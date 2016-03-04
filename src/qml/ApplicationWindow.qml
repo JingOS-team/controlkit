@@ -128,6 +128,16 @@ ApplicationWindow {
         internal.__passiveNotification.showNotification(message, timeout, actionText, callBack);
     }
 
+   /**
+    * Hide the passive notification, if any is shown
+    */
+    function hidePassiveNotification() {
+        if(internal.__passiveNotification) {
+           internal.__passiveNotification.hideNotification();
+        }
+    }
+
+
     /**
      * @returns a pointer to this application window
      * can be used anywhere in the application.
