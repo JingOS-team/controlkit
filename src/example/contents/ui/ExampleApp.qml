@@ -20,44 +20,44 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.4 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+import org.kde.kirigami 0.2 as Kirigami
 
-MobileComponents.ApplicationWindow {
+Kirigami.ApplicationWindow {
     id: root
     width: 500
     height: 800
     visible: true
 
-    globalDrawer: MobileComponents.GlobalDrawer {
+    globalDrawer: Kirigami.GlobalDrawer {
         title: "Widget gallery"
         titleIcon: "applications-graphics"
         bannerImageSource: "banner.jpg"
 
         actions: [
-            MobileComponents.Action {
+            Kirigami.Action {
                 text: "View"
                 iconName: "view-list-icons"
-                MobileComponents.Action {
+                Kirigami.Action {
                         text: "action 1"
                 }
-                MobileComponents.Action {
+                Kirigami.Action {
                         text: "action 2"
                 }
-                MobileComponents.Action {
+                Kirigami.Action {
                         text: "action 3"
                 }
             },
-            MobileComponents.Action {
+            Kirigami.Action {
                 text: "Sync"
                 iconName: "folder-sync"
-                MobileComponents.Action {
+                Kirigami.Action {
                         text: "action 4"
                 }
-                MobileComponents.Action {
+                Kirigami.Action {
                         text: "action 5"
                 }
             },
-            MobileComponents.Action {
+            Kirigami.Action {
                 text: "Checkable"
                 iconName: "view-list-details"
                 checkable: true
@@ -66,7 +66,7 @@ MobileComponents.ApplicationWindow {
                     print("Action checked:" + checked)
                 }
             },
-            MobileComponents.Action {
+            Kirigami.Action {
                 text: "Settings"
                 iconName: "configure"
                 checkable: true
@@ -96,7 +96,7 @@ MobileComponents.ApplicationWindow {
             value: 0.5
         }
     }
-    contextDrawer: MobileComponents.ContextDrawer {
+    contextDrawer: Kirigami.ContextDrawer {
         id: contextDrawer
     }
 
@@ -105,7 +105,7 @@ MobileComponents.ApplicationWindow {
 
     Component {
         id: settingsComponent
-        MobileComponents.Page {
+        Kirigami.Page {
             objectName: "settingsPage"
             Rectangle {
                 anchors.fill: parent

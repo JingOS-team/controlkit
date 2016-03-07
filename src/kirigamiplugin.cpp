@@ -19,20 +19,22 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef MOBILECOMPONENTSPLUGIN_H
-#define MOBILECOMPONENTSPLUGIN_H
+#include "kirigamiplugin.h"
 
-#include <QQmlEngine>
 #include <QQmlExtensionPlugin>
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QQuickItem>
 
-class MobileComponentsPlugin : public QQmlExtensionPlugin
+
+void KirigamiPlugin::registerTypes(const char *uri)
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
+    Q_ASSERT(uri == QLatin1String("org.kde.kirigami"));
 
-public:
-    void registerTypes(const char *uri);
+    //TODO: in this plugin it will end up something similar to
+    //PlasmaCore's ColorScope
+}
 
-};
 
-#endif
+#include "kirigamiplugin.moc"
+

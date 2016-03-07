@@ -20,14 +20,14 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.4 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+import org.kde.kirigami 0.2 as Kirigami
 
-MobileComponents.ScrollablePage {
+Kirigami.ScrollablePage {
     id: pageRoot
 
     anchors.fill:parent
     background: Rectangle {
-        color: MobileComponents.Theme.viewBackgroundColor
+        color: Kirigami.Theme.viewBackgroundColor
     }
 
     title: "Gallery"
@@ -41,18 +41,18 @@ MobileComponents.ScrollablePage {
 
     //flickable: mainListView
     contextualActions: [
-        MobileComponents.Action {
+        Kirigami.Action {
             text:"Action 1"
             iconName: "document-decrypt"
             onTriggered: print("Action 1 clicked")
         },
-        MobileComponents.Action {
+        Kirigami.Action {
             id: shareAction
             visible: checkableAction.checked
             text:"Action 2"
             iconName: "document-share"
         },
-        MobileComponents.Action {
+        Kirigami.Action {
             id: checkableAction
             text:"Checkabke"
             checkable: true
@@ -103,8 +103,8 @@ MobileComponents.ScrollablePage {
                 component: "NonScrollable"
             }
         }
-        delegate: MobileComponents.ActionsForListItem {
-            MobileComponents.BasicListItem {
+        delegate: Kirigami.ActionsForListItem {
+            Kirigami.BasicListItem {
                 supportsMouseEvents: true
                 label: model.text
 
@@ -120,11 +120,11 @@ MobileComponents.ScrollablePage {
             }
 
             actions: [
-                MobileComponents.Action {
+                Kirigami.Action {
                     iconName: "document-decrypt"
                     onTriggered: print("Action 1 clicked")
                 },
-                MobileComponents.Action {
+                Kirigami.Action {
                     iconName: "mail-reply-sender"
                 }]
         }

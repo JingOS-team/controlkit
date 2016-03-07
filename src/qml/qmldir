@@ -1,5 +1,5 @@
-module org.kde.plasma.mobilecomponents
-#plugin mobilecomponentsplugin
+module org.kde.kirigami
+#plugin kirigamiplugin
 
 singleton Units 0.2 Units.qml
 singleton Theme 0.2 Theme.qml

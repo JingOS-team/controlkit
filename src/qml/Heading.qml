@@ -18,7 +18,7 @@
 */
 
 import QtQuick 2.0
-import org.kde.plasma.mobilecomponents 0.2
+import org.kde.kirigami 0.2
 
 /**
  * A heading label used for subsections of texts.
@@ -30,10 +30,10 @@ import org.kde.plasma.mobilecomponents 0.2
  * Example usage:
  *
  * @code
- * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+ * import org.kde.kirigami 0.2 as Kirigami
  * [...]
  * Column {
- *     MobileComponents.Heading {
+ *     Kirigami.Heading {
  *         text: "Apples in the sunlight"
  *         level: 2
  *     }

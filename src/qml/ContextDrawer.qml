@@ -20,7 +20,7 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.0 as QtControls
-import org.kde.plasma.mobilecomponents 0.2
+import org.kde.kirigami 0.2
 
 /**
  * A drawer specialization that will show a list of actions that are
@@ -28,11 +28,11 @@ import org.kde.plasma.mobilecomponents 0.2
  *
  * Example usage:
  * @code
- * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+ * import org.kde.kirigami 0.2 as Kirigami
  *
- * MobileComponents.ApplicationWindow {
+ * Kirigami.ApplicationWindow {
  *  [...]
- *     contextDrawer: MobileComponents.ContextDrawer {
+ *     contextDrawer: Kirigami.ContextDrawer {
  *         id: contextDrawer
  *     }
  *  [...]
@@ -40,19 +40,19 @@ import org.kde.plasma.mobilecomponents 0.2
  * @endcode
  *
  * @code
- * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+ * import org.kde.kirigami 0.2 as Kirigami
  *
- * MobileComponents.Page {
+ * Kirigami.Page {
  *   [...]
  *     contextualActions: [
- *         MobileComponents.Action {
+ *         Kirigami.Action {
  *             iconName: "edit"
  *             text: "Action text"
  *             onTriggered: {
  *                 // do stuff
  *             }
  *         },
- *         MobileComponents.Action {
+ *         Kirigami.Action {
  *             iconName: "edit"
  *             text: "Action text"
  *             onTriggered: {
@@ -78,7 +78,7 @@ OverlayDrawer {
     /**
      * actions: list<Action>
      * This can be any type of object that a ListView can accept as model. 
-     * It expects items compatible with either QAction or MobileComponents Action
+     * It expects items compatible with either QAction or Kirigami Action
      */
     property var actions: pageStack.currentItem ? pageStack.currentItem.contextualActions : null
     enabled: menu.count > 0

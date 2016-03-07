@@ -19,7 +19,7 @@
 
 import QtQuick 2.5
 import QtQuick.Controls 1.3
-import org.kde.plasma.mobilecomponents 0.2
+import org.kde.kirigami 0.2
 import QtGraphicalEffects 1.0
 
 /**

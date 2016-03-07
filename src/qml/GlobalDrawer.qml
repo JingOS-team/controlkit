@@ -21,7 +21,7 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0 as Controls
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
-import org.kde.plasma.mobilecomponents 0.2
+import org.kde.kirigami 0.2
 
 /**
  * A drawer specialization intended for the global actions of the application
@@ -30,26 +30,26 @@ import org.kde.plasma.mobilecomponents 0.2
  *
  * Example usage:
  * @code
- * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+ * import org.kde.kirigami 0.2 as Kirigami
  *
- * MobileComponents.ApplicationWindow {
+ * Kirigami.ApplicationWindow {
  *  [...]
- *     globalDrawer: MobileComponents.GlobalDrawer {
+ *     globalDrawer: Kirigami.GlobalDrawer {
  *         actions: [
- *            MobileComponents.Action {
+ *            Kirigami.Action {
  *                text: "View"
  *                iconName: "view-list-icons"
- *                MobileComponents.Action {
+ *                Kirigami.Action {
  *                        text: "action 1"
  *                }
- *                MobileComponents.Action {
+ *                Kirigami.Action {
  *                        text: "action 2"
  *                }
- *                MobileComponents.Action {
+ *                Kirigami.Action {
  *                        text: "action 3"
  *                }
  *            },
- *            MobileComponents.Action {
+ *            Kirigami.Action {
  *                text: "Sync"
  *                iconName: "folder-sync"
  *            }
@@ -93,26 +93,26 @@ OverlayDrawer {
      *
      * Example usage:
      * @code
-     * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+     * import org.kde.kirigami 0.2 as Kirigami
      *
-     * MobileComponents.ApplicationWindow {
+     * Kirigami.ApplicationWindow {
      *  [...]
-     *     globalDrawer: MobileComponents.GlobalDrawer {
+     *     globalDrawer: Kirigami.GlobalDrawer {
      *         actions: [
-     *            MobileComponents.Action {
+     *            Kirigami.Action {
      *                text: "View"
      *                iconName: "view-list-icons"
-     *                MobileComponents.Action {
+     *                Kirigami.Action {
      *                        text: "action 1"
      *                }
-     *                MobileComponents.Action {
+     *                Kirigami.Action {
      *                        text: "action 2"
      *                }
-     *                MobileComponents.Action {
+     *                Kirigami.Action {
      *                        text: "action 3"
      *                }
      *            },
-     *            MobileComponents.Action {
+     *            Kirigami.Action {
      *                text: "Sync"
      *                iconName: "folder-sync"
      *            }
@@ -132,11 +132,11 @@ OverlayDrawer {
      *
      * Example usage:
      * @code
-     * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+     * import org.kde.kirigami 0.2 as Kirigami
      *
-     * MobileComponents.ApplicationWindow {
+     * Kirigami.ApplicationWindow {
      *  [...]
-     *     globalDrawer: MobileComponents.GlobalDrawer {
+     *     globalDrawer: Kirigami.GlobalDrawer {
      *         actions: [...]
      *         Button {
      *             text: "Button"

@@ -20,7 +20,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.3
 import "private"
-import org.kde.plasma.mobilecomponents 0.2
+import org.kde.kirigami 0.2
 import QtGraphicalEffects 1.0
 
 /**
@@ -32,52 +32,52 @@ import QtGraphicalEffects 1.0
  *
  * Example usage:
  * @code
- * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+ * import org.kde.kirigami 0.2 as Kirigami
  *
- * MobileComponents.ApplicationWindow {
+ * Kirigami.ApplicationWindow {
  *  [...]
- *     globalDrawer: MobileComponents.GlobalDrawer {
+ *     globalDrawer: Kirigami.GlobalDrawer {
  *         actions: [
- *            MobileComponents.Action {
+ *            Kirigami.Action {
  *                text: "View"
  *                iconName: "view-list-icons"
- *                MobileComponents.Action {
+ *                Kirigami.Action {
  *                        text: "action 1"
  *                }
- *                MobileComponents.Action {
+ *                Kirigami.Action {
  *                        text: "action 2"
  *                }
- *                MobileComponents.Action {
+ *                Kirigami.Action {
  *                        text: "action 3"
  *                }
  *            },
- *            MobileComponents.Action {
+ *            Kirigami.Action {
  *                text: "Sync"
  *                iconName: "folder-sync"
  *            }
  *         ]
  *     }
  *
- *     contextDrawer: MobileComponents.ContextDrawer {
+ *     contextDrawer: Kirigami.ContextDrawer {
  *         id: contextDrawer
  *     }
  * 
- *     pageStack.initialPage: MobileComponents.Page {
- *         mainAction: MobileComponents.Action {
+ *     pageStack.initialPage: Kirigami.Page {
+ *         mainAction: Kirigami.Action {
  *             iconName: "edit"
  *             onTriggered: {
  *                 // do stuff
  *             }
  *         }
  *         contextualActions: [
- *             MobileComponents.Action {
+ *             Kirigami.Action {
  *                 iconName: "edit"
  *                 text: "Action text"
  *                 onTriggered: {
  *                     // do stuff
  *                 }
  *             },
- *             MobileComponents.Action {
+ *             Kirigami.Action {
  *                 iconName: "edit"
  *                 text: "Action text"
  *                 onTriggered: {
@@ -213,11 +213,11 @@ ApplicationWindow {
      *
      * Example usage:
      * @code
-     * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+     * import org.kde.kirigami 0.2 as Kirigami
      *
-     * MobileComponents.ApplicationWindow {
+     * Kirigami.ApplicationWindow {
      *  [...]
-     *     contextDrawer: MobileComponents.ContextDrawer {
+     *     contextDrawer: Kirigami.ContextDrawer {
      *         id: contextDrawer
      *     }
      *  [...]
@@ -225,19 +225,19 @@ ApplicationWindow {
      * @endcode
      *
      * @code
-     * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+     * import org.kde.kirigami 0.2 as Kirigami
      *
-     * MobileComponents.Page {
+     * Kirigami.Page {
      *   [...]
      *     contextualActions: [
-     *         MobileComponents.Action {
+     *         Kirigami.Action {
      *             iconName: "edit"
      *             text: "Action text"
      *             onTriggered: {
      *                 // do stuff
      *             }
      *         },
-     *         MobileComponents.Action {
+     *         Kirigami.Action {
      *             iconName: "edit"
      *             text: "Action text"
      *             onTriggered: {

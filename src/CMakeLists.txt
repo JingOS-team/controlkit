@@ -1,16 +1,16 @@
-project(mobilecomponents)
+project(kirigami)
 
-set(mobilecomponents_SRCS
-    mobilecomponentsplugin.cpp
+set(kirigami_SRCS
+    kirigamiplugin.cpp
     )
 
-add_library(mobilecomponentsplugin SHARED ${mobilecomponents_SRCS})
-target_link_libraries(mobilecomponentsplugin Qt5::Core  Qt5::Qml Qt5::Quick)
+add_library(kirigamiplugin SHARED ${kirigami_SRCS})
+target_link_libraries(kirigamiplugin Qt5::Core  Qt5::Qml Qt5::Quick)
 
-install(TARGETS mobilecomponentsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/mobilecomponents)
+install(TARGETS kirigamiplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
 
 
-install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/mobilecomponents)
+install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
 
 
 #TODO: install the plasmaless version at build time
@@ -18,7 +18,7 @@ install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/mobileco
 FILE(GLOB platformspecific ${PROJECT_SOURCE_DIR}/plasmatheme/*)
 
 
-install(FILES ${platformspecific} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/mobilecomponents)
+install(FILES ${platformspecific} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
 
-install(DIRECTORY example DESTINATION ${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}/kpackage/genericqml/org.kde.plasma.mobile.gallery)
-install(FILES example/metadata.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} RENAME org.kde.plasma.mobile.gallery.desktop)
+install(DIRECTORY example/ DESTINATION ${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}/kpackage/genericqml/org.kde.kirigami.gallery)
+install(FILES example/metadata.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} RENAME org.kde.kirigami.gallery.desktop)

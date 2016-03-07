@@ -20,7 +20,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.2
-import org.kde.plasma.mobilecomponents 0.2
+import org.kde.kirigami 0.2
 
 
 /**
@@ -32,10 +32,10 @@ import org.kde.plasma.mobilecomponents 0.2
  * Example usage:
  *
  * @code
- * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+ * import org.kde.kirigami 0.2 as Kirigami
  * [...]
  * 
- * MobileComponents.RefreshableScrollView {
+ * Kirigami.RefreshableScrollView {
  *     id: view
  *     supportsRefreshing: true
  *     onRefreshingChanged: {

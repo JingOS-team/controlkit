@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.1
-import org.kde.plasma.mobilecomponents 0.2
+import org.kde.kirigami 0.2
 
 /**
  * An item delegate for the primitive ListView component.

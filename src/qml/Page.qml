@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.plasma.mobilecomponents 0.2
+import org.kde.kirigami 0.2
 import "private"
 
 /**
@@ -85,11 +85,11 @@ Item {
      *
      * Example usage:
      * @code
-     * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+     * import org.kde.kirigami 0.2 as Kirigami
      *
-     * MobileComponents.ApplicationWindow {
+     * Kirigami.ApplicationWindow {
      *  [...]
-     *     contextDrawer: MobileComponents.ContextDrawer {
+     *     contextDrawer: Kirigami.ContextDrawer {
      *         id: contextDrawer
      *     }
      *  [...]
@@ -97,19 +97,19 @@ Item {
      * @endcode
      *
      * @code
-     * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
+     * import org.kde.kirigami 0.2 as Kirigami
      *
-     * MobileComponents.Page {
+     * Kirigami.Page {
      *   [...]
      *     contextualActions: [
-     *         MobileComponents.Action {
+     *         Kirigami.Action {
      *             iconName: "edit"
      *             text: "Action text"
      *             onTriggered: {
      *                 // do stuff
      *             }
      *         },
-     *         MobileComponents.Action {
+     *         Kirigami.Action {
      *             iconName: "edit"
      *             text: "Action text"
      *             onTriggered: {
@@ -126,14 +126,14 @@ Item {
     /**
      * mainAction: Action
      * An optional single action for the action button.
-     * it can be a MobileComponents.Action or a QAction
+     * it can be a Kirigami.Action or a QAction
      *
      * Example usage:
      *
      * @code
-     * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
-     * MobileComponents.Page {
-     *     mainAction: MobileComponents.Action {
+     * import org.kde.kirigami 0.2 as Kirigami
+     * Kirigami.Page {
+     *     mainAction: Kirigami.Action {
      *         iconName: "edit"
      *         onTriggered: {
      *             // do stuff
@@ -181,9 +181,9 @@ Item {
      * Example usage:
      *
      * @code
-     * import org.kde.plasma.mobilecomponents 0.2 as MobileComponents
-     * MobileComponents.Page {
-     *     mainAction: MobileComponents.Action {
+     * import org.kde.kirigami 0.2 as Kirigami
+     * Kirigami.Page {
+     *     mainAction: Kirigami.Action {
      *         iconName: "edit"
      *         onTriggered: {
      *             // do stuff
