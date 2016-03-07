@@ -20,7 +20,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.3
 import "private"
-import org.kde.kirigami 0.2
+import org.kde.kirigami 1.0
 import QtGraphicalEffects 1.0
 
 /**
@@ -32,7 +32,7 @@ import QtGraphicalEffects 1.0
  *
  * Example usage:
  * @code
- * import org.kde.kirigami 0.2 as Kirigami
+ * import org.kde.kirigami 1.0 as Kirigami
  *
  * Kirigami.ApplicationWindow {
  *  [...]
@@ -213,7 +213,7 @@ ApplicationWindow {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 0.2 as Kirigami
+     * import org.kde.kirigami 1.0 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]
@@ -225,7 +225,7 @@ ApplicationWindow {
      * @endcode
      *
      * @code
-     * import org.kde.kirigami 0.2 as Kirigami
+     * import org.kde.kirigami 1.0 as Kirigami
      *
      * Kirigami.Page {
      *   [...]

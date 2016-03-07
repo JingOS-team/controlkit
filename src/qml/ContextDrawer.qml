@@ -20,7 +20,7 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.0 as QtControls
-import org.kde.kirigami 0.2
+import org.kde.kirigami 1.0
 
 /**
  * A drawer specialization that will show a list of actions that are
@@ -28,7 +28,7 @@ import org.kde.kirigami 0.2
  *
  * Example usage:
  * @code
- * import org.kde.kirigami 0.2 as Kirigami
+ * import org.kde.kirigami 1.0 as Kirigami
  *
  * Kirigami.ApplicationWindow {
  *  [...]
@@ -40,7 +40,7 @@ import org.kde.kirigami 0.2
  * @endcode
  *
  * @code
- * import org.kde.kirigami 0.2 as Kirigami
+ * import org.kde.kirigami 1.0 as Kirigami
  *
  * Kirigami.Page {
  *   [...]

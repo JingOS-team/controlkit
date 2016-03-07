@@ -18,7 +18,7 @@
 */
 
 import QtQuick 2.0
-import org.kde.kirigami 0.2
+import org.kde.kirigami 1.0
 
 /**
  * A heading label used for subsections of texts.
@@ -30,7 +30,7 @@ import org.kde.kirigami 0.2
  * Example usage:
  *
  * @code
- * import org.kde.kirigami 0.2 as Kirigami
+ * import org.kde.kirigami 1.0 as Kirigami
  * [...]
  * Column {
  *     Kirigami.Heading {

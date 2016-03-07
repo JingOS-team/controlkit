@@ -21,7 +21,7 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0 as Controls
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 0.2
+import org.kde.kirigami 1.0
 
 /**
  * A drawer specialization intended for the global actions of the application
@@ -30,7 +30,7 @@ import org.kde.kirigami 0.2
  *
  * Example usage:
  * @code
- * import org.kde.kirigami 0.2 as Kirigami
+ * import org.kde.kirigami 1.0 as Kirigami
  *
  * Kirigami.ApplicationWindow {
  *  [...]
@@ -93,7 +93,7 @@ OverlayDrawer {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 0.2 as Kirigami
+     * import org.kde.kirigami 1.0 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]
@@ -132,7 +132,7 @@ OverlayDrawer {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 0.2 as Kirigami
+     * import org.kde.kirigami 1.0 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]

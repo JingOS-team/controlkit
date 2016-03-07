@@ -21,7 +21,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 0.2
+import org.kde.kirigami 1.0
 
 MouseArea {
     id: root
