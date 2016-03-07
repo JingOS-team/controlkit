@@ -234,10 +234,10 @@ Item {
             }
             bottomMargin: height
             onMovementEnded: {
-                if ((root.height + mainFlickable.contentY) < flickableContents.height/2) {
+                if ((root.height + mainFlickable.contentY) < root.height/2) {
                     closeAnimation.to = -root.height;
                     closeAnimation.running = true;
-                } else if ((root.height + mainFlickable.contentY) > flickableContents.height*1.5) {
+                } else if ((root.height*0.6 + mainFlickable.contentY) > flickableContents.height) {
                     closeAnimation.to = flickableContents.height
                     closeAnimation.running = true;
                 }
