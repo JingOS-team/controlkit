@@ -121,9 +121,12 @@ Item {
      * @return The new created page
      */
     function push(page, properties) {
-        pop(currentItem, true);
         scrollAnimation.running = false;
-        var item = Engine.push(page, properties, false, false)
+        if (page != currentItem &&
+            (actualRoot.currentIndex < depth && page != Engine.actualPages[actualRoot.currentIndex+1])) {
+            pop(currentItem, true);
+            var item = Engine.push(page, properties, false, false);
+        }
         actualRoot.currentIndex = depth-1;
         return item
     }
@@ -295,7 +298,7 @@ Item {
                 return;
             }
 
-            var itemAtIndex = Engine.pageStack[Math.max(0, currentIndex)];
+            var itemAtIndex = Engine.pageStack[Math.max(0, Math.min(currentIndex, depth-1))];
             //Why itemAtPrevIndex? sometimes itemAtIndex is not positioned yet
             var itemAtPrevIndex = Engine.pageStack[Math.max(0, currentIndex-1)];
 
