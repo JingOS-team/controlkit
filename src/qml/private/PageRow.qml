@@ -282,7 +282,8 @@ Item {
 
             //search the last page to kinda fit
             for (var i = Engine.pageStack.length - 1; i >= 0; --i) {
-                if (Engine.pageStack[i].mapToItem(mainFlickable).x < Engine.pageStack[i].width /2) {
+                var item = Engine.pageStack[i];
+                if (item.mapToItem(mainFlickable, 0, 0).x < item.width /2) {
                     actualRoot.currentIndex = i;
                     break;
                 }
