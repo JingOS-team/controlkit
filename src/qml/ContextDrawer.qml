@@ -84,6 +84,13 @@ OverlayDrawer {
     enabled: menu.count > 0
     edge: Qt.RightEdge
 
+    Connections {
+        target: pageStack
+        onCurrentItemChanged: {
+            actions = pageStack.currentItem.contextualActions
+        }
+    }
+
     contentItem: QtControls.ScrollView {
         implicitWidth: Units.gridUnit * 20
         ListView {
