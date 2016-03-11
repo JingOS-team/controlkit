@@ -299,7 +299,7 @@ Item {
 
         Item {
             id: container
-            implicitWidth: root.defaultColumnWidth
+            implicitWidth: ObjectModel.index == pagesModel.count - 1 ? root.width - (ObjectModel.index == 0 ? 0 : root.defaultColumnWidth) : root.defaultColumnWidth
             height: listView.height
             property Item page
             property Item owner
