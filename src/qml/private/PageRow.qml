@@ -40,15 +40,14 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.5
+import QtQml.Models 2.2
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 1.0
 
-import "PageStack.js" as Engine
-
 Item {
-    id: actualRoot
+    id: root
 
     anchors.fill: parent
 
@@ -56,27 +55,27 @@ Item {
     /**
      * This property holds the number of items currently pushed onto the view
      */
-    property int depth: Engine.getDepth()
+    property alias depth: listView.count
 
     /**
      * The last Page in the Row
      */
-    property Item lastItem: null
+    property Item lastItem: listView.count ? pagesModel.get(listView.count - 1) : null
 
     /**
      * The currently visible Item
      */
-    property Item currentItem: currentItem
+    property Item currentItem: listView.currentItem.page
 
     /**
      * the index of the currently visible Item
      */
-    property int currentIndex: 0
+    property alias currentIndex: listView.currentIndex
 
     /**
      * This property holds the list of content children.
      */
-    property var contentChildren: Engine.actualPages
+    property alias contentChildren: pagesModel.actualPages
 
     /**
      * The initial item when this PageRow is created
@@ -84,13 +83,8 @@ Item {
     property variant initialPage
 
     /**
-     * The main flickable of this Row
-     */
-    property alias contentItem: mainFlickable
-
-    /**
      * The default width for a column
-     * default is wide enough for 30 characters.
+     * default is wide enough for 30 grid units.
      * Pages can override it with their Layout.fillWidth,
      * implicitWidth Layout.minimumWidth etc.
      */
@@ -121,13 +115,44 @@ Item {
      * @return The new created page
      */
     function push(page, properties) {
-        scrollAnimation.running = false;
 
         pop(currentItem, true);
-        var item = Engine.push(page, properties, false, false);
 
-        actualRoot.currentIndex = depth-1;
-        return item
+        // figure out if more than one page is being pushed
+        var pages;
+        if (page instanceof Array) {
+            pages = page;
+            page = pages.pop();
+            if (page.createObject === undefined && page.parent === undefined && typeof page != "string") {
+                properties = properties || page.properties;
+                page = page.page;
+            }
+        }
+
+        // push any extra defined pages onto the stack
+        if (pages) {
+            var i;
+            for (i = 0; i < pages.length; i++) {
+                var tPage = pages[i];
+                var tProps;
+                if (tPage.createObject === undefined && tPage.parent === undefined && typeof tPage != "string") {
+                    tProps = tPage.properties;
+                    tPage = tPage.page;
+                }
+
+                var container = pagesModel.initPage(tPage, tProps);
+                pagesModel.actualPages.push(pages[i]);
+                pagesModel.append(container);
+            }
+        }
+
+        // initialize the page
+        var container = pagesModel.initPage(page, properties);
+        pagesModel.actualPages.push(container.page);
+
+        pagesModel.append(container);
+        listView.currentIndex = container.ObjectModel.index;
+        return container.page
     }
 
     /**
@@ -138,8 +163,28 @@ Item {
      * @return The page instance that was popped off the stack.
      */
     function pop(page) {
-        actualRoot.currentIndex = depth-1;
-        return Engine.pop(page, false);
+        if (depth == 0) {
+            return null;
+        }
+
+        if (page !== undefined && page == pagesModel.actualPages[root.currentIndex - 1]) {
+            return null;
+        }
+
+        if (page !== undefined) {
+            var oldPage = pagesModel.actualPages[pagesModel.actualPages.length-1];
+            // an unwind target has been specified - pop until we find it
+            while (page != oldPage && pagesModel.actualPages.length > 1) {
+                oldPage = pagesModel.actualPages[pagesModel.actualPages.length-1];
+
+                pagesModel.actualPages.pop();
+                pagesModel.remove(oldPage.parent.ObjectModel.index);
+                if (oldPage.parent.owner) {
+                    oldPage.parent = oldPage.parent.owner;
+                    oldPage.parent.destroy();
+                }
+            }
+        }
     }
 
     /**
@@ -159,10 +204,7 @@ Item {
      */
     function replace(page, properties) {
         pop(currentItem, true);
-        scrollAnimation.running = false;
-        var item = Engine.push(page, properties, true, false);
-        actualRoot.currentIndex = depth-1;
-        return item
+        return push(page, properties);
     }
 
     /**
@@ -170,463 +212,122 @@ Item {
      * Destroy (or reparent) all the pages contained.
      */
     function clear() {
-        return Engine.clear();
+        pagesModel.actualPages.clear();
+        return pagesModel.clear();
     }
 
-    /**
-     * Iterates through all pages (top to bottom) and invokes the specified function.
-     * If the specified function returns true the search stops and the find function
-     * returns the page that the iteration stopped at. If the search doesn't result
-     * in any page being found then null is returned.
-     */
-    function find(func) {
-        return Engine.find(func);
-    }
-
-    /**
-     * Returns the page at a particular index
-     */
-    function pageAt(id) {
-        if (id < 0 || id >= depth) {
-            return null;
-        }
-        return root.children[id].page;
-    }
 
 //END FUNCTIONS
-    onCurrentIndexChanged: {
-        internal.syncWithCurrentIndex();
 
-        actualRoot.currentItem = Engine.pageStack[actualRoot.currentIndex].page;
-        if (!actualRoot.currentItem) {
-            actualRoot.currentItem = actualRoot.lastItem;
-        }
-    }
+    ObjectModel {
+        id: pagesModel
 
-    property alias clip: scrollArea.clip
+        property var componentCache
+        property var actualPages
 
-    SequentialAnimation {
-        id: scrollAnimation
-        property alias to: actualScrollAnimation.to
-        NumberAnimation {
-            id: actualScrollAnimation
-            target: mainFlickable
-            properties: "contentX"
-            duration: internal.transitionDuration
-            easing.type: Easing.InOutQuad
-        }
-        ScriptAction {
-            script: {
-                //At startup sometimes the contentX is NaN for an instant
-                if (isNaN(mainFlickable.contentX)) {
-                    return;
-                }
-
-                mainFlickable.returnToBounds();
-                //to not break syncIndexWithPosition
-                scrollAnimation.running = false;
-                internal.syncIndexWithPosition();
-            }
-        }
-    }
-
-    // Called when the page stack visibility changes.
-    onVisibleChanged: {
-        if (lastItem) {
-            if (visible)
-                lastItem.visible = lastItem.parent.visible = true;
-        }
-    }
-
-    onInitialPageChanged: {
-        if (!internal.completed) {
-            return
+        Component.onCompleted: {
+            componentCache = {};
+            actualPages = [];
         }
 
-        if (initialPage) {
-            if (depth == 0) {
-                push(initialPage, null, true)
-            } else if (depth == 1) {
-                replace(initialPage, null, true)
-            } else {
-                console.log("Cannot update PageStack.initialPage")
-            }
-        }
-    }
+        onCountChanged: root.contentChildrenChanged();
 
-    Component.onCompleted: {
-        internal.completed = true
-        if (initialPage && depth == 0) {
-            scrollAnimation.running = false;
-            //Disable animation: push() doesn't expose this anymore
-            Engine.push(initialPage, null, false, true)
-            actualRoot.currentIndex = depth-1;
-        }
-        actualRoot.currentItem = actualRoot.lastItem;
-    }
+        function initPage(page, properties) {
+            var container = containerComponent.createObject(pagesModel);
 
-    QtObject {
-        id: internal
-
-        // The number of ongoing transitions.
-        property int ongoingTransitionCount: 0
-
-        //FIXME: there should be a way to access to theh without storing it in an ugly way
-        property bool completed: false
-
-        // Duration of transition animation (in ms)
-        property int transitionDuration: Units.longDuration
-
-        function syncIndexWithPosition() {
-            if (scrollAnimation.running) {
-                return;
-            }
-
-            //search the last page to kinda fit
-            for (var i = Engine.pageStack.length - 1; i >= 0; --i) {
-                var item = Engine.pageStack[i];
-                if (item.mapToItem(mainFlickable, 0, 0).x < item.width /2) {
-                    actualRoot.currentIndex = i;
-                    break;
+            var pageComp;
+            if (page.createObject) {
+                // page defined as component
+                pageComp = page;
+            } else if (typeof page == "string") {
+                // page defined as string (a url)
+                pageComp = pagesModel.componentCache[page];
+                if (!pageComp) {
+                    pageComp = pagesModel.componentCache[page] = Qt.createComponent(page);
                 }
             }
-        }
-
-        function syncWithCurrentIndex() {
-            if (currentIndex < 0 || currentIndex > depth || root.width < width) {
-                return;
-            }
-
-            var itemAtIndex = Engine.pageStack[Math.max(0, Math.min(currentIndex, depth-1))];
-            //Why itemAtPrevIndex? sometimes itemAtIndex is not positioned yet
-            var itemAtPrevIndex = Engine.pageStack[Math.max(0, currentIndex-1)];
-
-            scrollAnimation.running = false;
-            if (currentIndex > 0) {
-                var itemAtPrevIndex = Engine.pageStack[Math.max(0, currentIndex-1)];
-                scrollAnimation.to = Math.min(itemAtPrevIndex.x + itemAtPrevIndex.page.width, mainFlickable.contentWidth - mainFlickable.width);
+            if (pageComp) {
+                if (pageComp.status == Component.Error) {
+                    throw new Error("Error while loading page: " + pageComp.errorString());
+                } else {
+                    // instantiate page from component
+                    page = pageComp.createObject(container.pageParent, properties || {});
+                }
             } else {
-                scrollAnimation.to = 0;
+                // copy properties to the page
+                for (var prop in properties) {
+                    if (properties.hasOwnProperty(prop)) {
+                        page[prop] = properties[prop];
+                    }
+                }
             }
 
-            //don't bother if we don't actually move
-            if (mainFlickable.contentX != scrollAnimation.to &&
-                //If current page is completely contained, don't scroll
-                !(mainFlickable.contentX < scrollAnimation.to &&
-                 mainFlickable.contentX + actualRoot.width > scrollAnimation.to + itemAtIndex.width)) {
-                scrollAnimation.running = true;
+            container.page = page;
+            if (page.parent == null || page.parent == container.pageParent) {
+                container.owner = null;
+            } else {
+                container.owner = page.parent;
             }
+
+            // the page has to be reparented
+            if (page.parent != container) {
+                page.parent = container;
+            }
+
+            return container;
         }
     }
 
-    ScrollView {
-        id: scrollArea
+    ListView {
+        id: listView
         anchors.fill: parent
-        verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff
-        Flickable {
-            id: mainFlickable
-            anchors.fill: parent
-            interactive: true//root.width > width
-            boundsBehavior: Flickable.StopAtBounds
-            contentWidth: root.width
-            contentHeight: height
-            onContentWidthChanged: internal.syncWithCurrentIndex();
-            Row {
-                id: root
-                spacing: 0
-                width: Math.max((depth-1+children[children.length-1].takenColumns) * defaultColumnWidth, childrenRect.width)
-
-                height: parent.height
-            }
-            onMovementEnded: {
-                //get correct index
-                internal.syncIndexWithPosition();
-                //snap
-                internal.syncWithCurrentIndex();
-            }
-            onFlickEnded: {
-                movementEnded();
-            }
-            onWidthChanged: {
-                resizeEventCompressTimer.restart();
-            }
-            Timer {
-                id: resizeEventCompressTimer
-                interval: 150
-                onTriggered: {
-                    scrollToLevel(actualRoot.lastVisiblePage.parent.parent.pageLevel);
-                }
+        model: pagesModel
+        orientation: ListView.Horizontal
+        snapMode: ListView.SnapToItem
+        boundsBehavior: Flickable.StopAtBounds
+        highlightMoveVelocity: width*2
+        onMovementEnded: {
+            var pos = currentItem.mapToItem(listView, 0, 0);
+            if (pos.x < 0 || pos.x >= width) {
+                currentIndex = indexAt(contentX + width - 10, 10);
             }
         }
+        onFlickEnded: movementEnded();
     }
 
-    // Component for page containers.
     Component {
         id: containerComponent
 
         Item {
             id: container
-            implicitWidth: actualContainer.width //+ Units.gridUnit * 8
-            width: implicitWidth
-            height: parent ? parent.height : 0
-            property int pageLevel: 0
-
-            x: 0
-
-            // The actual parent of page: page will anchor to that
-            property Item pageParent: actualContainer
-
-            property int pageDepth: 0
-            Component.onCompleted: {
-                pageDepth = Engine.getDepth() + 1
-                container.z = -Engine.getDepth()
+            implicitWidth: root.defaultColumnWidth
+            height: listView.height
+            property Item page
+            property Item owner
+            onPageChanged: {
+                page.parent = container;
+                page.anchors.fill = container;
             }
-
-            // The states correspond to the different possible positions of the container.
-            state: "Hidden"
-
-            // The page held by this container.
-            property Item page: null
-
-            // The owner of the page.
-            property Item owner: null
-
-            // The width of the longer stack dimension
-            property int stackWidth: Math.max(actualRoot.width, actualRoot.height)
-
-
-            // Flag that indicates the container should be cleaned up after the transition has ended.
-            property bool cleanupAfterTransition: false
-
-            // Flag that indicates if page transition animation is running
-            property bool transitionAnimationRunning: false
-
-            // State to be set after previous state change animation has finished
-            property string pendingState: "none"
-
-            //how many columns take the page?
-            property alias takenColumns: actualContainer.takenColumns
-
-            // Ensures that transition finish actions are executed
-            // in case the object is destroyed before reaching the
-            // end state of an ongoing transition
-            Component.onDestruction: {
-                if (transitionAnimationRunning)
-                    transitionEnded();
-            }
-
-            Item {
-                id: actualContainer
-
+            Rectangle {
                 anchors {
                     top: parent.top
                     bottom: parent.bottom
                     right: parent.right
                 }
-
-                property int takenColumns: {
-                    if (container.page && container.page.Layout && container.page.Layout.fillWidth) {
-                        return Math.max(1, Math.round(actualRoot.width/defaultColumnWidth)-(container.x > 0 ? 1: 0));
-                    } else {
-                        return Math.max(1, Math.round(container.page ? container.page.implicitWidth/defaultColumnWidth : 1));
-                    }
-                }
-
-                width: (container.pageDepth >= actualRoot.depth ? Math.min(actualRoot.width, takenColumns*defaultColumnWidth) : defaultColumnWidth)
-            }
-
-            Rectangle {
-                anchors {
-                    top: parent.top
-                    bottom: parent.bottom
-                    right: actualContainer.right
-                }
                 width: 1
                 color: Theme.textColor
                 opacity: 0.3
-                visible: container.pageDepth < actualRoot.depth
+                visible: container.ObjectModel.index < root.depth
             }
-
-            // Sets pending state as current if state change is delayed
-            onTransitionAnimationRunningChanged: {
-                if (!transitionAnimationRunning && pendingState != "none") {
-                    state = pendingState;
-                    pendingState = "none";
-                }
-            }
-
-            // Handles state change depening on transition animation status
-            function setState(newState)
-            {
-                if (transitionAnimationRunning)
-                    pendingState = newState;
-                else
-                    state = newState;
-            }
-
-            // Performs a push enter transition.
-            function pushEnter(immediate, orientationChanges)
-            {
-                if (!immediate) {
-                    setState("Right");
-                }
-                setState("");
-                page.visible = true;
-            }
-
-            // Performs a push exit transition.
-            function pushExit(replace, immediate, orientationChanges)
-            {
-                if (replace) {
-                    setState(immediate ? "Hidden" : "Left");
-                }
-
-                if (replace) {
-                    if (immediate)
-                        cleanup();
-                    else
-                        cleanupAfterTransition = true;
-                }
-            }
-
-            // Performs a pop enter transition.
-            function popEnter(immediate, orientationChanges)
-            {
-                setState("");
-                page.visible = true;
-            }
-
-            // Performs a pop exit transition.
-            function popExit(immediate, orientationChanges)
-            {
-                setState(immediate ? "Hidden" : "Left");
-
-                if (immediate)
-                    cleanup();
-                else
-                    cleanupAfterTransition = true;
-            }
-
-            // Called when a transition has started.
-            function transitionStarted()
-            {
-                container.clip = true
-                transitionAnimationRunning = true;
-                internal.ongoingTransitionCount++;
-            }
-
-            // Called when a transition has ended.
-            function transitionEnded()
-            {
-                container.clip = false
-                if (state != "")
-                    state = "Hidden";
-
-                internal.ongoingTransitionCount--;
-                transitionAnimationRunning = false;
-
-                if (cleanupAfterTransition) {
-                    cleanup();
-                }
-                internal.syncWithCurrentIndex();
-            }
-
-            states: [
-                // Explicit properties for default state.
-                State {
-                    name: ""
-                    PropertyChanges { target: container; visible: true; opacity: 1 }
-                    PropertyChanges { target: container; width: container.implicitWidth}
-                },
-                // Start state for pop entry, end state for push exit.
-                State {
-                    name: "Left"
-                    PropertyChanges { target: container; opacity: 0 }
-                    PropertyChanges { target: container; width: Units.gridUnit * 8}
-                },
-                // Start state for push entry, end state for pop exit.
-                State {
-                    name: "Right"
-                    PropertyChanges { target: container; opacity: 0 }
-                    PropertyChanges { target: container; width: Units.gridUnit * 8}
-                },
-                // Inactive state.
-                State {
-                    name: "Hidden"
-                    PropertyChanges { target: container; visible: false }
-                    PropertyChanges { target: container; width: container.implicitWidth}
-                }
-            ]
-
-            transitions: [
-                // Push exit transition
-                Transition {
-                    from: ""; to: "Left"
-                    SequentialAnimation {
-                        ScriptAction { script: transitionStarted() }
-                        ParallelAnimation {
-                            PropertyAnimation { properties: "width"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
-                        }
-                        ScriptAction { script: transitionEnded() }
-                    }
-                },
-                // Pop entry transition
-                Transition {
-                    from: "Left"; to: ""
-                    SequentialAnimation {
-                        ScriptAction { script: transitionStarted() }
-                        ParallelAnimation {
-                            PropertyAnimation { properties: "width"; easing.type: Easing.OutQuad; duration: internal.transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
-                        }
-                        ScriptAction { script: transitionEnded() }
-                    }
-                },
-                // Pop exit transition
-                Transition {
-                    from: ""; to: "Right"
-                    SequentialAnimation {
-                        ScriptAction { script: transitionStarted() }
-                        ParallelAnimation {
-                            PropertyAnimation { properties: "width"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
-                        }
-                        // Workaround for transition animation bug causing ghost view with page pop transition animation
-                        // TODO: Root cause still unknown
-                        PropertyAnimation {}
-                        ScriptAction { script: transitionEnded() }
-                    }
-                },
-                // Push entry transition
-                Transition {
-                    from: "Right"; to: ""
-                    SequentialAnimation {
-                        ScriptAction { script: transitionStarted() }
-                        ParallelAnimation {
-                            PropertyAnimation { properties: "width"; easing.type: Easing.OutQuad; duration: internal.transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.InQuad; duration: internal.transitionDuration }
-                        }
-                        ScriptAction { script: transitionEnded() }
-                    }
-                }
-            ]
-
-            // Cleans up the container and then destroys it.
-            function cleanup()
-            {
-                if (page != null) {
-                    if (owner != container) {
-                        // container is not the owner of the page - re-parent back to original owner
-                        page.visible = false;
-                        page.anchors.fill = undefined
-                        page.parent = owner;
-                    }
-                }
-                container.parent = null;
-                container.visible = false;
-                destroy();
-            }
+        }
+    }
+    Text {
+        y: 200
+        text: listView.currentIndex
+    }
+    Component.onCompleted: {
+        if (initialPage) {
+            push(initialPage, null)
         }
     }
 }
