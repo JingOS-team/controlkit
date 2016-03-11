@@ -216,7 +216,6 @@ Item {
         return pagesModel.clear();
     }
 
-
 //END FUNCTIONS
 
     ObjectModel {
