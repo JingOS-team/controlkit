@@ -122,11 +122,10 @@ Item {
      */
     function push(page, properties) {
         scrollAnimation.running = false;
-        if (page != currentItem &&
-            (actualRoot.currentIndex < depth && page != Engine.actualPages[actualRoot.currentIndex+1])) {
-            pop(currentItem, true);
-            var item = Engine.push(page, properties, false, false);
-        }
+
+        pop(currentItem, true);
+        var item = Engine.push(page, properties, false, false);
+
         actualRoot.currentIndex = depth-1;
         return item
     }
