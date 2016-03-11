@@ -149,14 +149,14 @@ Rectangle {
                     renderType: Text.QtRendering
                     color: Theme.viewBackgroundColor
                     elide: Text.ElideRight
-                    text: __appWindow.pageStack.pageAt(modelData).title
+                    text: __appWindow.pageStack.contentChildren[modelData].title
                     font.pixelSize: titleList.height / 1.6
                 }
             }
             Connections {
-                target: __appWindow.pageStack.pageAt(modelData).flickable
+                target: __appWindow.pageStack.contentChildren[modelData].flickable
                 onMovingChanged: {
-                    if (__appWindow.pageStack.pageAt(modelData).flickable.moving) {
+                    if (__appWindow.pageStack.contentChildren[modelData].flickable.moving) {
                         __appWindow.pageStack.currentIndex = modelData
                     }
                 }

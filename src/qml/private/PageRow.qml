@@ -173,26 +173,6 @@ Item {
         return Engine.clear();
     }
 
-    /**
-     * Iterates through all pages (top to bottom) and invokes the specified function.
-     * If the specified function returns true the search stops and the find function
-     * returns the page that the iteration stopped at. If the search doesn't result
-     * in any page being found then null is returned.
-     */
-    function find(func) {
-        return Engine.find(func);
-    }
-
-    /**
-     * Returns the page at a particular index
-     */
-    function pageAt(id) {
-        if (id < 0 || id >= depth) {
-            return null;
-        }
-        return root.children[id].page;
-    }
-
 //END FUNCTIONS
     onCurrentIndexChanged: {
         internal.syncWithCurrentIndex();
