@@ -35,10 +35,10 @@ Item {
 
     onXChanged: {
         if (mouseArea.pressed) {
-            if (globalDrawer) {
+            if (globalDrawer && globalDrawer.enabled) {
                 globalDrawer.position = Math.min(1, Math.max(0, (x - button.parent.width/2 + button.width/2)/globalDrawer.contentItem.width));
             }
-            if (contextDrawer) {
+            if (contextDrawer && contextDrawer.enabled) {
                 contextDrawer.position = Math.min(1, Math.max(0, (button.parent.width/2 - button.width/2 - x)/contextDrawer.contentItem.width));
             }
         }
@@ -62,8 +62,8 @@ Item {
         drag {
             target: button
             axis: Drag.XAxis
-            minimumX: 0
-            maximumX: button.parent.width
+            minimumX: contextDrawer.enabled ? 0 : button.parent.width/2 - button.width/2
+            maximumX: globalDrawer.enabled ? button.parent.width : button.parent.width/2 - button.width/2
         }
 
         transform: Translate {
