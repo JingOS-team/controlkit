@@ -36,6 +36,10 @@ ScrollablePage {
             text:"Action 2"
             iconName: "folder"
             enabled: false
+        },
+        Action {
+            text: "Action for Sheet"
+            visible: sheet.opened
         }
     ]
     mainAction: Action {
