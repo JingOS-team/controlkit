@@ -57,9 +57,13 @@ Rectangle {
 
     Connections {
         id: headerSlideConnection
-        target: __appWindow.pageStack.currentItem.flickable 
+        target: __appWindow.pageStack.currentItem.flickable
         property int oldContentY
         onContentYChanged: {
+            if (__appWindow.pageStack.currentItem.flickable.atYBeginning ||
+                __appWindow.pageStack.currentItem.flickable.atYEnd) {
+                return;
+            }
             headerItem.y = Math.min(0, Math.max(-headerItem.height + headerItem.Layout.minimumHeight, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY))
             oldContentY = __appWindow.pageStack.currentItem.flickable.contentY
         }
