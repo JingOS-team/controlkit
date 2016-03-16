@@ -158,7 +158,7 @@ ApplicationWindow {
     *
     * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
     */
-    property ApplicationHeader header: ApplicationHeader {
+    property Item header: ApplicationHeader {
     }
 
     PageRow {

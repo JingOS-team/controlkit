@@ -57,9 +57,12 @@ Rectangle {
 
     Connections {
         id: headerSlideConnection
-        target: __appWindow.pageStack.currentItem.flickable
+        target: __appWindow.pageStack.currentItem ? __appWindow.pageStack.currentItem.flickable : null
         property int oldContentY
         onContentYChanged: {
+            if (!__appWindow.pageStack.currentItem) {
+                return;
+            }
             if (__appWindow.pageStack.currentItem.flickable.atYBeginning ||
                 __appWindow.pageStack.currentItem.flickable.atYEnd) {
                 return;
@@ -71,6 +74,9 @@ Rectangle {
     Connections {
         target: __appWindow.pageStack
         onCurrentItemChanged: {
+            if (!__appWindow.pageStack.currentItem) {
+                return;
+            }
             if (__appWindow.pageStack.currentItem.flickable) {
                 headerSlideConnection.oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
             } else {
@@ -78,10 +84,28 @@ Rectangle {
             }
             headerItem.y = -headerItem.height + headerItem.Layout.preferredHeight;
         }
+
+        onContentChildrenChanged: {
+            var i = 0;
+            for (; i < __appWindow.pageStack.contentChildren.length; ++i) {
+                if (i >= model.count || __appWindow.pageStack.contentChildren[i].title 
+                    != model.get(i).title) {
+                    break;
+                }
+            }
+
+            while (model.count > i && model.count > 0) {
+                model.remove(model.count - 1);
+            }
+
+            for (var j = i; j < __appWindow.pageStack.contentChildren.length; ++j) {
+                model.append({"title": __appWindow.pageStack.contentChildren[j].title});
+            }
+        }
     }
 
     Behavior on y {
-        enabled: !__appWindow.pageStack.currentItem.flickable.moving
+        enabled: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable && !__appWindow.pageStack.currentItem.flickable.moving
         NumberAnimation {
             duration: Units.longDuration
             easing.type: Easing.InOutQuad
@@ -98,7 +122,10 @@ Rectangle {
         orientation: ListView.Horizontal
         boundsBehavior: Flickable.StopAtBounds
         //FIXME: proper implmentation needs Qt 5.6 for new ObjectModel api
-        model: __appWindow.pageStack.depth
+        model: ListModel {
+            id: model
+        }
+        //__appWindow.pageStack.depth
         spacing: wideScreen ? 0 : Units.gridUnit
         currentIndex: __appWindow.pageStack.currentIndex
         snapMode: ListView.SnapToItem
@@ -130,39 +157,31 @@ Rectangle {
                 }
             }
             height: titleList.height
-            onClicked: __appWindow.pageStack.currentIndex = modelData
+            onClicked: __appWindow.pageStack.currentIndex = model.index
             Row {
                 id: delegateRoot
 
                 spacing: Units.gridUnit
                 Rectangle {
-                    opacity: modelData > 0 ? 0.4 : 0
+                    opacity: model.index > 0 ? 0.4 : 0
                     visible: !titleList.wideScreen
                     color: Theme.viewBackgroundColor
                     anchors.verticalCenter: parent.verticalCenter
                     width: height
-                    height: Math.min(Units.gridUnit, title.height / 1.6)
+                    height: Math.min(Units.gridUnit, title.height / 2)
                     radius: width
                 }
                 Heading {
                     id: title
                     width:Math.min(titleList.width, implicitWidth)
                     anchors.verticalCenter: parent.verticalCenter
-                    opacity: __appWindow.pageStack.currentIndex == modelData ? 1 : 0.4
+                    opacity: titleList.currentIndex == index ? 1 : 0.4
                     //Scaling animate NativeRendering is too slow
                     renderType: Text.QtRendering
                     color: Theme.viewBackgroundColor
                     elide: Text.ElideRight
-                    text: __appWindow.pageStack.contentChildren[modelData].title
+                    text: model.title
                     font.pixelSize: titleList.height / 1.6
-                }
-            }
-            Connections {
-                target: __appWindow.pageStack.contentChildren[modelData].flickable
-                onMovingChanged: {
-                    if (__appWindow.pageStack.contentChildren[modelData].flickable.moving) {
-                        __appWindow.pageStack.currentIndex = modelData
-                    }
                 }
             }
         }

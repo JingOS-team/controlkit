@@ -196,16 +196,18 @@ function pop(page, immediate) {
         }
         // pop the current container off the stack and get the next container
         var oldContainer = pageStack.pop();
+        actualPages.pop();
+        actualRoot.contentChildrenChanged();
         var container = pageStack[pageStack.length - 1];
         if (page !== undefined) {
             // an unwind target has been specified - pop until we find it
             while (page != container.page && pageStack.length > 1) {
                 pageStack.pop();
                 actualPages.pop();
-                actualRoot.contentChildrenChanged();
                 container.popExit(immediate, false);
                 container = pageStack[pageStack.length - 1];
             }
+            actualRoot.contentChildrenChanged();
         }
 
         depth = pageStack.length;

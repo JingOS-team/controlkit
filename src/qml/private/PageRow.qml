@@ -123,7 +123,7 @@ Item {
     function push(page, properties) {
         scrollAnimation.running = false;
 
-        pop(currentItem, true);
+        Engine.pop(currentItem, true);
         var item = Engine.push(page, properties, false, false);
 
         actualRoot.currentIndex = depth-1;
@@ -138,8 +138,9 @@ Item {
      * @return The page instance that was popped off the stack.
      */
     function pop(page) {
+        var page = Engine.pop(page, true);
         actualRoot.currentIndex = depth-1;
-        return Engine.pop(page, false);
+        return page;
     }
 
     /**
