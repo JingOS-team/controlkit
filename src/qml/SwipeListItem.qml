@@ -26,7 +26,7 @@ import QtGraphicalEffects 1.0
  * An item delegate Intended to support extra actions obtainable
  * by uncovering them by dragging away the item with the handle
  * This acts as a container for normal list items.
- * Any subclass of AbstractListItem can be assigned as the listItem property.
+ * Any subclass of AbstractListItem can be assigned as the contentItem property.
  * @code
  * ListView {
  *     model: myModel
@@ -52,10 +52,66 @@ import QtGraphicalEffects 1.0
  * @inherit QtQuick.Item
  */
 Item {
-    id: listItemRoot
+    id: listItem
 
 //BEGIN properties
-    default property AbstractListItem listItem
+    /**
+     * type: Item
+     * This property holds the visual content item.
+     *
+     * Note: The content item is automatically resized inside the
+     * padding of the control.
+     */
+     default property Item contentItem
+
+    /**
+     * type: bool
+     * Holds if the item emits signals related to mouse interaction.
+     *TODO: remove
+     * The default value is false.
+     */
+    property alias supportsMouseEvents: itemMouse.enabled
+
+    /**
+     * type: signal
+     * This signal is emitted when there is a click.
+     *
+     * This is disabled by default, set enabled to true to use it.
+     * @see enabled
+     */
+    signal clicked
+
+
+    /**
+     * type: signal
+     * The user pressed the item with the mouse and didn't release it for a
+     * certain amount of time.
+     *
+     * This is disabled by default, set enabled to true to use it.
+     * @see enabled
+     */
+    signal pressAndHold
+
+    /**
+     * type: bool
+     * If true makes the list item look as checked or pressed. It has to be set
+     * from the code, it won't change by itself.
+     */
+    property bool checked: false
+
+    /**
+     * type: bool
+     * If true the item will be a delegate for a section, so will look like a
+     * "title" for the items under it.
+     */
+    property bool sectionDelegate: false
+
+    /**
+     * type: bool
+     * True if the separator between items is visible
+     * default: true
+     */
+    property bool separatorVisible: true
 
     /**
      * type: list<Action>
@@ -83,9 +139,35 @@ Item {
      * In most cases, there is no need to specify width or
      * height for a background item.
      */
-    property Item background : Item {
-        id: backgroundItem
-        parent: listItemRoot
+    property Item background: Rectangle {
+        color: listItem.checked || itemMouse.pressed ? Theme.highlightColor : Theme.viewBackgroundColor
+
+        parent: itemMouse
+        anchors.fill: parent
+        visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
+        opacity: itemMouse.containsMouse && !itemMouse.pressed ? 0.5 : 1
+        Behavior on color {
+            ColorAnimation { duration: Units.longDuration }
+        }
+        Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
+
+        Rectangle {
+            id: separator
+            color: Theme.textColor
+            opacity: 0.2
+            visible: listItem.separatorVisible
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+            height: Math.round(Units.smallSpacing / 3);
+        }
+    }
+
+    Item {
+        id: behindItem
+        parent: listItem
         anchors {
             fill: parent
             leftMargin: height
@@ -122,7 +204,7 @@ Item {
         }
         LinearGradient {
             width: Units.gridUnit/2
-            x: backgroundItem.width - (backgroundItem.width * listItemRoot.position)
+            x: behindItem.width - (behindItem.width * listItem.position)
             anchors {
                 top: parent.top
                 bottom: parent.bottom
@@ -147,36 +229,36 @@ Item {
         }
     }
 
-    implicitWidth: parent ? parent.width : listItem.width
-    implicitHeight: listItem.height
+    implicitWidth: parent ? parent.width : contentItem.width + paddingItem.anchors.margins * 2
+    implicitHeight: contentItem.implicitHeight + paddingItem.anchors.margins * 2
     height: visible ? implicitHeight : 0
 //END properties
 
 //BEGIN signal handlers
     onBackgroundChanged: {
-        background.parent = listItemRoot;
-        background.anchors.fill = listItemRoot;
-        background.anchors.leftMargin = background.height;
+        background.parent = itemMouse;
+        background.anchors.fill = itemMouse;
         background.z = 0;
     }
 
-    onHeightChanged: {
-        if (background) {
-            background.anchors.leftMargin = background.height;
-        }
+    onContentItemChanged: {
+        contentItem.parent = paddingItem
+        contentItem.anchors.fill = paddingItem;
+        //contentItem.anchors.leftMargin = background.height;
+        contentItem.z = 0;
     }
 
-    onListItemChanged: {
-        listItem.parent = listItemParent
-    }
     Component.onCompleted: {
-        listItem.parent = listItemParent
+        background.parent = itemMouse;
+        background.z = 0;
+        contentItem.parent = itemMouse
+        contentItem.z = 1;
     }
 
     onPositionChanged: {
         if (!handleMouse.pressed && !mainFlickable.flicking &&
             !mainFlickable.dragging && !positionAnimation.running) {
-            mainFlickable.contentX = (listItemRoot.width-listItemRoot.height) * mainFlickable.internalPosition;
+            mainFlickable.contentX = (listItem.width-listItem.height) * mainFlickable.internalPosition;
         }
     }
 //END signal handlers
@@ -196,13 +278,13 @@ Item {
         spacing: Units.largeSpacing
         Repeater {
             model: {
-                if (listItemRoot.actions.length == 0) {
+                if (listItem.actions.length == 0) {
                     return null;
                 } else {
-                    return listItemRoot.actions[0].text !== undefined &&
-                        listItemRoot.actions[0].trigger !== undefined ?
-                            listItemRoot.actions :
-                            listItemRoot.actions[0];
+                    return listItem.actions[0].text !== undefined &&
+                        listItem.actions[0].trigger !== undefined ?
+                            listItem.actions :
+                            listItem.actions[0];
                 }
             }
             delegate: Icon {
@@ -237,8 +319,8 @@ Item {
         properties: "contentX"
         duration: Units.longDuration
         easing.type: Easing.InOutQuad
-        
     }
+
     Flickable {
         id: mainFlickable
         z: 2
@@ -255,29 +337,39 @@ Item {
             }
             positionAnimation.running = true;
         }
-        property real internalPosition:  (mainFlickable.contentX/(listItemRoot.width-listItemRoot.height));
+        property real internalPosition:  (mainFlickable.contentX/(listItem.width-listItem.height));
         onInternalPositionChanged: {
-            listItemRoot.position = internalPosition;
+            listItem.position = internalPosition;
         }
 
         Item {
             id: mainItem
             width: (mainFlickable.width * 2) - height 
             height: mainFlickable.height
-            Item {
-                id: listItemParent
+            MouseArea {
+                id: itemMouse
                 anchors {
                     left: parent.left
                     top: parent.top
                     bottom: parent.bottom
                 }
                 width: mainFlickable.width
+                onClicked: listItem.clicked()
+                onPressAndHold: listItem.pressAndHold()
+
+                Item {
+                    id: paddingItem
+                    anchors {
+                        fill: parent
+                        margins: Units.smallSpacing
+                    }
+                }
             }
-            
+
             MouseArea {
                 id: handleMouse
                 anchors {
-                    left: listItemParent.right
+                    left: itemMouse.right
                     top: parent.top
                     bottom: parent.bottom
                     leftMargin:  -height

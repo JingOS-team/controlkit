@@ -103,22 +103,20 @@ Kirigami.ScrollablePage {
                 component: "NonScrollable"
             }
         }
-        delegate: Kirigami.ActionsForListItem {
-            Kirigami.BasicListItem {
-                supportsMouseEvents: true
-                label: model.text
-
-                property Item ownPage
-                onClicked: {
-                    root.pageStack.pop(root.initialItem);
-                    if (!model.component) {
-                        return;
-                    }
-                    ownPage = root.pageStack.push(Qt.resolvedUrl("gallery/" + model.component + "Gallery.qml"));
+        delegate: Kirigami.SwipeListItem {
+            Row {
+                Kirigami.Label {
+                    text: model.text
                 }
-                checked: ownPage && root.pageStack.lastItem == ownPage
             }
-
+            property Item ownPage
+            onClicked: {
+                if (!model.component) {
+                    return;
+                }
+                ownPage = root.pageStack.push(Qt.resolvedUrl("gallery/" + model.component + "Gallery.qml"));
+            }
+            checked: ownPage && root.pageStack.lastItem == ownPage
             actions: [
                 Kirigami.Action {
                     iconName: "document-decrypt"
