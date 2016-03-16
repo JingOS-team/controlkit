@@ -88,7 +88,6 @@ Rectangle {
      */
     property bool separatorVisible: true
 
-    
     /**
      * type: Item
      * This property holds the background item.
