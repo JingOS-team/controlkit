@@ -25,6 +25,7 @@ import org.kde.kirigami 1.0
 ScrollablePage {
     id: page
     Layout.fillWidth: true
+
     title: "Buttons"
     contextualActions: [
         Action {

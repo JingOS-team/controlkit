@@ -266,7 +266,10 @@ Item {
             //search the last page to kinda fit
             for (var i = Engine.pageStack.length - 1; i >= 0; --i) {
                 var item = Engine.pageStack[i];
-                if (item.mapToItem(mainFlickable, 0, 0).x < item.width /2) {
+
+                var mapped = item.mapToItem(mainFlickable, 0, 0, item.width, item.height);
+
+                if (mapped.x < item.width /2 && (mapped.x+mapped.width) <= actualRoot.width) {
                     actualRoot.currentIndex = i;
                     break;
                 }
@@ -407,7 +410,7 @@ Item {
 
                 property int takenColumns: {
                     if (container.page && container.page.Layout && container.page.Layout.fillWidth) {
-                        return Math.max(1, Math.round(actualRoot.width/defaultColumnWidth)-(container.x > 0 ? 1: 0));
+                        return Math.max(Math.max(1, Math.round(actualRoot.width/defaultColumnWidth)-(container.x > 0 ? 1: 0)), Math.round(container.page ? container.page.implicitWidth/defaultColumnWidth : 1));
                     } else {
                         return Math.max(1, Math.round(container.page ? container.page.implicitWidth/defaultColumnWidth : 1));
                     }
