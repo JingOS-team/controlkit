@@ -48,7 +48,7 @@ Item {
         id: mouseArea
         anchors.fill: parent
 
-        property bool internalVisibility: button.action ? (action.visible === undefined || action.visible === true) : false
+        property bool internalVisibility: (applicationWindow === undefined || applicationWindow().controlsVisible) && (button.action === undefined || action.visible === undefined || action.visible)
         onInternalVisibilityChanged: {
             showAnimation.running = false;
             if (internalVisibility) {

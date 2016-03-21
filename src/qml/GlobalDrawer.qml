@@ -149,6 +149,8 @@ OverlayDrawer {
      */
     default property alias content: mainContent.data
 
+    handleVisible: applicationWindow() ? applicationWindow().controlsVisible : true
+
     contentItem: ColumnLayout {
         id: mainColumn
         anchors.fill: parent

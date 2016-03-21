@@ -55,6 +55,17 @@ Rectangle {
     property QtObject __appWindow: applicationWindow();
     parent: __appWindow.contentItem;
 
+    transform: Translate {
+        id: translateTransform
+        y: __appWindow.controlsVisible ? 0 : -headerItem.height - shadow.height
+        Behavior on y {
+            NumberAnimation {
+                duration: Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+    }
+
     Connections {
         id: headerSlideConnection
         target: __appWindow.pageStack.currentItem ? __appWindow.pageStack.currentItem.flickable : null
@@ -195,6 +206,7 @@ Rectangle {
         }
     }
     LinearGradient {
+        id: shadow
         height: Units.gridUnit/2
         opacity: headerItem.y > -headerItem.height ? 1 : 0
         anchors {

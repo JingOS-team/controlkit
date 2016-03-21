@@ -132,14 +132,6 @@ ScrollablePage {
             onClicked: mainAction.visible = !mainAction.visible;
         }
         Controls.Button {
-            text: "Toggle Drawer Handles"
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: {
-                globalDrawer.handleVisible = !globalDrawer.handleVisible
-                contextDrawer.handleVisible = !contextDrawer.handleVisible
-            }
-        }
-        Controls.Button {
             text: "Show Passive Notification"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: showPassiveNotification("This is a passive message", 3000);
@@ -148,6 +140,13 @@ ScrollablePage {
             text: "Passive Notification Action"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: showPassiveNotification("This is a passive message", "long", "Action", function() {print("Passive notification action clicked")});
+        }
+        Controls.ToolButton {
+            text: "Toggle controls"
+            checkable: true
+            checked: true
+            anchors.horizontalCenter: parent.horizontalCenter
+            onCheckedChanged: applicationWindow().controlsVisible = checked
         }
         Controls.Button {
             text: "Disabled Button"

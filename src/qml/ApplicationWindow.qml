@@ -161,6 +161,15 @@ ApplicationWindow {
     property Item header: ApplicationHeader {
     }
 
+    /**
+     * controlsVisible: bool
+     * This property controls wether the standard chrome of the app, such
+     * as the Action button, the drawer handles and the application
+     * header should be visible or not.
+     */
+    property bool controlsVisible: true
+
+
     PageRow {
         id: __pageStack
         anchors {
