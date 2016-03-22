@@ -322,14 +322,27 @@ Item {
 
                 height: parent.height
             }
-            onMovementEnded: {
-                //get correct index
-                internal.syncIndexWithPosition();
-                //snap
-                internal.syncWithCurrentIndex();
+
+            onContentXChanged: {
+                if (!dragging) {
+                    scrollEventCompresstimer.restart();
+                }
             }
-            onFlickEnded: {
-                movementEnded();
+            onDraggingChanged: {
+                if (!dragging) {
+                    scrollEventCompresstimer.restart();
+                }
+            }
+
+            Timer {
+                id: scrollEventCompresstimer
+                interval: 150
+                onTriggered: {
+                    //get correct index
+                    internal.syncIndexWithPosition();
+                    //snap
+                    internal.syncWithCurrentIndex();
+                }
             }
             onWidthChanged: {
                 resizeEventCompressTimer.restart();
