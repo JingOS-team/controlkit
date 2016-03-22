@@ -338,7 +338,13 @@ Item {
                 id: resizeEventCompressTimer
                 interval: 150
                 onTriggered: {
-                    scrollToLevel(actualRoot.lastVisiblePage.parent.parent.pageLevel);
+                    if (actualRoot &&
+                        actualRoot.lastVisiblePage &&
+                        actualRoot.lastVisiblePage.parent &&
+                        actualRoot.lastVisiblePage.parent.parent &&
+                        actualRoot.lastVisiblePage.parent.parent.pageLevel) {
+                        scrollToLevel(actualRoot.lastVisiblePage.parent.parent.pageLevel);
+                    }
                 }
             }
         }
