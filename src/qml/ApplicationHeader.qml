@@ -129,7 +129,8 @@ Rectangle {
             fill: parent
             topMargin: Math.min(headerItem.height - headerItem.Layout.preferredHeight, -headerItem.y)
         }
-        property bool wideScreen: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.width > 0 && __appWindow.pageStack.width > __appWindow.pageStack.currentItem.width
+        cacheBuffer: __appWindow.pageStack.width
+        property bool wideScreen: __appWindow.pageStack.width > __appWindow.pageStack.height
         orientation: ListView.Horizontal
         boundsBehavior: Flickable.StopAtBounds
         //FIXME: proper implmentation needs Qt 5.6 for new ObjectModel api
