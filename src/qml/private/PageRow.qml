@@ -263,6 +263,11 @@ Item {
                 return;
             }
 
+            var mapped = actualRoot.currentItem.mapToItem(mainFlickable, 0, 0);
+            if (mapped.x >= 0 && mapped.x + actualRoot.currentItem.width <= actualRoot.width) {
+                return;
+            }
+
             //search the last page to kinda fit
             for (var i = Engine.pageStack.length - 1; i >= 0; --i) {
                 var item = Engine.pageStack[i];
