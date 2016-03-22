@@ -78,8 +78,13 @@ Rectangle {
                 __appWindow.pageStack.currentItem.flickable.atYEnd) {
                 return;
             }
-            headerItem.y = Math.min(0, Math.max(-headerItem.height + headerItem.Layout.minimumHeight, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY))
-            oldContentY = __appWindow.pageStack.currentItem.flickable.contentY
+
+            if (titleList.wideScreen) {
+                headerItem.y = -headerItem.height + headerItem.Layout.preferredHeight;
+            } else {
+                headerItem.y = Math.min(0, Math.max(-headerItem.height + headerItem.Layout.minimumHeight, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
+                oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
+            }
         }
     }
     Connections {
