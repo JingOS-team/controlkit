@@ -208,41 +208,53 @@ Item {
         }
     }
 
-    ScrollView {
-        id: scrollView
-        z: 2
+    MouseArea {
         anchors.fill: parent
-        Flickable {
-            id: mainFlickable
-            topMargin: height
-            contentWidth: width
-            contentHeight: flickableContents.height;
-            Item {
-                id: flickableContents
-                width: root.width
-                height: contentItem.height + topPadding + bottomPadding + Units.iconSizes.medium + Units.gridUnit
+        z: 2
+        drag.filterChildren: true
+
+        onClicked: {
+            var pos = mapToItem(flickableContents, mouse.x, mouse.y);
+            if (!flickableContents.contains(pos)) {
+                root.close();
+            }
+        }
+
+        ScrollView {
+            id: scrollView
+            anchors.fill: parent
+            Flickable {
+                id: mainFlickable
+                topMargin: height
+                contentWidth: width
+                contentHeight: flickableContents.height;
                 Item {
-                    id: contentItemParent
-                    anchors {
-                        fill: parent
-                        leftMargin: leftPadding
-                        topMargin: topPadding
-                        rightMargin: rightPadding
-                        bottomMargin: bottomPadding
+                    id: flickableContents
+                    width: root.width
+                    height: contentItem.height + topPadding + bottomPadding + Units.iconSizes.medium + Units.gridUnit
+                    Item {
+                        id: contentItemParent
+                        anchors {
+                            fill: parent
+                            leftMargin: leftPadding
+                            topMargin: topPadding
+                            rightMargin: rightPadding
+                            bottomMargin: bottomPadding
+                        }
                     }
                 }
-            }
-            bottomMargin: height
-            onMovementEnded: {
-                if ((root.height + mainFlickable.contentY) < root.height/2) {
-                    closeAnimation.to = -root.height;
-                    closeAnimation.running = true;
-                } else if ((root.height*0.6 + mainFlickable.contentY) > flickableContents.height) {
-                    closeAnimation.to = flickableContents.height
-                    closeAnimation.running = true;
+                bottomMargin: height
+                onMovementEnded: {
+                    if ((root.height + mainFlickable.contentY) < root.height/2) {
+                        closeAnimation.to = -root.height;
+                        closeAnimation.running = true;
+                    } else if ((root.height*0.6 + mainFlickable.contentY) > flickableContents.height) {
+                        closeAnimation.to = flickableContents.height
+                        closeAnimation.running = true;
+                    }
                 }
+                onFlickEnded: movementEnded();
             }
-            onFlickEnded: movementEnded();
         }
     }
 }
