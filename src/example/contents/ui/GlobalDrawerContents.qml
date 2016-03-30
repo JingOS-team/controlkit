@@ -20,13 +20,10 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
-import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.kirigami 1.0 as Kirigami
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kquickcontrolsaddons 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
 
-PlasmaExtras.ScrollArea {
+ScrollArea {
     implicitWidth: units.gridUnit * 12
     ListView {
         id: optionMenu
@@ -38,18 +35,18 @@ PlasmaExtras.ScrollArea {
                 left: parent.left
                 margins: units.largeSpacing
             }
-            PlasmaCore.IconItem {
+            Kirigami.Icon {
                 height: parent.height
                 width: height
                 source: "akregator"
             }
-            PlasmaExtras.Heading {
+            Kirigami.Heading {
                 level: 1
                 text: "Akregator"
             }
         }
-        delegate: PlasmaComponents.ListItem {
-            PlasmaComponents.Label {
+        delegate: Kirigami.ListItem {
+            Kirigami.Label {
                 anchors {
                     left: parent.left
                     margins: units.largeSpacing

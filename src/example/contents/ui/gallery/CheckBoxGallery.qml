@@ -21,8 +21,6 @@ import QtQuick 2.0
 import QtQuick.Controls 1.2 as Controls
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 1.0
-//FIXME
-import org.kde.plasma.core 2.0 as PlasmaCore
 
 ScrollablePage {
     id: page
@@ -82,62 +80,6 @@ ScrollablePage {
                     text: "Off"
                     checked: false
                     enabled: false
-                }
-            }
-        }
-        //FIXME: possible to have this in mobileComponents?
-        PlasmaCore.ColorScope {
-            colorGroup: PlasmaCore.Theme.ComplementaryColorGroup
-            Layout.fillWidth: true
-            Layout.minimumHeight: units.gridUnit * 10
-            Rectangle {
-                anchors {
-                    fill: parent
-                    leftMargin: -page.leftPadding
-                    rightMargin: -page.rightPadding
-                }
-                color: PlasmaCore.ColorScope.backgroundColor
-                GridLayout {
-                    anchors.centerIn: parent
-                    columns: 3
-                    rows: 3
-                    rowSpacing: Units.smallSpacing
-
-                    Item {
-                        width: 1
-                        height: 1
-                    }
-                    Label {
-                        text: "Normal"
-                    }
-                    Label {
-                        text: "Disabled"
-                        enabled: false
-                    }
-                    Label {
-                        text: "On"
-                    }
-                    Controls.CheckBox {
-                        text: "On"
-                        checked: true
-                    }
-                    Controls.CheckBox {
-                        text: "On"
-                        checked: true
-                        enabled: false
-                    }
-                    Label {
-                        text: "Off"
-                    }
-                    Controls.CheckBox {
-                        text: "Off"
-                        checked: false
-                    }
-                    Controls.CheckBox {
-                        text: "Off"
-                        checked: false
-                        enabled: false
-                    }
                 }
             }
         }

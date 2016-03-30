@@ -21,8 +21,6 @@ import QtQuick 2.0
 import QtQuick.Controls 1.2 as Controls
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 1.0
-//FIXME
-import org.kde.plasma.core 2.0 as PlasmaCore
 
 ScrollablePage {
     id: page
@@ -87,65 +85,6 @@ ScrollablePage {
                         maximumValue: 5.0
                         stepSize: 1.0
                         orientation: Qt.Vertical
-                    }
-                }
-            }
-        }
-        //FIXME: possible to have this in mobileComponents?
-        PlasmaCore.ColorScope {
-            colorGroup: PlasmaCore.Theme.ComplementaryColorGroup
-            Layout.fillWidth: true
-            Layout.minimumHeight: units.gridUnit * 20
-            Rectangle {
-                anchors {
-                    fill: parent
-                    leftMargin: -page.leftPadding
-                    rightMargin: -page.rightPadding
-                }
-                color: PlasmaCore.ColorScope.backgroundColor
-                ColumnLayout {
-                    anchors.centerIn: parent
-                    spacing: Units.smallSpacing
-
-                    Label {
-                        text: "Normal:"
-                    }
-                    Controls.Slider {
-                        Layout.minimumWidth: units.gridUnit * 15
-                        value: 2
-                        maximumValue: 5.0
-                    }
-                    Label {
-                        text: "Thickmarks:"
-                    }
-                    Controls.Slider {
-                        Layout.minimumWidth: units.gridUnit * 15
-                        tickmarksEnabled: true
-                        maximumValue: 5.0
-                        stepSize: 1.0
-                        value: 3
-                    }
-                    Label {
-                        text: "Vertical:"
-                    }
-                    RowLayout {
-                        Layout.alignment: Qt.AlignHCenter
-                        Controls.Slider {
-                            Layout.minimumWidth: 2
-                            Layout.minimumHeight: units.gridUnit * 10
-                            value: 2
-                            maximumValue: 5.0
-                            orientation: Qt.Vertical
-                        }
-                        Controls.Slider {
-                            Layout.minimumWidth: 2
-                            Layout.minimumHeight: units.gridUnit * 10
-                            value: 3
-                            tickmarksEnabled: true
-                            maximumValue: 5.0
-                            stepSize: 1.0
-                            orientation: Qt.Vertical
-                        }
                     }
                 }
             }
