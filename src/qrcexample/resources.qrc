@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="contents/ui/MainPage.qml">../example/contents/ui/MainPage.qml</file>
+        <file alias="contents/ui/banner.jpg">../example/contents/ui/banner.jpg</file>
+        <file alias="contents/ui/gallery/NonScrollableGallery.qml">../example/contents/ui/gallery/NonScrollableGallery.qml</file>
+        <file alias="contents/ui/gallery/RadioButtonGallery.qml">../example/contents/ui/gallery/RadioButtonGallery.qml</file>
+        <file alias="contents/ui/gallery/ButtonGallery.qml">../example/contents/ui/gallery/ButtonGallery.qml</file>
+        <file alias="contents/ui/gallery/ProgressBarGallery.qml">../example/contents/ui/gallery/ProgressBarGallery.qml</file>
+        <file alias="contents/ui/gallery/CheckBoxGallery.qml">../example/contents/ui/gallery/CheckBoxGallery.qml</file>
+        <file alias="contents/ui/gallery/SliderGallery.qml">../example/contents/ui/gallery/SliderGallery.qml</file>
+        <file alias="contents/ui/gallery/SwitchGallery.qml">../example/contents/ui/gallery/SwitchGallery.qml</file>
+        <file alias="contents/ui/gallery/TextFieldGallery.qml">../example/contents/ui/gallery/TextFieldGallery.qml</file>
+        <file alias="contents/ui/ExampleApp.qml">../example/contents/ui/ExampleApp.qml</file>
+        <file alias="metadata.desktop">../example/metadata.desktop</file>
+    </qresource>
+</RCC>

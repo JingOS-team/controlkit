@@ -25,3 +25,5 @@ install(FILES ${platformspecific} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kiri
 
 install(DIRECTORY example/ DESTINATION ${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}/kpackage/genericqml/org.kde.kirigami.gallery)
 install(FILES example/metadata.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} RENAME org.kde.kirigami.gallery.desktop)
+
+add_subdirectory(qrcexample)
