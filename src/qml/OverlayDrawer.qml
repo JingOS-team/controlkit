@@ -463,7 +463,7 @@ AbstractDrawer {
                         horizontalOffset: 0
                         verticalOffset: 0
                         radius: Units.gridUnit
-                        samples: radius * 2
+                        samples: 32
                         color: Qt.rgba(0, 0, 0, 0.5)
                         source: drawerHandle
                     }
