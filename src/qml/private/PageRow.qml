@@ -269,6 +269,12 @@ Item {
             }
         }
         onFlickEnded: movementEnded();
+        remove: Transition {
+            ParallelAnimation {
+                NumberAnimation { property: "opacity"; to: 0; duration: 1000 }
+                NumberAnimation { properties: "x,y"; to: 100; duration: 1000 }
+            }
+        }
     }
 
     Component {
