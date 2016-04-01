@@ -106,6 +106,7 @@ Kirigami.ApplicationWindow {
     Component {
         id: settingsComponent
         Kirigami.Page {
+            title: "Settings"
             objectName: "settingsPage"
             Rectangle {
                 anchors.fill: parent

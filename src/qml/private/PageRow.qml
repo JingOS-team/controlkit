@@ -314,6 +314,7 @@ Item {
             boundsBehavior: Flickable.StopAtBounds
             contentWidth: root.width
             contentHeight: height
+            maximumFlickVelocity: width*25
             onContentWidthChanged: internal.syncWithCurrentIndex();
             Row {
                 id: root
