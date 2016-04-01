@@ -1,5 +1,5 @@
 module org.kde.kirigami
-#plugin kirigamiplugin
+plugin kirigamiplugin
 
 singleton Units 1.0 Units.qml
 singleton Theme 1.0 Theme.qml
