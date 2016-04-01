@@ -444,7 +444,7 @@ Item {
                     bottom: parent.bottom
                     right: actualContainer.right
                 }
-                width: Math.round(Units.smallSpacing / 3);
+                width: Math.ceil(Units.smallSpacing / 5);
                 color: Theme.textColor
                 opacity: 0.3
                 visible: container.pageDepth < actualRoot.depth
