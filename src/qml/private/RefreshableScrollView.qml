@@ -146,7 +146,7 @@ ScrollView {
                 }
                 //only show in ListViews
                 visible: root.flickableItem == root.contentItem
-                height: Math.round(Units.smallSpacing / 3);
+                height: Math.ceil(Units.smallSpacing / 5);
             }
             onYChanged: {
                 if (!supportsRefreshing) {
