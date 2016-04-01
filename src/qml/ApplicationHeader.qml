@@ -175,7 +175,7 @@ Rectangle {
                 spacing: Units.gridUnit
                 Rectangle {
                     opacity: model.index > 0 ? 0.4 : 0
-                    visible: !titleList.wideScreen
+                    visible: !titleList.wideScreen && opacity > 0
                     color: Theme.viewBackgroundColor
                     anchors.verticalCenter: parent.verticalCenter
                     width: height
