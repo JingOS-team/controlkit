@@ -30,9 +30,9 @@ import QtGraphicalEffects 1.0
  * Scrolling the main page will make it taller or shorter (trough the point of going away)
  * It's a behavior similar to the typical mobile web browser adressbar
  * the minimum, preferred and maximum heights of the item can be controlled with
- * * Layout.minimumHeight: default is 0, i.e. hidden
- * * Layout.preferredHeight: default is Units.gridUnit * 1.6
- * * Layout.maximumHeight: default is Units.gridUnit * 3
+ * * minimumHeight: default is 0, i.e. hidden
+ * * preferredHeight: default is Units.gridUnit * 1.6
+ * * maximumHeight: default is Units.gridUnit * 3
  *
  * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
  */
@@ -44,13 +44,13 @@ Rectangle {
         right: parent.right
     }
     color: Theme.highlightColor
-    Layout.minimumHeight: 0
-    Layout.preferredHeight: Units.gridUnit * 1.6
-    Layout.maximumHeight: Units.gridUnit * 3
+    property int minimumHeight: 0
+    property int preferredHeight: Units.gridUnit * 1.6
+    property int maximumHeight: Units.gridUnit * 3
 
-    height: Layout.maximumHeight
+    height: maximumHeight
 
-    y: -height + Layout.preferredHeight
+    y: -height + preferredHeight
 
     property QtObject __appWindow: applicationWindow();
     parent: __appWindow.contentItem;
@@ -80,9 +80,9 @@ Rectangle {
             }
 
             if (titleList.wideScreen) {
-                headerItem.y = -headerItem.height + headerItem.Layout.preferredHeight;
+                headerItem.y = -headerItem.height + headerItem.preferredHeight;
             } else {
-                headerItem.y = Math.min(0, Math.max(-headerItem.height + headerItem.Layout.minimumHeight, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
+                headerItem.y = Math.min(0, Math.max(-headerItem.height + headerItem.minimumHeight, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
                 oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
             }
         }
@@ -98,7 +98,7 @@ Rectangle {
             } else {
                 headerSlideConnection.oldContentY = 0;
             }
-            headerItem.y = -headerItem.height + headerItem.Layout.preferredHeight;
+            headerItem.y = -headerItem.height + headerItem.preferredHeight;
         }
 
         onContentChildrenChanged: {
@@ -132,7 +132,7 @@ Rectangle {
         id: titleList
         anchors {
             fill: parent
-            topMargin: Math.min(headerItem.height - headerItem.Layout.preferredHeight, -headerItem.y)
+            topMargin: Math.min(headerItem.height - headerItem.preferredHeight, -headerItem.y)
         }
         cacheBuffer: __appWindow.pageStack.width
         property bool wideScreen: __appWindow.pageStack.width > __appWindow.pageStack.height
