@@ -137,7 +137,7 @@ Rectangle {
             id: model
         }
         //__appWindow.pageStack.depth
-        spacing: wideScreen ? 0 : Units.gridUnit
+        spacing: 0
         currentIndex: __appWindow.pageStack.currentIndex
         snapMode: ListView.SnapToItem
 
@@ -164,13 +164,14 @@ Rectangle {
                 if (titleList.wideScreen) {
                     return __appWindow.pageStack.defaultColumnWidth;
                 } else {
-                    return Math.min(titleList.width, delegateRoot.implicitWidth);
+                    return Math.min(titleList.width, delegateRoot.implicitWidth + Units.gridUnit + Units.smallSpacing);
                 }
             }
             height: titleList.height
             onClicked: __appWindow.pageStack.currentIndex = model.index
             Row {
                 id: delegateRoot
+                x: Units.smallSpacing
 
                 spacing: Units.gridUnit
                 Rectangle {
@@ -179,7 +180,7 @@ Rectangle {
                     color: Theme.viewBackgroundColor
                     anchors.verticalCenter: parent.verticalCenter
                     width: height
-                    height: Math.min(Units.gridUnit, title.height / 2)
+                    height: Math.min(Units.gridUnit/2, title.height / 2)
                     radius: width
                 }
                 Heading {

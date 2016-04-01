@@ -33,7 +33,7 @@ ScrollablePage {
 
         Item {
             Layout.fillWidth: true
-            Layout.minimumHeight: units.gridUnit * 20
+            Layout.minimumHeight: Units.gridUnit * 20
             ColumnLayout {
                 anchors.centerIn: parent
                 spacing: Units.smallSpacing
@@ -42,7 +42,7 @@ ScrollablePage {
                     text: "Normal:"
                 }
                 Controls.Slider {
-                    Layout.minimumWidth: units.gridUnit * 15
+                    Layout.minimumWidth: Units.gridUnit * 15
                     value: 2
                     maximumValue: 5.0
                 }
@@ -51,7 +51,7 @@ ScrollablePage {
                 }
                 Controls.Slider {
                     enabled: false
-                    Layout.minimumWidth: units.gridUnit * 15
+                    Layout.minimumWidth: Units.gridUnit * 15
                     value: 2
                     maximumValue: 5.0
                 }
@@ -59,7 +59,7 @@ ScrollablePage {
                     text: "Thickmarks:"
                 }
                 Controls.Slider {
-                    Layout.minimumWidth: units.gridUnit * 15
+                    Layout.minimumWidth: Units.gridUnit * 15
                     tickmarksEnabled: true
                     maximumValue: 5.0
                     stepSize: 1.0
@@ -72,14 +72,14 @@ ScrollablePage {
                     Layout.alignment: Qt.AlignHCenter
                     Controls.Slider {
                         Layout.minimumWidth: 2
-                        Layout.minimumHeight: units.gridUnit * 10
+                        Layout.minimumHeight: Units.gridUnit * 10
                         value: 2
                         maximumValue: 5.0
                         orientation: Qt.Vertical
                     }
                     Controls.Slider {
                         Layout.minimumWidth: 2
-                        Layout.minimumHeight: units.gridUnit * 10
+                        Layout.minimumHeight: Units.gridUnit * 10
                         value: 3
                         tickmarksEnabled: true
                         maximumValue: 5.0

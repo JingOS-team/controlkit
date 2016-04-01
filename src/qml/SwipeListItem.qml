@@ -161,7 +161,7 @@ Item {
                 right: parent.right
                 bottom: parent.bottom
             }
-            height: Math.round(Units.smallSpacing / 3);
+            height: Math.ceil(Units.smallSpacing / 5);
         }
     }
 
