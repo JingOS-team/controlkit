@@ -114,6 +114,7 @@ Kirigami.ScrollablePage {
                 if (!model.component) {
                     return;
                 }
+                root.pageStack.pop(pageRoot);
                 ownPage = root.pageStack.push(Qt.resolvedUrl("gallery/" + model.component + "Gallery.qml"));
             }
             checked: ownPage && root.pageStack.lastItem == ownPage
