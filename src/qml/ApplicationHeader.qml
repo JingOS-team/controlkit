@@ -50,7 +50,7 @@ Rectangle {
 
     height: maximumHeight
 
-    y: -height + preferredHeight
+    y: -maximumHeight + preferredHeight
 
     property QtObject __appWindow: applicationWindow();
     parent: __appWindow.contentItem;
@@ -80,7 +80,7 @@ Rectangle {
             }
 
             if (titleList.wideScreen) {
-                headerItem.y = -headerItem.height + headerItem.preferredHeight;
+                headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
             } else {
                 headerItem.y = Math.min(0, Math.max(-headerItem.height + headerItem.minimumHeight, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
                 oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
@@ -98,7 +98,7 @@ Rectangle {
             } else {
                 headerSlideConnection.oldContentY = 0;
             }
-            headerItem.y = -headerItem.height + headerItem.preferredHeight;
+            headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
         }
 
         onContentChildrenChanged: {

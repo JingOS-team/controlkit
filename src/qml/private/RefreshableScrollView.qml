@@ -181,8 +181,8 @@ ScrollView {
                 interval: 100
                 onTriggered: {
                     if (applicationWindow() && applicationWindow().header) {
-                        flickableItem.contentY = -applicationWindow().header.Layout.preferredHeight;
-                        applicationWindow().header.y = -applicationWindow().header.height +applicationWindow().header.Layout.preferredHeight;
+                        flickableItem.contentY = -applicationWindow().header.preferredHeight;
+                        applicationWindow().header.y = -applicationWindow().header.maximumHeight +applicationWindow().header.preferredHeight;
                     }
 
                     if (root.contentItem == root.flickableItem) {
