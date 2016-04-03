@@ -86,6 +86,15 @@ Rectangle {
                 oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
             }
         }
+        onMovementEnded: {
+            if (headerItem.y > -headerItem.maximumHeight + headerItem.preferredHeight) {
+                //if don't change the position if more then preferredSize is shown
+            } else if (headerItem.y > -headerItem.maximumHeight + headerItem.preferredHeight - headerItem.preferredHeight/2 ) {
+                headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
+            } else {
+                headerItem.y = -headerItem.maximumHeight;
+            }
+        }
     }
     Connections {
         target: __appWindow.pageStack
