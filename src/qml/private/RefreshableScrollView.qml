@@ -107,35 +107,20 @@ ScrollView {
 
     children: [
         Item {
+            id: busyIndicatorFrame
             z: 99
             y: -root.flickableItem.contentY-height
             width: root.flickableItem.width
-            height: root.flickableItem.topMargin
+            height: busyIndicator.height + Units.gridUnit * 2
             BusyIndicator {
                 id: busyIndicator
                 anchors.centerIn: parent
                 running: root.refreshing
-                visible: root.refreshing || parent.y < root.flickableItem.topMargin
-                opacity: supportsRefreshing ? (root.refreshing ? 1 : (parent.y/(busyIndicator.height*2))) : 0
+                visible: root.refreshing || parent.y >0
+                opacity: supportsRefreshing ? (root.refreshing ? 1 : (parent.y/busyIndicatorFrame.height)) : 0
                 rotation: root.refreshing ? 0 : 360 * opacity
             }
-            Label {
-                id: label
-                anchors {
-                    bottom: parent.bottom
-                    horizontalCenter: parent.horizontalCenter
-                    bottomMargin: Units.gridUnit * 2
-                }
-                //FIXME: how to translate at this tier?
-                text: "Pull down to refresh"
-                opacity: supportsRefreshing ? (root.refreshing ? 0 : Math.min(1, ((parent.height - Units.gridUnit * 8) + parent.y) / (Units.gridUnit * 9))) : 0
-                Behavior on opacity {
-                    OpacityAnimator {
-                        duration: Units.longDuration
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-            }
+
             Rectangle {
                 color: Theme.textColor
                 opacity: 0.2
@@ -149,24 +134,31 @@ ScrollView {
                 height: Math.ceil(Units.smallSpacing / 5);
             }
             onYChanged: {
+                if (y > Units.gridUnit * 15 && applicationWindow() && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
+                    //here assume applicationWindow().pageStack has a translate as transform
+                    applicationWindow().pageStack.transform[0].y = root.height/2;
+                } else if (y < root.flickableItem.contentHeight - root.height + Units.gridUnit * 15) {
+                    applicationWindow().pageStack.transform[0].y = 0;
+                }
+
                 if (!supportsRefreshing) {
                     return;
                 }
-                if (!root.refreshing && y > busyIndicator.height*2) {
+                if (!root.refreshing && y > busyIndicatorFrame.height) {
                     root.refreshing = true;
                 }
             }
             Binding {
                 target: root.flickableItem
                 property: "topMargin"
-                value: height/2
+                value: root.topPadding + (root.refreshing ? busyIndicatorFrame.height : 0)
             }
 
 
             Binding {
                 target: root.flickableItem
                 property: "bottomMargin"
-                value: Math.max((root.height - root.flickableItem.contentHeight), Units.gridUnit * 5)
+                value: Units.gridUnit * 5
             }
 
             Binding {

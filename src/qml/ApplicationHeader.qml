@@ -53,7 +53,7 @@ Rectangle {
     y: -maximumHeight + preferredHeight
 
     property QtObject __appWindow: applicationWindow();
-    parent: __appWindow.contentItem;
+    parent: __appWindow.pageStack;
 
     transform: Translate {
         id: translateTransform
@@ -139,9 +139,15 @@ Rectangle {
 
     ListView {
         id: titleList
+        property Translate overshootTransform
+        Component.onCompleted: {
+            if (applicationWindow() && applicationWindow().pageStack.transform[0]) {
+                overshootTransform = applicationWindow().pageStack.transform[0]
+            }
+        }
         anchors {
             fill: parent
-            topMargin: Math.min(headerItem.height - headerItem.preferredHeight, -headerItem.y)
+            topMargin: overshootTransform && overshootTransform.y > 0 ? 0 : Math.min(headerItem.height - headerItem.preferredHeight, -headerItem.y)
         }
         cacheBuffer: __appWindow.pageStack.width
         property bool wideScreen: __appWindow.pageStack.width > __appWindow.pageStack.height
