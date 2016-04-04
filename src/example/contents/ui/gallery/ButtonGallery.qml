@@ -47,11 +47,7 @@ ScrollablePage {
         iconName: sheet.opened ? "dialog-cancel" : "document-edit"
         onTriggered: {
             print("Action button in buttons page clicked");
-            if (sheet.opened) {
-                sheet.close();
-            } else {
-                sheet.open();
-            }
+            sheet.opened = !sheet.opened
         }
     }
 

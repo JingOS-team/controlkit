@@ -69,12 +69,18 @@ Item {
 
     function open() {
         root.visible = true;
+        openAnimation.from = -root.height;
+        openAnimation.to = openAnimation.topOpenPosition;
         openAnimation.running = true;
         root.opened = true;
     }
 
     function close() {
-        closeAnimation.to = -height;
+        if (mainFlickable.contentY < 0) {
+            closeAnimation.to = -height;
+        } else {
+            closeAnimation.to = flickableContents.height;
+        }
         closeAnimation.running = true;
     }
 
@@ -185,10 +191,12 @@ Item {
 
     NumberAnimation {
         id: openAnimation
+        property int topOpenPosition: Math.min(-root.height*0.15, flickableContents.height - root.height + Units.gridUnit * 5)
+        property int bottomOpenPosition: (flickableContents.height - root.height) + (Units.gridUnit * 5)
         target: mainFlickable
         properties: "contentY"
         from: -root.height
-        to: Math.min(-root.height*0.15, flickableContents.height - root.height)
+        to: topOpenPosition
         duration: Units.longDuration
         easing.type: Easing.InOutQuad
     }
@@ -245,12 +253,24 @@ Item {
                 }
                 bottomMargin: height
                 onMovementEnded: {
+                    //close
                     if ((root.height + mainFlickable.contentY) < root.height/2) {
                         closeAnimation.to = -root.height;
                         closeAnimation.running = true;
                     } else if ((root.height*0.6 + mainFlickable.contentY) > flickableContents.height) {
                         closeAnimation.to = flickableContents.height
                         closeAnimation.running = true;
+
+                    //reset to the default opened position
+                    } else if (mainFlickable.contentY < openAnimation.topOpenPosition) {
+                        openAnimation.from = mainFlickable.contentY;
+                        openAnimation.to = openAnimation.topOpenPosition;
+                        openAnimation.running = true;
+                    //reset to the default "bottom" opened position
+                    } else if (mainFlickable.contentY > openAnimation.bottomOpenPosition) {
+                        openAnimation.from = mainFlickable.contentY;
+                        openAnimation.to = openAnimation.bottomOpenPosition;
+                        openAnimation.running = true;
                     }
                 }
                 onFlickEnded: movementEnded();
