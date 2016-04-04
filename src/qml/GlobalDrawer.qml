@@ -264,6 +264,7 @@ OverlayDrawer {
                     id: menuComponent
                     ColumnLayout {
                         id: optionMenu
+                        spacing: 0
 
                         property int level: 0
 
