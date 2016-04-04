@@ -134,10 +134,10 @@ ScrollView {
                 height: Math.ceil(Units.smallSpacing / 5);
             }
             onYChanged: {
-                if (y > Units.gridUnit * 15 && applicationWindow() && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
+                if (y > Units.gridUnit * 5 && applicationWindow() && root.flickableItem.atYBeginning && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
                     //here assume applicationWindow().pageStack has a translate as transform
                     applicationWindow().pageStack.transform[0].y = root.height/2;
-                } else if (y < root.flickableItem.contentHeight - root.height + Units.gridUnit * 15) {
+                } else if (root.flickableItem.atYEnd && y < -(Math.max(0, root.flickableItem.contentHeight - root.height) + Units.gridUnit * 5)) {
                     applicationWindow().pageStack.transform[0].y = 0;
                 }
 
