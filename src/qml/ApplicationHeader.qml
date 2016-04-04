@@ -144,6 +144,11 @@ Rectangle {
             if (applicationWindow() && applicationWindow().pageStack.transform[0]) {
                 overshootTransform = applicationWindow().pageStack.transform[0]
             }
+            //only on iOs put the back button on top left corner
+            if (Qt.platform.os == "ios") {
+                titleList.header = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"))
+                print(titleList.header.error)
+            }
         }
         anchors {
             fill: parent
@@ -179,6 +184,7 @@ Rectangle {
                 __appWindow.pageStack.contentItem.movementEnded();
             }
         }
+
         delegate: MouseArea {
             width: {
                 //more columns shown?
