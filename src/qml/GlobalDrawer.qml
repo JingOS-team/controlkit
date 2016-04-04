@@ -265,11 +265,13 @@ OverlayDrawer {
                     ColumnLayout {
                         id: optionMenu
                         spacing: 0
+                        property alias model: actionsRepeater.model
 
                         property int level: 0
 
 
                         Repeater {
+                            id: actionsRepeater
                             model: actions
                             delegate: BasicListItem {
                                 supportsMouseEvents: true
