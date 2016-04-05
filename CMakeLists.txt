@@ -57,5 +57,7 @@ find_package(PkgConfig)
 #########################################################################
 
 add_subdirectory(src)
+#TODO: conditional
+add_subdirectory(examples)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
