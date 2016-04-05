@@ -469,9 +469,7 @@ AbstractDrawer {
                     }
                 }
 
-                LinearGradient {
-                    width: Units.gridUnit/2
-                    height: Units.gridUnit/2
+                EdgeShadow {
                     anchors {
                         right: root.edge == Qt.RightEdge ? drawerPage.left : (root.edge == Qt.LeftEdge ? undefined : parent.right)
                         left: root.edge == Qt.LeftEdge ? drawerPage.right : (root.edge == Qt.RightEdge ? undefined : parent.left)
@@ -480,22 +478,7 @@ AbstractDrawer {
                     }
 
                     opacity: root.position == 0 ? 0 : 1
-                    start: Qt.point(0, 0)
-                    end: (root.edge == Qt.RightEdge || root.edge == Qt.LeftEdge) ? Qt.point(Units.gridUnit/2, 0) : Qt.point(0, Units.gridUnit/2)
-                    gradient: Gradient {
-                        GradientStop {
-                            position: 0.0
-                            color: root.edge == Qt.LeftEdge ? Qt.rgba(0, 0, 0, 0.3) : "transparent"
-                        }
-                        GradientStop {
-                            position: root.edge == Qt.LeftEdge ? 0.3 : 0.7
-                            color: Qt.rgba(0, 0, 0, 0.15)
-                        }
-                        GradientStop {
-                            position: 1.0
-                            color: root.edge == Qt.LeftEdge ? "transparent" : Qt.rgba(0, 0, 0, 0.3)
-                        }
-                    }
+
                     Behavior on opacity {
                         NumberAnimation {
                             duration: Units.longDuration

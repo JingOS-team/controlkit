@@ -20,7 +20,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.3
 import org.kde.kirigami 1.0
-import QtGraphicalEffects 1.0
+import "private"
 
 /**
  * An overlay sheet that covers the current Page content.
@@ -102,68 +102,22 @@ Item {
             y: -mainFlickable.contentY
             height: mainFlickable.contentHeight
 
-            LinearGradient {
-                height: Units.gridUnit/2
+            EdgeShadow {
+                edge: Qt.BottomEdge
                 anchors {
                     right: parent.right
                     left: parent.left
                     bottom: parent.top
                 }
-
-                start: Qt.point(0, Units.gridUnit/2)
-                end: Qt.point(0, 0)
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0.0
-                        color: Qt.rgba(0, 0, 0, 0.4)
-                    }
-                    GradientStop {
-                        position: 0.3
-                        color: Qt.rgba(0, 0, 0, 0.1)
-                    }
-                    GradientStop {
-                        position: 1.0
-                        color:  "transparent"
-                    }
-                }
-                Behavior on opacity {
-                    OpacityAnimator {
-                        duration: Units.longDuration
-                        easing.type: Easing.InOutQuad
-                    }
-                }
             }
-
-            LinearGradient {
-                height: Units.gridUnit/2
+            EdgeShadow {
+                edge: Qt.TopEdge
                 anchors {
                     right: parent.right
                     left: parent.left
                     top: parent.bottom
                 }
 
-                start: Qt.point(0, 0)
-                end: Qt.point(0, Units.gridUnit/2)
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0.0
-                        color: Qt.rgba(0, 0, 0, 0.4)
-                    }
-                    GradientStop {
-                        position: 0.3
-                        color: Qt.rgba(0, 0, 0, 0.1)
-                    }
-                    GradientStop {
-                        position: 1.0
-                        color:  "transparent"
-                    }
-                }
-                Behavior on opacity {
-                    OpacityAnimator {
-                        duration: Units.longDuration
-                        easing.type: Easing.InOutQuad
-                    }
-                }
             }
         }
     }

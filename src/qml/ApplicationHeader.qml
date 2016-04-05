@@ -22,7 +22,6 @@ import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.2
 import "private"
 import org.kde.kirigami 1.0
-import QtGraphicalEffects 1.0
 
 
 /**
@@ -238,31 +237,14 @@ Rectangle {
             }
         }
     }
-    LinearGradient {
+    EdgeShadow {
         id: shadow
-        height: Units.gridUnit/2
+        edge: Qt.TopEdge
         opacity: headerItem.y > -headerItem.height ? 1 : 0
         anchors {
             right: parent.right
             left: parent.left
             top: parent.bottom
-        }
-
-        start: Qt.point(0, 0)
-        end: Qt.point(0, Units.gridUnit/2)
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: Qt.rgba(0, 0, 0, 0.2)
-            }
-            GradientStop {
-                position: 0.3
-                color: Qt.rgba(0, 0, 0, 0.1)
-            }
-            GradientStop {
-                position: 1.0
-                color:  "transparent"
-            }
         }
         Behavior on opacity {
             OpacityAnimator {
