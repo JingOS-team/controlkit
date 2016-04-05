@@ -189,6 +189,15 @@ Rectangle {
             }
         }
 
+        NumberAnimation {
+            id: scrollTopAnimation
+            target: __appWindow.pageStack.currentItem.flickable
+            properties: "contentY"
+            to: 0
+            duration: Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+
         delegate: MouseArea {
             width: {
                 //more columns shown?
@@ -199,7 +208,14 @@ Rectangle {
                 }
             }
             height: titleList.height
-            onClicked: __appWindow.pageStack.currentIndex = model.index
+            onClicked: {
+                //scroll up if current otherwise make current
+                if (__appWindow.pageStack.currentIndex == model.index) {
+                    scrollTopAnimation.running = true;
+                } else {
+                    __appWindow.pageStack.currentIndex = model.index;
+                }
+            }
             Row {
                 id: delegateRoot
                 x: Units.smallSpacing
