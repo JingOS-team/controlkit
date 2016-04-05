@@ -30,9 +30,9 @@ import "private"
  * @code
  * ListView {
  *     model: myModel
- *     delegate: ActionsForListItem {
- *         BasicListItem {
- *             label: model.text
+ *     delegate: SwipeListItem {
+ *         Label {
+ *             text: model.text
  *         }
  *         actions: [
  *              Action {
