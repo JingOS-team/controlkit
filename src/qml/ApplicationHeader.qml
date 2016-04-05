@@ -47,6 +47,7 @@ Rectangle {
     property int minimumHeight: 0
     property int preferredHeight: Units.gridUnit * 1.6
     property int maximumHeight: Units.gridUnit * 3
+    property alias contentItem: titleList
 
     height: maximumHeight
 
@@ -146,12 +147,16 @@ Rectangle {
             }
             //only on iOs put the back button on top left corner
             if (Qt.platform.os == "ios") {
-                titleList.header = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"))
-                print(titleList.header.error)
+                var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
+                print(component.error);
+                titleList.backButton = component.createObject(headerItem);
             }
         }
+        property Item backButton
+        clip: true
         anchors {
             fill: parent
+            leftMargin: backButton ? backButton.width : 0
             topMargin: overshootTransform && overshootTransform.y > 0 ? 0 : Math.min(headerItem.height - headerItem.preferredHeight, -headerItem.y)
         }
         cacheBuffer: __appWindow.pageStack.width

@@ -21,7 +21,11 @@ import QtQuick 2.1
 import org.kde.kirigami 1.0
 
 MouseArea {
-    height: titleList.height
+    anchors {
+        left: parent.left
+        top: parent.contentItem.top
+        bottom: parent.contentItem.bottom
+    }
     width: visible ? height : 0
     visible: __appWindow.pageStack.currentIndex > 0
     onClicked: __appWindow.pageStack.currentIndex--
