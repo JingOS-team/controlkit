@@ -122,7 +122,7 @@ OverlayDrawer {
      * }
      * @endcode
      */
-    property list<Action> actions
+    property list<QtObject> actions
 
 
     /**
@@ -149,7 +149,7 @@ OverlayDrawer {
      */
     default property alias content: mainContent.data
 
-    handleVisible: applicationWindow() ? applicationWindow().controlsVisible : true
+    handleVisible: typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true
 
     contentItem: Controls.ScrollView {
         anchors.fill: parent
@@ -290,7 +290,7 @@ OverlayDrawer {
                                     }
                                     width: height
                                     source: "go-next"
-                                    visible: modelData.children.length > 0
+                                    visible: modelData.children!==undefined && modelData.children.length > 0
                                 }
 
                                 onClicked: {
