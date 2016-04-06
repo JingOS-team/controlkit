@@ -33,7 +33,7 @@ import "private"
 AbstractDrawer {
     id: root
     anchors.fill: parent
-    z: 9999
+    z: opened ? 9999 : 9998
 
 //BEGIN Properties
     /**
@@ -191,8 +191,8 @@ AbstractDrawer {
             bottom: root.edge == Qt.TopEdge ? undefined : parent.bottom
         }
         z: 99
-        width: Units.smallSpacing * 2
-        height: Units.smallSpacing * 2
+        width: Units.smallSpacing * 3
+        height: Units.smallSpacing * 3
         property int startMouseX
         property real oldMouseX
         property int startMouseY

@@ -176,7 +176,7 @@ ScrollView {
             }
             Timer {
                 id: overshootResetTimer
-                interval: 5000
+                interval: 8000
                 onTriggered: {
                     applicationWindow().pageStack.transform[0].y = 0;
                 }
@@ -184,7 +184,7 @@ ScrollView {
             //HACK?
             Timer {
                 id: canOvershootBackTimer
-                interval: 500
+                interval: 800
             }
             Connections {
                 target: root.flickableItem
