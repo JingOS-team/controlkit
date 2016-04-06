@@ -294,7 +294,7 @@ OverlayDrawer {
                                 }
 
                                 onClicked: {
-                                    if (modelData.children.length > 0) {
+                                    if (modelData.children!==undefined && modelData.children.length > 0) {
                                         stackView.push(menuComponent, {"model": modelData.children, "level": level + 1});
                                     } else {
                                         modelData.trigger();
