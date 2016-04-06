@@ -470,6 +470,7 @@ AbstractDrawer {
                 }
 
                 EdgeShadow {
+                    edge: root.edge
                     anchors {
                         right: root.edge == Qt.RightEdge ? drawerPage.left : (root.edge == Qt.LeftEdge ? undefined : parent.right)
                         left: root.edge == Qt.LeftEdge ? drawerPage.right : (root.edge == Qt.RightEdge ? undefined : parent.left)
