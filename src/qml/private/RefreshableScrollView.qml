@@ -118,8 +118,7 @@ ScrollView {
                 anchors.centerIn: parent
                 running: root.refreshing
                 visible: root.refreshing
-                width: Units.gridUnit * 2
-                height: width
+                //Android busywidget QQC seems to be broken at custom sizes
             }
             Rectangle {
                 id: spinnerProgress
@@ -161,16 +160,17 @@ ScrollView {
                 height: Math.ceil(Units.smallSpacing / 5);
             }
             onYChanged: {
-                if (y > busyIndicatorFrame.height*2 && applicationWindow() && root.flickableItem.atYBeginning && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
+                if (y > busyIndicatorFrame.height*1.5 + topPadding && applicationWindow() && root.flickableItem.atYBeginning && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
                     //here assume applicationWindow().pageStack has a translate as transform
                     applicationWindow().pageStack.transform[0].y = root.height/2;
                     overshootResetTimer.restart();
+                    canOvershootBackTimer.restart();
                 }
 
                 if (!supportsRefreshing) {
                     return;
                 }
-                if (!root.refreshing && y > busyIndicatorFrame.height) {
+                if (!root.refreshing && y > busyIndicatorFrame.height/2 + topPadding) {
                     root.refreshing = true;
                 }
             }
@@ -179,19 +179,19 @@ ScrollView {
                 interval: 5000
                 onTriggered: {
                     applicationWindow().pageStack.transform[0].y = 0;
-                    canOvershootBack = false;
                 }
+            }
+            //HACK?
+            Timer {
+                id: canOvershootBackTimer
+                interval: 500
             }
             Connections {
                 target: root.flickableItem
-                property bool canOvershootBack: false
                 onMovementEnded: {
-                    if (canOvershootBack &&
+                    if (!canOvershootBackTimer.running &&
                         applicationWindow().pageStack.transform[0].y > 0) {
                         applicationWindow().pageStack.transform[0].y = 0;
-                        canOvershootBack = false;
-                    } else {
-                        canOvershootBack = true;
                     }
                 }
             }
