@@ -310,7 +310,7 @@ Item {
             }
             positionAnimation.running = true;
         }
-        property real internalPosition:  (mainFlickable.contentX/(listItem.width-listItem.height));
+        readonly property real internalPosition:  (mainFlickable.contentX/(listItem.width-listItem.height));
         onInternalPositionChanged: {
             listItem.position = internalPosition;
         }

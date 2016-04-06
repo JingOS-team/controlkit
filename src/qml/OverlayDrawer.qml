@@ -350,7 +350,7 @@ AbstractDrawer {
             contentWidth: mainItem.width
             contentHeight: mainItem.height
             boundsBehavior: Flickable.StopAtBounds
-            property real internalPosition: {
+            readonly property real internalPosition: {
                 switch (root.edge) {
                 case Qt.RightEdge:
                     return mainFlickable.contentX/drawerPage.width;
