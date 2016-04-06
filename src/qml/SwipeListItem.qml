@@ -19,6 +19,7 @@
 
 import QtQuick 2.5
 import QtQuick.Layouts 1.2
+import QtQuick.Controls.Private 1.0
 import org.kde.kirigami 1.0
 import "private"
 
@@ -145,11 +146,17 @@ Item {
         parent: itemMouse
         anchors.fill: parent
         visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
-        opacity: itemMouse.containsMouse && !itemMouse.pressed ? 0.5 : 1
+        Rectangle {
+            anchors.fill: parent
+            visible: !Settings.isMobile
+            color: Theme.highlightColor
+            opacity: itemMouse.containsMouse && !itemMouse.pressed ? 0.2 : 0
+            Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
+        }
         Behavior on color {
             ColorAnimation { duration: Units.longDuration }
         }
-        Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
+        
 
         Rectangle {
             id: separator
@@ -319,6 +326,7 @@ Item {
                     top: parent.top
                     bottom: parent.bottom
                 }
+                hoverEnabled: !Settings.isMobile
                 width: mainFlickable.width
                 onClicked: listItem.clicked()
                 onPressAndHold: listItem.pressAndHold()
