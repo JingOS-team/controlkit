@@ -19,6 +19,7 @@
 
 import QtQuick 2.5
 import QtQuick.Controls 1.3
+import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 1.0
 
@@ -116,9 +117,35 @@ ScrollView {
                 id: busyIndicator
                 anchors.centerIn: parent
                 running: root.refreshing
-                visible: root.refreshing || parent.y >0
-                opacity: supportsRefreshing ? (root.refreshing ? 1 : (parent.y/busyIndicatorFrame.height)) : 0
-                rotation: root.refreshing ? 0 : 360 * opacity
+                visible: root.refreshing
+                width: Units.gridUnit * 2
+                height: width
+            }
+            Rectangle {
+                id: spinnerProgress
+                anchors {
+                    fill: busyIndicator
+                    margins: Math.ceil(Units.smallSpacing/2)
+                }
+                radius: width
+                visible: supportsRefreshing && !refreshing && progress > 0
+                color: "transparent"
+                opacity: 0.8
+                border.color: Theme.viewBackgroundColor
+                border.width: Math.ceil(Units.smallSpacing/4)
+                property real progress: supportsRefreshing && !refreshing ? (parent.y/busyIndicatorFrame.height) : 0
+                
+            }
+            ConicalGradient {
+                source: spinnerProgress
+                visible: spinnerProgress.visible
+                anchors.fill: spinnerProgress
+                gradient: Gradient {
+                    GradientStop { position: 0.00; color: Theme.highlightColor }
+                    GradientStop { position: spinnerProgress.progress; color: Theme.highlightColor }
+                    GradientStop { position: spinnerProgress.progress + 0.01; color: "transparent" }
+                    GradientStop { position: 1.00; color: "transparent" }
+                }
             }
 
             Rectangle {
@@ -134,7 +161,7 @@ ScrollView {
                 height: Math.ceil(Units.smallSpacing / 5);
             }
             onYChanged: {
-                if (y > root.height/10 && applicationWindow() && root.flickableItem.atYBeginning && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
+                if (y > busyIndicatorFrame.height*2 && applicationWindow() && root.flickableItem.atYBeginning && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
                     //here assume applicationWindow().pageStack has a translate as transform
                     applicationWindow().pageStack.transform[0].y = root.height/2;
                     overshootResetTimer.restart();
