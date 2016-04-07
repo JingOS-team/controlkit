@@ -57,6 +57,10 @@ ScrollablePage {
             event.accepted = true;
             bottomDrawer.close();
         }
+        if (sheet.opened) {
+            event.accepted = true;
+            sheet.close();
+        }
     }
 
     OverlayDrawer {

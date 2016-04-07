@@ -216,28 +216,33 @@ ApplicationWindow {
             }
         }
         focus: true
+
+        function goBack() {
+            if (root.contextDrawer && root.contextDrawer.opened) {
+                root.contextDrawer.close();
+            } else if (root.globalDrawer && root.globalDrawer.opened) {
+                root.globalDrawer.close();
+            } else if (__pageStack.depth >= 1) {
+                var backEvent = {accepted: false}
+                __pageStack.currentItem.backRequested(backEvent);
+                if (!backEvent.accepted) {
+                    if (__pageStack.depth > 1) {
+                        __pageStack.currentIndex = Math.max(0, __pageStack.currentIndex - 1);
+                    } else {
+                        Qt.quit();
+                    }
+                }
+            } else {
+                Qt.quit();
+            }
+        }
+
         Keys.onReleased: {
             if (event.key == Qt.Key_Back ||
             (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {
                 event.accepted = true;
 
-                if (root.contextDrawer && root.contextDrawer.opened) {
-                    root.contextDrawer.close();
-                } else if (root.globalDrawer && root.globalDrawer.opened) {
-                    root.globalDrawer.close();
-                } else if (__pageStack.depth >= 1) {
-                    var backEvent = {accepted: false}
-                    __pageStack.currentItem.backRequested(backEvent);
-                    if (!backEvent.accepted) {
-                        if (__pageStack.depth > 1) {
-                            __pageStack.currentIndex = Math.max(0, __pageStack.currentIndex - 1);
-                        } else {
-                            Qt.quit();
-                        }
-                    }
-                } else {
-                    Qt.quit();
-                }
+                goBack();
             }
         }
     }
