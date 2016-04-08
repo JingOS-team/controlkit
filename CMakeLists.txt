@@ -11,6 +11,7 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 endif()
 
 option(NO_PLASMA "Don't use the Plasma library" OFF)
+option(BUILD_EXAMPLES "Build and install examples" OFF)
 
 # Make CPack available to easy generate binary packages
 include(CPack)
@@ -58,6 +59,9 @@ find_package(PkgConfig)
 
 add_subdirectory(src)
 #TODO: conditional
-add_subdirectory(examples)
+if (BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
