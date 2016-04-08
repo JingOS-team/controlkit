@@ -125,6 +125,20 @@ Item {
     default property Item contentItem
 
     Component.onCompleted: {
+        //try to find a Page and reparent directly to it
+        var pageCandidate = root.parent;
+        while (pageCandidate) {
+            //QML doesn't have typeof support to qml types, try asses by checking at some properties as an euristic
+            if (pageCandidate.contentItem !== undefined &&
+                pageCandidate.title !== undefined &&
+                pageCandidate.contextualActions !== undefined) {
+                break;
+            }
+            pageCandidate = pageCandidate.parent;
+        }
+        if (pageCandidate != root.parent) {
+            root.parent = pageCandidate;
+        }
         backgroundChanged();
         contentItemChanged();
     }
