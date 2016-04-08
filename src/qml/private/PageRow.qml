@@ -176,6 +176,11 @@ Item {
 
 //END FUNCTIONS
     onCurrentIndexChanged: {
+        if (actualRoot.currentIndex < 0 ||
+            actualRoot.currentIndex >= Engine.pageStack.length) {
+            return;
+        }
+
         internal.syncWithCurrentIndex();
 
         actualRoot.currentItem = Engine.pageStack[actualRoot.currentIndex].page;
