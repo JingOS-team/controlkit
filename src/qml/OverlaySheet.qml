@@ -166,7 +166,7 @@ Item {
         from: -root.height
         to: topOpenPosition
         duration: Units.longDuration
-        easing.type: Easing.InOutQuad
+        easing.type: Easing.OutQuad
     }
 
     SequentialAnimation {
@@ -177,7 +177,7 @@ Item {
             properties: "contentY"
             to: closeAnimation.to
             duration: Units.longDuration
-            easing.type: Easing.InOutQuad
+            easing.type: Easing.InQuad
         }
         ScriptAction {
             script: root.visible = root.opened = false;

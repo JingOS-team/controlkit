@@ -61,7 +61,7 @@ Rectangle {
         Behavior on y {
             NumberAnimation {
                 duration: Units.longDuration
-                easing.type: Easing.InOutQuad
+                easing.type: translateTransform.y < 0 ? Easing.OutQuad : Easing.InQuad
             }
         }
     }

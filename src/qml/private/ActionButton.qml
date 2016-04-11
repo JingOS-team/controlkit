@@ -142,7 +142,7 @@ Item {
             target: translateTransform
             properties: "y"
             duration: Units.longDuration
-            easing.type: Easing.InOutQuad
+            easing.type: mouseArea.internalVisibility == true ? Easing.InQuad : Easing.OutQuad
         }
         Item {
             id: background

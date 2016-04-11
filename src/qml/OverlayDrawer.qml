@@ -174,12 +174,14 @@ AbstractDrawer {
     }
 
 
-    NumberAnimation {
+    //NOTE: it's a PropertyAnimation instead of a NumberAnimation because
+    //NumberAnimation doesn't have NOTIFY signal on to property
+    PropertyAnimation {
         id: mainAnim
         target: mainFlickable
         properties: (root.edge == Qt.RightEdge || root.edge == Qt.LeftEdge) ? "contentX" : "contentY"
         duration: Units.longDuration
-        easing.type: Easing.InOutQuad
+        easing.type: mainAnim.to > 0 ? Easing.InQuad : Easing.OutQuad
     }
 
     MouseArea {
@@ -430,11 +432,12 @@ AbstractDrawer {
                         }
                     }
                     transform: Translate {
+                        id: translateTransform
                         x: root.handleVisible ? 0 : (root.edge == Qt.LeftEdge ? -drawerHandle.width : drawerHandle.width)
                         Behavior on x {
                             NumberAnimation {
                                 duration: Units.longDuration
-                                easing.type: Easing.InOutQuad
+                                easing.type: !root.handleVisible ? Easing.OutQuad : Easing.InQuad
                             }
                         }
                     }
