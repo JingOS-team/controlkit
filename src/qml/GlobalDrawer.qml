@@ -278,7 +278,7 @@ OverlayDrawer {
                                 checked: modelData.checked
                                 icon: modelData.iconName
                                 label: modelData.text
-                                visible: model ? model.visible : modelData.visible
+                                visible: model ? model.visible || model.visible===undefined : modelData.visible
                                 enabled: model ? model.enabled : modelData.enabled
                                 opacity: enabled ? 1.0 : 0.3
 
