@@ -62,10 +62,10 @@ Item {
     property int bottomPadding: Units.gridUnit
 
     /**
-     * contentItem: Item
-     * The main item contained in this Page
+     * contentData: Item
+     * The main items contained in this Page
      */
-    default property Item contentItem
+    default property alias contentData: container.data
 
     /**
      * flickable: Flickable
@@ -207,12 +207,6 @@ Item {
         action: root.mainAction
         anchors.bottom: parent.bottom
         x: parent.width/2 - width/2
-    }
-
-    Binding {
-        target: root.contentItem
-        property: "parent"
-        value: container
     }
 
     Item {
