@@ -191,7 +191,7 @@ Rectangle {
 
         NumberAnimation {
             id: scrollTopAnimation
-            target: __appWindow.pageStack.currentItem.flickable
+            target: __appWindow.pageStack.currentItem.flickable || null
             properties: "contentY"
             to: 0
             duration: Units.longDuration
