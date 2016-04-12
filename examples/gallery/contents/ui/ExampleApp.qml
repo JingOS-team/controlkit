@@ -1,5 +1,5 @@
 /*
- *   Copycontext 2015 Marco Martin <mart@kde.org>
+ *   Copyright 2015 Marco Martin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -106,6 +106,7 @@ Kirigami.ApplicationWindow {
     Component {
         id: settingsComponent
         Kirigami.Page {
+            title: "Settings"
             objectName: "settingsPage"
             Rectangle {
                 anchors.fill: parent

@@ -65,7 +65,7 @@ Item {
      * Pages can override it with their Layout.fillWidth,
      * implicitWidth Layout.minimumWidth etc.
      */
-    property int defaultColumnWidth: Math.floor(parent.width/(Units.gridUnit*30)) > 0 ? parent.width/Math.floor(parent.width/(Units.gridUnit*30)) : width
+    property int defaultColumnWidth: Units.gridUnit * 30
 
 //END PROPERTIES
 
@@ -282,8 +282,11 @@ Item {
 
         Item {
             id: container
-            implicitWidth: ObjectModel.index == pagesModel.count - 1 ? Math.max(root.defaultColumnWidth, root.width - (ObjectModel.index == 0 ? 0 : root.defaultColumnWidth)) : root.defaultColumnWidth
+            implicitWidth: ObjectModel.index == pagesModel.count - 1 ? Math.max(roundedWidth, root.width - (ObjectModel.index == 0 ? 0 : root.defaultColumnWidth)) : roundedWidth
             height: listView.height
+            property int hint: page.implicitWidth ? page.implicitWidth : root.defaultColumnWidth
+            property int roundedWidth: Math.floor(root.width/hint) > 0 ? root.width/Math.floor(root.width/hint) : root.width
+
             property Item page
             property Item owner
             onPageChanged: {

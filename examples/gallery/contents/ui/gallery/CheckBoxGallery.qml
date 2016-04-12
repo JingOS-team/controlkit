@@ -1,5 +1,5 @@
 /*
- *   Copycontext 2015 Marco Martin <mart@kde.org>
+ *   Copyright 2015 Marco Martin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -21,8 +21,6 @@ import QtQuick 2.0
 import QtQuick.Controls 1.2 as Controls
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 1.0
-//FIXME
-import org.kde.plasma.core 2.0 as PlasmaCore
 
 ScrollablePage {
     id: page
@@ -37,8 +35,22 @@ ScrollablePage {
     ]
     Layout.fillWidth: true
     title: "Checkboxes"
-
+    mainAction: Action {
+        iconName: sheet.opened ? "dialog-cancel" : "document-edit"
+        onTriggered: {
+            print("Action button in buttons page clicked");
+            sheet.opened = !sheet.opened
+        }
+    }
     ColumnLayout {
+        //This OverlaySheet is put in the "wrong place", but will be automatically reparented
+        // to "page"
+        OverlaySheet {
+            id: sheet
+            Label {
+                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id risus id augue euismod accumsan. Nunc vestibulum placerat bibendum. Morbi commodo auctor varius. Donec molestie euismod ultrices. Sed facilisis augue nec eros auctor, vitae mattis quam rhoncus. Nam ut erat diam. Curabitur iaculis accumsan magna, eget fermentum massa scelerisque eu. Cras elementum erat non erat euismod accumsan. Vestibulum ac mi sed dui finibus pulvinar. Vivamus dictum, leo sed lobortis porttitor, nisl magna faucibus orci, sit amet euismod arcu elit eget est. Duis et vehicula nibh. In arcu sapien, laoreet sit amet porttitor non, rhoncus vel magna. Suspendisse imperdiet consectetur est nec ornare. Pellentesque bibendum sapien at erat efficitur vehicula. Morbi sed porta nibh. Vestibulum ut urna ut dolor sagittis mattis."
+            }
+        }
         Item {
             Layout.fillWidth: true
             Layout.minimumHeight: units.gridUnit * 10
@@ -82,62 +94,6 @@ ScrollablePage {
                     text: "Off"
                     checked: false
                     enabled: false
-                }
-            }
-        }
-        //FIXME: possible to have this in mobileComponents?
-        PlasmaCore.ColorScope {
-            colorGroup: PlasmaCore.Theme.ComplementaryColorGroup
-            Layout.fillWidth: true
-            Layout.minimumHeight: units.gridUnit * 10
-            Rectangle {
-                anchors {
-                    fill: parent
-                    leftMargin: -page.leftPadding
-                    rightMargin: -page.rightPadding
-                }
-                color: PlasmaCore.ColorScope.backgroundColor
-                GridLayout {
-                    anchors.centerIn: parent
-                    columns: 3
-                    rows: 3
-                    rowSpacing: Units.smallSpacing
-
-                    Item {
-                        width: 1
-                        height: 1
-                    }
-                    Label {
-                        text: "Normal"
-                    }
-                    Label {
-                        text: "Disabled"
-                        enabled: false
-                    }
-                    Label {
-                        text: "On"
-                    }
-                    Controls.CheckBox {
-                        text: "On"
-                        checked: true
-                    }
-                    Controls.CheckBox {
-                        text: "On"
-                        checked: true
-                        enabled: false
-                    }
-                    Label {
-                        text: "Off"
-                    }
-                    Controls.CheckBox {
-                        text: "Off"
-                        checked: false
-                    }
-                    Controls.CheckBox {
-                        text: "Off"
-                        checked: false
-                        enabled: false
-                    }
                 }
             }
         }

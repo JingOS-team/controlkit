@@ -1,5 +1,5 @@
 /*
- *   Copycontext 2015 Marco Martin <mart@kde.org>
+ *   Copyright 2015 Marco Martin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -25,6 +25,8 @@ import org.kde.kirigami 1.0
 ScrollablePage {
     id: page
     Layout.fillWidth: true
+    implicitWidth: Units.gridUnit * (Math.floor(Math.random() * 35) + 8)
+
     title: "Buttons"
     contextualActions: [
         Action {
@@ -46,11 +48,7 @@ ScrollablePage {
         iconName: sheet.opened ? "dialog-cancel" : "document-edit"
         onTriggered: {
             print("Action button in buttons page clicked");
-            if (sheet.opened) {
-                sheet.close();
-            } else {
-                sheet.open();
-            }
+            sheet.opened = !sheet.opened
         }
     }
 
@@ -59,6 +57,10 @@ ScrollablePage {
         if (bottomDrawer.opened) {
             event.accepted = true;
             bottomDrawer.close();
+        }
+        if (sheet.opened) {
+            event.accepted = true;
+            sheet.close();
         }
     }
 
@@ -131,14 +133,6 @@ ScrollablePage {
             onClicked: mainAction.visible = !mainAction.visible;
         }
         Controls.Button {
-            text: "Toggle Drawer Handles"
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: {
-                globalDrawer.handleVisible = !globalDrawer.handleVisible
-                contextDrawer.handleVisible = !contextDrawer.handleVisible
-            }
-        }
-        Controls.Button {
             text: "Show Passive Notification"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: showPassiveNotification("This is a passive message", 3000);
@@ -147,6 +141,13 @@ ScrollablePage {
             text: "Passive Notification Action"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: showPassiveNotification("This is a passive message", "long", "Action", function() {print("Passive notification action clicked")});
+        }
+        Controls.ToolButton {
+            text: "Toggle controls"
+            checkable: true
+            checked: true
+            anchors.horizontalCenter: parent.horizontalCenter
+            onCheckedChanged: applicationWindow().controlsVisible = checked
         }
         Controls.Button {
             text: "Disabled Button"

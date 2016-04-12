@@ -39,6 +39,7 @@ MouseArea {
         if (!message) {
             return;
         }
+        appearAnimation.running = false;
         appearAnimation.appear = true;
         appearAnimation.running = true;
         if (timeout == "short") {
@@ -58,6 +59,7 @@ MouseArea {
     }
 
     function hideNotification() {
+        appearAnimation.running = false;
         appearAnimation.appear = false;
         appearAnimation.running = true;
     }
@@ -96,7 +98,7 @@ MouseArea {
             properties: "y"
             to: appearAnimation.appear ? 0 : background.height
             duration: Units.longDuration
-            easing.type: Easing.InOutQuad
+            easing.type: appearAnimation.appear ? Easing.OutQuad : Easing.InQuad
         }
     }
 

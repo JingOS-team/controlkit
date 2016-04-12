@@ -48,7 +48,7 @@ Item {
         id: mouseArea
         anchors.fill: parent
 
-        property bool internalVisibility: button.action ? (action.visible === undefined || action.visible === true) : false
+        property bool internalVisibility: (applicationWindow === undefined || applicationWindow().controlsVisible) && (button.action === null || button.action.visible === undefined || button.action.visible)
         onInternalVisibilityChanged: {
             showAnimation.running = false;
             if (internalVisibility) {
@@ -62,8 +62,8 @@ Item {
         drag {
             target: button
             axis: Drag.XAxis
-            minimumX: contextDrawer.enabled ? 0 : button.parent.width/2 - button.width/2
-            maximumX: globalDrawer.enabled ? button.parent.width : button.parent.width/2 - button.width/2
+            minimumX: contextDrawer && contextDrawer.enabled ? 0 : button.parent.width/2 - button.width/2
+            maximumX: globalDrawer && globalDrawer.enabled ? button.parent.width : button.parent.width/2 - button.width/2
         }
 
         transform: Translate {
@@ -142,7 +142,7 @@ Item {
             target: translateTransform
             properties: "y"
             duration: Units.longDuration
-            easing.type: Easing.InOutQuad
+            easing.type: mouseArea.internalVisibility == true ? Easing.InQuad : Easing.OutQuad
         }
         Item {
             id: background

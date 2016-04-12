@@ -84,6 +84,8 @@ OverlayDrawer {
     enabled: menu.count > 0
     edge: Qt.RightEdge
 
+    handleVisible: applicationWindow() ? applicationWindow().controlsVisible : true
+
     Connections {
         target: pageStack
         onCurrentItemChanged: {
@@ -129,6 +131,7 @@ OverlayDrawer {
                 checked: modelData.checked
                 icon: modelData.iconName
                 supportsMouseEvents: true
+                separatorVisible: index < menu.count-1
                 label: model ? model.text : modelData.text
                 enabled: model ? model.enabled : modelData.enabled
                 visible: model ? model.visible : modelData.visible
