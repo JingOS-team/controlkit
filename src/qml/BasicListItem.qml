@@ -59,6 +59,7 @@ AbstractListItem {
         }
         Label {
             text: listItem.label
+            color: listItem.checked ? Theme.viewHighlightedTextColor : Theme.viewTextColor
         }
     }
 }
