@@ -109,24 +109,6 @@ Rectangle {
             }
             headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
         }
-
-        onContentChildrenChanged: {
-            var i = 0;
-            for (; i < __appWindow.pageStack.contentChildren.length; ++i) {
-                if (i >= model.count || __appWindow.pageStack.contentChildren[i].title 
-                    != model.get(i).title) {
-                    break;
-                }
-            }
-
-            while (model.count > i && model.count > 0) {
-                model.remove(model.count - 1);
-            }
-
-            for (var j = i; j < __appWindow.pageStack.contentChildren.length; ++j) {
-                model.append({"title": __appWindow.pageStack.contentChildren[j].title});
-            }
-        }
     }
 
     Behavior on y {
@@ -159,13 +141,10 @@ Rectangle {
             topMargin: overshootTransform && overshootTransform.y > 0 ? 0 : Math.min(headerItem.height - headerItem.preferredHeight, -headerItem.y)
         }
         cacheBuffer: __appWindow.pageStack.width
-        property bool wideScreen: __appWindow.pageStack.width > __appWindow.pageStack.height
+        property bool wideScreen: __appWindow.pageStack.width >= __appWindow.pageStack.defaultColumnWidth*2
         orientation: ListView.Horizontal
         boundsBehavior: Flickable.StopAtBounds
-        //FIXME: proper implmentation needs Qt 5.6 for new ObjectModel api
-        model: ListModel {
-            id: model
-        }
+        model: __appWindow.pageStack.depth
         //__appWindow.pageStack.depth
         spacing: 0
         currentIndex: __appWindow.pageStack.currentIndex
@@ -202,7 +181,7 @@ Rectangle {
             width: {
                 //more columns shown?
                 if (titleList.wideScreen) {
-                    return __appWindow.pageStack.defaultColumnWidth;
+                    return __appWindow.pageStack.contentChildren[modelData].width;
                 } else {
                     return Math.min(titleList.width, delegateRoot.implicitWidth + Units.gridUnit + Units.smallSpacing);
                 }
@@ -210,10 +189,10 @@ Rectangle {
             height: titleList.height
             onClicked: {
                 //scroll up if current otherwise make current
-                if (__appWindow.pageStack.currentIndex == model.index) {
+                if (__appWindow.pageStack.currentIndex == modelData) {
                     scrollTopAnimation.running = true;
                 } else {
-                    __appWindow.pageStack.currentIndex = model.index;
+                    __appWindow.pageStack.currentIndex = modelData;
                 }
             }
             Row {
@@ -222,7 +201,7 @@ Rectangle {
 
                 spacing: Units.gridUnit
                 Rectangle {
-                    opacity: model.index > 0 ? 0.4 : 0
+                    opacity: modelData > 0 ? 0.4 : 0
                     visible: !titleList.wideScreen && opacity > 0
                     color: Theme.viewBackgroundColor
                     anchors.verticalCenter: parent.verticalCenter
@@ -239,7 +218,7 @@ Rectangle {
                     renderType: Text.QtRendering
                     color: Theme.viewBackgroundColor
                     elide: Text.ElideRight
-                    text: model.title
+                    text: __appWindow.pageStack.contentChildren[modelData].title
                     font.pixelSize: titleList.height / 1.6
                 }
             }

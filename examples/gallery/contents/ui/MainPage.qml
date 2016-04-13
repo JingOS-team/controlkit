@@ -25,7 +25,7 @@ import org.kde.kirigami 1.0 as Kirigami
 Kirigami.ScrollablePage {
     id: pageRoot
 
-    anchors.fill:parent
+    implicitWidth: Kirigami.Units.gridUnit * 20
     background: Rectangle {
         color: Kirigami.Theme.viewBackgroundColor
     }
