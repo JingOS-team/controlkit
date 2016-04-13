@@ -285,7 +285,7 @@ Item {
     Component {
         id: containerComponent
 
-        Item {
+        MouseArea {
             id: container
             implicitWidth: ObjectModel.index == pagesModel.count - 1 ? Math.max(roundedWidth, root.width - (ObjectModel.index == 0 ? 0 : pagesModel.get(ObjectModel.index-1).width)) : roundedWidth
             height: listView.height
@@ -298,7 +298,10 @@ Item {
                 page.parent = container;
                 page.anchors.fill = container;
             }
+            drag.filterChildren: true
+            onClicked: root.currentIndex = ObjectModel.index;
             Rectangle {
+                z: 999
                 anchors {
                     top: parent.top
                     bottom: parent.bottom
