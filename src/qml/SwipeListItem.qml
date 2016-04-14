@@ -384,7 +384,7 @@ Item {
                     width: Units.iconSizes.smallMedium
                     height: width
                     x: y
-                    source: "application-menu"
+                    source: "handle-left"
                 }
             }
         }
