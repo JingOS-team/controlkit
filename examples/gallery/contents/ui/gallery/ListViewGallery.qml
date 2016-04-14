@@ -27,6 +27,10 @@ ScrollablePage {
     Layout.fillWidth: true
     title: "Long List view"
 
+    background: Rectangle {
+        color: Kirigami.Theme.viewBackgroundColor
+    }
+
     ListView {
         model: 200
         delegate: BasicListItem {
