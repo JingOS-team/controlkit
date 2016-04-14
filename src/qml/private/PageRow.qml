@@ -131,8 +131,9 @@ Item {
         // initialize the page
         var container = pagesModel.initPage(page, properties);
         pagesModel.actualPages.push(container.page);
-
         pagesModel.append(container);
+
+        container.visible = true;
         listView.currentIndex = container.ObjectModel.index;
         return container.page
     }
@@ -277,20 +278,27 @@ Item {
         }
         onFlickEnded: movementEnded();
 
-        add: Transition {
-            ParallelAnimation {
-                NumberAnimation {
-                    property: "opacity"
-                    from: 0
-                    to: 1
-                    duration: Units.longDuration
+        /*add: Transition {
+            SequentialAnimation {
+                ParallelAnimation {
+                    NumberAnimation {
+                        property: "opacity"
+                        from: 0
+                        to: 1
+                        duration:  10*Units.longDuration
+                    }
+                    NumberAnimation {
+                        properties: "x,y"
+                        duration: 10*Units.longDuration
+                    }
                 }
-                NumberAnimation {
-                    properties: "x,y"
-                    duration: Units.longDuration
+                ScriptAction {
+                    script: {
+                    listView.contentX = 99999
+                    }
                 }
             }
-        }
+        }*/
     }
 
     Component {
@@ -298,10 +306,12 @@ Item {
 
         MouseArea {
             id: container
-            implicitWidth: ObjectModel.index == pagesModel.count - 1 ? Math.max(roundedWidth, root.width - (ObjectModel.index == 0 ? 0 : pagesModel.get(ObjectModel.index-1).width)) : roundedWidth
             height: listView.height
+
+            state: root.width < root.defaultColumnWidth || ObjectModel === undefined ? "vertical" : (ObjectModel.index == pagesModel.count - 1 ? "last" : "middle")
+
             property int hint: page && page.implicitWidth ? page.implicitWidth : root.defaultColumnWidth
-            property int roundedWidth: Math.floor(root.width/hint) > 0 ? root.width/Math.floor(root.width/hint) : root.width
+            property int roundedHint: Math.floor(root.width/hint) > 0 ? root.width/Math.floor(root.width/hint) : root.width
 
             property Item page
             property Item owner
@@ -311,6 +321,7 @@ Item {
             }
             drag.filterChildren: true
             onClicked: root.currentIndex = ObjectModel.index;
+
             Rectangle {
                 z: 999
                 anchors {
@@ -323,6 +334,49 @@ Item {
                 opacity: 0.3
                 visible: container.ObjectModel.index < root.depth
             }
+            states: [
+                State {
+                    name: "vertical"
+                    PropertyChanges {
+                        target: container
+                        implicitWidth: root.width
+                    }
+                },
+                State {
+                    name: "last"
+                    PropertyChanges {
+                        target: container
+                        implicitWidth: Math.max(roundedHint, root.width - (container.ObjectModel.index == 0 ? 0 : pagesModel.get(container.ObjectModel.index-1).width))
+                    }
+                },
+                State {
+                    name: "middle"
+                    PropertyChanges {
+                        target: container
+                        implicitWidth: roundedHint
+                    }
+                }
+            ]
+            transitions: [
+                Transition {
+                    from: "last"
+                    to: "middle"
+                    SequentialAnimation {
+                        NumberAnimation {
+                            property: "implicitWidth"
+                            duration: Units.longDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                        NumberAnimation {
+                            target: listView
+                            property: "contentX"
+                            to: container.x
+                            duration: Units.longDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                }
+            ]
         }
     }
 
