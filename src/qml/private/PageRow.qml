@@ -32,22 +32,22 @@ Item {
     /**
      * This property holds the number of items currently pushed onto the view
      */
-    property alias depth: listView.count
+    property alias depth: pagesModel.count
 
     /**
      * The last Page in the Row
      */
-    property Item lastItem: listView.count ? pagesModel.get(listView.count - 1) : null
+    property Item lastItem: pagesModel.count ? pagesModel.get(pagesModel.count - 1) : null
 
     /**
      * The currently visible Item
      */
-    property Item currentItem: listView.currentItem.page
+    property Item currentItem: mainFlickable.currentItem
 
     /**
      * the index of the currently visible Item
      */
-    property alias currentIndex: listView.currentIndex
+    property alias currentIndex: mainFlickable.currentIndex
 
     /**
      * This property holds the list of content children.
@@ -62,7 +62,7 @@ Item {
     /**
      * The main flickable of this Row
      */
-    property alias contentItem: listView
+    property alias contentItem: mainFlickable
 
     /**
      * The default width for a column
@@ -130,11 +130,12 @@ Item {
 
         // initialize the page
         var container = pagesModel.initPage(page, properties);
+        container.level = pagesModel.count
         pagesModel.actualPages.push(container.page);
         pagesModel.append(container);
 
         container.visible = true;
-        listView.currentIndex = container.ObjectModel.index;
+        mainFlickable.currentIndex = container.level;
         return container.page
     }
 
@@ -260,30 +261,64 @@ Item {
         }
     }
 
-    ListView {
-        id: listView
-        anchors.fill: parent
-        model: pagesModel
-        orientation: ListView.Horizontal
-        snapMode: ListView.SnapToItem
-        boundsBehavior: Flickable.StopAtBounds
-        highlightMoveDuration: Units.longDuration
-        cacheBuffer: width * count
-        displayMarginBeginning: width * count
-        onMovementEnded: {
-            var pos = currentItem.mapToItem(listView, 0, 0);
-            if (pos.x < 0 || pos.x >= width) {
-                currentIndex = indexAt(contentX + width - 10, 10);
+    NumberAnimation {
+        id: scrollAnim
+        target: mainFlickable
+        property: "contentX"
+        duration: Units.longDuration
+        easing.type: Easing.InOutQuad
+    }
+    Timer {
+        id: currentItemSnapTimer
+        interval: 150
+        onTriggered: {
+            var mappedPos = currentItem.parent.mapToItem(mainFlickable, 0, 0);
+            if (mappedPos.x >= 0 && mappedPos.x + currentItem.width <= mainFlickable.width) {
+                return;
             }
+            scrollAnim.from = mainFlickable.contentX;
+            scrollAnim.to = currentItem.parent.x;
+            scrollAnim.running = false;
+            scrollAnim.running = true;
+        }
+    }
+    Flickable {
+        id: mainFlickable
+        anchors.fill: parent
+        boundsBehavior: Flickable.StopAtBounds
+        contentWidth: mainLayout.width
+        contentHeight: height
+        property Item currentItem: pagesModel.count > currentIndex ? pagesModel.actualPages[currentIndex] : null
+        property int currentIndex: 0
+        onCurrentItemChanged: currentItemSnapTimer.restart();
+        onMovementEnded: {
+            var pos = currentItem.mapToItem(mainFlickable, 0, 0);
+            if (pos.x < 0 || pos.x >= width) {
+                currentIndex = mainLayout.childAt(contentX + width - 10, 10).level;
+            }
+
+            var childToSnap = mainLayout.childAt(contentX + 1, 10);
+            var mappedPos = childToSnap.mapToItem(mainFlickable, 0, 0);
+            if (mappedPos.x < -childToSnap.width / 2) {
+                childToSnap = mainLayout.children[childToSnap.level+1];
+            }
+            scrollAnim.from = mainFlickable.contentX;
+            scrollAnim.to = childToSnap.x;
+            scrollAnim.running = false;
+            scrollAnim.running = true;
         }
         onFlickEnded: movementEnded();
 
-        /*add: Transition {
-            SequentialAnimation {
+        Row {
+            id: mainLayout
+            Repeater {
+                model: pagesModel
+            }
+           /* add: Transition {
                 ParallelAnimation {
                     NumberAnimation {
                         property: "opacity"
-                        from: 0
+                        from: 0.5
                         to: 1
                         duration:  10*Units.longDuration
                     }
@@ -292,13 +327,8 @@ Item {
                         duration: 10*Units.longDuration
                     }
                 }
-                ScriptAction {
-                    script: {
-                    listView.contentX = 99999
-                    }
-                }
-            }
-        }*/
+            }*/
+        }
     }
 
     Component {
@@ -306,9 +336,13 @@ Item {
 
         MouseArea {
             id: container
-            height: listView.height
+            height: mainFlickable.height
 
-            state: root.width < root.defaultColumnWidth || ObjectModel === undefined ? "vertical" : (ObjectModel.index == pagesModel.count - 1 ? "last" : "middle")
+            state: root.width < root.defaultColumnWidth ? "vertical" : (container.level == pagesModel.count - 1 ? "last" : "middle");
+
+            //NOTE: use this instead of ObjectModel.index because we need to have this set
+            // *before* it's added to the model
+            property int level
 
             property int hint: page && page.implicitWidth ? page.implicitWidth : root.defaultColumnWidth
             property int roundedHint: Math.floor(root.width/hint) > 0 ? root.width/Math.floor(root.width/hint) : root.width
@@ -332,7 +366,7 @@ Item {
                 width: Math.ceil(Units.smallSpacing / 5)
                 color: Theme.textColor
                 opacity: 0.3
-                visible: container.ObjectModel.index < root.depth
+                visible: container.level < root.depth
             }
             states: [
                 State {
@@ -346,7 +380,7 @@ Item {
                     name: "last"
                     PropertyChanges {
                         target: container
-                        implicitWidth: Math.max(roundedHint, root.width - (container.ObjectModel.index == 0 ? 0 : pagesModel.get(container.ObjectModel.index-1).width))
+                        implicitWidth: Math.max(roundedHint, root.width - (container.level == 0 ? 0 : pagesModel.get(container.level-1).width))
                     }
                 },
                 State {
@@ -361,22 +395,14 @@ Item {
                 Transition {
                     from: "last"
                     to: "middle"
-                    SequentialAnimation {
-                        NumberAnimation {
-                            property: "implicitWidth"
-                            duration: Units.longDuration
-                            easing.type: Easing.InOutQuad
-                        }
-                        NumberAnimation {
-                            target: listView
-                            property: "contentX"
-                            to: container.x
-                            duration: Units.longDuration
-                            easing.type: Easing.InOutQuad
-                        }
+                    NumberAnimation {
+                        property: "implicitWidth"
+                        duration: Units.longDuration
+                        easing.type: Easing.InOutQuad
                     }
                 }
             ]
+            
         }
     }
 
