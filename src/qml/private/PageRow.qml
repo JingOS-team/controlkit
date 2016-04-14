@@ -267,6 +267,8 @@ Item {
         snapMode: ListView.SnapToItem
         boundsBehavior: Flickable.StopAtBounds
         highlightMoveDuration: Units.longDuration
+        cacheBuffer: width * count
+        displayMarginBeginning: width * count
         onMovementEnded: {
             var pos = currentItem.mapToItem(listView, 0, 0);
             if (pos.x < 0 || pos.x >= width) {

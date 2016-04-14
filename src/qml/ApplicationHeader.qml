@@ -140,7 +140,8 @@ Rectangle {
             leftMargin: backButton ? backButton.width : 0
             topMargin: overshootTransform && overshootTransform.y > 0 ? 0 : Math.min(headerItem.height - headerItem.preferredHeight, -headerItem.y)
         }
-        cacheBuffer: __appWindow.pageStack.width
+        cacheBuffer: width * count
+        displayMarginBeginning: __appWindow.pageStack.width * count
         property bool wideScreen: __appWindow.pageStack.width >= __appWindow.pageStack.defaultColumnWidth*2
         orientation: ListView.Horizontal
         boundsBehavior: Flickable.StopAtBounds
@@ -156,7 +157,7 @@ Rectangle {
 
         onContentXChanged: {
             if (wideScreen && !__appWindow.pageStack.contentItem.moving) {
-                __appWindow.pageStack.contentItem.contentX = titleList.contentX
+                __appWindow.pageStack.contentItem.contentX = titleList.contentX - originX + __appWindow.pageStack.contentItem.originX;
             }
         }
         onHeightChanged: {
@@ -227,7 +228,7 @@ Rectangle {
             target: titleList.wideScreen ? __appWindow.pageStack.contentItem : null
             onContentXChanged: {
                 if (!titleList.contentItem.moving) {
-                    titleList.contentX = Math.max(0, __appWindow.pageStack.contentItem.contentX)
+                    titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
                 }
             }
         }
