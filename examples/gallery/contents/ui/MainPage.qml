@@ -99,14 +99,22 @@ Kirigami.ScrollablePage {
                 component: "TextField"
             }
             ListElement {
+                text: "List View"
+                component: "ListView"
+            }
+            ListElement {
                 text: "Non Scrollable Page"
                 component: "NonScrollable"
             }
         }
         delegate: Kirigami.SwipeListItem {
-            Row {
+            id: listItem
+            Item {
                 Kirigami.Label {
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: y
                     text: model.text
+                    color: listItem.checked ? Kirigami.Theme.viewHighlightedTextColor : Kirigami.Theme.viewTextColor
                 }
             }
             property Item ownPage

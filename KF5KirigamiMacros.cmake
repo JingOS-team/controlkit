@@ -13,7 +13,7 @@ function(kirigami_package_breeze_icons)
     endif()
 
     #include icons used by Kirigami components themselves
-    set(ARG_ICONS ${ARG_ICONS} go-next go-previous application-menu)
+    set(ARG_ICONS ${ARG_ICONS} go-next go-previous handle-left)
 
     function(_find_breeze_icon icon varName)
         #HACKY

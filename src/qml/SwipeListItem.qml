@@ -203,7 +203,7 @@ Item {
     }
 
     implicitWidth: parent ? parent.width : contentItem.width + paddingItem.anchors.margins * 2
-    implicitHeight: contentItem.implicitHeight + paddingItem.anchors.margins * 2
+    implicitHeight: Math.max(Units.gridUnit * 3 , contentItem.implicitHeight + paddingItem.anchors.margins * 2)
     height: visible ? implicitHeight : 0
 //END properties
 
