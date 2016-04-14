@@ -318,7 +318,7 @@ Item {
                     bottom: parent.bottom
                     right: parent.right
                 }
-                width: 1
+                width: Math.ceil(Units.smallSpacing / 5)
                 color: Theme.textColor
                 opacity: 0.3
                 visible: container.ObjectModel.index < root.depth
