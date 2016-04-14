@@ -266,7 +266,7 @@ Item {
         orientation: ListView.Horizontal
         snapMode: ListView.SnapToItem
         boundsBehavior: Flickable.StopAtBounds
-        highlightMoveVelocity: width*2
+        highlightMoveDuration: Units.longDuration
         onMovementEnded: {
             var pos = currentItem.mapToItem(listView, 0, 0);
             if (pos.x < 0 || pos.x >= width) {
@@ -274,10 +274,19 @@ Item {
             }
         }
         onFlickEnded: movementEnded();
-        remove: Transition {
+
+        add: Transition {
             ParallelAnimation {
-                NumberAnimation { property: "opacity"; to: 0; duration: 1000 }
-                NumberAnimation { properties: "x,y"; to: 100; duration: 1000 }
+                NumberAnimation {
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: Units.longDuration
+                }
+                NumberAnimation {
+                    properties: "x,y"
+                    duration: Units.longDuration
+                }
             }
         }
     }
