@@ -384,7 +384,7 @@ Item {
                     width: Units.iconSizes.smallMedium
                     height: width
                     x: y
-                    source: "handle-left"
+                    source: (mainFlickable.contentX > mainFlickable.width / 2) ? "handle-right" : "handle-left"
                 }
             }
         }
