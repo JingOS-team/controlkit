@@ -33,6 +33,12 @@ ScrollablePage {
             print("Action button in buttons page clicked");
         }
     }
+    leftAction: Action {
+        iconName: "go-previous"
+        onTriggered: {
+            print("Left action triggered")
+        }
+    }
     ColumnLayout {
         width: page.width
 

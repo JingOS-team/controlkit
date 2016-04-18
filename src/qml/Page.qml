@@ -144,6 +144,16 @@ Item {
      */
     property QtObject mainAction
 
+    property QtObject leftAction
+
+    property QtObject rightAction
+
+    readonly property alias actions: actionsGroup
+
+    PageActionPropertyGroup {
+        id: actionsGroup
+    }
+
     /**
      * background: Item
      * This property holds the background item.
@@ -205,6 +215,8 @@ Item {
         id: __actionButton
         z: 9999
         action: root.mainAction
+        leftAction: root.leftAction
+        rightAction: root.rightAction
         anchors.bottom: parent.bottom
         x: parent.width/2 - width/2
     }

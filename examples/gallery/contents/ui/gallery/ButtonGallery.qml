@@ -50,6 +50,18 @@ ScrollablePage {
             sheet.opened = !sheet.opened
         }
     }
+    leftAction: Action {
+        iconName: "go-previous"
+        onTriggered: {
+            print("Left action triggered")
+        }
+    }
+    rightAction: Action {
+        iconName: "go-next"
+        onTriggered: {
+            print("Right action triggered")
+        }
+    }
 
     //Close the drawer with the back button
     onBackRequested: {
