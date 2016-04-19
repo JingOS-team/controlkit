@@ -10,6 +10,9 @@ cmake ..  -DCMAKE_TOOLCHAIN_FILE=/path/to/share/ECM/toolchain/Android.cmake -DQT
 
 You need a `-DCMAKE_INSTALL_PREFIX` to somewhere in your home, but using an absolute path
 
+If you have a local checkout of the breeze-icons repo, you can avoid the cloning of the build dir
+by passing also `-DBREEZEICONS_DIR=/path/to/existing/sources/of/breeze-icons`
+
 ```
 make
 make install
