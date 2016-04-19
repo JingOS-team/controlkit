@@ -27,16 +27,18 @@ ScrollablePage {
     Layout.fillWidth: true
 
     title: "Radio buttons"
-    mainAction: Action {
-        iconName: "document-edit"
-        onTriggered: {
-            print("Action button in buttons page clicked");
+    actions {
+        main: Action {
+            iconName: "document-edit"
+            onTriggered: {
+                print("Action button in buttons page clicked");
+            }
         }
-    }
-    leftAction: Action {
-        iconName: "go-previous"
-        onTriggered: {
-            print("Left action triggered")
+        left: Action {
+            iconName: "go-previous"
+            onTriggered: {
+                print("Left action triggered")
+            }
         }
     }
     ColumnLayout {

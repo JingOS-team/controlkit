@@ -40,25 +40,27 @@ Kirigami.ScrollablePage {
     }
 
     //flickable: mainListView
-    contextualActions: [
-        Kirigami.Action {
-            text:"Action 1"
-            iconName: "document-decrypt"
-            onTriggered: print("Action 1 clicked")
-        },
-        Kirigami.Action {
-            id: shareAction
-            visible: checkableAction.checked
-            text:"Action 2"
-            iconName: "document-share"
-        },
-        Kirigami.Action {
-            id: checkableAction
-            text:"Checkabke"
-            checkable: true
-            iconName: "dashboard-show"
-        }
-    ]
+    actions {
+        contextualActions: [
+            Kirigami.Action {
+                text:"Action 1"
+                iconName: "document-decrypt"
+                onTriggered: print("Action 1 clicked")
+            },
+            Kirigami.Action {
+                id: shareAction
+                visible: checkableAction.checked
+                text:"Action 2"
+                iconName: "document-share"
+            },
+            Kirigami.Action {
+                id: checkableAction
+                text:"Checkabke"
+                checkable: true
+                iconName: "dashboard-show"
+            }
+        ]
+    }
 
 
 

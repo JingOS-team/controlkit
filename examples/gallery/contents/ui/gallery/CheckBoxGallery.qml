@@ -24,24 +24,28 @@ import org.kde.kirigami 1.0
 
 ScrollablePage {
     id: page
-    contextualActions: [
-        Controls.Action {
-            text:"Action for checkbox page"
-            onTriggered: print("Action 1 clicked")
-        },
-        Controls.Action {
-            text:"Action 2"
+    actions {
+        main: Action {
+            iconName: sheet.opened ? "dialog-cancel" : "document-edit"
+            onTriggered: {
+                print("Action button in buttons page clicked");
+                sheet.opened = !sheet.opened
+            }
         }
-    ]
+        contextualActions: [
+            Controls.Action {
+                text:"Action for checkbox page"
+                onTriggered: print("Action 1 clicked")
+            },
+            Controls.Action {
+                text:"Action 2"
+            }
+        ]
+    }
+
     Layout.fillWidth: true
     title: "Checkboxes"
-    mainAction: Action {
-        iconName: sheet.opened ? "dialog-cancel" : "document-edit"
-        onTriggered: {
-            print("Action button in buttons page clicked");
-            sheet.opened = !sheet.opened
-        }
-    }
+
     ColumnLayout {
         //This OverlaySheet is put in the "wrong place", but will be automatically reparented
         // to "page"

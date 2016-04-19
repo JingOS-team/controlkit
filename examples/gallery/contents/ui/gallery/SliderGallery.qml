@@ -28,6 +28,21 @@ ScrollablePage {
 
     title: "Sliders"
 
+    actions {
+        left: Action {
+            iconName: "go-previous"
+            onTriggered: {
+                print("Left action triggered")
+            }
+        }
+        right: Action {
+            iconName: "go-next"
+            onTriggered: {
+                print("Right action triggered")
+            }
+        }
+    }
+
     ColumnLayout {
         width: page.width
 

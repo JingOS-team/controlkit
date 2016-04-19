@@ -79,7 +79,7 @@ Item {
     property Flickable flickable
 
     /**
-     * contextualActions: list<QtObject>
+     * actions.contextualActions: list<QtObject>
      * Defines the contextual actions for the page:
      * an easy way to assign actions in the right sliding panel
      *
@@ -101,7 +101,7 @@ Item {
      *
      * Kirigami.Page {
      *   [...]
-     *     contextualActions: [
+     *     actions.contextualActions: [
      *         Kirigami.Action {
      *             iconName: "edit"
      *             text: "Action text"
@@ -121,10 +121,11 @@ Item {
      * }
      * @endcode
      */
+    //TODO: remove
     property alias contextualActions: actionsGroup.contextualActions
 
     /**
-     * mainAction: Action
+     * actions.main: Action
      * An optional single action for the action button.
      * it can be a Kirigami.Action or a QAction
      *
@@ -133,7 +134,7 @@ Item {
      * @code
      * import org.kde.kirigami 1.0 as Kirigami
      * Kirigami.Page {
-     *     mainAction: Kirigami.Action {
+     *     actions.main: Kirigami.Action {
      *         iconName: "edit"
      *         onTriggered: {
      *             // do stuff
@@ -142,12 +143,71 @@ Item {
      * }
      * @endcode
      */
+    //TODO: remove
     property alias mainAction: actionsGroup.main
 
+    /**
+     * actions.left: Action
+     * An optional extra action at the left of the main action button.
+     * it can be a Kirigami.Action or a QAction
+     *
+     * Example usage:
+     *
+     * @code
+     * import org.kde.kirigami 1.0 as Kirigami
+     * Kirigami.Page {
+     *     actions.left: Kirigami.Action {
+     *         iconName: "edit"
+     *         onTriggered: {
+     *             // do stuff
+     *         }
+     *     }
+     * }
+     * @endcode
+     */
+    //TODO: remove
     property alias leftAction: actionsGroup.left
 
+    /**
+     * actions.right: Action
+     * An optional extra action at the right of the main action button.
+     * it can be a Kirigami.Action or a QAction
+     *
+     * Example usage:
+     *
+     * @code
+     * import org.kde.kirigami 1.0 as Kirigami
+     * Kirigami.Page {
+     *     actions.right: Kirigami.Action {
+     *         iconName: "edit"
+     *         onTriggered: {
+     *             // do stuff
+     *         }
+     *     }
+     * }
+     * @endcode
+     */
+    //TODO: remove
     property alias rightAction: actionsGroup.right
 
+    /**
+     * Actions properties are grouped.
+     *
+     * @code
+     * import org.kde.kirigami 1.0 as Kirigami
+     * Kirigami.Page {
+     *     actions {
+     *         main: Kirigami.Action {...}
+     *         left: Kirigami.Action {...}
+     *         right: Kirigami.Action {...}
+     *         contextualActions: [
+     *             Kirigami.Action {...},
+     *             Kirigami.Action {...}
+     *         ]
+     *     }
+     * }
+     * @endcode
+     */
     readonly property alias actions: actionsGroup
 
     PageActionPropertyGroup {

@@ -32,7 +32,7 @@ Item {
 
     implicitWidth: implicitHeight + Units.iconSizes.smallMedium*2
     implicitHeight: Units.iconSizes.large
-    visible: action != null
+    visible: action != null || leftAction != null || rightAction != null
 
 
     onXChanged: {
