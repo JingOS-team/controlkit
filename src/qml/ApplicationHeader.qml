@@ -249,7 +249,7 @@ Rectangle {
             target: titleList.wideScreen ? __appWindow.pageStack.contentItem : null
             onContentXChanged: {
                 if (!titleList.contentItem.moving) {
-                    titleList.contentX = Math.max(0, __appWindow.pageStack.contentItem.contentX)
+                    titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
                 }
             }
         }
