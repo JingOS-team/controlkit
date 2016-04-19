@@ -26,8 +26,7 @@ MouseArea {
         top: parent.contentItem.top
         bottom: parent.contentItem.bottom
     }
-    width: visible ? height : 0
-    visible: __appWindow.pageStack.currentIndex > 0
+    width: height
     onClicked: __appWindow.pageStack.goBack();
     Rectangle {
         anchors.verticalCenter: parent.verticalCenter
