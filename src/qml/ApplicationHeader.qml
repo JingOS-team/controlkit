@@ -212,7 +212,10 @@ Rectangle {
             onClicked: {
                 //scroll up if current otherwise make current
                 if (__appWindow.pageStack.currentIndex == model.index) {
-                    scrollTopAnimation.running = true;
+                    if (__appWindow.pageStack.currentItem.flickable.contentY > -__appWindow.header.height) {
+                        scrollTopAnimation.to = -__appWindow.header.height
+                        scrollTopAnimation.running = true;
+                    }
                 } else {
                     __appWindow.pageStack.currentIndex = model.index;
                 }
