@@ -271,14 +271,20 @@ Item {
     Timer {
         id: currentItemSnapTimer
         interval: 150
+        property Item itemToSnap
         onTriggered: {
-            var mappedPos = currentItem.parent.mapToItem(mainFlickable, 0, 0);
-            if (mappedPos.x >= 0 && mappedPos.x + currentItem.width <= mainFlickable.width) {
+            var mappedPos = itemToSnap.mapToItem(mainFlickable, 0, 0);
+            if (itemToSnap == currentItem.parent && mappedPos.x >= 0 && mappedPos.x + itemToSnap.width <= mainFlickable.width) {
                 return;
             }
-            scrollAnim.from = mainFlickable.contentX;
-            scrollAnim.to = currentItem.parent.x;
             scrollAnim.running = false;
+            scrollAnim.from = mainFlickable.contentX;
+            //currentItem snaps at the end of the view, the others at the beginning
+            if (itemToSnap == currentItem.parent) {
+                scrollAnim.to = itemToSnap.x - Math.max(0, mainFlickable.width - itemToSnap.width);
+            } else {
+                scrollAnim.to = Math.min(itemToSnap.x, mainLayout.width - mainFlickable.width);
+            }
             scrollAnim.running = true;
         }
     }
@@ -290,22 +296,27 @@ Item {
         contentHeight: height
         property Item currentItem: pagesModel.count > currentIndex ? pagesModel.actualPages[currentIndex] : null
         property int currentIndex: 0
-        onCurrentItemChanged: currentItemSnapTimer.restart();
+        onCurrentItemChanged: {
+            currentItemSnapTimer.itemToSnap = currentItem.parent;
+            currentItemSnapTimer.restart();
+        }
         onMovementEnded: {
             var pos = currentItem.mapToItem(mainFlickable, 0, 0);
+            var oldCurrentIndex = currentIndex;
             if (pos.x < 0 || pos.x >= width) {
                 currentIndex = mainLayout.childAt(contentX + width - 10, 10).level;
             }
 
+            if (oldCurrentIndex != currentIndex) {
+                return;
+            }
             var childToSnap = mainLayout.childAt(contentX + 1, 10);
             var mappedPos = childToSnap.mapToItem(mainFlickable, 0, 0);
             if (mappedPos.x < -childToSnap.width / 2) {
                 childToSnap = mainLayout.children[childToSnap.level+1];
             }
-            scrollAnim.from = mainFlickable.contentX;
-            scrollAnim.to = childToSnap.x;
-            scrollAnim.running = false;
-            scrollAnim.running = true;
+            currentItemSnapTimer.itemToSnap = childToSnap;
+            currentItemSnapTimer.restart();
         }
         onFlickEnded: movementEnded();
 
