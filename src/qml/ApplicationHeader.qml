@@ -177,7 +177,8 @@ Rectangle {
 
         onContentXChanged: {
             if (wideScreen && !__appWindow.pageStack.contentItem.moving) {
-                __appWindow.pageStack.contentItem.contentX = titleList.contentX
+                //FIXME: needs the rewrite to be properly fixed, disable sync in this direction for now
+               // __appWindow.pageStack.contentItem.contentX = titleList.contentX
             }
         }
         onHeightChanged: {
