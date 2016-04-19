@@ -27,41 +27,45 @@ ScrollablePage {
     Layout.fillWidth: true
 
     title: "Buttons"
-    contextualActions: [
-        Action {
-            text:"Action for buttons"
-            iconName: "bookmarks"
-            onTriggered: print("Action 1 clicked")
-        },
-        Action {
-            text:"Action 2"
-            iconName: "folder"
-            enabled: false
-        },
-        Action {
-            text: "Action for Sheet"
-            visible: sheet.opened
+
+    actions {
+        main: Action {
+            iconName: sheet.opened ? "dialog-cancel" : "document-edit"
+            onTriggered: {
+                print("Action button in buttons page clicked");
+                sheet.opened = !sheet.opened
+            }
         }
-    ]
-    mainAction: Action {
-        iconName: sheet.opened ? "dialog-cancel" : "document-edit"
-        onTriggered: {
-            print("Action button in buttons page clicked");
-            sheet.opened = !sheet.opened
+        left: Action {
+            iconName: "go-previous"
+            onTriggered: {
+                print("Left action triggered")
+            }
         }
+        right: Action {
+            iconName: "go-next"
+            onTriggered: {
+                print("Right action triggered")
+            }
+        }
+        contextualActions: [
+            Action {
+                text:"Action for buttons"
+                iconName: "bookmarks"
+                onTriggered: print("Action 1 clicked")
+            },
+            Action {
+                text:"Action 2"
+                iconName: "folder"
+                enabled: false
+            },
+            Action {
+                text: "Action for Sheet"
+                visible: sheet.opened
+            }
+        ]
     }
-    leftAction: Action {
-        iconName: "go-previous"
-        onTriggered: {
-            print("Left action triggered")
-        }
-    }
-    rightAction: Action {
-        iconName: "go-next"
-        onTriggered: {
-            print("Right action triggered")
-        }
-    }
+
 
     //Close the drawer with the back button
     onBackRequested: {

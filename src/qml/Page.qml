@@ -121,7 +121,7 @@ Item {
      * }
      * @endcode
      */
-    property list<QtObject> contextualActions
+    property alias contextualActions: actionsGroup.contextualActions
 
     /**
      * mainAction: Action
@@ -142,11 +142,11 @@ Item {
      * }
      * @endcode
      */
-    property QtObject mainAction
+    property alias mainAction: actionsGroup.main
 
-    property QtObject leftAction
+    property alias leftAction: actionsGroup.left
 
-    property QtObject rightAction
+    property alias rightAction: actionsGroup.right
 
     readonly property alias actions: actionsGroup
 
