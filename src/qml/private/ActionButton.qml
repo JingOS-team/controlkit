@@ -30,7 +30,7 @@ Item {
     property QtObject leftAction: pageStack.currentItem ? pageStack.currentItem.leftAction : null
     property QtObject rightAction: pageStack.currentItem ? pageStack.currentItem.rightAction : null
 
-    implicitWidth: implicitHeight + Units.iconSizes.smallMedium*2
+    implicitWidth: implicitHeight + Units.iconSizes.smallMedium*4
     implicitHeight: Units.iconSizes.large
     visible: action != null || leftAction != null || rightAction != null
 
@@ -205,8 +205,8 @@ Item {
                     verticalCenter: parent.verticalCenter
                 }
                 radius: Units.smallSpacing
-                height: buttonGraphics.height * 0.6
-                width: height + buttonGraphics.width/2
+                height: buttonGraphics.height * 0.8
+                width: height + Units.iconSizes.smallMedium
                 visible: button.leftAction
                 color: button.leftAction && ((button.leftAction && mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || button.leftAction.checked) ? Theme.highlightColor : Theme.backgroundColor
                 Icon {
@@ -228,8 +228,8 @@ Item {
                     verticalCenter: parent.verticalCenter
                 }
                 radius: Units.smallSpacing
-                height: buttonGraphics.height * 0.6
-                width: height + buttonGraphics.width/2
+                height: buttonGraphics.height * 0.8
+                width: height + Units.iconSizes.smallMedium
                 visible: button.rightAction
                 color: button.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || button.rightAction.checked) ? Theme.highlightColor : Theme.backgroundColor
                 Icon {
