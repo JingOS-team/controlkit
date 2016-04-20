@@ -213,7 +213,7 @@ Rectangle {
                 //scroll up if current otherwise make current
                 if (__appWindow.pageStack.currentIndex == model.index) {
                     if (__appWindow.pageStack.currentItem.flickable.contentY > -__appWindow.header.height) {
-                        scrollTopAnimation.to = -__appWindow.header.height
+                        scrollTopAnimation.to = __appWindow.pageStack.currentItem.topPadding;
                         scrollTopAnimation.running = true;
                     }
                 } else {
