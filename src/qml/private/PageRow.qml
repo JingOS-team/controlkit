@@ -130,7 +130,6 @@ Item {
 
         // initialize the page
         var container = pagesModel.initPage(page, properties);
-        container.level = pagesModel.count
         pagesModel.actualPages.push(container.page);
         pagesModel.append(container);
 
@@ -216,7 +215,7 @@ Item {
         onCountChanged: root.contentChildrenChanged();
 
         function initPage(page, properties) {
-            var container = containerComponent.createObject(pagesModel);
+            var container = containerComponent.createObject(pagesModel, {"level": pagesModel.count});
 
             var pageComp;
             if (page.createObject) {
@@ -270,7 +269,7 @@ Item {
     }
     Timer {
         id: currentItemSnapTimer
-        interval: 150
+        interval: Units.longDuration*2
         property Item itemToSnap
         onTriggered: {
             var mappedPos = itemToSnap.mapToItem(mainFlickable, 0, 0);
@@ -319,26 +318,13 @@ Item {
             currentItemSnapTimer.restart();
         }
         onFlickEnded: movementEnded();
+        onWidthChanged: movementEnded();
 
         Row {
             id: mainLayout
             Repeater {
                 model: pagesModel
             }
-           /* add: Transition {
-                ParallelAnimation {
-                    NumberAnimation {
-                        property: "opacity"
-                        from: 0.5
-                        to: 1
-                        duration:  10*Units.longDuration
-                    }
-                    NumberAnimation {
-                        properties: "x,y"
-                        duration: 10*Units.longDuration
-                    }
-                }
-            }*/
         }
     }
 
@@ -349,8 +335,18 @@ Item {
             id: container
             height: mainFlickable.height
 
-            state: root.width < root.defaultColumnWidth ? "vertical" : (container.level == pagesModel.count - 1 ? "last" : "middle");
+            state: pendingState
+            property string pendingState: root.width < root.defaultColumnWidth*2 ? "vertical" : (container.level >= pagesModel.count - 1 ? "last" : "middle");
 
+            //HACK
+            onPendingStateChanged: {
+                stateTimer.restart();
+            }
+            Timer {
+                id: stateTimer
+                interval: 150
+                onTriggered: container.state = container.pendingState
+            }
             //NOTE: use this instead of ObjectModel.index because we need to have this set
             // *before* it's added to the model
             property int level
@@ -385,13 +381,15 @@ Item {
                     PropertyChanges {
                         target: container
                         implicitWidth: root.width
+                        width: container.implicitWidth
                     }
                 },
                 State {
                     name: "last"
                     PropertyChanges {
                         target: container
-                        implicitWidth: Math.max(roundedHint, root.width - (container.level == 0 ? 0 : pagesModel.get(container.level-1).width))
+                        implicitWidth: Math.max(roundedHint, root.width - (container.level == 0 ? 0 : pagesModel.get(container.level-1).implicitWidth))
+                        width: container.implicitWidth
                     }
                 },
                 State {
@@ -399,21 +397,29 @@ Item {
                     PropertyChanges {
                         target: container
                         implicitWidth: roundedHint
+                        width: container.implicitWidth
                     }
                 }
             ]
             transitions: [
                 Transition {
-                    from: "last"
-                    to: "middle"
-                    NumberAnimation {
-                        property: "implicitWidth"
-                        duration: Units.longDuration
-                        easing.type: Easing.InOutQuad
+                    from: "last,middle"
+                    to: "middle,last"
+                    SequentialAnimation {
+                        NumberAnimation {
+                            property: "width"
+                            duration: Units.longDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                        ScriptAction {
+                            script: {
+                                currentItemSnapTimer.itemToSnap = mainFlickable.currentItem.parent;
+                                currentItemSnapTimer.restart();
+                            }
+                        }
                     }
                 }
             ]
-            
         }
     }
 

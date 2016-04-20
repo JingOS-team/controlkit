@@ -156,7 +156,7 @@ Rectangle {
         }
 
         onContentXChanged: {
-            if (wideScreen && !__appWindow.pageStack.contentItem.moving) {
+            if (wideScreen && !__appWindow.pageStack.contentItem.moving && titleList.moving) {
                 //FIXME: doesn't seem very reliable
                 __appWindow.pageStack.contentItem.contentX = titleList.contentX - originX + __appWindow.pageStack.contentItem.originX;
             }
