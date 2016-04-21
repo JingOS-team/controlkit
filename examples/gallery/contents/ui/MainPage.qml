@@ -99,6 +99,10 @@ Kirigami.ScrollablePage {
                 component: "TextField"
             }
             ListElement {
+                text: "Multiple Columns"
+                component: "MultipleColumns"
+            }
+            ListElement {
                 text: "Non Scrollable Page"
                 component: "NonScrollable"
             }

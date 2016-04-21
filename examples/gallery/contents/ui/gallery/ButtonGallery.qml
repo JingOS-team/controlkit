@@ -25,7 +25,7 @@ import org.kde.kirigami 1.0
 ScrollablePage {
     id: page
     Layout.fillWidth: true
-    implicitWidth: Units.gridUnit * (Math.floor(Math.random() * 35) + 10)
+    //implicitWidth: Units.gridUnit * (Math.floor(Math.random() * 35) + 10)
 
     title: "Buttons"
     contextualActions: [
@@ -121,11 +121,6 @@ ScrollablePage {
             text: "Open Sheet"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: sheet.open()
-        }
-        Controls.Button {
-            text: "Push another page"
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: pageStack.push(Qt.resolvedUrl("ButtonGallery.qml"));
         }
         Controls.Button {
             text: "Toggle Action Button"

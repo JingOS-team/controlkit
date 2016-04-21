@@ -164,9 +164,16 @@ Item {
                 pagesModel.remove(oldPage.parent.ObjectModel.index);
                 if (oldPage.parent.owner) {
                     oldPage.parent = oldPage.parent.owner;
-                    oldPage.parent.destroy();
                 }
+                oldPage.parent.destroy();
             }
+        } else {
+            pagesModel.actualPages.pop();
+            pagesModel.remove(pagesModel.count-1);
+            if (oldPage.parent.owner) {
+                oldPage.parent = oldPage.parent.owner;
+            }
+            oldPage.parent.destroy();
         }
     }
 
