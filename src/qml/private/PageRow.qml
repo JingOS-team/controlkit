@@ -277,7 +277,7 @@ Item {
     }
     Timer {
         id: currentItemSnapTimer
-        interval: Units.longDuration*2
+        interval: Units.longDuration
         property Item itemToSnap
         onTriggered: {
             var mappedPos = itemToSnap.mapToItem(mainFlickable, 0, 0);
@@ -303,6 +303,7 @@ Item {
         contentHeight: height
         property Item currentItem: pagesModel.count > currentIndex ? pagesModel.actualPages[currentIndex] : null
         property int currentIndex: 0
+        flickDeceleration: Units.gridUnit * 50
         onCurrentItemChanged: {
             currentItemSnapTimer.itemToSnap = currentItem.parent;
             currentItemSnapTimer.restart();
@@ -338,7 +339,7 @@ Item {
                     property: "y"
                     from: mainFlickable.height
                     to: 0
-                    duration: Units.longDuration
+                    duration: Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
             }
