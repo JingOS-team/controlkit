@@ -32,17 +32,17 @@ Item {
     /**
      * This property holds the number of items currently pushed onto the view
      */
-    property alias depth: pagesModel.count
+    readonly property alias depth: pagesModel.count
 
     /**
      * The last Page in the Row
      */
-    property Item lastItem: pagesModel.count ? pagesModel.get(pagesModel.count - 1) : null
+    readonly property Item lastItem: pagesModel.count ? pagesModel.get(pagesModel.count - 1).page : null
 
     /**
      * The currently visible Item
      */
-    property Item currentItem: mainFlickable.currentItem
+    readonly property Item currentItem: mainFlickable.currentItem
 
     /**
      * the index of the currently visible Item
@@ -52,7 +52,7 @@ Item {
     /**
      * This property holds the list of content children.
      */
-    property alias contentChildren: pagesModel.actualPages
+    readonly property alias contentChildren: pagesModel.actualPages
 
     /**
      * The initial item when this PageRow is created
