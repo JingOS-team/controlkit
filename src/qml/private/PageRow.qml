@@ -133,7 +133,7 @@ Item {
         pagesModel.actualPages.push(container.page);
         pagesModel.append(container);
 
-        container.visible = true;
+        container.visible = container.page.visible = true;
         mainFlickable.currentIndex = container.level;
         return container.page
     }
