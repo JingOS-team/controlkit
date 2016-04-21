@@ -32,7 +32,7 @@ Rectangle {
     id: listItem
     
     /**
-     * type: Item
+     * contentItem: Item
      * This property holds the visual content item.
      *
      * Note: The content item is automatically resized inside the
@@ -41,7 +41,7 @@ Rectangle {
      default property Item contentItem
 
     /**
-     * type: bool
+     * supportsMouseEvents: bool
      * Holds if the item emits signals related to mouse interaction.
      *TODO: remove
      * The default value is false.
@@ -49,7 +49,7 @@ Rectangle {
     property alias supportsMouseEvents: itemMouse.enabled
 
     /**
-     * type: signal
+     * clicked: signal
      * This signal is emitted when there is a click.
      *
      * This is disabled by default, set enabled to true to use it.
@@ -59,7 +59,7 @@ Rectangle {
 
 
     /**
-     * type: signal
+     * pressAndHold: signal
      * The user pressed the item with the mouse and didn't release it for a
      * certain amount of time.
      *
@@ -69,28 +69,42 @@ Rectangle {
     signal pressAndHold
 
     /**
-     * type: bool
+     * checked: bool
      * If true makes the list item look as checked or pressed. It has to be set
      * from the code, it won't change by itself.
      */
     property bool checked: false
 
     /**
-     * type: bool
+     * pressed: bool
+     * True when the user is pressing the mouse over the list item and
+     * supportsMouseEvents is set to true
+     */
+    property alias pressed: itemMouse.pressed
+
+    /**
+     * containsMouse: bool
+     * True when the user hover the mouse over the list item
+     * NOTE: on mobile touch devices this will be true only when pressed is also true
+     */
+    property alias containsMouse: itemMouse.containsMouse
+
+    /**
+     * sectionDelegate: bool
      * If true the item will be a delegate for a section, so will look like a
      * "title" for the items under it.
      */
     property bool sectionDelegate: false
 
     /**
-     * type: bool
+     * separatorVisible: bool
      * True if the separator between items is visible
      * default: true
      */
     property bool separatorVisible: true
 
     /**
-     * type: Item
+     * background: Item
      * This property holds the background item.
      *
      * Note: If the background item has no explicit size specified,
@@ -98,36 +112,8 @@ Rectangle {
      * In most cases, there is no need to specify width or
      * height for a background item.
      */
-    property Item background: Rectangle {
-        color: listItem.checked || (itemMouse.pressed && itemMouse.changeBackgroundOnPress) ? Theme.highlightColor : Theme.viewBackgroundColor
-
-        parent: itemMouse
-        anchors.fill: parent
-        visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
-        Rectangle {
-            anchors.fill: parent
-            visible: !Settings.isMobile
-            color: Theme.highlightColor
-            opacity: itemMouse.containsMouse && !itemMouse.pressed ? 0.2 : 0
-            Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
-        }
-        Behavior on color {
-            ColorAnimation { duration: Units.longDuration }
-        }
-
-        Rectangle {
-            id: separator
-            color: Theme.textColor
-            opacity: 0.2
-            visible: listItem.separatorVisible
-            anchors {
-                left: parent.left
-                right: parent.right
-                bottom: parent.bottom
-            }
-            height: Math.ceil(Units.smallSpacing / 5);
-        }
-    }
+    //FIXME: can this be an Item?
+    property var background
 
     implicitWidth: parent ? parent.width : childrenRect.width
 
@@ -140,12 +126,19 @@ Rectangle {
 
     onContentItemChanged: {
         contentItem.parent = paddingItem;
-        contentItem.anchors.fill = parent;
+    }
+
+    Component.onCompleted: {
+        if (listItem.background === undefined) {
+            var component = Qt.createComponent(Qt.resolvedUrl("./private/DefaultListItemBackground.qml"));
+            listItem.background = component.createObject(itemMouse);
+        }
+        background.parent = itemMouse;
+        background.anchors.fill = itemMouse;
     }
 
     MouseArea {
         id: itemMouse
-        property bool changeBackgroundOnPress: !listItem.checked && !listItem.sectionDelegate
         anchors.fill: parent
         enabled: false
         hoverEnabled: !Settings.isMobile

@@ -17,33 +17,13 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.1
-import org.kde.kirigami 1.0
+import QtQml 2.1
 
-MouseArea {
-    anchors {
-        left: parent.left
-        top: parent.contentItem.top
-        bottom: parent.contentItem.bottom
-    }
-    width: height
-    onClicked: __appWindow.pageStack.goBack();
-    Rectangle {
-        anchors.verticalCenter: parent.verticalCenter
-        x: width/2
-        antialiasing: true
-        width: parent.width/2
-        height: Units.smallSpacing/3
-        rotation: 45
-        transformOrigin: Item.Left
-    }
-    Rectangle {
-        anchors.verticalCenter: parent.verticalCenter
-        x: width/2
-        antialiasing: true
-        width: parent.width/2
-        height: Units.smallSpacing/3
-        rotation: -45
-        transformOrigin: Item.Left
-    }
+QtObject {
+    id: actionsGroup
+    property QtObject main
+    property QtObject left
+    property QtObject right
+    property list<QtObject> contextualActions
 }
+

@@ -28,6 +28,21 @@ ScrollablePage {
 
     title: "Progress Indicators"
 
+    actions {
+        main: Action {
+            iconName: "document-edit"
+            onTriggered: {
+                print("Action button in buttons page clicked");
+            }
+        }
+        right: Action {
+            iconName: "go-next"
+            onTriggered: {
+                print("Right action triggered")
+            }
+        }
+    }
+
     ColumnLayout {
         width: page.width
             Timer {

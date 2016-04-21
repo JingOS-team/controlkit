@@ -5,7 +5,7 @@ Build on Android:
 mkdir build
 cd build
 
-cmake ..  -DCMAKE_TOOLCHAIN_FILE=/path/to/share/ECM/toolchain/Android.cmake -DQTANDROID_EXPORTED_TARGET=kirigamigallery -DANDROID_APK_DIR=../src/qrcexample/ -DCMAKE_PREFIX_PATH=/path/to/Qt-Android/5.5/android_armv7/ -DCMAKE_INSTALL_PREFIX=/path/to/dummy/install/prefix
+cmake ..  -DCMAKE_TOOLCHAIN_FILE=/path/to/share/ECM/toolchain/Android.cmake -DQTANDROID_EXPORTED_TARGET=kirigamigallery -DANDROID_APK_DIR=../examples/android/ -DCMAKE_PREFIX_PATH=/path/to/Qt-Android/5.5/android_armv7/ -DCMAKE_INSTALL_PREFIX=/path/to/dummy/install/prefix -DBUILD_EXAMPLES=ON
 ```
 
 You need a `-DCMAKE_INSTALL_PREFIX` to somewhere in your home, but using an absolute path

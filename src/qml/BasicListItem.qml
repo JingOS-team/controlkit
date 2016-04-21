@@ -50,7 +50,6 @@ AbstractListItem {
         height: implicitHeight + Units.smallSpacing * 2
         anchors {
             left: parent.left
-            margins: Units.largeSpacing
         }
         Icon {
             Layout.minimumHeight: Units.iconSizes.smallMedium
@@ -59,6 +58,7 @@ AbstractListItem {
         }
         Label {
             text: listItem.label
+            color: listItem.checked ? Theme.viewHighlightedTextColor : Theme.viewTextColor
         }
     }
 }

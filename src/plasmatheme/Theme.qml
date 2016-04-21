@@ -26,6 +26,7 @@ QtObject {
 
     property color textColor: theme.textColor
     property color highlightColor: theme.highlightColor
+    property color highlightedTextColor: theme.highlightedTextColor
     property color backgroundColor: theme.backgroundColor
     property color linkColor: theme.linkColor
     property color visitedLinkColor: theme.visitedLinkColor
@@ -34,16 +35,21 @@ QtObject {
     property color buttonBackgroundColor: theme.buttonBackgroundColor
     property color buttonHoverColor: theme.buttonHoverColor
     property color buttonFocusColor: theme.buttonFocusColor
+    property color buttonHighlightedTextColor: theme.buttonHighlightedTextColor
 
     property color viewTextColor: theme.viewTextColor
     property color viewBackgroundColor: theme.viewBackgroundColor
     property color viewHoverColor: theme.viewHoverColor
     property color viewFocusColor: theme.viewFocusColor
+    property color viewHighlightedTextColor: theme.viewHighlightedTextColor
+    
 
     property color complementaryTextColor: theme.complementaryTextColor
     property color complementaryBackgroundColor: theme.complementaryBackgroundColor
     property color complementaryHoverColor: theme.complementaryHoverColor
     property color complementaryFocusColor: theme.complementaryFocusColor
+    property color complementaryHighlightedTextColor: theme.complementaryHighlightedTextColor
+    
 
     property variant defaultFont: theme.defaultFont
 }

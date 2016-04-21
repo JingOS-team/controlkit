@@ -40,25 +40,27 @@ Kirigami.ScrollablePage {
     }
 
     //flickable: mainListView
-    contextualActions: [
-        Kirigami.Action {
-            text:"Action 1"
-            iconName: "document-decrypt"
-            onTriggered: print("Action 1 clicked")
-        },
-        Kirigami.Action {
-            id: shareAction
-            visible: checkableAction.checked
-            text:"Action 2"
-            iconName: "document-share"
-        },
-        Kirigami.Action {
-            id: checkableAction
-            text:"Checkabke"
-            checkable: true
-            iconName: "dashboard-show"
-        }
-    ]
+    actions {
+        contextualActions: [
+            Kirigami.Action {
+                text:"Action 1"
+                iconName: "document-decrypt"
+                onTriggered: print("Action 1 clicked")
+            },
+            Kirigami.Action {
+                id: shareAction
+                visible: checkableAction.checked
+                text:"Action 2"
+                iconName: "document-share"
+            },
+            Kirigami.Action {
+                id: checkableAction
+                text:"Checkabke"
+                checkable: true
+                iconName: "dashboard-show"
+            }
+        ]
+    }
 
 
 
@@ -103,14 +105,22 @@ Kirigami.ScrollablePage {
                 component: "MultipleColumns"
             }
             ListElement {
+                text: "List View"
+                component: "ListView"
+            }
+            ListElement {
                 text: "Non Scrollable Page"
                 component: "NonScrollable"
             }
         }
         delegate: Kirigami.SwipeListItem {
-            Row {
+            id: listItem
+            Item {
                 Kirigami.Label {
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: y
                     text: model.text
+                    color: listItem.checked ? Kirigami.Theme.viewHighlightedTextColor : Kirigami.Theme.viewTextColor
                 }
             }
             property Item ownPage

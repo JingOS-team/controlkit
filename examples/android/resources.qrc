@@ -8,6 +8,7 @@
         <file alias="contents/ui/gallery/ProgressBarGallery.qml">../gallery/contents/ui/gallery/ProgressBarGallery.qml</file>
         <file alias="contents/ui/gallery/CheckBoxGallery.qml">../gallery/contents/ui/gallery/CheckBoxGallery.qml</file>
         <file alias="contents/ui/gallery/SliderGallery.qml">../gallery/contents/ui/gallery/SliderGallery.qml</file>
+        <file alias="contents/ui/gallery/ListViewGallery.qml">../gallery/contents/ui/gallery/ListViewGallery.qml</file>
         <file alias="contents/ui/gallery/SwitchGallery.qml">../gallery/contents/ui/gallery/SwitchGallery.qml</file>
         <file alias="contents/ui/gallery/TextFieldGallery.qml">../gallery/contents/ui/gallery/TextFieldGallery.qml</file>
         <file alias="contents/ui/ExampleApp.qml">../gallery/contents/ui/ExampleApp.qml</file>

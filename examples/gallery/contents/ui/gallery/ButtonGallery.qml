@@ -28,29 +28,45 @@ ScrollablePage {
     //implicitWidth: Units.gridUnit * (Math.floor(Math.random() * 35) + 10)
 
     title: "Buttons"
-    contextualActions: [
-        Action {
-            text:"Action for buttons"
-            iconName: "bookmarks"
-            onTriggered: print("Action 1 clicked")
-        },
-        Action {
-            text:"Action 2"
-            iconName: "folder"
-            enabled: false
-        },
-        Action {
-            text: "Action for Sheet"
-            visible: sheet.opened
+
+    actions {
+        main: Action {
+            iconName: sheet.opened ? "dialog-cancel" : "document-edit"
+            onTriggered: {
+                print("Action button in buttons page clicked");
+                sheet.opened = !sheet.opened
+            }
         }
-    ]
-    mainAction: Action {
-        iconName: sheet.opened ? "dialog-cancel" : "document-edit"
-        onTriggered: {
-            print("Action button in buttons page clicked");
-            sheet.opened = !sheet.opened
+        left: Action {
+            iconName: "go-previous"
+            onTriggered: {
+                print("Left action triggered")
+            }
         }
+        right: Action {
+            iconName: "go-next"
+            onTriggered: {
+                print("Right action triggered")
+            }
+        }
+        contextualActions: [
+            Action {
+                text:"Action for buttons"
+                iconName: "bookmarks"
+                onTriggered: print("Action 1 clicked")
+            },
+            Action {
+                text:"Action 2"
+                iconName: "folder"
+                enabled: false
+            },
+            Action {
+                text: "Action for Sheet"
+                visible: sheet.opened
+            }
+        ]
     }
+
 
     //Close the drawer with the back button
     onBackRequested: {

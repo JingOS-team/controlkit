@@ -156,9 +156,9 @@ Rectangle {
         }
 
         onContentXChanged: {
-            if (wideScreen && !__appWindow.pageStack.contentItem.moving && titleList.moving) {
-                //FIXME: doesn't seem very reliable
-                __appWindow.pageStack.contentItem.contentX = titleList.contentX - originX + __appWindow.pageStack.contentItem.originX;
+            if (wideScreen && !__appWindow.pageStack.contentItem.moving) {
+                //FIXME: needs the rewrite to be properly fixed, disable sync in this direction for now
+               // __appWindow.pageStack.contentItem.contentX = titleList.contentX
             }
         }
         onHeightChanged: {
@@ -191,8 +191,15 @@ Rectangle {
             height: titleList.height
             onClicked: {
                 //scroll up if current otherwise make current
+                if (!__appWindow.pageStack.currentItem.flickable) {
+                    return;
+                }
                 if (__appWindow.pageStack.currentIndex == modelData) {
-                    scrollTopAnimation.running = true;
+                    if (__appWindow.pageStack.currentItem.flickable.contentY > -__appWindow.header.height) {
+                        scrollTopAnimation.to = -__appWindow.pageStack.currentItem.flickable.topMargin;
+                        scrollTopAnimation.running = true;
+                    }
+
                 } else {
                     __appWindow.pageStack.currentIndex = modelData;
                 }

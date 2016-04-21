@@ -57,7 +57,7 @@ Item {
 
 //BEGIN properties
     /**
-     * type: Item
+     * contentItem: Item
      * This property holds the visual content item.
      *
      * Note: The content item is automatically resized inside the
@@ -66,7 +66,7 @@ Item {
      default property Item contentItem
 
     /**
-     * type: bool
+     * supportsMouseEvents: bool
      * Holds if the item emits signals related to mouse interaction.
      *TODO: remove
      * The default value is false.
@@ -74,7 +74,7 @@ Item {
     property alias supportsMouseEvents: itemMouse.enabled
 
     /**
-     * type: signal
+     * clicked: signal
      * This signal is emitted when there is a click.
      *
      * This is disabled by default, set enabled to true to use it.
@@ -84,7 +84,7 @@ Item {
 
 
     /**
-     * type: signal
+     * pressAndHold: signal
      * The user pressed the item with the mouse and didn't release it for a
      * certain amount of time.
      *
@@ -94,28 +94,28 @@ Item {
     signal pressAndHold
 
     /**
-     * type: bool
+     * checked: bool
      * If true makes the list item look as checked or pressed. It has to be set
      * from the code, it won't change by itself.
      */
     property bool checked: false
 
     /**
-     * type: bool
+     * sectionDelegate: bool
      * If true the item will be a delegate for a section, so will look like a
      * "title" for the items under it.
      */
     property bool sectionDelegate: false
 
     /**
-     * type: bool
+     * separatorVisible: bool
      * True if the separator between items is visible
      * default: true
      */
     property bool separatorVisible: true
 
     /**
-     * type: list<Action>
+     * actions: list<Action>
      * Defines the actions for the list item: at most 4 buttons will
      * contain the actions for the item, that can be revealed by
      * sliding away the list item.
@@ -132,7 +132,7 @@ Item {
     property real position: 0
 
     /**
-     * type: Item
+     * background: Item
      * This property holds the background item.
      *
      * Note: If the background item has no explicit size specified,
@@ -140,7 +140,8 @@ Item {
      * In most cases, there is no need to specify width or
      * height for a background item.
      */
-    property Item background: Rectangle {
+    property var background
+    /* : Rectangle {
         color: listItem.checked || itemMouse.pressed ? Theme.highlightColor : Theme.viewBackgroundColor
 
         parent: itemMouse
@@ -170,7 +171,7 @@ Item {
             }
             height: Math.ceil(Units.smallSpacing / 5);
         }
-    }
+    }*/
 
     Item {
         id: behindItem
@@ -203,7 +204,7 @@ Item {
     }
 
     implicitWidth: parent ? parent.width : contentItem.width + paddingItem.anchors.margins * 2
-    implicitHeight: contentItem.implicitHeight + paddingItem.anchors.margins * 2
+    implicitHeight: Math.max(Units.iconSizes.smallMedium , contentItem.implicitHeight) + Units.smallSpacing * 4
     height: visible ? implicitHeight : 0
 //END properties
 
@@ -222,8 +223,14 @@ Item {
     }
 
     Component.onCompleted: {
+        if (listItem.background === undefined) {
+            var component = Qt.createComponent(Qt.resolvedUrl("./private/DefaultListItemBackground.qml"));
+            listItem.background = component.createObject(itemMouse);
+        }
+
         background.parent = itemMouse;
         background.z = 0;
+
         contentItem.parent = itemMouse
         contentItem.z = 1;
     }
@@ -384,7 +391,7 @@ Item {
                     width: Units.iconSizes.smallMedium
                     height: width
                     x: y
-                    source: "application-menu"
+                    source: (mainFlickable.contentX > mainFlickable.width / 2) ? "handle-right" : "handle-left"
                 }
             }
         }

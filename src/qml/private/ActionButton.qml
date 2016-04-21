@@ -27,10 +27,12 @@ Item {
 
     //either Action or QAction should work here
     property QtObject action: pageStack.currentItem ? pageStack.currentItem.mainAction : null
+    property QtObject leftAction: pageStack.currentItem ? pageStack.currentItem.leftAction : null
+    property QtObject rightAction: pageStack.currentItem ? pageStack.currentItem.rightAction : null
 
-    implicitWidth: implicitHeight
+    implicitWidth: implicitHeight + Units.iconSizes.smallMedium*4
     implicitHeight: Units.iconSizes.large
-    visible: action != null
+    visible: action != null || leftAction != null || rightAction != null
 
 
     onXChanged: {
@@ -61,6 +63,7 @@ Item {
 
         drag {
             target: button
+            //filterChildren: true
             axis: Drag.XAxis
             minimumX: contextDrawer && contextDrawer.enabled ? 0 : button.parent.width/2 - button.width/2
             maximumX: globalDrawer && globalDrawer.enabled ? button.parent.width : button.parent.width/2 - button.width/2
@@ -72,11 +75,15 @@ Item {
         property var downTimestamp;
         property int startX
         property bool buttonPressedUnderMouse: false
+        property bool leftButtonPressedUnderMouse: false
+        property bool rightButtonPressedUnderMouse: false
 
         onPressed: {
             downTimestamp = (new Date()).getTime();
             startX = button.x + button.width/2;
-            buttonPressedUnderMouse = mouse.x > buttonGraphics.x - buttonGraphics.width / 2 && mouse.x < buttonGraphics.x + buttonGraphics.width / 2;
+            buttonPressedUnderMouse = mouse.x > buttonGraphics.x && mouse.x < buttonGraphics.x + buttonGraphics.width;
+            leftButtonPressedUnderMouse = !buttonPressedUnderMouse && leftAction && mouse.x < buttonGraphics.x;
+            rightButtonPressedUnderMouse = !buttonPressedUnderMouse && rightAction && mouse.x > buttonGraphics.x + buttonGraphics.width;
         }
         onReleased: {
             //pixel/second
@@ -102,18 +109,29 @@ Item {
                     contextDrawer.close();
                 }
             }
+            //buttonPressedUnderMouse = leftButtonPressedUnderMouse = rightButtonPressedUnderMouse = false;
         }
         onClicked: {
-            if (!buttonPressedUnderMouse || !button.action) {
+            var action;
+            if (buttonPressedUnderMouse) {
+                action = button.action;
+            } else if (leftButtonPressedUnderMouse) {
+                action = button.leftAction;
+            } else if (rightButtonPressedUnderMouse) {
+                action = button.rightAction;
+            }
+
+            if (!action) {
                 return;
             }
-            if (button.action.checkable) {
-                checked = !checked;
+
+            if (action.checkable) {
+                action.checked = !action.checked;
             }
 
             //if an action has been assigned, trigger it
-            if (button.action && button.action.trigger) {
-                button.action.trigger();
+            if (action && action.trigger) {
+                action.trigger();
             }
         }
         Connections {
@@ -148,8 +166,6 @@ Item {
             id: background
             anchors {
                 fill: parent
-                leftMargin: -Units.gridUnit
-                rightMargin: -Units.gridUnit
             }
 
             Rectangle {
@@ -158,7 +174,8 @@ Item {
                 anchors.centerIn: parent
                 height: parent.height - Units.smallSpacing*2
                 width: height
-                color: (button.action && mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || button.checked ? Theme.highlightColor : Theme.backgroundColor
+                visible: button.action
+                color: button.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || button.action.checked) ? Theme.highlightColor : Theme.backgroundColor
                 Icon {
                     id: icon
                     source: button.action && button.action.iconName ? button.action.iconName : ""
@@ -180,14 +197,61 @@ Item {
                     }
                 }
             }
+            //left button
+            Rectangle {
+                z: -1
+                anchors {
+                    right: parent.horizontalCenter
+                    verticalCenter: parent.verticalCenter
+                }
+                radius: Units.smallSpacing
+                height: buttonGraphics.height * 0.8
+                width: height + Units.iconSizes.smallMedium
+                visible: button.leftAction
+                color: button.leftAction && ((button.leftAction && mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || button.leftAction.checked) ? Theme.highlightColor : Theme.backgroundColor
+                Icon {
+                    source: button.leftAction && button.leftAction.iconName ? button.leftAction.iconName : ""
+                    width: height
+                    anchors {
+                        left: parent.left
+                        top: parent.top
+                        bottom: parent.bottom
+                        margins: Units.smallSpacing
+                    }
+                }
+            }
+            //right button
+            Rectangle {
+                z: -1
+                anchors {
+                    left: parent.horizontalCenter
+                    verticalCenter: parent.verticalCenter
+                }
+                radius: Units.smallSpacing
+                height: buttonGraphics.height * 0.8
+                width: height + Units.iconSizes.smallMedium
+                visible: button.rightAction
+                color: button.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || button.rightAction.checked) ? Theme.highlightColor : Theme.backgroundColor
+                Icon {
+                    source: button.rightAction && button.rightAction.iconName ? button.rightAction.iconName : ""
+                    width: height
+                    anchors {
+                        right: parent.right
+                        top: parent.top
+                        bottom: parent.bottom
+                        margins: Units.smallSpacing
+                    }
+                }
+            }
         }
+
         DropShadow {
             anchors.fill: background
             horizontalOffset: 0
             verticalOffset: Units.smallSpacing/3
             radius: Units.gridUnit / 3.5
             samples: 16
-            color: mouseArea.pressed && button.action && mouseArea.buttonPressedUnderMouse ? "transparent" : Qt.rgba(0, 0, 0, 0.5)
+            color: Qt.rgba(0, 0, 0, 0.5)
             source: background
         }
     }
