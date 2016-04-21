@@ -158,8 +158,8 @@ ApplicationWindow {
     *
     * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
     */
-    property ApplicationHeader header: ApplicationHeader {
-            }
+   //FIXME: this should become an actual ApplicationHeader
+    property var header: undefined
 
     /**
      * controlsVisible: bool
@@ -311,6 +311,12 @@ ApplicationWindow {
     }
     onContextDrawerChanged: {
         contextDrawer.parent = contentItem.parent;
+    }
+    Component.onCompleted: {
+        if (root.header === undefined) {
+            var component = Qt.createComponent(Qt.resolvedUrl("./ApplicationHeader.qml"));
+            root.header = component.createObject(root);
+        }
     }
 
     width: Units.gridUnit * 25
