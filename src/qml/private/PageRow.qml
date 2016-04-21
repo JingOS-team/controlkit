@@ -332,6 +332,15 @@ Item {
             Repeater {
                 model: pagesModel
             }
+            add: Transition {
+                NumberAnimation {
+                    property: "y"
+                    from: mainFlickable.height
+                    to: 0
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
         }
     }
 
