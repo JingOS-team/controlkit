@@ -140,7 +140,8 @@ Item {
      * In most cases, there is no need to specify width or
      * height for a background item.
      */
-    property Item background: Rectangle {
+    property var background
+    /* : Rectangle {
         color: listItem.checked || itemMouse.pressed ? Theme.highlightColor : Theme.viewBackgroundColor
 
         parent: itemMouse
@@ -170,7 +171,7 @@ Item {
             }
             height: Math.ceil(Units.smallSpacing / 5);
         }
-    }
+    }*/
 
     Item {
         id: behindItem
@@ -222,8 +223,14 @@ Item {
     }
 
     Component.onCompleted: {
+        if (listItem.background === undefined) {
+            var component = Qt.createComponent(Qt.resolvedUrl("./private/DefaultListItemBackground.qml"));
+            listItem.background = component.createObject(itemMouse);
+        }
+
         background.parent = itemMouse;
         background.z = 0;
+
         contentItem.parent = itemMouse
         contentItem.z = 1;
     }
