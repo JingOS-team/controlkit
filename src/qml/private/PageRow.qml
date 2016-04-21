@@ -212,11 +212,12 @@ Item {
         id: pagesModel
 
         property var componentCache
-        property var actualPages
+        property var actualPages: []
 
+        //NOTE:seems to only work if the array is defined in a declarative way,
+        //the Object in an imperative way, espacially on Android
         Component.onCompleted: {
             componentCache = {};
-            actualPages = [];
         }
 
         onCountChanged: root.contentChildrenChanged();
