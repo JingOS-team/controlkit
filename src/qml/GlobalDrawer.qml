@@ -155,6 +155,7 @@ OverlayDrawer {
         id: scrollView
         anchors.fill: parent
         implicitWidth: Math.min (Math.max(Units.gridUnit * 12, title.width), root.parent.width * 0.8)
+        horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
         Flickable {
             id: mainFlickable
             contentWidth: width
