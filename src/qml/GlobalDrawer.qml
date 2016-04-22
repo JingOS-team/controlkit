@@ -152,17 +152,18 @@ OverlayDrawer {
     handleVisible: typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true
 
     contentItem: Controls.ScrollView {
+        id: scrollView
         anchors.fill: parent
         implicitWidth: Math.min (Math.max(Units.gridUnit * 12, title.width), root.parent.width * 0.8)
         Flickable {
             id: mainFlickable
             contentWidth: width
-            contentHeight: mainColumn.height
+            contentHeight: mainColumn.Layout.minimumHeight
             ColumnLayout {
                 id: mainColumn
                 width: mainFlickable.width
                 spacing: 0
-                height: Math.max(mainFlickable.height, implicitHeight)
+                height: Math.max(root.height, Layout.minimumHeight)
 
                 Image {
                     id: bannerImage
