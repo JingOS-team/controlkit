@@ -56,6 +56,17 @@ ScrollablePage {
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: pageStack.pop();
         }
+        RowLayout {
+            anchors.horizontalCenter: parent.horizontalCenter
+            Controls.TextField {
+                id: edit
+                text: page.title
+            }
+            Controls.Button {
+                text: "Rename Page"
+                onClicked: page.title = edit.text;
+            }
+        }
     }
  
     
