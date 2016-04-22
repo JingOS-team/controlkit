@@ -147,7 +147,7 @@ ApplicationWindow {
     }
 
    /**
-    * header: ApplicationHeader
+    * header: AbstractApplicationHeader
     * An item that can be used as a title for the application.
     * Scrolling the main page will make it taller or shorter (trough the point of going away)
     * It's a behavior similar to the typical mobile web browser adressbar
@@ -315,6 +315,7 @@ ApplicationWindow {
     Component.onCompleted: {
         if (root.header === undefined) {
             var component = Qt.createComponent(Qt.resolvedUrl("./ApplicationHeader.qml"));
+            print("AAAA"+component.errorString())
             root.header = component.createObject(root);
         }
     }

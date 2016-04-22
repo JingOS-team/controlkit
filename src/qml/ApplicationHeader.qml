@@ -35,97 +35,12 @@ import org.kde.kirigami 1.0
  *
  * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
  */
-Rectangle {
-    id: headerItem
-    z: 2
-    anchors {
-        left: parent.left
-        right: parent.right
-    }
-    color: Theme.highlightColor
-    property int minimumHeight: 0
-    property int preferredHeight: Units.gridUnit * 1.6
-    property int maximumHeight: Units.gridUnit * 3
-    property alias contentItem: titleList
-
-    height: maximumHeight
-
-    y: -maximumHeight + preferredHeight
-
-    property QtObject __appWindow: applicationWindow();
-    parent: __appWindow.pageStack;
-
-    transform: Translate {
-        id: translateTransform
-        y: __appWindow.controlsVisible ? 0 : -headerItem.height - shadow.height
-        Behavior on y {
-            NumberAnimation {
-                duration: Units.longDuration
-                easing.type: translateTransform.y < 0 ? Easing.OutQuad : Easing.InQuad
-            }
-        }
-    }
-
-    Connections {
-        id: headerSlideConnection
-        target: __appWindow.pageStack.currentItem ? __appWindow.pageStack.currentItem.flickable : null
-        property int oldContentY
-        onContentYChanged: {
-            if (!__appWindow.pageStack.currentItem) {
-                return;
-            }
-            if (__appWindow.pageStack.currentItem.flickable.atYBeginning ||
-                __appWindow.pageStack.currentItem.flickable.atYEnd) {
-                return;
-            }
-
-            if (titleList.wideScreen) {
-                headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
-            } else {
-                headerItem.y = Math.min(0, Math.max(-headerItem.height + headerItem.minimumHeight, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
-                oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
-            }
-        }
-        onMovementEnded: {
-            if (headerItem.y > -headerItem.maximumHeight + headerItem.preferredHeight) {
-                //if don't change the position if more then preferredSize is shown
-            } else if (headerItem.y > -headerItem.maximumHeight + headerItem.preferredHeight - headerItem.preferredHeight/2 ) {
-                headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
-            } else {
-                headerItem.y = -headerItem.maximumHeight;
-            }
-        }
-    }
-    Connections {
-        target: __appWindow.pageStack
-        onCurrentItemChanged: {
-            if (!__appWindow.pageStack.currentItem) {
-                return;
-            }
-            if (__appWindow.pageStack.currentItem.flickable) {
-                headerSlideConnection.oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
-            } else {
-                headerSlideConnection.oldContentY = 0;
-            }
-            headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
-        }
-    }
-
-    Behavior on y {
-        enabled: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable && !__appWindow.pageStack.currentItem.flickable.moving
-        NumberAnimation {
-            duration: Units.longDuration
-            easing.type: Easing.InOutQuad
-        }
-    }
-
+AbstractApplicationHeader {
+    id: header
+    
     ListView {
         id: titleList
-        property Translate overshootTransform
         Component.onCompleted: {
-            if (applicationWindow() && applicationWindow().pageStack.transform[0]) {
-                overshootTransform = applicationWindow().pageStack.transform[0]
-            }
             //only on iOs put the back button on top left corner
             if (Qt.platform.os == "ios") {
                 var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
@@ -135,14 +50,9 @@ Rectangle {
         }
         property Item backButton
         clip: true
-        anchors {
-            fill: parent
-            leftMargin: backButton ? backButton.width : 0
-            topMargin: overshootTransform && overshootTransform.y > 0 ? 0 : Math.min(headerItem.height - headerItem.preferredHeight, -headerItem.y)
-        }
+        anchors.fill: parent
         cacheBuffer: width * count
         displayMarginBeginning: __appWindow.pageStack.width * count
-        property bool wideScreen: __appWindow.pageStack.width >= __appWindow.pageStack.defaultColumnWidth*2
         orientation: ListView.Horizontal
         boundsBehavior: Flickable.StopAtBounds
         model: __appWindow.pageStack.depth
@@ -156,7 +66,7 @@ Rectangle {
         }
 
         onContentXChanged: {
-            if (wideScreen && !__appWindow.pageStack.contentItem.moving) {
+            if (header.wideScreen && !__appWindow.pageStack.contentItem.moving) {
                 //FIXME: needs the rewrite to be properly fixed, disable sync in this direction for now
                // __appWindow.pageStack.contentItem.contentX = titleList.contentX
             }
@@ -165,7 +75,7 @@ Rectangle {
             titleList.returnToBounds()
         }
         onMovementEnded: {
-            if (wideScreen) {
+            if (header.wideScreen) {
                 __appWindow.pageStack.contentItem.movementEnded();
             }
         }
@@ -182,7 +92,7 @@ Rectangle {
         delegate: MouseArea {
             width: {
                 //more columns shown?
-                if (titleList.wideScreen) {
+                if (header.wideScreen) {
                     return __appWindow.pageStack.contentChildren[modelData].width;
                 } else {
                     return Math.min(titleList.width, delegateRoot.implicitWidth + Units.gridUnit + Units.smallSpacing);
@@ -211,7 +121,7 @@ Rectangle {
                 spacing: Units.gridUnit
                 Rectangle {
                     opacity: modelData > 0 ? 0.4 : 0
-                    visible: !titleList.wideScreen && opacity > 0
+                    visible: !header.wideScreen && opacity > 0
                     color: Theme.viewBackgroundColor
                     anchors.verticalCenter: parent.verticalCenter
                     width: height
@@ -233,27 +143,11 @@ Rectangle {
             }
         }
         Connections {
-            target: titleList.wideScreen ? __appWindow.pageStack.contentItem : null
+            target: header.wideScreen ? __appWindow.pageStack.contentItem : null
             onContentXChanged: {
                 if (!titleList.contentItem.moving) {
                     titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
                 }
-            }
-        }
-    }
-    EdgeShadow {
-        id: shadow
-        edge: Qt.TopEdge
-        opacity: headerItem.y > -headerItem.height ? 1 : 0
-        anchors {
-            right: parent.right
-            left: parent.left
-            top: parent.bottom
-        }
-        Behavior on opacity {
-            OpacityAnimator {
-                duration: Units.longDuration
-                easing.type: Easing.InOutQuad
             }
         }
     }

@@ -8,6 +8,7 @@ OverlayDrawer 1.0 OverlayDrawer.qml
 SplitDrawer 1.0 SplitDrawer.qml
 Action 1.0 Action.qml
 ApplicationWindow 1.0 ApplicationWindow.qml
+AbstractApplicationHeader 1.0 AbstractApplicationHeader.qml
 ApplicationHeader 1.0 ApplicationHeader.qml
 ContextDrawer 1.0 ContextDrawer.qml
 GlobalDrawer 1.0 GlobalDrawer.qml
