@@ -90,10 +90,12 @@ AbstractApplicationHeader {
         }
 
         delegate: MouseArea {
+            readonly property Page page: __appWindow.pageStack.get(modelData).page
+
             width: {
                 //more columns shown?
                 if (header.wideScreen) {
-                    return __appWindow.pageStack.contentChildren[modelData].width;
+                    return page.width;
                 } else {
                     return Math.min(titleList.width, delegateRoot.implicitWidth + Units.gridUnit + Units.smallSpacing);
                 }
@@ -137,7 +139,7 @@ AbstractApplicationHeader {
                     renderType: Text.QtRendering
                     color: Theme.viewBackgroundColor
                     elide: Text.ElideRight
-                    text: __appWindow.pageStack.contentChildren[modelData].title
+                    text: page.title
                     font.pixelSize: titleList.height / 1.6
                 }
             }

@@ -50,11 +50,6 @@ Item {
     property alias currentIndex: mainFlickable.currentIndex
 
     /**
-     * This property holds the list of content children.
-     */
-    readonly property alias contentChildren: pagesModel.actualPages
-
-    /**
      * The initial item when this PageRow is created
      */
     property variant initialPage
@@ -123,14 +118,12 @@ Item {
                 }
 
                 var container = pagesModel.initPage(tPage, tProps);
-                pagesModel.actualPages.push(pages[i]);
                 pagesModel.append(container);
             }
         }
 
         // initialize the page
         var container = pagesModel.initPage(page, properties);
-        pagesModel.actualPages.push(container.page);
         pagesModel.append(container);
 
         container.visible = container.page.visible = true;
@@ -147,20 +140,19 @@ Item {
      */
     function pop(page) {
         if (depth == 0) {
-            return null;
+            return;
         }
 
-        if (page !== undefined && page == pagesModel.actualPages[root.currentIndex - 1]) {
-            return null;
+        if (page !== undefined && page == pagesModel.get(root.currentIndex).page) {
+            return;
         }
 
         if (page !== undefined) {
-            var oldPage = pagesModel.actualPages[pagesModel.actualPages.length-1];
+            var oldPage = pagesModel.get(pagesModel.count-1).page;
             // an unwind target has been specified - pop until we find it
-            while (page != oldPage && pagesModel.actualPages.length > 1) {
-                oldPage = pagesModel.actualPages[pagesModel.actualPages.length-1];
+            while (page != oldPage && pagesModel.count > 1) {
+                oldPage = pagesModel.get(pagesModel.count-1).page;
 
-                pagesModel.actualPages.pop();
                 pagesModel.remove(oldPage.parent.ObjectModel.index);
                 if (oldPage.parent.owner) {
                     oldPage.parent = oldPage.parent.owner;
@@ -168,7 +160,6 @@ Item {
                 oldPage.parent.destroy();
             }
         } else {
-            pagesModel.actualPages.pop();
             pagesModel.remove(pagesModel.count-1);
             if (oldPage.parent.owner) {
                 oldPage.parent = oldPage.parent.owner;
@@ -202,8 +193,11 @@ Item {
      * Destroy (or reparent) all the pages contained.
      */
     function clear() {
-        pagesModel.actualPages.clear();
         return pagesModel.clear();
+    }
+
+    function get(idx) {
+        return pagesModel.get(idx);
     }
 
 //END FUNCTIONS
@@ -212,7 +206,6 @@ Item {
         id: pagesModel
 
         property var componentCache
-        property var actualPages: []
 
         //NOTE:seems to only work if the array is defined in a declarative way,
         //the Object in an imperative way, espacially on Android
@@ -220,10 +213,11 @@ Item {
             componentCache = {};
         }
 
-        onCountChanged: root.contentChildrenChanged();
-
         function initPage(page, properties) {
-            var container = containerComponent.createObject(pagesModel, {"level": pagesModel.count});
+            var container = containerComponent.createObject(pagesModel, {
+                "level": pagesModel.count,
+                "page": page
+            });
 
             var pageComp;
             if (page.createObject) {
@@ -301,7 +295,7 @@ Item {
         boundsBehavior: Flickable.StopAtBounds
         contentWidth: mainLayout.width
         contentHeight: height
-        property Item currentItem: pagesModel.count > currentIndex ? pagesModel.actualPages[currentIndex] : null
+        readonly property Item currentItem: pagesModel.count > currentIndex ? pagesModel.get(currentIndex).page : null
         property int currentIndex: 0
         flickDeceleration: Units.gridUnit * 50
         onCurrentItemChanged: {
