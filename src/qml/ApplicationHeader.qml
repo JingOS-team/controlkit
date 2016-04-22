@@ -100,11 +100,11 @@ AbstractApplicationHeader {
             }
             height: titleList.height
             onClicked: {
-                //scroll up if current otherwise make current
-                if (!__appWindow.pageStack.currentItem.flickable) {
-                    return;
-                }
                 if (__appWindow.pageStack.currentIndex == modelData) {
+                    //scroll up if current otherwise make current
+                    if (!__appWindow.pageStack.currentItem.flickable) {
+                        return;
+                    }
                     if (__appWindow.pageStack.currentItem.flickable.contentY > -__appWindow.header.height) {
                         scrollTopAnimation.to = -__appWindow.pageStack.currentItem.flickable.topMargin;
                         scrollTopAnimation.running = true;
