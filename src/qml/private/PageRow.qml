@@ -143,21 +143,16 @@ Item {
             return;
         }
 
-        if (page !== undefined && page == pagesModel.get(root.currentIndex).page) {
-            return;
-        }
-
+        var oldPage = pagesModel.get(pagesModel.count-1).page;
         if (page !== undefined) {
-            var oldPage = pagesModel.get(pagesModel.count-1).page;
             // an unwind target has been specified - pop until we find it
             while (page != oldPage && pagesModel.count > 1) {
-                oldPage = pagesModel.get(pagesModel.count-1).page;
-
                 pagesModel.remove(oldPage.parent.ObjectModel.index);
                 if (oldPage.parent.owner) {
                     oldPage.parent = oldPage.parent.owner;
                 }
                 oldPage.parent.destroy();
+                oldPage = pagesModel.get(pagesModel.count-1).page;
             }
         } else {
             pagesModel.remove(pagesModel.count-1);
