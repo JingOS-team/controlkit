@@ -7,6 +7,7 @@ singleton Theme 1.0 Theme.qml
 OverlayDrawer 1.0 OverlayDrawer.qml
 SplitDrawer 1.0 SplitDrawer.qml
 Action 1.0 Action.qml
+AbstractApplicationWindow 1.0 AbstractApplicationWindow.qml
 ApplicationWindow 1.0 ApplicationWindow.qml
 AbstractApplicationHeader 1.0 AbstractApplicationHeader.qml
 ApplicationHeader 1.0 ApplicationHeader.qml
