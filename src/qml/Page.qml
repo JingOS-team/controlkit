@@ -224,10 +224,6 @@ Item {
      */
     property Item background
 
-    //HACK: trigger a signal that will convince the ApplicationHeader to reload titles
-    //FIXME: when the 5.6 branch is merged, do it properly as PageRow will have a proper model
-    onTitleChanged: applicationWindow().pageStack.contentChildrenChanged();
-
     onBackgroundChanged: {
         background.z = -1;
         background.parent = root;

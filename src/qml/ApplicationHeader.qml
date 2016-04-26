@@ -35,140 +35,28 @@ import org.kde.kirigami 1.0
  *
  * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
  */
-Rectangle {
-    id: headerItem
-    z: 2
-    anchors {
-        left: parent.left
-        right: parent.right
-    }
-    color: Theme.highlightColor
-    property int minimumHeight: 0
-    property int preferredHeight: Units.gridUnit * 1.6
-    property int maximumHeight: Units.gridUnit * 3
-    property alias contentItem: titleList
-
-    height: maximumHeight
-
-    y: -maximumHeight + preferredHeight
-
-    property QtObject __appWindow: applicationWindow();
-    parent: __appWindow.pageStack;
-
-    transform: Translate {
-        id: translateTransform
-        y: __appWindow.controlsVisible ? 0 : -headerItem.height - shadow.height
-        Behavior on y {
-            NumberAnimation {
-                duration: Units.longDuration
-                easing.type: translateTransform.y < 0 ? Easing.OutQuad : Easing.InQuad
-            }
-        }
-    }
-
-    Connections {
-        id: headerSlideConnection
-        target: __appWindow.pageStack.currentItem ? __appWindow.pageStack.currentItem.flickable : null
-        property int oldContentY
-        onContentYChanged: {
-            if (!__appWindow.pageStack.currentItem) {
-                return;
-            }
-            if (__appWindow.pageStack.currentItem.flickable.atYBeginning ||
-                __appWindow.pageStack.currentItem.flickable.atYEnd) {
-                return;
-            }
-
-            if (titleList.wideScreen) {
-                headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
-            } else {
-                headerItem.y = Math.min(0, Math.max(-headerItem.height + headerItem.minimumHeight, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
-                oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
-            }
-        }
-        onMovementEnded: {
-            if (headerItem.y > -headerItem.maximumHeight + headerItem.preferredHeight) {
-                //if don't change the position if more then preferredSize is shown
-            } else if (headerItem.y > -headerItem.maximumHeight + headerItem.preferredHeight - headerItem.preferredHeight/2 ) {
-                headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
-            } else {
-                headerItem.y = -headerItem.maximumHeight;
-            }
-        }
-    }
-    Connections {
-        target: __appWindow.pageStack
-        onCurrentItemChanged: {
-            if (!__appWindow.pageStack.currentItem) {
-                return;
-            }
-            if (__appWindow.pageStack.currentItem.flickable) {
-                headerSlideConnection.oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
-            } else {
-                headerSlideConnection.oldContentY = 0;
-            }
-            headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
-        }
-
-        onContentChildrenChanged: {
-            var i = 0;
-            for (; i < __appWindow.pageStack.contentChildren.length; ++i) {
-                if (i >= model.count || __appWindow.pageStack.contentChildren[i].title 
-                    != model.get(i).title) {
-                    break;
-                }
-            }
-
-            while (model.count > i && model.count > 0) {
-                model.remove(model.count - 1);
-            }
-
-            for (var j = i; j < __appWindow.pageStack.contentChildren.length; ++j) {
-                model.append({"title": __appWindow.pageStack.contentChildren[j].title});
-            }
-        }
-    }
-
-    Behavior on y {
-        enabled: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable && !__appWindow.pageStack.currentItem.flickable.moving
-        NumberAnimation {
-            duration: Units.longDuration
-            easing.type: Easing.InOutQuad
-        }
-    }
+AbstractApplicationHeader {
+    id: header
 
     ListView {
         id: titleList
-        property Translate overshootTransform
         Component.onCompleted: {
-            if (applicationWindow() && applicationWindow().pageStack.transform[0]) {
-                overshootTransform = applicationWindow().pageStack.transform[0]
-            }
             //only on iOs put the back button on top left corner
             if (Qt.platform.os == "ios") {
                 var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
-                print(component.error);
                 titleList.backButton = component.createObject(headerItem);
             }
         }
         property Item backButton
         clip: true
-        anchors {
-            fill: parent
-            leftMargin: backButton ? backButton.width : 0
-            topMargin: overshootTransform && overshootTransform.y > 0 ? 0 : Math.min(headerItem.height - headerItem.preferredHeight, -headerItem.y)
-        }
-        cacheBuffer: __appWindow.pageStack.width
-        property bool wideScreen: __appWindow.pageStack.width > __appWindow.pageStack.height
+        anchors.fill: parent
+        cacheBuffer: width * count
+        displayMarginBeginning: __appWindow.pageStack.width * count
         orientation: ListView.Horizontal
         boundsBehavior: Flickable.StopAtBounds
-        //FIXME: proper implmentation needs Qt 5.6 for new ObjectModel api
-        model: ListModel {
-            id: model
-        }
-        //__appWindow.pageStack.depth
+        model: __appWindow.pageStack.depth
         spacing: 0
-        currentIndex: __appWindow.pageStack.currentIndex
+        currentIndex: __appWindow.pageStack && __appWindow.pageStack.currentIndex !== undefined ? __appWindow.pageStack.currentIndex : 0
         snapMode: ListView.SnapToItem
 
         onCurrentIndexChanged: {
@@ -176,7 +64,7 @@ Rectangle {
         }
 
         onContentXChanged: {
-            if (wideScreen && !__appWindow.pageStack.contentItem.moving) {
+            if (header.wideScreen && !__appWindow.pageStack.contentItem.moving) {
                 //FIXME: needs the rewrite to be properly fixed, disable sync in this direction for now
                // __appWindow.pageStack.contentItem.contentX = titleList.contentX
             }
@@ -185,14 +73,14 @@ Rectangle {
             titleList.returnToBounds()
         }
         onMovementEnded: {
-            if (wideScreen) {
+            if (header.wideScreen) {
                 __appWindow.pageStack.contentItem.movementEnded();
             }
         }
 
         NumberAnimation {
             id: scrollTopAnimation
-            target: __appWindow.pageStack.currentItem.flickable || null
+            target: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable ? __appWindow.pageStack.currentItem.flickable : null
             properties: "contentY"
             to: 0
             duration: Units.longDuration
@@ -200,24 +88,40 @@ Rectangle {
         }
 
         delegate: MouseArea {
+            id: delegate
+            readonly property Page page: __appWindow.pageStack.get(modelData).page ? __appWindow.pageStack.get(modelData).page : __appWindow.pageStack.get(modelData)
+            //NOTE: why not use ListViewCurrentIndex? because listview itself resets
+            //currentIndex in some situations (since here we are using an int as a model,
+            //even more often) so the property binding gets broken
+            readonly property bool current: __appWindow.pageStack.currentIndex == index
+            onCurrentChanged: {
+                if (current) {
+                    titleList.positionViewAtIndex(index, ListView.Contain);
+                }
+            }
+
             width: {
                 //more columns shown?
-                if (titleList.wideScreen) {
-                    return __appWindow.pageStack.defaultColumnWidth;
+                if (header.wideScreen) {
+                    return page.width;
                 } else {
                     return Math.min(titleList.width, delegateRoot.implicitWidth + Units.gridUnit + Units.smallSpacing);
                 }
             }
             height: titleList.height
             onClicked: {
-                //scroll up if current otherwise make current
-                if (__appWindow.pageStack.currentIndex == model.index) {
+                if (__appWindow.pageStack.currentIndex == modelData) {
+                    //scroll up if current otherwise make current
+                    if (!__appWindow.pageStack.currentItem.flickable) {
+                        return;
+                    }
                     if (__appWindow.pageStack.currentItem.flickable.contentY > -__appWindow.header.height) {
-                        scrollTopAnimation.to = __appWindow.pageStack.currentItem.topPadding;
+                        scrollTopAnimation.to = -__appWindow.pageStack.currentItem.flickable.topMargin;
                         scrollTopAnimation.running = true;
                     }
+
                 } else {
-                    __appWindow.pageStack.currentIndex = model.index;
+                    __appWindow.pageStack.currentIndex = modelData;
                 }
             }
             Row {
@@ -226,8 +130,8 @@ Rectangle {
 
                 spacing: Units.gridUnit
                 Rectangle {
-                    opacity: model.index > 0 ? 0.4 : 0
-                    visible: !titleList.wideScreen && opacity > 0
+                    opacity: modelData > 0 ? 0.4 : 0
+                    visible: !header.wideScreen && opacity > 0
                     color: Theme.viewBackgroundColor
                     anchors.verticalCenter: parent.verticalCenter
                     width: height
@@ -238,38 +142,22 @@ Rectangle {
                     id: title
                     width:Math.min(titleList.width, implicitWidth)
                     anchors.verticalCenter: parent.verticalCenter
-                    opacity: titleList.currentIndex == index ? 1 : 0.4
+                    opacity: delegate.current ? 1 : 0.4
                     //Scaling animate NativeRendering is too slow
                     renderType: Text.QtRendering
                     color: Theme.viewBackgroundColor
                     elide: Text.ElideRight
-                    text: model.title
+                    text: page.title
                     font.pixelSize: titleList.height / 1.6
                 }
             }
         }
         Connections {
-            target: titleList.wideScreen ? __appWindow.pageStack.contentItem : null
+            target: header.wideScreen ? __appWindow.pageStack.contentItem : null
             onContentXChanged: {
                 if (!titleList.contentItem.moving) {
                     titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
                 }
-            }
-        }
-    }
-    EdgeShadow {
-        id: shadow
-        edge: Qt.TopEdge
-        opacity: headerItem.y > -headerItem.height ? 1 : 0
-        anchors {
-            right: parent.right
-            left: parent.left
-            top: parent.bottom
-        }
-        Behavior on opacity {
-            OpacityAnimator {
-                duration: Units.longDuration
-                easing.type: Easing.InOutQuad
             }
         }
     }

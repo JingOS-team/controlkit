@@ -29,6 +29,9 @@ import QtGraphicalEffects 1.0
  * It's usually used as a root QML component for the application.
  * It's based around the PageRow component, the application will be
  * about pages adding and removal.
+ * For most of the usages, this class should be used instead
+ * of AbstractApplicationWidnow
+ * @see AbstractApplicationWidnow
  *
  * Example usage:
  * @code
@@ -93,7 +96,7 @@ import QtGraphicalEffects 1.0
  *
  * @inherit QtQuick.Controls.ApplicationWindow
  */
-ApplicationWindow {
+AbstractApplicationWindow {
     id: root
 
     /**
@@ -108,46 +111,24 @@ ApplicationWindow {
      */
     property alias pageStack: __pageStack
 
-    /**
-     * Shows a little passive notification at the bottom of the app window
-     * lasting for few seconds, with an optional action button.
-     *
-     * @param message The text message to be shown to the user.
-     * @param timeout How long to show the message:
-     *            possible values: "short", "long" or the number of milliseconds
-     * @param actionText Text in the action button, if any.
-     * @param callBack A JavaScript function that will be executed when the
-     *            user clicks the button.
-     */
-    function showPassiveNotification(message, timeout, actionText, callBack) {
-        if (!internal.__passiveNotification) {
-            var component = Qt.createComponent("private/PassiveNotification.qml");
-            internal.__passiveNotification = component.createObject(contentItem.parent);
+    onBackRequested: {
+        if (root.pageStack.depth >= 1) {
+            var backEvent = {accepted: false}
+            root.pageStack.currentItem.backRequested(backEvent);
+            if (!backEvent.accepted) {
+                if (__pageStack.depth > 1) {
+                    __pageStack.currentIndex = Math.max(0, __pageStack.currentIndex - 1);
+                } else {
+                    Qt.quit();
+                }
+            }
         }
 
-        internal.__passiveNotification.showNotification(message, timeout, actionText, callBack);
+        event.accepted = true;
     }
 
    /**
-    * Hide the passive notification, if any is shown
-    */
-    function hidePassiveNotification() {
-        if(internal.__passiveNotification) {
-           internal.__passiveNotification.hideNotification();
-        }
-    }
-
-
-    /**
-     * @returns a pointer to this application window
-     * can be used anywhere in the application.
-     */
-    function applicationWindow() {
-        return root;
-    }
-
-   /**
-    * header: ApplicationHeader
+    * header: AbstractApplicationHeader
     * An item that can be used as a title for the application.
     * Scrolling the main page will make it taller or shorter (trough the point of going away)
     * It's a behavior similar to the typical mobile web browser adressbar
@@ -158,8 +139,8 @@ ApplicationWindow {
     *
     * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
     */
-    property ApplicationHeader header: ApplicationHeader {
-            }
+   //FIXME: this should become an actual ApplicationHeader
+    property var header: undefined
 
     /**
      * controlsVisible: bool
@@ -216,108 +197,12 @@ ApplicationWindow {
             }
         }
         focus: true
+    }
 
-        function goBack() {
-            if (root.contextDrawer && root.contextDrawer.opened) {
-                root.contextDrawer.close();
-            } else if (root.globalDrawer && root.globalDrawer.opened) {
-                root.globalDrawer.close();
-            } else if (__pageStack.depth >= 1) {
-                var backEvent = {accepted: false}
-                __pageStack.currentItem.backRequested(backEvent);
-                if (!backEvent.accepted) {
-                    if (__pageStack.depth > 1) {
-                        __pageStack.currentIndex = Math.max(0, __pageStack.currentIndex - 1);
-                    } else {
-                        Qt.quit();
-                    }
-                }
-            } else {
-                Qt.quit();
-            }
+    Component.onCompleted: {
+        if (root.header === undefined) {
+            var component = Qt.createComponent(Qt.resolvedUrl("./ApplicationHeader.qml"));
+            root.header = component.createObject(root);
         }
-
-        Keys.onReleased: {
-            if (event.key == Qt.Key_Back ||
-            (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {
-                event.accepted = true;
-
-                goBack();
-            }
-        }
-    }
-
-    /**
-     * globalDrawer: AbstractDrawer
-     * The drawer for global actions, that will be opened by sliding from the
-     * left screen edge or by dragging the ActionButton to the right.
-     * It is recommended to use the GlobalDrawer class here
-     */
-    property AbstractDrawer globalDrawer
-
-    /**
-     * contextDrawer: AbstractDrawer
-     * The drawer for context-dependednt actions, that will be opened by sliding from the
-     * right screen edge or by dragging the ActionButton to the left.
-     * It is recommended to use the ContextDrawer class here.
-     * The contents of the context drawer should depend from what page is
-     * loaded in the main pageStack
-     *
-     * Example usage:
-     * @code
-     * import org.kde.kirigami 1.0 as Kirigami
-     *
-     * Kirigami.ApplicationWindow {
-     *  [...]
-     *     contextDrawer: Kirigami.ContextDrawer {
-     *         id: contextDrawer
-     *     }
-     *  [...]
-     * }
-     * @endcode
-     *
-     * @code
-     * import org.kde.kirigami 1.0 as Kirigami
-     *
-     * Kirigami.Page {
-     *   [...]
-     *     contextualActions: [
-     *         Kirigami.Action {
-     *             iconName: "edit"
-     *             text: "Action text"
-     *             onTriggered: {
-     *                 // do stuff
-     *             }
-     *         },
-     *         Kirigami.Action {
-     *             iconName: "edit"
-     *             text: "Action text"
-     *             onTriggered: {
-     *                 // do stuff
-     *             }
-     *         }
-     *     ]
-     *   [...]
-     * }
-     * @endcode
-     *
-     * When this page will be the current one, the context drawer will visualize
-     * contextualActions defined as property in that page.
-     */
-    property AbstractDrawer contextDrawer
-
-    onGlobalDrawerChanged: {
-        globalDrawer.parent = contentItem.parent;
-    }
-    onContextDrawerChanged: {
-        contextDrawer.parent = contentItem.parent;
-    }
-
-    width: Units.gridUnit * 25
-    height: Units.gridUnit * 30
-
-    QtObject {
-        id: internal
-        property Item __passiveNotification
     }
 }
