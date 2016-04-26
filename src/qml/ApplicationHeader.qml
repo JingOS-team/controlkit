@@ -59,9 +59,8 @@ AbstractApplicationHeader {
         currentIndex: __appWindow.pageStack && __appWindow.pageStack.currentIndex !== undefined ? __appWindow.pageStack.currentIndex : 0
         snapMode: ListView.SnapToItem
 
-        onCurrentIndexChanged: {
-            positionViewAtIndex(currentIndex, ListView.Contain);
-        }
+        onCurrentIndexChanged: positionViewAtIndex(currentIndex, ListView.Contain);
+        onModelChanged: positionViewAtIndex(currentIndex, ListView.Contain);
 
         onContentXChanged: {
             if (header.wideScreen && !__appWindow.pageStack.contentItem.moving) {
@@ -94,11 +93,6 @@ AbstractApplicationHeader {
             //currentIndex in some situations (since here we are using an int as a model,
             //even more often) so the property binding gets broken
             readonly property bool current: __appWindow.pageStack.currentIndex == index
-            onCurrentChanged: {
-                if (current) {
-                    titleList.positionViewAtIndex(index, ListView.Contain);
-                }
-            }
 
             width: {
                 //more columns shown?
