@@ -37,14 +37,13 @@ import org.kde.kirigami 1.0
  */
 AbstractApplicationHeader {
     id: header
-    
+
     ListView {
         id: titleList
         Component.onCompleted: {
             //only on iOs put the back button on top left corner
             if (Qt.platform.os == "ios") {
                 var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
-                print(component.error);
                 titleList.backButton = component.createObject(headerItem);
             }
         }
@@ -56,9 +55,8 @@ AbstractApplicationHeader {
         orientation: ListView.Horizontal
         boundsBehavior: Flickable.StopAtBounds
         model: __appWindow.pageStack.depth
-        //__appWindow.pageStack.depth
         spacing: 0
-        currentIndex: __appWindow.pageStack.currentIndex
+        currentIndex: __appWindow.pageStack && __appWindow.pageStack.currentIndex !== undefined ? __appWindow.pageStack.currentIndex : 0
         snapMode: ListView.SnapToItem
 
         onCurrentIndexChanged: {
@@ -82,7 +80,7 @@ AbstractApplicationHeader {
 
         NumberAnimation {
             id: scrollTopAnimation
-            target: __appWindow.pageStack.currentItem.flickable || null
+            target: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable ? __appWindow.pageStack.currentItem.flickable : null
             properties: "contentY"
             to: 0
             duration: Units.longDuration
@@ -90,7 +88,17 @@ AbstractApplicationHeader {
         }
 
         delegate: MouseArea {
-            readonly property Page page: __appWindow.pageStack.get(modelData).page
+            id: delegate
+            readonly property Page page: __appWindow.pageStack.get(modelData).page ? __appWindow.pageStack.get(modelData).page : __appWindow.pageStack.get(modelData)
+            //NOTE: why not use ListViewCurrentIndex? because listview itself resets
+            //currentIndex in some situations (since here we are using an int as a model,
+            //even more often) so the property binding gets broken
+            readonly property bool current: __appWindow.pageStack.currentIndex == index
+            onCurrentChanged: {
+                if (current) {
+                    titleList.positionViewAtIndex(index, ListView.Contain);
+                }
+            }
 
             width: {
                 //more columns shown?
@@ -134,7 +142,7 @@ AbstractApplicationHeader {
                     id: title
                     width:Math.min(titleList.width, implicitWidth)
                     anchors.verticalCenter: parent.verticalCenter
-                    opacity: titleList.currentIndex == index ? 1 : 0.4
+                    opacity: delegate.current ? 1 : 0.4
                     //Scaling animate NativeRendering is too slow
                     renderType: Text.QtRendering
                     color: Theme.viewBackgroundColor

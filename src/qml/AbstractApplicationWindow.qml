@@ -233,6 +233,7 @@ Controls.ApplicationWindow {
     onContextDrawerChanged: {
         contextDrawer.parent = contentItem.parent;
     }
+    onPageStackChanged: pageStack.parent = contentItem;
 
     width: Units.gridUnit * 25
     height: Units.gridUnit * 30
