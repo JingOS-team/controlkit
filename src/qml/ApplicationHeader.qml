@@ -59,8 +59,8 @@ AbstractApplicationHeader {
         currentIndex: __appWindow.pageStack && __appWindow.pageStack.currentIndex !== undefined ? __appWindow.pageStack.currentIndex : 0
         snapMode: ListView.SnapToItem
 
-        onCurrentIndexChanged: positionViewAtIndex(currentIndex, ListView.Contain);
-        onModelChanged: positionViewAtIndex(currentIndex, ListView.Contain);
+        onCurrentIndexChanged: positionViewAtIndex(currentIndex, ListView.Center);
+        onModelChanged: positionViewAtIndex(currentIndex, ListView.Center);
 
         onContentXChanged: {
             if (header.wideScreen && !__appWindow.pageStack.contentItem.moving) {
