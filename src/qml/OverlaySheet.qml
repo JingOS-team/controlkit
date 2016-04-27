@@ -84,40 +84,40 @@ Item {
         closeAnimation.running = true;
     }
 
-    property Item background: Item {
+    Rectangle {
         anchors.fill: parent
-        Rectangle {
+        color: Theme.textColor
+        opacity: 0.6 * Math.min(
+            (Math.min(mainFlickable.contentY + mainFlickable.height, mainFlickable.height) / mainFlickable.height),
+            (2 + (mainFlickable.contentHeight - mainFlickable.contentY - mainFlickable.topMargin - mainFlickable.bottomMargin)/mainFlickable.height))
+    }
+
+    property var background
+    Component {
+        id: defaultBackgroundComponent
+        Item {
             anchors.fill: parent
-            color: Theme.textColor
-            opacity: 0.6 * Math.min(
-                (Math.min(mainFlickable.contentY + mainFlickable.height, mainFlickable.height) / mainFlickable.height),
-                (2 + (mainFlickable.contentHeight - mainFlickable.contentY - mainFlickable.topMargin - mainFlickable.bottomMargin)/mainFlickable.height))
-        }
-        Rectangle {
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-            color: Theme.viewBackgroundColor
-            y: -mainFlickable.contentY
-            height: mainFlickable.contentHeight
+            Rectangle {
+                anchors.fill: parent
+                color: Theme.viewBackgroundColor
 
-            EdgeShadow {
-                edge: Qt.BottomEdge
-                anchors {
-                    right: parent.right
-                    left: parent.left
-                    bottom: parent.top
+                EdgeShadow {
+                    edge: Qt.BottomEdge
+                    anchors {
+                        right: parent.right
+                        left: parent.left
+                        bottom: parent.top
+                    }
                 }
-            }
-            EdgeShadow {
-                edge: Qt.TopEdge
-                anchors {
-                    right: parent.right
-                    left: parent.left
-                    top: parent.bottom
-                }
+                EdgeShadow {
+                    edge: Qt.TopEdge
+                    anchors {
+                        right: parent.right
+                        left: parent.left
+                        top: parent.bottom
+                    }
 
+                }
             }
         }
     }
@@ -125,6 +125,9 @@ Item {
     default property Item contentItem
 
     Component.onCompleted: {
+        if (root.background === undefined) {
+            root.background = defaultBackgroundComponent.createObject(flickableContents, {"z": -1});
+        }
         //try to find a Page and reparent directly to it
         var pageCandidate = root.parent;
         while (pageCandidate) {
@@ -142,7 +145,10 @@ Item {
         backgroundChanged();
         contentItemChanged();
     }
-    onBackgroundChanged: background.parent = root;
+    onBackgroundChanged: {
+        background.parent = flickableContents;
+        background.z = -1;
+    }
     onContentItemChanged: {
         contentItem.parent = contentItemParent;
         contentItem.anchors.left = contentItemParent.left;
