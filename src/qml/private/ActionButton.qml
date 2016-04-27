@@ -31,7 +31,7 @@ Item {
     property QtObject rightAction: pageStack.currentItem ? pageStack.currentItem.rightAction : null
 
     implicitWidth: implicitHeight + Units.iconSizes.smallMedium*4
-    implicitHeight: Units.iconSizes.large
+    implicitHeight: Units.iconSizes.large + Units.largeSpacing
     visible: action != null || leftAction != null || rightAction != null
 
 
@@ -205,7 +205,7 @@ Item {
                     verticalCenter: parent.verticalCenter
                 }
                 radius: Units.smallSpacing
-                height: buttonGraphics.height * 0.8
+                height: buttonGraphics.height * 0.7
                 width: height + Units.iconSizes.smallMedium
                 visible: button.leftAction
                 color: button.leftAction && ((button.leftAction && mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || button.leftAction.checked) ? Theme.highlightColor : Theme.backgroundColor
@@ -228,7 +228,7 @@ Item {
                     verticalCenter: parent.verticalCenter
                 }
                 radius: Units.smallSpacing
-                height: buttonGraphics.height * 0.8
+                height: buttonGraphics.height * 0.7
                 width: height + Units.iconSizes.smallMedium
                 visible: button.rightAction
                 color: button.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || button.rightAction.checked) ? Theme.highlightColor : Theme.backgroundColor

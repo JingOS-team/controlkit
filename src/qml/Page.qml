@@ -273,7 +273,10 @@ Item {
         action: root.mainAction
         leftAction: root.leftAction
         rightAction: root.rightAction
-        anchors.bottom: parent.bottom
+        anchors {
+            bottom: parent.bottom
+            bottomMargin: Units.smallSpacing
+        }
         x: parent.width/2 - width/2
     }
 
