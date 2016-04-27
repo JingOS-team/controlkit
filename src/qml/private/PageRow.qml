@@ -209,7 +209,7 @@ Item {
         }
 
         function initPage(page, properties) {
-            var container = containerComponent.createObject(pagesModel, {
+            var container = containerComponent.createObject(mainLayout, {
                 "level": pagesModel.count,
                 "page": page
             });
@@ -341,8 +341,8 @@ Item {
         MouseArea {
             id: container
             height: mainFlickable.height
-
-            state: pendingState
+            width: root.width
+            state: ""
             property string pendingState: root.width < root.defaultColumnWidth*2 ? "vertical" : (container.level >= pagesModel.count - 1 ? "last" : "middle");
 
             //HACK
@@ -387,24 +387,21 @@ Item {
                     name: "vertical"
                     PropertyChanges {
                         target: container
-                        implicitWidth: root.width
-                        width: container.implicitWidth
+                        width: root.width
                     }
                 },
                 State {
                     name: "last"
                     PropertyChanges {
                         target: container
-                        implicitWidth: Math.max(roundedHint, root.width - (container.level == 0 ? 0 : pagesModel.get(container.level-1).implicitWidth))
-                        width: container.implicitWidth
+                        width: Math.max(roundedHint, root.width - (container.level == 0 ? 0 : pagesModel.get(container.level-1).width))
                     }
                 },
                 State {
                     name: "middle"
                     PropertyChanges {
                         target: container
-                        implicitWidth: roundedHint
-                        width: container.implicitWidth
+                        width: roundedHint
                     }
                 }
             ]
