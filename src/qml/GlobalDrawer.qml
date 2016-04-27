@@ -239,7 +239,7 @@ OverlayDrawer {
                 Controls.StackView {
                     id: stackView
                     Layout.fillWidth: true
-                    Layout.minimumHeight: currentItem.implicitHeight
+                    Layout.minimumHeight: currentItem ? currentItem.implicitHeight : 0
                     initialItem: menuComponent
                 }
                 Item {
