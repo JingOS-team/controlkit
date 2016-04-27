@@ -284,52 +284,55 @@ Item {
             scrollAnim.running = true;
         }
     }
-    Flickable {
-        id: mainFlickable
+    ScrollView {
         anchors.fill: parent
-        boundsBehavior: Flickable.StopAtBounds
-        contentWidth: mainLayout.width
-        contentHeight: height
-        readonly property Item currentItem: pagesModel.count > currentIndex ? pagesModel.get(currentIndex).page : null
-        property int currentIndex: 0
-        flickDeceleration: Units.gridUnit * 50
-        onCurrentItemChanged: {
-            currentItemSnapTimer.itemToSnap = currentItem.parent;
-            currentItemSnapTimer.restart();
-        }
-        onMovementEnded: {
-            var pos = currentItem.mapToItem(mainFlickable, 0, 0);
-            var oldCurrentIndex = currentIndex;
-            if (pos.x < 0 || pos.x >= width) {
-                currentIndex = mainLayout.childAt(contentX + width - 10, 10).level;
+        Flickable {
+            id: mainFlickable
+            anchors.fill: parent
+            boundsBehavior: Flickable.StopAtBounds
+            contentWidth: mainLayout.width
+            contentHeight: height
+            readonly property Item currentItem: pagesModel.count > currentIndex ? pagesModel.get(currentIndex).page : null
+            property int currentIndex: 0
+            flickDeceleration: Units.gridUnit * 50
+            onCurrentItemChanged: {
+                currentItemSnapTimer.itemToSnap = currentItem.parent;
+                currentItemSnapTimer.restart();
             }
+            onMovementEnded: {
+                var pos = currentItem.mapToItem(mainFlickable, 0, 0);
+                var oldCurrentIndex = currentIndex;
+                if (pos.x < 0 || pos.x >= width) {
+                    currentIndex = mainLayout.childAt(contentX + width - 10, 10).level;
+                }
 
-            if (oldCurrentIndex != currentIndex) {
-                return;
+                if (oldCurrentIndex != currentIndex) {
+                    return;
+                }
+                var childToSnap = mainLayout.childAt(contentX + 1, 10);
+                var mappedPos = childToSnap.mapToItem(mainFlickable, 0, 0);
+                if (mappedPos.x < -childToSnap.width / 2) {
+                    childToSnap = mainLayout.children[childToSnap.level+1];
+                }
+                currentItemSnapTimer.itemToSnap = childToSnap;
+                currentItemSnapTimer.restart();
             }
-            var childToSnap = mainLayout.childAt(contentX + 1, 10);
-            var mappedPos = childToSnap.mapToItem(mainFlickable, 0, 0);
-            if (mappedPos.x < -childToSnap.width / 2) {
-                childToSnap = mainLayout.children[childToSnap.level+1];
-            }
-            currentItemSnapTimer.itemToSnap = childToSnap;
-            currentItemSnapTimer.restart();
-        }
-        onFlickEnded: movementEnded();
-        onWidthChanged: movementEnded();
+            onFlickEnded: movementEnded();
+            onWidthChanged: movementEnded();
 
-        Row {
-            id: mainLayout
-            Repeater {
-                model: pagesModel
-            }
-            add: Transition {
-                NumberAnimation {
-                    property: "y"
-                    from: mainFlickable.height
-                    to: 0
-                    duration: Units.shortDuration
-                    easing.type: Easing.InOutQuad
+            Row {
+                id: mainLayout
+                Repeater {
+                    model: pagesModel
+                }
+                add: Transition {
+                    NumberAnimation {
+                        property: "y"
+                        from: mainFlickable.height
+                        to: 0
+                        duration: Units.shortDuration
+                        easing.type: Easing.InOutQuad
+                    }
                 }
             }
         }
