@@ -51,7 +51,7 @@ Rectangle {
 
     height: maximumHeight
 
-    y: -maximumHeight + preferredHeight
+    y: 0
 
     property QtObject __appWindow: applicationWindow();
     parent: __appWindow.pageStack;
@@ -108,7 +108,11 @@ Rectangle {
             } else {
                 headerSlideConnection.oldContentY = 0;
             }
-            headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
+            if (__appWindow.pageStack.currentItem.flickable) {
+                headerItem.y = 0;
+            } else {
+                headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
+            }
         }
     }
 
