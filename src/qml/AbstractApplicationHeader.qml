@@ -67,6 +67,13 @@ Rectangle {
         }
     }
 
+    onWideScreenChanged: {
+        if (wideScreen) {
+            y = -headerItem.maximumHeight + headerItem.preferredHeight;
+        } else {
+            y = 0;
+        }
+    }
     Connections {
         id: headerSlideConnection
         target: __appWindow.pageStack.currentItem ? __appWindow.pageStack.currentItem.flickable : null
