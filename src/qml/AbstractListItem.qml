@@ -117,7 +117,7 @@ Rectangle {
 
     implicitWidth: parent ? parent.width : childrenRect.width
 
-    implicitHeight: paddingItem.childrenRect.height + Units.smallSpacing*2
+    implicitHeight: contentItem.height + Units.smallSpacing*4
 
 
     opacity: enabled ? 1 : 0.6

@@ -286,10 +286,10 @@ OverlayDrawer {
 
                                 Icon {
                                     anchors {
-                                        top: parent.top
-                                        bottom: parent.bottom
+                                        verticalCenter: parent.verticalCenter
                                         right: parent.right
                                     }
+                                    height: Units.iconSizes.smallMedium
                                     width: height
                                     source: "go-next"
                                     visible: modelData.children!==undefined && modelData.children.length > 0

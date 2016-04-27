@@ -204,8 +204,7 @@ Item {
     }
 
     implicitWidth: parent ? parent.width : contentItem.width + paddingItem.anchors.margins * 2
-    implicitHeight: Math.max(Units.iconSizes.smallMedium , contentItem.implicitHeight) + Units.smallSpacing * 4
-    height: visible ? implicitHeight : 0
+    implicitHeight: contentItem.height + Units.smallSpacing * 4
 //END properties
 
 //BEGIN signal handlers
@@ -217,8 +216,6 @@ Item {
 
     onContentItemChanged: {
         contentItem.parent = paddingItem
-        contentItem.anchors.fill = paddingItem;
-        //contentItem.anchors.leftMargin = background.height;
         contentItem.z = 0;
     }
 

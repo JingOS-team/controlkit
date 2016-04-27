@@ -47,12 +47,13 @@ AbstractListItem {
     property var icon
 
     RowLayout {
-        height: implicitHeight + Units.smallSpacing * 2
         anchors {
             left: parent.left
+            verticalCenter: parent.verticalCenter
         }
         Icon {
             Layout.minimumHeight: Units.iconSizes.smallMedium
+            Layout.maximumHeight: Layout.minimumHeight
             Layout.minimumWidth: height
             source: listItem.icon
         }
