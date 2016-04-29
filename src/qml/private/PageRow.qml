@@ -281,6 +281,12 @@ Item {
             } else {
                 scrollAnim.to = Math.min(itemToSnap.x, mainLayout.width - mainFlickable.width);
             }
+
+            var mappedCurrentItemPos = currentItem.mapToItem(mainFlickable, 0, 0);
+
+            if (mappedCurrentItemPos.x >= 0 || mappedCurrentItemPos.x + currentItem.width < mainFlickable.width) {
+                currentIndex = mainLayout.childAt(Math.min(itemToSnap.x + width, mainLayout.width) - 10, 10).level;
+            }
             scrollAnim.running = true;
         }
     }
@@ -302,13 +308,7 @@ Item {
             onMovementEnded: {
                 var pos = currentItem.mapToItem(mainFlickable, 0, 0);
                 var oldCurrentIndex = currentIndex;
-                if (pos.x < 0 || pos.x >= width) {
-                    currentIndex = mainLayout.childAt(contentX + width - 10, 10).level;
-                }
 
-                if (oldCurrentIndex != currentIndex) {
-                    return;
-                }
                 var childToSnap = mainLayout.childAt(contentX + 1, 10);
                 var mappedPos = childToSnap.mapToItem(mainFlickable, 0, 0);
                 if (mappedPos.x < -childToSnap.width / 2) {
