@@ -202,6 +202,11 @@ ScrollView {
                 value: Math.max(root.topPadding + (root.refreshing ? busyIndicatorFrame.height : 0), applicationWindow().header.height + applicationWindow().header.y)
             }
 
+            Binding {
+                target: root.flickableItem
+                property: "flickableDirection"
+                value: Flickable.VerticalFlick
+            }
 
             Binding {
                 target: root.flickableItem
