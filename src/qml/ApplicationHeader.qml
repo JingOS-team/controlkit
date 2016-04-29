@@ -38,8 +38,22 @@ import org.kde.kirigami 1.0
 AbstractApplicationHeader {
     id: header
 
+    /**
+     * separatorStyle: string
+     * The way the separator between pages should be drawn in the header.
+     * Allowed values are:
+     * * Breadcrumb: the pages are hyerarchical and the separator will look like a >
+     * * TabBar: the pages are intended to behave like tabbar pages
+     *    and the separator will look limke a dot.
+     *
+     * When the heaer is in wide screen mode, no separator will be drawn.
+     */
+    property string separatorStyle: "Breadcrumb"
+
     ListView {
         id: titleList
+        //uses this to have less strings comparisons
+        property bool isTabBar: header.separatorStyle == "TabBar"
         Component.onCompleted: {
             //only on iOs put the back button on top left corner
             if (Qt.platform.os == "ios") {
@@ -57,10 +71,28 @@ AbstractApplicationHeader {
         model: __appWindow.pageStack.depth
         spacing: 0
         currentIndex: __appWindow.pageStack && __appWindow.pageStack.currentIndex !== undefined ? __appWindow.pageStack.currentIndex : 0
-        snapMode: ListView.SnapToItem
 
-        onCurrentIndexChanged: positionViewAtIndex(currentIndex, ListView.Center);
-        onModelChanged: positionViewAtIndex(currentIndex, ListView.Center);
+        function gotoIndex(idx) {
+            listScrollAnim.running = false
+            var pos = titleList.contentX;
+            var destPos;
+            titleList.positionViewAtIndex(idx, ListView.Center);
+            destPos = titleList.contentX;
+            listScrollAnim.from = pos;
+            listScrollAnim.to = destPos;
+            listScrollAnim.running = true;
+        }
+
+        NumberAnimation {
+            id: listScrollAnim
+            target: titleList
+            property: "contentX"
+            duration: Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+
+        onCurrentIndexChanged: gotoIndex(currentIndex);
+        onModelChanged: gotoIndex(currentIndex);
 
         onContentXChanged: {
             if (header.wideScreen && !__appWindow.pageStack.contentItem.moving) {
@@ -80,7 +112,7 @@ AbstractApplicationHeader {
         NumberAnimation {
             id: scrollTopAnimation
             target: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable ? __appWindow.pageStack.currentItem.flickable : null
-            properties: "contentY"
+            property: "contentY"
             to: 0
             duration: Units.longDuration
             easing.type: Easing.InOutQuad
@@ -123,14 +155,30 @@ AbstractApplicationHeader {
                 x: Units.smallSpacing
 
                 spacing: Units.gridUnit
-                Rectangle {
+                Item {
+                    height: title.height
+                    width: titleList.isTabBar ? Math.min(Units.gridUnit/2, title.height / 2) : parent.height
                     opacity: modelData > 0 ? 0.4 : 0
                     visible: !header.wideScreen && opacity > 0
-                    color: Theme.viewBackgroundColor
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: height
-                    height: Math.min(Units.gridUnit/2, title.height / 2)
-                    radius: width
+                    layer.enabled: true
+                    Rectangle {
+                        color: Theme.viewBackgroundColor
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: titleList.isTabBar ? Math.min(Units.gridUnit/2, title.height / 2) : parent.height/2
+                        height: titleList.isTabBar ? width : width/10
+                        radius: titleList.isTabBar ? width : 0
+                        rotation: titleList.isTabBar ? 0 : 45
+                        transformOrigin: Item.BottomRight
+                    }
+                    Rectangle {
+                        visible: !titleList.isTabBar
+                        color: Theme.viewBackgroundColor
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.height/2
+                        height: width/10
+                        rotation: -45
+                        transformOrigin: Item.TopRight
+                    }
                 }
                 Heading {
                     id: title
