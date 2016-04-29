@@ -93,6 +93,7 @@ AbstractApplicationHeader {
 
         onCurrentIndexChanged: gotoIndex(currentIndex);
         onModelChanged: gotoIndex(currentIndex);
+        onContentWidthChanged: gotoIndex(currentIndex);
 
         onContentXChanged: {
             if (header.wideScreen && !__appWindow.pageStack.contentItem.moving) {
