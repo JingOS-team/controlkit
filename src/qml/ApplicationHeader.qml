@@ -192,7 +192,7 @@ AbstractApplicationHeader {
                     opacity: delegate.current ? 1 : 0.4
                     //Scaling animate NativeRendering is too slow
                     renderType: Text.QtRendering
-                    color: Theme.viewBackgroundColor
+                    color: Theme.highlightedTextColor
                     elide: Text.ElideRight
                     text: page.title
                     font.pixelSize: titleList.height / 1.6
