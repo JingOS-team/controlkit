@@ -73,6 +73,10 @@ AbstractApplicationHeader {
         currentIndex: __appWindow.pageStack && __appWindow.pageStack.currentIndex !== undefined ? __appWindow.pageStack.currentIndex : 0
 
         function gotoIndex(idx) {
+            //don't actually scroll in widescreen mode
+            if (header.wideScreen) {
+                return;
+            }
             listScrollAnim.running = false
             var pos = titleList.contentX;
             var destPos;

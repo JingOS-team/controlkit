@@ -115,7 +115,7 @@ Rectangle {
             } else {
                 headerSlideConnection.oldContentY = 0;
             }
-            if (__appWindow.pageStack.currentItem.flickable) {
+            if (!headerItem.wideScreen && __appWindow.pageStack.currentItem.flickable) {
                 headerItem.y = 0;
             } else {
                 headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
