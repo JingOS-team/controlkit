@@ -124,6 +124,8 @@ Item {
 
         // initialize the page
         var container = pagesModel.initPage(page, properties);
+        //NOTE: workaround for the position being 0,0 for an event loop after the item is added to the row
+        container.x = mainLayout.width;
         pagesModel.append(container);
 
         container.visible = container.page.visible = true;
@@ -269,24 +271,11 @@ Item {
         interval: Units.longDuration
         property Item itemToSnap
         onTriggered: {
-            var mappedPos = itemToSnap.mapToItem(mainFlickable, 0, 0);
-            if (itemToSnap == currentItem.parent && mappedPos.x >= 0 && mappedPos.x + itemToSnap.width <= mainFlickable.width) {
-                return;
-            }
             scrollAnim.running = false;
             scrollAnim.from = mainFlickable.contentX;
-            //currentItem snaps at the end of the view, the others at the beginning
-            if (itemToSnap == currentItem.parent) {
-                scrollAnim.to = itemToSnap.x - Math.max(0, mainFlickable.width - itemToSnap.width);
-            } else {
-                scrollAnim.to = Math.min(itemToSnap.x, mainLayout.width - mainFlickable.width);
-            }
 
-            var mappedCurrentItemPos = currentItem.mapToItem(mainFlickable, 0, 0);
+            scrollAnim.to = Math.min(itemToSnap.x, mainLayout.width - mainFlickable.width);
 
-            if (mappedCurrentItemPos.x >= 0 || mappedCurrentItemPos.x + currentItem.width < mainFlickable.width) {
-                currentIndex = mainLayout.childAt(Math.min(itemToSnap.x + width, mainLayout.width) - 10, 10).level;
-            }
             scrollAnim.running = true;
         }
     }
@@ -298,12 +287,20 @@ Item {
             boundsBehavior: Flickable.StopAtBounds
             contentWidth: mainLayout.width
             contentHeight: height
-            readonly property Item currentItem: pagesModel.count > currentIndex ? pagesModel.get(currentIndex).page : null
+            readonly property Item currentItem: pagesModel.get(Math.min(currentIndex, pagesModel.count-1)).page
             property int currentIndex: 0
             flickDeceleration: Units.gridUnit * 50
             onCurrentItemChanged: {
-                currentItemSnapTimer.itemToSnap = currentItem.parent;
-                currentItemSnapTimer.restart();
+                var mappedPos = currentItem.parent.mapToItem(mainFlickable, 0, 0);
+                if (mappedPos.x >= 0 && mappedPos.x + currentItem.parent.width <= mainFlickable.width) {
+                    return;
+                }
+                scrollAnim.running = false;
+                currentItemSnapTimer.running = false;
+                scrollAnim.from = mainFlickable.contentX;
+
+                scrollAnim.to = Math.max(0, currentItem.parent.x - Math.max(0, mainFlickable.width - currentItem.parent.width));
+                scrollAnim.running = true;
             }
             onMovementEnded: {
                 var pos = currentItem.mapToItem(mainFlickable, 0, 0);
@@ -316,6 +313,17 @@ Item {
                 }
                 currentItemSnapTimer.itemToSnap = childToSnap;
                 currentItemSnapTimer.restart();
+
+                var mappedCurrentItemPos = currentItem.mapToItem(mainFlickable, 0, 0);
+
+                if (mappedCurrentItemPos.x < 0 || mappedCurrentItemPos.x + currentItem.width > mainFlickable.width) {
+                    var newCurrentItem = mainLayout.childAt(Math.min(childToSnap.x + width, mainLayout.width) - 10, 10);
+                    if (newCurrentItem) {
+                        currentIndex = newCurrentItem.level;
+                    } else {
+                        currentIndex = mainLayout.children.length - 1;
+                    }
+                }
             }
             onFlickEnded: movementEnded();
             onWidthChanged: movementEnded();
@@ -420,8 +428,8 @@ Item {
                         }
                         ScriptAction {
                             script: {
-                                currentItemSnapTimer.itemToSnap = mainFlickable.currentItem.parent;
-                                currentItemSnapTimer.restart();
+                                //currentItemSnapTimer.itemToSnap = mainFlickable.currentItem.parent;
+                                //currentItemSnapTimer.restart();
                             }
                         }
                     }
