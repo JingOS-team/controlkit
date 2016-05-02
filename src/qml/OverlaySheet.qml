@@ -132,14 +132,14 @@ Item {
         var pageCandidate = root.parent;
         while (pageCandidate) {
             //QML doesn't have typeof support to qml types, try asses by checking at some properties as an euristic
-            if (pageCandidate.contentItem !== undefined &&
+            if (pageCandidate.contentData !== undefined &&
                 pageCandidate.title !== undefined &&
                 pageCandidate.contextualActions !== undefined) {
                 break;
             }
             pageCandidate = pageCandidate.parent;
         }
-        if (pageCandidate != root.parent) {
+        if (pageCandidate && pageCandidate != root.parent) {
             root.parent = pageCandidate;
         }
         backgroundChanged();
