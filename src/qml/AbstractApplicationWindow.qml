@@ -237,6 +237,7 @@ Controls.ApplicationWindow {
 
     width: Units.gridUnit * 25
     height: Units.gridUnit * 30
+    visible: true
 
     QtObject {
         id: internal
