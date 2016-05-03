@@ -28,6 +28,10 @@ Kirigami.ApplicationWindow {
     height: 800
     visible: true
 
+    header: Kirigami.ApplicationHeader {
+        preferredHeight: Kirigami.Units.gridUnit * 2.2
+        maximumHeight: Kirigami.Units.gridUnit * 2.2
+    }
     globalDrawer: Kirigami.GlobalDrawer {
         title: "Widget gallery"
         titleIcon: "applications-graphics"
