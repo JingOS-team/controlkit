@@ -161,6 +161,40 @@ Item {
             close();
         }
     }
+    onHeightChanged: {
+        if (!applicationWindow() || !applicationWindow().activeFocusItem) {
+            return;
+        }
+
+        //NOTE: there is no function to know if an item is descended from another,
+        //so we have to walk the parent hyerarchy by hand
+        var isDescendent = false;
+        var candidate = applicationWindow().activeFocusItem.parent;
+        while (candidate) {
+            if (candidate == root) {
+                isDescendent = true;
+                break;
+            }
+            candidate = candidate.parent;
+        }
+        if (!isDescendent) {
+            return;
+        }
+
+        var cursorY = 0;
+        if (applicationWindow().activeFocusItem.cursorPosition !== undefined) {
+            cursorY = applicationWindow().activeFocusItem.positionToRectangle(applicationWindow().activeFocusItem.cursorPosition).y;
+        }
+
+        
+        var pos = applicationWindow().activeFocusItem.mapToItem(flickableContents, 0, cursorY - Units.gridUnit*3);
+
+        //focused item alreqady visible?
+        if (pos.y >= mainFlickable.contentY && pos.y <= mainFlickable.contentY + mainFlickable.height) {
+            return;
+        }
+        mainFlickable.contentY = pos.y;
+    }
 
 
     NumberAnimation {
