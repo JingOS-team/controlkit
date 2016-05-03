@@ -127,16 +127,6 @@ Controls.ApplicationWindow {
         return root;
     }
 
-    /**
-     * emitted When the application requests a Back action
-     * For instance a global "back" shortcut or the Android
-     * Back button has been pressed.
-     * The page can manage the back event by itself,
-     * and if it set event.accepted = true, it will stop the main
-     * application to manage the back event.
-     */
-    signal backRequested(var event)
-
    /**
     * header: ApplicationHeader
     * An item that can be used as a title for the application.
@@ -158,15 +148,6 @@ Controls.ApplicationWindow {
      * header should be visible or not.
      */
     property bool controlsVisible: true
-
-    Controls.Action {
-        shortcut: "Alt+Left"
-        onTriggered: internal.back()
-    }
-    Controls.Action {
-        shortcut: Qt.Key_Back
-        onTriggered: internal.back()
-    }
 
     /**
      * globalDrawer: AbstractDrawer
@@ -239,21 +220,9 @@ Controls.ApplicationWindow {
     height: Units.gridUnit * 30
     visible: true
 
+
     QtObject {
         id: internal
         property Item __passiveNotification
-        function back () {
-            if (root.contextDrawer && root.contextDrawer.opened) {
-                root.contextDrawer.close();
-            } else if (root.globalDrawer && root.globalDrawer.opened) {
-                root.globalDrawer.close();
-            } else {
-                var backEvent = {accepted: false}
-                root.backRequested(backEvent);
-                if (!backEvent.accepted) {
-                    Qt.quit();
-                }
-            }
-        }
     }
 }

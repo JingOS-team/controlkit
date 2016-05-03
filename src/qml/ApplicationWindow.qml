@@ -111,22 +111,6 @@ AbstractApplicationWindow {
      */
     property alias pageStack: __pageStack
 
-    onBackRequested: {
-        if (root.pageStack.depth >= 1) {
-            var backEvent = {accepted: false}
-            root.pageStack.currentItem.backRequested(backEvent);
-            if (!backEvent.accepted) {
-                if (__pageStack.depth > 1) {
-                    __pageStack.currentIndex = Math.max(0, __pageStack.currentIndex - 1);
-                } else {
-                    Qt.quit();
-                }
-            }
-        }
-
-        event.accepted = true;
-    }
-
    /**
     * header: AbstractApplicationHeader
     * An item that can be used as a title for the application.
@@ -174,6 +158,35 @@ AbstractApplicationWindow {
             }
         }
         onCurrentIndexChanged: overscroll.y = 0;
+
+        Keys.onReleased: {
+            if (event.key == Qt.Key_Back ||
+            (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {
+                event.accepted = true;
+                if (root.contextDrawer && root.contextDrawer.opened) {
+                    root.contextDrawer.close();
+                } else if (root.globalDrawer && root.globalDrawer.opened) {
+                    root.globalDrawer.close();
+                } else {
+                    var backEvent = {accepted: false}
+                    if (root.pageStack.currentIndex >= 1) {
+                        root.pageStack.currentItem.backRequested(backEvent);
+                        if (!backEvent.accepted) {
+                            if (root.pageStack.depth > 1) {
+                                root.pageStack.currentIndex = Math.max(0, root.pageStack.currentIndex - 1);
+                                backEvent.accepted = true;
+                            } else {
+                                Qt.quit();
+                            }
+                        }
+                    }
+
+                    if (!backEvent.accepted) {
+                        Qt.quit();
+                    }
+                }
+            }
+        }
 
         Rectangle {
             z: -1
