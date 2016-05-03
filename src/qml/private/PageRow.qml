@@ -92,7 +92,6 @@ Item {
      * @return The new created page
      */
     function push(page, properties) {
-
         pop(currentItem, true);
 
         // figure out if more than one page is being pushed
@@ -124,10 +123,7 @@ Item {
 
         // initialize the page
         var container = pagesModel.initPage(page, properties);
-        //NOTE: workaround for the position being 0,0 for an event loop after the item is added to the row
-        container.x = mainLayout.width;
         pagesModel.append(container);
-
         container.visible = container.page.visible = true;
         mainFlickable.currentIndex = container.level;
         return container.page
@@ -267,40 +263,49 @@ Item {
         easing.type: Easing.InOutQuad
     }
     Timer {
-        id: currentItemSnapTimer
+        id: itemSnapTimer
         interval: Units.longDuration
         property Item itemToSnap
         onTriggered: {
             scrollAnim.running = false;
             scrollAnim.from = mainFlickable.contentX;
 
-            scrollAnim.to = Math.min(itemToSnap.x, mainLayout.width - mainFlickable.width);
+            scrollAnim.to = Math.min(itemToSnap.x, mainLayout.childrenRect.width - mainFlickable.width);
 
+            scrollAnim.running = true;
+        }
+    }
+    Timer {
+        id: currentItemSnapTimer
+        interval: Units.longDuration
+        property Item itemToSnap
+        onTriggered: {
+            var mappedPos = mainFlickable.currentItem.parent.mapToItem(mainFlickable, 0, 0);
+            if (mappedPos.x >= 0 && mappedPos.x + mainFlickable.currentItem.parent.width <= mainFlickable.width) {
+                return;
+            }
+            scrollAnim.running = false;
+            itemSnapTimer.running = false;
+            scrollAnim.from = mainFlickable.contentX;
+
+            scrollAnim.to = Math.max(0, (mainFlickable.currentItem.parent.x + mainFlickable.currentItem.parent.width) - mainFlickable.width);
             scrollAnim.running = true;
         }
     }
     ScrollView {
         anchors.fill: parent
+        verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff
         Flickable {
             id: mainFlickable
             anchors.fill: parent
             boundsBehavior: Flickable.StopAtBounds
-            contentWidth: mainLayout.width
+            contentWidth: mainLayout.childrenRect.width
             contentHeight: height
             readonly property Item currentItem: pagesModel.get(Math.min(currentIndex, pagesModel.count-1)).page
             property int currentIndex: 0
             flickDeceleration: Units.gridUnit * 50
             onCurrentItemChanged: {
-                var mappedPos = currentItem.parent.mapToItem(mainFlickable, 0, 0);
-                if (mappedPos.x >= 0 && mappedPos.x + currentItem.parent.width <= mainFlickable.width) {
-                    return;
-                }
-                scrollAnim.running = false;
-                currentItemSnapTimer.running = false;
-                scrollAnim.from = mainFlickable.contentX;
-
-                scrollAnim.to = Math.max(0, currentItem.parent.x - Math.max(0, mainFlickable.width - currentItem.parent.width));
-                scrollAnim.running = true;
+                currentItemSnapTimer.restart();
             }
             onMovementEnded: {
                 var pos = currentItem.mapToItem(mainFlickable, 0, 0);
@@ -311,13 +316,13 @@ Item {
                 if (mappedPos.x < -childToSnap.width / 2) {
                     childToSnap = mainLayout.children[childToSnap.level+1];
                 }
-                currentItemSnapTimer.itemToSnap = childToSnap;
-                currentItemSnapTimer.restart();
+                itemSnapTimer.itemToSnap = childToSnap;
+                itemSnapTimer.restart();
 
                 var mappedCurrentItemPos = currentItem.mapToItem(mainFlickable, 0, 0);
 
                 if (mappedCurrentItemPos.x < 0 || mappedCurrentItemPos.x + currentItem.width > mainFlickable.width) {
-                    var newCurrentItem = mainLayout.childAt(Math.min(childToSnap.x + width, mainLayout.width) - 10, 10);
+                    var newCurrentItem = mainLayout.childAt(Math.min(childToSnap.x + width, mainLayout.childrenRect.width) - 10, 10);
                     if (newCurrentItem) {
                         currentIndex = newCurrentItem.level;
                     } else {
@@ -353,7 +358,7 @@ Item {
             id: container
             height: mainFlickable.height
             width: root.width
-            state: ""
+            state: pendingState
             property string pendingState: root.width < root.defaultColumnWidth*2 ? "vertical" : (container.level >= pagesModel.count - 1 ? "last" : "middle");
 
             //HACK
@@ -428,8 +433,7 @@ Item {
                         }
                         ScriptAction {
                             script: {
-                                //currentItemSnapTimer.itemToSnap = mainFlickable.currentItem.parent;
-                                //currentItemSnapTimer.restart();
+                                currentItemSnapTimer.restart();
                             }
                         }
                     }
