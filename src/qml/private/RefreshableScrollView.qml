@@ -251,6 +251,41 @@ ScrollView {
         }
     ]
 
+    onHeightChanged: {
+        if (!applicationWindow() || !applicationWindow().activeFocusItem) {
+            return;
+        }
+
+        //NOTE: there is no function to know if an item is descended from another,
+        //so we have to walk the parent hyerarchy by hand
+        var isDescendent = false;
+        var candidate = applicationWindow().activeFocusItem.parent;
+        while (candidate) {
+            if (candidate == root) {
+                isDescendent = true;
+                break;
+            }
+            candidate = candidate.parent;
+        }
+        if (!isDescendent) {
+            return;
+        }
+
+        var cursorY = 0;
+        if (applicationWindow().activeFocusItem.cursorPosition !== undefined) {
+            cursorY = applicationWindow().activeFocusItem.positionToRectangle(applicationWindow().activeFocusItem.cursorPosition).y;
+        }
+
+        
+        var pos = applicationWindow().activeFocusItem.mapToItem(root.contentItem, 0, cursorY);
+
+        //focused item alreqady visible?
+        if (pos.y >= root.flickableItem.contentY && pos.y <= root.flickableItem.contentY + root.flickableItem.height) {
+            return;
+        }
+        root.flickableItem.contentY = pos.y;
+    }
+
     onLeftPaddingChanged: {
         if (root.contentItem == root.flickableItem) {
             flickableItem.anchors.leftMargin = 0;
