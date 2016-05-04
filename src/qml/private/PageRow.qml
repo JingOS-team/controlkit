@@ -91,7 +91,7 @@ Item {
      * @return The new created page
      */
     function push(page, properties) {
-        pop(currentItem, true);
+        pop(currentItem);
 
         // figure out if more than one page is being pushed
         var pages;
@@ -169,7 +169,12 @@ Item {
      * @see push() for details.
      */
     function replace(page, properties) {
-        pop(currentItem, true);
+        if (currentIndex>=1)
+            pop(pagesLogic.get(currentIndex-1).page);
+        else if (currentIndex==0)
+            pop();
+        else
+            console.warn("There's no page to replace");
         return push(page, properties);
     }
 
