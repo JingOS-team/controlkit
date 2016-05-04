@@ -136,7 +136,7 @@ AbstractApplicationHeader {
                 if (header.wideScreen) {
                     return page.width;
                 } else {
-                    return Math.min(titleList.width, delegateRoot.implicitWidth + Units.gridUnit + Units.smallSpacing);
+                    return Math.min(titleList.width, delegateRoot.implicitWidth + Units.smallSpacing);
                 }
             }
             height: titleList.height
@@ -159,10 +159,10 @@ AbstractApplicationHeader {
                 id: delegateRoot
                 x: Units.smallSpacing
 
-                spacing: Units.gridUnit
+                spacing: Units.smallSpacing
                 Item {
                     height: title.height
-                    width: titleList.isTabBar ? Math.min(Units.gridUnit/2, title.height / 2) : parent.height
+                    width: titleList.isTabBar ? Math.min(Units.gridUnit/2, title.height / 2) : parent.height/2
                     opacity: modelData > 0 ? 0.4 : 0
                     visible: !header.wideScreen && opacity > 0
                     layer.enabled: true
