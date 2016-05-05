@@ -45,7 +45,9 @@ QtObject {
 
     property font defaultFont: fontMetrics.font
 
-    TextMetrics {
-        id: fontMetrics
-    }
+    property list<QtObject> children: [
+        TextMetrics {
+            id: fontMetrics
+        }
+    ]
 }
