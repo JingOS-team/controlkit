@@ -37,22 +37,15 @@ QtObject {
     property color buttonBackgroundColor: "#eff0f1"
     property color buttonHoverColor: "#2196F3"
     property color buttonFocusColor: "#2196F3"
-    property color buttonHighlightedTextColor: "#eff0fa"
 
     property color viewTextColor: "#31363b"
     property color viewBackgroundColor: "#fcfcfc"
     property color viewHoverColor: "#2196F3"
     property color viewFocusColor: "#2196F3"
-    property color viewHighlightedTextColor: "#eff0fa"
-
-    property color complementaryTextColor: "#f3f3f3"
-    property color complementaryBackgroundColor: "#31363b"
-    property color complementaryHoverColor: "#2196F3"
-    property color complementaryFocusColor: "#2196F3"
-    property color complementaryHighlightedTextColor: "#eff0fa"
 
     property font defaultFont: fontMetrics.font
 
-    property variant fontMetrics: TextMetrics {}
-
+    TextMetrics {
+        id: fontMetrics
+    }
 }

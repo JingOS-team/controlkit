@@ -19,7 +19,7 @@
 
 pragma Singleton
 
-import QtQuick 2.0
+import QtQuick 2.4
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 
@@ -92,4 +92,11 @@ QtObject {
      * hover events, etc..
      */
     property int shortDuration: units.shortDuration
+
+    /**
+     * metrics used by the default font
+     */
+    property variant fontMetrics: TextMetrics {
+        text: "M"
+    }
 }
