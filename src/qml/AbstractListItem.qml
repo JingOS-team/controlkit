@@ -140,7 +140,7 @@ Rectangle {
     MouseArea {
         id: itemMouse
         anchors.fill: parent
-        enabled: false
+        enabled: true
         hoverEnabled: !Settings.isMobile
 
         onClicked: listItem.clicked()
