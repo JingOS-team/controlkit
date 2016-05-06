@@ -292,62 +292,83 @@ Item {
             scrollAnim.running = true;
         }
     }
-    ScrollView {
+
+    Flickable {
+        id: mainFlickable
         anchors.fill: parent
-        verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff
-        Flickable {
-            id: mainFlickable
-            anchors.fill: parent
-            boundsBehavior: Flickable.StopAtBounds
-            contentWidth: mainLayout.childrenRect.width
-            contentHeight: height
-            readonly property Item currentItem: pagesModel.get(Math.min(currentIndex, pagesModel.count-1)).page
-            property int currentIndex: 0
-            flickDeceleration: Units.gridUnit * 50
-            onCurrentItemChanged: {
-                currentItemSnapTimer.restart();
+        boundsBehavior: Flickable.StopAtBounds
+        contentWidth: mainLayout.childrenRect.width
+        contentHeight: height
+        readonly property Item currentItem: pagesModel.get(Math.min(currentIndex, pagesModel.count-1)).page
+        property int currentIndex: 0
+        flickDeceleration: Units.gridUnit * 50
+        onCurrentItemChanged: {
+            currentItemSnapTimer.restart();
+        }
+        onMovementEnded: {
+            var pos = currentItem.mapToItem(mainFlickable, 0, 0);
+            var oldCurrentIndex = currentIndex;
+
+            var childToSnap = mainLayout.childAt(contentX + 1, 10);
+            var mappedPos = childToSnap.mapToItem(mainFlickable, 0, 0);
+            if (mappedPos.x < -childToSnap.width / 2) {
+                childToSnap = mainLayout.children[childToSnap.level+1];
             }
-            onMovementEnded: {
-                var pos = currentItem.mapToItem(mainFlickable, 0, 0);
-                var oldCurrentIndex = currentIndex;
+            itemSnapTimer.itemToSnap = childToSnap;
+            itemSnapTimer.restart();
 
-                var childToSnap = mainLayout.childAt(contentX + 1, 10);
-                var mappedPos = childToSnap.mapToItem(mainFlickable, 0, 0);
-                if (mappedPos.x < -childToSnap.width / 2) {
-                    childToSnap = mainLayout.children[childToSnap.level+1];
-                }
-                itemSnapTimer.itemToSnap = childToSnap;
-                itemSnapTimer.restart();
+            var mappedCurrentItemPos = currentItem.mapToItem(mainFlickable, 0, 0);
 
-                var mappedCurrentItemPos = currentItem.mapToItem(mainFlickable, 0, 0);
-
-                if (mappedCurrentItemPos.x < 0 || mappedCurrentItemPos.x + currentItem.width > mainFlickable.width) {
-                    var newCurrentItem = mainLayout.childAt(Math.min(childToSnap.x + width, mainLayout.childrenRect.width) - 10, 10);
-                    if (newCurrentItem) {
-                        currentIndex = newCurrentItem.level;
-                    } else {
-                        currentIndex = mainLayout.children.length - 1;
-                    }
+            if (mappedCurrentItemPos.x < 0 || mappedCurrentItemPos.x + currentItem.width > mainFlickable.width) {
+                var newCurrentItem = mainLayout.childAt(Math.min(childToSnap.x + width, mainLayout.childrenRect.width) - 10, 10);
+                if (newCurrentItem) {
+                    currentIndex = newCurrentItem.level;
+                } else {
+                    currentIndex = mainLayout.children.length - 1;
                 }
             }
-            onFlickEnded: movementEnded();
-            onWidthChanged: movementEnded();
+        }
+        onFlickEnded: movementEnded();
+        onWidthChanged: movementEnded();
 
-            Row {
-                id: mainLayout
-                Repeater {
-                    model: pagesModel
-                }
-                add: Transition {
-                    NumberAnimation {
-                        property: "y"
-                        from: mainFlickable.height
-                        to: 0
-                        duration: Units.shortDuration
-                        easing.type: Easing.InOutQuad
-                    }
+        Row {
+            id: mainLayout
+            Repeater {
+                model: pagesModel
+            }
+            add: Transition {
+                NumberAnimation {
+                    property: "y"
+                    from: mainFlickable.height
+                    to: 0
+                    duration: Units.shortDuration
+                    easing.type: Easing.InOutQuad
                 }
             }
+        }
+    }
+
+    Rectangle {
+        height: Units.smallSpacing
+        width: root.width/root.depth
+        anchors.bottom: parent.bottom
+        color: Theme.textColor
+        opacity: 0
+        x: root.width * mainFlickable.visibleArea.xPosition
+        onXChanged: {
+            opacity = 0.3
+            scrollIndicatorTimer.restart();
+        }
+        Behavior on opacity {
+            OpacityAnimator {
+                duration: Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Timer {
+            id: scrollIndicatorTimer
+            interval: Units.longDuration * 4
+            onTriggered: parent.opacity = 0;
         }
     }
 
