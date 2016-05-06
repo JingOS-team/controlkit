@@ -128,20 +128,7 @@ Item {
         if (root.background === undefined) {
             root.background = defaultBackgroundComponent.createObject(flickableContents, {"z": -1});
         }
-        //try to find a Page and reparent directly to it
-        var pageCandidate = root.parent;
-        while (pageCandidate) {
-            //QML doesn't have typeof support to qml types, try asses by checking at some properties as an euristic
-            if (pageCandidate.contentData !== undefined &&
-                pageCandidate.title !== undefined &&
-                pageCandidate.contextualActions !== undefined) {
-                break;
-            }
-            pageCandidate = pageCandidate.parent;
-        }
-        if (pageCandidate && pageCandidate != root.parent) {
-            root.parent = pageCandidate;
-        }
+
         backgroundChanged();
         contentItemChanged();
     }
