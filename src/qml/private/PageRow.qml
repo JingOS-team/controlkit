@@ -32,12 +32,12 @@ Item {
     /**
      * This property holds the number of items currently pushed onto the view
      */
-    readonly property alias depth: pagesModel.count
+    readonly property alias depth: pagesLogic.count
 
     /**
      * The last Page in the Row
      */
-    readonly property Item lastItem: pagesModel.count ? pagesModel.get(pagesModel.count - 1).page : null
+    readonly property Item lastItem: pagesLogic.count ? pagesLogic.get(pagesLogic.count - 1).page : null
 
     /**
      * The currently visible Item
@@ -116,14 +116,14 @@ Item {
                     tPage = tPage.page;
                 }
 
-                var container = pagesModel.initPage(tPage, tProps);
-                pagesModel.append(container);
+                var container = pagesLogic.initPage(tPage, tProps);
+                pagesLogic.append(container);
             }
         }
 
         // initialize the page
-        var container = pagesModel.initPage(page, properties);
-        pagesModel.append(container);
+        var container = pagesLogic.initPage(page, properties);
+        pagesLogic.append(container);
         container.visible = container.page.visible = true;
         mainFlickable.currentIndex = container.level;
         return container.page
@@ -141,23 +141,16 @@ Item {
             return;
         }
 
-        var oldPage = pagesModel.get(pagesModel.count-1).page;
+        var oldPage = pagesLogic.get(pagesLogic.count-1).page;
         if (page !== undefined) {
             // an unwind target has been specified - pop until we find it
-            while (page != oldPage && pagesModel.count > 1) {
-                pagesModel.remove(oldPage.parent.ObjectModel.index);
-                if (oldPage.parent.owner) {
-                    oldPage.parent = oldPage.parent.owner;
-                }
-                oldPage.parent.destroy();
-                oldPage = pagesModel.get(pagesModel.count-1).page;
+            while (page != oldPage && pagesLogic.count > 1) {
+                pagesLogic.remove(oldPage.parent.level);
+
+                oldPage = pagesLogic.get(pagesLogic.count-1).page;
             }
         } else {
-            pagesModel.remove(pagesModel.count-1);
-            if (oldPage.parent.owner) {
-                oldPage.parent = oldPage.parent.owner;
-            }
-            oldPage.parent.destroy();
+            pagesLogic.remove(pagesLogic.count-1);
         }
     }
 
@@ -186,18 +179,19 @@ Item {
      * Destroy (or reparent) all the pages contained.
      */
     function clear() {
-        return pagesModel.clear();
+        return pagesLogic.clear();
     }
 
     function get(idx) {
-        return pagesModel.get(idx);
+        return pagesLogic.get(idx).page;
     }
 
 //END FUNCTIONS
 
-    ObjectModel {
-        id: pagesModel
+    QtObject {
+        id: pagesLogic
 
+        readonly property int count: mainLayout.children.length
         property var componentCache
 
         //NOTE:seems to only work if the array is defined in a declarative way,
@@ -206,9 +200,37 @@ Item {
             componentCache = {};
         }
 
+        //TODO: remove?
+        function get(id) {
+            return mainLayout.children[id];
+        }
+
+        function append(item) {
+            item.parent = mainLayout;
+        }
+
+        function clear () {
+            while (mainLayout.children.length > 0) {
+                remove(0);
+            }
+        }
+
+        function remove(id) {
+            if (id < 0 || id >= count) {
+                print("Tried to remove an invalid page index:" + id);
+                return;
+            }
+
+            var item = mainLayout.children[id];
+            if (item.owner) {
+                item.page.parent = item.owner;
+            }
+            item.destroy();
+        }
+
         function initPage(page, properties) {
             var container = containerComponent.createObject(mainLayout, {
-                "level": pagesModel.count,
+                "level": pagesLogic.count,
                 "page": page
             });
 
@@ -218,9 +240,9 @@ Item {
                 pageComp = page;
             } else if (typeof page == "string") {
                 // page defined as string (a url)
-                pageComp = pagesModel.componentCache[page];
+                pageComp = pagesLogic.componentCache[page];
                 if (!pageComp) {
-                    pageComp = pagesModel.componentCache[page] = Qt.createComponent(page);
+                    pageComp = pagesLogic.componentCache[page] = Qt.createComponent(page);
                 }
             }
             if (pageComp) {
@@ -299,7 +321,8 @@ Item {
         boundsBehavior: Flickable.StopAtBounds
         contentWidth: mainLayout.childrenRect.width
         contentHeight: height
-        readonly property Item currentItem: pagesModel.get(Math.min(currentIndex, pagesModel.count-1)).page
+        readonly property Item currentItem: pagesLogic.get(Math.min(currentIndex, pagesLogic.count-1)).page
+
         property int currentIndex: 0
         flickDeceleration: Units.gridUnit * 50
         onCurrentItemChanged: {
@@ -324,7 +347,7 @@ Item {
                 if (newCurrentItem) {
                     currentIndex = newCurrentItem.level;
                 } else {
-                    currentIndex = mainLayout.children.length - 1;
+                    currentIndex = pagesLogic.count - 1;
                 }
             }
         }
@@ -333,9 +356,7 @@ Item {
 
         Row {
             id: mainLayout
-            Repeater {
-                model: pagesModel
-            }
+
             add: Transition {
                 NumberAnimation {
                     property: "y"
@@ -380,7 +401,7 @@ Item {
             height: mainFlickable.height
             width: root.width
             state: pendingState
-            property string pendingState: root.width < root.defaultColumnWidth*2 ? "vertical" : (container.level >= pagesModel.count - 1 ? "last" : "middle");
+            property string pendingState: root.width < root.defaultColumnWidth*2 ? "vertical" : (container.level >= pagesLogic.count - 1 ? "last" : "middle");
 
             //HACK
             onPendingStateChanged: {
@@ -391,8 +412,7 @@ Item {
                 interval: 150
                 onTriggered: container.state = container.pendingState
             }
-            //NOTE: use this instead of ObjectModel.index because we need to have this set
-            // *before* it's added to the model
+
             property int level
 
             property int hint: page && page.implicitWidth ? page.implicitWidth : root.defaultColumnWidth
@@ -405,7 +425,7 @@ Item {
                 page.anchors.fill = container;
             }
             drag.filterChildren: true
-            onClicked: root.currentIndex = ObjectModel.index;
+            onClicked: root.currentIndex = level;
 
             Rectangle {
                 z: 999
@@ -431,7 +451,7 @@ Item {
                     name: "last"
                     PropertyChanges {
                         target: container
-                        width: Math.max(roundedHint, root.width - (container.level == 0 ? 0 : pagesModel.get(container.level-1).width))
+                        width: Math.max(roundedHint, root.width - (container.level == 0 ? 0 : pagesLogic.get(container.level-1).width))
                     }
                 },
                 State {

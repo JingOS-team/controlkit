@@ -125,7 +125,7 @@ AbstractApplicationHeader {
 
         delegate: MouseArea {
             id: delegate
-            readonly property Page page: __appWindow.pageStack.get(modelData).page ? __appWindow.pageStack.get(modelData).page : __appWindow.pageStack.get(modelData)
+            readonly property Page page: __appWindow.pageStack.get(modelData)
             //NOTE: why not use ListViewCurrentIndex? because listview itself resets
             //currentIndex in some situations (since here we are using an int as a model,
             //even more often) so the property binding gets broken

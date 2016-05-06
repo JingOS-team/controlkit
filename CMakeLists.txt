@@ -2,7 +2,7 @@ project(kirigami)
 
 cmake_minimum_required(VERSION 2.8.12)
 set(KF5_MIN_VERSION "5.18.0")
-set(QT_MIN_VERSION "5.6.0")
+set(QT_MIN_VERSION "5.5.0")
 
 ################# Disallow in-source build #################
 
