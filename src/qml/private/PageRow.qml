@@ -224,6 +224,9 @@ Item {
             if (item.owner) {
                 item.page.parent = item.owner;
             }
+            //FIXME: why reparent ing is necessary?
+            //is destroy just an async deleteLater() that isn't executed immediately or it actually leaks?
+            item.parent = root;
             item.destroy();
         }
 
