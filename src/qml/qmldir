@@ -17,7 +17,6 @@ Page 1.0 Page.qml
 Icon 1.0 Icon.qml
 Label 1.0 Label.qml
 Heading 1.0 Heading.qml
-HeaderItem 1.0 HeaderItem.qml
 ScrollablePage 1.0 ScrollablePage.qml
 AbstractListItem 1.0 AbstractListItem.qml
 BasicListItem 1.0 BasicListItem.qml
