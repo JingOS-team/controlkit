@@ -18,32 +18,47 @@
  */
 
 import QtQuick 2.1
+import QtQuick.Controls.Private 1.0
 import org.kde.kirigami 1.0
 
 MouseArea {
     anchors {
         left: parent.left
-        top: parent.contentItem.top
-        bottom: parent.contentItem.bottom
+        top: parent.top
+        bottom: parent.bottom
     }
+    opacity: !Settings.isMobile &&__appWindow.pageStack.currentIndex < 1 ? 0.4 : 1
     width: height
-    onClicked: __appWindow.pageStack.goBack();
+    z: 99
+    onClicked: applicationWindow().pageStack.goBack();
     Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         x: width/2
         antialiasing: true
         width: parent.width/2
-        height: Units.smallSpacing/3
+        height: Math.ceil(Units.smallSpacing / 3)
         rotation: 45
         transformOrigin: Item.Left
+        color: Theme.highlightedTextColor
     }
     Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         x: width/2
         antialiasing: true
         width: parent.width/2
-        height: Units.smallSpacing/3
+        height: Math.ceil(Units.smallSpacing / 3)
         rotation: -45
         transformOrigin: Item.Left
+        color: Theme.highlightedTextColor
+    }
+    Rectangle {
+        anchors {
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+        }
+        height: parent.height * 0.7
+        color: Theme.highlightedTextColor
+        width: Math.ceil(Units.smallSpacing / 6)
+        opacity: 0.4
     }
 }

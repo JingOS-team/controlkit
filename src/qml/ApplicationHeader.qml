@@ -20,6 +20,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.2
+import QtQuick.Controls.Private 1.0
 import "private"
 import org.kde.kirigami 1.0
 
@@ -55,15 +56,18 @@ AbstractApplicationHeader {
         //uses this to have less strings comparisons
         property bool isTabBar: header.separatorStyle == "TabBar"
         Component.onCompleted: {
-            //only on iOs put the back button on top left corner
-            if (Qt.platform.os == "ios") {
+            //only iOS and desktop systems put the back button on top left corner
+            if (!Settings.isMobile || Qt.platform.os == "ios") {
                 var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
-                titleList.backButton = component.createObject(headerItem);
+                titleList.backButton = component.createObject(titleList.parent);
             }
         }
         property Item backButton
         clip: true
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            leftMargin: backButton ? backButton.width : 0
+        }
         cacheBuffer: width * count
         displayMarginBeginning: __appWindow.pageStack.width * count
         orientation: ListView.Horizontal
@@ -134,7 +138,11 @@ AbstractApplicationHeader {
             width: {
                 //more columns shown?
                 if (header.wideScreen) {
-                    return page.width;
+                    if (modelData == 0 && titleList.backButton) {
+                        return page.width - titleList.backButton.width;
+                    } else {
+                        return page.width;
+                    }
                 } else {
                     return Math.min(titleList.width, delegateRoot.implicitWidth + Units.smallSpacing);
                 }

@@ -19,6 +19,7 @@
 
 import QtQuick 2.5
 import QtQuick.Controls 1.3
+import QtQuick.Controls.Private 1.0
 import "private"
 import org.kde.kirigami 1.0
 import QtGraphicalEffects 1.0
@@ -159,32 +160,33 @@ AbstractApplicationWindow {
         }
         onCurrentIndexChanged: overscroll.y = 0;
 
+        function goBack() {
+            if (root.contextDrawer && root.contextDrawer.opened) {
+                root.contextDrawer.close();
+            } else if (root.globalDrawer && root.globalDrawer.opened) {
+                root.globalDrawer.close();
+            } else {
+                var backEvent = {accepted: false}
+                if (root.pageStack.currentIndex >= 1) {
+                    root.pageStack.currentItem.backRequested(backEvent);
+                    if (!backEvent.accepted) {
+                        if (root.pageStack.depth > 1) {
+                            root.pageStack.currentIndex = Math.max(0, root.pageStack.currentIndex - 1);
+                            backEvent.accepted = true;
+                        }
+                    }
+                }
+
+                if (Settings.isMobile && !backEvent.accepted) {
+                    Qt.quit();
+                }
+            }
+        }
         Keys.onReleased: {
             if (event.key == Qt.Key_Back ||
             (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {
                 event.accepted = true;
-                if (root.contextDrawer && root.contextDrawer.opened) {
-                    root.contextDrawer.close();
-                } else if (root.globalDrawer && root.globalDrawer.opened) {
-                    root.globalDrawer.close();
-                } else {
-                    var backEvent = {accepted: false}
-                    if (root.pageStack.currentIndex >= 1) {
-                        root.pageStack.currentItem.backRequested(backEvent);
-                        if (!backEvent.accepted) {
-                            if (root.pageStack.depth > 1) {
-                                root.pageStack.currentIndex = Math.max(0, root.pageStack.currentIndex - 1);
-                                backEvent.accepted = true;
-                            } else {
-                                Qt.quit();
-                            }
-                        }
-                    }
-
-                    if (!backEvent.accepted) {
-                        Qt.quit();
-                    }
-                }
+                goBack();
             }
         }
 
