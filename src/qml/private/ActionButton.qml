@@ -32,24 +32,46 @@ Item {
 
     implicitWidth: implicitHeight + Units.iconSizes.smallMedium*4
     implicitHeight: Units.iconSizes.large + Units.largeSpacing
-    visible: action != null || leftAction != null || rightAction != null
+    //visible: action != null || leftAction != null || rightAction != null
 
 
     onXChanged: {
-        if (mouseArea.pressed) {
+        if (mouseArea.pressed || edgeMouseArea.pressed) {
             if (globalDrawer && globalDrawer.enabled) {
-                globalDrawer.position = Math.min(1, Math.max(0, (x - button.parent.width/2 + button.width/2)/globalDrawer.contentItem.width));
+                globalDrawer.position = Math.min(1, Math.max(0, (x - button.parent.width/2 + button.width/2)/globalDrawer.contentItem.width + mouseArea.drawerShowAdjust));
             }
             if (contextDrawer && contextDrawer.enabled) {
-                contextDrawer.position = Math.min(1, Math.max(0, (button.parent.width/2 - button.width/2 - x)/contextDrawer.contentItem.width));
+                contextDrawer.position = Math.min(1, Math.max(0, (button.parent.width/2 - button.width/2 - x)/contextDrawer.contentItem.width + mouseArea.drawerShowAdjust));
             }
         }
     }
 
     MouseArea {
+        id: edgeMouseArea
+        z:99
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: parent.bottom
+        }
+        drag {
+            target: button
+            //filterChildren: true
+            axis: Drag.XAxis
+            minimumX: contextDrawer && contextDrawer.enabled ? 0 : button.parent.width/2 - button.width/2
+            maximumX: globalDrawer && globalDrawer.enabled ? button.parent.width : button.parent.width/2 - button.width/2
+        }
+        height: Units.smallSpacing * 3
+        width: button.parent.width
+
+        onPressed: mouseArea.onPressed(mouse)
+        onPositionChanged: mouseArea.positionChanged(mouse)
+        onReleased: mouseArea.released(mouse)
+    }
+    MouseArea {
         id: mouseArea
         anchors.fill: parent
 
+        visible: action != null || leftAction != null || rightAction != null
         property bool internalVisibility: (applicationWindow === undefined || applicationWindow().controlsVisible) && (button.action === null || button.action.visible === undefined || button.action.visible)
         onInternalVisibilityChanged: {
             showAnimation.running = false;
@@ -74,6 +96,8 @@ Item {
         }
         property var downTimestamp;
         property int startX
+        property int startMouseY
+        property real drawerShowAdjust
         property bool buttonPressedUnderMouse: false
         property bool leftButtonPressedUnderMouse: false
         property bool rightButtonPressedUnderMouse: false
@@ -81,6 +105,8 @@ Item {
         onPressed: {
             downTimestamp = (new Date()).getTime();
             startX = button.x + button.width/2;
+            startMouseY = mouse.y;
+            drawerShowAdjust = 0;
             buttonPressedUnderMouse = mouse.x > buttonGraphics.x && mouse.x < buttonGraphics.x + buttonGraphics.width;
             leftButtonPressedUnderMouse = !buttonPressedUnderMouse && leftAction && mouse.x < buttonGraphics.x;
             rightButtonPressedUnderMouse = !buttonPressedUnderMouse && rightAction && mouse.x > buttonGraphics.x + buttonGraphics.width;
@@ -89,12 +115,13 @@ Item {
             //pixel/second
             var x = button.x + button.width/2;
             var speed = ((x - startX) / ((new Date()).getTime() - downTimestamp) * 1000);
+            drawerShowAdjust = 0;
 
             //project where it would be a full second in the future
             if (globalDrawer && x + speed > Math.min(button.parent.width/4*3, button.parent.width/2 + globalDrawer.contentItem.width/2)) {
                 globalDrawer.open();
                 contextDrawer.close();
-            } else if (contextDrawer && x + speed < Math.max(button.parent.width/4, button.parent.width/2 - contextDrawer.contentItem.width/2)) {print("222")
+            } else if (contextDrawer && x + speed < Math.max(button.parent.width/4, button.parent.width/2 - contextDrawer.contentItem.width/2)) {
                 if (contextDrawer) {
                     contextDrawer.open();
                 }
@@ -134,10 +161,14 @@ Item {
                 action.trigger();
             }
         }
+        onPositionChanged: {
+            drawerShowAdjust = Math.min(0.3, Math.max(0, (startMouseY - mouse.y)/(Units.gridUnit*15)));
+            button.xChanged();
+        }
         Connections {
             target: globalDrawer
             onPositionChanged: {
-                if (!mouseArea.pressed) {
+                if (!mouseArea.pressed && !edgeMouseArea.pressed) {
                     button.x = globalDrawer.contentItem.width * globalDrawer.position + button.parent.width/2 - button.width/2;
                 }
             }
@@ -145,7 +176,7 @@ Item {
         Connections {
             target: contextDrawer
             onPositionChanged: {
-                if (!mouseArea.pressed) {
+                if (!mouseArea.pressed && !edgeMouseArea.pressed) {
                     button.x = button.parent.width/2 - button.width/2 - contextDrawer.contentItem.width * contextDrawer.position;
                 }
             }
