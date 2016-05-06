@@ -52,6 +52,7 @@ Item {
         anchors {
             horizontalCenter: parent.horizontalCenter
             bottom: parent.bottom
+            bottomMargin: -Units.smallSpacing
         }
         drag {
             target: button
