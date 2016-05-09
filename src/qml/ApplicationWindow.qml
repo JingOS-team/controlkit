@@ -95,8 +95,7 @@ import QtGraphicalEffects 1.0
  * }
  * @endcode
  *
- * @inherit QtQuick.Controls.ApplicationWindow
- */
+*/
 AbstractApplicationWindow {
     id: root
 
