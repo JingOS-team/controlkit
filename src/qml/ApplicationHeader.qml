@@ -165,7 +165,7 @@ AbstractApplicationHeader {
             }
             Row {
                 id: delegateRoot
-                x: Units.smallSpacing
+                x: Units.smallSpacing + header.wideScreen ? (Math.min(delegate.width - width, Math.max(0, titleList.contentX - delegate.x))) : 0
 
                 spacing: Units.smallSpacing
                 Item {
