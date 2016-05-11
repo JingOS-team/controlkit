@@ -20,6 +20,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.3
 import org.kde.kirigami 1.0
+import QtGraphicalEffects 1.0
 import "private"
 
 /**
@@ -101,22 +102,16 @@ Item {
                 anchors.fill: parent
                 color: Theme.viewBackgroundColor
 
-                EdgeShadow {
-                    edge: Qt.BottomEdge
-                    anchors {
-                        right: parent.right
-                        left: parent.left
-                        bottom: parent.top
-                    }
-                }
-                EdgeShadow {
-                    edge: Qt.TopEdge
-                    anchors {
-                        right: parent.right
-                        left: parent.left
-                        top: parent.bottom
-                    }
-
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    visible: drawerHandle.visible
+                    anchors.fill: drawerHandle
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: Units.gridUnit
+                    samples: 32
+                    color: Qt.rgba(0, 0, 0, 0.5)
+                    source: drawerHandle
                 }
             }
         }
@@ -231,18 +226,24 @@ Item {
                 topMargin: height
                 contentWidth: width
                 contentHeight: flickableContents.height;
+                flickableDirection: Flickable.VerticalFlick
                 Item {
-                    id: flickableContents
-                    width: root.width
-                    height: contentItem.height + topPadding + bottomPadding + Units.iconSizes.medium + Units.gridUnit
+                    width: mainFlickable.width
+                    height: flickableContents.height
                     Item {
-                        id: contentItemParent
-                        anchors {
-                            fill: parent
-                            leftMargin: leftPadding
-                            topMargin: topPadding
-                            rightMargin: rightPadding
-                            bottomMargin: bottomPadding
+                        id: flickableContents
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: root.contentItem.implicitWidth <= 0 ? root.width : Math.max(root.width/2, Math.min(root.width, root.contentItem.implicitWidth))
+                        height: contentItem.height + topPadding + bottomPadding + Units.iconSizes.medium + Units.gridUnit
+                        Item {
+                            id: contentItemParent
+                            anchors {
+                                fill: parent
+                                leftMargin: leftPadding
+                                topMargin: topPadding
+                                rightMargin: rightPadding
+                                bottomMargin: bottomPadding
+                            }
                         }
                     }
                 }
