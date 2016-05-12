@@ -37,7 +37,7 @@ import org.kde.kirigami 1.0
  */
 Rectangle {
     id: headerItem
-    z: 2
+    z: 99
     anchors {
         left: parent.left
         right: parent.right
@@ -54,7 +54,8 @@ Rectangle {
     y: 0
 
     property QtObject __appWindow: applicationWindow();
-    parent: __appWindow.pageStack;
+    //parent: __appWindow.pageStack;
+    parent: __appWindow.contentItem
 
     transform: Translate {
         id: translateTransform

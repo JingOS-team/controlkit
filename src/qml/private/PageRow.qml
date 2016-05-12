@@ -324,6 +324,8 @@ Item {
         contentWidth: mainLayout.childrenRect.width
         contentHeight: height
         readonly property Item currentItem: pagesLogic.get(Math.min(currentIndex, pagesLogic.count-1)).page
+        //clip only when the app has a sidebar
+        clip: root.x > 0
 
         property int currentIndex: 0
         flickDeceleration: Units.gridUnit * 50
@@ -369,6 +371,20 @@ Item {
                 }
             }
         }
+    }
+
+    //show a separator when the app has a sidebar
+    Rectangle {
+        z: 999
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            left: parent.left
+        }
+        width: Math.ceil(Units.smallSpacing / 5)
+        color: Theme.textColor
+        opacity: 0.3
+        visible: root.x > 0
     }
 
     Rectangle {

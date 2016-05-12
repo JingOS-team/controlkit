@@ -51,14 +51,4 @@ MouseArea {
         transformOrigin: Item.Left
         color: Theme.highlightedTextColor
     }
-    Rectangle {
-        anchors {
-            right: parent.right
-            verticalCenter: parent.verticalCenter
-        }
-        height: parent.height * 0.7
-        color: Theme.highlightedTextColor
-        width: Math.ceil(Units.smallSpacing / 6)
-        opacity: 0.4
-    }
 }

@@ -51,6 +51,18 @@ AbstractApplicationHeader {
      */
     property string separatorStyle: "Breadcrumb"
 
+    Rectangle {
+        anchors {
+            right: titleList.left
+            verticalCenter: parent.verticalCenter
+        }
+        visible: titleList.x > 0 && !titleList.atXBeginning
+        height: parent.height * 0.7
+        color: Theme.highlightedTextColor
+        width: Math.ceil(Units.smallSpacing / 6)
+        opacity: 0.4
+    }
+
     ListView {
         id: titleList
         //uses this to have less strings comparisons
@@ -66,7 +78,7 @@ AbstractApplicationHeader {
         clip: true
         anchors {
             fill: parent
-            leftMargin: backButton ? backButton.width : 0
+            leftMargin: Math.max ((backButton ? backButton.width : 0), __appWindow.pageStack.x)
         }
         cacheBuffer: width * count
         displayMarginBeginning: __appWindow.pageStack.width * count
@@ -139,7 +151,7 @@ AbstractApplicationHeader {
                 //more columns shown?
                 if (header.wideScreen) {
                     if (modelData == 0 && titleList.backButton) {
-                        return page.width - titleList.backButton.width;
+                        return page.width - Math.max(0, titleList.backButton.width - __appWindow.pageStack.x);
                     } else {
                         return page.width;
                     }
