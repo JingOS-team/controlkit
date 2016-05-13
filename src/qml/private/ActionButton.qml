@@ -153,10 +153,6 @@ Item {
                 return;
             }
 
-            if (action.checkable) {
-                action.checked = !action.checked;
-            }
-
             //if an action has been assigned, trigger it
             if (action && action.trigger) {
                 action.trigger();
