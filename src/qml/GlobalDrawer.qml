@@ -149,8 +149,6 @@ OverlayDrawer {
      */
     default property alias content: mainContent.data
 
-    handleVisible: typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true
-
     contentItem: Controls.ScrollView {
         id: scrollView
         anchors.fill: parent

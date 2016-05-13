@@ -81,7 +81,7 @@ AbstractDrawer {
      * If true, a little handle will be visible to make opening the drawer easier
      * Currently supported only on left and right drawers
      */
-    property bool handleVisible: true
+    property bool handleVisible: typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true
 
 //END Properties
 
