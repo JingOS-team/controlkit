@@ -282,6 +282,19 @@ Item {
 
     Item {
         id: container
+        onChildrenChanged: {
+            //NOTE: make sure OverlaySheets are directly under the root
+            //so they are over all the contents and don't have margins
+            //TODO: OverlayDrawers as well?
+            //search for an OverlaySheet, unfortunately have to blind test properties
+            //as there is no way to get the classname from qml objects
+            for (var i = children.length -1; i >= 0; --i) {
+                var child = children[i];
+                if (child.toString().indexOf("OverlaySheet") === 0) {
+                    child.parent = root;
+                }
+            }
+        }
         anchors {
             fill: parent
             leftMargin: leftPadding

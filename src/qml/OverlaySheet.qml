@@ -34,6 +34,8 @@ import "private"
 Item {
     id: root
 
+    z: 999
+
     anchors.fill: parent
     visible: false
 
