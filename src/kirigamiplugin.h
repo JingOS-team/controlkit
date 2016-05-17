@@ -33,6 +33,10 @@ class KirigamiPlugin : public QQmlExtensionPlugin
 public:
     void registerTypes(const char *uri);
 
+private:
+    QString componentPath(const QString &fileName) const;
+
+    QStringList m_stylesFallbackChain;
 };
 
 #endif

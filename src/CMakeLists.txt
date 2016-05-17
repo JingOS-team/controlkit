@@ -12,15 +12,13 @@ install(TARGETS kirigamiplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigam
 
 install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
 
-
-#TODO: use the same way qquickcontrols2 uses to select if possible (needs a C++ plugin)
-if(HAVE_PLASMA)
-    FILE(GLOB platformspecific ${PROJECT_SOURCE_DIR}/plasmatheme/*)
-elseif(HAVE_KDECLARATIVE)
-    FILE(GLOB platformspecific ${PROJECT_SOURCE_DIR}/systemtheme/*)
-else()
-    FILE(GLOB platformspecific ${PROJECT_SOURCE_DIR}/fallbacktheme/*)
+#TODO: selectively install plasma and Desktop styles
+install(DIRECTORY styles/Fallback DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles/Fallback)
+if (PLASMA_ENABLED)
+    install(DIRECTORY styles/Plasma DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles/Plasma)
 endif()
-
+if (DESKTOP_ENABLED)
+    install(DIRECTORY styles/Desktop DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles/Desktop)
+endif()
 
 install(FILES ${platformspecific} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)

@@ -26,13 +26,44 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
+QString KirigamiPlugin::componentPath(const QString &fileName) const
+{
+    QString candidate;
+
+    foreach (const QString &style, m_stylesFallbackChain) {
+        candidate = baseUrl().toString() + QStringLiteral("/styles/") + style + QLatin1Char('/') + fileName;
+        if (QFile::exists(QUrl(candidate).path())) {
+            return candidate;
+        }
+    }
+
+    return QString();
+}
 
 void KirigamiPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.kirigami"));
 
+    m_stylesFallbackChain << QStringLiteral("Fallback");
+
+    const QString style = QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_STYLE"));
+
+    if (!style.isEmpty() && QFile::exists(baseUrl().path() + QStringLiteral("/styles/Desktop"))) {
+        m_stylesFallbackChain.prepend(QStringLiteral("Desktop"));
+    }
+
+    if (!style.isEmpty() && QFile::exists(baseUrl().path() + QStringLiteral("/styles/") + style)) {
+        m_stylesFallbackChain.prepend(style);
+    }
+    //At this point the fallback chain will be selected->Desktop->Fallback
+
+
     //TODO: in this plugin it will end up something similar to
-    //PlasmaCore's ColorScope
+    //PlasmaCore's ColorScope?
+
+    qmlRegisterSingletonType(componentPath(QStringLiteral("Theme.qml")), uri, 1, 0, "Theme");
+    qmlRegisterSingletonType(componentPath(QStringLiteral("Units.qml")), uri, 1, 0, "Units");
+    qmlRegisterType(componentPath(QStringLiteral("Icon.qml")), uri, 1, 0, "Icon");
 }
 
 

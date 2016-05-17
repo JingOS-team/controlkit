@@ -10,10 +10,8 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
    message(FATAL_ERROR "kirigami requires an out of source build. Please create a separate build directory and run 'cmake path_to_kirigami [options]' there.")
 endif()
 
-#option(THEME "Theme to install" "Plasma")
-if (NOT DEFINED THEME)
-    set(THEME "Plasma")
-endif()
+option(PLASMA_ENABLED "Build and install The Plasma style" ON)
+option(DESKTOP_ENABLED "Build and install The Desktop style" ON)
 option(BUILD_EXAMPLES "Build and install examples" OFF)
 
 # Make CPack available to easy generate binary packages
@@ -33,27 +31,29 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg)
 
-if(THEME STREQUAL "Plasma")
+if(PLASMA_ENABLED)
 # treat plasma as an optinal dep: full functionality is expected with only Qt
 find_package(KF5Plasma ${KF5_MIN_VERSION})
 set_package_properties(KF5Plasma PROPERTIES DESCRIPTION "Plasma framework"
                        TYPE OPTIONAL
                        PURPOSE "Optional Look and feel integration with Plasma Mobile."
                       )
-elseif(THEME STREQUAL "System")
+endif()
+
+if(DESKTOP_ENABLED)
 find_package(KF5Declarative ${KF5_MIN_VERSION})
-set_package_properties(KF5Plasma PROPERTIES DESCRIPTION "KDeclarative framework"
+set_package_properties(KF5Declarative PROPERTIES DESCRIPTION "KDeclarative framework"
                        TYPE OPTIONAL
-                       PURPOSE "Optional Look and feel integration with system colors and icons."
+                       PURPOSE "Optional Look and feel integration with desktop colors and icons."
                       )
 endif()
 
 if(KF5Plasma_FOUND AND THEME STREQUAL "Plasma")
-  set(HAVE_PLASMA 1)
+  set(PLASMA_ENABLED 1)
 endif()
 
 if(KF5Declarative_FOUND AND THEME STREQUAL "System")
-  set(HAVE_KDECLARATIVE 1)
+  set(DESKTOP_ENABLED 1)
 endif()
 
 ################# Enable C++11 features for clang and gcc #################

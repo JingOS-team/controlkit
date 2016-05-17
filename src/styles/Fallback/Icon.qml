@@ -34,7 +34,7 @@ Item {
     Image {
         id: image
         anchors.fill: parent
-        source: root.source != "" ? (root.source.indexOf(".") === -1 ? "icons/" + root.source + ".svg" : root.source) : root.source
+        source: root.source != "" ? (root.source.indexOf(".") === -1 ? "../../icons/" + root.source + ".svg" : root.source) : root.source
         sourceSize.width: root.width
         sourceSize.height: root.height
     }
