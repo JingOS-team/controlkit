@@ -106,14 +106,11 @@ Item {
 
                 layer.enabled: true
                 layer.effect: DropShadow {
-                    visible: drawerHandle.visible
-                    anchors.fill: drawerHandle
                     horizontalOffset: 0
                     verticalOffset: 0
                     radius: Units.gridUnit
                     samples: 32
                     color: Qt.rgba(0, 0, 0, 0.5)
-                    source: drawerHandle
                 }
             }
         }
@@ -146,14 +143,23 @@ Item {
         }
     }
     onHeightChanged: {
-        if (!applicationWindow() || !applicationWindow().activeFocusItem) {
+        var focusItem;
+
+        if (typeof applicationWindow !== "undefined") {
+            focusItem = applicationWindow().activeFocusItem;
+        //fallback: hope activeFocusItem is in context
+        } else {
+            focusItem = activeFocusItem;
+        }
+
+        if (!activeFocusItem) {
             return;
         }
 
         //NOTE: there is no function to know if an item is descended from another,
         //so we have to walk the parent hyerarchy by hand
         var isDescendent = false;
-        var candidate = applicationWindow().activeFocusItem.parent;
+        var candidate = focusItem.parent;
         while (candidate) {
             if (candidate == root) {
                 isDescendent = true;
@@ -166,13 +172,12 @@ Item {
         }
 
         var cursorY = 0;
-        if (applicationWindow().activeFocusItem.cursorPosition !== undefined) {
-            cursorY = applicationWindow().activeFocusItem.positionToRectangle(applicationWindow().activeFocusItem.cursorPosition).y;
+        if (focusItem.cursorPosition !== undefined) {
+            cursorY = focusItem.positionToRectangle(focusItem.cursorPosition).y;
         }
 
         
-        var pos = applicationWindow().activeFocusItem.mapToItem(flickableContents, 0, cursorY - Units.gridUnit*3);
-
+        var pos = focusItem.mapToItem(flickableContents, 0, cursorY - Units.gridUnit*3);
         //focused item alreqady visible?
         if (pos.y >= mainFlickable.contentY && pos.y <= mainFlickable.contentY + mainFlickable.height) {
             return;
