@@ -125,6 +125,7 @@ Item {
 
         backgroundChanged();
         contentItemChanged();
+        mainFlickable.interactive = true;
     }
     onBackgroundChanged: {
         background.parent = flickableContents;
