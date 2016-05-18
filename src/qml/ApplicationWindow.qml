@@ -111,21 +111,6 @@ AbstractApplicationWindow {
      */
     property alias pageStack: __pageStack
 
-   /**
-    * header: AbstractApplicationHeader
-    * An item that can be used as a title for the application.
-    * Scrolling the main page will make it taller or shorter (trough the point of going away)
-    * It's a behavior similar to the typical mobile web browser adressbar
-    * the minimum, preferred and maximum heights of the item can be controlled with
-    * * Layout.minimumHeight: default is 0, i.e. hidden
-    * * Layout.preferredHeight: default is Units.gridUnit * 1.6
-    * * Layout.maximumHeight: default is Units.gridUnit * 3
-    *
-    * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
-    */
-   //FIXME: this should become an actual ApplicationHeader
-    property var header: undefined
-
     /**
      * controlsVisible: bool
      * This property controls wether the standard chrome of the app, such
@@ -149,6 +134,8 @@ AbstractApplicationWindow {
         id: __pageStack
         anchors {
             fill: parent
+            leftMargin: root.globalDrawer && root.globalDrawer.modal === false ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
+            rightMargin: root.contextDrawer && root.contextDrawer.modal === false ? root.contextDrawer.contentItem.width * root.contextDrawer.position : 0
             //HACK: workaround a bug in android iOS keyboard management
             bottomMargin: ((Qt.platform.os == "android" || Qt.platform.os == "ios") || !Qt.inputMethod.visible) ? 0 : Qt.inputMethod.keyboardRectangle.height
             onBottomMarginChanged: {
@@ -160,9 +147,9 @@ AbstractApplicationWindow {
         onCurrentIndexChanged: overscroll.y = 0;
 
         function goBack() {
-            if (root.contextDrawer && root.contextDrawer.opened) {
+            if (root.contextDrawer && root.contextDrawer.opened && root.contextDrawer.modal) {
                 root.contextDrawer.close();
-            } else if (root.globalDrawer && root.globalDrawer.opened) {
+            } else if (root.globalDrawer && root.globalDrawer.opened && root.globalDrawer.modal) {
                 root.globalDrawer.close();
             } else {
                 var backEvent = {accepted: false}
@@ -216,7 +203,7 @@ AbstractApplicationWindow {
     Component.onCompleted: {
         if (root.header === undefined) {
             var component = Qt.createComponent(Qt.resolvedUrl("./ApplicationHeader.qml"));
-            root.header = component.createObject(root);
+            root.header = component.createObject(root.contentItem.parent);
         }
     }
 }

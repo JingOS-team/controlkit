@@ -37,10 +37,10 @@ Item {
 
     onXChanged: {
         if (mouseArea.pressed || edgeMouseArea.pressed) {
-            if (globalDrawer && globalDrawer.enabled) {
+            if (globalDrawer && globalDrawer.enabled && globalDrawer.modal) {
                 globalDrawer.position = Math.min(1, Math.max(0, (x - button.parent.width/2 + button.width/2)/globalDrawer.contentItem.width + mouseArea.drawerShowAdjust));
             }
-            if (contextDrawer && contextDrawer.enabled) {
+            if (contextDrawer && contextDrawer.enabled && contextDrawer.modal) {
                 contextDrawer.position = Math.min(1, Math.max(0, (button.parent.width/2 - button.width/2 - x)/contextDrawer.contentItem.width + mouseArea.drawerShowAdjust));
             }
         }
@@ -58,8 +58,8 @@ Item {
             target: button
             //filterChildren: true
             axis: Drag.XAxis
-            minimumX: contextDrawer && contextDrawer.enabled ? 0 : button.parent.width/2 - button.width/2
-            maximumX: globalDrawer && globalDrawer.enabled ? button.parent.width : button.parent.width/2 - button.width/2
+            minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : button.parent.width/2 - button.width/2
+            maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? button.parent.width : button.parent.width/2 - button.width/2
         }
         height: Units.smallSpacing * 3
         width: button.parent.width
@@ -88,8 +88,8 @@ Item {
             target: button
             //filterChildren: true
             axis: Drag.XAxis
-            minimumX: contextDrawer && contextDrawer.enabled ? 0 : button.parent.width/2 - button.width/2
-            maximumX: globalDrawer && globalDrawer.enabled ? button.parent.width : button.parent.width/2 - button.width/2
+            minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : button.parent.width/2 - button.width/2
+            maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? button.parent.width : button.parent.width/2 - button.width/2
         }
 
         transform: Translate {

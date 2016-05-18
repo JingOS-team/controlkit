@@ -32,8 +32,8 @@ import "private"
  */
 AbstractDrawer {
     id: root
-    anchors.fill: parent
-    z: opened ? 9999 : 9998
+
+    z: opened ? 99 : 98
 
 //BEGIN Properties
     /**
@@ -83,6 +83,17 @@ AbstractDrawer {
      */
     property bool handleVisible: typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true
 
+    /**
+     * modal: bool
+     * If true the drawer will be an overlay of the main content,
+     * obscuring it and blocking input.
+     * If false, the drawer will look like a sidebar, with the main content
+     * application still usable.
+     * It is recomended to use modal on mobile devices and not modal on desktop
+     * devices.
+     * Default is true
+     */
+    //property bool modal: true
 //END Properties
 
 
@@ -171,6 +182,7 @@ AbstractDrawer {
         anchors.fill: parent
         color: "black"
         opacity: 0.6 * mainFlickable.internalPosition
+        visible: root.modal
     }
 
 
@@ -269,10 +281,13 @@ AbstractDrawer {
 
     MouseArea {
         id: handleMouseArea
+        z:999
         anchors {
             right: root.edge == Qt.LeftEdge ? undefined : parent.right
             left: root.edge == Qt.RightEdge ? undefined : parent.left
             bottom: parent.bottom
+            leftMargin: root.opened ? drawerPage.width : 0
+            rightMargin: root.opened ? drawerPage.width : 0
         }
         visible: root.handleVisible && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
         width: Units.iconSizes.medium
@@ -338,7 +353,7 @@ AbstractDrawer {
             id: mainFlickable
             property bool open
             anchors.fill: parent
-
+            interactive: root.modal
             onOpenChanged: {
                 if (open) {
                     root.open();
@@ -389,7 +404,11 @@ AbstractDrawer {
                 height: root.height + ((root.edge == Qt.TopEdge || root.edge == Qt.BottomEdge) ? drawerPage.height : 0)
                 onWidthChanged: {
                     if (root.edge == Qt.LeftEdge) {
-                        mainFlickable.contentX = drawerPage.width;
+                        if (root.opened) {
+                            mainFlickable.contentX = 0;
+                        } else {
+                            mainFlickable.contentX = drawerPage.width;
+                        }
                     }
                 }
                 onHeightChanged: {
@@ -397,6 +416,7 @@ AbstractDrawer {
                         mainFlickable.contentY = drawerPage.Height;
                     }
                 }
+
 
                 Rectangle {
                     id: drawerPage

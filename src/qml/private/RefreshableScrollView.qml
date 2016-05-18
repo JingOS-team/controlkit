@@ -199,7 +199,7 @@ ScrollView {
                 target: root.flickableItem
                 property: "topMargin"
                 //value: root.topPadding + (root.refreshing ? busyIndicatorFrame.height : 0)
-                value: Math.max(root.topPadding + (root.refreshing ? busyIndicatorFrame.height : 0), applicationWindow().header.height + applicationWindow().header.y)
+                value: Math.max(root.topPadding + (root.refreshing ? busyIndicatorFrame.height : 0), applicationWindow().header.height)
             }
 
             Binding {
