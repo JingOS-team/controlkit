@@ -35,96 +35,27 @@ import org.kde.kirigami 1.0
  *
  * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
  */
-Rectangle {
-    id: headerItem
-    z: 99
-    anchors {
-        left: parent.left
-        right: parent.right
-    }
-    color: Theme.highlightColor
+Item {
+    id: root
+    z: 90
+    readonly property bool wideScreen: __appWindow.pageStack.width >= __appWindow.pageStack.defaultColumnWidth*2
     property int minimumHeight: 0
     property int preferredHeight: Units.gridUnit * 1.6
     property int maximumHeight: Units.gridUnit * 3
     default property alias contentItem: mainItem.data
-    readonly property bool wideScreen: __appWindow.pageStack.width >= __appWindow.pageStack.defaultColumnWidth*2
 
+    parent: __appWindow.contentItem.parent
+    //FIXME: remove
+    property QtObject __appWindow: applicationWindow();
+
+    anchors {
+        top: parent.top
+        left: parent.left
+        right: parent.right
+    }
     height: maximumHeight
 
-    y: 0
-
-    property QtObject __appWindow: applicationWindow();
-    //parent: __appWindow.pageStack;
-    parent: __appWindow.contentItem
-
-    transform: Translate {
-        id: translateTransform
-        y: __appWindow.controlsVisible ? 0 : -headerItem.height - shadow.height
-        Behavior on y {
-            NumberAnimation {
-                duration: Units.longDuration
-                easing.type: translateTransform.y < 0 ? Easing.OutQuad : Easing.InQuad
-            }
-        }
-    }
-
-    onWideScreenChanged: {
-        if (wideScreen) {
-            y = -headerItem.maximumHeight + headerItem.preferredHeight;
-        } else {
-            y = 0;
-        }
-    }
-    Connections {
-        id: headerSlideConnection
-        target: __appWindow.pageStack.currentItem ? __appWindow.pageStack.currentItem.flickable : null
-        property int oldContentY
-        onContentYChanged: {
-            if (!__appWindow.pageStack.currentItem) {
-                return;
-            }
-            if (__appWindow.pageStack.currentItem.flickable.atYBeginning ||
-                __appWindow.pageStack.currentItem.flickable.atYEnd) {
-                return;
-            }
-
-            if (headerItem.wideScreen) {
-                headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
-            } else {
-                headerItem.y = Math.min(0, Math.max(-headerItem.height + headerItem.minimumHeight, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
-                oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
-            }
-        }
-        onMovementEnded: {
-            if (headerItem.y > -headerItem.maximumHeight + headerItem.preferredHeight) {
-                //if don't change the position if more then preferredSize is shown
-            } else if (headerItem.y > -headerItem.maximumHeight + headerItem.preferredHeight - headerItem.preferredHeight/2 ) {
-                headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
-            } else {
-                headerItem.y = -headerItem.maximumHeight;
-            }
-        }
-    }
-    Connections {
-        target: __appWindow.pageStack
-        onCurrentItemChanged: {
-            if (!__appWindow.pageStack.currentItem) {
-                return;
-            }
-            if (__appWindow.pageStack.currentItem.flickable) {
-                headerSlideConnection.oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
-            } else {
-                headerSlideConnection.oldContentY = 0;
-            }
-            if (!headerItem.wideScreen && __appWindow.pageStack.currentItem.flickable) {
-                headerItem.y = 0;
-            } else {
-                headerItem.y = -headerItem.maximumHeight + headerItem.preferredHeight;
-            }
-        }
-    }
-
-    Behavior on y {
+    Behavior on height {
         enabled: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable && !__appWindow.pageStack.currentItem.flickable.moving
         NumberAnimation {
             duration: Units.longDuration
@@ -132,34 +63,118 @@ Rectangle {
         }
     }
 
-    Item {
-        id: mainItem
-        property Translate overshootTransform
-        Component.onCompleted: {
-            if (applicationWindow() && applicationWindow().pageStack.transform[0]) {
-                overshootTransform = applicationWindow().pageStack.transform[0]
-            }
-        }
-        anchors {
-            fill: parent
-            topMargin: overshootTransform && overshootTransform.y > 0 ? 0 : Math.min(headerItem.height - headerItem.preferredHeight, -headerItem.y)
+    opacity: height > 0 ? 1 : 0
+    Behavior on opacity {
+        OpacityAnimator {
+            duration: Units.longDuration
+            easing.type: Easing.InOutQuad
         }
     }
 
-    EdgeShadow {
-        id: shadow
-        edge: Qt.TopEdge
-        opacity: headerItem.y > -headerItem.height ? 1 : 0
-        anchors {
-            right: parent.right
-            left: parent.left
-            top: parent.bottom
+    onWideScreenChanged: {
+        if (wideScreen) {
+            height = preferredHeight;
+        } else {
+            height = maximumHeight;
         }
-        Behavior on opacity {
-            OpacityAnimator {
-                duration: Units.longDuration
-                easing.type: Easing.InOutQuad
+    }
+
+    Rectangle {
+        id: headerItem
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
+        color: Theme.highlightColor
+
+        height: parent.maximumHeight
+
+        transform: Translate {
+            id: translateTransform
+            y: __appWindow.controlsVisible ? 0 : -headerItem.height - shadow.height
+            Behavior on y {
+                NumberAnimation {
+                    duration: Units.longDuration
+                    easing.type: translateTransform.y < 0 ? Easing.OutQuad : Easing.InQuad
+                }
+            }
+        }
+
+        Connections {
+            id: headerSlideConnection
+            target: __appWindow.pageStack.currentItem ? __appWindow.pageStack.currentItem.flickable : null
+            property int oldContentY
+            onContentYChanged: {
+                if (!__appWindow.pageStack.currentItem) {
+                    return;
+                }
+                if (__appWindow.pageStack.currentItem.flickable.atYBeginning ||
+                    __appWindow.pageStack.currentItem.flickable.atYEnd) {
+                    return;
+                }
+
+                if (root.wideScreen) {
+                    root.height = root.preferredHeight;
+                } else {
+                    root.height = Math.min(root.maximumHeight,
+                                           Math.max(root.minimumHeight,
+                                               root.height + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
+                    oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
+                }
+            }
+            onMovementEnded: {
+                if (root.height > root.preferredHeight) {
+                    //if don't change the position if more then preferredSize is shown
+                } else if (root.height > root.preferredHeight/2 ) {
+                    root.height = root.preferredHeight;
+                } else {
+                    root.height = 0;
+                }
+            }
+        }
+        Connections {
+            target: __appWindow.pageStack
+            onCurrentItemChanged: {
+                if (!__appWindow.pageStack.currentItem) {
+                    return;
+                }
+                if (__appWindow.pageStack.currentItem.flickable) {
+                    headerSlideConnection.oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
+                } else {
+                    headerSlideConnection.oldContentY = 0;
+                }
+                if (!root.wideScreen && __appWindow.pageStack.currentItem.flickable) {
+                    root.height = root.maximumHeight;
+                } else {
+                    root.height = root.preferredHeight;
+                }
+            }
+        }
+
+        Item {
+            id: mainItem
+            property Translate overshootTransform
+            Component.onCompleted: {
+                if (applicationWindow() && applicationWindow().pageStack.transform[0]) {
+                    overshootTransform = applicationWindow().pageStack.transform[0]
+                }
+            }
+            anchors {
+                fill: parent
+                topMargin: overshootTransform && overshootTransform.y > 0 ? 0 : Math.min(headerItem.height - root.height, headerItem.height - root.preferredHeight)
+            }
+        }
+
+        EdgeShadow {
+            id: shadow
+            edge: Qt.TopEdge
+            anchors {
+                right: parent.right
+                left: parent.left
+                top: parent.bottom
             }
         }
     }
 }
+
