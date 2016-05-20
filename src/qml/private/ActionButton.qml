@@ -203,10 +203,12 @@ Item {
                 height: parent.height - Units.smallSpacing*2
                 width: height
                 visible: button.action
-                color: button.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || button.action.checked) ? Theme.highlightColor : Theme.backgroundColor
+                readonly property bool pressed: button.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || button.action.checked)
+                color: pressed ? Theme.highlightColor : Theme.backgroundColor
                 Icon {
                     id: icon
                     source: button.action && button.action.iconName ? button.action.iconName : ""
+                    selected: buttonGraphics.pressed
                     anchors {
                         fill: parent
                         margins: Units.smallSpacing
@@ -227,6 +229,7 @@ Item {
             }
             //left button
             Rectangle {
+                id: leftButtonGraphics
                 z: -1
                 anchors {
                     right: parent.horizontalCenter
@@ -236,10 +239,12 @@ Item {
                 height: buttonGraphics.height * 0.7
                 width: height + Units.iconSizes.smallMedium
                 visible: button.leftAction
-                color: button.leftAction && ((button.leftAction && mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || button.leftAction.checked) ? Theme.highlightColor : Theme.backgroundColor
+                readonly property bool pressed: button.leftAction && ((button.leftAction && mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || button.leftAction.checked)
+                color: pressed ? Theme.highlightColor : Theme.backgroundColor
                 Icon {
                     source: button.leftAction && button.leftAction.iconName ? button.leftAction.iconName : ""
                     width: height
+                    selected: leftButtonGraphics.pressed
                     anchors {
                         left: parent.left
                         top: parent.top
@@ -250,6 +255,7 @@ Item {
             }
             //right button
             Rectangle {
+                id: rightButtonGraphics
                 z: -1
                 anchors {
                     left: parent.horizontalCenter
@@ -259,10 +265,12 @@ Item {
                 height: buttonGraphics.height * 0.7
                 width: height + Units.iconSizes.smallMedium
                 visible: button.rightAction
-                color: button.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || button.rightAction.checked) ? Theme.highlightColor : Theme.backgroundColor
+                readonly property bool pressed: button.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || button.rightAction.checked)
+                color: pressed ? Theme.highlightColor : Theme.backgroundColor
                 Icon {
                     source: button.rightAction && button.rightAction.iconName ? button.rightAction.iconName : ""
                     width: height
+                    selected: rightButtonGraphics.pressed
                     anchors {
                         right: parent.right
                         top: parent.top

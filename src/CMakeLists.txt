@@ -13,12 +13,12 @@ install(TARGETS kirigamiplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigam
 install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
 
 #TODO: selectively install plasma and Desktop styles
-install(DIRECTORY styles/Fallback DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles/Fallback)
+install(DIRECTORY styles/Fallback DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles)
 if (PLASMA_ENABLED)
-    install(DIRECTORY styles/Plasma DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles/Plasma)
+    install(DIRECTORY styles/Plasma DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles)
 endif()
 if (DESKTOP_ENABLED)
-    install(DIRECTORY styles/Desktop DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles/Desktop)
+    install(DIRECTORY styles/Desktop DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles)
 endif()
 
 install(FILES ${platformspecific} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)

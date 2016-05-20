@@ -26,8 +26,25 @@ Item {
     id: root
     property alias source: icon.icon
     property alias smooth: icon.smooth
-    property bool active: icon.state == QIconItem.ActiveState
+    property bool active: false
     property bool valid: true
+    property bool selected: false
+    onSelectedChanged: {
+        if (selected) {
+            icon.state = QIconItem.SelectedState;
+            active = false;
+        } else if (icon.state == QIconItem.SelectedState) {
+            icon.state = QIconItem.DefaultState;
+        }
+    }
+    onActiveChanged: {
+        if (active) {
+            icon.state = QIconItem.ActiveState;
+            selected = false;
+        } else if (icon.state == QIconItem.ActiveState) {
+            icon.state = QIconItem.DefaultState;
+        }
+    }
 
     implicitWidth: icon.icon != "" ? Units.iconSizes.smallMedium : 0
     implicitHeight: icon.icon != "" ? Units.iconSizes.smallMedium : 0

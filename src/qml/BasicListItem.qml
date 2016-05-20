@@ -56,10 +56,11 @@ AbstractListItem {
             Layout.maximumHeight: Layout.minimumHeight
             Layout.minimumWidth: height
             source: listItem.icon
+            selected: listItem.checked || listItem.pressed
         }
         Label {
             text: listItem.label
-            color: listItem.checked ? Theme.viewHighlightedTextColor : Theme.viewTextColor
+            color: listItem.checked || listItem.pressed ? Theme.highlightedTextColor : Theme.viewTextColor
         }
     }
 }

@@ -27,6 +27,7 @@ Item {
     property alias smooth: image.smooth
     property bool active: false
     property bool valid: image.status == Image.Ready 
+    property bool selected: false
 
     implicitWidth: image.source != "" ? Units.iconSizes.smallMedium : 0
     implicitHeight: image.source != "" ? Units.iconSizes.smallMedium : 0
@@ -37,6 +38,15 @@ Item {
         source: root.source != "" ? (root.source.indexOf(".") === -1 ? "../../icons/" + root.source + ".svg" : root.source) : root.source
         sourceSize.width: root.width
         sourceSize.height: root.height
+    }
+    ColorOverlay {
+
+        anchors.fill: parent
+        source: image
+        color: Theme.highlightedTextColor
+        cached: true
+        visible: root.selected
+       // opacity: icon.color.a
     }
     /* // FIXME: This causes black squares on some GLES drivers, notably on Adreno hardware
     GammaAdjust {
