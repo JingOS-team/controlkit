@@ -34,12 +34,6 @@ Kirigami.ApplicationWindow {
         modal: false
         contentItem: Item {
             implicitWidth: Kirigami.Units.gridUnit * 10
-            /*anchors {
-                left: parent.left
-                top: parent.top
-                bottom: parent.bottom
-                topMargin: header.height
-            }*/
 
             Kirigami.Label {
                 text: "This is a sidebar"

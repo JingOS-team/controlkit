@@ -37,7 +37,7 @@ Kirigami.ApplicationWindow {
         title: "Widget gallery"
         titleIcon: "applications-graphics"
         bannerImageSource: "banner.jpg"
-modal:false
+
         actions: [
             Kirigami.Action {
                 text: "View"
