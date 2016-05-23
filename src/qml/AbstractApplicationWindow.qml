@@ -159,6 +159,13 @@ Controls.ApplicationWindow {
     property AbstractDrawer globalDrawer
 
     /**
+     * wideScreen: bool
+     * If true the application is considered to be in "widescreen" mode, such as on desktops or horizontal tablets.
+     * Different styles can have an own logic for deciding this
+     */
+    property bool wideScreen: width >= Units.gridUnit * 60
+
+    /**
      * contextDrawer: AbstractDrawer
      * The drawer for context-dependednt actions, that will be opened by sliding from the
      * right screen edge or by dragging the ActionButton to the left.

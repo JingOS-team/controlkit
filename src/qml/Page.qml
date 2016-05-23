@@ -298,7 +298,7 @@ Item {
         anchors {
             fill: parent
             leftMargin: leftPadding
-            topMargin: topPadding
+            topMargin: topPadding + (applicationWindow === undefined || applicationWindow().wideScreen ? 0 : applicationWindow().header.height)
             rightMargin: rightPadding
             bottomMargin: bottomPadding
         }

@@ -119,6 +119,8 @@ AbstractApplicationWindow {
      */
     property bool controlsVisible: true
 
+    //redefines here as here we can know a pointer to PageRow
+    wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth*2
 
     MouseArea {
         anchors.fill: parent
@@ -134,6 +136,7 @@ AbstractApplicationWindow {
         id: __pageStack
         anchors {
             fill: parent
+            topMargin: root.wideScreen && header ? header.height : 0
             leftMargin: root.globalDrawer && root.globalDrawer.modal === false ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
             rightMargin: root.contextDrawer && root.contextDrawer.modal === false ? root.contextDrawer.contentItem.width * root.contextDrawer.position : 0
             //HACK: workaround a bug in android iOS keyboard management

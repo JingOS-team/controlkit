@@ -90,7 +90,7 @@ AbstractApplicationHeader {
 
         function gotoIndex(idx) {
             //don't actually scroll in widescreen mode
-            if (header.wideScreen) {
+            if (__appWindow.wideScreen) {
                 return;
             }
             listScrollAnim.running = false
@@ -116,7 +116,7 @@ AbstractApplicationHeader {
         onContentWidthChanged: gotoIndex(currentIndex);
 
         onContentXChanged: {
-            if (header.wideScreen && !__appWindow.pageStack.contentItem.moving) {
+            if (__appWindow.wideScreen && !__appWindow.pageStack.contentItem.moving) {
                 //FIXME: needs the rewrite to be properly fixed, disable sync in this direction for now
                // __appWindow.pageStack.contentItem.contentX = titleList.contentX
             }
@@ -125,7 +125,7 @@ AbstractApplicationHeader {
             titleList.returnToBounds()
         }
         onMovementEnded: {
-            if (header.wideScreen) {
+            if (__appWindow.wideScreen) {
                 __appWindow.pageStack.contentItem.movementEnded();
             }
         }
@@ -149,7 +149,7 @@ AbstractApplicationHeader {
 
             width: {
                 //more columns shown?
-                if (header.wideScreen) {
+                if (__appWindow.wideScreen) {
                     if (modelData == 0 && titleList.backButton) {
                         return page.width - Math.max(0, titleList.backButton.width - __appWindow.pageStack.x);
                     } else {
@@ -177,14 +177,14 @@ AbstractApplicationHeader {
             }
             Row {
                 id: delegateRoot
-                x: Units.smallSpacing + header.wideScreen ? (Math.min(delegate.width - width, Math.max(0, titleList.contentX - delegate.x))) : 0
+                x: Units.smallSpacing + __appWindow.wideScreen ? (Math.min(delegate.width - width, Math.max(0, titleList.contentX - delegate.x))) : 0
 
                 spacing: Units.smallSpacing
                 Item {
                     height: title.height
                     width: titleList.isTabBar ? Math.min(Units.gridUnit/2, title.height / 2) : parent.height/2
                     opacity: modelData > 0 ? 0.4 : 0
-                    visible: !header.wideScreen && opacity > 0
+                    visible: !__appWindow.wideScreen && opacity > 0
                     layer.enabled: true
                     Rectangle {
                         color: Theme.viewBackgroundColor
@@ -220,7 +220,7 @@ AbstractApplicationHeader {
             }
         }
         Connections {
-            target: header.wideScreen ? __appWindow.pageStack.contentItem : null
+            target: __appWindow.wideScreen ? __appWindow.pageStack.contentItem : null
             onContentXChanged: {
                 if (!titleList.contentItem.moving) {
                     titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
