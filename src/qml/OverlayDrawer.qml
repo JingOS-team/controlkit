@@ -33,7 +33,7 @@ import "private"
 AbstractDrawer {
     id: root
 
-    z: opened ? 99 : 98
+    z: modal ? (opened ? 100 : 99 ): 98
 
 //BEGIN Properties
     /**
