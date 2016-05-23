@@ -74,6 +74,7 @@ Item {
 
         visible: action != null || leftAction != null || rightAction != null
         property bool internalVisibility: (applicationWindow === undefined || applicationWindow().controlsVisible) && (button.action === null || button.action.visible === undefined || button.action.visible)
+        preventStealing: true
         onInternalVisibilityChanged: {
             showAnimation.running = false;
             if (internalVisibility) {
@@ -119,21 +120,21 @@ Item {
             drawerShowAdjust = 0;
 
             //project where it would be a full second in the future
-            if (globalDrawer && x + speed > Math.min(button.parent.width/4*3, button.parent.width/2 + globalDrawer.contentItem.width/2)) {
+            if (globalDrawer && globalDrawer.modal && x + speed > Math.min(button.parent.width/4*3, button.parent.width/2 + globalDrawer.contentItem.width/2)) {
                 globalDrawer.open();
                 contextDrawer.close();
             } else if (contextDrawer && x + speed < Math.max(button.parent.width/4, button.parent.width/2 - contextDrawer.contentItem.width/2)) {
-                if (contextDrawer) {
+                if (contextDrawer && contextDrawer.modal) {
                     contextDrawer.open();
                 }
-                if (globalDrawer) {
+                if (globalDrawer && globalDrawer.modal) {
                     globalDrawer.close();
                 }
             } else {
-                if (globalDrawer) {
+                if (globalDrawer && globalDrawer.modal) {
                     globalDrawer.close();
                 }
-                if (contextDrawer) {
+                if (contextDrawer && contextDrawer.modal) {
                     contextDrawer.close();
                 }
             }
@@ -165,7 +166,7 @@ Item {
         Connections {
             target: globalDrawer
             onPositionChanged: {
-                if (!mouseArea.pressed && !edgeMouseArea.pressed) {
+                if ( globalDrawer && globalDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed) {
                     button.x = globalDrawer.contentItem.width * globalDrawer.position + button.parent.width/2 - button.width/2;
                 }
             }
@@ -173,7 +174,7 @@ Item {
         Connections {
             target: contextDrawer
             onPositionChanged: {
-                if (!mouseArea.pressed && !edgeMouseArea.pressed) {
+                if (contextDrawer && contextDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed) {
                     button.x = button.parent.width/2 - button.width/2 - contextDrawer.contentItem.width * contextDrawer.position;
                 }
             }
