@@ -152,18 +152,22 @@ AbstractDrawer {
 
 //BEGIN Signal handlers
     onPositionChanged: {
-        if (!mainFlickable.flicking && !mainFlickable.dragging && !mainAnim.running) {
-            switch (root.edge) {
-            case Qt.RightEdge:
-                mainFlickable.contentX = drawerPage.width * position;
-                break;
-            case Qt.LeftEdge:
-                mainFlickable.contentX = drawerPage.width * (1-position);
-                break;
-            case Qt.BottomEdge:
-                mainFlickable.contentY = drawerPage.height * position;
-                break;
+        if (!mainFlickable.loopCheck) {
+            mainFlickable.loopCheck = true;
+            if (!mainFlickable.flicking && !mainFlickable.dragging && !mainAnim.running) {
+                switch (root.edge) {
+                case Qt.RightEdge:
+                    mainFlickable.contentX = drawerPage.width * position;
+                    break;
+                case Qt.LeftEdge:
+                    mainFlickable.contentX = drawerPage.width * (1-position);
+                    break;
+                case Qt.BottomEdge:
+                    mainFlickable.contentY = drawerPage.height * position;
+                    break;
+                }
             }
+            mainFlickable.loopCheck = false;
         }
     }
     onContentItemChanged: {
@@ -379,8 +383,13 @@ AbstractDrawer {
                     return 1 - (mainFlickable.contentY/drawerPage.height);
                 }
             }
+            property bool loopCheck: false
             onInternalPositionChanged: {
-                root.position = internalPosition;
+                if (!loopCheck) {
+                    loopCheck = true;
+                    root.position = internalPosition;
+                    loopCheck = false;
+                }
             }
 
             onFlickingChanged: {

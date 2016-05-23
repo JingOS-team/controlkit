@@ -36,7 +36,7 @@ Item {
 
 
     onXChanged: {
-        if (mouseArea.pressed || edgeMouseArea.pressed) {
+        if (mouseArea.pressed || edgeMouseArea.pressed || fakeContextMenuButton.pressed) {
             if (globalDrawer && globalDrawer.enabled && globalDrawer.modal) {
                 globalDrawer.position = Math.min(1, Math.max(0, (x - button.parent.width/2 + button.width/2)/globalDrawer.contentItem.width + mouseArea.drawerShowAdjust));
             }
@@ -68,6 +68,7 @@ Item {
         onPositionChanged: mouseArea.positionChanged(mouse)
         onReleased: mouseArea.released(mouse)
     }
+
     MouseArea {
         id: mouseArea
         anchors.fill: parent
@@ -105,6 +106,12 @@ Item {
         property bool rightButtonPressedUnderMouse: false
 
         onPressed: {
+            //search if we have a page to set to current
+            if (applicationWindow !== undefined && applicationWindow().pageStack.currentIndex !== undefined) {
+                //search the button parent's parent, that is the page parent
+                //this will make the context drawer open for the proper page
+                applicationWindow().pageStack.currentIndex = button.parent.parent.level;
+            }
             downTimestamp = (new Date()).getTime();
             startX = button.x + button.width/2;
             startMouseY = mouse.y;
@@ -166,7 +173,7 @@ Item {
         Connections {
             target: globalDrawer
             onPositionChanged: {
-                if ( globalDrawer && globalDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed) {
+                if ( globalDrawer && globalDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
                     button.x = globalDrawer.contentItem.width * globalDrawer.position + button.parent.width/2 - button.width/2;
                 }
             }
@@ -174,7 +181,7 @@ Item {
         Connections {
             target: contextDrawer
             onPositionChanged: {
-                if (contextDrawer && contextDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed) {
+                if (contextDrawer && contextDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
                     button.x = button.parent.width/2 - button.width/2 - contextDrawer.contentItem.width * contextDrawer.position;
                 }
             }
@@ -282,6 +289,56 @@ Item {
             samples: 16
             color: Qt.rgba(0, 0, 0, 0.5)
             source: background
+        }
+    }
+
+    MouseArea {
+        id: fakeContextMenuButton
+        anchors {
+            right: edgeMouseArea.right
+            bottom: edgeMouseArea.bottom
+            margins: -1
+        }
+        drag {
+            target: button
+            //filterChildren: true
+            axis: Drag.XAxis
+            minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : button.parent.width/2 - button.width/2
+            maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? button.parent.width : button.parent.width/2 - button.width/2
+        }
+        visible: applicationWindow === undefined || applicationWindow().wideScreen
+
+        width: Units.iconSizes.medium
+        height: width
+
+        Rectangle {
+            color: Theme.viewBackgroundColor
+            opacity: parent.pressed ? 1 : 0.3
+            anchors.fill: parent
+            border {
+                width: Math.ceil(Units.smallSpacing / 5)
+                color: Theme.textColor
+            }
+        }
+
+        ContextIcon {
+            anchors.centerIn: parent
+            width: height
+            height: Units.iconSizes.smallMedium - Units.smallSpacing * 2
+        }
+
+        onPressed: mouseArea.onPressed(mouse)
+        onReleased: {
+            if (contextDrawer.position > 0.5 || contextDrawer.position < 0.1) {
+                contextDrawer.open();
+            } else {
+                contextDrawer.close();
+            }
+            if (globalDrawer.position > 0.5) {
+                globalDrawer.open();
+            } else {
+                globalDrawer.close();
+            }
         }
     }
 }

@@ -373,20 +373,6 @@ Item {
         }
     }
 
-    //show a separator when the app has a sidebar
-    Rectangle {
-        z: 999
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            left: parent.left
-        }
-        width: Math.ceil(Units.smallSpacing / 5)
-        color: Theme.textColor
-        opacity: 0.3
-        visible: root.x > 0
-    }
-
     Rectangle {
         height: Units.smallSpacing
         width: root.width/root.depth
