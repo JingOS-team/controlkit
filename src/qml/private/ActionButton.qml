@@ -306,7 +306,7 @@ Item {
             minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : button.parent.width/2 - button.width/2
             maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? button.parent.width : button.parent.width/2 - button.width/2
         }
-        visible: applicationWindow === undefined || applicationWindow().wideScreen
+        visible: button.parent.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
 
         width: Units.iconSizes.medium
         height: width
