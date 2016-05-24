@@ -119,6 +119,12 @@ Kirigami.ApplicationWindow {
             objectName: "settingsPage"
             Rectangle {
                 anchors.fill: parent
+                Controls.Button {
+                    anchors.centerIn: parent
+                    iconName: "go-previous"
+                    text: "Remove Page"
+                    onClicked: applicationWindow().pageStack.pop();
+                }
             }
         }
     }

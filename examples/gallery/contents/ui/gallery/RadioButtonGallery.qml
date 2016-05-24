@@ -43,8 +43,16 @@ ScrollablePage {
             }
         }
     }
+
+
     ColumnLayout {
         width: page.width
+        Controls.ExclusiveGroup {
+            id: radioGroup
+        }
+        Controls.ExclusiveGroup {
+            id: radioGroup2
+        }
 
         Item {
             Layout.fillWidth: true
@@ -72,11 +80,13 @@ ScrollablePage {
                 Controls.RadioButton {
                     text: "On"
                     checked: true
+                    exclusiveGroup: radioGroup
                 }
                 Controls.RadioButton {
                     text: "On"
                     checked: true
                     enabled: false
+                    exclusiveGroup: radioGroup2
                 }
                 Label {
                     text: "Off"
@@ -84,11 +94,13 @@ ScrollablePage {
                 Controls.RadioButton {
                     text: "Off"
                     checked: false
+                    exclusiveGroup: radioGroup
                 }
                 Controls.RadioButton {
                     text: "Off"
                     checked: false
                     enabled: false
+                    exclusiveGroup: radioGroup2
                 }
             }
         }
