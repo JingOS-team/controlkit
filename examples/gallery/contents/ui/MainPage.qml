@@ -32,13 +32,6 @@ Kirigami.ScrollablePage {
 
     title: "Gallery"
 
-    supportsRefreshing: true
-    onRefreshingChanged: {
-        if (refreshing) {
-            refreshRequestTimer.running = true;
-        }
-    }
-
     //flickable: mainListView
     actions {
         contextualActions: [
@@ -64,15 +57,9 @@ Kirigami.ScrollablePage {
         ]
     }
 
-
-
     ListView {
         id: mainListView
-        Timer {
-            id: refreshRequestTimer
-            interval: 3000
-            onTriggered: pageRoot.refreshing = false
-        }
+
         model: ListModel {
             ListElement {
                 text: "Button"
