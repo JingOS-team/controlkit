@@ -380,7 +380,7 @@ Item {
 
     Rectangle {
         height: Units.smallSpacing
-        width: root.width/root.depth
+        width: root.width * root.width/mainLayout.width
         anchors.bottom: parent.bottom
         color: Theme.textColor
         opacity: 0
