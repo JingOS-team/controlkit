@@ -84,6 +84,8 @@ OverlayDrawer {
     enabled: menu.count > 0
     edge: Qt.RightEdge
 
+    handleVisible: applicationWindow == undefined || applicationWindow().wideScreen == false
+
     Connections {
         target: pageStack
         onCurrentItemChanged: {

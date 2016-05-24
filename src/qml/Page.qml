@@ -47,7 +47,7 @@ Item {
      * topPadding: int
      * default contents padding at top
      */
-    property int topPadding: Units.gridUnit + (applicationWindow() && applicationWindow().header ? applicationWindow().header.preferredHeight : 0)
+    property int topPadding: Units.gridUnit
 
     /**
      * rightPadding: int
@@ -273,11 +273,6 @@ Item {
         action: root.mainAction
         leftAction: root.leftAction
         rightAction: root.rightAction
-        anchors {
-            bottom: parent.bottom
-            bottomMargin: Units.smallSpacing
-        }
-        x: parent.width/2 - width/2
     }
 
     Item {
@@ -298,7 +293,7 @@ Item {
         anchors {
             fill: parent
             leftMargin: leftPadding
-            topMargin: topPadding
+            topMargin: topPadding + (applicationWindow === undefined || applicationWindow().wideScreen ? 0 : applicationWindow().header.height)
             rightMargin: rightPadding
             bottomMargin: bottomPadding
         }

@@ -30,9 +30,8 @@ import "private"
  */
 AbstractDrawer {
     id: root
-    anchors {
-        fill: parent
-    }
+    z:0
+
     visible: true
 
     /**
@@ -54,12 +53,38 @@ AbstractDrawer {
      * component.
      */
     property alias opened: sidebar.open
-    
+
+    /**
+     * position: real
+     * This property holds the position of the drawer relative to its
+     * final destination. That is, the position will be 0 when the
+     * drawer is fully closed, and 1 when fully open.
+     */
+    property real position: 0
+
+    /**
+     * modal: bool
+     * If true the drawer will be an overlay of the main content,
+     * obscuring it and blocking input.
+     * If false, the drawer will look like a sidebar, with the main content
+     * application still usable.
+     * It is recomended to use modal on mobile devices and not modal on desktop
+     * devices.
+     * Default is true
+     */
+    //property bool modal: true
 
     Component.onCompleted: {
         mainPage.width = browserFrame.width
     }
 
+    onPositionChanged: {
+        if (!browserFrame.loopCheck) {
+            browserFrame.loopCheck = true;
+            browserFrame.x = position * sidebar.width;
+            browserFrame.loopCheck = false;
+        }
+    }
     onContentItemChanged: contentItem.parent = drawerPage
     MouseArea {
         id: mouseEventListener
@@ -71,6 +96,7 @@ AbstractDrawer {
         property int startBrowserFrameX
         property bool toggle: false
         property string startState
+        enabled: root.modal
 
         anchors.fill: parent
 
@@ -113,8 +139,17 @@ AbstractDrawer {
         id: browserFrame
         z: 100
         color: Theme.backgroundColor
-        state: "Closed"
+        state: sidebar.open ? "Open" : "Closed"
         onStateChanged: sidebar.open = (state != "Closed")
+        readonly property real position: Math.abs(x) / sidebar.width
+        property bool loopCheck: false
+        onPositionChanged: {
+            if (!loopCheck) {
+                loopCheck = true;
+                root.position = position;
+                loopCheck = false;
+            }
+        }
 
         anchors {
             top: parent.top
@@ -133,8 +168,10 @@ AbstractDrawer {
             anchors.fill: parent
             color: "black"
             opacity: Math.min(0.4, 0.4 * (browserFrame.x / sidebar.width))
+            visible: root.modal
         }
         EdgeShadow {
+            edge: Qt.RightEdge
             anchors {
                 right: parent.left
                 top: parent.top

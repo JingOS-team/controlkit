@@ -29,6 +29,39 @@ ScrollablePage {
 
     title: "Multiple Columns"
 
+    actions {
+        main: Action {
+            iconName: "document-edit"
+            onTriggered: {
+                print("Action button in buttons page clicked");
+            }
+        }
+        left: Action {
+            iconName: "go-previous"
+            onTriggered: {
+                print("Left action triggered")
+            }
+        }
+        right: Action {
+            iconName: "go-next"
+            onTriggered: {
+                print("Right action triggered")
+            }
+        }
+        contextualActions: [
+            Action {
+                text:"Action for buttons"
+                iconName: "bookmarks"
+                onTriggered: print("Action 1 clicked")
+            },
+            Action {
+                text:"Action 2"
+                iconName: "folder"
+                enabled: false
+            }
+        ]
+    }
+
     ColumnLayout {
         width: page.width
         spacing: Units.smallSpacing

@@ -38,7 +38,6 @@ import org.kde.kirigami 1.0
 Item {
     id: root
     z: 90
-    readonly property bool wideScreen: __appWindow.pageStack.width >= __appWindow.pageStack.defaultColumnWidth*2
     property int minimumHeight: 0
     property int preferredHeight: Units.gridUnit * 1.6
     property int maximumHeight: Units.gridUnit * 3
@@ -71,11 +70,14 @@ Item {
         }
     }
 
-    onWideScreenChanged: {
-        if (wideScreen) {
-            height = preferredHeight;
-        } else {
-            height = maximumHeight;
+    Connections {
+        target: __appWindow
+        onWideScreenChanged: {
+            if (wideScreen) {
+                height = preferredHeight;
+            } else {
+                height = maximumHeight;
+            }
         }
     }
 
@@ -114,7 +116,7 @@ Item {
                     return;
                 }
 
-                if (root.wideScreen) {
+                if (__appWindow.wideScreen) {
                     root.height = root.preferredHeight;
                 } else {
                     root.height = Math.min(root.maximumHeight,
@@ -144,7 +146,7 @@ Item {
                 } else {
                     headerSlideConnection.oldContentY = 0;
                 }
-                if (!root.wideScreen && __appWindow.pageStack.currentItem.flickable) {
+                if (!__appWindow.wideScreen && __appWindow.pageStack.currentItem.flickable) {
                     root.height = root.maximumHeight;
                 } else {
                     root.height = root.preferredHeight;

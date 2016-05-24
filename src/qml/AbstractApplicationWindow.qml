@@ -138,8 +138,9 @@ Controls.ApplicationWindow {
     * * Layout.maximumHeight: default is Units.gridUnit * 3
     *
     * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
+    * //FIXME: this should become an actual ApplicationHeader
     */
-    property ApplicationHeader header
+    property var header: undefined
 
     /**
      * controlsVisible: bool
@@ -156,6 +157,13 @@ Controls.ApplicationWindow {
      * It is recommended to use the GlobalDrawer class here
      */
     property AbstractDrawer globalDrawer
+
+    /**
+     * wideScreen: bool
+     * If true the application is considered to be in "widescreen" mode, such as on desktops or horizontal tablets.
+     * Different styles can have an own logic for deciding this
+     */
+    property bool wideScreen: width >= Units.gridUnit * 60
 
     /**
      * contextDrawer: AbstractDrawer
@@ -208,11 +216,17 @@ Controls.ApplicationWindow {
      */
     property AbstractDrawer contextDrawer
 
-    onGlobalDrawerChanged: {
-        globalDrawer.parent = contentItem.parent;
+    Binding {
+        when: globalDrawer !== undefined
+        target: globalDrawer
+        property: "parent"
+        value: contentItem.parent
     }
-    onContextDrawerChanged: {
-        contextDrawer.parent = contentItem.parent;
+    Binding {
+        when: contextDrawer !== undefined
+        target: contextDrawer
+        property: "parent"
+        value: contentItem.parent
     }
     onPageStackChanged: pageStack.parent = contentItem;
 

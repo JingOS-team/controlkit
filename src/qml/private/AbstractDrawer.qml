@@ -25,7 +25,10 @@ import org.kde.kirigami 1.0
 //providing just a dummy api for now
 Item {
     id: root
-    anchors.fill: parent
+    anchors {
+        fill: parent
+        topMargin: !modal && applicationWindow !== undefined && applicationWindow().header && applicationWindow().controlsVisible ? applicationWindow().header.height : 0
+    }
     z: 9999
 
     default property alias page: mainPage.data
@@ -33,6 +36,7 @@ Item {
     property bool opened
     property int edge: Qt.LeftEdge
     property real position: 0
+    property bool modal: true
 
     function open () { }
     function close () { }
