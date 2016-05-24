@@ -62,7 +62,7 @@ Item {
         }
     }
 
-    opacity: height > 0 ? 1 : 0
+    opacity: height > 0 || translateTransform.y <= 0 ? 1 : 0
     Behavior on opacity {
         OpacityAnimator {
             duration: Units.longDuration
@@ -94,7 +94,19 @@ Item {
 
         transform: Translate {
             id: translateTransform
-            y: __appWindow.controlsVisible ? 0 : -headerItem.height - shadow.height
+            y: {
+                if (__appWindow === undefined) {
+                    return 0;
+                }
+                //FIXME: expose an overshoot property in AbstractApplicationWindow?
+                if(__appWindow.pageStack.transform[0] && __appWindow.pageStack.transform[0].y > 0) {
+                     return __appWindow.pageStack.transform[0].y;
+                } else if (!__appWindow.controlsVisible) {
+                    return -headerItem.height - shadow.height;
+                } else {
+                    return 0;
+                }
+            }
             Behavior on y {
                 NumberAnimation {
                     duration: Units.longDuration
