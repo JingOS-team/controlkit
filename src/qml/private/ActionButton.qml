@@ -29,7 +29,8 @@ Item {
         right: parent.right
         bottom:parent.bottom
     }
-    height: button.height
+    //smallSpacing for the shadow
+    height: button.height + Units.smallSpacing
     clip: true
 
     //either Action or QAction should work here
