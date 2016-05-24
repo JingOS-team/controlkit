@@ -316,7 +316,8 @@ Item {
 
         onPressed: mouseArea.onPressed(mouse)
         onReleased: {
-            if (contextDrawer.position > 0.5 || contextDrawer.position < 0.1) {
+            var pos = root.mapFromItem(fakeContextMenuButton, mouse.x, mouse.y);
+            if (pos.x < root.width/2 || (mouse.x > 0 && mouse.x < width)) {
                 contextDrawer.open();
             } else {
                 contextDrawer.close();
