@@ -23,272 +23,263 @@ import QtGraphicalEffects 1.0
 import org.kde.kirigami 1.0
 
 Item {
-    id: button
+    id: root
+    anchors {
+        left: parent.left
+        right: parent.right
+        bottom:parent.bottom
+    }
+    height: button.height
+    clip: true
 
     //either Action or QAction should work here
     property QtObject action: pageStack.currentItem ? pageStack.currentItem.mainAction : null
     property QtObject leftAction: pageStack.currentItem ? pageStack.currentItem.leftAction : null
     property QtObject rightAction: pageStack.currentItem ? pageStack.currentItem.rightAction : null
 
-    implicitWidth: implicitHeight + Units.iconSizes.smallMedium*4
-    implicitHeight: Units.iconSizes.large + Units.largeSpacing
-    //visible: action != null || leftAction != null || rightAction != null
+    onWidthChanged: button.x = root.width/2 - button.width/2
 
-
-    onXChanged: {
-        if (mouseArea.pressed || edgeMouseArea.pressed || fakeContextMenuButton.pressed) {
-            if (globalDrawer && globalDrawer.enabled && globalDrawer.modal) {
-                globalDrawer.position = Math.min(1, Math.max(0, (x - button.parent.width/2 + button.width/2)/globalDrawer.contentItem.width + mouseArea.drawerShowAdjust));
-            }
-            if (contextDrawer && contextDrawer.enabled && contextDrawer.modal) {
-                contextDrawer.position = Math.min(1, Math.max(0, (button.parent.width/2 - button.width/2 - x)/contextDrawer.contentItem.width + mouseArea.drawerShowAdjust));
-            }
-        }
+    transform: Translate {
+        id: translateTransform
     }
 
-    MouseArea {
-        id: edgeMouseArea
-        z:99
+    Item {
+        id: button
+
         anchors {
-            horizontalCenter: parent.horizontalCenter
             bottom: parent.bottom
-            bottomMargin: -Units.smallSpacing
+            bottomMargin: Units.smallSpacing
         }
-        drag {
-            target: button
-            //filterChildren: true
-            axis: Drag.XAxis
-            minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : button.parent.width/2 - button.width/2
-            maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? button.parent.width : button.parent.width/2 - button.width/2
-        }
-        height: Units.smallSpacing * 3
-        width: button.parent.width
+        implicitWidth: implicitHeight + Units.iconSizes.smallMedium*4
+        implicitHeight: Units.iconSizes.large + Units.largeSpacing
+        //visible: action != null || leftAction != null || rightAction != null
 
-        onPressed: mouseArea.onPressed(mouse)
-        onPositionChanged: mouseArea.positionChanged(mouse)
-        onReleased: mouseArea.released(mouse)
-    }
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-
-        visible: action != null || leftAction != null || rightAction != null
-        property bool internalVisibility: (applicationWindow === undefined || applicationWindow().controlsVisible) && (button.action === null || button.action.visible === undefined || button.action.visible)
-        preventStealing: true
-        onInternalVisibilityChanged: {
-            showAnimation.running = false;
-            if (internalVisibility) {
-                showAnimation.to = 0;
-            } else {
-                showAnimation.to = button.height;
+        onXChanged: {
+            if (mouseArea.pressed || edgeMouseArea.pressed || fakeContextMenuButton.pressed) {
+                if (globalDrawer && globalDrawer.enabled && globalDrawer.modal) {
+                    globalDrawer.position = Math.min(1, Math.max(0, (x - root.width/2 + button.width/2)/globalDrawer.contentItem.width + mouseArea.drawerShowAdjust));
+                }
+                if (contextDrawer && contextDrawer.enabled && contextDrawer.modal) {
+                    contextDrawer.position = Math.min(1, Math.max(0, (root.width/2 - button.width/2 - x)/contextDrawer.contentItem.width + mouseArea.drawerShowAdjust));
+                }
             }
-            showAnimation.running = true;
         }
 
-        drag {
-            target: button
-            //filterChildren: true
-            axis: Drag.XAxis
-            minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : button.parent.width/2 - button.width/2
-            maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? button.parent.width : button.parent.width/2 - button.width/2
-        }
+        MouseArea {
+            id: mouseArea
+            anchors.fill: parent
 
-        transform: Translate {
-            id: translateTransform
-        }
-        property var downTimestamp;
-        property int startX
-        property int startMouseY
-        property real drawerShowAdjust
-        property bool buttonPressedUnderMouse: false
-        property bool leftButtonPressedUnderMouse: false
-        property bool rightButtonPressedUnderMouse: false
-
-        onPressed: {
-            //search if we have a page to set to current
-            if (applicationWindow !== undefined && applicationWindow().pageStack.currentIndex !== undefined) {
-                //search the button parent's parent, that is the page parent
-                //this will make the context drawer open for the proper page
-                applicationWindow().pageStack.currentIndex = button.parent.parent.level;
+            visible: action != null || leftAction != null || rightAction != null
+            property bool internalVisibility: (applicationWindow === undefined || applicationWindow().controlsVisible) && (root.action === null || root.action.visible === undefined || root.action.visible)
+            preventStealing: true
+            onInternalVisibilityChanged: {
+                showAnimation.running = false;
+                if (internalVisibility) {
+                    showAnimation.to = 0;
+                } else {
+                    showAnimation.to = button.height;
+                }
+                showAnimation.running = true;
             }
-            downTimestamp = (new Date()).getTime();
-            startX = button.x + button.width/2;
-            startMouseY = mouse.y;
-            drawerShowAdjust = 0;
-            buttonPressedUnderMouse = mouse.x > buttonGraphics.x && mouse.x < buttonGraphics.x + buttonGraphics.width;
-            leftButtonPressedUnderMouse = !buttonPressedUnderMouse && leftAction && mouse.x < buttonGraphics.x;
-            rightButtonPressedUnderMouse = !buttonPressedUnderMouse && rightAction && mouse.x > buttonGraphics.x + buttonGraphics.width;
-        }
-        onReleased: {
-            //pixel/second
-            var x = button.x + button.width/2;
-            var speed = ((x - startX) / ((new Date()).getTime() - downTimestamp) * 1000);
-            drawerShowAdjust = 0;
 
-            //project where it would be a full second in the future
-            if (globalDrawer && globalDrawer.modal && x + speed > Math.min(button.parent.width/4*3, button.parent.width/2 + globalDrawer.contentItem.width/2)) {
-                globalDrawer.open();
-                contextDrawer.close();
-            } else if (contextDrawer && x + speed < Math.max(button.parent.width/4, button.parent.width/2 - contextDrawer.contentItem.width/2)) {
-                if (contextDrawer && contextDrawer.modal) {
-                    contextDrawer.open();
+            drag {
+                target: button
+                //filterChildren: true
+                axis: Drag.XAxis
+                minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
+                maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
+            }
+
+            property var downTimestamp;
+            property int startX
+            property int startMouseY
+            property real drawerShowAdjust
+            property bool buttonPressedUnderMouse: false
+            property bool leftButtonPressedUnderMouse: false
+            property bool rightButtonPressedUnderMouse: false
+
+            onPressed: {
+                //search if we have a page to set to current
+                if (applicationWindow !== undefined && applicationWindow().pageStack.currentIndex !== undefined) {
+                    //search the button parent's parent, that is the page parent
+                    //this will make the context drawer open for the proper page
+                    applicationWindow().pageStack.currentIndex = root.parent.parent.level;
                 }
-                if (globalDrawer && globalDrawer.modal) {
-                    globalDrawer.close();
-                }
-            } else {
-                if (globalDrawer && globalDrawer.modal) {
-                    globalDrawer.close();
-                }
-                if (contextDrawer && contextDrawer.modal) {
+                downTimestamp = (new Date()).getTime();
+                startX = button.x + button.width/2;
+                startMouseY = mouse.y;
+                drawerShowAdjust = 0;
+                buttonPressedUnderMouse = mouse.x > buttonGraphics.x && mouse.x < buttonGraphics.x + buttonGraphics.width;
+                leftButtonPressedUnderMouse = !buttonPressedUnderMouse && leftAction && mouse.x < buttonGraphics.x;
+                rightButtonPressedUnderMouse = !buttonPressedUnderMouse && rightAction && mouse.x > buttonGraphics.x + buttonGraphics.width;
+            }
+            onReleased: {
+                //pixel/second
+                var x = button.x + button.width/2;
+                var speed = ((x - startX) / ((new Date()).getTime() - downTimestamp) * 1000);
+                drawerShowAdjust = 0;
+
+                //project where it would be a full second in the future
+                if (globalDrawer && globalDrawer.modal && x + speed > Math.min(root.width/4*3, root.width/2 + globalDrawer.contentItem.width/2)) {
+                    globalDrawer.open();
                     contextDrawer.close();
+                } else if (contextDrawer && x + speed < Math.max(root.width/4, root.width/2 - contextDrawer.contentItem.width/2)) {
+                    if (contextDrawer && contextDrawer.modal) {
+                        contextDrawer.open();
+                    }
+                    if (globalDrawer && globalDrawer.modal) {
+                        globalDrawer.close();
+                    }
+                } else {
+                    if (globalDrawer && globalDrawer.modal) {
+                        globalDrawer.close();
+                    }
+                    if (contextDrawer && contextDrawer.modal) {
+                        contextDrawer.close();
+                    }
+                }
+                //buttonPressedUnderMouse = leftButtonPressedUnderMouse = rightButtonPressedUnderMouse = false;
+            }
+            onClicked: {
+                var action;
+                if (buttonPressedUnderMouse) {
+                    action = root.action;
+                } else if (leftButtonPressedUnderMouse) {
+                    action = root.leftAction;
+                } else if (rightButtonPressedUnderMouse) {
+                    action = root.rightAction;
+                }
+
+                if (!action) {
+                    return;
+                }
+
+                //if an action has been assigned, trigger it
+                if (action && action.trigger) {
+                    action.trigger();
                 }
             }
-            //buttonPressedUnderMouse = leftButtonPressedUnderMouse = rightButtonPressedUnderMouse = false;
-        }
-        onClicked: {
-            var action;
-            if (buttonPressedUnderMouse) {
-                action = button.action;
-            } else if (leftButtonPressedUnderMouse) {
-                action = button.leftAction;
-            } else if (rightButtonPressedUnderMouse) {
-                action = button.rightAction;
-            }
-
-            if (!action) {
-                return;
-            }
-
-            //if an action has been assigned, trigger it
-            if (action && action.trigger) {
-                action.trigger();
-            }
-        }
-        onPositionChanged: {
-            drawerShowAdjust = Math.min(0.3, Math.max(0, (startMouseY - mouse.y)/(Units.gridUnit*15)));
-            button.xChanged();
-        }
-        Connections {
-            target: globalDrawer
             onPositionChanged: {
-                if ( globalDrawer && globalDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
-                    button.x = globalDrawer.contentItem.width * globalDrawer.position + button.parent.width/2 - button.width/2;
+                drawerShowAdjust = Math.min(0.3, Math.max(0, (startMouseY - mouse.y)/(Units.gridUnit*15)));
+                button.xChanged();
+            }
+            Connections {
+                target: globalDrawer
+                onPositionChanged: {
+                    if ( globalDrawer && globalDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
+                        button.x = globalDrawer.contentItem.width * globalDrawer.position + root.width/2 - button.width/2;
+                    }
                 }
             }
-        }
-        Connections {
-            target: contextDrawer
-            onPositionChanged: {
-                if (contextDrawer && contextDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
-                    button.x = button.parent.width/2 - button.width/2 - contextDrawer.contentItem.width * contextDrawer.position;
+            Connections {
+                target: contextDrawer
+                onPositionChanged: {
+                    if (contextDrawer && contextDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
+                        button.x = root.width/2 - button.width/2 - contextDrawer.contentItem.width * contextDrawer.position;
+                    }
                 }
-            }
-        }
-        Connections {
-            target: button.parent
-            onWidthChanged: button.x = button.parent.width/2 - button.width/2
-        }
-
-        NumberAnimation {
-            id: showAnimation
-            target: translateTransform
-            properties: "y"
-            duration: Units.longDuration
-            easing.type: mouseArea.internalVisibility == true ? Easing.InQuad : Easing.OutQuad
-        }
-        Item {
-            id: background
-            anchors {
-                fill: parent
             }
 
-            Rectangle {
-                id: buttonGraphics
-                radius: width/2
-                anchors.centerIn: parent
-                height: parent.height - Units.smallSpacing*2
-                width: height
-                visible: button.action
-                color: button.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || button.action.checked) ? Theme.highlightColor : Theme.backgroundColor
-                Icon {
-                    id: icon
-                    source: button.action && button.action.iconName ? button.action.iconName : ""
-                    anchors {
-                        fill: parent
-                        margins: Units.smallSpacing
-                    }
-                }
-                Behavior on color {
-                    ColorAnimation {
-                        duration: Units.longDuration
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-                Behavior on x {
-                    NumberAnimation {
-                        duration: Units.longDuration
-                        easing.type: Easing.InOutQuad
-                    }
-                }
+            NumberAnimation {
+                id: showAnimation
+                target: translateTransform
+                properties: "y"
+                duration: Units.longDuration
+                easing.type: mouseArea.internalVisibility == true ? Easing.InQuad : Easing.OutQuad
             }
-            //left button
-            Rectangle {
-                z: -1
+            Item {
+                id: background
                 anchors {
-                    right: parent.horizontalCenter
-                    verticalCenter: parent.verticalCenter
+                    fill: parent
                 }
-                radius: Units.smallSpacing
-                height: buttonGraphics.height * 0.7
-                width: height + Units.iconSizes.smallMedium
-                visible: button.leftAction
-                color: button.leftAction && ((button.leftAction && mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || button.leftAction.checked) ? Theme.highlightColor : Theme.backgroundColor
-                Icon {
-                    source: button.leftAction && button.leftAction.iconName ? button.leftAction.iconName : ""
-                    width: height
-                    anchors {
-                        left: parent.left
-                        top: parent.top
-                        bottom: parent.bottom
-                        margins: Units.smallSpacing
-                    }
-                }
-            }
-            //right button
-            Rectangle {
-                z: -1
-                anchors {
-                    left: parent.horizontalCenter
-                    verticalCenter: parent.verticalCenter
-                }
-                radius: Units.smallSpacing
-                height: buttonGraphics.height * 0.7
-                width: height + Units.iconSizes.smallMedium
-                visible: button.rightAction
-                color: button.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || button.rightAction.checked) ? Theme.highlightColor : Theme.backgroundColor
-                Icon {
-                    source: button.rightAction && button.rightAction.iconName ? button.rightAction.iconName : ""
-                    width: height
-                    anchors {
-                        right: parent.right
-                        top: parent.top
-                        bottom: parent.bottom
-                        margins: Units.smallSpacing
-                    }
-                }
-            }
-        }
 
-        DropShadow {
-            anchors.fill: background
-            horizontalOffset: 0
-            verticalOffset: Units.smallSpacing/3
-            radius: Units.gridUnit / 3.5
-            samples: 16
-            color: Qt.rgba(0, 0, 0, 0.5)
-            source: background
+                Rectangle {
+                    id: buttonGraphics
+                    radius: width/2
+                    anchors.centerIn: parent
+                    height: parent.height - Units.smallSpacing*2
+                    width: height
+                    visible: root.action
+                    color: root.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || root.action.checked) ? Theme.highlightColor : Theme.backgroundColor
+                    Icon {
+                        id: icon
+                        source: root.action && root.action.iconName ? root.action.iconName : ""
+                        anchors {
+                            fill: parent
+                            margins: Units.smallSpacing
+                        }
+                    }
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Units.longDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                    Behavior on x {
+                        NumberAnimation {
+                            duration: Units.longDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                }
+                //left button
+                Rectangle {
+                    z: -1
+                    anchors {
+                        right: parent.horizontalCenter
+                        verticalCenter: parent.verticalCenter
+                    }
+                    radius: Units.smallSpacing
+                    height: buttonGraphics.height * 0.7
+                    width: height + Units.iconSizes.smallMedium
+                    visible: root.leftAction
+                    color: root.leftAction && ((root.leftAction && mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || root.leftAction.checked) ? Theme.highlightColor : Theme.backgroundColor
+                    Icon {
+                        source: root.leftAction && root.leftAction.iconName ? root.leftAction.iconName : ""
+                        width: height
+                        anchors {
+                            left: parent.left
+                            top: parent.top
+                            bottom: parent.bottom
+                            margins: Units.smallSpacing
+                        }
+                    }
+                }
+                //right button
+                Rectangle {
+                    z: -1
+                    anchors {
+                        left: parent.horizontalCenter
+                        verticalCenter: parent.verticalCenter
+                    }
+                    radius: Units.smallSpacing
+                    height: buttonGraphics.height * 0.7
+                    width: height + Units.iconSizes.smallMedium
+                    visible: root.rightAction
+                    color: root.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || root.rightAction.checked) ? Theme.highlightColor : Theme.backgroundColor
+                    Icon {
+                        source: root.rightAction && root.rightAction.iconName ? root.rightAction.iconName : ""
+                        width: height
+                        anchors {
+                            right: parent.right
+                            top: parent.top
+                            bottom: parent.bottom
+                            margins: Units.smallSpacing
+                        }
+                    }
+                }
+            }
+
+            DropShadow {
+                anchors.fill: background
+                horizontalOffset: 0
+                verticalOffset: Units.smallSpacing/3
+                radius: Units.gridUnit / 3.5
+                samples: 16
+                color: Qt.rgba(0, 0, 0, 0.5)
+                source: background
+            }
         }
     }
 
@@ -303,10 +294,10 @@ Item {
             target: button
             //filterChildren: true
             axis: Drag.XAxis
-            minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : button.parent.width/2 - button.width/2
-            maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? button.parent.width : button.parent.width/2 - button.width/2
+            minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
+            maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
         }
-        visible: button.parent.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
+        visible: root.parent.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
 
         width: Units.iconSizes.medium
         height: width
@@ -315,10 +306,6 @@ Item {
             color: Theme.viewBackgroundColor
             opacity: parent.pressed ? 1 : 0.3
             anchors.fill: parent
-            border {
-                width: Math.ceil(Units.smallSpacing / 5)
-                color: Theme.textColor
-            }
         }
 
         ContextIcon {
@@ -340,6 +327,35 @@ Item {
                 globalDrawer.close();
             }
         }
+        layer.enabled: true
+        layer.effect: DropShadow {
+            horizontalOffset: 0
+            verticalOffset: 0
+            radius: Units.gridUnit
+            samples: 32
+            color: Qt.rgba(0, 0, 0, 0.5)
+        }
+    }
+
+    MouseArea {
+        id: edgeMouseArea
+        z:99
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
+        drag {
+            target: button
+            //filterChildren: true
+            axis: Drag.XAxis
+            minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
+            maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
+        }
+        height: Units.smallSpacing * 3
+
+        onPressed: mouseArea.onPressed(mouse)
+        onPositionChanged: mouseArea.positionChanged(mouse)
+        onReleased: mouseArea.released(mouse)
     }
 }
-

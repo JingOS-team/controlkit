@@ -27,7 +27,7 @@ Item {
     id: root
     anchors {
         fill: parent
-        topMargin: !modal && applicationWindow !== undefined && applicationWindow().header ? applicationWindow().header.height : 0
+        topMargin: !modal && applicationWindow !== undefined && applicationWindow().header && applicationWindow().controlsVisible ? applicationWindow().header.height : 0
     }
     z: 9999
 

@@ -430,6 +430,11 @@ Item {
             }
             drag.filterChildren: true
             onClicked: root.currentIndex = level;
+            onFocusChanged: {
+                if (focus) {
+                    root.currentIndex = level;
+                }
+            }
 
             Rectangle {
                 z: 999
