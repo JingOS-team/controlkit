@@ -30,14 +30,14 @@ ScrollablePage {
 
     actions {
         left: Action {
-            iconName: "go-previous"
+            iconName: "folder-sync"
             text: "Left Action Text"
             onTriggered: {
                 showPassiveNotification("Left action triggered")
             }
         }
         right: Action {
-            iconName: "go-next"
+            iconName: "configure"
             text: "Right Action Text"
             onTriggered: {
                 showPassiveNotification("Right action triggered")

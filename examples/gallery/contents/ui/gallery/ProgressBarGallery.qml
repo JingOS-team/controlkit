@@ -37,7 +37,7 @@ ScrollablePage {
             }
         }
         right: Action {
-            iconName: "go-next"
+            iconName: "folder-sync"
             text: "Right Action Text"
             onTriggered: {
                 showPassiveNotification("Right action triggered")

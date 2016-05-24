@@ -50,9 +50,8 @@ Item {
             bottom: parent.bottom
             bottomMargin: Units.smallSpacing
         }
-        implicitWidth: implicitHeight + Units.iconSizes.smallMedium*4
+        implicitWidth: implicitHeight + Units.iconSizes.smallMedium*3
         implicitHeight: Units.iconSizes.large + Units.largeSpacing
-        //visible: action != null || leftAction != null || rightAction != null
 
 
         onXChanged: {
@@ -246,12 +245,12 @@ Item {
                 Rectangle {
                     z: -1
                     anchors {
-                        right: parent.horizontalCenter
+                        left: parent.left
                         verticalCenter: parent.verticalCenter
                     }
                     radius: Units.smallSpacing
                     height: buttonGraphics.height * 0.7
-                    width: height + Units.iconSizes.smallMedium
+                    width: height + (root.action ? Units.iconSizes.smallMedium : 0)
                     visible: root.leftAction
                     color: root.leftAction && ((root.leftAction && mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || root.leftAction.checked) ? Theme.highlightColor : Theme.backgroundColor
                     Icon {
@@ -269,12 +268,12 @@ Item {
                 Rectangle {
                     z: -1
                     anchors {
-                        left: parent.horizontalCenter
+                        right: parent.right
                         verticalCenter: parent.verticalCenter
                     }
                     radius: Units.smallSpacing
                     height: buttonGraphics.height * 0.7
-                    width: height + Units.iconSizes.smallMedium
+                    width: height + (root.action ? Units.iconSizes.smallMedium : 0)
                     visible: root.rightAction
                     color: root.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || root.rightAction.checked) ? Theme.highlightColor : Theme.backgroundColor
                     Icon {
