@@ -40,26 +40,31 @@ Kirigami.ApplicationWindow {
 
         actions: [
             Kirigami.Action {
-                text: "View"
+                text: "Submenu 1"
                 iconName: "view-list-icons"
                 Kirigami.Action {
-                        text: "action 1"
+                        text: "Action 1"
+                        onTriggered: showPassiveNotification(text + " clicked")
                 }
                 Kirigami.Action {
-                        text: "action 2"
+                        text: "Action 2"
+                        onTriggered: showPassiveNotification(text + " clicked")
                 }
                 Kirigami.Action {
-                        text: "action 3"
+                        text: "Action 3"
+                        onTriggered: showPassiveNotification(text + " clicked")
                 }
             },
             Kirigami.Action {
-                text: "Sync"
+                text: "Submenu 2"
                 iconName: "folder-sync"
                 Kirigami.Action {
-                        text: "action 4"
+                        text: "Action 4"
+                        onTriggered: showPassiveNotification(text + " clicked")
                 }
                 Kirigami.Action {
-                        text: "action 5"
+                        text: "Action 5"
+                        onTriggered: showPassiveNotification(text + " clicked")
                 }
             },
             Kirigami.Action {
@@ -68,11 +73,11 @@ Kirigami.ApplicationWindow {
                 checkable: true
                 checked: false
                 onTriggered: {
-                    print("Action checked:" + checked)
+                    showPassiveNotification("Action checked: " + checked)
                 }
             },
             Kirigami.Action {
-                text: "Settings"
+                text: "Open A Page"
                 iconName: "configure"
                 checkable: true
                 //Need to do this, otherwise it breaks the bindings

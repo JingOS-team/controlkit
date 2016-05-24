@@ -45,19 +45,21 @@ Kirigami.ScrollablePage {
             Kirigami.Action {
                 text:"Action 1"
                 iconName: "document-decrypt"
-                onTriggered: print("Action 1 clicked")
+                onTriggered: showPassiveNotification("Action 1 clicked")
             },
             Kirigami.Action {
                 id: shareAction
                 visible: checkableAction.checked
                 text:"Action 2"
                 iconName: "document-share"
+                onTriggered: showPassiveNotification("Action 2 clicked")
             },
             Kirigami.Action {
                 id: checkableAction
                 text:"Checkabke"
                 checkable: true
                 iconName: "dashboard-show"
+                onCheckedChanged: showPassiveNotification("Cheched: " + checked)
             }
         ]
     }
@@ -135,10 +137,11 @@ Kirigami.ScrollablePage {
             actions: [
                 Kirigami.Action {
                     iconName: "document-decrypt"
-                    onTriggered: print("Action 1 clicked")
+                    onTriggered: showPassiveNotification(model.text + " Action 1 clicked")
                 },
                 Kirigami.Action {
                     iconName: "mail-reply-sender"
+                    onTriggered: showPassiveNotification(model.text + " Action 2 clicked")
                 }]
         }
     }

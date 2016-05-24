@@ -164,6 +164,25 @@ Item {
                 drawerShowAdjust = Math.min(0.3, Math.max(0, (startMouseY - mouse.y)/(Units.gridUnit*15)));
                 button.xChanged();
             }
+            onPressAndHold: {
+                var action;
+                if (buttonPressedUnderMouse) {
+                    action = root.action;
+                } else if (leftButtonPressedUnderMouse) {
+                    action = root.leftAction;
+                } else if (rightButtonPressedUnderMouse) {
+                    action = root.rightAction;
+                }
+
+                if (!action) {
+                    return;
+                }
+
+                //if an action has been assigned, show a message like a tooltip
+                if (action && action.text) {
+                    showPassiveNotification(action.text);
+                }
+            }
             Connections {
                 target: globalDrawer
                 onPositionChanged: {

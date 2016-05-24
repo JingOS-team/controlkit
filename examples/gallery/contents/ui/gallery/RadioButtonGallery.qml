@@ -30,14 +30,16 @@ ScrollablePage {
     actions {
         main: Action {
             iconName: "document-edit"
+            text: "Main Action Text"
             onTriggered: {
-                print("Action button in buttons page clicked");
+                showPassiveNotification("Action button in buttons page clicked");
             }
         }
         left: Action {
             iconName: "go-previous"
+            text: "Left Action Text"
             onTriggered: {
-                print("Left action triggered")
+                showPassiveNotification("Left action triggered")
             }
         }
     }

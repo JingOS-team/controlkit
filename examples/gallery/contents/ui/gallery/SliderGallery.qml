@@ -31,14 +31,16 @@ ScrollablePage {
     actions {
         left: Action {
             iconName: "go-previous"
+            text: "Left Action Text"
             onTriggered: {
-                print("Left action triggered")
+                showPassiveNotification("Left action triggered")
             }
         }
         right: Action {
             iconName: "go-next"
+            text: "Right Action Text"
             onTriggered: {
-                print("Right action triggered")
+                showPassiveNotification("Right action triggered")
             }
         }
     }
