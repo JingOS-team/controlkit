@@ -100,18 +100,17 @@ Item {
         id: defaultBackgroundComponent
         Item {
             anchors.fill: parent
+             RectangularGlow {
+                anchors.fill: parent
+                cached: true
+                glowRadius: Units.smallSpacing
+                spread: 0.2
+                color: Qt.rgba(0, 0, 0, 0.5)
+                cornerRadius: Units.gridUnit
+            }
             Rectangle {
                 anchors.fill: parent
                 color: Theme.viewBackgroundColor
-
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    horizontalOffset: 0
-                    verticalOffset: 0
-                    radius: Units.gridUnit
-                    samples: 32
-                    color: Qt.rgba(0, 0, 0, 0.5)
-                }
             }
         }
     }
