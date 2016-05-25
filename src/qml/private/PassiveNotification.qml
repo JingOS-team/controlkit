@@ -33,7 +33,7 @@ MouseArea {
     anchors {
         horizontalCenter: parent.horizontalCenter
         bottom: parent.bottom
-        bottomMargin: Units.smallSpacing*2
+        bottomMargin: Units.gridUnit * 4
     }
     function showNotification(message, timeout, actionText, callBack) {
         if (!message) {
@@ -137,16 +137,14 @@ MouseArea {
                 }
             }
         }
-    }
-
-    DropShadow {
-        anchors.fill: background
-        horizontalOffset: 0
-        verticalOffset: Units.smallSpacing/3
-        radius: Units.gridUnit / 3.5
-        samples: 16
-        color: Qt.rgba(0, 0, 0, 0.5)
-        source: background
+        layer.enabled: true
+        layer.effect: DropShadow {
+            horizontalOffset: 0
+            verticalOffset: 0
+            radius: Units.gridUnit
+            samples: 32
+            color: Qt.rgba(0, 0, 0, 0.5)
+        }
     }
 }
 

@@ -299,7 +299,9 @@ OverlayDrawer {
                                     } else {
                                         modelData.trigger();
                                         stackView.pop(stackView.initialItem);
-                                        root.opened = false;
+                                        if (root.modal) {
+                                            root.opened = false;
+                                        }
                                     }
                                 }
                             }

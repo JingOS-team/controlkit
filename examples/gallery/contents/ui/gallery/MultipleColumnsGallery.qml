@@ -29,6 +29,43 @@ ScrollablePage {
 
     title: "Multiple Columns"
 
+    actions {
+        main: Action {
+            iconName: "document-edit"
+            text: "Main Action Text"
+            onTriggered: {
+                showPassiveNotification("Action button in buttons page clicked");
+            }
+        }
+        left: Action {
+            iconName: "go-previous"
+            text: "Left Action Text"
+            onTriggered: {
+                showPassiveNotification("Left action triggered")
+            }
+        }
+        right: Action {
+            iconName: "go-next"
+            text: "Right Action Text"
+            onTriggered: {
+                showPassiveNotification("Right action triggered")
+            }
+        }
+        contextualActions: [
+            Action {
+                text:"Action 1"
+                iconName: "bookmarks"
+                onTriggered: showPassiveNotification("Action 1 clicked")
+            },
+            Action {
+                text:"Action 2"
+                iconName: "folder"
+                enabled: false
+                onTriggered: showPassiveNotification("Action 2 clicked")
+            }
+        ]
+    }
+
     ColumnLayout {
         width: page.width
         spacing: Units.smallSpacing

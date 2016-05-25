@@ -32,28 +32,30 @@ ScrollablePage {
     actions {
         main: Action {
             iconName: sheet.opened ? "dialog-cancel" : "document-edit"
-            onTriggered: {
-                print("Action button in buttons page clicked");
-                sheet.opened = !sheet.opened
-            }
+            text: "Main Action Text"
+            checked: sheet.opened
+            checkable: true
+            onCheckedChanged: sheet.opened = checked;
         }
         left: Action {
             iconName: "go-previous"
+            text: "Left Action Text"
             onTriggered: {
-                print("Left action triggered")
+                showPassiveNotification("Left action triggered")
             }
         }
         right: Action {
             iconName: "go-next"
+            text: "Right Action Text"
             onTriggered: {
-                print("Right action triggered")
+                showPassiveNotification("Right action triggered")
             }
         }
         contextualActions: [
             Action {
                 text:"Action for buttons"
                 iconName: "bookmarks"
-                onTriggered: print("Action 1 clicked")
+                onTriggered: showPassiveNotification("Action 1 clicked")
             },
             Action {
                 text:"Action 2"
@@ -91,10 +93,11 @@ ScrollablePage {
                 anchors.centerIn: parent
                 Controls.Button {
                     text: "Button1"
-                    onClicked: print(root)
+                    onClicked: showPassiveNotification("Button 1 clicked")
                 }
                 Controls.Button {
                     text: "Button2"
+                    onClicked: showPassiveNotification("Button 2 clicked")
                 }
             }
         }
@@ -160,7 +163,7 @@ ScrollablePage {
         Controls.Button {
             text: "Passive Notification Action"
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: showPassiveNotification("This is a passive message", "long", "Action", function() {print("Passive notification action clicked")});
+            onClicked: showPassiveNotification("This is a passive message", "long", "Action", function() {showPassiveNotification("Passive notification action clicked")});
         }
         Controls.ToolButton {
             text: "Toggle controls"
@@ -173,24 +176,24 @@ ScrollablePage {
             text: "Disabled Button"
             enabled: false
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: print("clicked")
+            onClicked: showPassiveNotification("clicked")
         }
         Controls.ToolButton {
             text: "Tool Button"
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: print("clicked")
+            onClicked: showPassiveNotification(text + " clicked")
         }
         Controls.ToolButton {
             text: "Tool Button non flat"
             property bool flat: false
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: print("clicked")
+            onClicked: showPassiveNotification(text + " clicked")
         }
         Controls.ToolButton {
             iconName: "go-previous"
             property bool flat: false
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: print("clicked")
+            onClicked: showPassiveNotification("Button clicked")
         }
         Row {
             spacing: 0
@@ -198,20 +201,18 @@ ScrollablePage {
             Controls.ToolButton {
                 iconName: "edit-cut"
                 property bool flat: false
-                onClicked: print("clicked")
+                onClicked: showPassiveNotification("Cut clicked")
             }
             Controls.ToolButton {
                 iconName: "edit-copy"
                 property bool flat: false
-                onClicked: print("clicked")
+                onClicked: showPassiveNotification("Copy clicked")
             }
             Controls.ToolButton {
                 iconName: "edit-paste"
                 property bool flat: false
-                onClicked: print("clicked")
+                onClicked: showPassiveNotification("Paste clicked")
             }
         }
     }
- 
-    
 }

@@ -30,19 +30,29 @@ ScrollablePage {
     actions {
         main: Action {
             iconName: "document-edit"
+            text: "Main Action Text"
             onTriggered: {
-                print("Action button in buttons page clicked");
+                showPassiveNotification("Action button in buttons page clicked");
             }
         }
         left: Action {
-            iconName: "go-previous"
+            iconName: "folder-sync"
+            text: "Left Action Text"
             onTriggered: {
-                print("Left action triggered")
+                showPassiveNotification("Left action triggered")
             }
         }
     }
+
+
     ColumnLayout {
         width: page.width
+        Controls.ExclusiveGroup {
+            id: radioGroup
+        }
+        Controls.ExclusiveGroup {
+            id: radioGroup2
+        }
 
         Item {
             Layout.fillWidth: true
@@ -70,11 +80,13 @@ ScrollablePage {
                 Controls.RadioButton {
                     text: "On"
                     checked: true
+                    exclusiveGroup: radioGroup
                 }
                 Controls.RadioButton {
                     text: "On"
                     checked: true
                     enabled: false
+                    exclusiveGroup: radioGroup2
                 }
                 Label {
                     text: "Off"
@@ -82,11 +94,13 @@ ScrollablePage {
                 Controls.RadioButton {
                     text: "Off"
                     checked: false
+                    exclusiveGroup: radioGroup
                 }
                 Controls.RadioButton {
                     text: "Off"
                     checked: false
                     enabled: false
+                    exclusiveGroup: radioGroup2
                 }
             }
         }

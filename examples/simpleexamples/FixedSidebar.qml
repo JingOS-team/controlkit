@@ -29,22 +29,20 @@ Kirigami.ApplicationWindow {
 
 
     pageStack.initialPage: mainPageComponent
-    pageStack.anchors.leftMargin: Kirigami.Units.gridUnit * 10
-    Item {
-        anchors {
-            left: parent.left
-            top: parent.top
-            bottom: parent.bottom
-            topMargin: header.height
-        }
+    globalDrawer: Kirigami.OverlayDrawer {
+        opened: true
+        modal: false
+        contentItem: Item {
+            implicitWidth: Kirigami.Units.gridUnit * 10
 
-        Kirigami.Label {
-            text: "This is a sidebar"
-            width: parent.width - Kirigami.Units.smallSpacing * 2
-            wrapMode: Text.WordWrap
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
+            Kirigami.Label {
+                text: "This is a sidebar"
+                width: parent.width - Kirigami.Units.smallSpacing * 2
+                wrapMode: Text.WordWrap
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
 
+        }
     }
 
     //Main app content

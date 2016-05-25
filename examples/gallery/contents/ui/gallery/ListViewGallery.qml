@@ -27,11 +27,25 @@ ScrollablePage {
     Layout.fillWidth: true
     title: "Long List view"
 
+    supportsRefreshing: true
+    onRefreshingChanged: {
+        if (refreshing) {
+            refreshRequestTimer.running = true;
+        } else {
+            showPassiveNotification("Example refreshing completed")
+        }
+    }
+
     background: Rectangle {
-        color: Kirigami.Theme.viewBackgroundColor
+        color: Theme.viewBackgroundColor
     }
 
     ListView {
+        Timer {
+            id: refreshRequestTimer
+            interval: 3000
+            onTriggered: page.refreshing = false
+        }
         model: 200
         delegate: BasicListItem {
             label: "Item " + modelData

@@ -27,18 +27,19 @@ ScrollablePage {
     actions {
         main: Action {
             iconName: sheet.opened ? "dialog-cancel" : "document-edit"
-            onTriggered: {
-                print("Action button in buttons page clicked");
-                sheet.opened = !sheet.opened
-            }
+            text: "Main Action Text"
+            checked: sheet.opened
+            checkable: true
+            onCheckedChanged: sheet.opened = checked;
         }
         contextualActions: [
             Controls.Action {
-                text:"Action for checkbox page"
-                onTriggered: print("Action 1 clicked")
+                text:"Action 1"
+                onTriggered: showPassiveNotification("Action 1 clicked")
             },
             Controls.Action {
                 text:"Action 2"
+                onTriggered: showPassiveNotification("Action 2 clicked")
             }
         ]
     }

@@ -91,7 +91,7 @@ Item {
      * @return The new created page
      */
     function push(page, properties) {
-        pop(currentItem, true);
+        pop(currentItem);
 
         // figure out if more than one page is being pushed
         var pages;
@@ -169,7 +169,12 @@ Item {
      * @see push() for details.
      */
     function replace(page, properties) {
-        pop(currentItem, true);
+        if (currentIndex>=1)
+            pop(pagesLogic.get(currentIndex-1).page);
+        else if (currentIndex==0)
+            pop();
+        else
+            console.warn("There's no page to replace");
         return push(page, properties);
     }
 
@@ -373,23 +378,9 @@ Item {
         }
     }
 
-    //show a separator when the app has a sidebar
-    Rectangle {
-        z: 999
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            left: parent.left
-        }
-        width: Math.ceil(Units.smallSpacing / 5)
-        color: Theme.textColor
-        opacity: 0.3
-        visible: root.x > 0
-    }
-
     Rectangle {
         height: Units.smallSpacing
-        width: root.width/root.depth
+        width: root.width * root.width/mainLayout.width
         anchors.bottom: parent.bottom
         color: Theme.textColor
         opacity: 0
@@ -444,6 +435,11 @@ Item {
             }
             drag.filterChildren: true
             onClicked: root.currentIndex = level;
+            onFocusChanged: {
+                if (focus) {
+                    root.currentIndex = level;
+                }
+            }
 
             Rectangle {
                 z: 999
