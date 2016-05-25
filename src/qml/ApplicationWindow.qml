@@ -127,7 +127,7 @@ AbstractApplicationWindow {
         onClicked: overscroll.y = 0
         Rectangle {
             anchors.fill: parent
-            color: Theme.complementaryBackgroundColor
+            color: Qt.rgba(0, 0, 0, 0.3)
             opacity: 0.15
         }
     }
