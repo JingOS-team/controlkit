@@ -483,10 +483,16 @@ AbstractDrawer {
                     }
 
                     Loader {
+                        id: handleLoader
                         anchors.centerIn: handleGraphics
                         width: height
                         height: Units.iconSizes.smallMedium - Units.smallSpacing * 2
                         source: root.edge == Qt.LeftEdge ? Qt.resolvedUrl("private/MenuIcon.qml") : (root.edge == Qt.RightEdge ? Qt.resolvedUrl("private/ContextIcon.qml") : "")
+                    }
+                    Binding {
+                        target: handleLoader.item
+                        property: "morph"
+                        value: root.position
                     }
                     layer.enabled: true
                     layer.effect: DropShadow {
