@@ -100,13 +100,68 @@ Item {
         id: defaultBackgroundComponent
         Item {
             anchors.fill: parent
-             RectangularGlow {
-                anchors.fill: parent
-                cached: true
-                glowRadius: Units.smallSpacing
-                spread: 0.2
-                color: Qt.rgba(0, 0, 0, 0.5)
-                cornerRadius: Units.gridUnit
+            //Why not a shadow or rectangularglow?
+            //on some android devices they break badly when the OverlaySheet is bigger than
+            //the screen
+            CornerShadow {
+                corner: Qt.BottomRightCorner
+                anchors {
+                    right: parent.left
+                    bottom: parent.top
+                }
+            }
+            CornerShadow {
+                corner: Qt.BottomLeftCorner
+                anchors {
+                    left: parent.right
+                    bottom: parent.top
+                }
+            }
+            CornerShadow {
+                corner: Qt.TopRightCorner
+                anchors {
+                    right: parent.left
+                    top: parent.bottom
+                }
+            }
+            CornerShadow {
+                corner: Qt.TopLeftCorner
+                anchors {
+                    left: parent.right
+                    top: parent.bottom
+                }
+            }
+            EdgeShadow {
+                edge: Qt.BottomEdge
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.top
+                }
+            }
+            EdgeShadow {
+                edge: Qt.TopEdge
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    top: parent.bottom
+                }
+            }
+            EdgeShadow {
+                edge: Qt.LeftEdge
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                    left: parent.right
+                }
+            }
+            EdgeShadow {
+                edge: Qt.RightEdge
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                    right: parent.left
+                }
             }
             Rectangle {
                 anchors.fill: parent
