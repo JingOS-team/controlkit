@@ -109,7 +109,7 @@ Kirigami.ScrollablePage {
                     anchors.verticalCenter: parent.verticalCenter
                     x: y
                     text: model.text
-                    color: listItem.checked ? Kirigami.Theme.viewHighlightedTextColor : Kirigami.Theme.viewTextColor
+                    color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.viewTextColor
                 }
 
             property Item ownPage

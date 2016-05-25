@@ -101,6 +101,20 @@ Item {
     property bool checked: false
 
     /**
+     * pressed: bool
+     * True when the user is pressing the mouse over the list item and
+     * supportsMouseEvents is set to true
+     */
+    property alias pressed: itemMouse.pressed
+
+    /**
+     * containsMouse: bool
+     * True when the user hover the mouse over the list item
+     * NOTE: on mobile touch devices this will be true only when pressed is also true
+     */
+    property alias containsMouse: itemMouse.containsMouse
+
+    /**
      * sectionDelegate: bool
      * If true the item will be a delegate for a section, so will look like a
      * "title" for the items under it.
@@ -385,6 +399,7 @@ Item {
                 Icon {
                     id: handleIcon
                     anchors.verticalCenter: parent.verticalCenter
+                    selected: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate)
                     width: Units.iconSizes.smallMedium
                     height: width
                     x: y
