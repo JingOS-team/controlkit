@@ -71,7 +71,7 @@ Item {
             anchors.fill: parent
 
             visible: action != null || leftAction != null || rightAction != null
-            property bool internalVisibility: (applicationWindow === undefined || applicationWindow().controlsVisible) && (root.action === null || root.action.visible === undefined || root.action.visible)
+            property bool internalVisibility: (applicationWindow === undefined || (applicationWindow().controlsVisible && applicationWindow().height > root.height*2)) && (root.action === null || root.action.visible === undefined || root.action.visible)
             preventStealing: true
             onInternalVisibilityChanged: {
                 showAnimation.running = false;
