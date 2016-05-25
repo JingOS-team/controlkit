@@ -80,7 +80,7 @@ AbstractApplicationHeader {
             fill: parent
             leftMargin: Math.max ((backButton ? backButton.width : 0), __appWindow.pageStack.x)
         }
-        cacheBuffer: width * count
+        cacheBuffer: width ? Math.max(0, width * count) : 0
         displayMarginBeginning: __appWindow.pageStack.width * count
         orientation: ListView.Horizontal
         boundsBehavior: Flickable.StopAtBounds
