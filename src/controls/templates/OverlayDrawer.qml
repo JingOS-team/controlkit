@@ -50,6 +50,13 @@ AbstractDrawer {
     property Item contentItem
 
     /**
+     * background: Item
+     * This property holds the background item.
+     * Note: the background will be automatically sized as the whole control
+     */
+    property Item background
+
+    /**
      * opened: bool
      * If true the drawer is open showing the contents of the "drawer"
      * component.
@@ -151,6 +158,12 @@ AbstractDrawer {
 //END Methods
 
 //BEGIN Signal handlers
+    onBackgroundChanged: {
+        background.z = 1;
+        background.parent = mainItem;
+        background.anchors.fill = drawerPage;
+    }
+
     onPositionChanged: {
         if (!mainFlickable.loopCheck) {
             mainFlickable.loopCheck = true;
@@ -427,7 +440,7 @@ AbstractDrawer {
                 }
 
 
-                Rectangle {
+                Item {
                     id: drawerPage
                     z: 3
                     anchors {
@@ -436,14 +449,14 @@ AbstractDrawer {
                         top: root.edge != Qt.BottomEdge ? parent.top : undefined
                         bottom: root.edge != Qt.TopEdge ? parent.bottom : undefined
                     }
-                    color: Theme.viewBackgroundColor
+
                     clip: true
                     width: root.contentItem ? Math.min(root.contentItem.implicitWidth, root.width * 0.7) : 0
                     height: root.contentItem ? Math.min(root.contentItem.implicitHeight, root.height * 0.7) : 0
                 }
                 Item {
                     id: drawerHandle
-                    z: 2
+                    z: 1
 
                     anchors {
                         right: root.edge == Qt.LeftEdge ? undefined : drawerPage.left
@@ -501,24 +514,7 @@ AbstractDrawer {
                     }
                 }
 
-                EdgeShadow {
-                    edge: root.edge
-                    anchors {
-                        right: root.edge == Qt.RightEdge ? drawerPage.left : (root.edge == Qt.LeftEdge ? undefined : parent.right)
-                        left: root.edge == Qt.LeftEdge ? drawerPage.right : (root.edge == Qt.RightEdge ? undefined : parent.left)
-                        top: root.edge == Qt.TopEdge ? drawerPage.bottom : (root.edge == Qt.BottomEdge ? undefined : parent.top)
-                        bottom: root.edge == Qt.BottomEdge ? drawerPage.top : (root.edge == Qt.TopEdge ? undefined : parent.bottom)
-                    }
-
-                    opacity: root.position == 0 ? 0 : 1
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: Units.longDuration
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                }
+                
             }
         }
     }

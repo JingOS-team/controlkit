@@ -57,10 +57,7 @@ Item {
     /**
      * background: Item
      * This property holds the background item.
-     * Note: If the background item has no explicit size specified,
-     * it automatically follows the control's size.
-     * In most cases, there is no need to specify width or
-     * height for a background item.
+     * Note: the background will be automatically sized as the whole control
      */
     property Item background
 

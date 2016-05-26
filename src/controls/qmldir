@@ -1,4 +1,5 @@
 module org.kde.kirigami
 plugin kirigamiplugin
 classname KirigamiPlugin
+depends QtQuick.Controls 1.4
 designersupported

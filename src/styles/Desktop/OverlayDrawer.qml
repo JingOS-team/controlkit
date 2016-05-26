@@ -20,8 +20,7 @@
 import QtQuick 2.1
 import org.kde.kirigami 1.0
 
-import "private"
-import "templates" as T
+import "../../templates" as T
 
 /**
  * Overlay Drawers are used to expose additional UI elements needed for
@@ -40,23 +39,15 @@ T.OverlayDrawer {
         property Item handleBackground: Item {
             
         }
-        EdgeShadow {
-            edge: root.edge
+        Rectangle {
             anchors {
-                right: root.edge == Qt.RightEdge ? parent.left : (root.edge == Qt.LeftEdge ? undefined : parent.right)
-                left: root.edge == Qt.LeftEdge ? parent.right : (root.edge == Qt.RightEdge ? undefined : parent.left)
-                top: root.edge == Qt.TopEdge ? parent.bottom : (root.edge == Qt.BottomEdge ? undefined : parent.top)
-                bottom: root.edge == Qt.BottomEdge ? parent.top : (root.edge == Qt.TopEdge ? undefined : parent.bottom)
+                left: parent.right
+                top: parent.top
+                bottom: parent.bottom
             }
-
-            opacity: root.position == 0 ? 0 : 1
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
+            color: Theme.textColor
+            opacity: 0.3
+            width: Math.ceil(Units.smallSpacing / 5)
         }
     }
 
