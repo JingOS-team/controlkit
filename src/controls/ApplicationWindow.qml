@@ -1,5 +1,5 @@
 /*
- *   Copyright 2016 Marco Martin <mart@kde.org>
+ *   Copyright 2015 Marco Martin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -18,7 +18,10 @@
  */
 
 import QtQuick 2.5
-import "templates" as T
+import QtQuick.Controls.Private 1.0
+import "templates/private"
+import org.kde.kirigami 1.0 as Kirigami
+import QtGraphicalEffects 1.0
 
 /**
  * A window that provides some basic features needed for all apps
@@ -92,7 +95,7 @@ import "templates" as T
  * @endcode
  *
 */
-T.ApplicationWindow {
+AbstractApplicationWindow {
     id: root
 
     /**
@@ -105,7 +108,7 @@ T.ApplicationWindow {
      * as can fit in the screen. An handheld device would usually have a single
      * fullscreen column, a tablet device would have many tiled columns.
      */
-    //property alias pageStack: __pageStack
+    property alias pageStack: __pageStack
 
     /**
      * controlsVisible: bool
@@ -113,5 +116,96 @@ T.ApplicationWindow {
      * as the Action button, the drawer handles and the application
      * header should be visible or not.
      */
-    //property bool controlsVisible: true
+    property bool controlsVisible: true
+
+    //redefines here as here we can know a pointer to PageRow
+    wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth*2
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: overscroll.y = 0
+        Rectangle {
+            anchors.fill: parent
+            color: Qt.rgba(0, 0, 0, 0.3)
+            opacity: 0.15
+        }
+    }
+
+    PageRow {
+        id: __pageStack
+        anchors {
+            fill: parent
+            topMargin: root.wideScreen && header && controlsVisible ? header.height : 0
+            leftMargin: root.globalDrawer && root.globalDrawer.modal === false ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
+            rightMargin: root.contextDrawer && root.contextDrawer.modal === false ? root.contextDrawer.contentItem.width * root.contextDrawer.position : 0
+            //HACK: workaround a bug in android iOS keyboard management
+            bottomMargin: ((Qt.platform.os == "android" || Qt.platform.os == "ios") || !Qt.inputMethod.visible) ? 0 : Qt.inputMethod.keyboardRectangle.height
+            onBottomMarginChanged: {
+                if (bottomMargin > 0) {
+                    overscroll.y = 0;
+                }
+            }
+        }
+        onCurrentIndexChanged: overscroll.y = 0;
+
+        function goBack() {
+            if (root.contextDrawer && root.contextDrawer.opened && root.contextDrawer.modal) {
+                root.contextDrawer.close();
+            } else if (root.globalDrawer && root.globalDrawer.opened && root.globalDrawer.modal) {
+                root.globalDrawer.close();
+            } else {
+                var backEvent = {accepted: false}
+                if (root.pageStack.currentIndex >= 1) {
+                    root.pageStack.currentItem.backRequested(backEvent);
+                    if (!backEvent.accepted) {
+                        if (root.pageStack.depth > 1) {
+                            root.pageStack.currentIndex = Math.max(0, root.pageStack.currentIndex - 1);
+                            backEvent.accepted = true;
+                        }
+                    }
+                }
+
+                if (Settings.isMobile && !backEvent.accepted) {
+                    Qt.quit();
+                }
+            }
+        }
+        Keys.onReleased: {
+            if (event.key == Qt.Key_Back ||
+            (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {
+                event.accepted = true;
+                goBack();
+            }
+        }
+
+        Rectangle {
+            z: -1
+            anchors.fill: parent
+            color: Kirigami.Theme.backgroundColor
+        }
+        //Don't want overscroll in landscape mode
+        onWidthChanged: {
+            if (width > height) {
+                overscroll.y = 0;
+            }
+        }
+
+        transform: Translate {
+            id: overscroll
+            Behavior on y {
+                NumberAnimation {
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+        focus: true
+    }
+
+    Component.onCompleted: {
+        if (root.header === undefined) {
+            var component = Qt.createComponent(Qt.resolvedUrl("./ApplicationHeader.qml"));
+            root.header = component.createObject(root.contentItem.parent);
+        }
+    }
 }

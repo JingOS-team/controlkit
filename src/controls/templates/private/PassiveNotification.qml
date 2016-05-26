@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.5
-import QtQuick.Controls 1.3
+import QtQuick.Controls 1.3 as Controls
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 1.0
@@ -124,7 +124,7 @@ MouseArea {
                 elide: Text.ElideRight
                 color: Theme.backgroundColor
             }
-            Button {
+            Controls.Button {
                 id: actionButton
                 property var callBack
                 visible: text != ""

@@ -18,7 +18,6 @@
  */
 
 import QtQuick 2.5
-import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.2
 import QtQuick.Controls.Private 1.0
 import "private"

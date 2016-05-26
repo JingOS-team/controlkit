@@ -1,5 +1,5 @@
 /*
- *   Copyright 2016 Marco Martin <mart@kde.org>
+ *   Copyright 2015 Marco Martin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -18,7 +18,10 @@
  */
 
 import QtQuick 2.5
-import "templates" as T
+import QtQuick.Controls 1.3 as Controls
+import "templates/private"
+import org.kde.kirigami 1.0
+import QtGraphicalEffects 1.0
 
 /**
  * A window that provides some basic features needed for all apps
@@ -74,7 +77,7 @@ import "templates" as T
  *
  * @inherit QtQuick.Controls.ApplicationWindow
  */
-T.AbstractApplicationWindow {
+Controls.ApplicationWindow {
     id: root
 
     /**
@@ -84,6 +87,45 @@ T.AbstractApplicationWindow {
      * between them.
      * Put a container here, such as QQuickControls PageStack
      */
+    property Item pageStack
+
+    /**
+     * Shows a little passive notification at the bottom of the app window
+     * lasting for few seconds, with an optional action button.
+     *
+     * @param message The text message to be shown to the user.
+     * @param timeout How long to show the message:
+     *            possible values: "short", "long" or the number of milliseconds
+     * @param actionText Text in the action button, if any.
+     * @param callBack A JavaScript function that will be executed when the
+     *            user clicks the button.
+     */
+    function showPassiveNotification(message, timeout, actionText, callBack) {
+        if (!internal.__passiveNotification) {
+            var component = Qt.createComponent("private/PassiveNotification.qml");
+            internal.__passiveNotification = component.createObject(contentItem.parent);
+        }
+
+        internal.__passiveNotification.showNotification(message, timeout, actionText, callBack);
+    }
+
+   /**
+    * Hide the passive notification, if any is shown
+    */
+    function hidePassiveNotification() {
+        if(internal.__passiveNotification) {
+           internal.__passiveNotification.hideNotification();
+        }
+    }
+
+
+    /**
+     * @returns a pointer to this application window
+     * can be used anywhere in the application.
+     */
+    function applicationWindow() {
+        return root;
+    }
 
    /**
     * header: ApplicationHeader
@@ -98,6 +140,7 @@ T.AbstractApplicationWindow {
     * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
     * //FIXME: this should become an actual ApplicationHeader
     */
+    property var header: undefined
 
     /**
      * controlsVisible: bool
@@ -105,6 +148,7 @@ T.AbstractApplicationWindow {
      * as the Action button, the drawer handles and the application
      * header should be visible or not.
      */
+    property bool controlsVisible: true
 
     /**
      * globalDrawer: AbstractDrawer
@@ -112,12 +156,14 @@ T.AbstractApplicationWindow {
      * left screen edge or by dragging the ActionButton to the right.
      * It is recommended to use the GlobalDrawer class here
      */
+    property AbstractDrawer globalDrawer
 
     /**
      * wideScreen: bool
      * If true the application is considered to be in "widescreen" mode, such as on desktops or horizontal tablets.
      * Different styles can have an own logic for deciding this
      */
+    property bool wideScreen: width >= Units.gridUnit * 60
 
     /**
      * contextDrawer: AbstractDrawer
@@ -168,31 +214,29 @@ T.AbstractApplicationWindow {
      * When this page will be the current one, the context drawer will visualize
      * contextualActions defined as property in that page.
      */
+    property AbstractDrawer contextDrawer
 
-//BEGIN Functions
-    /**
-     * Shows a little passive notification at the bottom of the app window
-     * lasting for few seconds, with an optional action button.
-     *
-     * @param message The text message to be shown to the user.
-     * @param timeout How long to show the message:
-     *            possible values: "short", "long" or the number of milliseconds
-     * @param actionText Text in the action button, if any.
-     * @param callBack A JavaScript function that will be executed when the
-     *            user clicks the button.
-     */
-    //function showPassiveNotification(message, timeout, actionText, callBack)
+    Binding {
+        when: globalDrawer !== undefined
+        target: globalDrawer
+        property: "parent"
+        value: contentItem.parent
+    }
+    Binding {
+        when: contextDrawer !== undefined
+        target: contextDrawer
+        property: "parent"
+        value: contentItem.parent
+    }
+    onPageStackChanged: pageStack.parent = contentItem;
 
-   /**
-    * Hide the passive notification, if any is shown
-    */
-    //function hidePassiveNotification()
+    width: Units.gridUnit * 25
+    height: Units.gridUnit * 30
+    visible: true
 
 
-    /**
-     * @returns a pointer to this application window
-     * can be used anywhere in the application.
-     */
-    //function applicationWindow()
-//END Functions
+    QtObject {
+        id: internal
+        property Item __passiveNotification
+    }
 }

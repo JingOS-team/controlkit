@@ -19,6 +19,7 @@
 
 import QtQuick 2.1
 import org.kde.kirigami 1.0
+import QtQuick.Controls 1.0 as Controls
 import QtQuick.Controls.Private 1.0
 
 Rectangle {

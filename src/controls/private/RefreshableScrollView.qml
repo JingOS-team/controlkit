@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.5
-import QtQuick.Controls 1.3
+import QtQuick.Controls 1.3 as Controls
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 1.0
@@ -61,7 +61,7 @@ import org.kde.kirigami 1.0
  * 
  * @inherit QtQuick.Controls.Scrollview
  */
-ScrollView {
+Controls.ScrollView {
     id: root
 
     /**
@@ -113,7 +113,7 @@ ScrollView {
             y: -root.flickableItem.contentY-height
             width: root.flickableItem.width
             height: busyIndicator.height + Units.gridUnit * 2
-            BusyIndicator {
+            Controls.BusyIndicator {
                 id: busyIndicator
                 anchors.centerIn: parent
                 running: root.refreshing
