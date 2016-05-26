@@ -274,6 +274,7 @@ OverlayDrawer {
                             id: actionsRepeater
                             model: actions
                             delegate: BasicListItem {
+                                id: listItem
                                 supportsMouseEvents: true
                                 checked: modelData.checked
                                 icon: modelData.iconName
@@ -288,6 +289,7 @@ OverlayDrawer {
                                         right: parent.right
                                     }
                                     height: Units.iconSizes.smallMedium
+                                    selected: listItem.checked || listItem.pressed
                                     width: height
                                     source: "go-next"
                                     visible: modelData.children!==undefined && modelData.children.length > 0
