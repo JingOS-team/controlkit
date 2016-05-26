@@ -9,8 +9,7 @@ target_link_libraries(kirigamiplugin Qt5::Core  Qt5::Qml Qt5::Quick)
 
 install(TARGETS kirigamiplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
 
-
-install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
+install(DIRECTORY controls/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
 
 #TODO: selectively install plasma and Desktop styles
 install(DIRECTORY styles/Fallback DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles)

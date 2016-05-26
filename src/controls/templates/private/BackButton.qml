@@ -31,24 +31,10 @@ MouseArea {
     width: height
     z: 99
     onClicked: applicationWindow().pageStack.goBack();
-    Rectangle {
-        anchors.verticalCenter: parent.verticalCenter
-        x: width/2
-        antialiasing: true
-        width: parent.width/2
-        height: Math.ceil(Units.smallSpacing / 3)
-        rotation: 45
-        transformOrigin: Item.Left
-        color: Theme.highlightedTextColor
-    }
-    Rectangle {
-        anchors.verticalCenter: parent.verticalCenter
-        x: width/2
-        antialiasing: true
-        width: parent.width/2
-        height: Math.ceil(Units.smallSpacing / 3)
-        rotation: -45
-        transformOrigin: Item.Left
-        color: Theme.highlightedTextColor
+
+    Icon {
+        anchors.fill: parent
+        selected: header.background && header.background.color && header.background.color == Theme.highlightColor
+        source: "go-previous"
     }
 }

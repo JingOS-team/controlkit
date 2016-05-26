@@ -54,6 +54,22 @@ Item {
     }
     height: maximumHeight
 
+    /**
+     * background: Item
+     * This property holds the background item.
+     * Note: If the background item has no explicit size specified,
+     * it automatically follows the control's size.
+     * In most cases, there is no need to specify width or
+     * height for a background item.
+     */
+    property Item background
+
+    onBackgroundChanged: {
+        background.z = -1;
+        background.parent = root;
+        background.anchors.fill = root;
+    }
+
     Behavior on height {
         enabled: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable && !__appWindow.pageStack.currentItem.flickable.moving
         NumberAnimation {
@@ -62,7 +78,7 @@ Item {
         }
     }
 
-    opacity: height > 0 || translateTransform.y <= 0 ? 1 : 0
+    opacity: height > 0 && -translateTransform.y <= height ? 1 : 0
     Behavior on opacity {
         OpacityAnimator {
             duration: Units.longDuration
@@ -81,39 +97,38 @@ Item {
         }
     }
 
-    Rectangle {
+    transform: Translate {
+        id: translateTransform
+        y: {
+            if (__appWindow === undefined) {
+                return 0;
+            }
+            //FIXME: expose an overshoot property in AbstractApplicationWindow?
+            if(__appWindow.pageStack.transform[0] && __appWindow.pageStack.transform[0].y > 0) {
+                    return __appWindow.pageStack.transform[0].y;
+            } else if (!__appWindow.controlsVisible) {
+                return -headerItem.height - Units.smallSpacing;
+            } else {
+                return 0;
+            }
+        }
+        Behavior on y {
+            NumberAnimation {
+                duration: Units.longDuration
+                easing.type: translateTransform.y < 0 ? Easing.OutQuad : Easing.InQuad
+            }
+        }
+    }
+
+    Item {
         id: headerItem
         anchors {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
         }
-        color: Theme.highlightColor
 
         height: parent.maximumHeight
-
-        transform: Translate {
-            id: translateTransform
-            y: {
-                if (__appWindow === undefined) {
-                    return 0;
-                }
-                //FIXME: expose an overshoot property in AbstractApplicationWindow?
-                if(__appWindow.pageStack.transform[0] && __appWindow.pageStack.transform[0].y > 0) {
-                     return __appWindow.pageStack.transform[0].y;
-                } else if (!__appWindow.controlsVisible) {
-                    return -headerItem.height - shadow.height;
-                } else {
-                    return 0;
-                }
-            }
-            Behavior on y {
-                NumberAnimation {
-                    duration: Units.longDuration
-                    easing.type: translateTransform.y < 0 ? Easing.OutQuad : Easing.InQuad
-                }
-            }
-        }
 
         Connections {
             id: headerSlideConnection
@@ -177,16 +192,6 @@ Item {
             anchors {
                 fill: parent
                 topMargin: overshootTransform && overshootTransform.y > 0 ? 0 : Math.min(headerItem.height - root.height, headerItem.height - root.preferredHeight)
-            }
-        }
-
-        EdgeShadow {
-            id: shadow
-            edge: Qt.TopEdge
-            anchors {
-                right: parent.right
-                left: parent.left
-                top: parent.bottom
             }
         }
     }

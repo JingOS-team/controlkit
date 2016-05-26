@@ -180,31 +180,15 @@ AbstractApplicationHeader {
                 x: Units.smallSpacing + __appWindow.wideScreen ? (Math.min(delegate.width - width, Math.max(0, titleList.contentX - delegate.x))) : 0
 
                 spacing: Units.smallSpacing
-                Item {
+
+                Icon {
+                    visible: modelData > 0 && !__appWindow.wideScreen && opacity > 0
                     height: title.height
-                    width: titleList.isTabBar ? Math.min(Units.gridUnit/2, title.height / 2) : parent.height/2
-                    opacity: modelData > 0 ? 0.4 : 0
-                    visible: !__appWindow.wideScreen && opacity > 0
-                    layer.enabled: true
-                    Rectangle {
-                        color: Theme.viewBackgroundColor
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: titleList.isTabBar ? Math.min(Units.gridUnit/2, title.height / 2) : parent.height/2
-                        height: titleList.isTabBar ? width : width/10
-                        radius: titleList.isTabBar ? width : 0
-                        rotation: titleList.isTabBar ? 0 : 45
-                        transformOrigin: Item.BottomRight
-                    }
-                    Rectangle {
-                        visible: !titleList.isTabBar
-                        color: Theme.viewBackgroundColor
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: parent.height/2
-                        height: width/10
-                        rotation: -45
-                        transformOrigin: Item.TopRight
-                    }
+                    width: height
+                    selected: header.background && header.background.color && header.background.color == Theme.highlightColor
+                    source: "go-next"
                 }
+
                 Heading {
                     id: title
                     width:Math.min(titleList.width, implicitWidth)
@@ -212,7 +196,7 @@ AbstractApplicationHeader {
                     opacity: delegate.current ? 1 : 0.4
                     //Scaling animate NativeRendering is too slow
                     renderType: Text.QtRendering
-                    color: Theme.highlightedTextColor
+                    color: header.background && header.background.color && header.background.color == Theme.highlightColor ? Theme.highlightedTextColor : Theme.textColor
                     elide: Text.ElideRight
                     text: page.title
                     font.pixelSize: titleList.height / 1.6
