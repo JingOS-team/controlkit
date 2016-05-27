@@ -21,6 +21,8 @@ import QtQuick 2.1
 import QtQuick.Controls 1.3 as Controls
 import org.kde.kirigami 1.0
 
+import "../../../templates/private"
+
 Rectangle {
     id: root
 
@@ -110,7 +112,15 @@ Rectangle {
             verticalCenter: parent.verticalCenter
         }
 
-        iconName: "application-menu"
+        //iconName: "application-menu"
+        //TODO: a proper icon ?
+        ContextIcon {
+            anchors {
+                fill: parent
+                margins: Units.smallSpacing*3
+            }
+        }
+        
         visible: menu.visibleChildren > 0
         onClicked: page.actions.main
 
@@ -118,7 +128,6 @@ Rectangle {
             id: menu
 
             property int visibleChildren: 0
-            onVisibleChildrenChanged: print(visibleChildren);
             Instantiator {
                 model: page.actions.contextualActions
                 Controls.MenuItem {
