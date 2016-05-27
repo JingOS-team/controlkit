@@ -120,6 +120,7 @@ T.OverlayDrawer {
 
     //default to a sidebar in desktop mode
     modal: edge == Qt.TopEdge || edge == Qt.BottomEdge
+    opened: true
 
     //NOTE: Only property documentation here, no definition/implementation
     /**
