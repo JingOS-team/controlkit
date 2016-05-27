@@ -52,7 +52,7 @@ Kirigami.ScrollablePage {
                 text:"Checkabke"
                 checkable: true
                 iconName: "dashboard-show"
-                onCheckedChanged: showPassiveNotification("Cheched: " + checked)
+                onCheckedChanged: showPassiveNotification("Checked: " + checked)
             }
         ]
     }
