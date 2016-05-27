@@ -18,7 +18,6 @@
  */
 
 import QtQuick 2.1
-import QtGraphicalEffects 1.0
 import org.kde.kirigami 1.0
 import "private"
 
@@ -454,67 +453,6 @@ AbstractDrawer {
                     width: root.contentItem ? Math.min(root.contentItem.implicitWidth, root.width * 0.7) : 0
                     height: root.contentItem ? Math.min(root.contentItem.implicitHeight, root.height * 0.7) : 0
                 }
-                Item {
-                    id: drawerHandle
-                    z: 1
-
-                    anchors {
-                        right: root.edge == Qt.LeftEdge ? undefined : drawerPage.left
-                        left: root.edge == Qt.RightEdge ? undefined : drawerPage.right
-                        bottom: drawerPage.bottom
-                    }
-                    visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
-                    width: Units.iconSizes.medium + Units.gridUnit
-                    height: width
-                    opacity: root.handleVisible ? 1 : 0
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: Units.longDuration
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                    transform: Translate {
-                        id: translateTransform
-                        x: root.handleVisible ? 0 : (root.edge == Qt.LeftEdge ? -drawerHandle.width : drawerHandle.width)
-                        Behavior on x {
-                            NumberAnimation {
-                                duration: Units.longDuration
-                                easing.type: !root.handleVisible ? Easing.OutQuad : Easing.InQuad
-                            }
-                        }
-                    }
-                    Rectangle {
-                        id: handleGraphics
-                        color: Theme.viewBackgroundColor
-                        opacity: handleMouseArea.pressed ? 1 : 0.3 + root.position
-                        anchors {
-                            fill: parent
-                            topMargin: Units.gridUnit
-                            rightMargin: root.edge == Qt.LeftEdge ? Units.gridUnit : 0
-                            leftMargin: root.edge == Qt.LeftEdge ? 0 : Units.gridUnit
-                        }
-                    }
-
-                    Loader {
-                        anchors.centerIn: handleGraphics
-                        width: height
-                        height: Units.iconSizes.smallMedium - Units.smallSpacing * 2
-                        source: root.edge == Qt.LeftEdge ? Qt.resolvedUrl("private/MenuIcon.qml") : (root.edge == Qt.RightEdge ? Qt.resolvedUrl("private/ContextIcon.qml") : "")
-                    }
-                    layer.enabled: true
-                    layer.effect: DropShadow {
-                        visible: drawerHandle.visible
-                        anchors.fill: drawerHandle
-                        horizontalOffset: 0
-                        verticalOffset: 0
-                        radius: Units.gridUnit
-                        samples: 32
-                        color: Qt.rgba(0, 0, 0, 0.5)
-                        source: drawerHandle
-                    }
-                }
-
-                
             }
         }
     }

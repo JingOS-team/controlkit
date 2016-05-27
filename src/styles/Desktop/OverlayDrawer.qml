@@ -39,14 +39,81 @@ T.OverlayDrawer {
         property Item handleBackground: Item {
             
         }
+        
+        Item {
+            id: drawerHandle
+            z: -1
+
+            anchors {
+                right: root.edge == Qt.LeftEdge ? undefined : parent.left
+                left: root.edge == Qt.RightEdge ? undefined : parent.right
+                bottom: parent.bottom
+            }
+            visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
+            width: Units.iconSizes.medium
+            height: width
+            opacity: root.handleVisible ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            transform: Translate {
+                id: translateTransform
+                x: root.handleVisible ? 0 : (root.edge == Qt.LeftEdge ? -drawerHandle.width : drawerHandle.width)
+                Behavior on x {
+                    NumberAnimation {
+                        duration: Units.longDuration
+                        easing.type: !root.handleVisible ? Easing.OutQuad : Easing.InQuad
+                    }
+                }
+            }
+            Rectangle {
+                id: handleGraphics
+                color: Theme.viewBackgroundColor
+                opacity: 0.3 + root.position
+                anchors.fill: parent
+            }
+
+            Loader {
+                anchors.centerIn: handleGraphics
+                width: height
+                height: Units.iconSizes.smallMedium - Units.smallSpacing * 2
+                source: root.edge == Qt.LeftEdge ? Qt.resolvedUrl("../../templates/private/MenuIcon.qml") : (root.edge == Qt.RightEdge ? Qt.resolvedUrl("../../templates/private/ContextIcon.qml") : "")
+            }
+            Rectangle {
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    top: parent.top
+                }
+                color: Theme.textColor
+                opacity: 0.3
+                height: Math.ceil(Units.smallSpacing / 5)
+            }
+            Rectangle {
+                anchors {
+                    left: root.edge == Qt.LeftEdge ? parent.right : undefined
+                    right: root.edge == Qt.RightEdge ? parent.left : undefined
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+                color: Theme.textColor
+                opacity: 0.3
+                width: Math.ceil(Units.smallSpacing / 5)
+            }
+        }
+        
         Rectangle {
+            z: -2
             anchors {
                 left: parent.right
                 top: parent.top
                 bottom: parent.bottom
             }
             color: Theme.textColor
-            opacity: 0.3
+            opacity: root.position == 0 ? 0 : 0.3
             width: Math.ceil(Units.smallSpacing / 5)
         }
     }
