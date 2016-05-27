@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.1
+import "private"
 import "templates" as T
 
 /**
@@ -28,6 +29,15 @@ import "templates" as T
  */
 T.Page {
     id: root
+
+    ActionButton {
+        id: __actionButton
+        parent: root
+        z: 9999
+        action: root.mainAction
+        leftAction: root.leftAction
+        rightAction: root.rightAction
+    }
 
     /**
      * title: string

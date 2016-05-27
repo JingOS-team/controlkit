@@ -102,7 +102,7 @@ Controls.ApplicationWindow {
      */
     function showPassiveNotification(message, timeout, actionText, callBack) {
         if (!internal.__passiveNotification) {
-            var component = Qt.createComponent("private/PassiveNotification.qml");
+            var component = Qt.createComponent("templates/private/PassiveNotification.qml");
             internal.__passiveNotification = component.createObject(contentItem.parent);
         }
 

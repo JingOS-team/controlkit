@@ -22,6 +22,8 @@ import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 1.0
 
+import "../templates/private"
+
 Item {
     id: root
     anchors {
