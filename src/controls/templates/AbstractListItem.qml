@@ -115,7 +115,7 @@ Rectangle {
      */
     property Item background
 
-    implicitWidth: parent ? parent.width : childrenRect.width
+    implicitWidth: childrenRect.width
 
     implicitHeight: contentItem.height + Units.smallSpacing*4
 
