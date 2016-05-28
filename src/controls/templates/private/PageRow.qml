@@ -24,8 +24,6 @@ import org.kde.kirigami 1.0
 Item {
     id: root
 
-    anchors.fill: parent
-
 //BEGIN PROPERTIES
     /**
      * This property holds the number of items currently pushed onto the view
