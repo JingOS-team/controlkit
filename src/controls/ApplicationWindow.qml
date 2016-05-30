@@ -135,9 +135,6 @@ AbstractApplicationWindow {
         id: __pageStack
         anchors {
             fill: parent
-            topMargin: root.wideScreen && header && controlsVisible ? header.height : 0
-            leftMargin: root.globalDrawer && root.globalDrawer.modal === false ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
-            rightMargin: root.contextDrawer && root.contextDrawer.modal === false ? root.contextDrawer.contentItem.width * root.contextDrawer.position : 0
             //HACK: workaround a bug in android iOS keyboard management
             bottomMargin: ((Qt.platform.os == "android" || Qt.platform.os == "ios") || !Qt.inputMethod.visible) ? 0 : Qt.inputMethod.keyboardRectangle.height
             onBottomMarginChanged: {

@@ -216,6 +216,10 @@ Controls.ApplicationWindow {
      */
     property AbstractDrawer contextDrawer
 
+    contentItem.anchors.topMargin: root.wideScreen && header && controlsVisible ? header.height : 0
+    contentItem.anchors.leftMargin: root.globalDrawer && (root.globalDrawer.toString().indexOf("SplitDrawer") === 0 || root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
+    contentItem.anchors.rightMargin: root.contextDrawer && root.contextDrawer.modal === false ? root.contextDrawer.contentItem.width * root.contextDrawer.position : 0
+
     Binding {
         when: globalDrawer !== undefined
         target: globalDrawer

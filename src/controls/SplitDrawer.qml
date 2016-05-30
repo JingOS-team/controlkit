@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.1
+import "private"
 import "templates" as T
 
 /**
@@ -29,6 +30,17 @@ import "templates" as T
 T.SplitDrawer {
     id: root
 
+    background: Item {
+        EdgeShadow {
+            edge: Qt.RightEdge
+            anchors {
+                right: parent.left
+                top: parent.top
+                bottom: parent.bottom
+                rightMargin: -1
+            }
+        }
+    }
 //BEGIN Properties
     //NOTE: Only property documentation here, no definition/implementation
     /**

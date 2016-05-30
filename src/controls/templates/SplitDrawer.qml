@@ -18,7 +18,6 @@
  */
 
 import QtQuick 2.1
-import QtGraphicalEffects 1.0
 import org.kde.kirigami 1.0
 import "private"
 
@@ -74,14 +73,32 @@ AbstractDrawer {
      */
     //property bool modal: true
 
+    /**
+     * background: Item
+     * This property holds the background item.
+     *
+     * Note: If the background item has no explicit size specified,
+     * it automatically follows the control's size.
+     * In most cases, there is no need to specify width or
+     * height for a background item.
+     */
+    property Item background
+
+    onBackgroundChanged: {
+        background.parent = browserFrame;
+        background.anchors.fill = browserFrame;
+        background.z = -1;
+    }
+
     Component.onCompleted: {
         mainPage.width = browserFrame.width
+        contentItem.parent = drawerPage
     }
 
     onPositionChanged: {
         if (!browserFrame.loopCheck) {
             browserFrame.loopCheck = true;
-            browserFrame.x = position * sidebar.width;
+            browserFrame.x = position * drawerPage.width;
             browserFrame.loopCheck = false;
         }
     }
@@ -126,7 +143,7 @@ AbstractDrawer {
         onReleased: {
             if (toggle) {
                 browserFrame.state = startState == "Open" ? "Closed" : "Open"
-            } else if (browserFrame.x < sidebar.width / 2) {
+            } else if (browserFrame.x < drawerPage.width / 2) {
                 browserFrame.state = "Closed";
             } else {
                 browserFrame.state = "Open";
@@ -135,13 +152,12 @@ AbstractDrawer {
         onClicked: root.clicked()
     }
 
-    Rectangle {
+    Item {
         id: browserFrame
         z: 100
-        color: Theme.backgroundColor
         state: sidebar.open ? "Open" : "Closed"
         onStateChanged: sidebar.open = (state != "Closed")
-        readonly property real position: Math.abs(x) / sidebar.width
+        readonly property real position: Math.abs(x) / drawerPage.width
         property bool loopCheck: false
         onPositionChanged: {
             if (!loopCheck) {
@@ -167,17 +183,8 @@ AbstractDrawer {
         Rectangle {
             anchors.fill: parent
             color: "black"
-            opacity: Math.min(0.4, 0.4 * (browserFrame.x / sidebar.width))
+            opacity: Math.min(0.4, 0.4 * (browserFrame.x / drawerPage.width))
             visible: root.modal
-        }
-        EdgeShadow {
-            edge: Qt.RightEdge
-            anchors {
-                right: parent.left
-                top: parent.top
-                bottom: parent.bottom
-                rightMargin: -1
-            }
         }
 
         states: [
@@ -185,7 +192,7 @@ AbstractDrawer {
                 name: "Open"
                 PropertyChanges {
                     target: browserFrame
-                    x: sidebar.width
+                    x: drawerPage.width
                 }
 
             },
@@ -235,7 +242,8 @@ AbstractDrawer {
             }
         }
 
-        width: Math.min(parent.width/4*3, Math.max(root.contentItem ? root.contentItem.implicitWidth : 0, parent.width/4))
+        width: browserFrame.x
+        clip: true
 
         anchors {
             left: parent.left
@@ -245,7 +253,13 @@ AbstractDrawer {
 
         Item {
             id: drawerPage
-            anchors.fill: parent
+            width: Math.min(root.width/4*3, Math.max(root.contentItem ? root.contentItem.implicitWidth : 0, root.width/4))
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+                topMargin: (applicationWindow !== undefined && applicationWindow().header) ? applicationWindow().header.height : 0
+            }
             clip: false
             onChildrenChanged: drawerPage.children[0].anchors.fill = drawerPage
         }
