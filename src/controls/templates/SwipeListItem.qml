@@ -22,7 +22,7 @@ import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.0 as Controls
 import QtQuick.Controls.Private 1.0
 import org.kde.kirigami 1.0
-import "private"
+import "../private"
 
 /**
  * An item delegate Intended to support extra actions obtainable
