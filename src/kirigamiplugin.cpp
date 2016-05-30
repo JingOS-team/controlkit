@@ -83,5 +83,5 @@ void KirigamiPlugin::registerTypes(const char *uri)
 }
 
 
-#include "kirigamiplugin.moc"
+#include "moc_kirigamiplugin.cpp"
 
