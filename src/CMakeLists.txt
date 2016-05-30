@@ -19,3 +19,8 @@ if (DESKTOP_ENABLED)
 endif()
 
 install(FILES ${platformspecific} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
+
+include(ECMGeneratePriFile)
+ecm_generate_pri_file(BASE_NAME Kirigami LIB_NAME KF5Kirigami DEPS "core qml quick svg" FILENAME_VAR PRI_FILENAME )
+install(FILES ${PRI_FILENAME}
+        DESTINATION ${ECM_MKSPECS_INSTALL_DIR})

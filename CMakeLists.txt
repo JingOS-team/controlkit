@@ -25,9 +25,18 @@ find_package(ECM 0.0.8 REQUIRED NO_MODULE)
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
+include(ECMSetupVersion)
+include(ECMGenerateHeaders)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
+
+set(KF5_VERSION "5.22.0")
+ecm_setup_version(${KF5_VERSION}
+    VARIABLE_PREFIX KIRIGAMI
+    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kirigami_version.h"
+    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KirigamiConfigVersion.cmake"
+    SOVERSION 5)
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg)
 
