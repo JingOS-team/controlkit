@@ -162,7 +162,7 @@ Controls.ScrollView {
             onYChanged: {
                 if (y > busyIndicatorFrame.height*1.5 + topPadding && applicationWindow() && root.flickableItem.atYBeginning && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
                     //here assume applicationWindow().pageStack has a translate as transform
-                    applicationWindow().pageStack.transform[0].y = root.height/2;
+                    applicationWindow().contentItem.transform[0].y = root.height/2;
                     overshootResetTimer.restart();
                     canOvershootBackTimer.restart();
                 }
@@ -178,7 +178,7 @@ Controls.ScrollView {
                 id: overshootResetTimer
                 interval: 8000
                 onTriggered: {
-                    applicationWindow().pageStack.transform[0].y = 0;
+                    applicationWindow().contentItem.transform[0].y = 0;
                 }
             }
             //HACK?
@@ -190,8 +190,8 @@ Controls.ScrollView {
                 target: root.flickableItem
                 onMovementEnded: {
                     if (!canOvershootBackTimer.running &&
-                        applicationWindow().pageStack.transform[0].y > 0) {
-                        applicationWindow().pageStack.transform[0].y = 0;
+                        applicationWindow().contentItem.transform[0].y > 0) {
+                        applicationWindow().contentItem.transform[0].y = 0;
                     }
                 }
             }

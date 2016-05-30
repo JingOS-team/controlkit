@@ -216,9 +216,37 @@ Controls.ApplicationWindow {
      */
     property AbstractDrawer contextDrawer
 
+    MouseArea {
+        parent: contentItem.parent
+        z: -1
+        anchors.fill: parent
+        onClicked: overscroll.y = 0
+        Rectangle {
+            anchors.fill: parent
+            color: Qt.rgba(0, 0, 0, 0.3)
+            opacity: 0.15
+        }
+    }
+
     contentItem.anchors.topMargin: root.wideScreen && header && controlsVisible ? header.height : 0
-    contentItem.anchors.leftMargin: root.globalDrawer && (root.globalDrawer.toString().indexOf("SplitDrawer") === 0 || root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
+    contentItem.anchors.leftMargin: root.globalDrawer && (/*root.globalDrawer.toString().indexOf("SplitDrawer") === 0 ||*/ root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
     contentItem.anchors.rightMargin: root.contextDrawer && root.contextDrawer.modal === false ? root.contextDrawer.contentItem.width * root.contextDrawer.position : 0
+    contentItem.transform: Translate {
+        id: overscroll
+        Behavior on y {
+            NumberAnimation {
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+        x: root.globalDrawer && root.globalDrawer.modal === true && root.globalDrawer.toString().indexOf("SplitDrawer") === 0 ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
+    }
+    //Don't want overscroll in landscape mode
+    onWidthChanged: {
+        if (width > height) {
+            overscroll.y = 0;
+        }
+    }
 
     Binding {
         when: globalDrawer !== undefined

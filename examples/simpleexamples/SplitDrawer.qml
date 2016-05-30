@@ -30,18 +30,25 @@ Kirigami.ApplicationWindow {
 
     pageStack.initialPage: mainPageComponent
     globalDrawer: Kirigami.SplitDrawer {
+        id: drawer
         opened: true
         //modal: false
-        contentItem: Item {
-            implicitWidth: Kirigami.Units.gridUnit * 10
+        contentItem: Column {
+            //implicitWidth: Kirigami.Units.gridUnit * 10
 
             Kirigami.Label {
+                anchors.horizontalCenter: parent.horizontalCenter
                 text: "This is a sidebar"
                 width: parent.width - Kirigami.Units.smallSpacing * 2
                 wrapMode: Text.WordWrap
-                anchors.horizontalCenter: parent.horizontalCenter
             }
-
+            Controls.Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Modal Drawer"
+                checkable: true
+                checked: true
+                onCheckedChanged: drawer.modal = checked
+            }
         }
     }
 

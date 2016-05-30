@@ -258,7 +258,7 @@ AbstractDrawer {
                 top: parent.top
                 bottom: parent.bottom
                 left: parent.left
-                topMargin: (applicationWindow !== undefined && applicationWindow().header) ? applicationWindow().header.height : 0
+                topMargin: (applicationWindow !== undefined && applicationWindow().header) && modal ? applicationWindow().header.height : 0
             }
             clip: false
             onChildrenChanged: drawerPage.children[0].anchors.fill = drawerPage

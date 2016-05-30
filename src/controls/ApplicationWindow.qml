@@ -121,16 +121,6 @@ AbstractApplicationWindow {
     //redefines here as here we can know a pointer to PageRow
     wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth*2
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: overscroll.y = 0
-        Rectangle {
-            anchors.fill: parent
-            color: Qt.rgba(0, 0, 0, 0.3)
-            opacity: 0.15
-        }
-    }
-
     PageRow {
         id: __pageStack
         anchors {
@@ -179,22 +169,6 @@ AbstractApplicationWindow {
             z: -1
             anchors.fill: parent
             color: Kirigami.Theme.backgroundColor
-        }
-        //Don't want overscroll in landscape mode
-        onWidthChanged: {
-            if (width > height) {
-                overscroll.y = 0;
-            }
-        }
-
-        transform: Translate {
-            id: overscroll
-            Behavior on y {
-                NumberAnimation {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
         }
         focus: true
     }

@@ -100,8 +100,8 @@ Item {
                 return 0;
             }
             //FIXME: expose an overshoot property in AbstractApplicationWindow?
-            if(__appWindow.pageStack.transform[0] && __appWindow.pageStack.transform[0].y > 0) {
-                    return __appWindow.pageStack.transform[0].y;
+            if(__appWindow.contentItem.transform[0] && __appWindow.contentItem.transform[0].y > 0) {
+                    return __appWindow.contentItem.transform[0].y;
             } else if (!__appWindow.controlsVisible) {
                 return -headerItem.height - Units.smallSpacing;
             } else {
@@ -181,8 +181,8 @@ Item {
             id: mainItem
             property Translate overshootTransform
             Component.onCompleted: {
-                if (applicationWindow() && applicationWindow().pageStack.transform[0]) {
-                    overshootTransform = applicationWindow().pageStack.transform[0]
+                if (applicationWindow() && applicationWindow().contentItem.transform[0]) {
+                    overshootTransform = applicationWindow().contentItem.transform[0]
                 }
             }
             anchors {
