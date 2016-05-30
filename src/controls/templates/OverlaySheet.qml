@@ -40,6 +40,15 @@ Item {
     visible: false
 
     /**
+     * contentItem: Item
+     * This property holds the visual content item.
+     *
+     * Note: The content item is automatically resized inside the
+     * padding of the control.
+     */
+    default property Item contentItem
+
+    /**
      * opened: bool
      * If true the sheet is open showing the contents of the OverlaySheet
      * component.
@@ -70,6 +79,18 @@ Item {
      */
     property int bottomPadding: Units.gridUnit
 
+    /**
+     * background: Item
+     * This property holds the background item.
+     *
+     * Note: If the background item has no explicit size specified,
+     * it automatically follows the control's size.
+     * In most cases, there is no need to specify width or
+     * height for a background item.
+     */
+    property Item background
+
+
     function open() {
         root.visible = true;
         openAnimation.from = -root.height;
@@ -95,90 +116,8 @@ Item {
             (2 + (mainFlickable.contentHeight - mainFlickable.contentY - mainFlickable.topMargin - mainFlickable.bottomMargin)/mainFlickable.height))
     }
 
-    property var background
-    Component {
-        id: defaultBackgroundComponent
-        Item {
-            anchors.fill: parent
-            //Why not a shadow or rectangularglow?
-            //on some android devices they break badly when the OverlaySheet is bigger than
-            //the screen
-            CornerShadow {
-                corner: Qt.BottomRightCorner
-                anchors {
-                    right: parent.left
-                    bottom: parent.top
-                }
-            }
-            CornerShadow {
-                corner: Qt.BottomLeftCorner
-                anchors {
-                    left: parent.right
-                    bottom: parent.top
-                }
-            }
-            CornerShadow {
-                corner: Qt.TopRightCorner
-                anchors {
-                    right: parent.left
-                    top: parent.bottom
-                }
-            }
-            CornerShadow {
-                corner: Qt.TopLeftCorner
-                anchors {
-                    left: parent.right
-                    top: parent.bottom
-                }
-            }
-            EdgeShadow {
-                edge: Qt.BottomEdge
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    bottom: parent.top
-                }
-            }
-            EdgeShadow {
-                edge: Qt.TopEdge
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    top: parent.bottom
-                }
-            }
-            EdgeShadow {
-                edge: Qt.LeftEdge
-                anchors {
-                    top: parent.top
-                    bottom: parent.bottom
-                    left: parent.right
-                }
-            }
-            EdgeShadow {
-                edge: Qt.RightEdge
-                anchors {
-                    top: parent.top
-                    bottom: parent.bottom
-                    right: parent.left
-                }
-            }
-            Rectangle {
-                anchors.fill: parent
-                color: Theme.viewBackgroundColor
-            }
-        }
-    }
-
-    default property Item contentItem
 
     Component.onCompleted: {
-        if (root.background === undefined) {
-            root.background = defaultBackgroundComponent.createObject(flickableContents, {"z": -1});
-        }
-
-        backgroundChanged();
-        contentItemChanged();
         mainFlickable.interactive = true;
     }
     onBackgroundChanged: {
