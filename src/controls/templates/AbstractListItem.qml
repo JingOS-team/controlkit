@@ -113,8 +113,7 @@ Rectangle {
      * In most cases, there is no need to specify width or
      * height for a background item.
      */
-    //FIXME: can this be an Item?
-    property var background
+    property Item background
 
     implicitWidth: parent ? parent.width : childrenRect.width
 
@@ -130,12 +129,10 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        if (listItem.background === undefined) {
-            var component = Qt.createComponent(Qt.resolvedUrl("./private/DefaultListItemBackground.qml"));
-            listItem.background = component.createObject(itemMouse);
+        if (background) {
+            background.parent = itemMouse;
+            background.anchors.fill = itemMouse;
         }
-        background.parent = itemMouse;
-        background.anchors.fill = itemMouse;
     }
 
     MouseArea {

@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.1
+import "private"
 import "templates" as T
 
 /**
@@ -29,7 +30,9 @@ import "templates" as T
  */
 T.AbstractListItem {
     id: listItem
-    
+
+    background: DefaultListItemBackground {}
+
     /**
      * contentItem: Item
      * This property holds the visual content item.

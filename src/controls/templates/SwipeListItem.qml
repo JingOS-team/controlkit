@@ -155,38 +155,7 @@ Item {
      * In most cases, there is no need to specify width or
      * height for a background item.
      */
-    property var background
-    /* : Rectangle {
-        color: listItem.checked || itemMouse.pressed ? Theme.highlightColor : Theme.viewBackgroundColor
-
-        parent: itemMouse
-        anchors.fill: parent
-        visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
-        Rectangle {
-            anchors.fill: parent
-            visible: !Settings.isMobile
-            color: Theme.highlightColor
-            opacity: itemMouse.containsMouse && !itemMouse.pressed ? 0.2 : 0
-            Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
-        }
-        Behavior on color {
-            ColorAnimation { duration: Units.longDuration }
-        }
-        
-
-        Rectangle {
-            id: separator
-            color: Theme.textColor
-            opacity: 0.2
-            visible: listItem.separatorVisible
-            anchors {
-                left: parent.left
-                right: parent.right
-                bottom: parent.bottom
-            }
-            height: Math.ceil(Units.smallSpacing / 5);
-        }
-    }*/
+    property Item background
 
     Item {
         id: behindItem
@@ -235,13 +204,11 @@ Item {
     }
 
     Component.onCompleted: {
-        if (listItem.background === undefined) {
-            var component = Qt.createComponent(Qt.resolvedUrl("./private/DefaultListItemBackground.qml"));
-            listItem.background = component.createObject(itemMouse);
-        }
 
-        background.parent = itemMouse;
-        background.z = 0;
+        if (background) {
+            background.parent = itemMouse;
+            background.z = 0;
+        }
 
         contentItem.parent = itemMouse
         contentItem.z = 1;

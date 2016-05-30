@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.5
+import "private"
 import "templates" as T
 
 /**
@@ -53,6 +54,7 @@ T.SwipeListItem {
     id: root
 
 //BEGIN properties
+    background: DefaultListItemBackground {}
     /**
      * contentItem: Item
      * This property holds the visual content item.
