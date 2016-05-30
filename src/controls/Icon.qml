@@ -45,7 +45,7 @@ Item {
         source: image
         color: Theme.highlightedTextColor
         cached: true
-        visible: root.selected
+        visible: root.selected && root.valid
        // opacity: icon.color.a
     }
     /* // FIXME: This causes black squares on some GLES drivers, notably on Adreno hardware
