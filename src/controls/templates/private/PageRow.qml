@@ -328,6 +328,7 @@ Item {
         contentWidth: mainLayout.childrenRect.width
         contentHeight: height
         readonly property Item currentItem: pagesLogic.get(Math.min(currentIndex, pagesLogic.count-1)).page
+        property real scrollProportion: 0
         //clip only when the app has a sidebar
         clip: root.x > 0
 
@@ -336,7 +337,7 @@ Item {
         onCurrentItemChanged: {
             currentItemSnapTimer.restart();
         }
-        onMovementEnded: {
+        onMovementEnded: {print("minchia: onmovementended")
             var pos = currentItem.mapToItem(mainFlickable, 0, 0);
             var oldCurrentIndex = currentIndex;
 
@@ -360,7 +361,9 @@ Item {
             }
         }
         onFlickEnded: movementEnded();
-        onWidthChanged: movementEnded();
+        onContentXChanged: {
+            scrollProportion = (currentItem.parent.x - contentX) / width;
+        }
 
         Row {
             id: mainLayout
@@ -373,6 +376,14 @@ Item {
                     duration: Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
+            }
+            onWidthChanged: {
+                var oldScrollProportion = mainFlickable.scrollProportion;
+                mainFlickable.contentX = currentItem.parent.x - oldScrollProportion * mainFlickable.width;
+                mainFlickable.scrollProportion = oldScrollProportion;
+
+                itemSnapTimer.itemToSnap = currentItem.parent;
+                itemSnapTimer.restart();
             }
         }
     }
