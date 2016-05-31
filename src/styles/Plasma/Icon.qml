@@ -21,4 +21,13 @@ import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 
-PlasmaCore.IconItem {}
+PlasmaCore.IconItem {
+    property bool selected: false
+    onSelectedChanged: {
+        if (selected) {
+            state = PlasmaCore.Svg.Selected;
+        } else {
+            state = PlasmaCore.Svg.Normal;
+        }
+    }
+}
