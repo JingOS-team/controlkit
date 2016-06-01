@@ -91,6 +91,7 @@ Item {
                 height = maximumHeight;
             }
         }
+        onHeightChanged: root.height = maximumHeight;
     }
 
     transform: Translate {
