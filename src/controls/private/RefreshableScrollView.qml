@@ -278,8 +278,8 @@ Controls.ScrollView {
         
         var pos = applicationWindow().activeFocusItem.mapToItem(root.contentItem, 0, cursorY);
 
-        //focused item alreqady visible?
-        if (pos.y >= root.flickableItem.contentY && pos.y <= root.flickableItem.contentY + root.flickableItem.height) {
+        //focused item alreqady visible? add some margin for the space of the action buttons
+        if (pos.y >= root.flickableItem.contentY && pos.y <= root.flickableItem.contentY + root.flickableItem.height - Units.gridUnit * 8) {
             return;
         }
         root.flickableItem.contentY = pos.y;

@@ -172,8 +172,8 @@ Item {
 
         
         var pos = focusItem.mapToItem(flickableContents, 0, cursorY - Units.gridUnit*3);
-        //focused item alreqady visible?
-        if (pos.y >= mainFlickable.contentY && pos.y <= mainFlickable.contentY + mainFlickable.height) {
+        //focused item alreqady visible? add some margin for the space of the action buttons
+        if (pos.y >= mainFlickable.contentY && pos.y <= mainFlickable.contentY + mainFlickable.height - Units.gridUnit * 8) {
             return;
         }
         mainFlickable.contentY = pos.y;
