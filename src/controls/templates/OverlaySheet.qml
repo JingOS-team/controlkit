@@ -134,6 +134,7 @@ Item {
             open();
         } else {
             close();
+            Qt.inputMethod.hide();
         }
     }
     onHeightChanged: {
