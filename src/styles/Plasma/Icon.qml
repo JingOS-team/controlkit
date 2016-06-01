@@ -25,9 +25,9 @@ PlasmaCore.IconItem {
     property bool selected: false
     onSelectedChanged: {
         if (selected) {
-            state = PlasmaCore.Svg.Selected;
+            status = PlasmaCore.Svg.Selected;
         } else {
-            state = PlasmaCore.Svg.Normal;
+            status = PlasmaCore.Svg.Normal;
         }
     }
 }
