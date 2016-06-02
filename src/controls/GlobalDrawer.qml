@@ -23,6 +23,8 @@ import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 1.0
 
+import "private"
+
 /**
  * A drawer specialization intended for the global actions of the application
  * valid regardless of the application state (think about the menubar
@@ -181,6 +183,15 @@ OverlayDrawer {
                         top: parent.top
                     }
 
+                    EdgeShadow {
+                        edge: Qt.BottomEdge
+                        visible: bannerImageSource != ""
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                            bottom: parent.top
+                        }
+                    }
                     LinearGradient {
                         anchors {
                             left: parent.left
