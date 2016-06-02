@@ -25,6 +25,7 @@ import org.kde.kirigami 1.0
 
 MouseArea {
     id: root
+    z: 9999
     width: background.width
     height: background.height
     opacity: 0
