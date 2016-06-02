@@ -87,8 +87,7 @@ ScrollablePage {
         anchors.fill: parent
         edge: Qt.BottomEdge
         contentItem: Item {
-            implicitWidth: Units.gridUnit * 8
-            implicitHeight: Units.gridUnit * 8
+            implicitHeight: childrenRect.height + Units.gridUnit
             ColumnLayout {
                 anchors.centerIn: parent
                 Controls.Button {
@@ -98,6 +97,9 @@ ScrollablePage {
                 Controls.Button {
                     text: "Button2"
                     onClicked: showPassiveNotification("Button 2 clicked")
+                }
+                Item {
+                    Layout.minimumHeight: Units.gridUnit * 4
                 }
             }
         }
