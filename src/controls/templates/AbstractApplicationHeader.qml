@@ -106,6 +106,7 @@ Item {
             } else if (!__appWindow.controlsVisible) {
                 return -headerItem.height - Units.smallSpacing;
             } else {
+                root.height = maximumHeight;
                 return 0;
             }
         }
