@@ -29,6 +29,7 @@ Rectangle {
     height: moreButton.height
     property Item page: parent
     color: Theme.backgroundColor
+    visible: applicationWindow().controlsVisible
 
     anchors {
         left: parent.left

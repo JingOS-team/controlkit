@@ -133,6 +133,7 @@ AbstractApplicationWindow {
                 }
             }
         }
+        //FIXME
         onCurrentIndexChanged: overscroll.y = 0;
 
         function goBack() {
