@@ -26,7 +26,7 @@ Item {
     id: canvas
     width: height
     height: Units.iconSizes.smallMedium
-    property real morph: 0
+    property real morph: root.position
     property color color: Theme.textColor
     opacity: 0.8
     layer.enabled: true
