@@ -58,7 +58,7 @@ ScrollablePage {
                 onTriggered: showPassiveNotification("Action 1 clicked")
             },
             Action {
-                text:"Action 2"
+                text:"Disabled Action"
                 iconName: "folder"
                 enabled: false
             },

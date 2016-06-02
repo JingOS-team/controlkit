@@ -112,8 +112,8 @@ MouseArea {
             radius: Units.smallSpacing
             color: Theme.textColor
             opacity: 0.6
-            width: mainLayout.width + Units.smallSpacing
-            height: mainLayout.height + Units.smallSpacing
+            width: mainLayout.width + Math.round((height - mainLayout.height))
+            height: Math.max(mainLayout.height + Units.smallSpacing*2, Units.gridUnit*2)
         }
         RowLayout {
             id: mainLayout
