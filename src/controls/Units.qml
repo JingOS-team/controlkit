@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.4
+import QtQuick.Controls.Private 1.0
 import QtQuick.Window 2.2
 
 pragma Singleton
@@ -51,12 +52,12 @@ QtObject {
      * * desktop
      */
     property QtObject iconSizes: QtObject {
-        property int small: 16 * devicePixelRatio
-        property int smallMedium: 22 * devicePixelRatio
-        property int medium: 32 * devicePixelRatio
-        property int large: 48 * devicePixelRatio
-        property int huge: 64 * devicePixelRatio
-        property int enormous: 128 * devicePixelRatio
+        property int small: 16 * devicePixelRatio * (Settings.isMobile ? 1.5 : 1)
+        property int smallMedium: 22 * devicePixelRatio * (Settings.isMobile ? 1.5 : 1)
+        property int medium: 32 * devicePixelRatio * (Settings.isMobile ? 1.5 : 1)
+        property int large: 48 * devicePixelRatio * (Settings.isMobile ? 1.5 : 1)
+        property int huge: 64 * devicePixelRatio * (Settings.isMobile ? 1.5 : 1)
+        property int enormous: 128 * devicePixelRatio * (Settings.isMobile ? 1.5 : 1)
     }
 
     /**
@@ -81,7 +82,7 @@ QtObject {
      * use theme.mSize(theme.defaultFont), units.smallSpacing and units.largeSpacing.
      * The devicePixelRatio follows the definition of "device independent pixel" by Microsoft.
      */
-    property real devicePixelRatio: Math.floor(fontMetrics.font.pixelSize / fontMetrics.font.pointSize)
+    property real devicePixelRatio: fontMetrics.font.pixelSize / (fontMetrics.font.pointSize * 1.33)
 
     /**
      * units.longDuration should be used for longer, screen-covering animations, for opening and
