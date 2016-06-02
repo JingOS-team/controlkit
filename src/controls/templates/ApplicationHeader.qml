@@ -77,7 +77,7 @@ AbstractApplicationHeader {
         clip: true
         anchors {
             fill: parent
-            leftMargin: Math.max ((backButton ? backButton.width : 0), __appWindow.pageStack.x)
+            leftMargin: Math.max ((backButton ? backButton.width : 0), __appWindow.contentItem.x)
         }
         cacheBuffer: width * count
         displayMarginBeginning: __appWindow.pageStack.width * count
@@ -150,7 +150,7 @@ AbstractApplicationHeader {
                 //more columns shown?
                 if (__appWindow.wideScreen) {
                     if (modelData == 0 && titleList.backButton) {
-                        return page.width - Math.max(0, titleList.backButton.width - __appWindow.pageStack.x);
+                        return page.width - Math.max(0, titleList.backButton.width - __appWindow.contentItem.x);
                     } else {
                         return page.width;
                     }

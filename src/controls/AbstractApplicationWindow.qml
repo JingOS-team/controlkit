@@ -229,13 +229,13 @@ Controls.ApplicationWindow {
     }
 
     contentItem.anchors.topMargin: root.wideScreen && header && controlsVisible ? header.height : 0
-    contentItem.anchors.leftMargin: root.globalDrawer && (/*root.globalDrawer.toString().indexOf("SplitDrawer") === 0 ||*/ root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
+    contentItem.anchors.leftMargin: root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
     contentItem.anchors.rightMargin: root.contextDrawer && root.contextDrawer.modal === false ? root.contextDrawer.contentItem.width * root.contextDrawer.position : 0
     contentItem.transform: Translate {
         id: overscroll
         Behavior on y {
             NumberAnimation {
-                duration: Kirigami.Units.longDuration
+                duration: Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }
@@ -262,8 +262,8 @@ Controls.ApplicationWindow {
     }
     onPageStackChanged: pageStack.parent = contentItem;
 
-    width: Units.gridUnit * 25
-    height: Units.gridUnit * 30
+    width: Units.gridUnit * 30
+    height: Units.gridUnit * 45
     visible: true
 
 

@@ -25,9 +25,6 @@ import "gallery"
 
 Kirigami.ApplicationWindow {
     id: root
-    width: 500
-    height: 800
-    visible: true
 
     header: Kirigami.ApplicationHeader {
         preferredHeight: Kirigami.Units.gridUnit * 2.2
