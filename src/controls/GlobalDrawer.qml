@@ -249,6 +249,7 @@ OverlayDrawer {
                     id: stackView
                     Layout.fillWidth: true
                     Layout.minimumHeight: currentItem ? currentItem.implicitHeight : 0
+                    Layout.maximumHeight: Layout.minimumHeight
                     initialItem: menuComponent
                 }
                 Item {
@@ -279,6 +280,7 @@ OverlayDrawer {
                         property alias model: actionsRepeater.model
 
                         property int level: 0
+                        Layout.maximumHeight: Layout.minimumHeight
 
 
                         Repeater {
@@ -293,7 +295,6 @@ OverlayDrawer {
                                 visible: model ? model.visible || model.visible===undefined : modelData.visible
                                 enabled: model ? model.enabled : modelData.enabled
                                 opacity: enabled ? 1.0 : 0.3
-
                                 Icon {
                                     anchors {
                                         verticalCenter: parent.verticalCenter

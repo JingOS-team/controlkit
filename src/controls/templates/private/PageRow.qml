@@ -337,7 +337,11 @@ Item {
         onCurrentItemChanged: {
             currentItemSnapTimer.restart();
         }
-        onMovementEnded: {print("minchia: onmovementended")
+        onMovementEnded: {
+            if (mainLayout.childrenRect.width == 0) {
+                return;
+            }
+
             var pos = currentItem.mapToItem(mainFlickable, 0, 0);
             var oldCurrentIndex = currentIndex;
 
