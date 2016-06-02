@@ -382,6 +382,9 @@ Item {
                 }
             }
             onWidthChanged: {
+                if (currentItemSnapTimer.running) {
+                    return;
+                }
                 var oldScrollProportion = mainFlickable.scrollProportion;
                 mainFlickable.contentX = currentItem.parent.x - oldScrollProportion * mainFlickable.width;
                 mainFlickable.scrollProportion = oldScrollProportion;
