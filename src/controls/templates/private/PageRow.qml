@@ -461,7 +461,7 @@ Item {
                 width: Math.ceil(Units.smallSpacing / 5)
                 color: Theme.textColor
                 opacity: 0.3
-                visible: container.level < root.depth
+                visible: container.level < root.depth-1
             }
             states: [
                 State {
