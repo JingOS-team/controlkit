@@ -110,14 +110,6 @@ AbstractApplicationWindow {
      */
     property alias pageStack: __pageStack
 
-    /**
-     * controlsVisible: bool
-     * This property controls wether the standard chrome of the app, such
-     * as the Action button, the drawer handles and the application
-     * header should be visible or not.
-     */
-    property bool controlsVisible: true
-
     //redefines here as here we can know a pointer to PageRow
     wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth*2
 
