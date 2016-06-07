@@ -46,9 +46,9 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     const QString style = QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_STYLE"));
 
-   /* if (!style.isEmpty() && QFile::exists(baseUrl().path() + QStringLiteral("/styles/Desktop"))) {
+    if (style.isEmpty() && QFile::exists(baseUrl().path() + QStringLiteral("/styles/Desktop"))) {
         m_stylesFallbackChain.prepend(QStringLiteral("Desktop"));
-    }*/
+    }
 
     if (!style.isEmpty() && QFile::exists(baseUrl().path() + QStringLiteral("/styles/") + style)) {
         m_stylesFallbackChain.prepend(style);
