@@ -216,11 +216,20 @@ Controls.ApplicationWindow {
      */
     property AbstractDrawer contextDrawer
 
+    /**
+     * reachableMode: bool
+     * When true the application is in reachable mode for single hand use.
+     * the whole content of the application is moved down the screen to be
+     * reachable with the thumb. if wideScreen is true, tis property has
+     * no effect.
+     */
+    property bool reachableMode: false
+
     MouseArea {
         parent: contentItem.parent
         z: -1
         anchors.fill: parent
-        onClicked: overscroll.y = 0
+        onClicked: root.reachableMode = false;
         Rectangle {
             anchors.fill: parent
             color: Qt.rgba(0, 0, 0, 0.3)
@@ -232,19 +241,19 @@ Controls.ApplicationWindow {
     contentItem.anchors.leftMargin: root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
     contentItem.anchors.rightMargin: root.contextDrawer && root.contextDrawer.modal === false ? root.contextDrawer.contentItem.width * root.contextDrawer.position : 0
     contentItem.transform: Translate {
-        id: overscroll
         Behavior on y {
             NumberAnimation {
                 duration: Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }
+        y: root.reachableMode && !root.wideScreen ? root.height/2 : 0
         x: root.globalDrawer && root.globalDrawer.modal === true && root.globalDrawer.toString().indexOf("SplitDrawer") === 0 ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
     }
     //Don't want overscroll in landscape mode
     onWidthChanged: {
         if (width > height) {
-            overscroll.y = 0;
+            root.reachableMode = false;
         }
     }
 

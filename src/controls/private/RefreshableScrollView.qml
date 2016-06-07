@@ -162,7 +162,7 @@ Controls.ScrollView {
             onYChanged: {
                 if (y > busyIndicatorFrame.height*1.5 + topPadding && applicationWindow() && root.flickableItem.atYBeginning && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
                     //here assume applicationWindow().pageStack has a translate as transform
-                    applicationWindow().contentItem.transform[0].y = root.height/2;
+                    applicationWindow().reachableMode = true;
                     overshootResetTimer.restart();
                     canOvershootBackTimer.restart();
                 }
@@ -178,7 +178,7 @@ Controls.ScrollView {
                 id: overshootResetTimer
                 interval: 8000
                 onTriggered: {
-                    applicationWindow().contentItem.transform[0].y = 0;
+                    applicationWindow().reachableMode = false;
                 }
             }
             //HACK?
@@ -190,8 +190,8 @@ Controls.ScrollView {
                 target: root.flickableItem
                 onMovementEnded: {
                     if (!canOvershootBackTimer.running &&
-                        applicationWindow().contentItem.transform[0].y > 0) {
-                        applicationWindow().contentItem.transform[0].y = 0;
+                        applicationWindow().reachableMode) {
+                        applicationWindow().reachableMode = false;
                     }
                 }
             }
@@ -225,13 +225,7 @@ Controls.ScrollView {
                 interval: 100
                 onTriggered: {
                     if (applicationWindow() && applicationWindow().header) {
-                        if (applicationWindow().header.wideScreen) {
-                            flickableItem.contentY = -applicationWindow().header.preferredHeight;
-                            applicationWindow().header.y = -applicationWindow().header.maximumHeight + applicationWindow().header.preferredHeight;
-                        } else {
-                            flickableItem.contentY = -applicationWindow().header.maximumHeight;
-                            applicationWindow().header.y = 0;
-                        }
+                        flickableItem.contentY = -applicationWindow().header.preferredHeight;
                     }
 
                     if (root.contentItem == root.flickableItem) {

@@ -30,7 +30,7 @@ import org.kde.kirigami 1.0
  * the minimum, preferred and maximum heights of the item can be controlled with
  * * minimumHeight: default is 0, i.e. hidden
  * * preferredHeight: default is Units.gridUnit * 1.6
- * * maximumHeight: default is Units.gridUnit * 3
+ * * preferredHeight: default is Units.gridUnit * 3
  *
  * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
  */
@@ -38,7 +38,7 @@ Item {
     id: root
     z: 90
     property int minimumHeight: 0
-    property int preferredHeight: Units.gridUnit * 1.6
+    property int preferredHeight: Units.gridUnit * 2
     property int maximumHeight: Units.gridUnit * 3
     default property alias contentItem: mainItem.data
 
@@ -51,7 +51,7 @@ Item {
         left: parent.left
         right: parent.right
     }
-    height: maximumHeight
+    height: preferredHeight
 
     /**
      * background: Item
@@ -88,10 +88,11 @@ Item {
             if (wideScreen) {
                 height = preferredHeight;
             } else {
-                height = maximumHeight;
+                height = preferredHeight;
             }
         }
-        onHeightChanged: root.height = maximumHeight;
+        onHeightChanged: root.height = preferredHeight;
+        onReachabilityChanged: root.height = __appWindow.reachableMode  && !__appWindow.wideScreen ? maximumHeight : preferredHeight;
     }
 
     transform: Translate {
@@ -100,13 +101,11 @@ Item {
             if (__appWindow === undefined) {
                 return 0;
             }
-            //FIXME: expose an overshoot property in AbstractApplicationWindow?
-            if(__appWindow.contentItem.transform[0] && __appWindow.contentItem.transform[0].y > 0) {
-                    return __appWindow.contentItem.transform[0].y;
+            if (__appWindow.reachableMode && !__appWindow.wideScreen) {
+                return __appWindow.height/2;
             } else if (!__appWindow.controlsVisible) {
                 return -headerItem.height - Units.smallSpacing;
             } else {
-                root.height = maximumHeight;
                 return 0;
             }
         }
@@ -126,7 +125,7 @@ Item {
             bottom: parent.bottom
         }
 
-        height: parent.maximumHeight
+        height: parent.preferredHeight
 
         Connections {
             id: headerSlideConnection
@@ -143,8 +142,10 @@ Item {
 
                 if (__appWindow.wideScreen) {
                     root.height = root.preferredHeight;
+                } else if (__appWindow.reachableMode && !__appWindow.wideScreen) {
+                    root.height = root.maximumHeight;
                 } else {
-                    root.height = Math.min(root.maximumHeight,
+                    root.height = Math.min(root.preferredHeight,
                                            Math.max(root.minimumHeight,
                                                root.height + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
                     oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
@@ -171,25 +172,15 @@ Item {
                 } else {
                     headerSlideConnection.oldContentY = 0;
                 }
-                if (!__appWindow.wideScreen && __appWindow.pageStack.currentItem.flickable) {
-                    root.height = root.maximumHeight;
-                } else {
-                    root.height = root.preferredHeight;
-                }
+                root.height = root.preferredHeight;
             }
         }
 
         Item {
             id: mainItem
-            property Translate overshootTransform
-            Component.onCompleted: {
-                if (applicationWindow() && applicationWindow().contentItem.transform[0]) {
-                    overshootTransform = applicationWindow().contentItem.transform[0]
-                }
-            }
             anchors {
                 fill: parent
-                topMargin: overshootTransform && overshootTransform.y > 0 ? 0 : Math.min(headerItem.height - root.height, headerItem.height - root.preferredHeight)
+                topMargin: applicationWindow().reachable ? 0 : Math.min(headerItem.height - root.height, headerItem.height - root.preferredHeight)
             }
         }
     }

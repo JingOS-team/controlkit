@@ -121,12 +121,12 @@ AbstractApplicationWindow {
             bottomMargin: ((Qt.platform.os == "android" || Qt.platform.os == "ios") || !Qt.inputMethod.visible) ? 0 : Qt.inputMethod.keyboardRectangle.height
             onBottomMarginChanged: {
                 if (bottomMargin > 0) {
-                    overscroll.y = 0;
+                    root.reachableMode = false;
                 }
             }
         }
         //FIXME
-        onCurrentIndexChanged: overscroll.y = 0;
+        onCurrentIndexChanged: root.reachableMode = false;
 
         function goBack() {
             if (root.contextDrawer && root.contextDrawer.opened && root.contextDrawer.modal) {
