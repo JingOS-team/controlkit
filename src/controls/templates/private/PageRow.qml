@@ -63,7 +63,7 @@ Item {
      * Pages can override it with their Layout.fillWidth,
      * implicitWidth Layout.minimumWidth etc.
      */
-    property int defaultColumnWidth: 400//Units.gridUnit * 30
+    property int defaultColumnWidth: Units.gridUnit * 20
 
 //END PROPERTIES
 
@@ -123,6 +123,7 @@ Item {
         var container = pagesLogic.initPage(page, properties);
         pagesLogic.append(container);
         container.visible = container.page.visible = true;
+
         mainFlickable.currentIndex = container.level;
         return container.page
     }
@@ -211,6 +212,8 @@ Item {
         }
 
         function append(item) {
+            //FIXME: seems that for one loop the x of the item would continue to be 0
+            item.x = item.level * roundedDefaultColumnWidth;
             item.parent = mainLayout;
         }
 
@@ -300,21 +303,27 @@ Item {
         contentWidth: mainLayout.childrenRect.width
         contentHeight: height
         readonly property Item currentItem: pagesLogic.get(Math.min(currentIndex, pagesLogic.count-1)).page
-        property real scrollProportion: 0
         //clip only when the app has a sidebar
         clip: root.x > 0
 
         property int currentIndex: 0
+        property int firstVisibleLevel: Math.round (contentX / pagesLogic.roundedDefaultColumnWidth)
+
         flickDeceleration: Units.gridUnit * 50
         onCurrentItemChanged: {
-            //TODO
-            var mappedPos = mainFlickable.currentItem.parent.mapToItem(mainFlickable, 0, 0);
-            if (mappedPos.x >= 0 && mappedPos.x + mainFlickable.currentItem.parent.width <= mainFlickable.width) {
+            var itemX = pagesLogic.roundedDefaultColumnWidth * currentIndex;
+
+            if (itemX >= contentX && itemX + mainFlickable.currentItem.width <= contentX + mainFlickable.width) {
                 return;
             }
-            print("AAA"+currentItem.parent.x)
-            scrollAnim.to = Math.max(0, (mainFlickable.currentItem.parent.x + mainFlickable.currentItem.parent.width) - mainFlickable.width);
 
+            scrollAnim.running = false;
+            scrollAnim.from = contentX;
+            if (itemX < contentX) {
+                scrollAnim.to = Math.max(0, Math.min(itemX, mainFlickable.contentWidth - mainFlickable.width));
+            } else {
+                scrollAnim.to = Math.max(0, Math.min(itemX - mainFlickable.width + mainFlickable.currentItem.width, mainFlickable.contentWidth - mainFlickable.width));
+            }
             scrollAnim.running = true;
         }
         onMovementEnded: {
@@ -322,33 +331,21 @@ Item {
                 return;
             }
 
-            var pos = currentItem.mapToItem(mainFlickable, 0, 0);
-            var oldCurrentIndex = currentIndex;
-
-            var childToSnap = mainLayout.childAt(contentX + 1, 10);
-            var mappedPos = childToSnap.mapToItem(mainFlickable, 0, 0);
-            if (mappedPos.x < -childToSnap.width / 2) {
-                childToSnap = mainLayout.children[childToSnap.level+1];
-            }
-
-            scrollAnim.to = childToSnap.x;
+            scrollAnim.running = false;
+            scrollAnim.from = contentX;
+            scrollAnim.to = pagesLogic.roundedDefaultColumnWidth * firstVisibleLevel
             scrollAnim.running = true;
 
             var mappedCurrentItemPos = currentItem.mapToItem(mainFlickable, 0, 0);
 
-            if (mappedCurrentItemPos.x < 0 || mappedCurrentItemPos.x + currentItem.width > mainFlickable.width) {
-                var newCurrentItem = mainLayout.childAt(Math.min(childToSnap.x + width, mainLayout.childrenRect.width) - 10, 10);
-                if (newCurrentItem) {
-                    currentIndex = newCurrentItem.level;
-                } else {
-                    currentIndex = pagesLogic.count - 1;
-                }
+            //is the current item out of view?
+            if (mappedCurrentItemPos.x < 0) {
+                currentIndex = firstVisibleLevel;
+            } else if (mappedCurrentItemPos.x + currentItem.width > mainFlickable.width) {
+                currentIndex = Math.min(root.depth-1, firstVisibleLevel + Math.floor(mainFlickable.width/pagesLogic.roundedDefaultColumnWidth)-1);
             }
         }
         onFlickEnded: movementEnded();
-        onContentXChanged: {
-            scrollProportion = (currentItem.parent.x - contentX) / width;
-        }
 
         Row {
             id: mainLayout
@@ -363,10 +360,10 @@ Item {
                 }
             }
             onWidthChanged: {
-                var oldScrollProportion = mainFlickable.scrollProportion;
-                mainFlickable.contentX = currentItem.parent.x - oldScrollProportion * mainFlickable.width;
-                mainFlickable.scrollProportion = oldScrollProportion;
+                mainFlickable.contentX = pagesLogic.roundedDefaultColumnWidth * mainFlickable.firstVisibleLevel
+                
             }
+            //onChildrenChanged: mainFlickable.contentX = pagesLogic.roundedDefaultColumnWidth * mainFlickable.firstVisibleLevel
         }
     }
 
@@ -477,6 +474,9 @@ Item {
                             property: "width"
                             duration: Units.longDuration
                             easing.type: Easing.InOutQuad
+                        }
+                        ScriptAction {
+                           script: mainFlickable.currentItemChanged();
                         }
                     }
                 }
