@@ -67,6 +67,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentPath(QStringLiteral("AbstractApplicationWindow.qml")), uri, 1, 0, "AbstractApplicationWindow");
     qmlRegisterType(componentPath(QStringLiteral("AbstractListItem.qml")), uri, 1, 0, "AbstractListItem");
     qmlRegisterType(componentPath(QStringLiteral("ApplicationHeader.qml")), uri, 1, 0, "ApplicationHeader");
+    qmlRegisterType(componentPath(QStringLiteral("ToolBarApplicationHeader.qml")), uri, 1, 0, "ToolBarApplicationHeader");
     qmlRegisterType(componentPath(QStringLiteral("ApplicationWindow.qml")), uri, 1, 0, "ApplicationWindow");
     qmlRegisterType(componentPath(QStringLiteral("BasicListItem.qml")), uri, 1, 0, "BasicListItem");
     qmlRegisterType(componentPath(QStringLiteral("OverlayDrawer.qml")), uri, 1, 0, "OverlayDrawer");

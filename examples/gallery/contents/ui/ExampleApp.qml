@@ -26,6 +26,8 @@ import "gallery"
 Kirigami.ApplicationWindow {
     id: root
 
+    //header: Kirigami.ToolBarApplicationHeader {}
+
     globalDrawer: Kirigami.GlobalDrawer {
         title: "Widget gallery"
         titleIcon: "applications-graphics"

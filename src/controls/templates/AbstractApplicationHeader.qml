@@ -92,7 +92,7 @@ Item {
             }
         }
         onHeightChanged: root.height = preferredHeight;
-        onReachabilityChanged: root.height = __appWindow.reachableMode  && !__appWindow.wideScreen ? maximumHeight : preferredHeight;
+        onReachableModeChanged: root.height = __appWindow.reachableMode  && !__appWindow.wideScreen ? maximumHeight : preferredHeight;
     }
 
     transform: Translate {

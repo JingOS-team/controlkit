@@ -50,6 +50,8 @@ AbstractApplicationHeader {
      */
     property string separatorStyle: "Breadcrumb"
 
+    property alias pageDelegate: titleList.delegate
+
     Rectangle {
         anchors {
             right: titleList.left
@@ -116,7 +118,7 @@ AbstractApplicationHeader {
 
         onContentXChanged: {
             if (__appWindow.wideScreen && !__appWindow.pageStack.contentItem.moving) {
-                __appWindow.pageStack.contentItem.contentX = titleList.contentX
+                //__appWindow.pageStack.contentItem.contentX = titleList.contentX
             }
         }
         onHeightChanged: {
