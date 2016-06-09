@@ -63,7 +63,7 @@ Item {
      * Pages can override it with their Layout.fillWidth,
      * implicitWidth Layout.minimumWidth etc.
      */
-    property int defaultColumnWidth: Units.gridUnit * 30
+    property int defaultColumnWidth: 400//Units.gridUnit * 30
 
 //END PROPERTIES
 
@@ -197,6 +197,8 @@ Item {
         readonly property int count: mainLayout.children.length
         property var componentCache
 
+        property int roundedDefaultColumnWidth: Math.floor(root.width/root.defaultColumnWidth) > 0 ? root.width/Math.floor(root.width/root.defaultColumnWidth) : root.width
+
         //NOTE:seems to only work if the array is defined in a declarative way,
         //the Object in an imperative way, espacially on Android
         Component.onCompleted: {
@@ -290,36 +292,6 @@ Item {
         duration: Units.longDuration
         easing.type: Easing.InOutQuad
     }
-    Timer {
-        id: itemSnapTimer
-        interval: Units.longDuration
-        property Item itemToSnap
-        onTriggered: {
-            scrollAnim.running = false;
-            scrollAnim.from = mainFlickable.contentX;
-
-            scrollAnim.to = Math.min(itemToSnap.x, mainLayout.childrenRect.width - mainFlickable.width);
-
-            scrollAnim.running = true;
-        }
-    }
-    Timer {
-        id: currentItemSnapTimer
-        interval: Units.longDuration
-        property Item itemToSnap
-        onTriggered: {
-            var mappedPos = mainFlickable.currentItem.parent.mapToItem(mainFlickable, 0, 0);
-            if (mappedPos.x >= 0 && mappedPos.x + mainFlickable.currentItem.parent.width <= mainFlickable.width) {
-                return;
-            }
-            scrollAnim.running = false;
-            itemSnapTimer.running = false;
-            scrollAnim.from = mainFlickable.contentX;
-
-            scrollAnim.to = Math.max(0, (mainFlickable.currentItem.parent.x + mainFlickable.currentItem.parent.width) - mainFlickable.width);
-            scrollAnim.running = true;
-        }
-    }
 
     Flickable {
         id: mainFlickable
@@ -335,7 +307,15 @@ Item {
         property int currentIndex: 0
         flickDeceleration: Units.gridUnit * 50
         onCurrentItemChanged: {
-            currentItemSnapTimer.restart();
+            //TODO
+            var mappedPos = mainFlickable.currentItem.parent.mapToItem(mainFlickable, 0, 0);
+            if (mappedPos.x >= 0 && mappedPos.x + mainFlickable.currentItem.parent.width <= mainFlickable.width) {
+                return;
+            }
+            print("AAA"+currentItem.parent.x)
+            scrollAnim.to = Math.max(0, (mainFlickable.currentItem.parent.x + mainFlickable.currentItem.parent.width) - mainFlickable.width);
+
+            scrollAnim.running = true;
         }
         onMovementEnded: {
             if (mainLayout.childrenRect.width == 0) {
@@ -350,8 +330,9 @@ Item {
             if (mappedPos.x < -childToSnap.width / 2) {
                 childToSnap = mainLayout.children[childToSnap.level+1];
             }
-            itemSnapTimer.itemToSnap = childToSnap;
-            itemSnapTimer.restart();
+
+            scrollAnim.to = childToSnap.x;
+            scrollAnim.running = true;
 
             var mappedCurrentItemPos = currentItem.mapToItem(mainFlickable, 0, 0);
 
@@ -382,15 +363,9 @@ Item {
                 }
             }
             onWidthChanged: {
-                if (currentItemSnapTimer.running) {
-                    return;
-                }
                 var oldScrollProportion = mainFlickable.scrollProportion;
                 mainFlickable.contentX = currentItem.parent.x - oldScrollProportion * mainFlickable.width;
                 mainFlickable.scrollProportion = oldScrollProportion;
-
-                itemSnapTimer.itemToSnap = currentItem.parent;
-                itemSnapTimer.restart();
             }
         }
     }
@@ -489,7 +464,7 @@ Item {
                     name: "middle"
                     PropertyChanges {
                         target: container
-                        width: roundedHint
+                        width: pagesLogic.roundedDefaultColumnWidth
                     }
                 }
             ]
@@ -502,11 +477,6 @@ Item {
                             property: "width"
                             duration: Units.longDuration
                             easing.type: Easing.InOutQuad
-                        }
-                        ScriptAction {
-                            script: {
-                                currentItemSnapTimer.restart();
-                            }
                         }
                     }
                 }
