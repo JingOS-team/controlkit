@@ -31,7 +31,7 @@ import org.kde.kirigami 1.0
 ApplicationHeader {
     id: header
 
-    preferredHeight: spacer.height
+    preferredHeight: 34//spacer.height
     maximumHeight: preferredHeight
 
     Controls.ToolButton {
@@ -46,93 +46,110 @@ ApplicationHeader {
     pageDelegate: Item {
         id: delegateItem
         readonly property Page page: applicationWindow().pageStack.get(modelData)
+        property ListView view: ListView.view
+        readonly property bool current: __appWindow.pageStack.currentIndex == index
+        property Row layout
 
         width: {
             //more columns shown?
             if (__appWindow.wideScreen) {
-                if (modelData == 0 && ListView.view.x > 0) {
-                    return page.width - Math.max(0, ListView.view.x - __appWindow.contentItem.x);
+                if (modelData == 0 && view.x > 0) {
+                    return page.width - Math.max(0, view.x - __appWindow.contentItem.x);
                 } else {
                     return page.width;
                 }
             } else {
-                return Math.min(titleList.width, delegateRoot.implicitWidth + Units.smallSpacing);
+                return Math.min(view.width, delegateRoot.implicitWidth + Units.smallSpacing);
             }
         }
-        height: ListView.view.height
+        height: view.height
 
-        Row {
-            id: layout
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-            Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                color: Theme.textColor
-                opacity: 0.3
-                width: Units.devicePixelRatio
-                height: parent.height * 0.6
-            }
-            Controls.ToolButton {
-                anchors.verticalCenter: parent.verticalCenter
-                iconName: page.actions.main.iconName
-                text: page.actions.main.text
-                tooltip: page.actions.main.text
-                checkable: page.actions.main.checkable
-                checked: page.actions.main.checked
-                enabled: page.actions.main.enabled
-                opacity: enabled ? 1 : 0.4
-                visible: page.actions.main && page.actions.main.visible
-                onClicked: page.actions.main.trigger();
-            }
-            Controls.ToolButton {
-                anchors.verticalCenter: parent.verticalCenter
-                iconName: page.actions.left.iconName
-                text: page.actions.left.text
-                tooltip: page.actions.left.text
-                checkable: page.actions.left.checkable
-                checked: page.actions.left.checked
-                enabled: page.actions.left.enabled
-                opacity: enabled ? 1 : 0.4
-                visible: page.actions.left && page.actions.left.visible
-                onClicked: page.actions.left.trigger();
-            }
-            Controls.ToolButton {
-                anchors.verticalCenter: parent.verticalCenter
-                iconName: page.actions.right.iconName
-                text: page.actions.right.text
-                tooltip: page.actions.right.text
-                checkable: page.actions.right.checkable
-                checked: page.actions.right.checked
-                enabled: page.actions.right.enabled
-                opacity: enabled ? 1 : 0.4
-                visible: page.actions.right && page.actions.right.visible
-                onClicked: page.actions.right.trigger();
-            }
-            Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                color: Theme.textColor
-                opacity: 0.3
-                width: Units.devicePixelRatio
-                height: parent.height * 0.6
-            }
-            Repeater {
-                id: repeater
-                model: page.actions.contextualActions
-                delegate: Controls.ToolButton {
+        Component.onCompleted: {
+            layout = toolbarComponent.createObject(delegateItem)
+        }
+        Component {
+            id: toolbarComponent
+            Row {
+                id: layout
+                x: __appWindow.wideScreen ? (Math.min(delegateItem.width - width, Math.max(0, delegateItem.view.contentX - delegateItem.x))) : 0
+
+                Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
-                    iconName: modelData.iconName
-                    text: modelData.text
-                    tooltip: modelData.text
-                    checkable: modelData.checkable
-                    checked: modelData.checked
-                    enabled: modelData.enabled
+                    color: Theme.textColor
+                    opacity: 0.3
+                    width: Units.devicePixelRatio
+                    height: parent.height * 0.6
+                }
+                Controls.ToolButton {
+                    anchors.verticalCenter: parent.verticalCenter
+                    iconName: page && page.actions && page.actions.main ? page.actions.main.iconName : ""
+                    text: page && page.actions && page.actions.main ? page.actions.main.text : ""
+                    tooltip: page && page.actions && page.actions.main ? page.actions.main.text : ""
+                    checkable: page && page.actions && page.actions.main && page.actions.main.checkable
+                    checked: page && page.actions && page.actions.main && page.actions.main.checked
+                    enabled: page && page.actions && page.actions.main && page.actions.main.enabled
                     opacity: enabled ? 1 : 0.4
-                    visible: modelData.visible && x+width*2 < delegateItem.width
-                    onClicked: modelData.trigger();
+                    visible: page && page.actions && page.actions.main && page.actions.main.visible
+                    onClicked: page.actions.main.trigger();
+                }
+                Controls.ToolButton {
+                    anchors.verticalCenter: parent.verticalCenter
+                    iconName: page && page.actions && page.actions.left ? page.actions.left.iconName : ""
+                    text: page && page.actions && page.actions.left ? page.actions.left.text : ""
+                    tooltip: page && page.actions && page.actions.left ? page.actions.left.text : ""
+                    checkable: page && page.actions && page.actions.left && page.actions.left.checkable
+                    checked: page && page.actions && page.actions.left && page.actions.left.checked
+                    enabled: page && page.actions && page.actions.left && page.actions.left.enabled
+                    opacity: enabled ? 1 : 0.4
+                    visible: page && page.actions && page.actions.left && page.actions.left && page.actions.left.visible
+                    onClicked: page.actions.left.trigger();
+                }
+                Controls.ToolButton {
+                    anchors.verticalCenter: parent.verticalCenter
+                    iconName: page && page.actions && page.actions.right ? page.actions.right.iconName : ""
+                    text: page && page.actions && page.actions.right ? page.actions.right.text : ""
+                    tooltip: page && page.actions && page.actions.right ? page.actions.right.text : ""
+                    checkable: page && page.actions && page.actions.right && page.actions.right.checkable
+                    checked: page && page.actions && page.actions.right && page.actions.right.checked
+                    enabled: page && page.actions && page.actions.right && page.actions.right.enabled
+                    opacity: enabled ? 1 : 0.4
+                    visible: page && page.actions && page.actions.right && page.actions.right && page.actions.right.visible
+                    onClicked: page.actions.right.trigger();
+                }
+                Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: Theme.textColor
+                    opacity: 0.3
+                    width: Units.devicePixelRatio
+                    height: parent.height * 0.6
+                }
+                Repeater {
+                    id: repeater
+                    model: page && page.actions.contextualActions ? page.actions.contextualActions : null
+                    delegate: Controls.ToolButton {
+                        anchors.verticalCenter: parent.verticalCenter
+                        iconName: modelData.iconName
+                        text: modelData.text
+                        tooltip: modelData.text
+                        checkable: modelData.checkable
+                        checked: modelData.checked
+                        enabled: modelData.enabled
+                        opacity: enabled ? 1 : 0.4
+                        visible: modelData.visible && x+layout.x+width*2 < delegateItem.width
+                        onClicked: modelData.trigger();
+                    }
                 }
             }
+        }
+        Heading {
+            x: __appWindow.wideScreen ? (Math.min(delegateItem.width - width, Math.max(0, delegateItem.view.contentX - delegateItem.x))) : 0
+            anchors.verticalCenter: parent.verticalCenter
+            visible: layout.width <= 0
+            opacity: delegateItem.current ? 1 : 0.4
+            color: Theme.textColor
+            elide: Text.ElideRight
+            text: page ? page.title : ""
+            font.pixelSize: parent.height / 1.6
         }
         Controls.ToolButton {
             id: moreButton
@@ -151,13 +168,14 @@ ApplicationHeader {
 
                 property int visibleChildren: 0
                 Instantiator {
-                    model: page.actions.contextualActions
-                    Controls.MenuItem {
-                        text: modelData.text
+                    model: page && page.actions.contextualActions ? page.actions.contextualActions : null
+                    delegate: Controls.MenuItem {
+                        text: modelData ? modelData.text : ""
                         iconName: modelData.iconName
                         shortcut: modelData.shortcut
                         onTriggered: modelData.trigger();
-                        visible: !layout.children[index+3].visible && modelData.visible
+                        //skip the 3 buttons and 2 separators
+                        visible: !layout.children[index+5].visible && modelData.visible
                         enabled: modelData.enabled
                         onVisibleChanged: {
                             if (visible) {
