@@ -161,7 +161,6 @@ Controls.ScrollView {
             }
             onYChanged: {
                 if (y > busyIndicatorFrame.height*1.5 + topPadding && applicationWindow() && root.flickableItem.atYBeginning && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
-                    //here assume applicationWindow().pageStack has a translate as transform
                     applicationWindow().reachableMode = true;
                     overshootResetTimer.restart();
                     canOvershootBackTimer.restart();
@@ -224,7 +223,7 @@ Controls.ScrollView {
                 id: resetTimer
                 interval: 100
                 onTriggered: {
-                    if (applicationWindow() && applicationWindow().header) {
+                    if (applicationWindow() && applicationWindow().header && !applicationWindow().wideScreen) {
                         flickableItem.contentY = -applicationWindow().header.preferredHeight;
                     }
 
@@ -269,7 +268,6 @@ Controls.ScrollView {
             cursorY = applicationWindow().activeFocusItem.positionToRectangle(applicationWindow().activeFocusItem.cursorPosition).y;
         }
 
-        
         var pos = applicationWindow().activeFocusItem.mapToItem(root.contentItem, 0, cursorY);
 
         //focused item alreqady visible? add some margin for the space of the action buttons

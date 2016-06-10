@@ -317,6 +317,10 @@ Item {
                 return;
             }
 
+            //this catches 0 and NaN (sometimes at startup width can oddly be nan
+            if (!mainFlickable.width) {
+                return;
+            }
             scrollAnim.running = false;
             scrollAnim.from = contentX;
             if (itemX < contentX) {
@@ -349,7 +353,6 @@ Item {
 
         Row {
             id: mainLayout
-
             add: Transition {
                 NumberAnimation {
                     property: "y"
