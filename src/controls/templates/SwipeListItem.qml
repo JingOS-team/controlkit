@@ -215,7 +215,7 @@ Item {
     }
 
     onPositionChanged: {
-        if (!handleMouse.pressed && !mainFlickable.flicking &&
+        if (!mainFlickable.loopCheck && !handleMouse.pressed && !mainFlickable.flicking &&
             !mainFlickable.dragging && !positionAnimation.running) {
             mainFlickable.contentX = (listItem.width-listItem.height) * mainFlickable.internalPosition;
         }
@@ -297,8 +297,13 @@ Item {
             positionAnimation.running = true;
         }
         readonly property real internalPosition:  (mainFlickable.contentX/(listItem.width-listItem.height));
+        property bool loopCheck: false
         onInternalPositionChanged: {
-            listItem.position = internalPosition;
+            if (!loopCheck) {
+                loopCheck = true;
+                listItem.position = internalPosition;
+                loopCheck = false;
+            }
         }
 
         Item {
