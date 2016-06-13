@@ -264,15 +264,16 @@ Item {
         }
     }
 
-    ActionButton {
-        id: __actionButton
-        parent: root
+    Loader {
         z: 9999
-        action: root.mainAction
-        leftAction: root.leftAction
-        rightAction: root.rightAction
-        visible: applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") !== 0
-
+        parent: root
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
+        height: item ? item.height : 0
+        source: applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") !== 0 ? Qt.resolvedUrl("./private/ActionButton.qml") : ""
     }
 
     Layout.fillWidth: true

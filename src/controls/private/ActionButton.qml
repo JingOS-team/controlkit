@@ -106,7 +106,7 @@ Item {
                 if (applicationWindow !== undefined && applicationWindow().pageStack.currentIndex !== undefined) {
                     //search the button parent's parent, that is the page parent
                     //this will make the context drawer open for the proper page
-                    applicationWindow().pageStack.currentIndex = root.parent.parent.level;
+                    applicationWindow().pageStack.currentIndex = root.parent.parent.parent.level;
                 }
                 downTimestamp = (new Date()).getTime();
                 startX = button.x + button.width/2;
@@ -328,7 +328,7 @@ Item {
             minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
             maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
         }
-        visible: root.parent.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
+        visible: root.parent.parent.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
 
         width: Units.iconSizes.medium
         height: width
