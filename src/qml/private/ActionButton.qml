@@ -139,27 +139,33 @@ Item {
                         contextDrawer.close();
                     }
                 }
-                //buttonPressedUnderMouse = leftButtonPressedUnderMouse = rightButtonPressedUnderMouse = false;
-            }
-            onClicked: {
-                var action;
-                if (buttonPressedUnderMouse) {
-                    action = root.action;
-                } else if (leftButtonPressedUnderMouse) {
-                    action = root.leftAction;
-                } else if (rightButtonPressedUnderMouse) {
-                    action = root.rightAction;
-                }
+                //Don't rely on native onClicked, but fake it here:
+                //Qt.startDragDistance is not adapted to devices dpi in case
+                //of Android, so consider the button "clicked" when:
+                //*the button has been dragged less than a gridunit
+                //*the finger is still on the button
+                if (Math.abs((button.x + button.width/2) - startX) < Units.gridUnit &&
+                    mouse.y > 0) {
+                    var action;
+                    if (buttonPressedUnderMouse) {
+                        action = root.action;
+                    } else if (leftButtonPressedUnderMouse) {
+                        action = root.leftAction;
+                    } else if (rightButtonPressedUnderMouse) {
+                        action = root.rightAction;
+                    }
 
-                if (!action) {
-                    return;
-                }
+                    if (!action) {
+                        return;
+                    }
 
-                //if an action has been assigned, trigger it
-                if (action && action.trigger) {
-                    action.trigger();
+                    //if an action has been assigned, trigger it
+                    if (action && action.trigger) {
+                        action.trigger();
+                    }
                 }
             }
+
             onPositionChanged: {
                 drawerShowAdjust = Math.min(0.3, Math.max(0, (startMouseY - mouse.y)/(Units.gridUnit*15)));
                 button.xChanged();
