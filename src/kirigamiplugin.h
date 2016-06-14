@@ -22,21 +22,86 @@
 #ifndef MOBILECOMPONENTSPLUGIN_H
 #define MOBILECOMPONENTSPLUGIN_H
 
+#ifdef KIRIGAMI_BUILD_TYPE_STATIC
+#include <QObject>
+#include <QString>
+#include <QUrl>
+#else
 #include <QQmlEngine>
 #include <QQmlExtensionPlugin>
+#include <QUrl>
+#endif
 
-class KirigamiPlugin : public QQmlExtensionPlugin
+class AbstractKirigamiPlugin : public QObject
 {
     Q_OBJECT
+public:
+    virtual void registerTypes(const char *uri) = 0;
+
+protected:
+    virtual QUrl componentPath(const QString &fileName) const = 0;
+    virtual QString resolveFilePath(const QString &path) const = 0;
+    virtual QUrl resolveFileUrl(const QString &filePath) const = 0;
+
+    QStringList m_stylesFallbackChain;
+
+};
+
+#ifdef KIRIGAMI_BUILD_TYPE_STATIC
+
+class KirigamiPlugin : public AbstractKirigamiPlugin
+{
+public:
+    static KirigamiPlugin& getInstance()
+    {
+        static KirigamiPlugin instance;
+        return instance;
+    }
+    KirigamiPlugin(KirigamiPlugin const&) = delete;
+    void operator=(KirigamiPlugin const&) = delete;
+    void registerTypes(const char *uri);
+    static void registerTypes()
+    {
+        getInstance().registerTypes("org.kde.kirigami");
+    }
+
+private:
+    KirigamiPlugin() {}
+    QUrl componentPath(const QString &fileName) const;
+    QString resolveFilePath(const QString &path) const
+    {
+        return QLatin1Char(':') + path;
+    }
+    QUrl resolveFileUrl(const QString &filePath) const
+    {
+        if (filePath.startsWith(QLatin1Char(':'))) {
+            return QUrl(QStringLiteral("qrc:") + filePath.right(filePath.length() - 1));
+        }
+        return QUrl(QStringLiteral("qrc:/") + filePath);
+    }
+};
+
+#else
+
+class KirigamiPlugin : public AbstractKirigamiPlugin, public QQmlExtensionPlugin
+{
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
     void registerTypes(const char *uri);
 
 private:
-    QString componentPath(const QString &fileName) const;
-
-    QStringList m_stylesFallbackChain;
+    QUrl componentPath(const QString &fileName) const;
+    QString resolveFilePath(const QString &path) const
+    {
+        return baseUrl().path() + QLatin1Char('/') + path;
+    }
+    QUrl resolveFileUrl(const QString &filePath) const
+    {
+        return QUrl(baseUrl().toString() + QLatin1Char('/') + filePath);
+    }
 };
+
+#endif
 
 #endif

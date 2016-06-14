@@ -1,23 +1,12 @@
-#this pri is needed only when included as a subdirectory of a cmake project
-TEMPLATE = lib
-CONFIG += plugin
 
 QT          += qml quick gui svg
 HEADERS     += $$PWD/src/kirigamiplugin.h
 SOURCES     += $$PWD/src/kirigamiplugin.cpp
+INCLUDEPATH += $$PWD/src
+DEFINES     += KIRIGAMI_BUILD_TYPE_STATIC
 
 API_VER=1.0
 
-TARGET = $$qtLibraryTarget(org/kde/kirigamiplugin)
+RESOURCES += $$PWD/kirigami.qrc
 
-importPath = $$[QT_INSTALL_QML]/org/kde/kirigami
-target.path = $${importPath}
-
-controls.path = $${importPath}
-controls.files += $$PWD/src/controls/*
-
-#For now ignore Desktop and Plasma stuff in qmake
-#styles.path = $${importPath}/styles
-#styles.files += $$PWD/src/styles/*
-
-INSTALLS    += target controls
+#QML_IMPORT_PATH += $$PWD
