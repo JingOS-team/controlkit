@@ -25,19 +25,21 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
-QUrl KirigamiPlugin::componentPath(const QString &fileName) const
+QString KirigamiPlugin::componentPath(const QString &fileName) const
 {
     QString candidate;
+    QString candidatePath;
 
     foreach (const QString &style, m_stylesFallbackChain) {
-        candidate = resolveFilePath(QStringLiteral("/styles/") + style + QLatin1Char('/') + fileName);
-        if (QFile::exists(candidate)) {
+        candidate = QStringLiteral("styles/") + style + QLatin1Char('/') + fileName;
+        if (QFile::exists(resolveFilePath(candidate))) {
             return resolveFileUrl(candidate);
         }
     }
 
     return resolveFileUrl(fileName);
 }
+
 
 void KirigamiPlugin::registerTypes(const char *uri)
 {
@@ -57,7 +59,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //TODO: in this plugin it will end up something similar to
     //PlasmaCore's ColorScope?
-
+qWarning()<<"FFF"<<componentPath(QStringLiteral("Theme.qml"));
     qmlRegisterSingletonType(componentPath(QStringLiteral("Theme.qml")), uri, 1, 0, "Theme");
     qmlRegisterSingletonType(componentPath(QStringLiteral("Units.qml")), uri, 1, 0, "Units");
 

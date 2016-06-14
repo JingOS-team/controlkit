@@ -32,24 +32,10 @@
 #include <QUrl>
 #endif
 
-class AbstractKirigamiPlugin : public QObject
-{
-    Q_OBJECT
-public:
-    virtual void registerTypes(const char *uri) = 0;
-
-protected:
-    virtual QUrl componentPath(const QString &fileName) const = 0;
-    virtual QString resolveFilePath(const QString &path) const = 0;
-    virtual QUrl resolveFileUrl(const QString &filePath) const = 0;
-
-    QStringList m_stylesFallbackChain;
-
-};
 
 #ifdef KIRIGAMI_BUILD_TYPE_STATIC
 
-class KirigamiPlugin : public AbstractKirigamiPlugin
+class KirigamiPlugin : public QObject
 {
 public:
     static KirigamiPlugin& getInstance()
@@ -72,34 +58,37 @@ private:
     {
         return QLatin1Char(':') + path;
     }
-    QUrl resolveFileUrl(const QString &filePath) const
+    QString resolveFileUrl(const QString &filePath) const
     {
         if (filePath.startsWith(QLatin1Char(':'))) {
-            return QUrl(QStringLiteral("qrc:") + filePath.right(filePath.length() - 1));
+            return QStringLiteral("qrc:") + filePath.right(filePath.length() - 1);
         }
-        return QUrl(QStringLiteral("qrc:/") + filePath);
+        return QStringLiteral("qrc:/") + filePath;
     }
+    QStringList m_stylesFallbackChain;
 };
 
 #else
 
-class KirigamiPlugin : public AbstractKirigamiPlugin, public QQmlExtensionPlugin
+class KirigamiPlugin : public QQmlExtensionPlugin
 {
+    Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
     void registerTypes(const char *uri);
 
 private:
-    QUrl componentPath(const QString &fileName) const;
+    QString componentPath(const QString &fileName) const;
     QString resolveFilePath(const QString &path) const
     {
         return baseUrl().path() + QLatin1Char('/') + path;
     }
-    QUrl resolveFileUrl(const QString &filePath) const
+    QString resolveFileUrl(const QString &filePath) const
     {
-        return QUrl(baseUrl().toString() + QLatin1Char('/') + filePath);
+        return QStringLiteral("file://") + baseUrl().path() + QLatin1Char('/') + filePath;
     }
+    QStringList m_stylesFallbackChain;
 };
 
 #endif
