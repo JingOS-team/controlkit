@@ -47,9 +47,11 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     const QString style = QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_STYLE"));
 
+#if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     if (style.isEmpty() && QFile::exists(resolveFilePath(QStringLiteral("/styles/Desktop")))) {
         m_stylesFallbackChain.prepend(QStringLiteral("Desktop"));
     }
+#endif
 
     if (!style.isEmpty() && QFile::exists(resolveFilePath(QStringLiteral("/styles/") + style))) {
         m_stylesFallbackChain.prepend(style);
@@ -59,7 +61,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //TODO: in this plugin it will end up something similar to
     //PlasmaCore's ColorScope?
-qWarning()<<"FFF"<<componentPath(QStringLiteral("Theme.qml"));
+
     qmlRegisterSingletonType(componentPath(QStringLiteral("Theme.qml")), uri, 1, 0, "Theme");
     qmlRegisterSingletonType(componentPath(QStringLiteral("Units.qml")), uri, 1, 0, "Units");
 
