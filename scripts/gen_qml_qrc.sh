@@ -2,7 +2,7 @@
 
 TAB="    "
 
-kirigami_dir="$(dirname $(readlink -f $0))/.."
+kirigami_dir="$(cd $(dirname $(readlink -f $0))/.. && pwd)"
 
 case $1 in
 -h|--help)
