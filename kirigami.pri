@@ -8,5 +8,6 @@ DEFINES     += KIRIGAMI_BUILD_TYPE_STATIC
 API_VER=1.0
 
 RESOURCES += $$PWD/kirigami.qrc
+RESOURCES += $$PWD/kirigami-icons.qrc
 
 #QML_IMPORT_PATH += $$PWD
