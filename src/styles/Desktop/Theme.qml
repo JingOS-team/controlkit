@@ -26,6 +26,7 @@ QtObject {
     id: theme
 
     property color textColor: palette.windowText
+    property color disabledTextColor: disabledPalette.windowText
 
     property color highlightColor: palette.highlight
     property color highlightedTextColor: palette.highlightedText
@@ -52,6 +53,10 @@ QtObject {
         SystemPalette {
             id: palette
             colorGroup: SystemPalette.Active
+        },
+        SystemPalette {
+            id: disabledPalette
+            colorGroup: SystemPalette.Disabled
         }
     ]
 }

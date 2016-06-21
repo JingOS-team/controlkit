@@ -24,6 +24,8 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 QtObject {
     property color textColor: theme.textColor
+    property color disabledTextColor: Qt.rgba(palette.windowText.r, palette.windowText.g, palette.windowText.b, 0.6)
+
     property color highlightColor: theme.highlightColor
     property color highlightedTextColor: theme.highlightedTextColor
     property color backgroundColor: theme.backgroundColor

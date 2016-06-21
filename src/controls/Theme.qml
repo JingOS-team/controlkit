@@ -26,6 +26,7 @@ QtObject {
     id: theme
 
     property color textColor: "#31363b"
+    property color disabledTextColor: "#9931363b"
 
     property color highlightColor: "#2196F3"
     property color highlightedTextColor: "#eff0fa"
