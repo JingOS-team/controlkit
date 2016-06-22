@@ -12,7 +12,12 @@ endif()
 
 option(PLASMA_ENABLED "Build and install The Plasma style" ON)
 option(DESKTOP_ENABLED "Build and install The Desktop style" ON)
+option(STATIC_LIBRARY "Build as a static library" OFF)
 option(BUILD_EXAMPLES "Build and install examples" OFF)
+
+IF(STATIC_LIBRARY)
+    ADD_DEFINITIONS(-DKIRIGAMI_BUILD_TYPE_STATIC)
+ENDIF(STATIC_LIBRARY)
 
 # Make CPack available to easy generate binary packages
 include(CPack)

@@ -4,6 +4,15 @@ set(kirigami_SRCS
     kirigamiplugin.cpp
     )
 
+IF(STATIC_LIBRARY)
+
+qt5_add_resources(RESOURCES ${CMAKE_SOURCE_DIR}/kirigami.qrc)
+
+add_library(kirigamiplugin STATIC ${kirigami_SRCS} ${RESOURCES})
+target_link_libraries(kirigamiplugin Qt5::Core  Qt5::Qml Qt5::Quick)
+
+ELSE(STATIC_LIBRARY)
+
 add_library(kirigamiplugin SHARED ${kirigami_SRCS})
 target_link_libraries(kirigamiplugin Qt5::Core  Qt5::Qml Qt5::Quick)
 
@@ -24,3 +33,5 @@ include(ECMGeneratePriFile)
 ecm_generate_pri_file(BASE_NAME Kirigami LIB_NAME KF5Kirigami DEPS "core qml quick svg" FILENAME_VAR PRI_FILENAME )
 install(FILES ${PRI_FILENAME}
         DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
+
+ENDIF(STATIC_LIBRARY)
