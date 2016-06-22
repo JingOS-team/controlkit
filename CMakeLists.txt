@@ -15,13 +15,22 @@ option(DESKTOP_ENABLED "Build and install The Desktop style" ON)
 option(STATIC_LIBRARY "Build as a static library" OFF)
 option(BUILD_EXAMPLES "Build and install examples" OFF)
 
-IF(STATIC_LIBRARY)
-    ADD_DEFINITIONS(-DKIRIGAMI_BUILD_TYPE_STATIC)
-ENDIF(STATIC_LIBRARY)
-
 # Make CPack available to easy generate binary packages
 include(CPack)
 include(FeatureSummary)
+
+IF(STATIC_LIBRARY)
+	set(CMAKE_INCLUDE_CURRENT_DIR ON)
+	ADD_DEFINITIONS(-DKIRIGAMI_BUILD_TYPE_STATIC)
+	find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg)
+	set (QT_MIN_VERSION "5.5.0")
+	if(UNIX)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
+	endif()
+	add_subdirectory(src)
+
+ELSE(STATIC_LIBRARY)
+
 
 ################# set KDE specific information #################
 
@@ -54,11 +63,6 @@ install(FILES
   COMPONENT Devel
 )
 
-# install(EXPORT KF5KirigamiTargets
-#         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-#         FILE KF5KirigamiTargets.cmake
-#         NAMESPACE KF5::
-#         COMPONENT Devel)
 
 set(KF5_VERSION "5.22.0")
 ecm_setup_version(${KF5_VERSION}
@@ -112,6 +116,8 @@ add_subdirectory(src)
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
+
+ENDIF(STATIC_LIBRARY)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
