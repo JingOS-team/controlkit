@@ -25,4 +25,6 @@ T.AbstractDrawer {
     id: root
     enabled: false
     visible: false
+    property var title
+    property var actions
 }
