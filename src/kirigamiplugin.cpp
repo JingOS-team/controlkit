@@ -36,15 +36,17 @@ QString KirigamiPlugin::componentPath(const QString &fileName) const
             return resolveFileUrl(candidate);
         }
     }
-
     return resolveFileUrl(fileName);
 }
 
 
 void KirigamiPlugin::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.kirigami"));
+#ifdef KIRIGAMI_BUILD_TYPE_STATIC
+    Q_INIT_RESOURCE(kirigami);
+#endif
 
+    Q_ASSERT(uri == QLatin1String("org.kde.kirigami"));
     const QString style = QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_STYLE"));
 
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
