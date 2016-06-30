@@ -65,6 +65,15 @@ Item {
      */
     property int defaultColumnWidth: Units.gridUnit * 20
 
+    /**
+     * interactive: bool
+     * If true it will be possible to go back/forward by dragging the
+     * content themselves with a gesture.
+     * Otherwise the only way to go back will be programmatically
+     * default: true
+     */
+    property alias interactive: mainFlickable.interactive
+
 //END PROPERTIES
 
 //BEGIN FUNCTIONS
