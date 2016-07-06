@@ -70,7 +70,7 @@ AbstractApplicationHeader {
         property bool isTabBar: header.separatorStyle == "TabBar"
         Component.onCompleted: {
             //only iOS and desktop systems put the back button on top left corner
-            if (!Settings.isMobile || Qt.platform.os == "ios") {
+            if (!titleList.isTabBar && !Settings.isMobile || Qt.platform.os == "ios") {
                 var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
                 titleList.backButton = component.createObject(titleList.parent);
             }
@@ -184,7 +184,8 @@ AbstractApplicationHeader {
                 spacing: Units.smallSpacing
 
                 Icon {
-                    visible: modelData > 0 && !__appWindow.wideScreen && opacity > 0
+                    //in tabbar mode this is just a spacer
+                    visible: (titleList.isTabBar || modelData > 0) && !__appWindow.wideScreen && opacity > 0
                     height: title.height
                     width: height
                     selected: header.background && header.background.color && header.background.color == Theme.highlightColor
