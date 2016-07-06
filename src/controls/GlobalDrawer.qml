@@ -151,6 +151,30 @@ OverlayDrawer {
      */
     default property alias content: mainContent.data
 
+    /**
+     * content: list<Item> default property
+     * Items that will be instantiated inside the drawer and
+     * will be displayed on top of the actions list.
+     *
+     * Example usage:
+     * @code
+     * import org.kde.kirigami 1.0 as Kirigami
+     *
+     * Kirigami.ApplicationWindow {
+     *  [...]
+     *     globalDrawer: Kirigami.GlobalDrawer {
+     *         actions: [...]
+     *         topContent: [Button {
+     *             text: "Button"
+     *             onClicked: //do stuff
+     *         }]
+     *     }
+     *  [...]
+     * }
+     * @endcode
+     */
+    property alias topContent: topContent.data
+
     contentItem: Controls.ScrollView {
         id: scrollView
         anchors.fill: parent
@@ -238,11 +262,23 @@ OverlayDrawer {
                     }
                 }
 
+                ColumnLayout {
+                    id: topContent
+                    spacing: 0
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.minimumWidth: parent.width - Units.smallSpacing*2
+                    Layout.maximumWidth: Layout.minimumWidth
+                    Layout.preferredHeight: Layout.minimumHeight + Units.smallSpacing*2
+                    Layout.fillWidth: false
+                    Layout.fillHeight: true
+                    visible: children.length > 0 && childrenRect.height > 0
+                }
+
                 Rectangle {
                     color: Theme.textColor
                     opacity: 0.2
                     Layout.fillWidth: true
-                    Layout.minimumHeight: 1
+                    Layout.minimumHeight: Units.devicePixelRatio
                 }
 
                 Controls.StackView {
