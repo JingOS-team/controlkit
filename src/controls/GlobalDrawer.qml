@@ -278,7 +278,8 @@ OverlayDrawer {
                     color: Theme.textColor
                     opacity: 0.2
                     Layout.fillWidth: true
-                    Layout.minimumHeight: Units.devicePixelRatio
+                    Layout.minimumHeight: Math.floor(Units.devicePixelRatio)
+                    visible: actions.length > 0
                 }
 
                 Controls.StackView {
