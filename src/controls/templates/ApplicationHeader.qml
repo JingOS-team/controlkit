@@ -175,9 +175,11 @@ AbstractApplicationHeader {
                     __appWindow.pageStack.currentIndex = modelData;
                 }
             }
+
             Row {
                 id: delegateRoot
                 x: Units.smallSpacing + __appWindow.wideScreen ? (Math.min(delegate.width - width, Math.max(0, titleList.contentX - delegate.x))) : 0
+                height: parent.height
 
                 spacing: Units.smallSpacing
 
@@ -186,7 +188,7 @@ AbstractApplicationHeader {
                     height: title.height
                     width: height
                     selected: header.background && header.background.color && header.background.color == Theme.highlightColor
-                    source: "go-next"
+                    source: titleList.isTabBar ? "" : "go-next"
                 }
 
                 Heading {
@@ -200,6 +202,18 @@ AbstractApplicationHeader {
                     elide: Text.ElideRight
                     text: page.title
                     font.pixelSize: titleList.height / 1.6
+                    height: parent.height
+                    Rectangle {
+                        anchors {
+                            bottom: parent.bottom
+                            left: parent.left
+                            right: parent.right
+                        }
+                        height: Units.smallSpacing
+                        color: title.color
+                        opacity: 0.6
+                        visible: titleList.isTabBar && delegate.current
+                    }
                 }
             }
         }
