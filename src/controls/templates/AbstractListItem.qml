@@ -119,6 +119,7 @@ Rectangle {
 
     implicitHeight: contentItem.height + Units.smallSpacing*4
 
+    width: parent ? parent.width : implicitWidth
 
     opacity: enabled ? 1 : 0.6
 

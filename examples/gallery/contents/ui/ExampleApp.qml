@@ -33,15 +33,14 @@ Kirigami.ApplicationWindow {
         titleIcon: "applications-graphics"
         bannerImageSource: "banner.jpg"
 
-        topContent: [
-            Controls.TextField {
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
-                placeholderText: "Search..."
+        topContent: Controls.TextField {
+            anchors {
+                left: parent.left
+                right: parent.right
             }
-        ]
+            placeholderText: "Search..."
+        }
+
         actions: [
             Kirigami.Action {
                 text: "Submenu 1"
