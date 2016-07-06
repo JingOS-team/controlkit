@@ -370,7 +370,13 @@ Item {
                 }
             }
             onWidthChanged: {
-                mainFlickable.contentX = pagesLogic.roundedDefaultColumnWidth * mainFlickable.firstVisibleLevel
+                //current item in view
+                if (children[mainFlickable.currentIndex].x >= mainFlickable.contentX &&
+                    children[mainFlickable.currentIndex].x + children[mainFlickable.currentIndex].width <= mainFlickable.contentX + mainFlickable.width) {
+                    mainFlickable.contentX = pagesLogic.roundedDefaultColumnWidth * mainFlickable.firstVisibleLevel;
+                } else {
+                    mainFlickable.contentX = Math.max(0, Math.min(width - mainFlickable.width, mainFlickable.currentIndex * pagesLogic.roundedDefaultColumnWidth));
+                }
                 
             }
             //onChildrenChanged: mainFlickable.contentX = pagesLogic.roundedDefaultColumnWidth * mainFlickable.firstVisibleLevel
