@@ -101,6 +101,10 @@ Kirigami.ScrollablePage {
                 text: "Non Scrollable Page"
                 component: "NonScrollable"
             }
+            ListElement {
+                text: "Colors"
+                component: "Colors"
+            }
         }
         delegate: Kirigami.SwipeListItem {
             id: listItem
