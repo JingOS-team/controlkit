@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.1
+import QtQuick.Layouts 1.0
 import QtQuick.Controls 1.0 as Controls
 import QtQuick.Controls.Private 1.0
 import org.kde.kirigami 1.0
@@ -115,11 +116,12 @@ Rectangle {
      */
     property Item background
 
-    implicitWidth: childrenRect.width
+    implicitWidth: contentItem ? contentItem.childrenRect.width : 0
 
     implicitHeight: contentItem.height + Units.smallSpacing*4
 
     width: parent ? parent.width : implicitWidth
+    Layout.fillWidth: true
 
     opacity: enabled ? 1 : 0.6
 
