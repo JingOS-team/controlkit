@@ -70,7 +70,7 @@ AbstractApplicationHeader {
         property bool isTabBar: header.separatorStyle == "TabBar"
         Component.onCompleted: {
             //only iOS and desktop systems put the back button on top left corner
-            if (!titleList.isTabBar && !Settings.isMobile || Qt.platform.os == "ios") {
+            if (!titleList.isTabBar && (!Settings.isMobile || Qt.platform.os == "ios")) {
                 var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
                 titleList.backButton = component.createObject(titleList.parent);
             }
