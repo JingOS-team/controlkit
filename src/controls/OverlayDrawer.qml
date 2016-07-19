@@ -68,29 +68,40 @@ T.OverlayDrawer {
                     }
                 }
             }
-            Rectangle {
-                id: handleGraphics
-                color: Theme.viewBackgroundColor
+            Item {
                 opacity: 0.3 + root.position
-                anchors.fill: parent
+                anchors {
+                    fill:parent
+                    margins: -Units.gridUnit
+                }
+                layer.enabled: true
+                Rectangle {
+                    id: shadowRect
+                    anchors.fill: handleGraphics
+                    color: "black"
+                }
+                FastBlur {
+                    z: -1
+                    anchors.fill: shadowRect
+                    source: shadowRect
+                    radius: Units.gridUnit
+                    transparentBorder: true
+                }
+                Rectangle {
+                    id: handleGraphics
+                    color: Theme.viewBackgroundColor
+                    anchors {
+                        fill:parent
+                        margins: Units.gridUnit
+                    }
+                }
             }
 
             Loader {
-                anchors.centerIn: handleGraphics
+                anchors.centerIn: parent
                 width: height
                 height: Units.iconSizes.smallMedium
                 source: root.edge == Qt.LeftEdge ? Qt.resolvedUrl("templates/private/MenuIcon.qml") : (root.edge == Qt.RightEdge ? Qt.resolvedUrl("templates/private/ContextIcon.qml") : "")
-            }
-            layer.enabled: true
-            layer.effect: DropShadow {
-                visible: drawerHandle.visible
-                anchors.fill: drawerHandle
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: Units.gridUnit
-                samples: 32
-                color: Qt.rgba(0, 0, 0, 0.5)
-                source: drawerHandle
             }
         }
 
