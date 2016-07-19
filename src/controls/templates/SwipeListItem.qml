@@ -188,7 +188,7 @@ Item {
     }
 
     implicitWidth: parent ? parent.width : contentItem.width + paddingItem.anchors.margins * 2
-    implicitHeight: contentItem.height + Units.smallSpacing * 4
+    implicitHeight: contentItem.height + Units.smallSpacing * 5
 //END properties
 
 //BEGIN signal handlers

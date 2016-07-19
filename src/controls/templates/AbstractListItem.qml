@@ -118,7 +118,7 @@ Rectangle {
 
     implicitWidth: contentItem ? contentItem.childrenRect.width : 0
 
-    implicitHeight: contentItem.height + Units.smallSpacing*4
+    implicitHeight: contentItem.height + Units.smallSpacing * 5
 
     width: parent ? parent.width : implicitWidth
     Layout.fillWidth: true
