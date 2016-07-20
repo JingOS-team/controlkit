@@ -81,6 +81,11 @@ T.OverlayDrawer {
                 width: height
                 height: Units.iconSizes.smallMedium - Units.smallSpacing * 2
                 source: root.edge == Qt.LeftEdge ? Qt.resolvedUrl("../../templates/private/MenuIcon.qml") : (root.edge == Qt.RightEdge ? Qt.resolvedUrl("../../templates/private/ContextIcon.qml") : "")
+                onItemChanged: {
+                    if(item) {
+                        item.morph = Qt.binding(function(){return root.position})
+                    }
+                }
             }
             Rectangle {
                 anchors {

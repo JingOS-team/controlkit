@@ -149,7 +149,7 @@ AbstractApplicationHeader {
 
             width: {
                 //more columns shown?
-                if (__appWindow.wideScreen) {
+                if (__appWindow.wideScreen && page) {
                     if (modelData == 0 && titleList.backButton) {
                         return page.width - Math.max(0, titleList.backButton.width - __appWindow.contentItem.x);
                     } else {

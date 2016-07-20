@@ -309,7 +309,10 @@ Item {
         boundsBehavior: Flickable.StopAtBounds
         contentWidth: mainLayout.childrenRect.width
         contentHeight: height
-        readonly property Item currentItem: pagesLogic.get(Math.min(currentIndex, pagesLogic.count-1)).page
+        readonly property Item currentItem: {
+            var idx = Math.min(currentIndex, pagesLogic.count-1)
+            return idx>=0 ? pagesLogic.get(idx).page : null
+        }
         //clip only when the app has a sidebar
         clip: root.x > 0
 
@@ -320,7 +323,7 @@ Item {
         onCurrentItemChanged: {
             var itemX = pagesLogic.roundedDefaultColumnWidth * currentIndex;
 
-            if (itemX >= contentX && itemX + mainFlickable.currentItem.width <= contentX + mainFlickable.width) {
+            if (itemX >= contentX && mainFlickable.currentItem && itemX + mainFlickable.currentItem.width <= contentX + mainFlickable.width) {
                 return;
             }
 
@@ -330,7 +333,7 @@ Item {
             }
             scrollAnim.running = false;
             scrollAnim.from = contentX;
-            if (itemX < contentX) {
+            if (itemX < contentX || !mainFlickable.currentItem) {
                 scrollAnim.to = Math.max(0, Math.min(itemX, mainFlickable.contentWidth - mainFlickable.width));
             } else {
                 scrollAnim.to = Math.max(0, Math.min(itemX - mainFlickable.width + mainFlickable.currentItem.width, mainFlickable.contentWidth - mainFlickable.width));
