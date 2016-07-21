@@ -41,42 +41,5 @@ T.SplitDrawer {
             }
         }
     }
-//BEGIN Properties
-    //NOTE: Only property documentation here, no definition/implementation
-    /**
-     * page: Item
-     * It's the default property. it's the main content of the drawer page,
-     * the part that is always shown
-     */
-
-    /**
-     * contentItem: Item
-     * It's the part that can be pulled in and out, will act as a sidebar.
-     */
-
-    /**
-     * opened: bool
-     * If true the drawer is open showing the contents of the "drawer"
-     * component.
-     */
-
-    /**
-     * position: real
-     * This property holds the position of the drawer relative to its
-     * final destination. That is, the position will be 0 when the
-     * drawer is fully closed, and 1 when fully open.
-     */
-
-    /**
-     * modal: bool
-     * If true the drawer will be an overlay of the main content,
-     * obscuring it and blocking input.
-     * If false, the drawer will look like a sidebar, with the main content
-     * application still usable.
-     * It is recomended to use modal on mobile devices and not modal on desktop
-     * devices.
-     * Default is true
-     */
-//END Properties
 }
 

@@ -103,35 +103,4 @@ T.OverlaySheet {
             color: Theme.viewBackgroundColor
         }
     }
-
-    /**
-     * opened: bool
-     * If true the sheet is open showing the contents of the OverlaySheet
-     * component.
-     */
-    //property bool opened
-
-    /**
-     * leftPadding: int
-     * default contents padding at left
-     */
-    //property int leftPadding: Units.gridUnit
-
-    /**
-     * topPadding: int
-     * default contents padding at top
-     */
-    //property int topPadding: Units.gridUnit
-
-    /**
-     * rightPadding: int
-     * default contents padding at right
-     */
-    //property int rightPadding: Units.gridUnit
-
-    /**
-     * bottomPadding: int
-     * default contents padding at bottom
-     */
-    //property int bottomPadding: Units.gridUnit
 }

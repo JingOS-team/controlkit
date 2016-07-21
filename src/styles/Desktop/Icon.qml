@@ -53,12 +53,4 @@ Item {
         id: icon
         anchors.fill: parent
     }
-
-    /* // FIXME: This causes black squares on some GLES drivers, notably on Adreno hardware
-    GammaAdjust {
-        anchors.fill: image
-        source: image
-        gamma: root.active ? 3.0 : 1
-    }
-    */
 }

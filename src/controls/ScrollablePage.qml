@@ -142,19 +142,4 @@ Page {
          }
          overlay.oldContentItem = root.contentItem
     }
-  /*  Component.onCompleted: {
-        if (0&&contentItem == flickable) {
-            leftPadding = 0;
-            topPadding = 0;
-            rightPadding = 0;
-            bottomPadding = 0;
-
-        } else {
-            leftPadding = Units.gridUnit;
-            topPadding = Units.gridUnit;
-            rightPadding = Units.gridUnit;
-            bottomPadding = Units.gridUnit;
-        }
-    }*/
-    
 }

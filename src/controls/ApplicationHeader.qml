@@ -34,16 +34,4 @@ import "templates" as T
  */
 T.ApplicationHeader {
     id: header
-
-    /**
-     * separatorStyle: string
-     * The way the separator between pages should be drawn in the header.
-     * Allowed values are:
-     * * Breadcrumb: the pages are hyerarchical and the separator will look like a >
-     * * TabBar: the pages are intended to behave like tabbar pages
-     *    and the separator will look limke a dot.
-     *
-     * When the heaer is in wide screen mode, no separator will be drawn.
-     */
-    //property string separatorStyle: "Breadcrumb"
 }
