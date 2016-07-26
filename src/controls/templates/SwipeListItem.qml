@@ -251,14 +251,14 @@ Item {
                 height: actionsLayout.height
                 width: height
                 source: modelData.iconName
-                enabled: modelData.enabled
-                visible: modelData.visible
+                enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
+                visible: (modelData && modelData.visible !== undefined) ? modelData.visible : true;
                 MouseArea {
                     anchors {
-                        fill: parent
-                        margins: -Units.smallSpacing
+                        fill: parent;
+                        margins: -Units.smallSpacing;
                     }
-                    enabled: modelData.enabled
+                    enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
                     onClicked: {
                         if (modelData && modelData.trigger !== undefined) {
                             modelData.trigger();
@@ -344,7 +344,7 @@ Item {
                     leftMargin:  -height
                 }
                 preventStealing: true
-                width: mainFlickable.width - actionsLayout.width
+                width: mainFlickable.width - actionsLayout.width - actionsLayout.anchors.rightMargin
                 property var downTimestamp;
                 property int startX
                 property int startMouseX
