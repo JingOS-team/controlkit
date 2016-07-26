@@ -223,7 +223,7 @@ Item {
 //END signal handlers
 
 //BEGIN UI implementation
-    RowLayout {
+    Row {
         id: actionsLayout
         z: 1
         anchors {
@@ -232,6 +232,7 @@ Item {
             rightMargin: y
         }
         height: Math.min( parent.height / 1.5, Units.iconSizes.medium)
+        width: childrenRect.width
         property bool exclusive: false
         property Item checkedButton
         spacing: Units.largeSpacing
@@ -247,14 +248,17 @@ Item {
                 }
             }
             delegate: Icon {
-                Layout.fillHeight: true
-                Layout.minimumWidth: height
+                height: actionsLayout.height
+                width: height
                 source: modelData.iconName
+                enabled: modelData.enabled
+                visible: modelData.visible
                 MouseArea {
                     anchors {
                         fill: parent
                         margins: -Units.smallSpacing
                     }
+                    enabled: modelData.enabled
                     onClicked: {
                         if (modelData && modelData.trigger !== undefined) {
                             modelData.trigger();
