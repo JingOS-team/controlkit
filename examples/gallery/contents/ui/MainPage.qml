@@ -108,13 +108,14 @@ Kirigami.ScrollablePage {
         }
         delegate: Kirigami.SwipeListItem {
             id: listItem
-                Kirigami.Label {
-                    height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
-                    anchors.verticalCenter: parent.verticalCenter
-                    x: y
-                    text: model.text
-                    color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.viewTextColor
-                }
+
+            Kirigami.Label {
+                height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
+                anchors.verticalCenter: parent.verticalCenter
+                x: y
+                text: model.text
+                color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeTextColor : listItem.textColor
+            }
 
             property Item ownPage
             onClicked: {

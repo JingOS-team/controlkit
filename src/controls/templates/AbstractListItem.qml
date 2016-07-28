@@ -116,6 +116,40 @@ Rectangle {
      */
     property Item background
 
+    /**
+     * textColor: color
+     * Color for the text in the item
+     * It is advised to leave the default value (Theme.viewTextColor)
+     *
+     * Note: if custom text elements are inserted in an AbstractListItem,
+     * their color proprty will ahve to be manually binded with this property
+     */
+    property color textColor: Theme.viewTextColor
+
+    /**
+     * backgroundColor: color
+     * Color for the background of the item
+     * It is advised to leave the default value (Theme.viewBackgroundColor)
+     */
+    property color backgroundColor: Theme.viewBackgroundColor
+
+    /**
+     * activeTextColor: color
+     * Color for the text in the item when pressed or selected
+     * It is advised to leave the default value (Theme.highlightedTextColor)
+     *
+     * Note: if custom text elements are inserted in an AbstractListItem,
+     * their color proprty will ahve to be manually binded with this property
+     */
+    property color activeTextColor: Theme.highlightedTextColor
+
+    /**
+     * activeBackgroundColor: color
+     * Color for the background of the item when pressed or selected
+     * It is advised to leave the default value (Theme.highlightColor)
+     */
+    property color activeBackgroundColor: Theme.highlightColor
+
     implicitWidth: contentItem ? contentItem.childrenRect.width : 0
 
     implicitHeight: contentItem.height + Units.smallSpacing * 5

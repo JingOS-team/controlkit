@@ -23,13 +23,13 @@ import QtQuick.Controls 1.0 as Controls
 import QtQuick.Controls.Private 1.0
 
 Rectangle {
-    color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? Theme.highlightColor : Theme.viewBackgroundColor
+    color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeBackgroundColor : listItem.backgroundColor
 
     visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
     Rectangle {
         anchors.fill: parent
         visible: !Settings.isMobile
-        color: Theme.highlightColor
+        color: listItem.activeBackgroundColor
         opacity: listItem.containsMouse && !listItem.pressed ? 0.2 : 0
         Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
     }
@@ -39,7 +39,7 @@ Rectangle {
 
     Rectangle {
         id: separator
-        color: Theme.textColor
+        color: listItem.textColor
         opacity: 0.2
         visible: listItem.separatorVisible
         anchors {

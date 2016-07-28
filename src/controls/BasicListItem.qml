@@ -60,7 +60,7 @@ AbstractListItem {
         }
         Label {
             text: listItem.label
-            color: listItem.checked || listItem.pressed ? Theme.highlightedTextColor : Theme.viewTextColor
+            color: listItem.checked || listItem.pressed ? listItem.activeTextColor : listItem.textColor
         }
     }
 }
