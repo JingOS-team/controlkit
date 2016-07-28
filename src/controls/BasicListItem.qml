@@ -44,7 +44,7 @@ AbstractListItem {
      * be either a QIcon, a string name of a fdo compatible name,
      * or any url accepted by the Image element.
      */
-    property alias icon: iconItem.source
+    property var icon
 
     RowLayout {
         anchors {
@@ -52,10 +52,10 @@ AbstractListItem {
             verticalCenter: parent.verticalCenter
         }
         Icon {
-            id: iconItem
             Layout.minimumHeight: Units.iconSizes.smallMedium
             Layout.maximumHeight: Layout.minimumHeight
             Layout.minimumWidth: height
+            source: listItem.icon
             selected: listItem.checked || listItem.pressed
         }
         Label {
