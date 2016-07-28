@@ -361,7 +361,7 @@ OverlayDrawer {
                             visible: level > 0
                             supportsMouseEvents: true
                             icon: "go-previous"
-                            label: typeof i18n !== "undefined" ? i18n("Back") : "Back"
+                            label: typeof i18n !== "undefined" ? i18n("Back") : qsTr("Back")
                             onClicked: stackView.pop()
                         }
                     }
