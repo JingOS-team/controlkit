@@ -73,7 +73,7 @@ OverlayDrawer {
      * title: string
      * A title for the action list that will be shown to the user when opens the drawer
      */
-    property string title: typeof i18n !== "undefined" ? i18n("Actions") : qsTr("Actions")
+    property string title: qsTr("Actions")
 
     /**
      * actions: list<Action>
