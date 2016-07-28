@@ -39,14 +39,24 @@ ScrollablePage {
     background: Rectangle {
         color: Theme.viewBackgroundColor
     }
+    header: Component {
+        Controls.Button {
+            text: "Important information on top"
+            onClicked: theList.positionViewAtBeginning()
+        }
+    }
 
     ListView {
+        id: theList
         Timer {
             id: refreshRequestTimer
             interval: 3000
             onTriggered: page.refreshing = false
         }
         model: 200
+        header: Label {
+            text: "super important information"
+        }
         delegate: BasicListItem {
             label: "Item " + modelData
         }

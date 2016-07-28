@@ -115,6 +115,8 @@ Page {
      */
     property alias bottomPadding: scrollView.bottomPadding
 
+    property alias pageHeader: pageHeaderLoader.sourceComponent
+
     children: [
         RefreshableScrollView {
             id: scrollView
@@ -131,6 +133,34 @@ Page {
             id: overlay
             anchors.fill: parent
             property Item oldContentItem
+
+            Loader {
+                id: pageHeaderLoader
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                }
+
+                Behavior on y {
+                    NumberAnimation {
+                        duration: Units.longDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+
+                states: [
+                    State {
+                        name: "top"
+                        when: root.flickable.contentY > 0
+                        PropertyChanges { target: pageHeaderLoader; y: 0 }
+                    },
+                    State {
+                        name: "scrolled"
+                        when: root.flickable.contentY <= 0
+                        PropertyChanges { target: pageHeaderLoader; y: -height }
+                    }
+                ]
+            }
         }
     ]
 
