@@ -43,6 +43,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_D
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 include(ECMPackageConfigHelpers)
+include(ECMPoQmTools)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)

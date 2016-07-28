@@ -1,7 +1,10 @@
 project(kirigami)
 
+ecm_create_qm_loader(kirigami_QM_LOADER libkirigamiplugin_qt)
+
 set(kirigami_SRCS
     kirigamiplugin.cpp
+    ${kirigami_QM_LOADER}
     )
 
 IF(STATIC_LIBRARY)
