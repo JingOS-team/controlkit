@@ -179,14 +179,14 @@ AbstractApplicationHeader {
 
             Row {
                 id: delegateRoot
-                x: Units.smallSpacing + titleList.internalHeaderStyle == ApplicationHeaderStyle.Titles ? (Math.min(delegate.width - width, Math.max(0, titleList.contentX - delegate.x))) : 0
+                x: Units.smallSpacing + __appWindow.wideScreen ? (Math.min(delegate.width - width, Math.max(0, titleList.contentX - delegate.x))) : 0
                 height: parent.height
 
                 spacing: Units.smallSpacing
 
                 Icon {
                     //in tabbar mode this is just a spacer
-                    visible: (titleList.isTabBar || modelData > 0) && titleList.internalHeaderStyle != ApplicationHeaderStyle.Titles && opacity > 0
+                    visible: !__appWindow.wideScreen && (modelData > 0 || titleList.internalHeaderStyle == ApplicationHeaderStyle.TabBar)
                     height: title.height
                     width: height
                     selected: header.background && header.background.color && header.background.color == Theme.highlightColor
