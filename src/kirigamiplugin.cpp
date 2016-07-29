@@ -20,6 +20,7 @@
  */
 
 #include "kirigamiplugin.h"
+#include "enums.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -63,6 +64,8 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //TODO: in this plugin it will end up something similar to
     //PlasmaCore's ColorScope?
+
+    qmlRegisterUncreatableType<ApplicationHeaderStyle>(uri, 1, 0, "ApplicationHeaderStyle", "Cannot create objects of type ApplicationHeaderStyle");
 
     qmlRegisterSingletonType(componentPath(QStringLiteral("Theme.qml")), uri, 1, 0, "Theme");
     qmlRegisterSingletonType(componentPath(QStringLiteral("Units.qml")), uri, 1, 0, "Units");

@@ -4,6 +4,7 @@ ecm_create_qm_loader(kirigami_QM_LOADER libkirigamiplugin_qt)
 
 set(kirigami_SRCS
     kirigamiplugin.cpp
+    enums.cpp
     ${kirigami_QM_LOADER}
     )
 

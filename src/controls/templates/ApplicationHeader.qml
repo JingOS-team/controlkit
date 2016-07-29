@@ -39,7 +39,7 @@ AbstractApplicationHeader {
     id: header
 
     /**
-     * separatorStyle: string
+     * headerStyle: string
      * The way the separator between pages should be drawn in the header.
      * Allowed values are:
      * * Breadcrumb: the pages are hyerarchical and the separator will look like a >
@@ -48,7 +48,7 @@ AbstractApplicationHeader {
      *
      * When the heaer is in wide screen mode, no separator will be drawn.
      */
-    property string separatorStyle: "Breadcrumb"
+    property int headerStyle: ApplicationHeaderStyle.Auto
 
     property alias pageDelegate: titleList.delegate
 
@@ -66,8 +66,9 @@ AbstractApplicationHeader {
 
     ListView {
         id: titleList
+        property int internalHeaderStyle: header.headerStyle == ApplicationHeaderStyle.Auto ? (__appWindow.wideScreen ? ApplicationHeaderStyle.Titles : ApplicationHeaderStyle.Breadcrumb) : header.headerStyle
         //uses this to have less strings comparisons
-        property bool isTabBar: header.separatorStyle == "TabBar"
+        property bool isTabBar: header.headerStyle == ApplicationHeaderStyle.TabBar
         Component.onCompleted: {
             //only iOS and desktop systems put the back button on top left corner
             if (!titleList.isTabBar && (!Settings.isMobile || Qt.platform.os == "ios")) {
@@ -79,7 +80,7 @@ AbstractApplicationHeader {
         clip: true
         anchors {
             fill: parent
-            leftMargin: Math.max ((backButton ? backButton.width : Units.smallSpacing*2), __appWindow.contentItem.x)
+            leftMargin: titleList.isTabBar ? 0 : Math.max ((backButton ? backButton.width : Units.smallSpacing*2), __appWindow.contentItem.x)
         }
         cacheBuffer: width ? Math.max(0, width * count) : 0
         displayMarginBeginning: __appWindow.pageStack.width * count
@@ -178,14 +179,14 @@ AbstractApplicationHeader {
 
             Row {
                 id: delegateRoot
-                x: Units.smallSpacing + __appWindow.wideScreen ? (Math.min(delegate.width - width, Math.max(0, titleList.contentX - delegate.x))) : 0
+                x: Units.smallSpacing + titleList.internalHeaderStyle == ApplicationHeaderStyle.Titles ? (Math.min(delegate.width - width, Math.max(0, titleList.contentX - delegate.x))) : 0
                 height: parent.height
 
                 spacing: Units.smallSpacing
 
                 Icon {
                     //in tabbar mode this is just a spacer
-                    visible: (titleList.isTabBar || modelData > 0) && !__appWindow.wideScreen && opacity > 0
+                    visible: (titleList.isTabBar || modelData > 0) && titleList.internalHeaderStyle != ApplicationHeaderStyle.Titles && opacity > 0
                     height: title.height
                     width: height
                     selected: header.background && header.background.color && header.background.color == Theme.highlightColor

@@ -30,7 +30,7 @@ Kirigami.ApplicationWindow {
 
 
     header: Kirigami.ApplicationHeader {
-        separatorStyle: "TabBar"
+        headerStyle: Kirigami.ApplicationHeaderStyle.TabBar
     }
 
 
