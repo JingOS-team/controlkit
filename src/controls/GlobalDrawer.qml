@@ -152,7 +152,7 @@ OverlayDrawer {
     default property alias content: mainContent.data
 
     /**
-     * content: list<Item> default property
+     * topContent: list<Item> default property
      * Items that will be instantiated inside the drawer and
      * will be displayed on top of the actions list.
      *
