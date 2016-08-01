@@ -473,7 +473,10 @@ Item {
                     name: "last"
                     PropertyChanges {
                         target: container
-                        width: Math.max(roundedHint, root.width - (container.level == 0 ? 0 : pagesLogic.get(container.level-1).width))
+                        width: {
+                            var page = pagesLogic.get(container.level-1);
+                            Math.max(roundedHint, root.width - (page == undefined ? 0 : page.width))
+                        }
                     }
                 },
                 State {
