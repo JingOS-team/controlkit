@@ -3,10 +3,14 @@ description: QtQuick plugins to build user interfaces based on the KDE UX guidel
 tier: 2
 type: functional
 platforms:
-    - name: All
-portingAid: false
+    - name: Linux
+    - name: Android
+public_lib: true
 deprecated: false
-release: false
+release: true
+logo: logo.png
 libraries:
  - cmake: KF5::Kirigami
 cmakename: KF5Kirigami
+irc: plasma
+mailinglist: plasma-devel
