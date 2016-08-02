@@ -262,7 +262,7 @@ Item {
                         verticalCenter: parent.verticalCenter
                     }
                     radius: Units.smallSpacing
-                    height: buttonGraphics.height * 0.7
+                    height: Units.iconSizes.medium + Units.smallSpacing * 2
                     width: height + (root.action ? Units.iconSizes.smallMedium : 0)
                     visible: root.leftAction
 
@@ -289,7 +289,7 @@ Item {
                         verticalCenter: parent.verticalCenter
                     }
                     radius: Units.smallSpacing
-                    height: buttonGraphics.height * 0.7
+                    height: Units.iconSizes.medium + Units.smallSpacing * 2
                     width: height + (root.action ? Units.iconSizes.smallMedium : 0)
                     visible: root.rightAction
                     readonly property bool pressed: root.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || root.rightAction.checked)
