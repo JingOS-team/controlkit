@@ -306,7 +306,7 @@ OverlayDrawer {
                 }
                 Item {
                     Layout.minimumWidth: Units.smallSpacing
-                    Layout.minimumHeight: Units.smallSpacing
+                    Layout.minimumHeight: root.bottomPadding
                 }
 
                 Component {
