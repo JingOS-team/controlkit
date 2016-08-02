@@ -36,9 +36,9 @@ Item {
     clip: true
 
     //either Action or QAction should work here
-    property QtObject action: pageStack.currentItem ? pageStack.currentItem.mainAction : null
-    property QtObject leftAction: pageStack.currentItem ? pageStack.currentItem.leftAction : null
-    property QtObject rightAction: pageStack.currentItem ? pageStack.currentItem.rightAction : null
+    property QtObject action: root.parent.parent ? root.parent.parent.mainAction : null
+    property QtObject leftAction: root.parent.parent ? root.parent.parent.leftAction : null
+    property QtObject rightAction: root.parent.parent ? root.parent.parent.rightAction : null
 
     onWidthChanged: button.x = root.width/2 - button.width/2
 
