@@ -339,10 +339,35 @@ Item {
         width: Units.iconSizes.medium
         height: width
 
-        Rectangle {
-            color: Theme.viewBackgroundColor
-            opacity: parent.pressed ? 1 : 0.3
-            anchors.fill: parent
+        Item {
+            opacity: 0.3
+            anchors {
+                fill:parent
+                margins: -Units.gridUnit
+            }
+            layer.enabled: true
+            Rectangle {
+                id: shadowRect
+                anchors {
+                    fill: parent
+                    margins: Units.gridUnit
+                }
+                color: "black"
+            }
+            FastBlur {
+                z: -1
+                anchors.fill: shadowRect
+                source: shadowRect
+                radius: Units.gridUnit
+                transparentBorder: true
+            }
+            Rectangle {
+                color: Theme.viewBackgroundColor
+                anchors {
+                    fill:parent
+                    margins: Units.gridUnit
+                }
+            }
         }
 
         ContextIcon {
@@ -354,9 +379,9 @@ Item {
         onPressed: mouseArea.onPressed(mouse)
         onReleased: {
             var pos = root.mapFromItem(fakeContextMenuButton, mouse.x, mouse.y);
-            if (pos.x < root.width/2 || (mouse.x > 0 && mouse.x < width)) {
+            if (pos.x < root.width/2 || (!contextDrawer.opened && mouse.x > 0 && mouse.x < width)) {
                 contextDrawer.open();
-            } else {
+            } else if (contextDrawer.opened && mouse.x > 0 && mouse.x < width) {
                 contextDrawer.close();
             }
             if (globalDrawer.position > 0.5) {
@@ -365,14 +390,15 @@ Item {
                 globalDrawer.close();
             }
         }
-        layer.enabled: true
+      /*  layer.enabled: true
         layer.effect: DropShadow {
             horizontalOffset: 0
             verticalOffset: 0
             radius: Units.gridUnit
             samples: 32
             color: Qt.rgba(0, 0, 0, 0.5)
-        }
+        }*/
+
     }
 
     MouseArea {
