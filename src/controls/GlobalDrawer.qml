@@ -266,10 +266,11 @@ OverlayDrawer {
                     id: topContent
                     spacing: 0
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.minimumWidth: parent.width - Units.smallSpacing*2
-                    Layout.maximumWidth: Layout.minimumWidth
-                    Layout.preferredHeight: Layout.minimumHeight + Units.smallSpacing*2
-                    Layout.fillWidth: false
+                    Layout.leftMargin: root.leftPadding
+                    Layout.rightMargin:root.rightPadding
+                    Layout.bottomMargin: Units.smallSpacing
+                    Layout.topMargin: root.topPadding
+                    Layout.fillWidth: true
                     Layout.fillHeight: true
                     visible: children.length > 0 && childrenRect.height > 0
                 }
@@ -298,9 +299,9 @@ OverlayDrawer {
                 ColumnLayout {
                     id: mainContent
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.minimumWidth: parent.width - root.leftPadding - root.rightPadding
-                    Layout.maximumWidth: Layout.minimumWidth
-                    Layout.fillWidth: false
+                    Layout.leftMargin: root.leftPadding
+                    Layout.rightMargin: root.rightPadding
+                    Layout.fillWidth: true
                     Layout.fillHeight: true
                     visible: children.length > 0
                 }
