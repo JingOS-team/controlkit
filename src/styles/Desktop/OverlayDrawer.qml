@@ -37,9 +37,8 @@ T.OverlayDrawer {
     background: Rectangle {
         color: Theme.viewBackgroundColor
         property Item handleBackground: Item {
-            
         }
-        
+
         Item {
             id: drawerHandle
             z: -1
@@ -95,7 +94,7 @@ T.OverlayDrawer {
                 }
                 color: Theme.textColor
                 opacity: 0.3
-                height: Math.ceil(Units.smallSpacing / 5)
+                height: Units.devicePixelRatio
             }
             Rectangle {
                 anchors {
@@ -106,20 +105,21 @@ T.OverlayDrawer {
                 }
                 color: Theme.textColor
                 opacity: 0.3
-                width: Math.ceil(Units.smallSpacing / 5)
+                width: Units.devicePixelRatio
             }
         }
-        
+
         Rectangle {
             z: -2
             anchors {
-                left: parent.right
-                top: parent.top
-                bottom: parent.bottom
+                left: root.edge == Qt.LeftEdge ? parent.right : Qt.RightEdge
+                right: root.edge == Qt.RightEdge ? parent.left : Qt.LeftEdge
+                top: root.edge == Qt.TopEdge ? parent.bottom : parent.top
+                bottom: root.edge == Qt.BottomEdge ? parent.top : parent.bottom
             }
             color: Theme.textColor
             opacity: root.position == 0 ? 0 : 0.3
-            width: Math.ceil(Units.smallSpacing / 5)
+            width: Units.devicePixelRatio
         }
     }
 
