@@ -298,7 +298,7 @@ OverlayDrawer {
                 ColumnLayout {
                     id: mainContent
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.minimumWidth: parent.width - Units.smallSpacing*2
+                    Layout.minimumWidth: parent.width - root.leftPadding - root.rightPadding
                     Layout.maximumWidth: Layout.minimumWidth
                     Layout.fillWidth: false
                     Layout.fillHeight: true

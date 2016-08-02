@@ -23,31 +23,12 @@ import org.kde.kirigami 1.0 as Kirigami
 Kirigami.ApplicationWindow {
     id: root
 
-    globalDrawer: Kirigami.GlobalDrawer {
-        title: "Hello App"
-        titleIcon: "applications-graphics"
-
-        actions: [
-            Kirigami.Action {
-                text: "View"
-                iconName: "view-list-icons"
-                Kirigami.Action {
-                    text: "action 1"
-                }
-                Kirigami.Action {
-                    text: "action 2"
-                }
-                Kirigami.Action {
-                    text: "action 3"
-                }
-            },
-            Kirigami.Action {
-                text: "action 3"
-            },
-            Kirigami.Action {
-                text: "action 4"
-            }
-        ]
+    globalDrawer: Kirigami.OverlayDrawer {
+        contentItem: Rectangle {
+            implicitWidth: Kirigami.Units.gridUnit * 10
+            color: "red"
+            anchors.fill: parent
+        }
     }
     contextDrawer: Kirigami.ContextDrawer {
         id: contextDrawer

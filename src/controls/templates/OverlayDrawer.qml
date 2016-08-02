@@ -90,6 +90,30 @@ AbstractDrawer {
     property bool handleVisible: typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true
 
     /**
+     * leftPadding: int
+     * default contents padding at left
+     */
+    property int leftPadding: Units.smallSpacing
+
+    /**
+     * topPadding: int
+     * default contents padding at top
+     */
+    property int topPadding: Units.smallSpacing
+
+    /**
+     * rightPadding: int
+     * default contents padding at right
+     */
+    property int rightPadding: Units.smallSpacing
+
+    /**
+     * bottomPadding: int
+     * default contents padding at bottom
+     */
+    property int bottomPadding: Units.smallSpacing
+
+    /**
      * modal: bool
      * If true the drawer will be an overlay of the main content,
      * obscuring it and blocking input.
@@ -185,6 +209,17 @@ AbstractDrawer {
     onContentItemChanged: {
         contentItem.parent = drawerPage
         contentItem.anchors.fill = drawerPage
+        if (contentItem.flickableItem !== undefined) {
+            contentItem.anchors.topMargin = 0;
+            contentItem.anchors.leftMargin = 0;
+            contentItem.anchors.bottomMargin = 0;
+            contentItem.anchors.rightMargin = 0;
+        } else {
+            contentItem.anchors.topMargin = root.topPadding;
+            contentItem.anchors.leftMargin = root.leftPadding;
+            contentItem.anchors.bottomMargin = root.bottomPadding;
+            contentItem.anchors.rightMargin = root.rightPadding;
+        }
     }
 //END Signal handlers
 
