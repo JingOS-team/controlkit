@@ -329,6 +329,7 @@ OverlayDrawer {
                                 checked: modelData.checked
                                 icon: modelData.iconName
                                 label: modelData.text
+                                separatorVisible: false
                                 visible: model ? model.visible || model.visible===undefined : modelData.visible
                                 enabled: model ? model.enabled : modelData.enabled
                                 opacity: enabled ? 1.0 : 0.3
@@ -362,6 +363,7 @@ OverlayDrawer {
                             supportsMouseEvents: true
                             icon: "go-previous"
                             label: qsTr("Back")
+                            separatorVisible: false
                             onClicked: stackView.pop()
                         }
                     }
