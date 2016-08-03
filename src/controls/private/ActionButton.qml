@@ -336,7 +336,7 @@ Item {
         }
         visible: root.parent.parent.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
 
-        width: Units.iconSizes.medium
+        width: Units.iconSizes.medium + Units.smallSpacing * 2
         height: width
 
         Item {
@@ -390,15 +390,6 @@ Item {
                 globalDrawer.close();
             }
         }
-      /*  layer.enabled: true
-        layer.effect: DropShadow {
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: Units.gridUnit
-            samples: 32
-            color: Qt.rgba(0, 0, 0, 0.5)
-        }*/
-
     }
 
     MouseArea {
