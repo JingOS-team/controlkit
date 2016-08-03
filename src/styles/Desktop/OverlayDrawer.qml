@@ -49,7 +49,7 @@ T.OverlayDrawer {
                 bottom: parent.bottom
             }
             visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
-            width: Units.iconSizes.medium
+            width: Units.iconSizes.medium + Units.smallSpacing * 2
             height: width
             opacity: root.handleVisible ? 1 : 0
             Behavior on opacity {
@@ -78,7 +78,7 @@ T.OverlayDrawer {
             Loader {
                 anchors.centerIn: handleGraphics
                 width: height
-                height: Units.iconSizes.smallMedium - Units.smallSpacing * 2
+                height: Units.iconSizes.smallMedium 
                 source: root.edge == Qt.LeftEdge ? Qt.resolvedUrl("../../templates/private/MenuIcon.qml") : (root.edge == Qt.RightEdge ? Qt.resolvedUrl("../../templates/private/ContextIcon.qml") : "")
                 onItemChanged: {
                     if(item) {
