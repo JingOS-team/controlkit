@@ -1,5 +1,13 @@
 [Desktop Entry]
 Name=Kirigami Gallery
+Name[ca]=Galeria del Kirigami
+Name[en_GB]=Kirigami Gallery
+Name[nl]=Kirigami galerij
+Name[pl]=Galeria Kirigami
+Name[pt]=Galeria do Kirigami
+Name[sv]=Kirigami-galleri
+Name[uk]=Галерея Kirigami
+Name[x-test]=xxKirigami Galleryxx
 
 Encoding=UTF-8
 Type=Application
