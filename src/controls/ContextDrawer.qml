@@ -83,6 +83,7 @@ OverlayDrawer {
     property var actions: pageStack.currentItem ? pageStack.currentItem.contextualActions : null
     enabled: menu.count > 0
     edge: Qt.RightEdge
+    opened: false
 
     handleVisible: applicationWindow == undefined || applicationWindow().wideScreen == true ? false : applicationWindow().controlsVisible
 
