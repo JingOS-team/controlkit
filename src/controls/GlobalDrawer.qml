@@ -267,20 +267,15 @@ OverlayDrawer {
                     spacing: 0
                     Layout.alignment: Qt.AlignHCenter
                     Layout.leftMargin: root.leftPadding
-                    Layout.rightMargin:root.rightPadding
+                    Layout.rightMargin: root.rightPadding
                     Layout.bottomMargin: Units.smallSpacing
                     Layout.topMargin: root.topPadding
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    //NOTE: why this? just Layout.fillWidth: true doesn't seem sufficient
+                    //as items are added only after this column creation
+                    Layout.minimumWidth: parent.width - root.leftPadding - root.rightPadding
                     visible: children.length > 0 && childrenRect.height > 0
-                }
-
-                Rectangle {
-                    color: Theme.textColor
-                    opacity: 0.2
-                    Layout.fillWidth: true
-                    Layout.minimumHeight: Math.floor(Units.devicePixelRatio)
-                    visible: actions.length > 0
                 }
 
                 Controls.StackView {
@@ -303,6 +298,9 @@ OverlayDrawer {
                     Layout.rightMargin: root.rightPadding
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    //NOTE: why this? just Layout.fillWidth: true doesn't seem sufficient
+                    //as items are added only after this column creation
+                    Layout.minimumWidth: parent.width - root.leftPadding - root.rightPadding
                     visible: children.length > 0
                 }
                 Item {
