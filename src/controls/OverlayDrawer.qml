@@ -69,7 +69,7 @@ T.OverlayDrawer {
                 }
             }
             Item {
-                opacity: 0.3 + root.position
+                opacity: 0.4 + root.position
                 anchors {
                     fill:parent
                     margins: -Units.gridUnit

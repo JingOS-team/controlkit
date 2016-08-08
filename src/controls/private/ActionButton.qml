@@ -340,7 +340,7 @@ Item {
         height: width
 
         Item {
-            opacity: 0.3
+            opacity: 0.4
             anchors {
                 fill:parent
                 margins: -Units.gridUnit
