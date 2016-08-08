@@ -163,7 +163,6 @@ Controls.ScrollView {
                 if (y > busyIndicatorFrame.height*1.5 + topPadding && applicationWindow() && root.flickableItem.atYBeginning && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
                     applicationWindow().reachableMode = true;
                     overshootResetTimer.restart();
-                    canOvershootBackTimer.restart();
                 }
 
                 if (!supportsRefreshing) {
@@ -178,20 +177,6 @@ Controls.ScrollView {
                 interval: 8000
                 onTriggered: {
                     applicationWindow().reachableMode = false;
-                }
-            }
-            //HACK?
-            Timer {
-                id: canOvershootBackTimer
-                interval: 800
-            }
-            Connections {
-                target: root.flickableItem
-                onMovementEnded: {
-                    if (!canOvershootBackTimer.running &&
-                        applicationWindow().reachableMode) {
-                        applicationWindow().reachableMode = false;
-                    }
                 }
             }
             Binding {
