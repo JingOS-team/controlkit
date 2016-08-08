@@ -25,6 +25,7 @@ import org.kde.kirigami 1.0
 ScrollablePage {
     title: "Colors"
 
+   // leftPadding: 20//Units.gridUnit
     function endsWith(subject, predicate) {
         var idx = subject.indexOf(predicate);
         return idx + predicate.length == subject.length;
@@ -39,24 +40,35 @@ ScrollablePage {
         return keys;
     }
 
-    GridView {
-        id: view
-        model: getkeys()
-        cellWidth: 120
+    Column {
+        Flow {
+            id: view
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: Math.floor(parent.width / (Units.gridUnit * 9)) * (Units.gridUnit * 9)
+            Repeater {
+                model: getkeys()
 
-        delegate: ColumnLayout {
-            Rectangle {
-                width: view.cellWidth
-                height: 50
-                color: Theme[modelData]
-                border {
-                    width: 1
-                    color: "black"
+                delegate: ColumnLayout {
+                    width: Units.gridUnit * 9
+                    Rectangle {
+                        Layout.alignment: Qt.AlignHCenter
+                        width: Units.gridUnit * 7
+                        height: Units.gridUnit * 3
+                        color: Theme[modelData]
+                        border {
+                            width: 1
+                            color: "black"
+                        }
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                        text: modelData
+                    }
+                    Item {
+                        width: 1
+                        height: Units.smallSpacing
+                    }
                 }
-            }
-            Label {
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                text: modelData
             }
         }
     }
