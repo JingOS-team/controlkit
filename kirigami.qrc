@@ -42,7 +42,6 @@
         <file alias="styles/Plasma/Theme.qml">src/styles/Plasma/Theme.qml</file>
         <file alias="styles/Plasma/Units.qml">src/styles/Plasma/Units.qml</file>
         <file alias="styles/Plasma/Icon.qml">src/styles/Plasma/Icon.qml</file>
-        <file alias="styles/Desktop/ContextDrawer.qml">src/styles/Desktop/ContextDrawer.qml</file>
         <file alias="styles/Desktop/Theme.qml">src/styles/Desktop/Theme.qml</file>
         <file alias="styles/Desktop/OverlayDrawer.qml">src/styles/Desktop/OverlayDrawer.qml</file>
         <file alias="styles/Desktop/Units.qml">src/styles/Desktop/Units.qml</file>
