@@ -1,6 +1,6 @@
 project(kirigami)
 
-if (! STATIC_LIBRARY)
+if (NOT STATIC_LIBRARY)
     ecm_create_qm_loader(kirigami_QM_LOADER libkirigamiplugin_qt)
 endif()
 
