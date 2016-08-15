@@ -4,6 +4,7 @@ CONFIG += plugin
 QT          += qml quick gui svg
 HEADERS     += $$PWD/src/kirigamiplugin.h $$PWD/src/enums.h
 SOURCES     += $$PWD/src/kirigamiplugin.cpp $$PWD/src/enums.cpp
+RESOURCES   += $$PWD/kirigami.qrc
 
 API_VER=1.0
 
