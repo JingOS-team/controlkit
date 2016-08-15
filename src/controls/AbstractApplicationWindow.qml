@@ -230,6 +230,7 @@ Controls.ApplicationWindow {
         z: -1
         anchors.fill: parent
         onClicked: root.reachableMode = false;
+        visible: root.reachableMode
         Rectangle {
             anchors.fill: parent
             color: Qt.rgba(0, 0, 0, 0.3)
