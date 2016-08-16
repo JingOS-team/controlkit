@@ -7,12 +7,13 @@
         <file alias="AbstractListItem.qml">src/controls/AbstractListItem.qml</file>
         <file alias="SplitDrawer.qml">src/controls/SplitDrawer.qml</file>
         <file alias="Theme.qml">src/controls/Theme.qml</file>
+        <file alias="ToolBarApplicationHeader.qml">src/controls/ToolBarApplicationHeader.qml</file>
         <file alias="private/RefreshableScrollView.qml">src/controls/private/RefreshableScrollView.qml</file>
+        <file alias="private/PageActionPropertyGroup.qml">src/controls/private/PageActionPropertyGroup.qml</file>
         <file alias="private/CornerShadow.qml">src/controls/private/CornerShadow.qml</file>
         <file alias="private/ActionButton.qml">src/controls/private/ActionButton.qml</file>
         <file alias="private/DefaultListItemBackground.qml">src/controls/private/DefaultListItemBackground.qml</file>
         <file alias="private/EdgeShadow.qml">src/controls/private/EdgeShadow.qml</file>
-        <file alias="private/PageActionPropertyGroup.qml">src/controls/private/PageActionPropertyGroup.qml</file>
         <file alias="OverlayDrawer.qml">src/controls/OverlayDrawer.qml</file>
         <file alias="OverlaySheet.qml">src/controls/OverlaySheet.qml</file>
         <file alias="GlobalDrawer.qml">src/controls/GlobalDrawer.qml</file>
@@ -42,11 +43,12 @@
         <file alias="styles/Plasma/Theme.qml">src/styles/Plasma/Theme.qml</file>
         <file alias="styles/Plasma/Units.qml">src/styles/Plasma/Units.qml</file>
         <file alias="styles/Plasma/Icon.qml">src/styles/Plasma/Icon.qml</file>
+        <file alias="styles/Desktop/AbstractListItem.qml">src/styles/Desktop/AbstractListItem.qml</file>
         <file alias="styles/Desktop/Theme.qml">src/styles/Desktop/Theme.qml</file>
         <file alias="styles/Desktop/OverlayDrawer.qml">src/styles/Desktop/OverlayDrawer.qml</file>
         <file alias="styles/Desktop/Units.qml">src/styles/Desktop/Units.qml</file>
+        <file alias="styles/Desktop/SwipeListItem.qml">src/styles/Desktop/SwipeListItem.qml</file>
         <file alias="styles/Desktop/ApplicationWindow.qml">src/styles/Desktop/ApplicationWindow.qml</file>
-        <file alias="styles/Desktop/Icon.qml">src/styles/Desktop/Icon.qml</file>
         <file alias="styles/Desktop/AbstractApplicationHeader.qml">src/styles/Desktop/AbstractApplicationHeader.qml</file>
     </qresource>
 </RCC>
