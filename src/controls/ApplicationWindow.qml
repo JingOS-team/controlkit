@@ -145,7 +145,7 @@ AbstractApplicationWindow {
                     }
                 }
 
-                if (Settings.isMobile && !backEvent.accepted) {
+                if (Settings.isMobile && !backEvent.accepted && Qt.platform.os !== "ios") {
                     Qt.quit();
                 }
             }
