@@ -84,14 +84,6 @@ set_package_properties(KF5Plasma PROPERTIES DESCRIPTION "Plasma framework"
                       )
 endif()
 
-if(DESKTOP_ENABLED)
-find_package(KF5Declarative ${KF5_MIN_VERSION})
-set_package_properties(KF5Declarative PROPERTIES DESCRIPTION "KDeclarative framework"
-                       TYPE OPTIONAL
-                       PURPOSE "Optional Look and feel integration with desktop colors and icons."
-                      )
-endif()
-
 if(KF5Plasma_FOUND AND THEME STREQUAL "Plasma")
   set(PLASMA_ENABLED 1)
 endif()

@@ -7,6 +7,7 @@ endif()
 set(kirigami_SRCS
     kirigamiplugin.cpp
     enums.cpp
+    desktopicon.cpp
     ${kirigami_QM_LOADER}
     )
 
