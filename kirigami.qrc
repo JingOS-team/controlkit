@@ -46,7 +46,6 @@
         <file alias="styles/Desktop/OverlayDrawer.qml">src/styles/Desktop/OverlayDrawer.qml</file>
         <file alias="styles/Desktop/Units.qml">src/styles/Desktop/Units.qml</file>
         <file alias="styles/Desktop/ApplicationWindow.qml">src/styles/Desktop/ApplicationWindow.qml</file>
-        <file alias="styles/Desktop/Icon.qml">src/styles/Desktop/Icon.qml</file>
         <file alias="styles/Desktop/AbstractApplicationHeader.qml">src/styles/Desktop/AbstractApplicationHeader.qml</file>
     </qresource>
 </RCC>
