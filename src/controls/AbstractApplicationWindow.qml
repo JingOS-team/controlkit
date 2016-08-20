@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.5
+import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Controls 1.3 as Controls
 import "templates/private"
 import org.kde.kirigami 1.0
@@ -77,7 +78,7 @@ import QtGraphicalEffects 1.0
  *
  * @inherit QtQuick.Controls.ApplicationWindow
  */
-Controls.ApplicationWindow {
+QQC2.ApplicationWindow {
     id: root
 
     /**
@@ -140,7 +141,7 @@ Controls.ApplicationWindow {
     * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
     * //FIXME: this should become an actual ApplicationHeader
     */
-    property var header: undefined
+    header: undefined
 
     /**
      * controlsVisible: bool

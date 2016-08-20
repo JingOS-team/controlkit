@@ -81,10 +81,9 @@ ScrollablePage {
             sheet.close();
         }
     }
-
+/*
     OverlayDrawer {
         id: bottomDrawer
-        anchors.fill: parent
         edge: Qt.BottomEdge
         contentItem: Item {
             implicitHeight: childrenRect.height + Units.gridUnit
@@ -104,7 +103,7 @@ ScrollablePage {
             }
         }
     }
-
+*/
     OverlaySheet {
         id: sheet
         ColumnLayout {

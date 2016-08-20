@@ -18,34 +18,23 @@
  */
 
 import QtQuick 2.1
+import QtQuick.Controls 2.0 as QQC2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 1.0
 
 //TODO: This will become a QQC2 Drawer
 //providing just a dummy api for now
-Item {
+QQC2.Drawer {
     id: root
-    anchors {
-        fill: parent
-        topMargin: !modal && applicationWindow !== undefined && applicationWindow().header && applicationWindow().controlsVisible ? applicationWindow().header.height : 0
-    }
-    z: 9999
 
-    default property alias page: mainPage.data
-    property Item contentItem
+    height: applicationWindow().height
+    parent: applicationWindow().contentItem
+
+    //default property alias page: mainPage.data
     property bool opened
-    property int edge: Qt.LeftEdge
-    property real position: 0
-    property bool modal: true
+    edge: Qt.LeftEdge
+    modal: true
 
-    function open () { }
-    function close () { }
     signal clicked
-
-    Item {
-        id: mainPage
-        anchors.fill: parent
-        onChildrenChanged: mainPage.children[0].anchors.fill = mainPage
-    }
 }
 

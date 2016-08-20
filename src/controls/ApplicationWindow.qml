@@ -165,11 +165,4 @@ AbstractApplicationWindow {
         }
         focus: true
     }
-
-    Component.onCompleted: {
-        if (root.header === undefined) {
-            var component = Qt.createComponent(Qt.resolvedUrl("./ApplicationHeader.qml"));
-            root.header = component.createObject(root.contentItem.parent);
-        }
-    }
 }
