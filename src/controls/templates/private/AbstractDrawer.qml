@@ -31,9 +31,10 @@ QQC2.Drawer {
     parent: applicationWindow().contentItem
 
     //default property alias page: mainPage.data
-    property bool opened
+    property alias opened: root.visible
     edge: Qt.LeftEdge
     modal: true
+    property bool enabled: true
 
     signal clicked
 }

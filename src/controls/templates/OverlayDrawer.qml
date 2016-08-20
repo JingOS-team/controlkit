@@ -50,8 +50,6 @@ AbstractDrawer {
      */
     property bool opened: position >= 1
 
-    property bool enabled
-
 
     /**
      * handleVisible: bool
