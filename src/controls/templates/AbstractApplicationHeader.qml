@@ -42,7 +42,6 @@ Item {
     property int maximumHeight: Units.gridUnit * 3
     default property alias contentItem: mainItem.data
 
-    parent: __appWindow.contentItem.parent
     //FIXME: remove
     property QtObject __appWindow: applicationWindow();
 
