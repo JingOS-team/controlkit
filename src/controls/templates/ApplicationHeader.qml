@@ -202,7 +202,7 @@ AbstractApplicationHeader {
                     renderType: Text.QtRendering
                     color: header.background && header.background.color && header.background.color == Theme.highlightColor ? Theme.highlightedTextColor : Theme.textColor
                     elide: Text.ElideRight
-                    text: page.title
+                    text: page ? page.title : ""
                     font.pixelSize: titleList.height / 1.6
                     height: parent.height
                     Rectangle {
