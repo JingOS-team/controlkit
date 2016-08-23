@@ -82,16 +82,11 @@ private:
     QString componentPath(const QString &fileName) const;
     QString resolveFilePath(const QString &path) const
     {
-        #ifdef Q_OS_WIN
-        // On Windows, the leading slash does not make sense, so let's snip that off
-        return baseUrl().path().mid(1) + QLatin1Char('/') + path;
-        #else
-        return baseUrl().path() + QLatin1Char('/') + path;
-        #endif
+        return baseUrl().toLocalFile() + QLatin1Char('/') + path;
     }
     QString resolveFileUrl(const QString &filePath) const
     {
-        return QStringLiteral("file://") + baseUrl().path() + QLatin1Char('/') + filePath;
+        return baseUrl().toString() + QLatin1Char('/') + filePath;
     }
     QStringList m_stylesFallbackChain;
 };

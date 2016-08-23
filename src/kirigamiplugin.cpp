@@ -29,11 +29,8 @@
 
 QString KirigamiPlugin::componentPath(const QString &fileName) const
 {
-    QString candidate;
-    QString candidatePath;
-
     foreach (const QString &style, m_stylesFallbackChain) {
-        candidate = QStringLiteral("styles/") + style + QLatin1Char('/') + fileName;
+        const QString candidate = QStringLiteral("styles/") + style + QLatin1Char('/') + fileName;
         if (QFile::exists(resolveFilePath(candidate))) {
             return resolveFileUrl(candidate);
         }
@@ -82,7 +79,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //The icon is "special: we have to use a wrapper class to QIcon on desktops
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
-    if (m_stylesFallbackChain.first() == QStringLiteral("Desktop")) {
+    if (!m_stylesFallbackChain.isEmpty() && m_stylesFallbackChain.first() == QStringLiteral("Desktop")) {
         qmlRegisterType<DesktopIcon>(uri, 1, 0, "Icon");
     } else {
         qmlRegisterType(componentPath(QStringLiteral("Icon.qml")), uri, 1, 0, "Icon");
