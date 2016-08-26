@@ -252,12 +252,11 @@ OverlayDrawer {
                         }
                         Heading {
                             id: heading
+                            Layout.fillWidth: true
+                            Layout.rightMargin: heading.height
                             level: 1
                             color: bannerImageSource != "" ? "white" : Theme.textColor
-                        }
-                        Item {
-                            height: 1
-                            Layout.minimumWidth: heading.height
+                            elide: Text.ElideRight
                         }
                     }
                 }
