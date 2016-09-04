@@ -175,6 +175,24 @@ OverlayDrawer {
      */
     property alias topContent: topContent.data
 
+    /**
+     * resetMenuOnTriggered: bool
+     *
+     * On the actions menu, whenever a leaf action is triggered, the menu
+     * will reset to its parent.
+     */
+    property bool resetMenuOnTriggered: true
+
+    /**
+     * Reverts the menu back to its initial state
+     */
+    function resetMenu() {
+        stackView.pop(stackView.initialItem);
+        if (root.modal) {
+            root.opened = false;
+        }
+    }
+
     contentItem: Controls.ScrollView {
         id: scrollView
         anchors.fill: parent
@@ -348,11 +366,8 @@ OverlayDrawer {
 
                                     if (modelData.children!==undefined && modelData.children.length > 0) {
                                         stackView.push(menuComponent, {"model": modelData.children, "level": level + 1});
-                                    } else {
-                                        stackView.pop(stackView.initialItem);
-                                        if (root.modal) {
-                                            root.opened = false;
-                                        }
+                                    } else if (root.resetMenuOnTriggered) {
+                                        root.resetMenu();
                                     }
                                 }
                             }
