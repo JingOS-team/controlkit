@@ -344,10 +344,11 @@ OverlayDrawer {
                                 }
 
                                 onClicked: {
+                                    modelData.trigger();
+
                                     if (modelData.children!==undefined && modelData.children.length > 0) {
                                         stackView.push(menuComponent, {"model": modelData.children, "level": level + 1});
                                     } else {
-                                        modelData.trigger();
                                         stackView.pop(stackView.initialItem);
                                         if (root.modal) {
                                             root.opened = false;
