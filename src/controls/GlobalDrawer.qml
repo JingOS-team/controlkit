@@ -336,6 +336,15 @@ OverlayDrawer {
                         Layout.maximumHeight: Layout.minimumHeight
 
 
+                        BasicListItem {
+                            visible: level > 0
+                            supportsMouseEvents: true
+                            icon: "go-previous"
+                            label: qsTr("Back")
+                            separatorVisible: false
+                            onClicked: stackView.pop()
+                        }
+
                         Repeater {
                             id: actionsRepeater
                             model: actions
@@ -371,14 +380,6 @@ OverlayDrawer {
                                     }
                                 }
                             }
-                        }
-                        BasicListItem {
-                            visible: level > 0
-                            supportsMouseEvents: true
-                            icon: "go-previous"
-                            label: qsTr("Back")
-                            separatorVisible: false
-                            onClicked: stackView.pop()
                         }
                     }
                 }
