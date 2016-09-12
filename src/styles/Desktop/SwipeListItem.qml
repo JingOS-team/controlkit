@@ -23,7 +23,7 @@ import "../../private"
 import "../../templates" as T
 
 T.SwipeListItem {
-    id: root
+    id: listItem
 
     background: DefaultListItemBackground {}
     implicitHeight: contentItem.height + Units.smallSpacing*4
