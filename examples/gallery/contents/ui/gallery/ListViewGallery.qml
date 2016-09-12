@@ -27,6 +27,16 @@ ScrollablePage {
     Layout.fillWidth: true
     title: "Long List view"
 
+    actions {
+        main: Action {
+            iconName: sheet.opened ? "dialog-cancel" : "document-edit"
+            text: "Main Action Text"
+            checked: sheet.opened
+            checkable: true
+            onCheckedChanged: sheet.opened = checked;
+        }
+    }
+
     supportsRefreshing: true
     onRefreshingChanged: {
         if (refreshing) {
@@ -38,6 +48,15 @@ ScrollablePage {
 
     background: Rectangle {
         color: Theme.viewBackgroundColor
+    }
+    OverlaySheet {
+        id: sheet
+        ListView {
+            model: 100
+            delegate: BasicListItem {
+                label: "Item in sheet" + modelData
+            }
+        }
     }
 
     ListView {

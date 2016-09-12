@@ -100,10 +100,10 @@ Item {
     }
 
     function close() {
-        if (mainFlickable.contentY < 0) {
+        if (scrollView.flickableItem.contentY < 0) {
             closeAnimation.to = -height;
         } else {
-            closeAnimation.to = flickableContents.height;
+            closeAnimation.to = scrollView.flickableItem.contentHeight;
         }
         closeAnimation.running = true;
     }
@@ -112,22 +112,30 @@ Item {
         anchors.fill: parent
         color: Theme.textColor
         opacity: 0.6 * Math.min(
-            (Math.min(mainFlickable.contentY + mainFlickable.height, mainFlickable.height) / mainFlickable.height),
-            (2 + (mainFlickable.contentHeight - mainFlickable.contentY - mainFlickable.topMargin - mainFlickable.bottomMargin)/mainFlickable.height))
+            (Math.min(scrollView.flickableItem.contentY + scrollView.flickableItem.height, scrollView.flickableItem.height) / scrollView.flickableItem.height),
+            (2 + (scrollView.flickableItem.contentHeight - scrollView.flickableItem.contentY - scrollView.flickableItem.topMargin - scrollView.flickableItem.bottomMargin)/scrollView.flickableItem.height))
     }
 
 
     Component.onCompleted: {
-        mainFlickable.interactive = true;
+        scrollView.flickableItem.interactive = true;
     }
     onBackgroundChanged: {
         background.parent = flickableContents;
         background.z = -1;
     }
     onContentItemChanged: {
-        contentItem.parent = contentItemParent;
-        contentItem.anchors.left = contentItemParent.left;
-        contentItem.anchors.right = contentItemParent.right;
+        if (contentItem.hasOwnProperty("contentY") && // Check if flickable
+            contentItem.hasOwnProperty("contentHeight")) {
+            contentItem.parent = scrollView;
+            scrollView.contentItem = contentItem;
+        } else {
+            contentItem.parent = contentItemParent;
+            scrollView.contentItem = flickableContents;
+            contentItem.anchors.left = contentItemParent.left;
+            contentItem.anchors.right = contentItemParent.right;
+        }
+        scrollView.flickableItem.flickableDirection = Flickable.VerticalFlick;
     }
     onOpenedChanged: {
         if (opened) {
@@ -174,18 +182,18 @@ Item {
         
         var pos = focusItem.mapToItem(flickableContents, 0, cursorY - Units.gridUnit*3);
         //focused item alreqady visible? add some margin for the space of the action buttons
-        if (pos.y >= mainFlickable.contentY && pos.y <= mainFlickable.contentY + mainFlickable.height - Units.gridUnit * 8) {
+        if (pos.y >= scrollView.flickableItem.contentY && pos.y <= scrollView.flickableItem.contentY + scrollView.flickableItem.height - Units.gridUnit * 8) {
             return;
         }
-        mainFlickable.contentY = pos.y;
+        scrollView.flickableItem.contentY = pos.y;
     }
 
 
     NumberAnimation {
         id: openAnimation
-        property int topOpenPosition: Math.min(-root.height*0.15, flickableContents.height - root.height + Units.gridUnit * 5)
-        property int bottomOpenPosition: (flickableContents.height - root.height) + (Units.gridUnit * 5)
-        target: mainFlickable
+        property int topOpenPosition: Math.min(-root.height*0.15, scrollView.flickableItem.contentHeight - root.height + Units.gridUnit * 5)
+        property int bottomOpenPosition: (scrollView.flickableItem.contentHeight - root.height) + (Units.gridUnit * 5)
+        target: scrollView.flickableItem
         properties: "contentY"
         from: -root.height
         to: topOpenPosition
@@ -197,14 +205,17 @@ Item {
         id: closeAnimation
         property int to: -root.height
         NumberAnimation {
-            target: mainFlickable
+            target: scrollView.flickableItem
             properties: "contentY"
             to: closeAnimation.to
             duration: Units.longDuration
             easing.type: Easing.InQuad
         }
         ScriptAction {
-            script: root.visible = root.opened = false;
+            script: {
+                scrollView.flickableItem.contentY = -root.height;
+                root.visible = root.opened = false;
+            }
         }
     }
 
@@ -220,59 +231,72 @@ Item {
             }
         }
 
+        Item {
+            id: flickableContents
+            x: scrollView.flickableItem && !root.contentItem.hasOwnProperty("contentY") ? (scrollView.flickableItem.width-width)/2 : 0
+            y: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? -scrollView.flickableItem.contentY : 0
+            width: root.contentItem.implicitWidth <= 0 ? root.width : Math.max(root.width/2, Math.min(root.width, root.contentItem.implicitWidth))
+            height: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? scrollView.flickableItem.contentHeight : (root.contentItem.height + topPadding + bottomPadding + Units.iconSizes.medium + Units.gridUnit)
+            Item {
+                id: contentItemParent
+                anchors {
+                    fill: parent
+                    leftMargin: leftPadding
+                    topMargin: topPadding
+                    rightMargin: rightPadding
+                    bottomMargin: bottomPadding
+                }
+            }
+        }
+        Binding {
+            when: scrollView.flickableItem != null
+            target: scrollView.flickableItem
+            property: "topMargin"
+            value: scrollView.height
+        }
+        Binding {
+            when: scrollView.flickableItem != null
+            target: scrollView.flickableItem
+            property: "bottomMargin"
+            value: scrollView.height
+        }
+
+        Connections {
+            target: scrollView.flickableItem
+            function movementEnded() {
+                //close
+                if ((root.height + scrollView.flickableItem.contentY) < root.height/2) {
+                    closeAnimation.to = -root.height;
+                    closeAnimation.running = true;
+                } else if ((root.height*0.6 + scrollView.flickableItem.contentY) > scrollView.flickableItem.contentHeight) {
+                    closeAnimation.to = scrollView.flickableItem.contentHeight
+                    closeAnimation.running = true;
+
+                //reset to the default opened position
+                } else if (scrollView.flickableItem.contentY < openAnimation.topOpenPosition) {
+                    openAnimation.from = scrollView.flickableItem.contentY;
+                    openAnimation.to = openAnimation.topOpenPosition;
+                    openAnimation.running = true;
+                //reset to the default "bottom" opened position
+                } else if (scrollView.flickableItem.contentY > openAnimation.bottomOpenPosition) {
+                    openAnimation.from = scrollView.flickableItem.contentY;
+                    openAnimation.to = openAnimation.bottomOpenPosition;
+                    openAnimation.running = true;
+                }
+            }
+            onMovementEnded: movementEnded();
+            onFlickEnded: movementEnded();
+            onContentHeightChanged: {
+                if (openAnimation.running) {
+                    openAnimation.running = false;
+                    open();
+                }
+            }
+        }
         Controls.ScrollView {
             id: scrollView
             anchors.fill: parent
-            Flickable {
-                id: mainFlickable
-                topMargin: height
-                contentWidth: width
-                contentHeight: flickableContents.height;
-                flickableDirection: Flickable.VerticalFlick
-                Item {
-                    width: mainFlickable.width
-                    height: flickableContents.height
-                    Item {
-                        id: flickableContents
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        width: root.contentItem.implicitWidth <= 0 ? root.width : Math.max(root.width/2, Math.min(root.width, root.contentItem.implicitWidth))
-                        height: contentItem.height + topPadding + bottomPadding + Units.iconSizes.medium + Units.gridUnit
-                        Item {
-                            id: contentItemParent
-                            anchors {
-                                fill: parent
-                                leftMargin: leftPadding
-                                topMargin: topPadding
-                                rightMargin: rightPadding
-                                bottomMargin: bottomPadding
-                            }
-                        }
-                    }
-                }
-                bottomMargin: height
-                onMovementEnded: {
-                    //close
-                    if ((root.height + mainFlickable.contentY) < root.height/2) {
-                        closeAnimation.to = -root.height;
-                        closeAnimation.running = true;
-                    } else if ((root.height*0.6 + mainFlickable.contentY) > flickableContents.height) {
-                        closeAnimation.to = flickableContents.height
-                        closeAnimation.running = true;
-
-                    //reset to the default opened position
-                    } else if (mainFlickable.contentY < openAnimation.topOpenPosition) {
-                        openAnimation.from = mainFlickable.contentY;
-                        openAnimation.to = openAnimation.topOpenPosition;
-                        openAnimation.running = true;
-                    //reset to the default "bottom" opened position
-                    } else if (mainFlickable.contentY > openAnimation.bottomOpenPosition) {
-                        openAnimation.from = mainFlickable.contentY;
-                        openAnimation.to = openAnimation.bottomOpenPosition;
-                        openAnimation.running = true;
-                    }
-                }
-                onFlickEnded: movementEnded();
-            }
+            horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
         }
     }
 }
