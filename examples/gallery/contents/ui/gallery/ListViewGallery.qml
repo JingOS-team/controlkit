@@ -53,6 +53,7 @@ ScrollablePage {
         id: sheet
         ListView {
             model: 100
+            implicitWidth: Units.gridUnit * 30
             delegate: BasicListItem {
                 label: "Item in sheet" + modelData
             }

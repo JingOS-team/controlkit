@@ -145,6 +145,11 @@ Item {
             Qt.inputMethod.hide();
         }
     }
+    onWidthChanged: {
+        var width = Math.max(root.width/2, Math.min(root.width, root.contentItem.implicitWidth));
+        contentItem.contentItem.x = (root.width - width)/2
+        contentItem.contentItem.width = width;
+    }
     onHeightChanged: {
         var focusItem;
 
@@ -199,6 +204,13 @@ Item {
         to: topOpenPosition
         duration: Units.longDuration
         easing.type: Easing.OutQuad
+        onRunningChanged: {
+            if (!running) {
+                var width = Math.max(root.width/2, Math.min(root.width, root.contentItem.implicitWidth));
+                contentItem.contentItem.x = (root.width - width)/2
+                contentItem.contentItem.width = width;
+            }
+        }
     }
 
     SequentialAnimation {
@@ -223,6 +235,7 @@ Item {
         anchors.fill: parent
         z: 2
         drag.filterChildren: true
+        hoverEnabled: true
 
         onClicked: {
             var pos = mapToItem(flickableContents, mouse.x, mouse.y);
@@ -233,7 +246,8 @@ Item {
 
         Item {
             id: flickableContents
-            x: scrollView.flickableItem && !root.contentItem.hasOwnProperty("contentY") ? (scrollView.flickableItem.width-width)/2 : 0
+            //anchors.horizontalCenter: parent.horizontalCenter
+            x: (root.width - width) / 2
             y: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? -scrollView.flickableItem.contentY : 0
             width: root.contentItem.implicitWidth <= 0 ? root.width : Math.max(root.width/2, Math.min(root.width, root.contentItem.implicitWidth))
             height: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? scrollView.flickableItem.contentHeight : (root.contentItem.height + topPadding + bottomPadding + Units.iconSizes.medium + Units.gridUnit)
