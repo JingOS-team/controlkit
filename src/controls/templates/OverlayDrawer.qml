@@ -60,5 +60,11 @@ AbstractDrawer {
 
 //END Properties
 
-
+    onOpenedChanged: {
+        if (opened) {
+            open();
+        } else {
+            close();
+        }
+    }
 }

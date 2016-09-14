@@ -39,10 +39,11 @@ T.OverlayDrawer {
     background: Rectangle {
         color: Theme.viewBackgroundColor
 
-        Item {
+        MouseArea {
             id: drawerHandle
             z: -1
 
+            onClicked: root.opened = !root.opened
             anchors {
                 right: root.edge == Qt.LeftEdge ? undefined : parent.left
                 left: root.edge == Qt.RightEdge ? undefined : parent.right
