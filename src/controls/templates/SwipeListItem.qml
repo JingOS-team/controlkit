@@ -23,6 +23,7 @@ import QtQuick.Controls 1.0 as Controls
 import QtQuick.Controls.Private 1.0
 import org.kde.kirigami 1.0
 import "../private"
+import QtQuick.Controls 2.0 as QQC2
 
 /**
  * An item delegate Intended to support extra actions obtainable

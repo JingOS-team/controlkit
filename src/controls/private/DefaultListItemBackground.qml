@@ -30,7 +30,7 @@ Rectangle {
         anchors.fill: parent
         visible: !Settings.isMobile
         color: listItem.activeBackgroundColor
-        opacity: listItem.containsMouse && !listItem.pressed ? 0.2 : 0
+        opacity: listItem.hovered && !listItem.pressed ? 0.2 : 0
         Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
     }
     Behavior on color {
