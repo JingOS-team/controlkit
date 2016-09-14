@@ -30,7 +30,7 @@ import org.kde.kirigami 1.0
  *
  * @inherit QtQuick.Item
  */
-Rectangle {
+Item {
     id: listItem
     
     /**
@@ -166,10 +166,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        if (background) {
-            background.parent = itemMouse;
-            background.anchors.fill = itemMouse;
-        }
+        itemMouse.integrateBackground()
     }
 
     MouseArea {
@@ -189,10 +186,17 @@ Rectangle {
                 margins: Units.smallSpacing
             }
         }
+
+        function integrateBackground() {
+            if (background) {
+                background.parent = itemMouse;
+                background.anchors.fill = itemMouse;
+            }
+        }
     }
 
     onBackgroundChanged: {
-        background.parent = itemMouse
+        itemMouse.integrateBackground()
     }
 
     Accessible.role: Accessible.ListItem

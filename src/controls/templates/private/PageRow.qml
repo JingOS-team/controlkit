@@ -205,7 +205,7 @@ Item {
         readonly property int count: mainLayout.children.length
         property var componentCache
 
-        property int roundedDefaultColumnWidth: Math.floor(root.width/root.defaultColumnWidth) > 0 ? root.width/Math.floor(root.width/root.defaultColumnWidth) : root.width
+        property int roundedDefaultColumnWidth: root.width < root.defaultColumnWidth*2 ? root.width : root.defaultColumnWidth
 
         //NOTE:seems to only work if the array is defined in a declarative way,
         //the Object in an imperative way, espacially on Android

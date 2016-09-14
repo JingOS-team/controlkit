@@ -37,17 +37,14 @@ Rectangle {
         ColorAnimation { duration: Units.longDuration }
     }
 
-    Rectangle {
-        id: separator
-        color: listItem.textColor
-        opacity: 0.2
-        visible: listItem.separatorVisible
+    Separator {
         anchors {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
         }
-        height: Math.ceil(Units.smallSpacing / 5);
+        visible: listItem.separatorVisible
+        color: listItem.textColor
     }
 }
 

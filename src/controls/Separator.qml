@@ -1,5 +1,6 @@
 /*
- *   Copyright 2016 Marco Martin <notmart@gmail.com>
+ *   Copyright 2012 Marco Martin <mart@kde.org>
+ *   Copyright 2016 Aleix Pol Gonzalez <aleixpol@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -14,17 +15,23 @@
  *   You should have received a copy of the GNU Library General Public
  *   License along with this program; if not, write to the
  *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.5
+import QtQuick 2.1
 import org.kde.kirigami 1.0
-import "../../private"
-import "../../templates" as T
 
-T.SwipeListItem {
-    id: listItem
+/**
+ * A visual separator
+ *
+ * Useful for splitting one set of items from another.
+ *
+ * @inherit QtQuick.Rectangle
+ */
 
-    background: DefaultListItemBackground {}
-    implicitHeight: contentItem.height + Units.smallSpacing*4
+Rectangle {
+    opacity: 0.2
+    height: Units.devicePixelRatio
+    width: Units.devicePixelRatio
+    color: Theme.textColor
 }

@@ -90,7 +90,8 @@ OverlayDrawer {
     Connections {
         target: pageStack
         onCurrentItemChanged: {
-            actions = pageStack.currentItem.contextualActions
+            if (pageStack.currentItem)
+                actions = pageStack.currentItem.contextualActions
         }
     }
 

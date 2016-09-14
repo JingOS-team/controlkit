@@ -175,10 +175,28 @@ OverlayDrawer {
      */
     property alias topContent: topContent.data
 
+    /**
+     * resetMenuOnTriggered: bool
+     *
+     * On the actions menu, whenever a leaf action is triggered, the menu
+     * will reset to its parent.
+     */
+    property bool resetMenuOnTriggered: true
+
+    /**
+     * Reverts the menu back to its initial state
+     */
+    function resetMenu() {
+        stackView.pop(stackView.initialItem);
+        if (root.modal) {
+            root.opened = false;
+        }
+    }
+
     contentItem: Controls.ScrollView {
         id: scrollView
         anchors.fill: parent
-        implicitWidth: Math.min (Math.max(Units.gridUnit * 12, title.width), root.parent.width * 0.8)
+        implicitWidth: Math.min (Units.gridUnit * 20, root.parent.width * 0.8)
         horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
         Flickable {
             id: mainFlickable
@@ -252,12 +270,11 @@ OverlayDrawer {
                         }
                         Heading {
                             id: heading
+                            Layout.fillWidth: true
+                            Layout.rightMargin: heading.height
                             level: 1
                             color: bannerImageSource != "" ? "white" : Theme.textColor
-                        }
-                        Item {
-                            height: 1
-                            Layout.minimumWidth: heading.height
+                            elide: Text.ElideRight
                         }
                     }
                 }
@@ -319,6 +336,15 @@ OverlayDrawer {
                         Layout.maximumHeight: Layout.minimumHeight
 
 
+                        BasicListItem {
+                            visible: level > 0
+                            supportsMouseEvents: true
+                            icon: "go-previous"
+                            label: qsTr("Back")
+                            separatorVisible: false
+                            onClicked: stackView.pop()
+                        }
+
                         Repeater {
                             id: actionsRepeater
                             model: actions
@@ -345,25 +371,15 @@ OverlayDrawer {
                                 }
 
                                 onClicked: {
+                                    modelData.trigger();
+
                                     if (modelData.children!==undefined && modelData.children.length > 0) {
                                         stackView.push(menuComponent, {"model": modelData.children, "level": level + 1});
-                                    } else {
-                                        modelData.trigger();
-                                        stackView.pop(stackView.initialItem);
-                                        if (root.modal) {
-                                            root.opened = false;
-                                        }
+                                    } else if (root.resetMenuOnTriggered) {
+                                        root.resetMenu();
                                     }
                                 }
                             }
-                        }
-                        BasicListItem {
-                            visible: level > 0
-                            supportsMouseEvents: true
-                            icon: "go-previous"
-                            label: qsTr("Back")
-                            separatorVisible: false
-                            onClicked: stackView.pop()
                         }
                     }
                 }

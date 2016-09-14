@@ -112,10 +112,10 @@ T.OverlayDrawer {
         Rectangle {
             z: -2
             anchors {
-                left: root.edge == Qt.LeftEdge ? parent.right : Qt.RightEdge
-                right: root.edge == Qt.RightEdge ? parent.left : Qt.LeftEdge
-                top: root.edge == Qt.TopEdge ? parent.bottom : parent.top
-                bottom: root.edge == Qt.BottomEdge ? parent.top : parent.bottom
+                right: root.edge == Qt.RightEdge ? parent.left : (root.edge == Qt.LeftEdge ? undefined : parent.right)
+                left: root.edge == Qt.LeftEdge ? parent.right : (root.edge == Qt.RightEdge ? undefined : parent.left)
+                top: root.edge == Qt.TopEdge ? parent.bottom : (root.edge == Qt.BottomEdge ? undefined : parent.top)
+                bottom: root.edge == Qt.BottomEdge ? parent.top : (root.edge == Qt.TopEdge ? undefined : parent.bottom)
             }
             color: Theme.textColor
             opacity: root.position == 0 ? 0 : 0.3
