@@ -26,5 +26,5 @@ T.AbstractListItem {
     id: listItem
 
     background: DefaultListItemBackground {}
-    implicitHeight: listItem.contentItem.height + Units.smallSpacing*4
+    implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 4
 }
