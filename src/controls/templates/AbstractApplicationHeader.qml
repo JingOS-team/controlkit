@@ -50,7 +50,15 @@ Item {
         left: parent.left
         right: parent.right
     }
-    height: preferredHeight
+    height: {
+        if (!__appWindow.controlsVisible) {
+            return 1;
+        } else if (__appWindow.wideScreen) {
+            return preferredHeight;
+        } else {
+            return 1;
+        }
+    }
 
     /**
      * background: Item
@@ -61,16 +69,8 @@ Item {
 
     onBackgroundChanged: {
         background.z = -1;
-        background.parent = root;
-        background.anchors.fill = root;
-    }
-
-    Behavior on height {
-        enabled: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable && !__appWindow.pageStack.currentItem.flickable.moving
-        NumberAnimation {
-            duration: Units.longDuration
-            easing.type: Easing.InOutQuad
-        }
+        background.parent = headerItem;
+        background.anchors.fill = headerItem;
     }
 
     opacity: height > 0 && -translateTransform.y <= height ? 1 : 0
@@ -79,19 +79,6 @@ Item {
             duration: Units.longDuration
             easing.type: Easing.InOutQuad
         }
-    }
-
-    Connections {
-        target: __appWindow
-        onWideScreenChanged: {
-            if (wideScreen) {
-                height = preferredHeight;
-            } else {
-                height = preferredHeight;
-            }
-        }
-        onHeightChanged: root.height = preferredHeight;
-        onReachableModeChanged: root.height = __appWindow.reachableMode  && !__appWindow.wideScreen ? maximumHeight : preferredHeight;
     }
 
     transform: Translate {
@@ -121,10 +108,10 @@ Item {
         anchors {
             left: parent.left
             right: parent.right
-            bottom: parent.bottom
+            //bottom: parent.bottom
         }
 
-        height: parent.preferredHeight
+        height: __appWindow.reachableMode ? root.maximumHeight : root.preferredHeight
 
         Connections {
             id: headerSlideConnection
@@ -140,23 +127,21 @@ Item {
                 }
 
                 if (__appWindow.wideScreen) {
-                    root.height = root.preferredHeight;
-                } else if (__appWindow.reachableMode && !__appWindow.wideScreen) {
-                    root.height = root.maximumHeight;
+                    headerItem.y = 0;
                 } else {
-                    root.height = Math.min(root.preferredHeight,
-                                           Math.max(root.minimumHeight,
-                                               root.height + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
+                    headerItem.y = Math.max(-root.preferredHeight,
+                                           Math.min(root.minimumHeight,
+                                               headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
                     oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
                 }
             }
             onMovementEnded: {
-                if (root.height > root.preferredHeight) {
+                if (headerItem.y > root.preferredHeight) {
                     //if don't change the position if more then preferredSize is shown
-                } else if (root.height > root.preferredHeight/2 ) {
-                    root.height = root.preferredHeight;
+                } else if (headerItem.y < -root.preferredHeight/2 ) {
+                    headerItem.y = -root.preferredHeight;
                 } else {
-                    root.height = 0;
+                    headerItem.y = 0;
                 }
             }
         }
@@ -171,7 +156,7 @@ Item {
                 } else {
                     headerSlideConnection.oldContentY = 0;
                 }
-                root.height = root.preferredHeight;
+                headerItem.y = 0;
             }
         }
 
@@ -179,7 +164,14 @@ Item {
             id: mainItem
             anchors {
                 fill: parent
-                topMargin: applicationWindow().reachable ? 0 : Math.min(headerItem.height - root.height, headerItem.height - root.preferredHeight)
+                topMargin: applicationWindow().reachable ? 0 : Math.min(headerItem.height - headerItem.y, headerItem.height - root.preferredHeight)
+            }
+        }
+        Behavior on y {
+            enabled: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable && !__appWindow.pageStack.currentItem.flickable.moving
+            NumberAnimation {
+                duration: Units.longDuration
+                easing.type: Easing.InOutQuad
             }
         }
     }
