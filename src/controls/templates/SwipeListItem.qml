@@ -23,7 +23,7 @@ import QtQuick.Controls 1.0 as Controls
 import QtQuick.Controls.Private 1.0
 import org.kde.kirigami 1.0
 import "../private"
-import QtQuick.Controls 2.0 as QQC2
+import QtQuick.Templates 2.0 as T2
 
 /**
  * An item delegate Intended to support extra actions obtainable
@@ -54,7 +54,7 @@ import QtQuick.Controls 2.0 as QQC2
  *
  * @inherit QtQuick.Item
  */
-QQC2.ItemDelegate {
+T2.ItemDelegate {
     id: listItem
 
 //BEGIN properties

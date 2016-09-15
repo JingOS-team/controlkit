@@ -46,7 +46,7 @@ AbstractListItem {
      */
     property alias icon: iconItem.source
 
-    RowLayout {
+    contentItem: RowLayout {
         anchors {
             left: parent.left
             verticalCenter: parent.verticalCenter
@@ -60,6 +60,7 @@ AbstractListItem {
         }
         Label {
             id: labelItem
+            Layout.fillWidth: true
             color: listItem.checked || listItem.pressed ? listItem.activeTextColor : listItem.textColor
         }
     }
