@@ -54,67 +54,24 @@ import QtQuick.Controls 2.0 as QQC2
  *
  * @inherit QtQuick.Item
  */
-Item {
+QQC2.ItemDelegate {
     id: listItem
 
 //BEGIN properties
-    /**
-     * contentItem: Item
-     * This property holds the visual content item.
-     *
-     * Note: The content item is automatically resized inside the
-     * padding of the control.
-     */
-     default property Item contentItem
-
     /**
      * supportsMouseEvents: bool
      * Holds if the item emits signals related to mouse interaction.
      *TODO: remove
      * The default value is false.
      */
-    property alias supportsMouseEvents: itemMouse.enabled
-
-    /**
-     * clicked: signal
-     * This signal is emitted when there is a click.
-     *
-     * This is disabled by default, set enabled to true to use it.
-     * @see enabled
-     */
-    signal clicked
-
-
-    /**
-     * pressAndHold: signal
-     * The user pressed the item with the mouse and didn't release it for a
-     * certain amount of time.
-     *
-     * This is disabled by default, set enabled to true to use it.
-     * @see enabled
-     */
-    signal pressAndHold
-
-    /**
-     * checked: bool
-     * If true makes the list item look as checked or pressed. It has to be set
-     * from the code, it won't change by itself.
-     */
-    property bool checked: false
-
-    /**
-     * pressed: bool
-     * True when the user is pressing the mouse over the list item and
-     * supportsMouseEvents is set to true
-     */
-    property alias pressed: itemMouse.pressed
+    property alias supportsMouseEvents: listItem.hoverEnabled
 
     /**
      * containsMouse: bool
      * True when the user hover the mouse over the list item
      * NOTE: on mobile touch devices this will be true only when pressed is also true
      */
-    property alias containsMouse: itemMouse.containsMouse
+    property alias containsMouse: listItem.hovered
 
     /**
      * sectionDelegate: bool
@@ -137,26 +94,6 @@ Item {
      * sliding away the list item.
      */
     property list<Action> actions
-
-
-    /**
-     * position: real
-     * This property holds the position of the dragged list item relative to its
-     * final destination (just like the Drawer). That is, the position
-     * will be 0 when the list item is fully closed, and 1 when fully open.
-     */
-    property real position: 0
-
-    /**
-     * background: Item
-     * This property holds the background item.
-     *
-     * Note: If the background item has no explicit size specified,
-     * it automatically follows the control's size.
-     * In most cases, there is no need to specify width or
-     * height for a background item.
-     */
-    property Item background
 
     /**
      * textColor: color
@@ -190,12 +127,17 @@ Item {
      */
     property color activeBackgroundColor: Theme.highlightColor
 
+    implicitWidth: parent ? parent.width : contentItem.width + paddingItem.anchors.margins * 2
+    implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5
+
+//END properties
+
     Item {
         id: behindItem
         parent: listItem
+        z: -1
         anchors {
             fill: parent
-            leftMargin: height
         }
         Rectangle {
             id: shadowHolder
@@ -212,213 +154,142 @@ Item {
         }
         EdgeShadow {
             edge: Qt.LeftEdge
-            x: behindItem.width - (behindItem.width * listItem.position)
+            x: listItem.background.x + listItem.background.width
             anchors {
                 top: parent.top
                 bottom: parent.bottom
             }
         }
-    }
-
-    implicitWidth: parent ? parent.width : contentItem.width + paddingItem.anchors.margins * 2
-    implicitHeight: contentItem.height + Units.smallSpacing * 5
-//END properties
-
-//BEGIN signal handlers
-    onBackgroundChanged: {
-        background.parent = itemMouse;
-        background.anchors.fill = itemMouse;
-        background.z = 0;
-    }
-
-    onContentItemChanged: {
-        contentItem.parent = paddingItem
-        contentItem.z = 0;
-    }
-
-    Component.onCompleted: {
-
-        if (background) {
-            background.parent = itemMouse;
-            background.z = 0;
+        MouseArea {
+            anchors.fill: parent
+            preventStealing: true
+            enabled: background.x != 0
+            onClicked: {
+                positionAnimation.from = background.x;
+                positionAnimation.to = 0;
+                positionAnimation.running = true;
+            }
         }
-
-        contentItem.parent = itemMouse
-        contentItem.z = 1;
-    }
-
-    onPositionChanged: {
-        if (!mainFlickable.loopCheck && !handleMouse.pressed && !mainFlickable.flicking &&
-            !mainFlickable.dragging && !positionAnimation.running) {
-            mainFlickable.contentX = (listItem.width-listItem.height) * mainFlickable.internalPosition;
+        Row {
+            id: actionsLayout
+            z: 1
+            anchors {
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+                rightMargin: y
+            }
+            height: Math.min( parent.height / 1.5, Units.iconSizes.medium)
+            width: childrenRect.width
+            property bool exclusive: false
+            property Item checkedButton
+            spacing: Units.largeSpacing
+            Repeater {
+                model: {
+                    if (listItem.actions.length == 0) {
+                        return null;
+                    } else {
+                        return listItem.actions[0].text !== undefined &&
+                            listItem.actions[0].trigger !== undefined ?
+                                listItem.actions :
+                                listItem.actions[0];
+                    }
+                }
+                delegate: Icon {
+                    height: actionsLayout.height
+                    width: height
+                    source: modelData.iconName
+                    enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
+                    visible: (modelData && modelData.visible !== undefined) ? modelData.visible : true;
+                    MouseArea {
+                        anchors {
+                            fill: parent;
+                            margins: -Units.smallSpacing;
+                        }
+                        enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
+                        onClicked: {
+                            if (modelData && modelData.trigger !== undefined) {
+                                modelData.trigger();
+                            }
+                            positionAnimation.from = background.x;
+                            positionAnimation.to = 0;
+                            positionAnimation.running = true;
+                        }
+                    }
+                }
+            }
         }
     }
-//END signal handlers
 
-//BEGIN UI implementation
-    Row {
-        id: actionsLayout
-        z: 1
+    MouseArea {
+        id: handleMouse
+        parent: listItem.background
+        z: 99
         anchors {
             right: parent.right
-            verticalCenter: parent.verticalCenter
-            rightMargin: y
+            top: parent.top
+            bottom: parent.bottom
         }
-        height: Math.min( parent.height / 1.5, Units.iconSizes.medium)
-        width: childrenRect.width
-        property bool exclusive: false
-        property Item checkedButton
-        spacing: Units.largeSpacing
-        Repeater {
-            model: {
-                if (listItem.actions.length == 0) {
-                    return null;
-                } else {
-                    return listItem.actions[0].text !== undefined &&
-                        listItem.actions[0].trigger !== undefined ?
-                            listItem.actions :
-                            listItem.actions[0];
-                }
-            }
-            delegate: Icon {
-                height: actionsLayout.height
-                width: height
-                source: modelData.iconName
-                enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
-                visible: (modelData && modelData.visible !== undefined) ? modelData.visible : true;
-                MouseArea {
-                    anchors {
-                        fill: parent;
-                        margins: -Units.smallSpacing;
-                    }
-                    enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
-                    onClicked: {
-                        if (modelData && modelData.trigger !== undefined) {
-                            modelData.trigger();
-                        // assume the model is a list of QAction or Action
-                        } else if (toolbar.model.length > index) {
-                            toolbar.model[index].trigger();
-                        } else {
-                            console.log("Don't know how to trigger the action")
-                        }
-                        positionAnimation.to = 0;
-                        positionAnimation.running = true;
-                    }
-                }
-            }
-        }
-    }
+        preventStealing: true
+        width: height
+        property var downTimestamp;
+        property int startX
+        property int startMouseX
 
-    PropertyAnimation {
-        id: positionAnimation
-        target: mainFlickable
-        properties: "contentX"
-        duration: Units.longDuration
-        easing.type: Easing.InOutQuad
-    }
-
-    Flickable {
-        id: mainFlickable
-        z: 2
-        interactive: false
-        boundsBehavior: Flickable.StopAtBounds
-        anchors.fill: parent
-        contentWidth: mainItem.width
-        contentHeight: height
-        onFlickEnded: {
-            if (contentX > width / 2) {
-                positionAnimation.to = width - height;
+        onClicked: {
+            positionAnimation.from = background.x;
+            if (listItem.background.x > -listItem.background.width/2) {
+                positionAnimation.to = -root.width + height;
             } else {
                 positionAnimation.to = 0;
             }
             positionAnimation.running = true;
         }
-        readonly property real internalPosition:  (mainFlickable.contentX/(listItem.width-listItem.height));
-        property bool loopCheck: false
-        onInternalPositionChanged: {
-            if (!loopCheck) {
-                loopCheck = true;
-                listItem.position = internalPosition;
-                loopCheck = false;
-            }
+        onPressed: {
+            downTimestamp = (new Date()).getTime();
+            startX = listItem.background.x;
+            startMouseX = mouse.x;
         }
+        onPositionChanged: {
+            listItem.background.x = Math.min(0, Math.max(-root.width + height, listItem.background.x - (startMouseX - mouse.x)));
+        }
+        onReleased: {
+            var speed = ((startX - listItem.background.x) / ((new Date()).getTime() - downTimestamp) * 1000);
 
-        Item {
-            id: mainItem
-            width: (mainFlickable.width * 2) - height 
-            height: mainFlickable.height
-            MouseArea {
-                id: itemMouse
-                anchors {
-                    left: parent.left
-                    top: parent.top
-                    bottom: parent.bottom
-                }
-                hoverEnabled: !Settings.isMobile
-                width: mainFlickable.width
-                onClicked: listItem.clicked()
-                onPressAndHold: listItem.pressAndHold()
-
-                Item {
-                    id: paddingItem
-                    anchors {
-                        fill: parent
-                        margins: Units.smallSpacing
-                    }
-                }
+            if (Math.abs(speed) < Units.gridUnit) {
+                return;
             }
-
-            MouseArea {
-                id: handleMouse
-                anchors {
-                    left: itemMouse.right
-                    top: parent.top
-                    bottom: parent.bottom
-                    leftMargin:  -height
-                }
-                preventStealing: true
-                width: mainFlickable.width - actionsLayout.width - actionsLayout.anchors.rightMargin
-                property var downTimestamp;
-                property int startX
-                property int startMouseX
-
-                onClicked: {
-                    if (Math.abs(startX - mainFlickable.contentX) > Units.gridUnit ||
-                        Math.abs(startMouseX - mouse.x) > Units.gridUnit) {
-                        return;
-                    }
-                    if (mainFlickable.contentX > mainFlickable.width / 2) {
-                        positionAnimation.to = 0;
-                    } else {
-                        positionAnimation.to = mainFlickable.width - mainFlickable.height;
-                    }
-                    positionAnimation.running = true;
-                }
-                onPressed: {
-                    downTimestamp = (new Date()).getTime();
-                    startX = mainFlickable.contentX;
-                    startMouseX = mouse.x;
-                }
-                onPositionChanged: {
-                    mainFlickable.contentX = Math.max(0, Math.min(mainFlickable.width - height, mainFlickable.contentX + (startMouseX - mouse.x)))
-                }
-                onReleased: {
-                    var speed = ((startX - mainFlickable.contentX) / ((new Date()).getTime() - downTimestamp) * 1000);
-                    mainFlickable.flick(speed, 0);
-                }
-                Icon {
-                    id: handleIcon
-                    anchors.verticalCenter: parent.verticalCenter
-                    selected: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate)
-                    width: Units.iconSizes.smallMedium
-                    height: width
-                    x: y
-                    source: (mainFlickable.contentX > mainFlickable.width / 2) ? "handle-right" : "handle-left"
-                }
+            if (speed > listItem.width/2) {
+                positionAnimation.to = -root.width + height;
+            } else {
+                positionAnimation.to = 0;
             }
+            positionAnimation.from = background.x;
+            positionAnimation.running = true;
+        }
+        Icon {
+            id: handleIcon
+            anchors.verticalCenter: parent.verticalCenter
+            selected: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate)
+            width: Units.iconSizes.smallMedium
+            height: width
+            x: y
+            source: listItem.background.x < -listItem.background.width/2 ? "handle-right" : "handle-left"
         }
     }
-//END UI implementation
+
+    XAnimator {
+        id: positionAnimation
+        target: background
+        duration: Units.longDuration
+        easing.type: Easing.InOutQuad
+    }
+
+//BEGIN signal handlers
+    onContentItemChanged: {
+        contentItem.parent = background;
+        contentItem.z = 0;
+    }
+//END signal handlers
 
     Accessible.role: Accessible.ListItem
 }

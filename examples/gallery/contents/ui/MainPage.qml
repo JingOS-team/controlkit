@@ -109,7 +109,7 @@ Kirigami.ScrollablePage {
         delegate: Kirigami.SwipeListItem {
             id: listItem
 
-            Kirigami.Label {
+            contentItem: Kirigami.Label {
                 height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
                 anchors.verticalCenter: parent.verticalCenter
                 x: y
