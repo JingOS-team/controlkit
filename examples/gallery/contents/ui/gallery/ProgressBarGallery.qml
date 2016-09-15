@@ -62,7 +62,7 @@ ScrollablePage {
             anchors.centerIn: parent
             rowSpacing: Units.largeSpacing
             columns: 2
-            width: parent.width - units.gridUnit*2
+            width: parent.width - Units.gridUnit*2
 
             Label {
                 text: "Determinate:"
@@ -72,7 +72,7 @@ ScrollablePage {
                 minimumValue: 0
                 maximumValue: 100
                 value: timer.value
-                Layout.maximumWidth: units.gridUnit * 10
+                Layout.maximumWidth: Units.gridUnit * 10
             }
             Label {
                 text: "Indeterminate:"
@@ -82,7 +82,7 @@ ScrollablePage {
                 minimumValue: 0
                 maximumValue: 100
                 indeterminate: true
-                Layout.maximumWidth: units.gridUnit * 10
+                Layout.maximumWidth: Units.gridUnit * 10
             }
             Label {
                 text: "Busy indicator:"

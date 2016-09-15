@@ -62,7 +62,7 @@ ScrollablePage {
 
         Item {
             Layout.fillWidth: true
-            Layout.minimumHeight: units.gridUnit * 10
+            Layout.minimumHeight: Units.gridUnit * 10
             GridLayout {
                 anchors.centerIn: parent
                 columns: 3
