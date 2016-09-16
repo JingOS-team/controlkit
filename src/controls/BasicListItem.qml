@@ -47,10 +47,6 @@ AbstractListItem {
     property alias icon: iconItem.source
 
     contentItem: RowLayout {
-        anchors {
-            left: parent.left
-            verticalCenter: parent.verticalCenter
-        }
         Icon {
             id: iconItem
             Layout.minimumHeight: Units.iconSizes.smallMedium
