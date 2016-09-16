@@ -27,8 +27,11 @@ import org.kde.kirigami 1.0
 QQC2.Drawer {
     id: root
 
-    height: applicationWindow().height
+    height: edge == Qt.LeftEdge || edge == Qt.RightEdge ? applicationWindow().height : contentItem.implicitHeight
+    width:  edge == Qt.TopEdge || edge == Qt.BottomEdge ? applicationWindow().width : contentItem.implicitwidth
     parent: applicationWindow().contentItem
+
+    dragMargin: enabled && (edge == Qt.LeftEdge || edge == Qt.RightEdge) ? Qt.styleHints.startDragDistance : 0
 
     //default property alias page: mainPage.data
     property alias opened: root.visible
