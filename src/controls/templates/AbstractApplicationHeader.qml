@@ -86,9 +86,7 @@ Item {
             if (__appWindow === undefined) {
                 return 0;
             }
-            if (__appWindow.reachableMode && !__appWindow.wideScreen) {
-                return __appWindow.height/2;
-            } else if (!__appWindow.controlsVisible) {
+            if (!__appWindow.controlsVisible) {
                 return -headerItem.height - Units.smallSpacing;
             } else {
                 return 0;
