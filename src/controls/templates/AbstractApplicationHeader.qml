@@ -46,7 +46,6 @@ Item {
     property QtObject __appWindow: applicationWindow();
 
     anchors {
-        top: parent.top
         left: parent.left
         right: parent.right
     }
@@ -108,7 +107,6 @@ Item {
         anchors {
             left: parent.left
             right: parent.right
-            //bottom: parent.bottom
         }
 
         height: __appWindow.reachableMode ? root.maximumHeight : root.preferredHeight
@@ -129,17 +127,16 @@ Item {
                 if (__appWindow.wideScreen) {
                     headerItem.y = 0;
                 } else {
-                    headerItem.y = Math.max(-root.preferredHeight,
-                                           Math.min(root.minimumHeight,
-                                               headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
+                    headerItem.y = Math.max(root.minimumHeight - root.preferredHeight, Math.min(0, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
+                    
                     oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
                 }
             }
             onMovementEnded: {
                 if (headerItem.y > root.preferredHeight) {
                     //if don't change the position if more then preferredSize is shown
-                } else if (headerItem.y < -root.preferredHeight/2 ) {
-                    headerItem.y = -root.preferredHeight;
+                } else if (headerItem.y < -(root.preferredHeight - root.minimumHeight)/2 ) {
+                    headerItem.y = root.minimumHeight - root.preferredHeight;
                 } else {
                     headerItem.y = 0;
                 }
@@ -164,7 +161,6 @@ Item {
             id: mainItem
             anchors {
                 fill: parent
-                topMargin: applicationWindow().reachable ? 0 : Math.min(headerItem.height - headerItem.y, headerItem.height - root.preferredHeight)
             }
         }
         Behavior on y {
