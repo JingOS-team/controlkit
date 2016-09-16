@@ -223,7 +223,6 @@ T2.Page {
             //TODO: OverlaySheets should be Popup instead?
             for (var i = children.length -1; i >= 0; --i) {
                 var child = children[i];
-                print(child.toString())
                 if (child.toString().indexOf("OverlaySheet") === 0) {
                     child.parent = root;
                     child.z = 9997
