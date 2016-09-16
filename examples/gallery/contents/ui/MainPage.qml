@@ -109,12 +109,15 @@ Kirigami.ScrollablePage {
         delegate: Kirigami.SwipeListItem {
             id: listItem
 
-            contentItem: Kirigami.Label {
-                height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
-                anchors.verticalCenter: parent.verticalCenter
-                x: y
-                text: model.text
-                color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeTextColor : listItem.textColor
+            contentItem: Item {
+                implicitHeight: Math.max(label.implicitHeight, Kirigami.Units.iconSizes.smallMedium)
+                Kirigami.Label {
+                    id: label
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: y
+                    text: model.text
+                    color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeTextColor : listItem.textColor
+                }
             }
 
             property Item ownPage
