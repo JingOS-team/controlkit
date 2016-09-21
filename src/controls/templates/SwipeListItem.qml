@@ -225,25 +225,21 @@ Item {
 
 //BEGIN signal handlers
     onBackgroundChanged: {
-        background.parent = itemMouse;
-        background.anchors.fill = itemMouse;
-        background.z = 0;
+        if (background) {
+            background.parent = itemMouse;
+            background.anchors.fill = itemMouse;
+            background.z = -1;
+        }
     }
 
     onContentItemChanged: {
         contentItem.parent = paddingItem
-        contentItem.z = 0;
+        contentItem.z = 1;
     }
 
     Component.onCompleted: {
-
-        if (background) {
-            background.parent = itemMouse;
-            background.z = 0;
-        }
-
-        contentItem.parent = itemMouse
-        contentItem.z = 1;
+        backgroundChanged();
+        contentItemChanged();
     }
 
     onPositionChanged: {
@@ -344,7 +340,7 @@ Item {
 
         Item {
             id: mainItem
-            width: (mainFlickable.width * 2) - height 
+            width: (mainFlickable.width * 2) - handleMouse.width
             height: mainFlickable.height
             MouseArea {
                 id: itemMouse
@@ -363,6 +359,7 @@ Item {
                     anchors {
                         fill: parent
                         margins: Units.smallSpacing
+                        rightMargin: handleIcon.width + Units.smallSpacing
                     }
                 }
             }
@@ -371,12 +368,12 @@ Item {
                 id: handleMouse
                 anchors {
                     left: itemMouse.right
+                    right: itemMouse.right
                     top: parent.top
                     bottom: parent.bottom
                     leftMargin:  -height
                 }
                 preventStealing: true
-                width: mainFlickable.width - actionsLayout.width - actionsLayout.anchors.rightMargin
                 property var downTimestamp;
                 property int startX
                 property int startMouseX
@@ -407,11 +404,10 @@ Item {
                 }
                 Icon {
                     id: handleIcon
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.centerIn: parent
                     selected: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate)
                     width: Units.iconSizes.smallMedium
                     height: width
-                    x: y
                     source: (mainFlickable.contentX > mainFlickable.width / 2) ? "handle-right" : "handle-left"
                 }
             }
