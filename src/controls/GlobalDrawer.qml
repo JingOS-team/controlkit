@@ -191,6 +191,11 @@ OverlayDrawer {
     readonly property Action currentSubMenu: stackView.currentItem ? stackView.currentItem.current: null
 
     /**
+     * Notifies that the banner has been clicked
+     */
+    signal bannerClicked()
+
+    /**
      * Reverts the menu back to its initial state
      */
     function resetMenu() {
@@ -223,6 +228,11 @@ OverlayDrawer {
                     Layout.preferredWidth: title.implicitWidth
                     Layout.preferredHeight: bannerImageSource != "" ? Math.max(title.implicitHeight, Math.floor(width / (sourceSize.width/sourceSize.height))) : title.implicitHeight
                     Layout.minimumHeight: Math.max(headingIcon.height, heading.height) + Units.smallSpacing * 2
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: root.bannerClicked()
+                    }
 
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
