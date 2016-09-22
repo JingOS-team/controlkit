@@ -184,6 +184,13 @@ OverlayDrawer {
     property bool resetMenuOnTriggered: true
 
     /**
+     * currentSubMenu: Action
+     *
+     * Points to the action acting as a submenu
+     */
+    readonly property Action currentSubMenu: stackView.currentItem ? stackView.currentItem.current: null
+
+    /**
      * Reverts the menu back to its initial state
      */
     function resetMenu() {
@@ -210,6 +217,7 @@ OverlayDrawer {
 
                 Image {
                     id: bannerImage
+
                     Layout.fillWidth: true
 
                     Layout.preferredWidth: title.implicitWidth
@@ -328,9 +336,9 @@ OverlayDrawer {
                 Component {
                     id: menuComponent
                     ColumnLayout {
-                        id: optionMenu
                         spacing: 0
                         property alias model: actionsRepeater.model
+                        property Action current
 
                         property int level: 0
                         Layout.maximumHeight: Layout.minimumHeight
@@ -374,7 +382,7 @@ OverlayDrawer {
                                     modelData.trigger();
 
                                     if (modelData.children!==undefined && modelData.children.length > 0) {
-                                        stackView.push(menuComponent, {"model": modelData.children, "level": level + 1});
+                                        stackView.push(menuComponent, {model: modelData.children, level: level + 1, current: modelData });
                                     } else if (root.resetMenuOnTriggered) {
                                         root.resetMenu();
                                     }
