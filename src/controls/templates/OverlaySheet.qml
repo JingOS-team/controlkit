@@ -208,7 +208,7 @@ Item {
         duration: Units.longDuration
         easing.type: Easing.OutQuad
         onRunningChanged: {
-            if (!running) {
+            if (!running && contentItem.contentItem) {
                 var width = Math.max(root.width/2, Math.min(root.width, root.contentItem.implicitWidth));
                 contentItem.contentItem.x = (root.width - width)/2
                 contentItem.contentItem.width = width;
