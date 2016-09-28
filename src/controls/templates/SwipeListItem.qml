@@ -256,6 +256,7 @@ T2.ItemDelegate {
         onReleased: {
             var speed = ((startX - listItem.background.x) / ((new Date()).getTime() - downTimestamp) * 1000);
 
+<<<<<<< HEAD
             if (Math.abs(speed) < Units.gridUnit) {
                 return;
             }
@@ -263,6 +264,80 @@ T2.ItemDelegate {
                 positionAnimation.to = -root.width + height;
             } else {
                 positionAnimation.to = 0;
+=======
+        Item {
+            id: mainItem
+            width: (mainFlickable.width * 2) - handleMouse.width
+            height: mainFlickable.height
+            MouseArea {
+                id: itemMouse
+                anchors {
+                    left: parent.left
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+                hoverEnabled: !Settings.isMobile
+                width: mainFlickable.width
+                onClicked: listItem.clicked()
+                onPressAndHold: listItem.pressAndHold()
+
+                Item {
+                    id: paddingItem
+                    anchors {
+                        fill: parent
+                        margins: Units.smallSpacing
+                        rightMargin: handleIcon.width + Units.smallSpacing
+                    }
+                }
+            }
+
+            MouseArea {
+                id: handleMouse
+                anchors {
+                    left: itemMouse.right
+                    right: itemMouse.right
+                    top: parent.top
+                    bottom: parent.bottom
+                    leftMargin:  -height
+                }
+                preventStealing: true
+                property var downTimestamp;
+                property int startX
+                property int startMouseX
+
+                onClicked: {
+                    if (Math.abs(startX - mainFlickable.contentX) > Units.gridUnit ||
+                        Math.abs(startMouseX - mouse.x) > Units.gridUnit) {
+                        return;
+                    }
+                    if (mainFlickable.contentX > mainFlickable.width / 2) {
+                        positionAnimation.to = 0;
+                    } else {
+                        positionAnimation.to = mainFlickable.width - mainFlickable.height;
+                    }
+                    positionAnimation.running = true;
+                }
+                onPressed: {
+                    downTimestamp = (new Date()).getTime();
+                    startX = mainFlickable.contentX;
+                    startMouseX = mouse.x;
+                }
+                onPositionChanged: {
+                    mainFlickable.contentX = Math.max(0, Math.min(mainFlickable.width - height, mainFlickable.contentX + (startMouseX - mouse.x)))
+                }
+                onReleased: {
+                    var speed = ((startX - mainFlickable.contentX) / ((new Date()).getTime() - downTimestamp) * 1000);
+                    mainFlickable.flick(speed, 0);
+                }
+                Icon {
+                    id: handleIcon
+                    anchors.centerIn: parent
+                    selected: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate)
+                    width: Units.iconSizes.smallMedium
+                    height: width
+                    source: (mainFlickable.contentX > mainFlickable.width / 2) ? "handle-right" : "handle-left"
+                }
+>>>>>>> master
             }
             positionAnimation.from = background.x;
             positionAnimation.running = true;

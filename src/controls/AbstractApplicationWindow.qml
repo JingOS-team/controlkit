@@ -291,4 +291,9 @@ QQC2.ApplicationWindow {
         id: internal
         property Item __passiveNotification
     }
+
+    Shortcut {
+        sequence: StandardKey.Quit
+        onActivated: root.close()
+    }
 }

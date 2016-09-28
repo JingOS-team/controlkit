@@ -184,6 +184,18 @@ OverlayDrawer {
     property bool resetMenuOnTriggered: true
 
     /**
+     * currentSubMenu: Action
+     *
+     * Points to the action acting as a submenu
+     */
+    readonly property Action currentSubMenu: stackView.currentItem ? stackView.currentItem.current: null
+
+    /**
+     * Notifies that the banner has been clicked
+     */
+    signal bannerClicked()
+
+    /**
      * Reverts the menu back to its initial state
      */
     function resetMenu() {
@@ -210,11 +222,17 @@ OverlayDrawer {
 
                 Image {
                     id: bannerImage
+
                     Layout.fillWidth: true
 
                     Layout.preferredWidth: title.implicitWidth
                     Layout.preferredHeight: bannerImageSource != "" ? Math.max(title.implicitHeight, Math.floor(width / (sourceSize.width/sourceSize.height))) : title.implicitHeight
                     Layout.minimumHeight: Math.max(headingIcon.height, heading.height) + Units.smallSpacing * 2
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: root.bannerClicked()
+                    }
 
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
@@ -328,9 +346,9 @@ OverlayDrawer {
                 Component {
                     id: menuComponent
                     ColumnLayout {
-                        id: optionMenu
                         spacing: 0
                         property alias model: actionsRepeater.model
+                        property Action current
 
                         property int level: 0
                         Layout.maximumHeight: Layout.minimumHeight
@@ -374,7 +392,7 @@ OverlayDrawer {
                                     modelData.trigger();
 
                                     if (modelData.children!==undefined && modelData.children.length > 0) {
-                                        stackView.push(menuComponent, {"model": modelData.children, "level": level + 1});
+                                        stackView.push(menuComponent, {model: modelData.children, level: level + 1, current: modelData });
                                     } else if (root.resetMenuOnTriggered) {
                                         root.resetMenu();
                                     }
