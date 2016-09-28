@@ -60,9 +60,13 @@ Item {
         onXChanged: {
             if (mouseArea.pressed || edgeMouseArea.pressed || fakeContextMenuButton.pressed) {
                 if (globalDrawer && globalDrawer.enabled && globalDrawer.modal) {
+                    globalDrawer.peeking = true;
+                    globalDrawer.visible = true;
                     globalDrawer.position = Math.min(1, Math.max(0, (x - root.width/2 + button.width/2)/globalDrawer.contentItem.width + mouseArea.drawerShowAdjust));
                 }
                 if (contextDrawer && contextDrawer.enabled && contextDrawer.modal) {
+                    contextDrawer.peeking = true;
+                    contextDrawer.visible = true;
                     contextDrawer.position = Math.min(1, Math.max(0, (root.width/2 - button.width/2 - x)/contextDrawer.contentItem.width + mouseArea.drawerShowAdjust));
                 }
             }
@@ -117,6 +121,8 @@ Item {
                 rightButtonPressedUnderMouse = !buttonPressedUnderMouse && rightAction && mouse.x > buttonGraphics.x + buttonGraphics.width;
             }
             onReleased: {
+                globalDrawer.peeking = false;
+                contextDrawer.peeking = false;
                 //pixel/second
                 var x = button.x + button.width/2;
                 var speed = ((x - startX) / ((new Date()).getTime() - downTimestamp) * 1000);
@@ -378,6 +384,8 @@ Item {
 
         onPressed: mouseArea.onPressed(mouse)
         onReleased: {
+            globalDrawer.peeking = false;
+            contextDrawer.peeking = false;
             var pos = root.mapFromItem(fakeContextMenuButton, mouse.x, mouse.y);
             if (pos.x < root.width/2 || (!contextDrawer.opened && mouse.x > 0 && mouse.x < width)) {
                 contextDrawer.open();

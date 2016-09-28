@@ -18,27 +18,79 @@
  */
 
 import QtQuick 2.1
-import QtQuick.Controls 2.0 as QQC2
+import QtQuick.Templates 2.0 as T2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 1.0
 
 //TODO: This will become a QQC2 Drawer
 //providing just a dummy api for now
-QQC2.Drawer {
+T2.Drawer {
     id: root
 
+    parent: T2.ApplicationWindow.overlay
     height: edge == Qt.LeftEdge || edge == Qt.RightEdge ? applicationWindow().height : contentItem.implicitHeight
     width:  edge == Qt.TopEdge || edge == Qt.BottomEdge ? applicationWindow().width : contentItem.implicitwidth
-    parent: applicationWindow().contentItem
 
     dragMargin: enabled && (edge == Qt.LeftEdge || edge == Qt.RightEdge) ? Qt.styleHints.startDragDistance : 0
 
     //default property alias page: mainPage.data
-    property alias opened: root.visible
+    property bool opened: false
     edge: Qt.LeftEdge
     modal: true
     property bool enabled: true
+    property bool peeking: false
+    onPositionChanged: {
+        if (peeking) {
+            visible = true
+        }
+    }
+    onVisibleChanged: {
+        if (peeking) {
+            visible = true
+        } else {
+            opened = visible;
+        }
+    }
+    onPeekingChanged:  {
+        if (peeking) {
+            //FIXME: setting visible here is too early to kill the animation
+            //visible = true
+            position = 0
+        } else {
+            positionResetAnim.to = position > 0.5 ? 1 : 0;
+            positionResetAnim.running = true
+        }
+    }
 
-    signal clicked
+    Component.onCompleted: {
+        if (root.opened) {
+            root.visible = true;
+        }
+    }
+    //FIXME: any way to avoid?
+    property NumberAnimation __internalAnim: NumberAnimation {
+        id: positionResetAnim
+        target: root
+        to: 0
+        property: "position"
+        duration: (root.position)*Units.longDuration
+    }
+
+    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
+
+    contentWidth: contentItem.implicitWidth || (contentChildren.length === 1 ? contentChildren[0].implicitWidth : 0)
+    contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
+
+    enter: Transition {
+        NumberAnimation {
+            duration: root.peeking ? 0 : Units.longDuration
+        }
+    }
+    exit: Transition {
+        NumberAnimation {
+            duration: (root.position)*Units.longDuration
+        }
+    }
 }
 

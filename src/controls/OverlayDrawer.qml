@@ -19,6 +19,7 @@
 
 import QtQuick 2.1
 import QtGraphicalEffects 1.0
+import QtQuick.Templates 2.0 as T2
 import org.kde.kirigami 1.0
 
 import "private"
@@ -39,14 +40,24 @@ T.OverlayDrawer {
     background: Rectangle {
         color: Theme.viewBackgroundColor
 
-        MouseArea {
+      /*  MouseArea {
             id: drawerHandle
-            z: -1
-
+            z: 2000000
+parent:T2.ApplicationWindow.overlay
             onClicked: root.opened = !root.opened
+            x: {
+                switch(root.edge) {
+                case Qt.LeftEdge:
+                    return root.contentItem.width * root.position;
+                case Qt.RightEdge:
+                    return root.parent.width - (root.contentItem.width * root.position) - width;
+                default:
+                    return 0;
+                }
+            }
             anchors {
-                right: root.edge == Qt.LeftEdge ? undefined : parent.left
-                left: root.edge == Qt.RightEdge ? undefined : parent.right
+              //  right: root.edge == Qt.LeftEdge ? undefined : parent.left
+                //left: root.edge == Qt.RightEdge ? undefined : parent.right
                 bottom: parent.bottom
             }
             visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
@@ -109,7 +120,7 @@ T.OverlayDrawer {
                     }
                 }
             }
-        }
+        }*/
 
         EdgeShadow {
             z: -2
