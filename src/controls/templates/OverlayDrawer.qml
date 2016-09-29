@@ -35,6 +35,12 @@ AbstractDrawer {
 
     z: modal ? (opened ? 100 : 99 ): 98
 
+    //default paddings
+    leftPadding: Units.smallSpacing
+    topPadding: Units.smallSpacing
+    rightPadding: Units.smallSpacing
+    bottomPadding: Units.smallSpacing
+
 //BEGIN Properties
     /**
      * page: Item
@@ -101,9 +107,9 @@ AbstractDrawer {
         x: {
             switch(root.edge) {
             case Qt.LeftEdge:
-                return root.contentItem.width * root.position;
+                return root.background.width * root.position;
             case Qt.RightEdge:
-                return root.parent.width - (root.contentItem.width * root.position) - width;
+                return drawerHandle.parent.width - (root.background.width * root.position) - width;
             default:
                 return 0;
             }
