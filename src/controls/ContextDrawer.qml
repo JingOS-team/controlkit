@@ -85,6 +85,11 @@ OverlayDrawer {
     edge: Qt.RightEdge
     opened: false
 
+    //list items go to edges, have their own padding
+    leftPadding: 0
+    rightPadding: 0
+    bottomPadding: 0
+
     handleVisible: applicationWindow == undefined || applicationWindow().wideScreen == true ? false : applicationWindow().controlsVisible
 
     Connections {
