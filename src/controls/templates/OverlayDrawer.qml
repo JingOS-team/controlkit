@@ -60,31 +60,28 @@ AbstractDrawer {
 
 //END Properties
 
-    onOpenedChanged: {print("AAA"+opened)
+    onOpenedChanged: {
         if (opened) {
             open();
         } else {
             close();
         }
     }
-    Component.onCompleted: {print(handleComponent)
+    Component.onCompleted: {
         root.pollo.createObject(T2.ApplicationWindow.overlay.parent)
     }
     property Component pollo: Component {
         id: handleComponent
         MouseArea {
             id: drawerHandle
-            z: 2000000
+            z: 99
             preventStealing: true
             clip: true
 
             property int startX
             property int mappedStartX
             onPressed: {
-                var oldPosition = position;
                 root.peeking = true;
-                root.visible = true;
-                position = oldPosition;
                 startX = mouse.x;
                 mappedStartX = mapToItem(parent, startX, 0).x
             }
@@ -101,17 +98,13 @@ AbstractDrawer {
                 }
             }
             onReleased: {
-                print("released")
                 root.peeking = false;
                 
                 if (Math.abs(mapToItem(parent, mouse.x, 0).x - mappedStartX) < Qt.styleHints.startDragDistance) {
                     root.opened = !root.opened;
-                    root.visible = false;
-                    root.visible = opened;
                 }
             }
             onCanceled: {
-                print("canceled")
                 root.peeking = false
             }
             x: {

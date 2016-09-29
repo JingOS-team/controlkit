@@ -53,12 +53,13 @@ T2.Drawer {
     }
     onPeekingChanged:  {
         if (peeking) {
-            //FIXME: setting visible here is too early to kill the animation
-            //visible = true
-            position = 0
+            root.enter.enabled = false;
+            root.exit.enabled = false;
         } else {
             positionResetAnim.to = position > 0.5 ? 1 : 0;
             positionResetAnim.running = true
+            root.enter.enabled = true;
+            root.exit.enabled = true;
         }
     }
 
@@ -83,14 +84,10 @@ T2.Drawer {
     contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
 
     enter: Transition {
-        NumberAnimation {
-            duration: root.peeking ? 0 : Units.longDuration
-        }
+        SmoothedAnimation { velocity: 5 }
     }
     exit: Transition {
-        NumberAnimation {
-            duration: (root.position)*Units.longDuration
-        }
+        SmoothedAnimation { velocity: 5 }
     }
 }
 
