@@ -36,18 +36,12 @@ T.OverlayDrawer {
 //BEGIN Properties
     background: Rectangle {
         color: Theme.viewBackgroundColor
-        property Item handleBackground: Item {
-        }
 
         Item {
             id: drawerHandle
-            z: -1
+            parent: root.handle
+            anchors.fill: parent
 
-            anchors {
-                right: root.edge == Qt.LeftEdge ? undefined : parent.left
-                left: root.edge == Qt.RightEdge ? undefined : parent.right
-                bottom: parent.bottom
-            }
             visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
             width: Units.iconSizes.medium + Units.smallSpacing * 2
             height: width

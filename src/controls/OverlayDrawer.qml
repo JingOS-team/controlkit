@@ -40,51 +40,16 @@ T.OverlayDrawer {
     background: Rectangle {
         color: Theme.viewBackgroundColor
 
-      /*  MouseArea {
-            id: drawerHandle
-            z: 2000000
-parent:T2.ApplicationWindow.overlay
-            onClicked: root.opened = !root.opened
-            x: {
-                switch(root.edge) {
-                case Qt.LeftEdge:
-                    return root.contentItem.width * root.position;
-                case Qt.RightEdge:
-                    return root.parent.width - (root.contentItem.width * root.position) - width;
-                default:
-                    return 0;
-                }
-            }
-            anchors {
-              //  right: root.edge == Qt.LeftEdge ? undefined : parent.left
-                //left: root.edge == Qt.RightEdge ? undefined : parent.right
-                bottom: parent.bottom
-            }
-            visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
-            width: Units.iconSizes.medium + Units.smallSpacing * 2
-            height: width
-            opacity: root.handleVisible ? 1 : 0
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-            transform: Translate {
-                id: translateTransform
-                x: root.handleVisible ? 0 : (root.edge == Qt.LeftEdge ? -drawerHandle.width : drawerHandle.width)
-                Behavior on x {
-                    NumberAnimation {
-                        duration: Units.longDuration
-                        easing.type: !root.handleVisible ? Easing.OutQuad : Easing.InQuad
-                    }
-                }
-            }
+        Item {
+            parent: root.handle
+            anchors.fill: parent
             Item {
                 opacity: 0.4 + root.position
                 anchors {
-                    fill:parent
-                    margins: -Units.gridUnit
+                    fill: parent
+                    topMargin: -Units.gridUnit
+                    leftMargin: root.edge == Qt.RightEdge ? -Units.gridUnit : 0
+                    rightMargin: root.edge == Qt.RightEdge ? 0 : -Units.gridUnit
                 }
                 layer.enabled: true
                 Rectangle {
@@ -103,8 +68,10 @@ parent:T2.ApplicationWindow.overlay
                     id: handleGraphics
                     color: Theme.viewBackgroundColor
                     anchors {
-                        fill:parent
-                        margins: Units.gridUnit
+                        fill: parent
+                        topMargin: Units.gridUnit
+                        leftMargin: root.edge == Qt.RightEdge ? Units.gridUnit : 0
+                        rightMargin: root.edge == Qt.RightEdge ? 0 : Units.gridUnit
                     }
                 }
             }
@@ -120,7 +87,7 @@ parent:T2.ApplicationWindow.overlay
                     }
                 }
             }
-        }*/
+        }
 
         EdgeShadow {
             z: -2
