@@ -239,7 +239,7 @@ T2.ItemDelegate {
         onClicked: {
             positionAnimation.from = background.x;
             if (listItem.background.x > -listItem.background.width/2) {
-                positionAnimation.to = -root.width + height;
+                positionAnimation.to = -listItem.width + height;
             } else {
                 positionAnimation.to = 0;
             }
@@ -251,7 +251,7 @@ T2.ItemDelegate {
             startMouseX = mouse.x;
         }
         onPositionChanged: {
-            listItem.background.x = Math.min(0, Math.max(-root.width + height, listItem.background.x - (startMouseX - mouse.x)));
+            listItem.background.x = Math.min(0, Math.max(-listItem.width + height, listItem.background.x - (startMouseX - mouse.x)));
         }
         onReleased: {
             var speed = ((startX - listItem.background.x) / ((new Date()).getTime() - downTimestamp) * 1000);
@@ -260,7 +260,7 @@ T2.ItemDelegate {
                 return;
             }
             if (speed > listItem.width/2) {
-                positionAnimation.to = -root.width + height;
+                positionAnimation.to = -listItem.width + height;
             } else {
                 positionAnimation.to = 0;
             }
