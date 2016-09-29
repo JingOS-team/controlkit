@@ -98,6 +98,11 @@ T2.ItemDelegate {
      */
     property color activeBackgroundColor: Theme.highlightColor
 
+    leftPadding: Units.smallSpacing
+    topPadding: Units.smallSpacing
+    rightPadding: Units.smallSpacing
+    bottomPadding: Units.smallSpacing
+
     implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
 
     implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5

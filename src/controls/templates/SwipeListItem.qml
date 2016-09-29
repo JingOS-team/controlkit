@@ -131,6 +131,11 @@ T2.ItemDelegate {
     width: parent ? parent.width : implicitWidth
     implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5
 
+    leftPadding: Units.smallSpacing
+    topPadding: Units.smallSpacing
+    rightPadding: Units.smallSpacing
+    bottomPadding: Units.smallSpacing
+
 //END properties
 
     Item {
