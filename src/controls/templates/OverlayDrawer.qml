@@ -58,18 +58,11 @@ AbstractDrawer {
      */
     property bool handleVisible: typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true
 
-//END Properties
-
-    onOpenedChanged: {
-        if (opened) {
-            open();
-        } else {
-            close();
-        }
-    }
-    Component.onCompleted: {
-        root.pollo.createObject(T2.ApplicationWindow.overlay.parent)
-    }
+    /**
+     * handle: Item
+     * Readonly property that points to the item that will act as a physical
+     * handle for the Drawer
+     **/
     readonly property Item handle: MouseArea {
         id: drawerHandle
         z: 2000000
@@ -138,5 +131,6 @@ AbstractDrawer {
             }
         }
     }
-    
+
+//END Properties
 }

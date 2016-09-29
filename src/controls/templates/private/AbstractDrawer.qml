@@ -62,10 +62,21 @@ T2.Drawer {
             root.exit.enabled = true;
         }
     }
+    onOpenedChanged: {
+        if (opened) {
+            open();
+        } else {
+            close();
+        }
+    }
 
     Component.onCompleted: {
+        //if defined as opened by default in QML, don't animate
         if (root.opened) {
+            root.enter.enabled = false;
             root.visible = true;
+            root.position = 1;
+            root.enter.enabled = true;
         }
     }
     //FIXME: any way to avoid?
