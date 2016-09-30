@@ -51,6 +51,7 @@ ScrollablePage {
     }
     OverlaySheet {
         id: sheet
+        parent: applicationWindow().overlay
         ListView {
             model: 100
             implicitWidth: Units.gridUnit * 30

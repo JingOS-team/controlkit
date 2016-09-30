@@ -90,7 +90,7 @@ Page {
      * will be a pointer to the ListView (or GridView)
      * NOTE: can't be contentItem as Page's contentItem is final
      */
-    default property alias mainItem: scrollView.contentItem
+    default property QtObject mainItem
 
     RefreshableScrollView {
         id: scrollView
@@ -111,7 +111,7 @@ Page {
         parent: root
         z: 9998
         anchors.fill: parent
-        property Item oldMainItem
+        property QtObject oldMainItem
     }
 
     //HACK to get the mainItem as the last one, all the other eventual items as an overlay
@@ -120,7 +120,7 @@ Page {
          if (mainItem.hasOwnProperty("anchors")) {
              scrollView.contentItem = mainItem
          }
-         if (overlay.oldMainItem) {
+         if (overlay.oldMainItem && overlay.oldMainItem.parent != applicationWindow().overlay) {
              overlay.oldMainItem.parent = overlay
          }
          overlay.oldMainItem = mainItem

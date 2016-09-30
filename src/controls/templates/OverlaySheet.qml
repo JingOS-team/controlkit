@@ -21,6 +21,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.3 as Controls
 import org.kde.kirigami 1.0
 import QtGraphicalEffects 1.0
+import QtQuick.Templates 2.0 as T2
 import "private"
 
 /**
@@ -31,13 +32,8 @@ import "private"
  * logically done as a new separate Page, even if potentially
  * are taller than the screen space.
  */
-Item {
+QtObject {
     id: root
-
-    z: 999
-
-    anchors.fill: parent
-    visible: false
 
     /**
      * contentItem: Item
@@ -90,10 +86,12 @@ Item {
      */
     property Item background
 
+    property Item parent
+
 
     function open() {
-        root.visible = true;
-        openAnimation.from = -root.height;
+        mainItem.visible = true;
+        openAnimation.from = -mainItem.height;
         openAnimation.to = openAnimation.topOpenPosition;
         openAnimation.running = true;
         root.opened = true;
@@ -108,9 +106,7 @@ Item {
         closeAnimation.running = true;
     }
 
-    Component.onCompleted: {
-        scrollView.flickableItem.interactive = true;
-    }
+    
     onBackgroundChanged: {
         background.parent = flickableContents;
         background.z = -1;
@@ -136,98 +132,21 @@ Item {
             Qt.inputMethod.hide();
         }
     }
-    onWidthChanged: {
-        if (!contentItem.contentItem)
-            return
 
-        var width = Math.max(root.width/2, Math.min(root.width, root.contentItem.implicitWidth));
-        contentItem.contentItem.x = (root.width - width)/2
-        contentItem.contentItem.width = width;
-    }
-    onHeightChanged: {
-        var focusItem;
-
-        if (typeof applicationWindow !== "undefined") {
-            focusItem = applicationWindow().activeFocusItem;
-        //fallback: hope activeFocusItem is in context
-        } else {
-            focusItem = activeFocusItem;
-        }
-
-        if (!activeFocusItem) {
-            return;
-        }
-
-        //NOTE: there is no function to know if an item is descended from another,
-        //so we have to walk the parent hyerarchy by hand
-        var isDescendent = false;
-        var candidate = focusItem.parent;
-        while (candidate) {
-            if (candidate == root) {
-                isDescendent = true;
-                break;
-            }
-            candidate = candidate.parent;
-        }
-        if (!isDescendent) {
-            return;
-        }
-
-        var cursorY = 0;
-        if (focusItem.cursorPosition !== undefined) {
-            cursorY = focusItem.positionToRectangle(focusItem.cursorPosition).y;
-        }
-
-        
-        var pos = focusItem.mapToItem(flickableContents, 0, cursorY - Units.gridUnit*3);
-        //focused item alreqady visible? add some margin for the space of the action buttons
-        if (pos.y >= scrollView.flickableItem.contentY && pos.y <= scrollView.flickableItem.contentY + scrollView.flickableItem.height - Units.gridUnit * 8) {
-            return;
-        }
-        scrollView.flickableItem.contentY = pos.y;
-    }
-
-
-    NumberAnimation {
-        id: openAnimation
-        property int topOpenPosition: Math.min(-root.height*0.15, scrollView.flickableItem.contentHeight - root.height + Units.gridUnit * 5)
-        property int bottomOpenPosition: (scrollView.flickableItem.contentHeight - root.height) + (Units.gridUnit * 5)
-        target: scrollView.flickableItem
-        properties: "contentY"
-        from: -root.height
-        to: topOpenPosition
-        duration: Units.longDuration
-        easing.type: Easing.OutQuad
-        onRunningChanged: {
-            if (!running && contentItem.contentItem) {
-                var width = Math.max(root.width/2, Math.min(root.width, root.contentItem.implicitWidth));
-                contentItem.contentItem.x = (root.width - width)/2
-                contentItem.contentItem.width = width;
-            }
+    Component.onCompleted: {
+        scrollView.flickableItem.interactive = true;
+        if (!root.parent) {
+            root.parent = applicationWindow().overlay
         }
     }
 
-    SequentialAnimation {
-        id: closeAnimation
-        property int to: -root.height
-        NumberAnimation {
-            target: scrollView.flickableItem
-            properties: "contentY"
-            to: closeAnimation.to
-            duration: Units.longDuration
-            easing.type: Easing.InQuad
-        }
-        ScriptAction {
-            script: {
-                scrollView.flickableItem.contentY = -root.height;
-                root.visible = root.opened = false;
-            }
-        }
-    }
-
-    MouseArea {
+    property Item rootItem: MouseArea {
+        id: mainItem
+        //we want to be over any possible OverlayDrawers, including handles
+        parent: root.parent == applicationWindow().overlay ? root.parent.parent : root.parent
         anchors.fill: parent
-        z: 2
+        z: 2000000
+        visible: false
         drag.filterChildren: true
         hoverEnabled: true
 
@@ -238,6 +157,93 @@ Item {
             }
         }
 
+        onWidthChanged: {
+            if (!contentItem.contentItem)
+                return
+
+            var width = Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth));
+            contentItem.contentItem.x = (mainItem.width - width)/2
+            contentItem.contentItem.width = width;
+        }
+        onHeightChanged: {
+            var focusItem;
+
+            if (typeof applicationWindow !== "undefined") {
+                focusItem = applicationWindow().activeFocusItem;
+            //fallback: hope activeFocusItem is in context
+            } else {
+                focusItem = activeFocusItem;
+            }
+
+            if (!activeFocusItem) {
+                return;
+            }
+
+            //NOTE: there is no function to know if an item is descended from another,
+            //so we have to walk the parent hyerarchy by hand
+            var isDescendent = false;
+            var candidate = focusItem.parent;
+            while (candidate) {
+                if (candidate == root) {
+                    isDescendent = true;
+                    break;
+                }
+                candidate = candidate.parent;
+            }
+            if (!isDescendent) {
+                return;
+            }
+
+            var cursorY = 0;
+            if (focusItem.cursorPosition !== undefined) {
+                cursorY = focusItem.positionToRectangle(focusItem.cursorPosition).y;
+            }
+
+            
+            var pos = focusItem.mapToItem(flickableContents, 0, cursorY - Units.gridUnit*3);
+            //focused item alreqady visible? add some margin for the space of the action buttons
+            if (pos.y >= scrollView.flickableItem.contentY && pos.y <= scrollView.flickableItem.contentY + scrollView.flickableItem.height - Units.gridUnit * 8) {
+                return;
+            }
+            scrollView.flickableItem.contentY = pos.y;
+        }
+
+        NumberAnimation {
+            id: openAnimation
+            property int topOpenPosition: Math.min(-mainItem.height*0.15, scrollView.flickableItem.contentHeight - mainItem.height + Units.gridUnit * 5)
+            property int bottomOpenPosition: (scrollView.flickableItem.contentHeight - mainItem.height) + (Units.gridUnit * 5)
+            target: scrollView.flickableItem
+            properties: "contentY"
+            from: -mainItem.height
+            to: topOpenPosition
+            duration: Units.longDuration
+            easing.type: Easing.OutQuad
+            onRunningChanged: {
+                if (!running && contentItem.contentItem) {
+                    var width = Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth));
+                    contentItem.contentItem.x = (mainItem.width - width)/2
+                    contentItem.contentItem.width = width;
+                }
+            }
+        }
+
+        SequentialAnimation {
+            id: closeAnimation
+            property int to: -mainItem.height
+            NumberAnimation {
+                target: scrollView.flickableItem
+                properties: "contentY"
+                to: closeAnimation.to
+                duration: Units.longDuration
+                easing.type: Easing.InQuad
+            }
+            ScriptAction {
+                script: {
+                    scrollView.flickableItem.contentY = -mainItem.height;
+                    mainItem.visible = root.opened = false;
+                }
+            }
+        }
         Rectangle {
             anchors.fill: parent
             color: Theme.textColor
@@ -249,9 +255,9 @@ Item {
         Item {
             id: flickableContents
             //anchors.horizontalCenter: parent.horizontalCenter
-            x: (root.width - width) / 2
+            x: (mainItem.width - width) / 2
             y: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? -scrollView.flickableItem.contentY : 0
-            width: root.contentItem.implicitWidth <= 0 ? root.width : Math.max(root.width/2, Math.min(root.width, root.contentItem.implicitWidth))
+            width: root.contentItem.implicitWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth))
             height: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? scrollView.flickableItem.contentHeight : (root.contentItem.height + topPadding + bottomPadding + Units.iconSizes.medium + Units.gridUnit)
             Item {
                 id: contentItemParent
@@ -281,10 +287,10 @@ Item {
             target: scrollView.flickableItem
             function movementEnded() {
                 //close
-                if ((root.height + scrollView.flickableItem.contentY) < root.height/2) {
-                    closeAnimation.to = -root.height;
+                if ((mainItem.height + scrollView.flickableItem.contentY) < mainItem.height/2) {
+                    closeAnimation.to = -mainItem.height;
                     closeAnimation.running = true;
-                } else if ((root.height*0.6 + scrollView.flickableItem.contentY) > scrollView.flickableItem.contentHeight) {
+                } else if ((mainItem.height*0.6 + scrollView.flickableItem.contentY) > scrollView.flickableItem.contentHeight) {
                     closeAnimation.to = scrollView.flickableItem.contentHeight
                     closeAnimation.running = true;
 
