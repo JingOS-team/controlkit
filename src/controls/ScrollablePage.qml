@@ -117,7 +117,9 @@ Page {
     //HACK to get the mainItem as the last one, all the other eventual items as an overlay
     //no idea if is the way the user expects
     onMainItemChanged: {
-         scrollView.contentItem = mainItem
+         if (mainItem.hasOwnProperty("anchors")) {
+             scrollView.contentItem = mainItem
+         }
          if (overlay.oldMainItem) {
              overlay.oldMainItem.parent = overlay
          }

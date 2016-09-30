@@ -108,15 +108,6 @@ Item {
         closeAnimation.running = true;
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: Theme.textColor
-        opacity: 0.6 * Math.min(
-            (Math.min(scrollView.flickableItem.contentY + scrollView.flickableItem.height, scrollView.flickableItem.height) / scrollView.flickableItem.height),
-            (2 + (scrollView.flickableItem.contentHeight - scrollView.flickableItem.contentY - scrollView.flickableItem.topMargin - scrollView.flickableItem.bottomMargin)/scrollView.flickableItem.height))
-    }
-
-
     Component.onCompleted: {
         scrollView.flickableItem.interactive = true;
     }
@@ -245,6 +236,14 @@ Item {
             if (!flickableContents.contains(pos)) {
                 root.close();
             }
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            color: Theme.textColor
+            opacity: 0.6 * Math.min(
+                (Math.min(scrollView.flickableItem.contentY + scrollView.flickableItem.height, scrollView.flickableItem.height) / scrollView.flickableItem.height),
+                (2 + (scrollView.flickableItem.contentHeight - scrollView.flickableItem.contentY - scrollView.flickableItem.topMargin - scrollView.flickableItem.bottomMargin)/scrollView.flickableItem.height))
         }
 
         Item {
