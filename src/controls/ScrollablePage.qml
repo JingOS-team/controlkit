@@ -119,6 +119,9 @@ Page {
     onMainItemChanged: {
          if (mainItem.hasOwnProperty("anchors")) {
              scrollView.contentItem = mainItem
+         //don't try to reparent drawers
+         } else if (mainItem.hasOwnProperty("dragMargin")) {
+             return;
          }
          if (overlay.oldMainItem && overlay.oldMainItem.parent != applicationWindow().overlay) {
              overlay.oldMainItem.parent = overlay
