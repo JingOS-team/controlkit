@@ -39,7 +39,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        if (index == 0) {
+        if (index !== undefined && index == 0) {
             var newObject = Qt.createQmlObject('import QtQuick 2.0; import org.kde.kirigami 1.0; Separator {anchors {left: parent.left; right: parent.right; top: parent.top} visible: listItem.separatorVisible; color: listItem.textColor}',
                                    background);
         }
