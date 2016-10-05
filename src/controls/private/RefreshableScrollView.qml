@@ -147,18 +147,6 @@ Controls.ScrollView {
                 }
             }
 
-            Rectangle {
-                color: Theme.textColor
-                opacity: 0.2
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    bottom: parent.bottom
-                }
-                //only show in ListViews
-                visible: root.flickableItem == root.contentItem
-                height: Math.ceil(Units.smallSpacing / 5);
-            }
             onYChanged: {
                 if (y > busyIndicatorFrame.height*1.5 + topPadding && applicationWindow() && root.flickableItem.atYBeginning && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
                     applicationWindow().reachableMode = true;

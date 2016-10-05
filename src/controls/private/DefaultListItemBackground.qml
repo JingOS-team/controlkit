@@ -37,6 +37,17 @@ Rectangle {
         ColorAnimation { duration: Units.longDuration }
     }
 
+    //FIXME: make this not be instantiated in normal items
+    Separator {
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+        }
+        visible: listItem.separatorVisible && index === 0
+        color: listItem.textColor
+    }
+
     Separator {
         anchors {
             left: parent.left
