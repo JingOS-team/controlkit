@@ -73,7 +73,7 @@ AbstractDrawer {
         id: drawerHandle
         z: 2000000
         preventStealing: true
-        parent: T2.ApplicationWindow.overlay.parent
+        parent: applicationWindow().overlay.parent
 
         property int startX
         property int mappedStartX

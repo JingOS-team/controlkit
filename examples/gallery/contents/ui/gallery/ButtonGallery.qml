@@ -85,7 +85,7 @@ ScrollablePage {
     OverlayDrawer {
         id: bottomDrawer
         edge: Qt.BottomEdge
-        Item {
+        contentItem: Item {
             implicitHeight: childrenRect.height + Units.gridUnit
             ColumnLayout {
                 anchors.centerIn: parent
