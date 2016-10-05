@@ -23,6 +23,7 @@ import QtQuick.Controls 1.0 as Controls
 import QtQuick.Controls.Private 1.0
 
 Rectangle {
+    id: background
     color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeBackgroundColor : listItem.backgroundColor
 
     visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
@@ -35,6 +36,13 @@ Rectangle {
     }
     Behavior on color {
         ColorAnimation { duration: Units.longDuration }
+    }
+
+    Component.onCompleted: {
+        if (index == 0) {
+            var newObject = Qt.createQmlObject('import QtQuick 2.0; import org.kde.kirigami 1.0; Separator {anchors {left: parent.left; right: parent.right; top: parent.top} visible: listItem.separatorVisible; color: listItem.textColor}',
+                                   background);
+        }
     }
 
     Separator {
