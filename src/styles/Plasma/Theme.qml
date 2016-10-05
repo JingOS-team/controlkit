@@ -19,7 +19,7 @@
 
 pragma Singleton
 
-import QtQuick 2.0
+import QtQuick 2.4
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 QtObject {
@@ -30,6 +30,7 @@ QtObject {
     property color highlightedTextColor: theme.highlightedTextColor
     property color backgroundColor: theme.backgroundColor
     property color linkColor: theme.linkColor
+    property color visitedLinkColor: theme.visitedLinkColor
 
     property color buttonTextColor: theme.buttonTextColor
     property color buttonBackgroundColor: theme.buttonBackgroundColor
