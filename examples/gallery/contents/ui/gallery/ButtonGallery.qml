@@ -82,30 +82,28 @@ ScrollablePage {
         }
     }
 
-    //FIXME: is this contraption necessary to get working Popups?
-    contentData: [
-        OverlayDrawer {
-            id: bottomDrawer
-            edge: Qt.BottomEdge
-            contentItem: Item {
-                implicitHeight: childrenRect.height + Units.gridUnit
-                ColumnLayout {
-                    anchors.centerIn: parent
-                    Controls.Button {
-                        text: "Button1"
-                        onClicked: showPassiveNotification("Button 1 clicked")
-                    }
-                    Controls.Button {
-                        text: "Button2"
-                        onClicked: showPassiveNotification("Button 2 clicked")
-                    }
-                    Item {
-                        Layout.minimumHeight: Units.gridUnit * 4
-                    }
+    OverlayDrawer {
+        id: bottomDrawer
+        edge: Qt.BottomEdge
+        Item {
+            implicitHeight: childrenRect.height + Units.gridUnit
+            ColumnLayout {
+                anchors.centerIn: parent
+                Controls.Button {
+                    text: "Button1"
+                    onClicked: showPassiveNotification("Button 1 clicked")
+                }
+                Controls.Button {
+                    text: "Button2"
+                    onClicked: showPassiveNotification("Button 2 clicked")
+                }
+                Item {
+                    Layout.minimumHeight: Units.gridUnit * 4
                 }
             }
         }
-    ]
+    }
+    
 
     OverlaySheet {
         id: sheet
