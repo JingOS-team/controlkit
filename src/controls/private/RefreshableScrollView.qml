@@ -197,10 +197,17 @@ P.ScrollView {
                         flickableItem.contentY = -applicationWindow().header.preferredHeight;
                     }
 
-                    flickableItem.anchors.leftMargin = 0;
-                    flickableItem.anchors.topMargin = 0;
-                    flickableItem.anchors.rightMargin = 0;
-                    flickableItem.anchors.bottomMargin = 0;
+                    if (root.contentItem == root.flickableItem) {
+                        flickableItem.anchors.leftMargin = 0;
+                        flickableItem.anchors.topMargin = 0;
+                        flickableItem.anchors.rightMargin = 0;
+                        flickableItem.anchors.bottomMargin = 0;
+                    } else {
+                        flickableItem.anchors.leftMargin = leftPadding;
+                        flickableItem.anchors.topMargin = topPadding;
+                        flickableItem.anchors.rightMargin = rightPadding;
+                        flickableItem.anchors.bottomMargin = bottomPadding;
+                    }
                 }
             }
         }
@@ -241,10 +248,17 @@ P.ScrollView {
     }
 
     onLeftPaddingChanged: {
-        flickableItem.anchors.leftMargin = 0;
-        flickableItem.anchors.topMargin = 0;
-        flickableItem.anchors.rightMargin = 0;
-        flickableItem.anchors.bottomMargin = 0;
+        if (root.contentItem == root.flickableItem) {
+            flickableItem.anchors.leftMargin = 0;
+            flickableItem.anchors.topMargin = 0;
+            flickableItem.anchors.rightMargin = 0;
+            flickableItem.anchors.bottomMargin = 0;
+        } else {
+            flickableItem.anchors.leftMargin = leftPadding;
+            flickableItem.anchors.topMargin = topPadding;
+            flickableItem.anchors.rightMargin = rightPadding;
+            flickableItem.anchors.bottomMargin = bottomPadding;
+        }
     }
 
     onFlickableItemChanged: resetTimer.restart()

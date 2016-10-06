@@ -45,6 +45,9 @@ Item {
         }
         flickableItem.anchors.fill = root;
         flickableItem.ScrollBar.vertical = scrollComponent.createObject(root);
+        flickableItem.ScrollBar.vertical.anchors.right = root.right
+        flickableItem.ScrollBar.vertical.anchors.top = root.top
+        flickableItem.ScrollBar.vertical.anchors.bottom = root.bottom
     }
     Binding {
         target: flickableItem
