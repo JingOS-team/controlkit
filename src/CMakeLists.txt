@@ -33,6 +33,7 @@ endif()
 if (DESKTOP_ENABLED)
     install(DIRECTORY styles/Desktop DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles)
 endif()
+install(DIRECTORY styles/material DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles)
 
 install(FILES ${platformspecific} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
 
