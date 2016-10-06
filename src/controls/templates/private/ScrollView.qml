@@ -25,10 +25,15 @@ Item {
     default property Item contentItem
     property Flickable flickableItem
 
-    property int horizontalScrollBarPolicy: Qt.ScrollBarAsNeeded
+    //TODO: horizontalScrollBarPolicy is completely noop just for compatibility right now
+    property int horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
     property int verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
 
     clip: true
+
+    onVerticalScrollBarPolicyChanged: {
+        flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy == Qt.ScrollBarAlwaysOff
+    }
 
     onContentItemChanged: {
         if (contentItem.hasOwnProperty("contentY")) {
