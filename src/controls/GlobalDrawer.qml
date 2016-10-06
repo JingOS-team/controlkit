@@ -18,12 +18,13 @@
  */
 
 import QtQuick 2.1
-import QtQuick.Controls 1.4 as Controls
+import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 1.0
 
 import "private"
+import "templates/private"
 
 /**
  * A drawer specialization intended for the global actions of the application
@@ -205,7 +206,7 @@ OverlayDrawer {
         }
     }
 
-    contentItem: Controls.ScrollView {
+    contentItem: ScrollView {
         id: scrollView
         anchors.fill: parent
         implicitWidth: Math.min (Units.gridUnit * 20, root.parent.width * 0.8)
@@ -313,7 +314,7 @@ OverlayDrawer {
                     visible: children.length > 0 && childrenRect.height > 0
                 }
 
-                Controls.StackView {
+                QQC2.StackView {
                     id: stackView
                     Layout.fillWidth: true
                     Layout.minimumHeight: currentItem ? currentItem.implicitHeight : 0
