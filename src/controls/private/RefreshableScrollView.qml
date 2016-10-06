@@ -22,7 +22,7 @@ import QtQuick.Controls 1.3 as Controls
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 1.0
-
+import "../templates/private" as P
 
 /**
  * RefreshableScrollView is a scroll view for any Flickable that supports the
@@ -61,7 +61,7 @@ import org.kde.kirigami 1.0
  * 
  * @inherit QtQuick.Controls.Scrollview
  */
-Controls.ScrollView {
+P.ScrollView {
     id: root
 
     /**
@@ -103,8 +103,6 @@ Controls.ScrollView {
      */
     property int bottomPadding: Units.gridUnit
 
-
-    frameVisible: false
 
     children: [
         Item {

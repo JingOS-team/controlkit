@@ -315,7 +315,7 @@ QtObject {
                 }
             }
         }
-        Controls.ScrollView {
+        ScrollView {
             id: scrollView
             anchors.fill: parent
             horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
