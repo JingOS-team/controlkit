@@ -18,7 +18,6 @@
 */
 
 import QtQuick 2.5
-import QtQuick.Controls 1.3 as Controls
 import org.kde.kirigami 1.0
 import QtGraphicalEffects 1.0
 import QtQuick.Templates 2.0 as T2
