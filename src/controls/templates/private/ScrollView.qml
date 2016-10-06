@@ -57,7 +57,9 @@ Item {
     Component {
         id: flickableComponent
         Flickable {
-            anchors.fill: parent
+            anchors {
+                fill: parent
+            }
         }
     }
     Component {
