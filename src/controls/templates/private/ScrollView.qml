@@ -29,8 +29,6 @@ Item {
     property int horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
     property int verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
 
-    clip: true
-
     onVerticalScrollBarPolicyChanged: {
         flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy == Qt.ScrollBarAlwaysOff
     }
@@ -38,16 +36,25 @@ Item {
     onContentItemChanged: {
         if (contentItem.hasOwnProperty("contentY")) {
             flickableItem = contentItem;
-            contentItem.parent = root;
+            contentItem.parent = flickableParent;
         } else {
-            flickableItem = flickableComponent.createObject(root);
+            flickableItem = flickableComponent.createObject(flickableParent);
             contentItem.parent = flickableItem.contentItem;
         }
-        flickableItem.anchors.fill = root;
+        flickableItem.anchors.fill = flickableParent;
         flickableItem.ScrollBar.vertical = scrollComponent.createObject(root);
         flickableItem.ScrollBar.vertical.anchors.right = root.right
     }
 
+    Item {
+        id: flickableParent
+        anchors {
+            fill: parent
+            //FIXME: depending from properietary extension _desktopStyle?
+            rightMargin: flickableItem.ScrollBar.vertical.size < 1.0 && flickableItem.ScrollBar.vertical._desktopStyle ? flickableItem.ScrollBar.vertical.width : 0
+        }
+        clip: true
+    }
     Component {
         id: flickableComponent
         Flickable {
