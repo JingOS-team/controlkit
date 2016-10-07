@@ -29,6 +29,8 @@ Item {
     property int horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
     property int verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
 
+    readonly property Item verticalScrollBar: flickableItem.ScrollBar.vertical ? flickableItem.ScrollBar.vertical : null
+
     onVerticalScrollBarPolicyChanged: {
         flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy == Qt.ScrollBarAlwaysOff
     }
@@ -51,7 +53,7 @@ Item {
         anchors {
             fill: parent
             //FIXME: depending from properietary extension _desktopStyle?
-            rightMargin: flickableItem.ScrollBar.vertical.size < 1.0 && flickableItem.ScrollBar.vertical._desktopStyle ? flickableItem.ScrollBar.vertical.width : 0
+            rightMargin: flickableItem.ScrollBar.vertical.visible && flickableItem.ScrollBar.vertical.size < 1.0 && flickableItem.ScrollBar.vertical._desktopStyle ? flickableItem.ScrollBar.vertical.width : 0
         }
         clip: true
     }

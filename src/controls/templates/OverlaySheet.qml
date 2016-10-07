@@ -314,6 +314,27 @@ QtObject {
                 }
             }
         }
+
+        //add an extra background for the scrollbar
+        Rectangle {
+            z: -1
+            parent: scrollView.verticalScrollBar.background
+            anchors.fill:parent
+            color: Theme.viewBackgroundColor
+        }
+        Binding {
+            target: scrollView.verticalScrollBar
+            property: "visible"
+            value: scrollView.flickableItem.contentHeight > mainItem.height*0.8
+        }
+        Connections {
+            target: scrollView.verticalScrollBar
+            onActiveChanged: {
+                if (!scrollView.verticalScrollBar.active) {
+                    scrollView.flickableItem.movementEnded();
+                }
+            }
+        }
         ScrollView {
             id: scrollView
             anchors.fill: parent
