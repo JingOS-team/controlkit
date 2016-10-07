@@ -80,7 +80,7 @@ AbstractApplicationHeader {
         clip: true
         anchors {
             fill: parent
-            leftMargin: Math.max ((backButton ? backButton.width : (titleList.isTabBar ? 0 : Units.smallSpacing*2)), __appWindow.contentItem.x)
+            leftMargin: (backButton ? backButton.width : (titleList.isTabBar ? 0 : Units.smallSpacing*2))
         }
         cacheBuffer: width ? Math.max(0, width * count) : 0
         displayMarginBeginning: __appWindow.pageStack.width * count
