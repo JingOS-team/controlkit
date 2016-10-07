@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 import QtQuick 2.5
-//import QtQuick.Controls 1.3 as Controls
 import QtQuick.Controls 2.0 
+import org.kde.kirigami 1.0
 
 Item {
     id: root
@@ -46,28 +46,16 @@ Item {
         flickableItem.anchors.fill = root;
         flickableItem.ScrollBar.vertical = scrollComponent.createObject(root);
         flickableItem.ScrollBar.vertical.anchors.right = root.right
-        flickableItem.ScrollBar.vertical.anchors.top = root.top
-        flickableItem.ScrollBar.vertical.anchors.bottom = root.bottom
-    }
-    Binding {
-        target: flickableItem
-        property: "contentHeight"
-        when: contentItem !== flickableItem
-        value: contentItem ? contentItem.height : 0
     }
 
-    Binding {
-        target: flickableItem
-        when: contentItem !== flickableItem
-        property: "contentWidth"
-        value: contentItem ? contentItem.width : 0
-    }
     Component {
         id: flickableComponent
         Flickable {
             anchors {
                 fill: parent
             }
+            contentWidth: root.contentItem ? root.contentItem.width : 0
+            contentHeight: root.contentItem ? root.contentItem.height : 0
         }
     }
     Component {
