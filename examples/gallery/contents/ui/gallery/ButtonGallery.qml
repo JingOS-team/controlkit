@@ -19,6 +19,7 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 1.2 as Controls
+import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 1.0
 
@@ -89,11 +90,11 @@ ScrollablePage {
             implicitHeight: childrenRect.height + Units.gridUnit
             ColumnLayout {
                 anchors.centerIn: parent
-                Controls.Button {
+                QQC2.Button {
                     text: "Button1"
                     onClicked: showPassiveNotification("Button 1 clicked")
                 }
-                Controls.Button {
+                QQC2.Button {
                     text: "Button2"
                     onClicked: showPassiveNotification("Button 2 clicked")
                 }
@@ -131,7 +132,7 @@ ScrollablePage {
 
     Etiam sapien leo, venenatis eget justo at, pellentesque mollis tellus. Fusce consequat ullamcorper vulputate. Duis tellus nisi, dictum ut augue non, elementum congue ligula. Fusce in vehicula arcu. Nulla facilisi. Quisque a convallis sapien. Aenean pellentesque convallis egestas. Phasellus rhoncus, nulla in tempor maximus, arcu ex venenatis diam, sit amet egestas mi dolor non ante. "
             }
-            Controls.Button {
+            QQC2.Button {
                 text: "Close"
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: sheet.close()
@@ -142,27 +143,27 @@ ScrollablePage {
         width: page.width
         spacing: Units.smallSpacing
 
-        Controls.Button {
+        QQC2.Button {
             text: "Open Bottom drawer"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: bottomDrawer.open()
         }
-        Controls.Button {
+        QQC2.Button {
             text: "Open Sheet"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: sheet.open()
         }
-        Controls.Button {
+        QQC2.Button {
             text: "Toggle Action Button"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: mainAction.visible = !mainAction.visible;
         }
-        Controls.Button {
+        QQC2.Button {
             text: "Show Passive Notification"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: showPassiveNotification("This is a passive message", 3000);
         }
-        Controls.Button {
+        QQC2.Button {
             text: "Passive Notification Action"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: showPassiveNotification("This is a passive message", "long", "Action", function() {showPassiveNotification("Passive notification action clicked")});
@@ -174,7 +175,7 @@ ScrollablePage {
             anchors.horizontalCenter: parent.horizontalCenter
             onCheckedChanged: applicationWindow().controlsVisible = checked
         }
-        Controls.Button {
+        QQC2.Button {
             text: "Disabled Button"
             enabled: false
             anchors.horizontalCenter: parent.horizontalCenter

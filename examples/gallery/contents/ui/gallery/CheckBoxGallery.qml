@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.2 as Controls
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 1.0
 
@@ -33,11 +33,11 @@ ScrollablePage {
             onCheckedChanged: sheet.opened = checked;
         }
         contextualActions: [
-            Controls.Action {
+            Action {
                 text:"Action 1"
                 onTriggered: showPassiveNotification("Action 1 clicked")
             },
-            Controls.Action {
+            Action {
                 text:"Action 2"
                 onTriggered: showPassiveNotification("Action 2 clicked")
             }
@@ -64,6 +64,7 @@ ScrollablePage {
             Layout.fillWidth: true
             Layout.minimumHeight: Units.gridUnit * 10
             GridLayout {
+                id: grid
                 anchors.centerIn: parent
                 columns: 3
                 rows: 3
@@ -104,6 +105,15 @@ ScrollablePage {
                     checked: false
                     enabled: false
                 }
+            }
+            Controls.CheckBox {
+                anchors {
+                    top: grid.bottom
+                    left: grid.left
+                }
+                text: "Tristate"
+                checked: true
+                tristate: true
             }
         }
     }
