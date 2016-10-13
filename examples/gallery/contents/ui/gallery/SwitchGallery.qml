@@ -55,20 +55,24 @@ ScrollablePage {
                 }
                 Controls.Switch {
                     checked: true
+                    text: "On"
                 }
                 Controls.Switch {
                     checked: true
                     enabled: false
+                    text: "On"
                 }
                 Label {
                     text: "Off"
                 }
                 Controls.Switch {
                     checked: false
+                    text: "Off"
                 }
                 Controls.Switch {
                     checked: false
                     enabled: false
+                    text: "Off"
                 }
             }
         }
