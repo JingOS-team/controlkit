@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.2 as Controls
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 1.0
 
@@ -69,8 +69,8 @@ ScrollablePage {
                 Layout.alignment: Qt.AlignRight
             }
             Controls.ProgressBar {
-                minimumValue: 0
-                maximumValue: 100
+                from: 0
+                to: 100
                 value: timer.value
                 Layout.maximumWidth: Units.gridUnit * 10
             }
@@ -79,8 +79,8 @@ ScrollablePage {
                 Layout.alignment: Qt.AlignRight
             }
             Controls.ProgressBar {
-                minimumValue: 0
-                maximumValue: 100
+                from: 0
+                to: 100
                 indeterminate: true
                 Layout.maximumWidth: Units.gridUnit * 10
             }
@@ -105,26 +105,6 @@ ScrollablePage {
             Controls.BusyIndicator {
                 Layout.minimumWidth: Units.iconSizes.enormous
                 Layout.minimumHeight: width
-            }
-            Label {
-                text: "Vertical:"
-                Layout.alignment: Qt.AlignRight
-            }
-            RowLayout {
-                Controls.ProgressBar {
-                    Layout.minimumWidth: Units.gridUnit * 2
-                    Layout.maximumHeight: Units.gridUnit * 8
-                    minimumValue: 0
-                    maximumValue: 100
-                    value: timer.value
-                    orientation: Qt.Vertical
-                }
-                Controls.ProgressBar {
-                    Layout.minimumWidth: Units.gridUnit * 2
-                    Layout.maximumHeight: Units.gridUnit * 8
-                    indeterminate: true
-                    orientation: Qt.Vertical
-                }
             }
         }
     }
