@@ -86,6 +86,10 @@ Kirigami.ScrollablePage {
                 component: "Switch"
             }
             ListElement {
+                text: "Tab Bar"
+                component: "TabBar"
+            }
+            ListElement {
                 text: "Text Field"
                 component: "TextField"
             }
