@@ -106,16 +106,10 @@ Kirigami.ScrollablePage {
                 component: "Colors"
             }
         }
-        delegate: Kirigami.SwipeListItem {
+        delegate: Kirigami.BasicListItem {
             id: listItem
 
-            Kirigami.Label {
-                height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
-                anchors.verticalCenter: parent.verticalCenter
-                x: y
-                text: model.text
-                color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeTextColor : listItem.textColor
-            }
+            label: model.text
 
             property Item ownPage
             onClicked: {
@@ -126,15 +120,6 @@ Kirigami.ScrollablePage {
                 ownPage = root.pageStack.push(Qt.resolvedUrl("gallery/" + model.component + "Gallery.qml"));
             }
             checked: ownPage && root.pageStack.lastItem == ownPage
-            actions: [
-                Kirigami.Action {
-                    iconName: "document-decrypt"
-                    onTriggered: showPassiveNotification(model.text + " Action 1 clicked")
-                },
-                Kirigami.Action {
-                    iconName: "mail-reply-sender"
-                    onTriggered: showPassiveNotification(model.text + " Action 2 clicked")
-                }]
         }
     }
 }

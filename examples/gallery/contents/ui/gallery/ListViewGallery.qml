@@ -20,15 +20,15 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.2 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
+import org.kde.kirigami 1.0 as Kirigami
 
-ScrollablePage {
+Kirigami.ScrollablePage {
     id: page
     Layout.fillWidth: true
     title: "Long List view"
 
     actions {
-        main: Action {
+        main: Kirigami.Action {
             iconName: sheet.opened ? "dialog-cancel" : "document-edit"
             text: "Main Action Text"
             checked: sheet.opened
@@ -49,12 +49,12 @@ ScrollablePage {
     background: Rectangle {
         color: Theme.viewBackgroundColor
     }
-    OverlaySheet {
+    Kirigami.OverlaySheet {
         id: sheet
         ListView {
             model: 100
             implicitWidth: Units.gridUnit * 30
-            delegate: BasicListItem {
+            delegate: Kirigami.BasicListItem {
                 label: "Item in sheet" + modelData
             }
         }
@@ -67,8 +67,24 @@ ScrollablePage {
             onTriggered: page.refreshing = false
         }
         model: 200
-        delegate: BasicListItem {
-            label: "Item " + modelData
+        delegate: Kirigami.SwipeListItem {
+            id: listItem
+            Kirigami.Label {
+                height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
+                anchors.verticalCenter: parent.verticalCenter
+                x: y
+                text: "Item " + modelData
+                color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeTextColor : listItem.textColor
+            }
+            actions: [
+                Kirigami.Action {
+                    iconName: "document-decrypt"
+                    onTriggered: showPassiveNotification(model.text + " Action 1 clicked")
+                },
+                Kirigami.Action {
+                    iconName: "mail-reply-sender"
+                    onTriggered: showPassiveNotification(model.text + " Action 2 clicked")
+                }]
         }
     }
 }
