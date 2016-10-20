@@ -58,6 +58,25 @@ Page {
                     horizontalAlignment: Qt.AlignHCenter
                     text: "Page " + modelData
                 }
+                Controls.TabBar {
+                    position: Controls.TabBar.Footer
+                    anchors {
+                        bottom: parent.bottom
+                        horizontalCenter: parent.horizontalCenter
+                    }
+                    Controls.TabButton {
+                        text: "First"
+                    }
+                    Controls.TabButton {
+                        text: "Second"
+                    }
+                    Controls.TabButton {
+                        text: "Third"
+                    }
+                    Controls.TabButton {
+                        text: "Fourth"
+                    }
+                }
             }
         }
     }
