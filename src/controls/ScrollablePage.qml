@@ -106,6 +106,8 @@ Page {
         }
     }
 
+    anchors.topMargin: 0
+
     Item {
         id: overlay
         parent: root

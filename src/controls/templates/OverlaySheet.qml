@@ -139,7 +139,7 @@ QtObject {
         }
     }
 
-    property Item rootItem: MouseArea {
+    readonly property Item rootItem: MouseArea {
         id: mainItem
         //we want to be over any possible OverlayDrawers, including handles
         parent: root.parent == applicationWindow().overlay ? root.parent.parent : root.parent

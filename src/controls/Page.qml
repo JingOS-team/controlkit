@@ -213,6 +213,8 @@ T2.Page {
      */
     signal backRequested(var event);
 
+    anchors.topMargin: (applicationWindow() && !applicationWindow().wideScreen && applicationWindow().controlsVisible && applicationWindow().header ? applicationWindow().header.preferredHeight : 0)
+
     //NOTE: This exists just because control instances require it
     contentItem: Item { 
         onChildrenChanged: {
@@ -223,7 +225,8 @@ T2.Page {
             //TODO: OverlaySheets should be Popup instead?
             for (var i = children.length -1; i >= 0; --i) {
                 var child = children[i];
-                if (child.toString().indexOf("OverlaySheet") === 0) {
+                if (child.toString().indexOf("OverlaySheet") === 0 ||
+                    (child.opened !== undefined && child.open !== undefined && child.close !== undefined)) {
                     child.parent = root;
                     child.z = 9997
                 }
