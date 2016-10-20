@@ -38,8 +38,10 @@ Rectangle {
         ColorAnimation { duration: Units.longDuration }
     }
 
-    Component.onCompleted: {
-        if (index !== undefined && index == 0) {
+    readonly property bool _firstElement: index !== undefined && index == 0
+
+    on_FirstElementChanged: {
+        if (_firstElement) {
             var newObject = Qt.createQmlObject('import QtQuick 2.0; import org.kde.kirigami 1.0; Separator {anchors {left: parent.left; right: parent.right; top: parent.top} visible: listItem.separatorVisible; color: listItem.textColor}',
                                    background);
         }
