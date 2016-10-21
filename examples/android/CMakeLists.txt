@@ -6,7 +6,7 @@ set(kirigamigallery_SRCS
 qt5_add_resources(RESOURCES resources.qrc)
 
 add_executable(kirigamigallery ${kirigamigallery_SRCS} ${RESOURCES})
-target_link_libraries(kirigamigallery Qt5::Core  Qt5::Qml Qt5::Quick Qt5::Svg)
+target_link_libraries(kirigamigallery Qt5::Core  Qt5::Qml Qt5::Quick Qt5::Svg Qt5::QuickControls2)
 
 install(TARGETS kirigamigallery ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 

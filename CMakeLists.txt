@@ -73,7 +73,7 @@ ecm_setup_version(${KF5_VERSION}
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KirigamiConfigVersion.cmake"
     SOVERSION 5)
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg)
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg QuickControls2)
 
 if(PLASMA_ENABLED)
 # treat plasma as an optinal dep: full functionality is expected with only Qt

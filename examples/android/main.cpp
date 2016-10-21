@@ -7,6 +7,7 @@
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
     qputenv("QML_IMPORT_TRACE", "1");
