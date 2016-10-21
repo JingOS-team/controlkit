@@ -299,7 +299,6 @@ T2.ItemDelegate {
     }
     Component.onCompleted: {
         //this will happen only once
-        print(Settings.isMobile)
         if (Settings.isMobile && !listItem.ListView.view.parent.parent._swipeFilter) {
             var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
             listItem.ListView.view.parent.parent._swipeFilter = component.createObject(listItem.ListView.view.parent.parent);
