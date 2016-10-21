@@ -103,6 +103,8 @@ P.ScrollView {
     property int bottomPadding: Units.gridUnit
 
 
+    property Item _swipeFilter
+
     children: [
         Item {
             id: busyIndicatorFrame

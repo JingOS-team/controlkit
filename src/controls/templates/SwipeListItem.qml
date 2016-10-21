@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
  */
 
-import QtQuick 2.5
+import QtQuick 2.7
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.0 as Controls
 import QtQuick.Controls.Private 1.0
@@ -241,6 +241,8 @@ T2.ItemDelegate {
         property int startX
         property int startMouseX
 
+        property MouseArea edgeFilter
+
         onClicked: {
             positionAnimation.from = background.x;
             if (listItem.background.x > -listItem.background.width/2) {
@@ -294,6 +296,25 @@ T2.ItemDelegate {
     onContentItemChanged: {
         contentItem.parent = background;
         contentItem.z = 0;
+    }
+    Component.onCompleted: {
+        //this will happen only once
+        if (!listItem.ListView.view.parent.parent._swipeFilter) {
+            var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
+            listItem.ListView.view.parent.parent._swipeFilter = component.createObject(listItem.ListView.view.parent.parent);
+        }
+    }
+    Connections {
+        target: enabled ? listItem.ListView.view.parent.parent._swipeFilter : null
+        property bool enabled: listItem.ListView.view.parent.parent._swipeFilter.currentItem === listItem
+        onPeekChanged: listItem.background.x = -(listItem.background.width - listItem.background.height) * listItem.ListView.view.parent.parent._swipeFilter.peek
+        onCurrentItemChanged: {
+            if (!enabled) {
+                positionAnimation.to = 0;
+                positionAnimation.from = background.x;
+                positionAnimation.running = true;
+            }
+        }
     }
 //END signal handlers
 
