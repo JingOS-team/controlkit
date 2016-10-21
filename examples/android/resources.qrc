@@ -15,5 +15,6 @@
         <file alias="contents/ui/gallery/ColorsGallery.qml">../gallery/contents/ui/gallery/ColorsGallery.qml</file>
         <file alias="contents/ui/ExampleApp.qml">../gallery/contents/ui/ExampleApp.qml</file>
         <file alias="metadata.desktop">../gallery/metadata.desktop</file>
+        <file alias="qtquickcontrols2.conf">qtquickcontrols2.conf</file>
     </qresource>
 </RCC>

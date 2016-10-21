@@ -181,7 +181,7 @@ T2.ItemDelegate {
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
-                rightMargin: y
+                rightMargin: listItem.rightPadding
             }
             height: Math.min( parent.height / 1.5, Units.iconSizes.medium)
             width: childrenRect.width
