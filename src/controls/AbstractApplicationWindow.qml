@@ -19,7 +19,6 @@
 
 import QtQuick 2.5
 import QtQuick.Controls 2.0 as QQC2
-import QtQuick.Controls 1.3 as Controls
 import "templates/private"
 import org.kde.kirigami 1.0
 import QtGraphicalEffects 1.0
