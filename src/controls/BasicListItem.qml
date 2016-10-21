@@ -46,6 +46,14 @@ AbstractListItem {
      */
     property alias icon: iconItem.source
 
+    /**
+     * reserveSpaceForIcon: bool
+     * If true, even when there is no icon the space will be reserved for it
+     * It's useful in layouts where only some entries have an icon,
+     * having the text all horizontally aligned
+     */
+    property alias reserveSpaceForIcon: iconItem.visible
+
     contentItem: RowLayout {
         Icon {
             id: iconItem

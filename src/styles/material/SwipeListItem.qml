@@ -88,4 +88,5 @@ T.SwipeListItem {
             }
         }
     }
+    implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 6
 }

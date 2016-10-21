@@ -59,5 +59,5 @@ T.AbstractListItem {
             }
         }
     }
-    implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 4
+    implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 6
 }
