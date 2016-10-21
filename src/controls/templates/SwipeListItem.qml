@@ -19,7 +19,6 @@
 
 import QtQuick 2.7
 import QtQuick.Layouts 1.2
-import QtQuick.Controls 1.0 as Controls
 import QtQuick.Controls.Private 1.0
 import org.kde.kirigami 1.0
 import "../private"
@@ -131,10 +130,10 @@ T2.ItemDelegate {
     width: parent ? parent.width : implicitWidth
     implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5
 
-    leftPadding: Units.smallSpacing
-    topPadding: Units.smallSpacing
-    rightPadding: Units.smallSpacing
-    bottomPadding: Units.smallSpacing
+    leftPadding: Units.smallSpacing * 2
+    topPadding: Units.smallSpacing * 2
+    rightPadding: Units.smallSpacing * 2
+    bottomPadding: Units.smallSpacing * 2
 
 //END properties
 
@@ -234,6 +233,7 @@ T2.ItemDelegate {
             right: parent.right
             top: parent.top
             bottom: parent.bottom
+            rightMargin: listItem.rightPadding
         }
         preventStealing: true
         width: height
@@ -299,14 +299,14 @@ T2.ItemDelegate {
     }
     Component.onCompleted: {
         //this will happen only once
-        if (!listItem.ListView.view.parent.parent._swipeFilter) {
+        if (Settings.styleName != "Desktop" && !listItem.ListView.view.parent.parent._swipeFilter) {
             var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
             listItem.ListView.view.parent.parent._swipeFilter = component.createObject(listItem.ListView.view.parent.parent);
         }
     }
     Connections {
         target: enabled ? listItem.ListView.view.parent.parent._swipeFilter : null
-        property bool enabled: listItem.ListView.view.parent.parent._swipeFilter.currentItem === listItem
+        property bool enabled: listItem.ListView.view.parent.parent._swipeFilter ? listItem.ListView.view.parent.parent._swipeFilter.currentItem === listItem : false
         onPeekChanged: listItem.background.x = -(listItem.background.width - listItem.background.height) * listItem.ListView.view.parent.parent._swipeFilter.peek
         onCurrentItemChanged: {
             if (!enabled) {

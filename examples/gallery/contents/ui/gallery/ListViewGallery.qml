@@ -47,14 +47,14 @@ Kirigami.ScrollablePage {
     }
 
     background: Rectangle {
-        color: Theme.viewBackgroundColor
+        color: Kirigami.Theme.viewBackgroundColor
     }
     Kirigami.OverlaySheet {
         id: sheet
         parent: applicationWindow().overlay
         ListView {
             model: 100
-            implicitWidth: Units.gridUnit * 30
+            implicitWidth: Kirigami.Units.gridUnit * 30
             delegate: Kirigami.BasicListItem {
                 label: "Item in sheet" + modelData
             }
@@ -73,7 +73,6 @@ Kirigami.ScrollablePage {
             contentItem: Kirigami.Label {
                 height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
                 anchors.verticalCenter: parent.verticalCenter
-                x: y
                 text: "Item " + modelData
                 color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeTextColor : listItem.textColor
             }
