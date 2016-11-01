@@ -64,7 +64,7 @@ T2.Drawer {
     }
     onOpenedChanged: {
         //sync this property only when the component is properly loaded
-        if (!positionResetAnim.__completed) {
+        if (!__internal.completed) {
             return;
         }
         positionResetAnim.running = false;
@@ -83,19 +83,22 @@ T2.Drawer {
             root.position = 1;
             root.enter.enabled = true;
         }
-        positionResetAnim.__completed = true;
+        __internal.completed = true;
     }
-    //FIXME: any way to avoid?
-    property NumberAnimation __internalAnim: NumberAnimation {
-        id: positionResetAnim
+
+
+    //this is as hidden as it can get here
+    property QtObject __internal: QtObject {
         //here in order to not be accessible from outside
-        property bool __completed: false
+        property bool completed: false
+        property NumberAnimation positionResetAnim: NumberAnimation {
+        id: positionResetAnim
         target: root
         to: 0
         property: "position"
         duration: (root.position)*Units.longDuration
     }
-
+    }
     implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
 
