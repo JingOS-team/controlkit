@@ -168,7 +168,7 @@ ScrollablePage {
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: showPassiveNotification("This is a passive message", "long", "Action", function() {showPassiveNotification("Passive notification action clicked")});
         }
-        Controls.ToolButton {
+        QQC2.ToolButton {
             text: "Toggle controls"
             checkable: true
             checked: true
@@ -181,41 +181,16 @@ ScrollablePage {
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: showPassiveNotification("clicked")
         }
-        Controls.ToolButton {
+        QQC2.ToolButton {
             text: "Tool Button"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: showPassiveNotification(text + " clicked")
         }
-        Controls.ToolButton {
+        QQC2.ToolButton {
             text: "Tool Button non flat"
-            property bool flat: false
+            flat: false
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: showPassiveNotification(text + " clicked")
-        }
-        Controls.ToolButton {
-            iconName: "go-previous"
-            property bool flat: false
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: showPassiveNotification("Button clicked")
-        }
-        Row {
-            spacing: 0
-            anchors.horizontalCenter: parent.horizontalCenter
-            Controls.ToolButton {
-                iconName: "edit-cut"
-                property bool flat: false
-                onClicked: showPassiveNotification("Cut clicked")
-            }
-            Controls.ToolButton {
-                iconName: "edit-copy"
-                property bool flat: false
-                onClicked: showPassiveNotification("Copy clicked")
-            }
-            Controls.ToolButton {
-                iconName: "edit-paste"
-                property bool flat: false
-                onClicked: showPassiveNotification("Paste clicked")
-            }
         }
     }
 }
