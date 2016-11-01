@@ -19,6 +19,7 @@
 
 import QtQuick 2.1
 import org.kde.kirigami 1.0
+import QtQuick.Templates 2.0
 
 import "../../templates" as T
 
@@ -120,4 +121,5 @@ T.OverlayDrawer {
     //default to a sidebar in desktop mode
     modal: edge == Qt.TopEdge || edge == Qt.BottomEdge
     opened: true
+    closePolicy: Popup.NoAutoClose
 }
