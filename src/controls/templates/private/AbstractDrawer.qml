@@ -63,6 +63,10 @@ T2.Drawer {
         }
     }
     onOpenedChanged: {
+        //sync this property only when the component is properly loaded
+        if (!positionResetAnim.__completed) {
+            return;
+        }
         if (opened) {
             open();
         } else {
@@ -78,10 +82,13 @@ T2.Drawer {
             root.position = 1;
             root.enter.enabled = true;
         }
+        positionResetAnim.__completed = true;
     }
     //FIXME: any way to avoid?
     property NumberAnimation __internalAnim: NumberAnimation {
         id: positionResetAnim
+        //here in order to not be accessible from outside
+        property bool __completed: false
         target: root
         to: 0
         property: "position"

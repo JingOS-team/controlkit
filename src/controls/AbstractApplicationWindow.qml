@@ -268,16 +268,16 @@ QQC2.ApplicationWindow {
     }
 
     Binding {
-        when: globalDrawer !== undefined
+        when: globalDrawer !== undefined && root.visible
         target: globalDrawer
         property: "parent"
-        value: contentItem.parent
+        value: overlay
     }
     Binding {
-        when: contextDrawer !== undefined
+        when: contextDrawer !== undefined && root.visible
         target: contextDrawer
         property: "parent"
-        value: contentItem.parent
+        value: overlay
     }
     onPageStackChanged: pageStack.parent = contentItem;
 
