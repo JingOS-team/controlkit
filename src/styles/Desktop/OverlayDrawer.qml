@@ -122,4 +122,11 @@ T.OverlayDrawer {
     modal: edge == Qt.TopEdge || edge == Qt.BottomEdge
     opened: true
     closePolicy: Popup.NoAutoClose
+    //handleVisible: false
+    onPositionChanged: {
+        print("enter.runnig: "+root.enter.running +" exit.running: "+root.exit.running)
+        if (opened && !root.enter.running && !handleVisible && !root.exit.running) {
+            position = 1;
+        }
+    }
 }

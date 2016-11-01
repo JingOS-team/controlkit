@@ -34,6 +34,7 @@ T2.Drawer {
     dragMargin: enabled && (edge == Qt.LeftEdge || edge == Qt.RightEdge) ? Qt.styleHints.startDragDistance : 0
 
     //default property alias page: mainPage.data
+    //TODO: opened is a signal now, it should be renamed?
     property bool opened: false
     edge: Qt.LeftEdge
     modal: true

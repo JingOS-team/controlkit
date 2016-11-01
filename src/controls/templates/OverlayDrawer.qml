@@ -43,21 +43,6 @@ AbstractDrawer {
 
 //BEGIN Properties
     /**
-     * page: Item
-     * It's the default property. it's the main content of the drawer page,
-     * the part that is always shown
-     */
-    //default property alias page: mainPage.data
-
-    /**
-     * opened: bool
-     * If true the drawer is open showing the contents of the "drawer"
-     * component.
-     */
-    //property bool opened: false
-
-
-    /**
      * handleVisible: bool
      * If true, a little handle will be visible to make opening the drawer easier
      * Currently supported only on left and right drawers
