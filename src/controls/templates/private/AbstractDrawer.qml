@@ -67,6 +67,7 @@ T2.Drawer {
         if (!positionResetAnim.__completed) {
             return;
         }
+        positionResetAnim.running = false;
         if (opened) {
             open();
         } else {
