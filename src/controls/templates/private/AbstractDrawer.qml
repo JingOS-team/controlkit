@@ -92,12 +92,12 @@ T2.Drawer {
         //here in order to not be accessible from outside
         property bool completed: false
         property NumberAnimation positionResetAnim: NumberAnimation {
-        id: positionResetAnim
-        target: root
-        to: 0
-        property: "position"
-        duration: (root.position)*Units.longDuration
-    }
+            id: positionResetAnim
+            target: root
+            to: 0
+            property: "position"
+            duration: (root.position)*Units.longDuration
+        }
     }
     implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
