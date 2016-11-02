@@ -54,7 +54,7 @@ ApplicationHeader {
             //more columns shown?
             if (__appWindow.wideScreen) {
                 if (modelData == 0 && view.x > 0) {
-                    return page.width - Math.max(0, view.x - __appWindow.contentItem.x);
+                    return page.width - view.x;
                 } else {
                     return page.width;
                 }
