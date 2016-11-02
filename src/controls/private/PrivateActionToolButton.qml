@@ -27,13 +27,25 @@ import org.kde.kirigami 1.0
 T.ToolButton {
     id: control
 
-    property string iconName
-    property string tooltip
     implicitWidth: background.implicitWidth
     implicitHeight: background.implicitHeight
 
     hoverEnabled: true
     property Action action
+
+    text: action ? action.text : ""
+    //TODO: to be implemented
+    property string tooltip: action? action.text : ""
+    checkable: action && action.checkable
+    checked: action && action.checked
+    enabled: action && action.enabled
+    opacity: enabled ? 1 : 0.4
+    visible: action && action.visible
+    onClicked: {
+        if (action) {
+            action.trigger();
+        }
+    }
 
     flat: true
     contentItem: Item {}

@@ -34,7 +34,7 @@ ApplicationHeader {
     preferredHeight: 34//spacer.height
     maximumHeight: preferredHeight
 
-    PrivateActionToolButton {
+    Controls.ToolButton {
         id: spacer
         iconName: "go-previous"
         visible: false
@@ -83,41 +83,14 @@ ApplicationHeader {
                 PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
                     action: page && page.actions ? page.actions.main : null
-                    iconName: page && page.actions && page.actions.main ? page.actions.main.iconName : ""
-                    text: page && page.actions && page.actions.main ? page.actions.main.text : ""
-                    tooltip: page && page.actions && page.actions.main ? page.actions.main.text : ""
-                    checkable: page && page.actions && page.actions.main && page.actions.main.checkable
-                    checked: page && page.actions && page.actions.main && page.actions.main.checked
-                    enabled: page && page.actions && page.actions.main && page.actions.main.enabled
-                    opacity: enabled ? 1 : 0.4
-                    visible: page && page.actions && page.actions.main && page.actions.main.visible
-                    onClicked: page.actions.main.trigger();
                 }
                 PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
                     action: page && page.actions ? page.actions.left : null
-                    iconName: page && page.actions && page.actions.left ? page.actions.left.iconName : ""
-                    text: page && page.actions && page.actions.left ? page.actions.left.text : ""
-                    tooltip: page && page.actions && page.actions.left ? page.actions.left.text : ""
-                    checkable: page && page.actions && page.actions.left && page.actions.left.checkable
-                    checked: page && page.actions && page.actions.left && page.actions.left.checked
-                    enabled: page && page.actions && page.actions.left && page.actions.left.enabled
-                    opacity: enabled ? 1 : 0.4
-                    visible: page && page.actions && page.actions.left && page.actions.left && page.actions.left.visible
-                    onClicked: page.actions.left.trigger();
                 }
                 PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
                     action: page && page.actions ? page.actions.right : null
-                    iconName: page && page.actions && page.actions.right ? page.actions.right.iconName : ""
-                    text: page && page.actions && page.actions.right ? page.actions.right.text : ""
-                    tooltip: page && page.actions && page.actions.right ? page.actions.right.text : ""
-                    checkable: page && page.actions && page.actions.right && page.actions.right.checkable
-                    checked: page && page.actions && page.actions.right && page.actions.right.checked
-                    enabled: page && page.actions && page.actions.right && page.actions.right.enabled
-                    opacity: enabled ? 1 : 0.4
-                    visible: page && page.actions && page.actions.right && page.actions.right && page.actions.right.visible
-                    onClicked: page.actions.right.trigger();
                 }
                 Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
@@ -131,16 +104,7 @@ ApplicationHeader {
                     model: page && page.actions.contextualActions ? page.actions.contextualActions : null
                     delegate: PrivateActionToolButton {
                         anchors.verticalCenter: parent.verticalCenter
-                        iconName: modelData.iconName
                         action: modelData
-                        text: modelData.text
-                        tooltip: modelData.text
-                        checkable: modelData.checkable
-                        checked: modelData.checked
-                        enabled: modelData.enabled
-                        opacity: enabled ? 1 : 0.4
-                        visible: modelData.visible && x+layout.x+width*2 < delegateItem.width
-                        onClicked: modelData.trigger();
                     }
                 }
             }
