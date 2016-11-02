@@ -34,7 +34,7 @@ ApplicationHeader {
     preferredHeight: 34//spacer.height
     maximumHeight: preferredHeight
 
-    Controls.ToolButton {
+    PrivateActionToolButton {
         id: spacer
         iconName: "go-previous"
         visible: false
@@ -80,8 +80,9 @@ ApplicationHeader {
                     width: Units.devicePixelRatio
                     height: parent.height * 0.6
                 }
-                Controls.ToolButton {
+                PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
+                    action: page && page.actions ? page.actions.main : null
                     iconName: page && page.actions && page.actions.main ? page.actions.main.iconName : ""
                     text: page && page.actions && page.actions.main ? page.actions.main.text : ""
                     tooltip: page && page.actions && page.actions.main ? page.actions.main.text : ""
@@ -92,8 +93,9 @@ ApplicationHeader {
                     visible: page && page.actions && page.actions.main && page.actions.main.visible
                     onClicked: page.actions.main.trigger();
                 }
-                Controls.ToolButton {
+                PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
+                    action: page && page.actions ? page.actions.left : null
                     iconName: page && page.actions && page.actions.left ? page.actions.left.iconName : ""
                     text: page && page.actions && page.actions.left ? page.actions.left.text : ""
                     tooltip: page && page.actions && page.actions.left ? page.actions.left.text : ""
@@ -104,8 +106,9 @@ ApplicationHeader {
                     visible: page && page.actions && page.actions.left && page.actions.left && page.actions.left.visible
                     onClicked: page.actions.left.trigger();
                 }
-                Controls.ToolButton {
+                PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
+                    action: page && page.actions ? page.actions.right : null
                     iconName: page && page.actions && page.actions.right ? page.actions.right.iconName : ""
                     text: page && page.actions && page.actions.right ? page.actions.right.text : ""
                     tooltip: page && page.actions && page.actions.right ? page.actions.right.text : ""
@@ -126,9 +129,10 @@ ApplicationHeader {
                 Repeater {
                     id: repeater
                     model: page && page.actions.contextualActions ? page.actions.contextualActions : null
-                    delegate: Controls.ToolButton {
+                    delegate: PrivateActionToolButton {
                         anchors.verticalCenter: parent.verticalCenter
                         iconName: modelData.iconName
+                        action: modelData
                         text: modelData.text
                         tooltip: modelData.text
                         checkable: modelData.checkable
