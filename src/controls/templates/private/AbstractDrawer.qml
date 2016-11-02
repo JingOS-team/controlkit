@@ -40,6 +40,11 @@ T2.Drawer {
     modal: true
     property bool enabled: true
     property bool peeking: false
+    /**
+     * animating: Bool
+     * true during an animation of a drawer either opening or closing
+     */
+    readonly property bool animating : enterAnimation.animating || exitAnimation.animating || positionResetAnim.running
     onPositionChanged: {
         if (peeking) {
             visible = true
@@ -107,10 +112,38 @@ T2.Drawer {
     contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
 
     enter: Transition {
-        SmoothedAnimation { velocity: 5 }
+        SequentialAnimation {
+            id: enterAnimation
+            /*NOTE: why this? the running status of the enter transition is not relaible and
+             * the SmoothedAnimation is always marked as non running,
+             * so the only way to get to a reliable animating status is with this
+             */
+            property bool animating
+            ScriptAction {
+                script: enterAnimation.animating = true
+            }
+            SmoothedAnimation {
+                velocity: 5
+            }
+            ScriptAction {
+                script: enterAnimation.animating = false
+            }
+        }
     }
     exit: Transition {
-        SmoothedAnimation { velocity: 5 }
+        SequentialAnimation {
+            id: exitAnimation
+            property bool animating
+            ScriptAction {
+                script: exitAnimation.animating = true
+            }
+            SmoothedAnimation {
+                velocity: 5 
+            }
+            ScriptAction {
+                script: exitAnimation.animating = false
+            }
+        }
     }
 }
 
