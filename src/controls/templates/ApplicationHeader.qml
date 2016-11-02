@@ -118,8 +118,8 @@ AbstractApplicationHeader {
         onContentWidthChanged: gotoIndex(currentIndex);
 
         onContentXChanged: {
-            if (__appWindow.wideScreen && !__appWindow.pageStack.contentItem.moving) {
-                //__appWindow.pageStack.contentItem.contentX = titleList.contentX
+            if (__appWindow.wideScreen && !__appWindow.pageStack.contentItem.moving && titleList.moving) {
+                __appWindow.pageStack.contentItem.contentX = titleList.contentX
             }
         }
         onHeightChanged: {
