@@ -42,7 +42,7 @@ Rectangle {
 
     on_FirstElementChanged: {
         if (_firstElement) {
-            var newObject = Qt.createQmlObject('import QtQuick 2.0; import org.kde.kirigami 1.0; Separator {anchors {left: parent.left; right: parent.right; top: parent.top} visible: listItem.separatorVisible; color: listItem.textColor}',
+            var newObject = Qt.createQmlObject('import QtQuick 2.0; import org.kde.kirigami 1.0; Separator {anchors {left: parent.left; right: parent.right; bottom: parent.top} visible: listItem.separatorVisible; color: listItem.textColor}',
                                    background);
         }
     }
