@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.6
+import QtQuick.Layouts 1.2
 import QtQuick.Templates 2.0 as T
 //QQC1 is needed for StyleItem to fully work
 import QtQuick.Controls 1.0 as QQC1
@@ -27,15 +28,14 @@ import org.kde.kirigami 1.0
 T.ToolButton {
     id: control
 
-    implicitWidth: background.implicitWidth
+    implicitWidth: Math.max(background.implicitWidth, layout.implicitWidth + 16)
     implicitHeight: background.implicitHeight
 
     hoverEnabled: true
     property Action action
+    property bool showText: true
 
     text: action ? action.text : ""
-    //TODO: to be implemented
-    property string tooltip: action? action.text : ""
     checkable: action && action.checkable
     checked: action && action.checked
     enabled: action && action.enabled
@@ -48,18 +48,35 @@ T.ToolButton {
     }
 
     flat: true
-    contentItem: Item {}
+    contentItem: MouseArea {
+        hoverEnabled: true
+        RowLayout {
+            id: layout
+            anchors.centerIn: parent
+            Icon {
+                Layout.minimumWidth: 22
+                Layout.minimumHeight: 22
+                source: control.action ? control.action.iconName : ""
+                visible: control.action && control.action.iconName != ""
+            }
+            Label {
+                text: control.text
+                visible: control.showText
+            }
+        }
+    }
     background: StyleItem {
         id: styleitem
         elementType: control.flat ? "toolbutton" : "button"
         sunken: control.pressed || (control.checkable && control.checked)
         raised: !(control.pressed || (control.checkable && control.checked))
         hover: control.hovered
-        text: control.text
-        hasFocus: control.activeFocus
         activeControl: control.isDefault ? "default" : "f"
-        properties: {
-            "icon": control.action.__icon
-        }
+    }
+    Timer {
+        interval: 1000
+        property string tooltip: action.tooltip.length ? action.tooltip : action.text
+        running: control.hovered && !control.pressed && tooltip.length
+        onTriggered: Tooltip.showText(contentItem, Qt.point(contentItem.mouseX, contentItem.mouseY), tooltip)
     }
 }

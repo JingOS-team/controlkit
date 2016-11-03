@@ -31,14 +31,8 @@ import org.kde.kirigami 1.0
 ApplicationHeader {
     id: header
 
-    preferredHeight: 34//spacer.height
+    preferredHeight: 38
     maximumHeight: preferredHeight
-
-    Controls.ToolButton {
-        id: spacer
-        iconName: "go-previous"
-        visible: false
-    }
 
     //FIXME: needs a property difinition to have its own type in qml
     property string _internal: ""
@@ -71,7 +65,9 @@ ApplicationHeader {
             id: toolbarComponent
             Row {
                 id: layout
+                anchors.verticalCenter: parent.verticalCenter
                 x: __appWindow.wideScreen ? (Math.min(delegateItem.width - width, Math.max(0, delegateItem.view.contentX - delegateItem.x))) : 0
+                spacing: 2
 
                 Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
@@ -82,15 +78,18 @@ ApplicationHeader {
                 }
                 PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
-                    action: page && page.actions ? page.actions.main : null
+                    action: page && page.actions ? page.actions.left : null
+                    showText: false
                 }
                 PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
-                    action: page && page.actions ? page.actions.left : null
+                    action: page && page.actions ? page.actions.main : null
+                    showText: false
                 }
                 PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
                     action: page && page.actions ? page.actions.right : null
+                    showText: false
                 }
                 Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
