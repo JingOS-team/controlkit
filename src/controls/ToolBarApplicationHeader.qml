@@ -104,6 +104,7 @@ ApplicationHeader {
                     delegate: PrivateActionToolButton {
                         anchors.verticalCenter: parent.verticalCenter
                         action: modelData
+                        visible: modelData.visible && x+layout.x+width*2 < delegateItem.width
                     }
                 }
             }
