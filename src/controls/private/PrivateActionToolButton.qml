@@ -50,6 +50,7 @@ T.ToolButton {
     flat: true
     contentItem: MouseArea {
         hoverEnabled: true
+        onPressed: mouse.accepted = false
         RowLayout {
             id: layout
             anchors.centerIn: parent
