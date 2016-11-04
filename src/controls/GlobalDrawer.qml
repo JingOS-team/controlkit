@@ -379,8 +379,8 @@ OverlayDrawer {
                                 opacity: enabled ? 1.0 : 0.3
                                 Icon {
                                     anchors {
-                                        verticalCenter: parent.verticalCenter
-                                        right: parent.right
+                                        verticalCenter: contentItem.verticalCenter
+                                        right: contentItem.right
                                     }
                                     height: Units.iconSizes.smallMedium
                                     selected: listItem.checked || listItem.pressed
