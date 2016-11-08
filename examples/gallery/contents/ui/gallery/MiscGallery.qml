@@ -41,6 +41,7 @@ ScrollablePage {
                     transformOrigin: Controls.Menu.TopRight
 
                     Controls.MenuItem {
+                        checkable: true
                         text: "Item1"
                     }
                     Controls.MenuItem {
@@ -88,6 +89,7 @@ ScrollablePage {
             Layout.alignment: Qt.AlignHCenter
         }
         Controls.SpinBox {
+            editable: true
             Layout.alignment: Qt.AlignHCenter
         }
         Controls.GroupBox {
