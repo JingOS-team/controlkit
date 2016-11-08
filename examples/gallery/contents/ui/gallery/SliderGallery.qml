@@ -59,9 +59,15 @@ ScrollablePage {
                     text: "Normal:"
                 }
                 Controls.Slider {
+                    id: slider
                     Layout.minimumWidth: Units.gridUnit * 15
                     value: 2
                     to: 5.0
+                    Controls.ToolTip {
+                        parent: slider.handle
+                        visible: slider.pressed
+                        text: slider.position.toFixed(1)
+                    }
                 }
                 Label {
                     text: "Disabled:"
@@ -76,10 +82,16 @@ ScrollablePage {
                     text: "Thickmarks:"
                 }
                 Controls.Slider {
+                    id: slider2
                     Layout.minimumWidth: Units.gridUnit * 15
                     to: 5.0
                     stepSize: 1.0
                     value: 3
+                    Controls.ToolTip {
+                        parent: slider2.handle
+                        visible: slider2.pressed
+                        text: slider2.position.toFixed(1)
+                    }
                 }
                 Label {
                     text: "Vertical:"

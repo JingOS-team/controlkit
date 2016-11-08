@@ -98,6 +98,10 @@ Kirigami.ScrollablePage {
                 component: "MultipleColumns"
             }
             ListElement {
+                text: "Misc widgets"
+                component: "Misc"
+            }
+            ListElement {
                 text: "List View"
                 component: "ListView"
             }
