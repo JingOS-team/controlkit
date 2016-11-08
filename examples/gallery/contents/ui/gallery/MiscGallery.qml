@@ -90,6 +90,27 @@ ScrollablePage {
         Controls.SpinBox {
             Layout.alignment: Qt.AlignHCenter
         }
+        Controls.GroupBox {
+            title: "Title"
+            Layout.alignment: Qt.AlignHCenter
+
+            ColumnLayout {
+                id: options
+
+                Controls.RadioButton {
+                    text: "First"
+                    checked: true
+                }
+                Controls.RadioButton {
+                    text: "Second"
+                    checked: false
+                }
+                Controls.RadioButton {
+                    text: "Third"
+                    checked: false
+                }
+            }
+        }
         Column {
             Layout.alignment: Qt.AlignHCenter
             Controls.ItemDelegate {
