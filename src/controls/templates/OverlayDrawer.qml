@@ -33,7 +33,7 @@ import "private"
 AbstractDrawer {
     id: root
 
-    z: modal ? (opened ? 100 : 99 ): 98
+    z: modal ? (opened ? 100 : 99 ): 0
 
     //default paddings
     leftPadding: Units.smallSpacing

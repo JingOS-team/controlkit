@@ -27,7 +27,7 @@ import org.kde.kirigami 1.0
 T2.Drawer {
     id: root
 
-    parent: T2.ApplicationWindow.overlay
+    parent: modal ? T2.ApplicationWindow.overlay : T2.ApplicationWindow.contentItem
     height: edge == Qt.LeftEdge || edge == Qt.RightEdge ? applicationWindow().height : Math.min(contentItem.implicitHeight, Math.round(applicationWindow().height*0.8))
     width:  edge == Qt.TopEdge || edge == Qt.BottomEdge ? applicationWindow().width : Math.min(contentItem.implicitWidth, Math.round(applicationWindow().width*0.8))
 
