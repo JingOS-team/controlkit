@@ -18,7 +18,7 @@
  */
 import QtQuick 2.5
 import QtQuick.Controls 2.0 
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 Item {
     id: root

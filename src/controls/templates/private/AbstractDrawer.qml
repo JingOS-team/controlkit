@@ -20,7 +20,7 @@
 import QtQuick 2.1
 import QtQuick.Templates 2.0 as T2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 //TODO: This will become a QQC2 Drawer
 //providing just a dummy api for now

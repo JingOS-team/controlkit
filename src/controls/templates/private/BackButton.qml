@@ -20,7 +20,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0 as Controls
 import QtQuick.Controls.Private 1.0
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 MouseArea {
     anchors {

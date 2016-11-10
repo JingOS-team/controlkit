@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 /**
  * An item delegate for the primitive ListView component.

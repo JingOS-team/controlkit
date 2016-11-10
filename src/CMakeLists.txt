@@ -23,19 +23,19 @@ ELSE(STATIC_LIBRARY)
 add_library(kirigamiplugin SHARED ${kirigami_SRCS})
 target_link_libraries(kirigamiplugin Qt5::Core  Qt5::Qml Qt5::Quick)
 
-install(TARGETS kirigamiplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
+install(TARGETS kirigamiplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2)
 
-install(DIRECTORY controls/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
+install(DIRECTORY controls/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2)
 
 if (PLASMA_ENABLED)
-    install(DIRECTORY styles/Plasma DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles)
+    install(DIRECTORY styles/Plasma DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles)
 endif()
 if (DESKTOP_ENABLED)
-    install(DIRECTORY styles/Desktop DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles)
+    install(DIRECTORY styles/Desktop DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles)
 endif()
-install(DIRECTORY styles/Material DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles)
+install(DIRECTORY styles/Material DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles)
 
-install(FILES ${platformspecific} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami)
+install(FILES ${platformspecific} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2)
 
 include(ECMGeneratePriFile)
 ecm_generate_pri_file(BASE_NAME Kirigami LIB_NAME KF5Kirigami DEPS "core qml quick svg" FILENAME_VAR PRI_FILENAME )

@@ -22,7 +22,7 @@ import QtQuick.Controls 1.3 as Controls
 import QtQuick.Layouts 1.2
 import QtQuick.Controls.Private 1.0
 import "private"
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 
 /**
