@@ -103,6 +103,7 @@ Page {
         bottomPadding: contentItem == flickable ? 0 : root.bottomPadding
         anchors {
             fill: parent
+            topMargin: root.header ? root.header.height : 0
         }
     }
 
