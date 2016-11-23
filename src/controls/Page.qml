@@ -226,7 +226,7 @@ T2.Page {
             for (var i = children.length -1; i >= 0; --i) {
                 var child = children[i];
                 if (child.toString().indexOf("OverlaySheet") === 0 ||
-                    (child.opened !== undefined && child.open !== undefined && child.close !== undefined)) {
+                    (child.sheetOpen !== undefined && child.open !== undefined && child.close !== undefined)) {
                     child.parent = root;
                     child.z = 9997
                 }

@@ -129,9 +129,9 @@ AbstractApplicationWindow {
         onCurrentIndexChanged: root.reachableMode = false;
 
         function goBack() {
-            if (root.contextDrawer && root.contextDrawer.opened && root.contextDrawer.modal) {
+            if (root.contextDrawer && root.contextDrawer.drawerOpen && root.contextDrawer.modal) {
                 root.contextDrawer.close();
-            } else if (root.globalDrawer && root.globalDrawer.opened && root.globalDrawer.modal) {
+            } else if (root.globalDrawer && root.globalDrawer.drawerOpen && root.globalDrawer.modal) {
                 root.globalDrawer.close();
             } else {
                 var backEvent = {accepted: false}

@@ -387,9 +387,9 @@ Item {
             globalDrawer.peeking = false;
             contextDrawer.peeking = false;
             var pos = root.mapFromItem(fakeContextMenuButton, mouse.x, mouse.y);
-            if (pos.x < root.width/2 || (!contextDrawer.opened && mouse.x > 0 && mouse.x < width)) {
+            if (pos.x < root.width/2 || (!contextDrawer.drawerOpen && mouse.x > 0 && mouse.x < width)) {
                 contextDrawer.open();
-            } else if (contextDrawer.opened && mouse.x > 0 && mouse.x < width) {
+            } else if (contextDrawer.drawerOpen && mouse.x > 0 && mouse.x < width) {
                 contextDrawer.close();
             }
             if (globalDrawer.position > 0.5) {
