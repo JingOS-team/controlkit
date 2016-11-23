@@ -84,7 +84,7 @@ OverlayDrawer {
     property var actions: pageStack.currentItem ? pageStack.currentItem.contextualActions : null
     enabled: menu.count > 0
     edge: Qt.RightEdge
-    opened: false
+    drawerOpen: false
 
     //list items go to edges, have their own padding
     leftPadding: 0
@@ -153,7 +153,7 @@ OverlayDrawer {
                     } else {
                         console.warning("Don't know how to trigger the action")
                     }
-                    root.opened = false;
+                    root.drawerOpen = false;
                 }
             }
         }

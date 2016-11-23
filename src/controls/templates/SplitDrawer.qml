@@ -47,11 +47,11 @@ AbstractDrawer {
     property Item contentItem
 
     /**
-     * opened: bool
+     * drawerOpen: bool
      * If true the drawer is open showing the contents of the "drawer"
      * component.
      */
-    property alias opened: sidebar.open
+    property alias drawerOpen: sidebar.open
 
     /**
      * position: real

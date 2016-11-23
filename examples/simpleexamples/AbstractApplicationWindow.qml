@@ -119,9 +119,9 @@ Kirigami.AbstractApplicationWindow {
             if (event.key == Qt.Key_Back ||
             (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {
                 event.accepted = true;
-                if (root.contextDrawer && root.contextDrawer.opened) {
+                if (root.contextDrawer && root.contextDrawer.drawerOpen) {
                     root.contextDrawer.close();
-                } else if (root.globalDrawer && root.globalDrawer.opened) {
+                } else if (root.globalDrawer && root.globalDrawer.drawerOpen) {
                     root.globalDrawer.close();
                 } else {
                     var backEvent = {accepted: false}

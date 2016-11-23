@@ -44,11 +44,11 @@ QtObject {
     default property Item contentItem
 
     /**
-     * opened: bool
+     * sheetOpen: bool
      * If true the sheet is open showing the contents of the OverlaySheet
      * component.
      */
-    property bool opened
+    property bool sheetOpen
 
     /**
      * leftPadding: int
@@ -93,7 +93,7 @@ QtObject {
         openAnimation.from = -mainItem.height;
         openAnimation.to = openAnimation.topOpenPosition;
         openAnimation.running = true;
-        root.opened = true;
+        root.sheetOpen = true;
     }
 
     function close() {
@@ -123,8 +123,8 @@ QtObject {
         }
         scrollView.flickableItem.flickableDirection = Flickable.VerticalFlick;
     }
-    onOpenedChanged: {
-        if (opened) {
+    onSheetOpenChanged: {
+        if (sheetOpen) {
             open();
         } else {
             close();
@@ -239,7 +239,7 @@ QtObject {
             ScriptAction {
                 script: {
                     scrollView.flickableItem.contentY = -mainItem.height;
-                    mainItem.visible = root.opened = false;
+                    mainItem.visible = root.sheetOpen = false;
                 }
             }
         }
@@ -293,12 +293,12 @@ QtObject {
                     closeAnimation.to = scrollView.flickableItem.contentHeight
                     closeAnimation.running = true;
 
-                //reset to the default opened position
+                //reset to the default sheetOpen position
                 } else if (scrollView.flickableItem.contentY < openAnimation.topOpenPosition) {
                     openAnimation.from = scrollView.flickableItem.contentY;
                     openAnimation.to = openAnimation.topOpenPosition;
                     openAnimation.running = true;
-                //reset to the default "bottom" opened position
+                //reset to the default "bottom" sheetOpen position
                 } else if (scrollView.flickableItem.contentY > openAnimation.bottomOpenPosition) {
                     openAnimation.from = scrollView.flickableItem.contentY;
                     openAnimation.to = openAnimation.bottomOpenPosition;

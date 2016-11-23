@@ -29,11 +29,11 @@ Page {
 
     actions {
         main: Action {
-            iconName: sheet.opened ? "dialog-cancel" : "document-edit"
+            iconName: sheet.sheetOpen ? "dialog-cancel" : "document-edit"
             text: "Main Action Text"
-            checked: sheet.opened
+            checked: sheet.sheetOpen
             checkable: true
-            onCheckedChanged: sheet.opened = checked;
+            onCheckedChanged: sheet.sheetOpen = checked;
         }
     }
 

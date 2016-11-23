@@ -32,11 +32,11 @@ ScrollablePage {
 
     actions {
         main: Action {
-            iconName: sheet.opened ? "dialog-cancel" : "document-edit"
+            iconName: sheet.sheetOpen ? "dialog-cancel" : "document-edit"
             text: "Main Action Text"
-            checked: sheet.opened
+            checked: sheet.sheetOpen
             checkable: true
-            onCheckedChanged: sheet.opened = checked;
+            onCheckedChanged: sheet.sheetOpen = checked;
         }
         left: Action {
             iconName: "go-previous"
@@ -65,7 +65,7 @@ ScrollablePage {
             },
             Action {
                 text: "Action for Sheet"
-                visible: sheet.opened
+                visible: sheet.sheetOpen
             }
         ]
     }
@@ -73,11 +73,11 @@ ScrollablePage {
 
     //Close the drawer with the back button
     onBackRequested: {
-        if (bottomDrawer.opened) {
+        if (bottomDrawer.drawerOpen) {
             event.accepted = true;
             bottomDrawer.close();
         }
-        if (sheet.opened) {
+        if (sheet.sheetOpen) {
             event.accepted = true;
             sheet.close();
         }

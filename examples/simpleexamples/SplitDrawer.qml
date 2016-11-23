@@ -31,7 +31,7 @@ Kirigami.ApplicationWindow {
     pageStack.initialPage: mainPageComponent
     globalDrawer: Kirigami.SplitDrawer {
         id: drawer
-        opened: true
+        drawerOpen: true
         //modal: false
         contentItem: Column {
             //implicitWidth: Kirigami.Units.gridUnit * 10

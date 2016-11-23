@@ -30,7 +30,7 @@ Kirigami.ApplicationWindow {
 
     pageStack.initialPage: mainPageComponent
     globalDrawer: Kirigami.OverlayDrawer {
-        opened: true
+        drawerOpen: true
         modal: false
         contentItem: Item {
             implicitWidth: Kirigami.Units.gridUnit * 10

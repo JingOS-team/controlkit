@@ -22,22 +22,24 @@ import QtQuick.Templates 2.0 as T2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.0
 
-//TODO: This will become a QQC2 Drawer
-//providing just a dummy api for now
 T2.Drawer {
     id: root
 
     parent: modal ? T2.ApplicationWindow.overlay : T2.ApplicationWindow.contentItem
     height: edge == Qt.LeftEdge || edge == Qt.RightEdge ? applicationWindow().height : Math.min(contentItem.implicitHeight, Math.round(applicationWindow().height*0.8))
     width:  edge == Qt.TopEdge || edge == Qt.BottomEdge ? applicationWindow().width : Math.min(contentItem.implicitWidth, Math.round(applicationWindow().width*0.8))
+    edge: Qt.LeftEdge
+    modal: true
 
     dragMargin: enabled && (edge == Qt.LeftEdge || edge == Qt.RightEdge) ? Qt.styleHints.startDragDistance : 0
 
     //default property alias page: mainPage.data
-    //TODO: opened is a signal now, it should be renamed?
-    property bool opened: false
-    edge: Qt.LeftEdge
-    modal: true
+
+    /**
+     * drawerOpen: bool
+     * true when the drawer is open and visible
+     */
+    property bool drawerOpen: false
     property bool enabled: true
     property bool peeking: false
     /**
@@ -54,7 +56,7 @@ T2.Drawer {
         if (peeking) {
             visible = true
         } else {
-            opened = visible;
+            drawerOpen = visible;
         }
     }
     onPeekingChanged:  {
@@ -68,13 +70,13 @@ T2.Drawer {
             root.exit.enabled = true;
         }
     }
-    onOpenedChanged: {
+    onDrawerOpenChanged: {
         //sync this property only when the component is properly loaded
         if (!__internal.completed) {
             return;
         }
         positionResetAnim.running = false;
-        if (opened) {
+        if (drawerOpen) {
             open();
         } else {
             close();
@@ -82,8 +84,8 @@ T2.Drawer {
     }
 
     Component.onCompleted: {
-        //if defined as opened by default in QML, don't animate
-        if (root.opened) {
+        //if defined as drawerOpen by default in QML, don't animate
+        if (root.drawerOpen) {
             root.enter.enabled = false;
             root.visible = true;
             root.position = 1;
