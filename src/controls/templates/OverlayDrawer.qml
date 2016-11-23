@@ -33,7 +33,7 @@ import "private"
 AbstractDrawer {
     id: root
 
-    z: modal ? (opened ? 100 : 99 ): 0
+    z: modal ? (drawerOpen ? 100 : 99 ): 0
 
     //default paddings
     leftPadding: Units.smallSpacing
@@ -83,7 +83,7 @@ AbstractDrawer {
             root.peeking = false;
             
             if (Math.abs(mapToItem(parent, mouse.x, 0).x - mappedStartX) < Qt.styleHints.startDragDistance) {
-                root.opened = !root.opened;
+                root.drawerOpen = !root.drawerOpen;
             }
         }
         onCanceled: {

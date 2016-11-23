@@ -202,7 +202,7 @@ OverlayDrawer {
     function resetMenu() {
         stackView.pop(stackView.initialItem);
         if (root.modal) {
-            root.opened = false;
+            root.drawerOpen = false;
         }
     }
 
