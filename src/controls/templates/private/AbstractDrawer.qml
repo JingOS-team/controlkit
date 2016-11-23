@@ -33,20 +33,32 @@ T2.Drawer {
 
     dragMargin: enabled && (edge == Qt.LeftEdge || edge == Qt.RightEdge) ? Qt.styleHints.startDragDistance : 0
 
-    //default property alias page: mainPage.data
-
     /**
      * drawerOpen: bool
      * true when the drawer is open and visible
      */
     property bool drawerOpen: false
+
+    /**
+     * enabled: bool
+     * This property holds whether the item receives mouse and keyboard events. By default this is true.
+     */
     property bool enabled: true
+
+    /**
+     * peeking: true
+     * When true the drawer is in a state between open and closed. the drawer is visible but not completely open.
+     * This is usually the case when the user is dragging the drawer from a screen 
+     * edge, so the user is "peeking" what's in the drawer
+     */
     property bool peeking: false
+
     /**
      * animating: Bool
-     * true during an animation of a drawer either opening or closing
+     * True during an animation of a drawer either opening or closing
      */
     readonly property bool animating : enterAnimation.animating || exitAnimation.animating || positionResetAnim.running
+
     onPositionChanged: {
         if (peeking) {
             visible = true
