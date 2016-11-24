@@ -126,6 +126,8 @@ T2.ItemDelegate {
      */
     property color activeBackgroundColor: Theme.highlightColor
 
+    default property alias _default: listItem.contentItem
+
     implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
     width: parent ? parent.width : implicitWidth
     implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5

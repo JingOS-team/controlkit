@@ -96,6 +96,8 @@ T2.ItemDelegate {
      */
     property color activeBackgroundColor: Theme.highlightColor
 
+    default property alias _default: listItem.contentItem
+
     leftPadding: Units.smallSpacing * 2
     topPadding: Units.smallSpacing * 2
     rightPadding: Units.smallSpacing * 2

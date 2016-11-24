@@ -54,7 +54,10 @@ AbstractListItem {
      */
     property alias reserveSpaceForIcon: iconItem.visible
 
-    contentItem: RowLayout {
+    default property alias _basicDefault: layout.children
+
+    RowLayout {
+        id: layout
         Icon {
             id: iconItem
             Layout.minimumHeight: Units.iconSizes.smallMedium
