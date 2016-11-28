@@ -11,6 +11,7 @@ OverlaySheet 1.0 templates/OverlaySheet.qml
 Page 1.0 templates/Page.qml
 SplitDrawer 1.0 templates/SplitDrawer.qml
 SwipeListItem 1.0 templates/SwipeListItem.qml
+PageRow 1.0 templates/private/PageRow.qml
 
 BasicListItem 1.0 controls/BasicListItem.qml
 ContextDrawer 1.0 controls/ContextDrawer.qml
