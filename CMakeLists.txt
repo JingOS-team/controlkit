@@ -105,6 +105,7 @@ set (QT_MIN_VERSION "5.5.0")
 find_package(PkgConfig)
 #########################################################################
 
+add_subdirectory(autotests)
 add_subdirectory(src)
 #TODO: conditional
 if (BUILD_EXAMPLES)

@@ -1,0 +1,1 @@
+add_test(qmltests COMMAND qmltestrunner WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
