@@ -19,6 +19,7 @@
 
 import QtQuick 2.5
 import QtQuick.Layouts 1.2
+import QtQuick.Templates 2.0 as T
 import org.kde.kirigami 2.0
 
 Item {
@@ -384,29 +385,35 @@ Item {
             }
             //onChildrenChanged: mainFlickable.contentX = pagesLogic.roundedDefaultColumnWidth * mainFlickable.firstVisibleLevel
         }
-    }
-
-    Rectangle {
-        height: Units.smallSpacing
-        width: root.width * root.width/mainLayout.width
-        anchors.bottom: parent.bottom
-        color: Theme.textColor
-        opacity: 0
-        x: root.width * mainFlickable.visibleArea.xPosition
-        onXChanged: {
-            opacity = 0.3
-            scrollIndicatorTimer.restart();
-        }
-        Behavior on opacity {
-            OpacityAnimator {
-                duration: Units.longDuration
-                easing.type: Easing.InOutQuad
+        
+        T.ScrollIndicator.horizontal: T.ScrollIndicator {
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
             }
-        }
-        Timer {
-            id: scrollIndicatorTimer
-            interval: Units.longDuration * 4
-            onTriggered: parent.opacity = 0;
+            height: Units.smallSpacing
+            contentItem: Rectangle {
+                height: Units.smallSpacing
+                width: Units.smallSpacing
+                color: Theme.textColor
+                opacity: 0
+                onXChanged: {
+                    opacity = 0.3
+                    scrollIndicatorTimer.restart();
+                }
+                Behavior on opacity {
+                    OpacityAnimator {
+                        duration: Units.longDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                Timer {
+                    id: scrollIndicatorTimer
+                    interval: Units.longDuration * 4
+                    onTriggered: parent.opacity = 0;
+                }
+            }
         }
     }
 
