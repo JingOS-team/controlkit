@@ -10,5 +10,5 @@ target_link_libraries(kirigami2gallery Qt5::Core  Qt5::Qml Qt5::Quick Qt5::Svg Q
 
 install(TARGETS kirigami2gallery ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
-include(${CMAKE_SOURCE_DIR}/KF5KirigamiMacros.cmake)
+include(${CMAKE_SOURCE_DIR}/KF5Kirigami2Macros.cmake)
 kirigami_package_breeze_icons(ICONS applications-graphics view-list-icons folder-sync view-list-details configure document-edit dialog-cancel document-decrypt mail-reply-sender bookmarks folder)

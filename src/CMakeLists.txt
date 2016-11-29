@@ -38,7 +38,7 @@ install(DIRECTORY styles/Material DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kiri
 install(FILES ${platformspecific} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2)
 
 include(ECMGeneratePriFile)
-ecm_generate_pri_file(BASE_NAME Kirigami LIB_NAME KF5Kirigami DEPS "core qml quick svg" FILENAME_VAR PRI_FILENAME )
+ecm_generate_pri_file(BASE_NAME Kirigami2 LIB_NAME KF5Kirigami2 DEPS "core qml quick svg" FILENAME_VAR PRI_FILENAME )
 install(FILES ${PRI_FILENAME}
         DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
