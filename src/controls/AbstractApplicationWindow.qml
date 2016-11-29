@@ -151,12 +151,12 @@ QQC2.ApplicationWindow {
     property bool controlsVisible: true
 
     /**
-     * globalDrawer: AbstractDrawer
+     * globalDrawer: OverlayDrawer
      * The drawer for global actions, that will be opened by sliding from the
      * left screen edge or by dragging the ActionButton to the right.
      * It is recommended to use the GlobalDrawer class here
      */
-    property AbstractDrawer globalDrawer
+    property OverlayDrawer globalDrawer
 
     /**
      * wideScreen: bool
@@ -166,7 +166,7 @@ QQC2.ApplicationWindow {
     property bool wideScreen: width >= Units.gridUnit * 60
 
     /**
-     * contextDrawer: AbstractDrawer
+     * contextDrawer: OverlayDrawer
      * The drawer for context-dependednt actions, that will be opened by sliding from the
      * right screen edge or by dragging the ActionButton to the left.
      * It is recommended to use the ContextDrawer class here.
@@ -214,7 +214,7 @@ QQC2.ApplicationWindow {
      * When this page will be the current one, the context drawer will visualize
      * contextualActions defined as property in that page.
      */
-    property AbstractDrawer contextDrawer
+    property OverlayDrawer contextDrawer
 
     /**
      * reachableMode: bool
