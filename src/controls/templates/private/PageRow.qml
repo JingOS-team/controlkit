@@ -427,18 +427,7 @@ Item {
             id: container
             height: mainFlickable.height
             width: root.width
-            state: pendingState
-            property string pendingState: root.width < root.defaultColumnWidth*2 ? "vertical" : (container.level >= pagesLogic.count - 1 ? "last" : "middle");
-
-            //HACK
-            onPendingStateChanged: {
-                stateTimer.restart();
-            }
-            Timer {
-                id: stateTimer
-                interval: 150
-                onTriggered: container.state = container.pendingState
-            }
+            state: root.width < root.defaultColumnWidth*2 ? "vertical" : (container.level >= pagesLogic.count - 1 ? "last" : "middle");
 
             property int level
 
@@ -494,22 +483,6 @@ Item {
                     PropertyChanges {
                         target: container
                         width: pagesLogic.roundedDefaultColumnWidth
-                    }
-                }
-            ]
-            transitions: [
-                Transition {
-                    from: "last,middle"
-                    to: "middle,last"
-                    SequentialAnimation {
-                        NumberAnimation {
-                            property: "width"
-                            duration: Units.longDuration
-                            easing.type: Easing.InOutQuad
-                        }
-                        ScriptAction {
-                           script: mainFlickable.currentItemChanged();
-                        }
                     }
                 }
             ]
