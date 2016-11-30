@@ -112,7 +112,14 @@ AbstractApplicationHeader {
             duration: Units.longDuration
             easing.type: Easing.InOutQuad
         }
-
+        Timer {
+            id: contentXSyncTimer
+            interval: 0
+            onTriggered: {
+                titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
+            }
+        }
+        onCountChanged: contentXSyncTimer.restart();
         onCurrentIndexChanged: gotoIndex(currentIndex);
         onModelChanged: gotoIndex(currentIndex);
         onContentWidthChanged: gotoIndex(currentIndex);
