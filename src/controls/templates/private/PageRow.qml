@@ -373,6 +373,9 @@ Item {
                     easing.type: Easing.InOutQuad
                 }
             }
+            onChildrenChanged: {
+                mainFlickable.currentIndex = Math.min(mainFlickable.currentIndex, children.length-1);
+            }
             onWidthChanged: {
                 //current item in view
                 if (children[mainFlickable.currentIndex].x >= mainFlickable.contentX &&
