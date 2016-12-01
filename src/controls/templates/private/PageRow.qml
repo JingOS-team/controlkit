@@ -19,10 +19,11 @@
 
 import QtQuick 2.5
 import QtQuick.Layouts 1.2
+import QtQml.Models 2.2
 import QtQuick.Templates 2.0 as T
 import org.kde.kirigami 2.0
 
-Item {
+T.Control {
     id: root
 
 //BEGIN PROPERTIES
@@ -39,12 +40,12 @@ Item {
     /**
      * The currently visible Item
      */
-    readonly property Item currentItem: mainFlickable.currentItem
+    readonly property Item currentItem: mainView.currentItem.page
 
     /**
      * the index of the currently visible Item
      */
-    property alias currentIndex: mainFlickable.currentIndex
+    property alias currentIndex: mainView.currentIndex
 
     /**
      * The initial item when this PageRow is created
@@ -54,7 +55,8 @@ Item {
     /**
      * The main flickable of this Row
      */
-    property alias contentItem: mainFlickable
+//    property alias contentItem: mainView
+    contentItem: mainView
 
     /**
      * The default width for a column
@@ -71,7 +73,7 @@ Item {
      * Otherwise the only way to go back will be programmatically
      * default: true
      */
-    property alias interactive: mainFlickable.interactive
+//    property alias interactive: mainView.interactive
 
 //END PROPERTIES
 
@@ -132,7 +134,7 @@ Item {
         pagesLogic.append(container);
         container.visible = container.page.visible = true;
 
-        mainFlickable.currentIndex = container.level;
+        mainView.currentIndex = container.level;
         return container.page
     }
 
@@ -200,195 +202,80 @@ Item {
 
 //END FUNCTIONS
 
-    QtObject {
-        id: pagesLogic
-
-        readonly property int count: mainLayout.children.length
-        property var componentCache
-
-        property int roundedDefaultColumnWidth: root.width < root.defaultColumnWidth*2 ? root.width : root.defaultColumnWidth
-
-        //NOTE:seems to only work if the array is defined in a declarative way,
-        //the Object in an imperative way, espacially on Android
-        Component.onCompleted: {
-            componentCache = {};
-        }
-
-        //TODO: remove?
-        function get(id) {
-            return mainLayout.children[id];
-        }
-
-        function append(item) {
-            //FIXME: seems that for one loop the x of the item would continue to be 0
-            item.x = item.level * roundedDefaultColumnWidth;
-            item.parent = mainLayout;
-        }
-
-        function clear () {
-            while (mainLayout.children.length > 0) {
-                remove(0);
-            }
-        }
-
-        function remove(id) {
-            if (id < 0 || id >= count) {
-                print("Tried to remove an invalid page index:" + id);
-                return;
-            }
-
-            var item = mainLayout.children[id];
-            if (item.owner) {
-                item.page.parent = item.owner;
-            }
-            //FIXME: why reparent ing is necessary?
-            //is destroy just an async deleteLater() that isn't executed immediately or it actually leaks?
-            item.parent = root;
-            item.destroy();
-        }
-
-        function initPage(page, properties) {
-            var container = containerComponent.createObject(mainLayout, {
-                "level": pagesLogic.count,
-                "page": page
-            });
-
-            var pageComp;
-            if (page.createObject) {
-                // page defined as component
-                pageComp = page;
-            } else if (typeof page == "string") {
-                // page defined as string (a url)
-                pageComp = pagesLogic.componentCache[page];
-                if (!pageComp) {
-                    pageComp = pagesLogic.componentCache[page] = Qt.createComponent(page);
-                }
-            }
-            if (pageComp) {
-                if (pageComp.status == Component.Error) {
-                    throw new Error("Error while loading page: " + pageComp.errorString());
-                } else {
-                    // instantiate page from component
-                    page = pageComp.createObject(container.pageParent, properties || {});
-                }
-            } else {
-                // copy properties to the page
-                for (var prop in properties) {
-                    if (properties.hasOwnProperty(prop)) {
-                        page[prop] = properties[prop];
-                    }
-                }
-            }
-
-            container.page = page;
-            if (page.parent == null || page.parent == container.pageParent) {
-                container.owner = null;
-            } else {
-                container.owner = page.parent;
-            }
-
-            // the page has to be reparented
-            if (page.parent != container) {
-                page.parent = container;
-            }
-
-            return container;
-        }
-    }
-
-    NumberAnimation {
-        id: scrollAnim
-        target: mainFlickable
-        property: "contentX"
-        duration: Units.longDuration
-        easing.type: Easing.InOutQuad
-    }
-
-    Flickable {
-        id: mainFlickable
+    ListView {
+        id: mainView
+        z: 99
         anchors.fill: parent
         boundsBehavior: Flickable.StopAtBounds
-        contentWidth: mainLayout.childrenRect.width
-        contentHeight: height
-        readonly property Item currentItem: {
-            var idx = Math.min(currentIndex, pagesLogic.count-1)
-            return idx>=0 ? pagesLogic.get(idx).page : null
-        }
-        //clip only when the app has a sidebar
-        clip: root.x > 0
+        orientation: Qt.Horizontal
+        snapMode: ListView.SnapToItem
+        interactive: root.interactive
+        currentIndex: root.currentIndex
+        rightMargin: count > 1 ? pagesLogic.get(count-1).page.width - pagesLogic.get(count-1).width : 0
+        preferredHighlightBegin: 0
+        preferredHighlightEnd: 0
+        highlightMoveDuration: Units.longDuration
+        onMovementEnded: currentIndex = indexAt(contentX, 0)
+        onFlickEnded: onMovementEnded();
+        model: ObjectModel {
+            id: pagesLogic
+            property var componentCache
 
-        property int currentIndex: 0
-        property int firstVisibleLevel: Math.round (contentX / pagesLogic.roundedDefaultColumnWidth)
+            property int roundedDefaultColumnWidth: root.width < root.defaultColumnWidth*2 ? root.width : root.defaultColumnWidth
 
-        flickDeceleration: Units.gridUnit * 50
-        onCurrentItemChanged: {
-            var itemX = pagesLogic.roundedDefaultColumnWidth * currentIndex;
-
-            if (itemX >= contentX && mainFlickable.currentItem && itemX + mainFlickable.currentItem.width <= contentX + mainFlickable.width) {
-                return;
+            //NOTE:seems to only work if the array is defined in a declarative way,
+            //the Object in an imperative way, espacially on Android
+            Component.onCompleted: {
+                componentCache = {};
             }
+            function initPage(page, properties) {
+                var container = containerComponent.createObject(mainView, {
+                    "level": pagesLogic.count,
+                    "page": page
+                });
 
-            //this catches 0 and NaN (sometimes at startup width can oddly be nan
-            if (!mainFlickable.width) {
-                return;
-            }
-            scrollAnim.running = false;
-            scrollAnim.from = contentX;
-            if (itemX < contentX || !mainFlickable.currentItem) {
-                scrollAnim.to = Math.max(0, Math.min(itemX, mainFlickable.contentWidth - mainFlickable.width));
-            } else {
-                scrollAnim.to = Math.max(0, Math.min(itemX - mainFlickable.width + mainFlickable.currentItem.width, mainFlickable.contentWidth - mainFlickable.width));
-            }
-            scrollAnim.running = true;
-        }
-        onMovementEnded: {
-            if (mainLayout.childrenRect.width == 0) {
-                return;
-            }
-
-            scrollAnim.running = false;
-            scrollAnim.from = contentX;
-            scrollAnim.to = pagesLogic.roundedDefaultColumnWidth * firstVisibleLevel
-            scrollAnim.running = true;
-
-            var mappedCurrentItemPos = currentItem.mapToItem(mainFlickable, 0, 0);
-
-            //is the current item out of view?
-            if (mappedCurrentItemPos.x < 0) {
-                currentIndex = firstVisibleLevel;
-            } else if (mappedCurrentItemPos.x + currentItem.width > mainFlickable.width) {
-                currentIndex = Math.min(root.depth-1, firstVisibleLevel + Math.floor(mainFlickable.width/pagesLogic.roundedDefaultColumnWidth)-1);
-            }
-        }
-        onFlickEnded: movementEnded();
-
-        Row {
-            id: mainLayout
-            add: Transition {
-                NumberAnimation {
-                    property: "y"
-                    from: mainFlickable.height
-                    to: 0
-                    duration: Units.shortDuration
-                    easing.type: Easing.InOutQuad
+                var pageComp;
+                if (page.createObject) {
+                    // page defined as component
+                    pageComp = page;
+                } else if (typeof page == "string") {
+                    // page defined as string (a url)
+                    pageComp = pagesLogic.componentCache[page];
+                    if (!pageComp) {
+                        pageComp = pagesLogic.componentCache[page] = Qt.createComponent(page);
+                    }
                 }
-            }
-            onChildrenChanged: {
-                mainFlickable.currentIndex = Math.min(mainFlickable.currentIndex, children.length-1);
-            }
-            onWidthChanged: {
-                //current item in view
-                if (children[mainFlickable.currentIndex].x >= mainFlickable.contentX &&
-                    children[mainFlickable.currentIndex].x + children[mainFlickable.currentIndex].width <= mainFlickable.contentX + mainFlickable.width) {
-                    mainFlickable.contentX = pagesLogic.roundedDefaultColumnWidth * mainFlickable.firstVisibleLevel;
+                if (pageComp) {
+                    if (pageComp.status == Component.Error) {
+                        throw new Error("Error while loading page: " + pageComp.errorString());
+                    } else {
+                        // instantiate page from component
+                        page = pageComp.createObject(container.pageParent, properties || {});
+                    }
                 } else {
-                    mainFlickable.contentX = Math.max(0, Math.min(width - mainFlickable.width, mainFlickable.currentIndex * pagesLogic.roundedDefaultColumnWidth));
+                    // copy properties to the page
+                    for (var prop in properties) {
+                        if (properties.hasOwnProperty(prop)) {
+                            page[prop] = properties[prop];
+                        }
+                    }
                 }
-                
+
+                container.page = page;
+                if (page.parent == null || page.parent == container.pageParent) {
+                    container.owner = null;
+                } else {
+                    container.owner = page.parent;
+                }
+
+                // the page has to be reparented
+                if (page.parent != container) {
+                    page.parent = container;
+                }
+
+                return container;
             }
-            //onChildrenChanged: mainFlickable.contentX = pagesLogic.roundedDefaultColumnWidth * mainFlickable.firstVisibleLevel
         }
-        
         T.ScrollIndicator.horizontal: T.ScrollIndicator {
             anchors {
                 left: parent.left
@@ -425,9 +312,9 @@ Item {
 
         MouseArea {
             id: container
-            height: mainFlickable.height
+            height: mainView.height
             width: root.width
-            state: root.width < root.defaultColumnWidth*2 ? "vertical" : (container.level >= pagesLogic.count - 1 ? "last" : "middle");
+            state: page ? (root.width < root.defaultColumnWidth*2 || pagesLogic.count < 2 ? "vertical" : (container.level >= pagesLogic.count - 1 ? "last" : "middle")) : "";
 
             property int level
 
@@ -467,14 +354,21 @@ Item {
                         target: container
                         width: root.width
                     }
+                    PropertyChanges {
+                        target: container.page.anchors
+                        rightMargin: 0
+                    }
                 },
                 State {
                     name: "last"
                     PropertyChanges {
                         target: container
-                        width: {
-                            var page = pagesLogic.get(container.level-1);
-                            Math.max(roundedHint, root.width - (page == undefined ? 0 : page.width))
+                        width: pagesLogic.roundedDefaultColumnWidth
+                    }
+                    PropertyChanges {
+                        target: container.page.anchors
+                        rightMargin: {
+                            return -(root.width - pagesLogic.roundedDefaultColumnWidth*2);
                         }
                     }
                 },
@@ -483,6 +377,10 @@ Item {
                     PropertyChanges {
                         target: container
                         width: pagesLogic.roundedDefaultColumnWidth
+                    }
+                    PropertyChanges {
+                        target: container.page.anchors
+                        rightMargin: 0
                     }
                 }
             ]

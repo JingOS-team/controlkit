@@ -39,78 +39,61 @@ ApplicationHeader {
 
     pageDelegate: Item {
         id: delegateItem
-        readonly property Page page: applicationWindow().pageStack.get(modelData)
-        property ListView view: ListView.view
         readonly property bool current: __appWindow.pageStack.currentIndex == index
         property Row layout
 
-        width: {
-            //more columns shown?
-            if (__appWindow.wideScreen) {
-                if (modelData == 0 && view.x > 0) {
-                    return page.width - view.x;
-                } else {
-                    return page.width;
-                }
-            } else {
-                return Math.min(view.width, delegateRoot.implicitWidth + Units.smallSpacing);
-            }
-        }
-        height: view.height
+        implicitWidth: layout.width > 0 ? layout.width : heading.width
+        width: parent.width
+        height: parent.height
 
-        Component.onCompleted: {
-            layout = toolbarComponent.createObject(delegateItem)
-        }
-        Component {
-            id: toolbarComponent
-            Row {
-                id: layout
+        Row {
+            id: layout
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 2
+
+            Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                x: __appWindow.wideScreen ? (Math.min(delegateItem.width - width, Math.max(0, delegateItem.view.contentX - delegateItem.x))) : 0
-                spacing: 2
-
-                Rectangle {
+                color: Theme.textColor
+                opacity: 0.3
+                width: Units.devicePixelRatio
+                height: parent.height * 0.6
+            }
+            PrivateActionToolButton {
+                anchors.verticalCenter: parent.verticalCenter
+                action: page && page.actions ? page.actions.left : null
+                showText: false
+            }
+            PrivateActionToolButton {
+                anchors.verticalCenter: parent.verticalCenter
+                action: page && page.actions ? page.actions.main : null
+                showText: false
+            }
+            PrivateActionToolButton {
+                anchors.verticalCenter: parent.verticalCenter
+                action: page && page.actions ? page.actions.right : null
+                showText: false
+            }
+            Rectangle {
+                anchors.verticalCenter: parent.verticalCenter
+                color: Theme.textColor
+                opacity: 0.3
+                width: Units.devicePixelRatio
+                height: parent.height * 0.6
+                visible: page && page.actions && (page.actions.left || page.actions.main || page.actions.right)
+            }
+            Repeater {
+                id: repeater
+                model: page && page.actions.contextualActions ? page.actions.contextualActions : null
+                delegate: PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
-                    color: Theme.textColor
-                    opacity: 0.3
-                    width: Units.devicePixelRatio
-                    height: parent.height * 0.6
-                }
-                PrivateActionToolButton {
-                    anchors.verticalCenter: parent.verticalCenter
-                    action: page && page.actions ? page.actions.left : null
-                    showText: false
-                }
-                PrivateActionToolButton {
-                    anchors.verticalCenter: parent.verticalCenter
-                    action: page && page.actions ? page.actions.main : null
-                    showText: false
-                }
-                PrivateActionToolButton {
-                    anchors.verticalCenter: parent.verticalCenter
-                    action: page && page.actions ? page.actions.right : null
-                    showText: false
-                }
-                Rectangle {
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: Theme.textColor
-                    opacity: 0.3
-                    width: Units.devicePixelRatio
-                    height: parent.height * 0.6
-                }
-                Repeater {
-                    id: repeater
-                    model: page && page.actions.contextualActions ? page.actions.contextualActions : null
-                    delegate: PrivateActionToolButton {
-                        anchors.verticalCenter: parent.verticalCenter
-                        action: modelData
-                        visible: modelData.visible && x+layout.x+width*2 < delegateItem.width
-                    }
+                    action: modelData
+                    visible: modelData.visible && x+layout.x+width*2 < delegateItem.width
                 }
             }
         }
+
         Heading {
-            x: __appWindow.wideScreen ? (Math.min(delegateItem.width - width, Math.max(0, delegateItem.view.contentX - delegateItem.x))) : 0
+            id: heading
             anchors.verticalCenter: parent.verticalCenter
             visible: layout.width <= 0
             opacity: delegateItem.current ? 1 : 0.4
