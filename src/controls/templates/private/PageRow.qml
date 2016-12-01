@@ -431,8 +431,8 @@ Item {
 
             property int level
 
-            property int hint: page && page.implicitWidth ? page.implicitWidth : root.defaultColumnWidth
-            property int roundedHint: Math.floor(root.width/hint) > 0 ? root.width/Math.floor(root.width/hint) : root.width
+            readonly property int hint: page && page.implicitWidth ? page.implicitWidth : root.defaultColumnWidth
+            readonly property int roundedHint: Math.floor(root.width/hint) > 0 ? root.width/Math.floor(root.width/hint) : root.width
 
             property Item page
             property Item owner
