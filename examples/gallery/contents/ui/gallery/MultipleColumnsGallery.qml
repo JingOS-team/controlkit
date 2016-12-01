@@ -79,10 +79,6 @@ ScrollablePage {
             Layout.minimumWidth: Units.gridUnit *2
             Layout.minimumHeight: Layout.minimumWidth
         }
-        Label {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "Page implicitWidth: " + page.implicitWidth
-        }
         Controls.Button {
             text: "Push Another Page"
             anchors.horizontalCenter: parent.horizontalCenter
