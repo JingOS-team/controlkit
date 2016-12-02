@@ -150,7 +150,7 @@ AbstractApplicationWindow {
                 }
             }
         }
-        Keys.onReleased: {print("AAA"+event.key)
+        Keys.onReleased: {
             if (event.key == Qt.Key_Back ||
             (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {
                 event.accepted = true;
