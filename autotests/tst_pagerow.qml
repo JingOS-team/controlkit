@@ -67,34 +67,36 @@ TestCase {
         signalName: "activeChanged"
     }
 
-    function initTestCase() {
+    function init() {
+        mainWindow.pageStack.clear()
         spyActive.clear()
         spyCurrentIndex.clear()
     }
 
     function test_pop() {
-        compare(mainWindow.pageStack.depth, 1)
+        compare(mainWindow.pageStack.depth, 0)
         mainWindow.pageStack.push(randomPage)
-        compare(mainWindow.pageStack.depth, 2)
-        mainWindow.pageStack.pop()
         compare(mainWindow.pageStack.depth, 1)
+        mainWindow.pageStack.pop()
+        compare(mainWindow.pageStack.depth, 0)
     }
 
     function test_goBack() {
-        compare(spyCurrentIndex.count, 0)
-        compare(mainWindow.pageStack.depth, 1)
+        compare(mainWindow.pageStack.depth, 0)
+        mainWindow.pageStack.push(randomPage)
         mainWindow.pageStack.push(randomPage)
         compare(mainWindow.pageStack.depth, 2)
-        compare(spyCurrentIndex.count, 1)
-        mainWindow.requestActivate()
+        compare(mainWindow.pageStack.currentIndex, 1)
+        compare(spyCurrentIndex.count, 2)
         spyActive.clear()
+        mainWindow.requestActivate()
         spyCurrentIndex.clear()
-        var sa = spyActive.wait(12321313)
-        verify(mainWindow.active || sa)
-        console.log("lalala", mainWindow.active)
+        if (!mainWindow.active)
+            spyActive.wait()
+        verify(mainWindow.active)
         keyClick(Qt.Key_Left, Qt.AltModifier)
 
-        spyCurrentIndex.wait(5000)
+        spyCurrentIndex.wait()
 
         compare(mainWindow.pageStack.depth, 2)
         compare(mainWindow.pageStack.currentIndex, 0)
