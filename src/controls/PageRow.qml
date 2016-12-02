@@ -162,12 +162,12 @@ T.Control {
         if (page !== undefined) {
             // an unwind target has been specified - pop until we find it
             while (page != oldPage && pagesLogic.count > 1) {
-                pagesLogic.remove(oldPage.parent.level);
+                pagesLogic.removePage(oldPage.parent.level);
 
                 oldPage = pagesLogic.get(pagesLogic.count-1).page;
             }
         } else {
-            pagesLogic.remove(pagesLogic.count-1);
+            pagesLogic.removePage(pagesLogic.count-1);
         }
     }
 
@@ -201,7 +201,7 @@ T.Control {
      * Destroy (or reparent) all the pages contained.
      */
     function clear() {
-        return pagesLogic.clear();
+        return pagesLogic.clearPages();
     }
 
     function get(idx) {
@@ -235,6 +235,27 @@ T.Control {
             //the Object in an imperative way, espacially on Android
             Component.onCompleted: {
                 componentCache = {};
+            }
+            function removePage(id) {
+                if (id < 0 || id >= count) {
+                    print("Tried to remove an invalid page index:" + id);
+                    return;
+                }
+
+                var item = pagesLogic.get(id);
+                if (item.owner) {
+                    item.page.parent = item.owner;
+                }
+                //FIXME: why reparent ing is necessary?
+                //is destroy just an async deleteLater() that isn't executed immediately or it actually leaks?
+                pagesLogic.remove(id);
+                item.parent = root;
+                item.destroy();
+            }
+            function clearPages () {
+                while (count > 0) {
+                    removePage(0);
+                }
             }
             function initPage(page, properties) {
                 var container = containerComponent.createObject(mainView, {
