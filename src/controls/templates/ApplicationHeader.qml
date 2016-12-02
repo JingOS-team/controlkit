@@ -118,7 +118,10 @@ AbstractApplicationHeader {
         }
         property Item backButton
         clip: true
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            leftMargin: __appWindow.wideScreen ? 0 : backButton.width
+        }
         cacheBuffer: width ? Math.max(0, width * count) : 0
         displayMarginBeginning: __appWindow.pageStack.width * count
         orientation: ListView.Horizontal

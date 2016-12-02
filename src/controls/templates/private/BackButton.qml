@@ -19,22 +19,18 @@
 
 import QtQuick 2.1
 //for Settings
-import QtQuick.Controls 1.0 as Controls
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Controls.Private 1.0
 
 import org.kde.kirigami 2.0
 
-MouseArea {
-    anchors {
-        left: parent.left
-        top: parent.top
-        bottom: parent.bottom
-    }
-    opacity: !Settings.isMobile &&__appWindow.pageStack.currentIndex < 1 ? 0.4 : 1
+Controls.ToolButton {
+    enabled: !Settings.isMobile &&__appWindow.pageStack.currentIndex
+    height: parent.height
     width: height
+    implicitWidth: height
     z: 99
     onClicked: applicationWindow().pageStack.goBack();
-
     Icon {
         anchors.fill: parent
         selected: header.background && header.background.color && header.background.color == Theme.highlightColor
