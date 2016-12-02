@@ -77,6 +77,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentPath(QStringLiteral("GlobalDrawer.qml")), uri, 2, 0, "GlobalDrawer");
     qmlRegisterType(componentPath(QStringLiteral("Heading.qml")), uri, 2, 0, "Heading");
     qmlRegisterType(componentPath(QStringLiteral("Separator.qml")), uri, 2, 0, "Separator");
+    qmlRegisterType(componentPath(QStringLiteral("PageRow.qml")), uri, 2, 0, "PageRow");
 
     //The icon is "special: we have to use a wrapper class to QIcon on desktops
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)

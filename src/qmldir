@@ -11,8 +11,8 @@ OverlaySheet 2.0 templates/OverlaySheet.qml
 Page 2.0 templates/Page.qml
 SplitDrawer 2.0 templates/SplitDrawer.qml
 SwipeListItem 2.0 templates/SwipeListItem.qml
-PageRow 2.0 templates/private/PageRow.qml
 
+PageRow 2.0 controls/PageRow.qml
 BasicListItem 2.0 controls/BasicListItem.qml
 ContextDrawer 2.0 controls/ContextDrawer.qml
 GlobalDrawer 2.0 controls/GlobalDrawer.qml
