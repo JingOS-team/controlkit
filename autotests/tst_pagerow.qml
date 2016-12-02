@@ -104,4 +104,26 @@ TestCase {
         mainWindow.pageStack.pop()
         compare(mainWindow.pageStack.depth, 1)
     }
+
+    readonly property int destructions: 0
+    Component {
+        id: destroyedPage
+        Kirigami.Page {
+            Rectangle {
+                anchors.fill: parent
+                color: "blue"
+                Component.onDestruction: testCase.destructions++
+            }
+        }
+    }
+    function test_cleanup() {
+        mainWindow.pageStack.push(destroyedPage)
+        mainWindow.pageStack.push(destroyedPage)
+        mainWindow.pageStack.push(destroyedPage)
+        compare(mainWindow.pageStack.depth, 3)
+        mainWindow.pageStack.clear()
+
+        compare(mainWindow.pageStack.depth, 0)
+        compare(testCase.destructions, 3)
+    }
 }
