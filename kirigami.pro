@@ -6,6 +6,12 @@ HEADERS     += $$PWD/src/kirigamiplugin.h $$PWD/src/enums.h
 SOURCES     += $$PWD/src/kirigamiplugin.cpp $$PWD/src/enums.cpp
 RESOURCES   += $$PWD/kirigami.qrc
 
+!ios:!android {
+    message( "compiling for desktop" )
+    HEADERS += $$PWD/src/desktopicon.h
+    SOURCES += $$PWD/src/desktopicon.cpp
+}
+
 API_VER=1.0
 
 TARGET = $$qtLibraryTarget(org/kde/kirigami/kirigamiplugin)
