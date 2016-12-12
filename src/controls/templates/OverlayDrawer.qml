@@ -18,7 +18,8 @@
  */
 
 import QtQuick 2.1
-import org.kde.kirigami 1.0
+import QtQuick.Templates 2.0 as T2
+import org.kde.kirigami 2.0
 import "private"
 
 /**
@@ -29,58 +30,37 @@ import "private"
  * This is used for the distinct task of navigating to another page.
  *
  */
-AbstractDrawer {
+T2.Drawer {
     id: root
 
-    z: modal ? (opened ? 100 : 99 ): 98
+    z: modal ? (drawerOpen ? 100 : 99 ): 0
 
 //BEGIN Properties
     /**
-     * page: Item
-     * It's the default property. it's the main content of the drawer page,
-     * the part that is always shown
+     * drawerOpen: bool
+     * true when the drawer is open and visible
      */
-    default property alias page: mainPage.data
+    property bool drawerOpen: false
 
     /**
-     * contentItem: Item
-     * It's the part that can be pulled in and out, will act as a sidebar.
+     * enabled: bool
+     * This property holds whether the item receives mouse and keyboard events. By default this is true.
      */
-    property Item contentItem
+    property bool enabled: true
 
     /**
-     * background: Item
-     * This property holds the background item.
-     * Note: the background will be automatically sized as the whole control
+     * peeking: true
+     * When true the drawer is in a state between open and closed. the drawer is visible but not completely open.
+     * This is usually the case when the user is dragging the drawer from a screen 
+     * edge, so the user is "peeking" what's in the drawer
      */
-    property Item background
+    property bool peeking: false
 
     /**
-     * opened: bool
-     * If true the drawer is open showing the contents of the "drawer"
-     * component.
+     * animating: Bool
+     * True during an animation of a drawer either opening or closing
      */
-    property alias opened: mainFlickable.open
-
-    /**
-     * edge: enumeration
-     * This property holds the edge of the content item at which the drawer
-     * will open from.
-     * The acceptable values are:
-     * Qt.TopEdge: The top edge of the content item.
-     * Qt.LeftEdge: The left edge of the content item (default).
-     * Qt.RightEdge: The right edge of the content item.
-     * Qt.BottomEdge: The bottom edge of the content item.
-     */
-    property int edge: Qt.LeftEdge
-
-    /**
-     * position: real
-     * This property holds the position of the drawer relative to its
-     * final destination. That is, the position will be 0 when the
-     * drawer is fully closed, and 1 when fully open.
-     */
-    property real position: 0
+    readonly property bool animating : enterAnimation.animating || exitAnimation.animating || positionResetAnim.running
 
     /**
      * handleVisible: bool
@@ -90,405 +70,200 @@ AbstractDrawer {
     property bool handleVisible: typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true
 
     /**
-     * leftPadding: int
-     * default contents padding at left
-     */
-    property int leftPadding: Units.smallSpacing
+     * handle: Item
+     * Readonly property that points to the item that will act as a physical
+     * handle for the Drawer
+     **/
+    readonly property Item handle: MouseArea {
+        id: drawerHandle
+        z: 2000000
+        preventStealing: true
+        parent: applicationWindow().overlay.parent
 
-    /**
-     * topPadding: int
-     * default contents padding at top
-     */
-    property int topPadding: Units.smallSpacing
+        property int startX
+        property int mappedStartX
+        onPressed: {
+            root.peeking = true;
+            startX = mouse.x;
+            mappedStartX = mapToItem(parent, startX, 0).x
+        }
+        onPositionChanged: {
+            var pos = mapToItem(parent, mouse.x - startX, mouse.y);
+            switch(root.edge) {
+            case Qt.LeftEdge:
+                root.position = pos.x/root.contentItem.width;
+                break;
+            case Qt.RightEdge:
+                root.position = (root.parent.width - pos.x - width)/root.contentItem.width;
+                break;
+            default:
+            }
+        }
+        onReleased: {
+            root.peeking = false;
+            
+            if (Math.abs(mapToItem(parent, mouse.x, 0).x - mappedStartX) < Qt.styleHints.startDragDistance) {
+                root.drawerOpen = !root.drawerOpen;
+            }
+        }
+        onCanceled: {
+            root.peeking = false
+        }
+        x: {
+            switch(root.edge) {
+            case Qt.LeftEdge:
+                return root.background.width * root.position;
+            case Qt.RightEdge:
+                return drawerHandle.parent.width - (root.background.width * root.position) - width;
+            default:
+                return 0;
+            }
+        }
 
-    /**
-     * rightPadding: int
-     * default contents padding at right
-     */
-    property int rightPadding: Units.smallSpacing
+        anchors.bottom: parent.bottom
+        visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
+        width: Units.iconSizes.medium + Units.smallSpacing * 2
+        height: width
+        opacity: root.handleVisible ? 1 : 0
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+        transform: Translate {
+            id: translateTransform
+            x: root.handleVisible ? 0 : (root.edge == Qt.LeftEdge ? -drawerHandle.width : drawerHandle.width)
+            Behavior on x {
+                NumberAnimation {
+                    duration: Units.longDuration
+                    easing.type: !root.handleVisible ? Easing.OutQuad : Easing.InQuad
+                }
+            }
+        }
+    }
 
-    /**
-     * bottomPadding: int
-     * default contents padding at bottom
-     */
-    property int bottomPadding: Units.smallSpacing
-
-    /**
-     * modal: bool
-     * If true the drawer will be an overlay of the main content,
-     * obscuring it and blocking input.
-     * If false, the drawer will look like a sidebar, with the main content
-     * application still usable.
-     * It is recomended to use modal on mobile devices and not modal on desktop
-     * devices.
-     * Default is true
-     */
-    //property bool modal: true
 //END Properties
 
 
-//BEGIN Methods
-    /**
-     * open: function
-     * This method opens the drawer, animating the movement if a
-     * valid animation has been set.
-     */
-    function open () {
-        mainAnim.to = 0;
-        switch (root.edge) {
-        case Qt.RightEdge:
-            mainAnim.to = drawerPage.width;
-            break;
-        case Qt.BottomEdge:
-            mainAnim.to = drawerPage.height;
-            break;
-        case Qt.LeftEdge:
-        case Qt.TopEdge:
-        default:
-            mainAnim.to = 0;
-            break;
+//BEGIN reassign properties
+    //default paddings
+    leftPadding: Units.smallSpacing
+    topPadding: Units.smallSpacing
+    rightPadding: Units.smallSpacing
+    bottomPadding: Units.smallSpacing
+
+    parent: modal ? T2.ApplicationWindow.overlay : T2.ApplicationWindow.contentItem
+    height: edge == Qt.LeftEdge || edge == Qt.RightEdge ? applicationWindow().height : Math.min(contentItem.implicitHeight, Math.round(applicationWindow().height*0.8))
+    width:  edge == Qt.TopEdge || edge == Qt.BottomEdge ? applicationWindow().width : Math.min(contentItem.implicitWidth, Math.round(applicationWindow().width*0.8))
+    edge: Qt.LeftEdge
+    modal: true
+
+    dragMargin: enabled && (edge == Qt.LeftEdge || edge == Qt.RightEdge) ? Qt.styleHints.startDragDistance : 0
+    
+    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
+
+    contentWidth: contentItem.implicitWidth || (contentChildren.length === 1 ? contentChildren[0].implicitWidth : 0)
+    contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
+
+    enter: Transition {
+        SequentialAnimation {
+            id: enterAnimation
+            /*NOTE: why this? the running status of the enter transition is not relaible and
+             * the SmoothedAnimation is always marked as non running,
+             * so the only way to get to a reliable animating status is with this
+             */
+            property bool animating
+            ScriptAction {
+                script: enterAnimation.animating = true
+            }
+            SmoothedAnimation {
+                velocity: 5
+            }
+            ScriptAction {
+                script: enterAnimation.animating = false
+            }
         }
-        mainAnim.running = true;
-        mainFlickable.open = true;
     }
 
-    /**
-     * close: function
-     * This method closes the drawer, animating the movement if a
-     * valid animation has been set.
-     */
-    function close () {
-        switch (root.edge) {
-        case Qt.RightEdge:
-        case Qt.BottomEdge:
-            mainAnim.to = 0;
-            break;
-        case Qt.LeftEdge:
-            mainAnim.to = drawerPage.width;
-            break;
-        case Qt.TopEdge:
-            mainAnim.to = drawerPage.height;
-            break;
+    exit: Transition {
+        SequentialAnimation {
+            id: exitAnimation
+            property bool animating
+            ScriptAction {
+                script: exitAnimation.animating = true
+            }
+            SmoothedAnimation {
+                velocity: 5 
+            }
+            ScriptAction {
+                script: exitAnimation.animating = false
+            }
         }
-        mainAnim.running = true;
-        mainFlickable.open = false;
     }
+//END reassign properties
 
-    /**
-     * clicked: signal
-     * This signal is emitted when the drawer is clicked.
-     */
-//END Methods
 
-//BEGIN Signal handlers
-    onBackgroundChanged: {
-        background.z = 1;
-        background.parent = mainItem;
-        background.anchors.fill = drawerPage;
-    }
-
+//BEGIN signal handlers
     onPositionChanged: {
-        if (!mainFlickable.loopCheck) {
-            mainFlickable.loopCheck = true;
-            if (!mainFlickable.flicking && !mainFlickable.dragging && !mainAnim.running) {
-                switch (root.edge) {
-                case Qt.RightEdge:
-                    mainFlickable.contentX = drawerPage.width * position;
-                    break;
-                case Qt.LeftEdge:
-                    mainFlickable.contentX = drawerPage.width * (1-position);
-                    break;
-                case Qt.BottomEdge:
-                    mainFlickable.contentY = drawerPage.height * position;
-                    break;
-                }
-            }
-            mainFlickable.loopCheck = false;
+        if (peeking) {
+            visible = true
         }
     }
-    onContentItemChanged: {
-        contentItem.parent = drawerPage
-        contentItem.anchors.fill = drawerPage
-        if (contentItem.flickableItem !== undefined) {
-            contentItem.anchors.topMargin = 0;
-            contentItem.anchors.leftMargin = 0;
-            contentItem.anchors.bottomMargin = 0;
-            contentItem.anchors.rightMargin = 0;
+    onVisibleChanged: {
+        if (peeking) {
+            visible = true
         } else {
-            contentItem.anchors.topMargin = root.topPadding;
-            contentItem.anchors.leftMargin = root.leftPadding;
-            contentItem.anchors.bottomMargin = root.bottomPadding;
-            contentItem.anchors.rightMargin = root.rightPadding;
+            drawerOpen = visible;
         }
     }
-//END Signal handlers
-
-    Item {
-        id: mainPage
-        anchors.fill: parent
-        onChildrenChanged: mainPage.children[0].anchors.fill = mainPage
+    onPeekingChanged:  {
+        if (peeking) {
+            root.enter.enabled = false;
+            root.exit.enabled = false;
+        } else {
+            positionResetAnim.to = position > 0.5 ? 1 : 0;
+            positionResetAnim.running = true
+            root.enter.enabled = true;
+            root.exit.enabled = true;
+        }
     }
-
-    Rectangle {
-        anchors.fill: parent
-        color: "black"
-        opacity: 0.6 * mainFlickable.internalPosition
-        visible: root.modal
-    }
-
-
-    //NOTE: it's a PropertyAnimation instead of a NumberAnimation because
-    //NumberAnimation doesn't have NOTIFY signal on to property
-    PropertyAnimation {
-        id: mainAnim
-        target: mainFlickable
-        properties: (root.edge == Qt.RightEdge || root.edge == Qt.LeftEdge) ? "contentX" : "contentY"
-        duration: Units.longDuration
-        easing.type: mainAnim.to > 0 ? Easing.InQuad : Easing.OutQuad
-    }
-
-    MouseArea {
-        id: edgeMouse
-        anchors {
-            right: root.edge == Qt.LeftEdge ? undefined : parent.right
-            left: root.edge == Qt.RightEdge ? undefined : parent.left
-            top: root.edge == Qt.BottomEdge ? undefined : parent.top
-            bottom: root.edge == Qt.TopEdge ? undefined : parent.bottom
+    onDrawerOpenChanged: {
+        //sync this property only when the component is properly loaded
+        if (!__internal.completed) {
+            return;
         }
-        z: 99
-        width: Units.smallSpacing * 3
-        height: Units.smallSpacing * 3
-        property int startMouseX
-        property real oldMouseX
-        property int startMouseY
-        property real oldMouseY
-        property bool startDragging: false
-
-        function managePress(mouse) {
-            if (drawerPage.children.length == 0) {
-                mouse.accepted = false;
-                return;
-            }
-
-            speedSampler.restart();
-            mouse.accepted = true;
-            oldMouseX = startMouseX = mouse.x;
-            oldMouseY = startMouseY = mouse.y;
-            startDragging = false;
-        }
-        onPressed: {
-            managePress(mouse)
-        }
-
-        onPositionChanged: {
-            if (!root.contentItem) {
-                mouse.accepted = false;
-                return;
-            }
-
-            if (Math.abs(mouse.x - startMouseX) > root.width / 5 ||
-                Math.abs(mouse.y - startMouseY) > root.height / 5) {
-                startDragging = true;
-            }
-            if (startDragging) {
-                switch (root.edge) {
-                case Qt.RightEdge:
-                    mainFlickable.contentX = Math.min(mainItem.width - root.width, mainFlickable.contentX + oldMouseX - mouse.x);
-                    break;
-                case Qt.LeftEdge:
-                    mainFlickable.contentX = Math.max(0, mainFlickable.contentX + oldMouseX - mouse.x);
-                    break;
-                case Qt.BottomEdge:
-                    mainFlickable.contentY = Math.min(mainItem.height - root.height, mainFlickable.contentY + oldMouseY - mouse.y);
-                    break;
-                case Qt.TopEdge:
-                    mainFlickable.contentY = Math.max(0, mainFlickable.contentY + oldMouseY - mouse.y);
-                    break;
-                }
-            }
-            oldMouseX = mouse.x;
-            oldMouseY = mouse.y;
-        }
-        onReleased: {
-            if (!startDragging) {
-                return;
-            }
-            speedSampler.running = false;
-            if (speedSampler.speed != 0) {
-                if (root.edge == Qt.RightEdge || root.edge == Qt.LeftEdge) {
-                    mainFlickable.flick(speedSampler.speed, 0);
-                } else {
-                    mainFlickable.flick(0, speedSampler.speed);
-                }
-            } else {
-                if (mainFlickable.internalPosition > 0.5) {
-                    root.open();
-                } else {
-                    root.close();
-                }
-            }
+        positionResetAnim.running = false;
+        if (drawerOpen) {
+            open();
+        } else {
+            close();
         }
     }
 
-    MouseArea {
-        id: handleMouseArea
-        z:999
-        anchors {
-            right: root.edge == Qt.LeftEdge ? undefined : parent.right
-            left: root.edge == Qt.RightEdge ? undefined : parent.left
-            bottom: parent.bottom
-            leftMargin: root.opened ? drawerPage.width : 0
-            rightMargin: root.opened ? drawerPage.width : 0
+    Component.onCompleted: {
+        //if defined as drawerOpen by default in QML, don't animate
+        if (root.drawerOpen) {
+            root.enter.enabled = false;
+            root.visible = true;
+            root.position = 1;
+            root.enter.enabled = true;
         }
-        visible: root.handleVisible && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
-        width: Units.iconSizes.medium
-        height: width
-        onPressed: edgeMouse.managePress(mouse);
-        onPositionChanged: edgeMouse.positionChanged(mouse);
-        onReleased: edgeMouse.released(mouse);
-        onClicked: root.opened ? root.close() : root.open();
+        __internal.completed = true;
     }
+//END signal handlers
 
-    Timer {
-        id: speedSampler
-        interval: 100
-        repeat: true
-        property real speed
-        property real oldContentX
-        property real oldContentY
-        onTriggered: {
-            if (root.edge == Qt.RightEdge || root.edge == Qt.LeftEdge) {
-                speed = (mainFlickable.contentX - oldContentX) * 10;
-                oldContentX = mainFlickable.contentX;
-            } else {
-                speed = (mainFlickable.contentY - oldContentY) * 10;
-                oldContentY = mainFlickable.contentY;
-            }
-        }
-        onRunningChanged: {
-            if (running) {
-                speed = 0;
-                oldContentX = mainFlickable.contentX;
-                oldContentY = mainFlickable.contentY;
-            } else {
-                if (root.edge == Qt.RightEdge || root.edge == Qt.LeftEdge) {
-                    speed = (oldContentX - mainFlickable.contentX) * 10;
-                } else {
-                    speed = (oldContentY - mainFlickable.contentY) * 10;
-                }
-            }
-        }
-    }
-
-    MouseArea {
-        id: mainMouseArea
-        anchors.fill: parent
-        drag.filterChildren: true
-        onClicked: {
-            if ((root.edge == Qt.LeftEdge && mouse.x < drawerPage.width) ||
-                (root.edge == Qt.RightEdge && mouse.x > drawerPage.x - mainFlickable.contentX) ||
-                (root.edge == Qt.TopEdge && mouse.y < drawerPage.height) ||
-                (root.edge == Qt.BottomEdge && mouse.y > drawerPage.y - mainFlickable.contentY)) {
-                return;
-            }
-            root.clicked();
-            root.close();
-        }
-        enabled: (root.edge == Qt.LeftEdge && !mainFlickable.atXEnd) ||
-                 (root.edge == Qt.RightEdge && !mainFlickable.atXBeginning) ||
-                 (root.edge == Qt.TopEdge && !mainFlickable.atYEnd) ||
-                 (root.edge == Qt.BottomEdge && !mainFlickable.atYBeginning) ||
-                 mainFlickable.moving
-
-        Flickable {
-            id: mainFlickable
-            property bool open
-            anchors.fill: parent
-            interactive: root.modal
-            onOpenChanged: {
-                if (open) {
-                    root.open();
-                    Qt.inputMethod.hide();
-                } else {
-                    root.close();
-                }
-            }
-            enabled: parent.enabled
-            flickableDirection: root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge ? Flickable.HorizontalFlick : Flickable.VerticalFlick
-            contentWidth: mainItem.width
-            contentHeight: mainItem.height
-            boundsBehavior: Flickable.StopAtBounds
-            readonly property real internalPosition: {
-                switch (root.edge) {
-                case Qt.RightEdge:
-                    return mainFlickable.contentX/drawerPage.width;
-                case Qt.LeftEdge:
-                    return 1 - (mainFlickable.contentX/drawerPage.width);
-                case Qt.BottomEdge:
-                    return mainFlickable.contentY/drawerPage.height;
-                case Qt.TopEdge:
-                    return 1 - (mainFlickable.contentY/drawerPage.height);
-                }
-            }
-            property bool loopCheck: false
-            onInternalPositionChanged: {
-                if (!loopCheck) {
-                    loopCheck = true;
-                    root.position = internalPosition;
-                    loopCheck = false;
-                }
-            }
-
-            onFlickingChanged: {
-                if (!flicking) {
-                    if (internalPosition > 0.5) {
-                        root.open();
-                    } else {
-                        root.close();
-                    }
-                }
-            }
-            onMovingChanged: {
-                if (!moving) {
-                    flickingChanged();
-                }
-            }
-
-            Item {
-                id: mainItem
-                width: root.width + ((root.edge == Qt.RightEdge || root.edge == Qt.LeftEdge) ? drawerPage.width : 0)
-                height: root.height + ((root.edge == Qt.TopEdge || root.edge == Qt.BottomEdge) ? drawerPage.height : 0)
-                onWidthChanged: {
-                    if (root.edge == Qt.LeftEdge) {
-                        if (root.opened) {
-                            mainFlickable.contentX = 0;
-                        } else {
-                            mainFlickable.contentX = drawerPage.width;
-                        }
-                    }
-                }
-                onHeightChanged: {
-                    if (root.edge == Qt.TopEdge) {
-                        mainFlickable.contentY = drawerPage.Height;
-                    }
-                }
-
-
-                Item {
-                    id: drawerPage
-                    z: 3
-                    anchors {
-                        left: root.edge != Qt.RightEdge ? parent.left : undefined
-                        right: root.edge != Qt.LeftEdge ? parent.right : undefined
-                        top: root.edge != Qt.BottomEdge ? parent.top : undefined
-                        bottom: root.edge != Qt.TopEdge ? parent.bottom : undefined
-                    }
-
-                    clip: true
-                    width: root.contentItem ? Math.min(root.contentItem.implicitWidth, root.width * 0.7) : 0
-                    height: root.contentItem ? Math.min(root.contentItem.implicitHeight, root.height * 0.7) : 0
-                }
-            }
+    //this is as hidden as it can get here
+    property QtObject __internal: QtObject {
+        //here in order to not be accessible from outside
+        property bool completed: false
+        property NumberAnimation positionResetAnim: NumberAnimation {
+            id: positionResetAnim
+            target: root
+            to: 0
+            property: "position"
+            duration: (root.position)*Units.longDuration
         }
     }
 }

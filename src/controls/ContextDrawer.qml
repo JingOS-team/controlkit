@@ -19,8 +19,9 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import QtQuick.Controls 1.0 as QtControls
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
+
+import "templates/private"
 
 /**
  * A drawer specialization that will show a list of actions that are
@@ -28,7 +29,7 @@ import org.kde.kirigami 1.0
  *
  * Example usage:
  * @code
- * import org.kde.kirigami 1.0 as Kirigami
+ * import org.kde.kirigami 2.0 as Kirigami
  *
  * Kirigami.ApplicationWindow {
  *  [...]
@@ -40,7 +41,7 @@ import org.kde.kirigami 1.0
  * @endcode
  *
  * @code
- * import org.kde.kirigami 1.0 as Kirigami
+ * import org.kde.kirigami 2.0 as Kirigami
  *
  * Kirigami.Page {
  *   [...]
@@ -83,7 +84,12 @@ OverlayDrawer {
     property var actions: pageStack.currentItem ? pageStack.currentItem.contextualActions : null
     enabled: menu.count > 0
     edge: Qt.RightEdge
-    opened: false
+    drawerOpen: false
+
+    //list items go to edges, have their own padding
+    leftPadding: 0
+    rightPadding: 0
+    bottomPadding: 0
 
     handleVisible: applicationWindow == undefined || applicationWindow().wideScreen == true ? false : applicationWindow().controlsVisible
 
@@ -95,7 +101,7 @@ OverlayDrawer {
         }
     }
 
-    contentItem: QtControls.ScrollView {
+    contentItem: ScrollView {
         implicitWidth: Units.gridUnit * 20
         ListView {
             id: menu
@@ -147,7 +153,7 @@ OverlayDrawer {
                     } else {
                         console.warning("Don't know how to trigger the action")
                     }
-                    root.opened = false;
+                    root.drawerOpen = false;
                 }
             }
         }

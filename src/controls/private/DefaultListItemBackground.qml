@@ -18,7 +18,8 @@
  */
 
 import QtQuick 2.1
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
+//those 2 for settings
 import QtQuick.Controls 1.0 as Controls
 import QtQuick.Controls.Private 1.0
 
@@ -31,7 +32,7 @@ Rectangle {
         anchors.fill: parent
         visible: !Settings.isMobile
         color: listItem.activeBackgroundColor
-        opacity: listItem.containsMouse && !listItem.pressed ? 0.2 : 0
+        opacity: listItem.hovered && !listItem.pressed ? 0.2 : 0
         Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
     }
     Behavior on color {
@@ -42,7 +43,7 @@ Rectangle {
 
     on_FirstElementChanged: {
         if (_firstElement) {
-            var newObject = Qt.createQmlObject('import QtQuick 2.0; import org.kde.kirigami 1.0; Separator {anchors {left: parent.left; right: parent.right; top: parent.top} visible: listItem.separatorVisible; color: listItem.textColor}',
+            var newObject = Qt.createQmlObject('import QtQuick 2.0; import org.kde.kirigami 2.0; Separator {anchors {left: parent.left; right: parent.right; bottom: parent.top} visible: listItem.separatorVisible; color: listItem.textColor}',
                                    background);
         }
     }

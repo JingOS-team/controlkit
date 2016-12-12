@@ -18,9 +18,9 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.2 as Controls
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 ScrollablePage {
     id: page
@@ -55,20 +55,24 @@ ScrollablePage {
                 }
                 Controls.Switch {
                     checked: true
+                    text: "On"
                 }
                 Controls.Switch {
                     checked: true
                     enabled: false
+                    text: "On"
                 }
                 Label {
                     text: "Off"
                 }
                 Controls.Switch {
                     checked: false
+                    text: "Off"
                 }
                 Controls.Switch {
                     checked: false
                     enabled: false
+                    text: "Off"
                 }
             }
         }

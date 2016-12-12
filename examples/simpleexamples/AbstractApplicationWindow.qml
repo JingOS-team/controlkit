@@ -20,7 +20,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.4 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0 as Kirigami
+import org.kde.kirigami 2.0 as Kirigami
 
 Kirigami.AbstractApplicationWindow {
     id: root
@@ -119,9 +119,9 @@ Kirigami.AbstractApplicationWindow {
             if (event.key == Qt.Key_Back ||
             (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {
                 event.accepted = true;
-                if (root.contextDrawer && root.contextDrawer.opened) {
+                if (root.contextDrawer && root.contextDrawer.drawerOpen) {
                     root.contextDrawer.close();
-                } else if (root.globalDrawer && root.globalDrawer.opened) {
+                } else if (root.globalDrawer && root.globalDrawer.drawerOpen) {
                     root.globalDrawer.close();
                 } else {
                     var backEvent = {accepted: false}

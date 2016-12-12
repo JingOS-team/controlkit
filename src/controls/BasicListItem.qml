@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 /**
  * An item delegate for the primitive ListView component.
@@ -46,11 +46,18 @@ AbstractListItem {
      */
     property alias icon: iconItem.source
 
+    /**
+     * reserveSpaceForIcon: bool
+     * If true, even when there is no icon the space will be reserved for it
+     * It's useful in layouts where only some entries have an icon,
+     * having the text all horizontally aligned
+     */
+    property alias reserveSpaceForIcon: iconItem.visible
+
+    default property alias _basicDefault: layout.children
+
     RowLayout {
-        anchors {
-            left: parent.left
-            verticalCenter: parent.verticalCenter
-        }
+        id: layout
         Icon {
             id: iconItem
             Layout.minimumHeight: Units.iconSizes.smallMedium
@@ -60,6 +67,7 @@ AbstractListItem {
         }
         Label {
             id: labelItem
+            Layout.fillWidth: true
             color: listItem.checked || listItem.pressed ? listItem.activeTextColor : listItem.textColor
         }
     }

@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.1
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 import "../../private"
 import "../../templates" as T
 
@@ -26,5 +26,5 @@ T.AbstractListItem {
     id: listItem
 
     background: DefaultListItemBackground {}
-    implicitHeight: listItem.contentItem.height + Units.smallSpacing*4
+    implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 4
 }

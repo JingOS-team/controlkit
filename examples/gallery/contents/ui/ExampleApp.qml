@@ -19,14 +19,15 @@
 
 import QtQuick 2.1
 import QtQuick.Controls 1.4 as Controls
+import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0 as Kirigami
+import org.kde.kirigami 2.0 as Kirigami
 import "gallery"
 
 Kirigami.ApplicationWindow {
     id: root
 
-    //header: Kirigami.ToolBarApplicationHeader {}
+    header: Kirigami.ApplicationHeader {}
 
     globalDrawer: Kirigami.GlobalDrawer {
         title: "Widget gallery"
@@ -86,17 +87,17 @@ Kirigami.ApplicationWindow {
             }
             ]
 
-        Controls.CheckBox {
+        QQC2.CheckBox {
             checked: true
             text: "Option 1"
         }
-        Controls.CheckBox {
+        QQC2.CheckBox {
             text: "Option 2"
         }
-        Controls.CheckBox {
+        QQC2.CheckBox {
             text: "Option 3"
         }
-        Controls.Slider {
+        QQC2.Slider {
             Layout.fillWidth: true
             value: 0.5
         }

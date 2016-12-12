@@ -18,9 +18,9 @@
  */
 
 import QtQuick 2.1
-import QtQuick.Controls 1.4 as Controls
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0 as Kirigami
+import org.kde.kirigami 2.0 as Kirigami
 
 Kirigami.ScrollablePage {
     id: pageRoot
@@ -86,12 +86,20 @@ Kirigami.ScrollablePage {
                 component: "Switch"
             }
             ListElement {
+                text: "Tab Bar"
+                component: "TabBar"
+            }
+            ListElement {
                 text: "Text Field"
                 component: "TextField"
             }
             ListElement {
                 text: "Multiple Columns"
                 component: "MultipleColumns"
+            }
+            ListElement {
+                text: "Misc widgets"
+                component: "Misc"
             }
             ListElement {
                 text: "List View"
@@ -109,6 +117,7 @@ Kirigami.ScrollablePage {
         delegate: Kirigami.BasicListItem {
             id: listItem
 
+            reserveSpaceForIcon: false
             label: model.text
 
             property Item ownPage

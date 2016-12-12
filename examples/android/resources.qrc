@@ -11,9 +11,11 @@
         <file alias="contents/ui/gallery/MultipleColumnsGallery.qml">../gallery/contents/ui/gallery/MultipleColumnsGallery.qml</file>
         <file alias="contents/ui/gallery/ListViewGallery.qml">../gallery/contents/ui/gallery/ListViewGallery.qml</file>
         <file alias="contents/ui/gallery/SwitchGallery.qml">../gallery/contents/ui/gallery/SwitchGallery.qml</file>
+        <file alias="contents/ui/gallery/TabBarGallery.qml">../gallery/contents/ui/gallery/TabBarGallery.qml</file>
         <file alias="contents/ui/gallery/TextFieldGallery.qml">../gallery/contents/ui/gallery/TextFieldGallery.qml</file>
         <file alias="contents/ui/gallery/ColorsGallery.qml">../gallery/contents/ui/gallery/ColorsGallery.qml</file>
         <file alias="contents/ui/ExampleApp.qml">../gallery/contents/ui/ExampleApp.qml</file>
         <file alias="metadata.desktop">../gallery/metadata.desktop</file>
+        <file alias="qtquickcontrols2.conf">qtquickcontrols2.conf</file>
     </qresource>
 </RCC>

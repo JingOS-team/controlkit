@@ -20,7 +20,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.2 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 Page {
     id: page
@@ -29,11 +29,11 @@ Page {
 
     actions {
         main: Action {
-            iconName: sheet.opened ? "dialog-cancel" : "document-edit"
+            iconName: sheet.sheetOpen ? "dialog-cancel" : "document-edit"
             text: "Main Action Text"
-            checked: sheet.opened
+            checked: sheet.sheetOpen
             checkable: true
-            onCheckedChanged: sheet.opened = checked;
+            onCheckedChanged: sheet.sheetOpen = checked;
         }
     }
 

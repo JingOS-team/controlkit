@@ -18,13 +18,14 @@
  */
 
 import QtQuick 2.5
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 import "../../private"
 import "../../templates" as T
 
 T.SwipeListItem {
     id: listItem
 
+    rightPadding: Units.gridUnit
     background: DefaultListItemBackground {}
-    implicitHeight: contentItem.height + Units.smallSpacing*4
+    implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 4
 }

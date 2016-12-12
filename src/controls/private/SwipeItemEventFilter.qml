@@ -17,29 +17,26 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.1
-import "private"
-import "templates" as T
+import QtQuick 2.5
+import org.kde.kirigami 2.0
 
-/**
- * Split Drawers are used to expose additional UI elements which are optional
- * and can be used in conjunction with the main UI elements.
- * For example the Resource Browser uses a Split Drawer to select
- * different kinds of filters for the main view.
- */
-T.SplitDrawer {
-    id: root
 
-    background: Item {
-        EdgeShadow {
-            edge: Qt.RightEdge
-            anchors {
-                right: parent.left
-                top: parent.top
-                bottom: parent.bottom
-                rightMargin: -1
-            }
-        }
+MouseArea {
+    id: swipeFilter
+    anchors {
+        right: parent.right
+        top: parent.top
+        bottom: parent.bottom
+    }
+
+    z: 99999
+    property Item currentItem
+    property real peek
+
+    width: Units.gridUnit
+    onPositionChanged: {
+        var mapped = mapToItem(parent.flickableItem.contentItem, mouse.x, mouse.y);
+        currentItem = parent.flickableItem.itemAt(mapped.x, mapped.y)
+        peek = 1 - mapped.x / parent.flickableItem.contentItem.width
     }
 }
-

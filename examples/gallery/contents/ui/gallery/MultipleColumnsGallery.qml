@@ -18,9 +18,9 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.2 as Controls
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 ScrollablePage {
     id: page
@@ -78,10 +78,6 @@ ScrollablePage {
         Item {
             Layout.minimumWidth: Units.gridUnit *2
             Layout.minimumHeight: Layout.minimumWidth
-        }
-        Label {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "Page implicitWidth: " + page.implicitWidth
         }
         Controls.Button {
             text: "Push Another Page"

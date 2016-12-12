@@ -1,4 +1,4 @@
-project(kirigami)
+project(kirigami2)
 
 cmake_minimum_required(VERSION 2.8.12)
 set(KF5_MIN_VERSION "5.18.0")
@@ -48,19 +48,19 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
-set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5Kirigami")
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5Kirigami2")
 
 ecm_configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/KF5KirigamiConfig.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5KirigamiConfig.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/KF5Kirigami2Config.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5Kirigami2Config.cmake"
   INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
   PATH_VARS  KF5_INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
 )
 
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5KirigamiConfig.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5KirigamiConfigVersion.cmake"
-  "${CMAKE_CURRENT_SOURCE_DIR}/KF5KirigamiMacros.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5Kirigami2Config.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5Kirigami2ConfigVersion.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/KF5Kirigami2Macros.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Devel
 )
@@ -70,10 +70,10 @@ set(KF5_VERSION "5.22.0")
 ecm_setup_version(${KF5_VERSION}
     VARIABLE_PREFIX KIRIGAMI
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kirigami_version.h"
-    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KirigamiConfigVersion.cmake"
+    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5Kirigami2ConfigVersion.cmake"
     SOVERSION 5)
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg)
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg QuickControls2)
 
 if(PLASMA_ENABLED)
 # treat plasma as an optinal dep: full functionality is expected with only Qt
@@ -105,6 +105,7 @@ set (QT_MIN_VERSION "5.5.0")
 find_package(PkgConfig)
 #########################################################################
 
+add_subdirectory(autotests)
 add_subdirectory(src)
 #TODO: conditional
 if (BUILD_EXAMPLES)

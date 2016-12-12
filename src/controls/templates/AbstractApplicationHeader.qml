@@ -20,7 +20,7 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.2
 import "private"
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 
 /**
@@ -42,16 +42,22 @@ Item {
     property int maximumHeight: Units.gridUnit * 3
     default property alias contentItem: mainItem.data
 
-    parent: __appWindow.contentItem.parent
     //FIXME: remove
     property QtObject __appWindow: applicationWindow();
 
     anchors {
-        top: parent.top
         left: parent.left
         right: parent.right
     }
-    height: preferredHeight
+    height: {
+        if (!__appWindow.controlsVisible) {
+            return 1;
+        } else if (__appWindow.wideScreen) {
+            return preferredHeight;
+        } else {
+            return 1;
+        }
+    }
 
     /**
      * background: Item
@@ -62,16 +68,8 @@ Item {
 
     onBackgroundChanged: {
         background.z = -1;
-        background.parent = root;
-        background.anchors.fill = root;
-    }
-
-    Behavior on height {
-        enabled: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable && !__appWindow.pageStack.currentItem.flickable.moving
-        NumberAnimation {
-            duration: Units.longDuration
-            easing.type: Easing.InOutQuad
-        }
+        background.parent = headerItem;
+        background.anchors.fill = headerItem;
     }
 
     opacity: height > 0 && -translateTransform.y <= height ? 1 : 0
@@ -82,28 +80,13 @@ Item {
         }
     }
 
-    Connections {
-        target: __appWindow
-        onWideScreenChanged: {
-            if (wideScreen) {
-                height = preferredHeight;
-            } else {
-                height = preferredHeight;
-            }
-        }
-        onHeightChanged: root.height = preferredHeight;
-        onReachableModeChanged: root.height = __appWindow.reachableMode  && !__appWindow.wideScreen ? maximumHeight : preferredHeight;
-    }
-
     transform: Translate {
         id: translateTransform
         y: {
             if (__appWindow === undefined) {
                 return 0;
             }
-            if (__appWindow.reachableMode && !__appWindow.wideScreen) {
-                return __appWindow.height/2;
-            } else if (!__appWindow.controlsVisible) {
+            if (!__appWindow.controlsVisible) {
                 return -headerItem.height - Units.smallSpacing;
             } else {
                 return 0;
@@ -122,10 +105,9 @@ Item {
         anchors {
             left: parent.left
             right: parent.right
-            bottom: parent.bottom
         }
 
-        height: parent.preferredHeight
+        height: __appWindow.reachableMode ? root.maximumHeight : root.preferredHeight
 
         Connections {
             id: headerSlideConnection
@@ -141,23 +123,20 @@ Item {
                 }
 
                 if (__appWindow.wideScreen) {
-                    root.height = root.preferredHeight;
-                } else if (__appWindow.reachableMode && !__appWindow.wideScreen) {
-                    root.height = root.maximumHeight;
+                    headerItem.y = 0;
                 } else {
-                    root.height = Math.min(root.preferredHeight,
-                                           Math.max(root.minimumHeight,
-                                               root.height + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
+                    headerItem.y = Math.max(root.minimumHeight - root.preferredHeight, Math.min(0, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
+                    
                     oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
                 }
             }
             onMovementEnded: {
-                if (root.height > root.preferredHeight) {
+                if (headerItem.y > root.preferredHeight) {
                     //if don't change the position if more then preferredSize is shown
-                } else if (root.height > root.preferredHeight/2 ) {
-                    root.height = root.preferredHeight;
+                } else if (headerItem.y < -(root.preferredHeight - root.minimumHeight)/2 ) {
+                    headerItem.y = root.minimumHeight - root.preferredHeight;
                 } else {
-                    root.height = 0;
+                    headerItem.y = 0;
                 }
             }
         }
@@ -172,7 +151,7 @@ Item {
                 } else {
                     headerSlideConnection.oldContentY = 0;
                 }
-                root.height = root.preferredHeight;
+                headerItem.y = 0;
             }
         }
 
@@ -180,7 +159,13 @@ Item {
             id: mainItem
             anchors {
                 fill: parent
-                topMargin: applicationWindow().reachable ? 0 : Math.min(headerItem.height - root.height, headerItem.height - root.preferredHeight)
+            }
+        }
+        Behavior on y {
+            enabled: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable && !__appWindow.pageStack.currentItem.flickable.moving
+            NumberAnimation {
+                duration: Units.longDuration
+                easing.type: Easing.InOutQuad
             }
         }
     }

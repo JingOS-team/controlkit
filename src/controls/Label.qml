@@ -18,7 +18,8 @@
 */
 
 import QtQuick 2.1
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
+import QtQuick.Templates 2.0 as T2
 
 /**
  * This is a label which uses the plasma Theme.
@@ -32,7 +33,7 @@ import org.kde.kirigami 1.0
  *
  * @inherit QtQuick.Text
  */
-Text {
+T2.Label {
     id: root
 
     height: Math.round(Math.max(paintedHeight, Units.gridUnit * 1.6))

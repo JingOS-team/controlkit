@@ -18,11 +18,11 @@
  */
 
 import QtQuick 2.5
-import QtQuick.Controls 1.3 as Controls
+import QtQuick.Controls 2.0 as QQC2
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
-
+import org.kde.kirigami 2.0
+import "../templates/private" as P
 
 /**
  * RefreshableScrollView is a scroll view for any Flickable that supports the
@@ -33,7 +33,7 @@ import org.kde.kirigami 1.0
  * Example usage:
  *
  * @code
- * import org.kde.kirigami 1.0 as Kirigami
+ * import org.kde.kirigami 2.0 as Kirigami
  * [...]
  * 
  * Kirigami.RefreshableScrollView {
@@ -59,9 +59,8 @@ import org.kde.kirigami 1.0
  *
  * @endcode
  * 
- * @inherit QtQuick.Controls.Scrollview
  */
-Controls.ScrollView {
+P.ScrollView {
     id: root
 
     /**
@@ -104,7 +103,7 @@ Controls.ScrollView {
     property int bottomPadding: Units.gridUnit
 
 
-    frameVisible: false
+    property Item _swipeFilter
 
     children: [
         Item {
@@ -113,7 +112,7 @@ Controls.ScrollView {
             y: -root.flickableItem.contentY-height
             width: root.flickableItem.width
             height: busyIndicator.height + Units.gridUnit * 2
-            Controls.BusyIndicator {
+            QQC2.BusyIndicator {
                 id: busyIndicator
                 anchors.centerIn: parent
                 running: root.refreshing

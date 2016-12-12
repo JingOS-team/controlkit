@@ -19,7 +19,8 @@
 
 import QtQuick 2.1
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 1.0
+import QtQuick.Templates 2.0 as T2
+import org.kde.kirigami 2.0
 
 import "private"
 import "templates" as T
@@ -40,39 +41,15 @@ T.OverlayDrawer {
         color: Theme.viewBackgroundColor
 
         Item {
-            id: drawerHandle
-            z: -1
-
-            anchors {
-                right: root.edge == Qt.LeftEdge ? undefined : parent.left
-                left: root.edge == Qt.RightEdge ? undefined : parent.right
-                bottom: parent.bottom
-            }
-            visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
-            width: Units.iconSizes.medium + Units.smallSpacing * 2
-            height: width
-            opacity: root.handleVisible ? 1 : 0
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-            transform: Translate {
-                id: translateTransform
-                x: root.handleVisible ? 0 : (root.edge == Qt.LeftEdge ? -drawerHandle.width : drawerHandle.width)
-                Behavior on x {
-                    NumberAnimation {
-                        duration: Units.longDuration
-                        easing.type: !root.handleVisible ? Easing.OutQuad : Easing.InQuad
-                    }
-                }
-            }
+            parent: root.handle
+            anchors.fill: parent
             Item {
                 opacity: 0.4 + root.position
                 anchors {
-                    fill:parent
-                    margins: -Units.gridUnit
+                    fill: parent
+                    topMargin: -Units.gridUnit
+                    leftMargin: root.edge == Qt.RightEdge ? -Units.gridUnit : 0
+                    rightMargin: root.edge == Qt.RightEdge ? 0 : -Units.gridUnit
                 }
                 layer.enabled: true
                 Rectangle {
@@ -91,8 +68,10 @@ T.OverlayDrawer {
                     id: handleGraphics
                     color: Theme.viewBackgroundColor
                     anchors {
-                        fill:parent
-                        margins: Units.gridUnit
+                        fill: parent
+                        topMargin: Units.gridUnit
+                        leftMargin: root.edge == Qt.RightEdge ? Units.gridUnit : 0
+                        rightMargin: root.edge == Qt.RightEdge ? 0 : Units.gridUnit
                     }
                 }
             }

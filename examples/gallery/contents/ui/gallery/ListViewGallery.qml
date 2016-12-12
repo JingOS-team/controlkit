@@ -20,7 +20,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.2 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0 as Kirigami
+import org.kde.kirigami 2.0 as Kirigami
 
 Kirigami.ScrollablePage {
     id: page
@@ -29,11 +29,11 @@ Kirigami.ScrollablePage {
 
     actions {
         main: Kirigami.Action {
-            iconName: sheet.opened ? "dialog-cancel" : "document-edit"
+            iconName: sheet.sheetOpen ? "dialog-cancel" : "document-edit"
             text: "Main Action Text"
-            checked: sheet.opened
+            checked: sheet.sheetOpen
             checkable: true
-            onCheckedChanged: sheet.opened = checked;
+            onCheckedChanged: sheet.sheetOpen = checked;
         }
     }
 
@@ -47,13 +47,14 @@ Kirigami.ScrollablePage {
     }
 
     background: Rectangle {
-        color: Theme.viewBackgroundColor
+        color: Kirigami.Theme.viewBackgroundColor
     }
     Kirigami.OverlaySheet {
         id: sheet
+        parent: applicationWindow().overlay
         ListView {
             model: 100
-            implicitWidth: Units.gridUnit * 30
+            implicitWidth: Kirigami.Units.gridUnit * 30
             delegate: Kirigami.BasicListItem {
                 label: "Item in sheet" + modelData
             }
@@ -69,10 +70,9 @@ Kirigami.ScrollablePage {
         model: 200
         delegate: Kirigami.SwipeListItem {
             id: listItem
-            Kirigami.Label {
+            contentItem: Kirigami.Label {
                 height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
                 anchors.verticalCenter: parent.verticalCenter
-                x: y
                 text: "Item " + modelData
                 color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeTextColor : listItem.textColor
             }

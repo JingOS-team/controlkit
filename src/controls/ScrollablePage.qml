@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 import "private"
 
 /**
@@ -88,58 +88,47 @@ Page {
      * The main content Item of this page.
      * In the case of a ListView or GridView, both contentItem and flickable
      * will be a pointer to the ListView (or GridView)
+     * NOTE: can't be contentItem as Page's contentItem is final
      */
-    default property alias contentItem: scrollView.contentItem
+    default property QtObject mainItem
 
-    /**
-     * leftPadding: int
-     * default contents padding at left
-     */
-    property alias leftPadding: scrollView.leftPadding
-
-    /**
-     * topPadding: int
-     * default contents padding at top
-     */
-    property alias topPadding: scrollView.topPadding
-
-    /**
-     * rightPadding: int
-     * default contents padding at right
-     */
-    property alias rightPadding: scrollView.rightPadding
-
-    /**
-     * bottomPadding: int
-     * default contents padding at bottom
-     */
-    property alias bottomPadding: scrollView.bottomPadding
-
-    children: [
-        RefreshableScrollView {
-            id: scrollView
-            topPadding: (applicationWindow() && applicationWindow().header ? applicationWindow().header.preferredHeight : 0) + (contentItem == flickable ? 0 : Units.gridUnit)
-            leftPadding: contentItem == flickable ? 0 : Units.gridUnit
-            rightPadding: contentItem == flickable ? 0 : Units.gridUnit
-            bottomPadding: contentItem == flickable ? 0 : Units.gridUnit
-            anchors {
-                fill: parent
-            }
-        },
-
-        Item {
-            id: overlay
-            anchors.fill: parent
-            property Item oldContentItem
+    RefreshableScrollView {
+        id: scrollView
+        z: 0
+        //child of root as it shouldn't have margins
+        parent: root
+        topPadding: (applicationWindow() && applicationWindow().header ? applicationWindow().header.preferredHeight : 0) + (contentItem == flickable ? 0 : root.topPadding)
+        leftPadding: contentItem == flickable ? 0 : root.leftPadding
+        rightPadding: contentItem == flickable ? 0 : root.rightPadding
+        bottomPadding: contentItem == flickable ? 0 : root.bottomPadding
+        anchors {
+            fill: parent
+            topMargin: root.header ? root.header.height : 0
         }
-    ]
+    }
 
-    //HACK to get the contentItem as the last one, all the other eventual items as an overlay
+    anchors.topMargin: 0
+
+    Item {
+        id: overlay
+        parent: root
+        z: 9998
+        anchors.fill: parent
+        property QtObject oldMainItem
+    }
+
+    //HACK to get the mainItem as the last one, all the other eventual items as an overlay
     //no idea if is the way the user expects
-    onContentItemChanged: {
-         if (overlay.oldContentItem) {
-             overlay.oldContentItem.parent = overlay
+    onMainItemChanged: {
+         if (mainItem.hasOwnProperty("anchors")) {
+             scrollView.contentItem = mainItem
+         //don't try to reparent drawers
+         } else if (mainItem.hasOwnProperty("dragMargin")) {
+             return;
          }
-         overlay.oldContentItem = root.contentItem
+         if (overlay.oldMainItem && overlay.oldMainItem.parent != applicationWindow().overlay) {
+             overlay.oldMainItem.parent = overlay
+         }
+         overlay.oldMainItem = mainItem
     }
 }

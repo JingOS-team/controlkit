@@ -20,7 +20,7 @@
 import QtQuick 2.5
 import QtQuick.Controls.Private 1.0
 import "templates/private"
-import org.kde.kirigami 1.0 as Kirigami
+import org.kde.kirigami 2.0 as Kirigami
 import QtGraphicalEffects 1.0
 
 /**
@@ -35,7 +35,7 @@ import QtGraphicalEffects 1.0
  *
  * Example usage:
  * @code
- * import org.kde.kirigami 1.0 as Kirigami
+ * import org.kde.kirigami 2.0 as Kirigami
  *
  * Kirigami.ApplicationWindow {
  *  [...]
@@ -129,9 +129,9 @@ AbstractApplicationWindow {
         onCurrentIndexChanged: root.reachableMode = false;
 
         function goBack() {
-            if (root.contextDrawer && root.contextDrawer.opened && root.contextDrawer.modal) {
+            if (root.contextDrawer && root.contextDrawer.drawerOpen && root.contextDrawer.modal) {
                 root.contextDrawer.close();
-            } else if (root.globalDrawer && root.globalDrawer.opened && root.globalDrawer.modal) {
+            } else if (root.globalDrawer && root.globalDrawer.drawerOpen && root.globalDrawer.modal) {
                 root.globalDrawer.close();
             } else {
                 var backEvent = {accepted: false}
@@ -164,12 +164,5 @@ AbstractApplicationWindow {
             color: Kirigami.Theme.backgroundColor
         }
         focus: true
-    }
-
-    Component.onCompleted: {
-        if (root.header === undefined) {
-            var component = Qt.createComponent(Qt.resolvedUrl("./ApplicationHeader.qml"));
-            root.header = component.createObject(root.contentItem.parent);
-        }
     }
 }

@@ -74,7 +74,7 @@ function(kirigami_package_breeze_icons)
         _find_breeze_icon(${_iconName} _iconPath)
         message (STATUS ${_iconPath})
         if (EXISTS ${_iconPath})
-            install(FILES ${_iconPath} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/icons/ RENAME ${_iconName}.svg)
+            install(FILES ${_iconPath} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/icons/ RENAME ${_iconName}.svg)
         endif()
 
     endforeach()

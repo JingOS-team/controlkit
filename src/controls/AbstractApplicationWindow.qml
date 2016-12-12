@@ -18,9 +18,9 @@
  */
 
 import QtQuick 2.5
-import QtQuick.Controls 1.3 as Controls
+import QtQuick.Controls 2.0 as QQC2
 import "templates/private"
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 import QtGraphicalEffects 1.0
 
 /**
@@ -38,7 +38,7 @@ import QtGraphicalEffects 1.0
  *
  * Example usage:
  * @code
- * import org.kde.kirigami 1.0 as Kirigami
+ * import org.kde.kirigami 2.0 as Kirigami
  *
  * Kirigami.ApplicationWindow {
  *  [...]
@@ -77,7 +77,7 @@ import QtGraphicalEffects 1.0
  *
  * @inherit QtQuick.Controls.ApplicationWindow
  */
-Controls.ApplicationWindow {
+QQC2.ApplicationWindow {
     id: root
 
     /**
@@ -103,7 +103,7 @@ Controls.ApplicationWindow {
     function showPassiveNotification(message, timeout, actionText, callBack) {
         if (!internal.__passiveNotification) {
             var component = Qt.createComponent("templates/private/PassiveNotification.qml");
-            internal.__passiveNotification = component.createObject(contentItem.parent);
+            internal.__passiveNotification = component.createObject(overlay.parent);
         }
 
         internal.__passiveNotification.showNotification(message, timeout, actionText, callBack);
@@ -140,7 +140,7 @@ Controls.ApplicationWindow {
     * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
     * //FIXME: this should become an actual ApplicationHeader
     */
-    property var header: undefined
+    header: undefined
 
     /**
      * controlsVisible: bool
@@ -151,12 +151,12 @@ Controls.ApplicationWindow {
     property bool controlsVisible: true
 
     /**
-     * globalDrawer: AbstractDrawer
+     * globalDrawer: OverlayDrawer
      * The drawer for global actions, that will be opened by sliding from the
      * left screen edge or by dragging the ActionButton to the right.
      * It is recommended to use the GlobalDrawer class here
      */
-    property AbstractDrawer globalDrawer
+    property OverlayDrawer globalDrawer
 
     /**
      * wideScreen: bool
@@ -166,7 +166,7 @@ Controls.ApplicationWindow {
     property bool wideScreen: width >= Units.gridUnit * 60
 
     /**
-     * contextDrawer: AbstractDrawer
+     * contextDrawer: OverlayDrawer
      * The drawer for context-dependednt actions, that will be opened by sliding from the
      * right screen edge or by dragging the ActionButton to the left.
      * It is recommended to use the ContextDrawer class here.
@@ -175,7 +175,7 @@ Controls.ApplicationWindow {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 1.0 as Kirigami
+     * import org.kde.kirigami 2.0 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]
@@ -187,7 +187,7 @@ Controls.ApplicationWindow {
      * @endcode
      *
      * @code
-     * import org.kde.kirigami 1.0 as Kirigami
+     * import org.kde.kirigami 2.0 as Kirigami
      *
      * Kirigami.Page {
      *   [...]
@@ -214,7 +214,7 @@ Controls.ApplicationWindow {
      * When this page will be the current one, the context drawer will visualize
      * contextualActions defined as property in that page.
      */
-    property AbstractDrawer contextDrawer
+    property OverlayDrawer contextDrawer
 
     /**
      * reachableMode: bool
@@ -245,6 +245,8 @@ Controls.ApplicationWindow {
         }
     }
 
+    contentItem.anchors.left: contentItem.parent.left
+    contentItem.anchors.right: contentItem.parent.right
     contentItem.anchors.topMargin: root.wideScreen && header && controlsVisible ? header.height : 0
     contentItem.anchors.leftMargin: root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
     contentItem.anchors.rightMargin: root.contextDrawer && root.contextDrawer.modal === false ? root.contextDrawer.contentItem.width * root.contextDrawer.position : 0
@@ -266,16 +268,16 @@ Controls.ApplicationWindow {
     }
 
     Binding {
-        when: globalDrawer !== undefined
+        when: globalDrawer !== undefined && root.visible
         target: globalDrawer
         property: "parent"
-        value: contentItem.parent
+        value: overlay
     }
     Binding {
-        when: contextDrawer !== undefined
+        when: contextDrawer !== undefined && root.visible
         target: contextDrawer
         property: "parent"
-        value: contentItem.parent
+        value: overlay
     }
     onPageStackChanged: pageStack.parent = contentItem;
 

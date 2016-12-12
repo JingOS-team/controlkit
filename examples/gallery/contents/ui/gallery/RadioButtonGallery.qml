@@ -18,9 +18,9 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.2 as Controls
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 ScrollablePage {
     id: page
@@ -44,63 +44,63 @@ ScrollablePage {
         }
     }
 
+    Controls.ButtonGroup {
+        buttons: column1.children
+    }
 
     ColumnLayout {
         width: page.width
-        Controls.ExclusiveGroup {
-            id: radioGroup
-        }
-        Controls.ExclusiveGroup {
-            id: radioGroup2
-        }
 
         Item {
             Layout.fillWidth: true
             Layout.minimumHeight: Units.gridUnit * 10
-            GridLayout {
+            RowLayout {
                 anchors.centerIn: parent
-                columns: 3
-                rows: 3
-                rowSpacing: Units.smallSpacing
-
-                Item {
-                    width: 1
-                    height: 1
+                ColumnLayout {
+                    Layout.fillHeight: true
+                    Item {
+                        width: 1
+                        height: 1
+                        Layout.fillHeight: true
+                    }
+                    Label {
+                        text: "On"
+                        Layout.preferredHeight: radio1.height
+                    }
+                    Label {
+                        text: "Off"
+                        Layout.preferredHeight: radio1.height
+                    }
                 }
-                Label {
-                    text: "Normal"
+                ColumnLayout {
+                    id: column1
+                    Label {
+                        text: "Normal"
+                    }
+                    Controls.RadioButton {
+                        id: radio1
+                        text: "On"
+                        checked: true
+                    }
+                    Controls.RadioButton {
+                        text: "Off"
+                        checked: false
+                    }
                 }
-                Label {
-                    text: "Disabled"
+                ColumnLayout {
+                    id: column2
                     enabled: false
-                }
-                Label {
-                    text: "On"
-                }
-                Controls.RadioButton {
-                    text: "On"
-                    checked: true
-                    exclusiveGroup: radioGroup
-                }
-                Controls.RadioButton {
-                    text: "On"
-                    checked: true
-                    enabled: false
-                    exclusiveGroup: radioGroup2
-                }
-                Label {
-                    text: "Off"
-                }
-                Controls.RadioButton {
-                    text: "Off"
-                    checked: false
-                    exclusiveGroup: radioGroup
-                }
-                Controls.RadioButton {
-                    text: "Off"
-                    checked: false
-                    enabled: false
-                    exclusiveGroup: radioGroup2
+                    Label {
+                        text: "Disabled"
+                    }
+                    Controls.RadioButton {
+                        text: "On"
+                        checked: true
+                    }
+                    Controls.RadioButton {
+                        text: "Off"
+                        checked: false
+                    }
                 }
             }
         }

@@ -19,8 +19,9 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 import "private"
+import QtQuick.Templates 2.0 as T2
 
 /**
  * Page is a container for all the app pages: everything pushed to the
@@ -28,44 +29,32 @@ import "private"
  * such as ScrollablePage)
  * @see ScrollablePage
  */
-Item {
+T2.Page {
     id: root
-
-    /**
-     * title: string
-     * Title for the page
-     */
-    property string title
 
     /**
      * leftPadding: int
      * default contents padding at left
      */
-    property int leftPadding: Units.gridUnit
+    leftPadding: Units.gridUnit
 
     /**
      * topPadding: int
      * default contents padding at top
      */
-    property int topPadding: Units.gridUnit
+    topPadding: Units.gridUnit
 
     /**
      * rightPadding: int
      * default contents padding at right
      */
-    property int rightPadding: Units.gridUnit
+    rightPadding: Units.gridUnit
 
     /**
      * bottomPadding: int
      * default contents padding at bottom
      */
-    property int bottomPadding: Units.gridUnit
-
-    /**
-     * contentData: Item
-     * The main items contained in this Page
-     */
-    default property alias contentData: container.data
+    bottomPadding: Units.gridUnit
 
     /**
      * flickable: Flickable
@@ -85,7 +74,7 @@ Item {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 1.0 as Kirigami
+     * import org.kde.kirigami 2.0 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]
@@ -97,7 +86,7 @@ Item {
      * @endcode
      *
      * @code
-     * import org.kde.kirigami 1.0 as Kirigami
+     * import org.kde.kirigami 2.0 as Kirigami
      *
      * Kirigami.Page {
      *   [...]
@@ -132,7 +121,7 @@ Item {
      * Example usage:
      *
      * @code
-     * import org.kde.kirigami 1.0 as Kirigami
+     * import org.kde.kirigami 2.0 as Kirigami
      * Kirigami.Page {
      *     actions.main: Kirigami.Action {
      *         iconName: "edit"
@@ -154,7 +143,7 @@ Item {
      * Example usage:
      *
      * @code
-     * import org.kde.kirigami 1.0 as Kirigami
+     * import org.kde.kirigami 2.0 as Kirigami
      * Kirigami.Page {
      *     actions.left: Kirigami.Action {
      *         iconName: "edit"
@@ -176,7 +165,7 @@ Item {
      * Example usage:
      *
      * @code
-     * import org.kde.kirigami 1.0 as Kirigami
+     * import org.kde.kirigami 2.0 as Kirigami
      * Kirigami.Page {
      *     actions.right: Kirigami.Action {
      *         iconName: "edit"
@@ -194,7 +183,7 @@ Item {
      * Actions properties are grouped.
      *
      * @code
-     * import org.kde.kirigami 1.0 as Kirigami
+     * import org.kde.kirigami 2.0 as Kirigami
      * Kirigami.Page {
      *     actions {
      *         main: Kirigami.Action {...}
@@ -215,22 +204,6 @@ Item {
     }
 
     /**
-     * background: Item
-     * This property holds the background item.
-     * Note: If the background item has no explicit size specified,
-     * it automatically follows the control's size.
-     * In most cases, there is no need to specify width or
-     * height for a background item.
-     */
-    property Item background
-
-    onBackgroundChanged: {
-        background.z = -1;
-        background.parent = root;
-        background.anchors.fill = root;
-    }
-
-    /**
      * emitted When the application requests a Back action
      * For instance a global "back" shortcut or the Android
      * Back button has been pressed.
@@ -240,27 +213,24 @@ Item {
      */
     signal backRequested(var event);
 
-    Item {
-        id: container
+    anchors.topMargin: (applicationWindow() && !applicationWindow().wideScreen && applicationWindow().controlsVisible && applicationWindow().header ? applicationWindow().header.preferredHeight : 0)
+
+    //NOTE: This exists just because control instances require it
+    contentItem: Item { 
         onChildrenChanged: {
             //NOTE: make sure OverlaySheets are directly under the root
             //so they are over all the contents and don't have margins
-            //TODO: OverlayDrawers as well?
             //search for an OverlaySheet, unfortunately have to blind test properties
             //as there is no way to get the classname from qml objects
+            //TODO: OverlaySheets should be Popup instead?
             for (var i = children.length -1; i >= 0; --i) {
                 var child = children[i];
-                if (child.toString().indexOf("OverlaySheet") === 0) {
+                if (child.toString().indexOf("OverlaySheet") === 0 ||
+                    (child.sheetOpen !== undefined && child.open !== undefined && child.close !== undefined)) {
                     child.parent = root;
+                    child.z = 9997
                 }
             }
-        }
-        anchors {
-            fill: parent
-            leftMargin: leftPadding
-            topMargin: topPadding + (applicationWindow === undefined || applicationWindow().wideScreen ? 0 : applicationWindow().header.height)
-            rightMargin: rightPadding
-            bottomMargin: bottomPadding
         }
     }
 

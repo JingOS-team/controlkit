@@ -19,9 +19,8 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.0
-import QtQuick.Controls 1.0 as Controls
-import QtQuick.Controls.Private 1.0
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
+import QtQuick.Templates 2.0 as T2
 
 /**
  * An item delegate for the primitive ListView component.
@@ -30,66 +29,24 @@ import org.kde.kirigami 1.0
  *
  * @inherit QtQuick.Item
  */
-Item {
+T2.ItemDelegate {
     id: listItem
     
-    /**
-     * contentItem: Item
-     * This property holds the visual content item.
-     *
-     * Note: The content item is automatically resized inside the
-     * padding of the control.
-     */
-     default property Item contentItem
-
     /**
      * supportsMouseEvents: bool
      * Holds if the item emits signals related to mouse interaction.
      *TODO: remove
      * The default value is false.
      */
-    property alias supportsMouseEvents: itemMouse.enabled
-
-    /**
-     * clicked: signal
-     * This signal is emitted when there is a click.
-     *
-     * This is disabled by default, set enabled to true to use it.
-     * @see enabled
-     */
-    signal clicked
-
-
-    /**
-     * pressAndHold: signal
-     * The user pressed the item with the mouse and didn't release it for a
-     * certain amount of time.
-     *
-     * This is disabled by default, set enabled to true to use it.
-     * @see enabled
-     */
-    signal pressAndHold
-
-    /**
-     * checked: bool
-     * If true makes the list item look as checked or pressed. It has to be set
-     * from the code, it won't change by itself.
-     */
-    property bool checked: false
-
-    /**
-     * pressed: bool
-     * True when the user is pressing the mouse over the list item and
-     * supportsMouseEvents is set to true
-     */
-    property alias pressed: itemMouse.pressed
+    property bool supportsMouseEvents: hoverEnabled
 
     /**
      * containsMouse: bool
      * True when the user hover the mouse over the list item
      * NOTE: on mobile touch devices this will be true only when pressed is also true
+     * TODO: remove?
      */
-    property alias containsMouse: itemMouse.containsMouse
+    property alias containsMouse: listItem.hovered
 
     /**
      * sectionDelegate: bool
@@ -104,17 +61,6 @@ Item {
      * default: true
      */
     property bool separatorVisible: true
-
-    /**
-     * background: Item
-     * This property holds the background item.
-     *
-     * Note: If the background item has no explicit size specified,
-     * it automatically follows the control's size.
-     * In most cases, there is no need to specify width or
-     * height for a background item.
-     */
-    property Item background
 
     /**
      * textColor: color
@@ -150,9 +96,16 @@ Item {
      */
     property color activeBackgroundColor: Theme.highlightColor
 
-    implicitWidth: contentItem ? contentItem.childrenRect.width : 0
+    default property alias _default: listItem.contentItem
 
-    implicitHeight: contentItem.height + Units.smallSpacing * 5
+    leftPadding: Units.smallSpacing * 2
+    topPadding: Units.smallSpacing * 2
+    rightPadding: Units.smallSpacing * 2
+    bottomPadding: Units.smallSpacing * 2
+
+    implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
+
+    implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5
 
     width: parent ? parent.width : implicitWidth
     Layout.fillWidth: true
@@ -161,43 +114,7 @@ Item {
 
     height: visible ? implicitHeight : 0
 
-    onContentItemChanged: {
-        contentItem.parent = paddingItem;
-    }
-
-    Component.onCompleted: {
-        itemMouse.integrateBackground()
-    }
-
-    MouseArea {
-        id: itemMouse
-        anchors.fill: parent
-        enabled: true
-        hoverEnabled: !Settings.isMobile
-
-        onClicked: listItem.clicked()
-        onPressAndHold: listItem.pressAndHold()
-
-        Item {
-            id: paddingItem
-            z: 2
-            anchors {
-                fill: parent
-                margins: Units.smallSpacing
-            }
-        }
-
-        function integrateBackground() {
-            if (background) {
-                background.parent = itemMouse;
-                background.anchors.fill = itemMouse;
-            }
-        }
-    }
-
-    onBackgroundChanged: {
-        itemMouse.integrateBackground()
-    }
+    hoverEnabled:true
 
     Accessible.role: Accessible.ListItem
 }

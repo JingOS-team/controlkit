@@ -21,7 +21,7 @@ import QtQuick 2.5
 import QtQuick.Layouts 1.2
 import QtQuick.Controls.Private 1.0
 import "private"
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 
 /**
@@ -50,7 +50,47 @@ AbstractApplicationHeader {
      */
     property int headerStyle: ApplicationHeaderStyle.Auto
 
-    property alias pageDelegate: titleList.delegate
+    property Component pageDelegate: Component {
+        Row {
+            height: parent.height
+
+            spacing: Units.smallSpacing
+
+            Icon {
+                //in tabbar mode this is just a spacer
+                visible: !__appWindow.wideScreen && (modelData > 0 || titleList.internalHeaderStyle == ApplicationHeaderStyle.TabBar)
+                height: title.height
+                width: height
+                selected: header.background && header.background.color && header.background.color == Theme.highlightColor
+                source: titleList.isTabBar ? "" : "go-next"
+            }
+
+            Heading {
+                id: title
+                width:Math.min(titleList.width, implicitWidth)
+                anchors.verticalCenter: parent.verticalCenter
+                opacity: current ? 1 : 0.4
+                //Scaling animate NativeRendering is too slow
+                renderType: Text.QtRendering
+                color: header.background && header.background.color && header.background.color == Theme.highlightColor ? Theme.highlightedTextColor : Theme.textColor
+                elide: Text.ElideRight
+                text: page ? page.title : ""
+                font.pixelSize: titleList.height / 1.6
+                height: parent.height
+                Rectangle {
+                    anchors {
+                        bottom: parent.bottom
+                        left: parent.left
+                        right: parent.right
+                    }
+                    height: Units.smallSpacing
+                    color: title.color
+                    opacity: 0.6
+                    visible: titleList.isTabBar && current
+                }
+            }
+        }
+    }
 
     Rectangle {
         anchors {
@@ -80,7 +120,7 @@ AbstractApplicationHeader {
         clip: true
         anchors {
             fill: parent
-            leftMargin: Math.max ((backButton ? backButton.width : (titleList.isTabBar ? 0 : Units.smallSpacing*2)), __appWindow.contentItem.x)
+            leftMargin: __appWindow.wideScreen ? 0 : backButton.width
         }
         cacheBuffer: width ? Math.max(0, width * count) : 0
         displayMarginBeginning: __appWindow.pageStack.width * count
@@ -112,14 +152,21 @@ AbstractApplicationHeader {
             duration: Units.longDuration
             easing.type: Easing.InOutQuad
         }
-
+        Timer {
+            id: contentXSyncTimer
+            interval: 0
+            onTriggered: {
+                titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
+            }
+        }
+        onCountChanged: contentXSyncTimer.restart();
         onCurrentIndexChanged: gotoIndex(currentIndex);
         onModelChanged: gotoIndex(currentIndex);
         onContentWidthChanged: gotoIndex(currentIndex);
 
         onContentXChanged: {
-            if (__appWindow.wideScreen && !__appWindow.pageStack.contentItem.moving) {
-                //__appWindow.pageStack.contentItem.contentX = titleList.contentX
+            if (__appWindow.wideScreen && !__appWindow.pageStack.contentItem.moving && titleList.moving) {
+                __appWindow.pageStack.contentItem.contentX = titleList.contentX
             }
         }
         onHeightChanged: {
@@ -127,7 +174,8 @@ AbstractApplicationHeader {
         }
         onMovementEnded: {
             if (__appWindow.wideScreen) {
-                __appWindow.pageStack.contentItem.movementEnded();
+                //this will trigger snap as well
+                __appWindow.pageStack.contentItem.flick(0,0);
             }
         }
 
@@ -142,22 +190,16 @@ AbstractApplicationHeader {
 
         delegate: MouseArea {
             id: delegate
-            readonly property Page page: __appWindow.pageStack.get(modelData)
-            //NOTE: why not use ListViewCurrentIndex? because listview itself resets
-            //currentIndex in some situations (since here we are using an int as a model,
-            //even more often) so the property binding gets broken
-            readonly property bool current: __appWindow.pageStack.currentIndex == index
+            readonly property int currentIndex: index
+            readonly property var currentModelData: modelData
+            clip: true
 
             width: {
                 //more columns shown?
-                if (__appWindow.wideScreen && page) {
-                    if (modelData == 0 && titleList.backButton) {
-                        return page.width - Math.max(0, titleList.backButton.width - __appWindow.contentItem.x);
-                    } else {
-                        return page.width;
-                    }
+                if (__appWindow.wideScreen && delegateLoader.page) {
+                    return delegateLoader.page.width;
                 } else {
-                    return Math.min(titleList.width, delegateRoot.implicitWidth + Units.smallSpacing);
+                    return Math.min(titleList.width, delegateLoader.implicitWidth + Units.smallSpacing);
                 }
             }
             height: titleList.height
@@ -177,46 +219,21 @@ AbstractApplicationHeader {
                 }
             }
 
-            Row {
-                id: delegateRoot
-                x: Units.smallSpacing + __appWindow.wideScreen ? (Math.min(delegate.width - width, Math.max(0, titleList.contentX - delegate.x))) : 0
+            Loader {
+                id: delegateLoader
                 height: parent.height
+                x: Units.smallSpacing + __appWindow.wideScreen ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + (titleList.backButton ? titleList.backButton.width : 0)))) : 0
+                width: parent.width - x
 
-                spacing: Units.smallSpacing
+                sourceComponent: header.pageDelegate
 
-                Icon {
-                    //in tabbar mode this is just a spacer
-                    visible: !__appWindow.wideScreen && (modelData > 0 || titleList.internalHeaderStyle == ApplicationHeaderStyle.TabBar)
-                    height: title.height
-                    width: height
-                    selected: header.background && header.background.color && header.background.color == Theme.highlightColor
-                    source: titleList.isTabBar ? "" : "go-next"
-                }
-
-                Heading {
-                    id: title
-                    width:Math.min(titleList.width, implicitWidth)
-                    anchors.verticalCenter: parent.verticalCenter
-                    opacity: delegate.current ? 1 : 0.4
-                    //Scaling animate NativeRendering is too slow
-                    renderType: Text.QtRendering
-                    color: header.background && header.background.color && header.background.color == Theme.highlightColor ? Theme.highlightedTextColor : Theme.textColor
-                    elide: Text.ElideRight
-                    text: page ? page.title : ""
-                    font.pixelSize: titleList.height / 1.6
-                    height: parent.height
-                    Rectangle {
-                        anchors {
-                            bottom: parent.bottom
-                            left: parent.left
-                            right: parent.right
-                        }
-                        height: Units.smallSpacing
-                        color: title.color
-                        opacity: 0.6
-                        visible: titleList.isTabBar && delegate.current
-                    }
-                }
+                readonly property Page page: __appWindow.pageStack.get(modelData)
+                //NOTE: why not use ListViewCurrentIndex? because listview itself resets
+                //currentIndex in some situations (since here we are using an int as a model,
+                //even more often) so the property binding gets broken
+                readonly property bool current: __appWindow.pageStack.currentIndex == index
+                readonly property int index: parent.currentIndex
+                readonly property var modelData: parent.currentModelData
             }
         }
         Connections {

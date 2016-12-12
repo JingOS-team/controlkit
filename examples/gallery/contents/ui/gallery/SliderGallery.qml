@@ -18,9 +18,9 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.2 as Controls
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 ScrollablePage {
     id: page
@@ -59,9 +59,15 @@ ScrollablePage {
                     text: "Normal:"
                 }
                 Controls.Slider {
+                    id: slider
                     Layout.minimumWidth: Units.gridUnit * 15
                     value: 2
-                    maximumValue: 5.0
+                    to: 5.0
+                    Controls.ToolTip {
+                        parent: slider.handle
+                        visible: slider.pressed
+                        text: slider.position.toFixed(1)
+                    }
                 }
                 Label {
                     text: "Disabled:"
@@ -70,17 +76,22 @@ ScrollablePage {
                     enabled: false
                     Layout.minimumWidth: Units.gridUnit * 15
                     value: 2
-                    maximumValue: 5.0
+                    to: 5.0
                 }
                 Label {
                     text: "Thickmarks:"
                 }
                 Controls.Slider {
+                    id: slider2
                     Layout.minimumWidth: Units.gridUnit * 15
-                    tickmarksEnabled: true
-                    maximumValue: 5.0
+                    to: 5.0
                     stepSize: 1.0
                     value: 3
+                    Controls.ToolTip {
+                        parent: slider2.handle
+                        visible: slider2.pressed
+                        text: slider2.position.toFixed(1)
+                    }
                 }
                 Label {
                     text: "Vertical:"
@@ -91,15 +102,14 @@ ScrollablePage {
                         Layout.minimumWidth: 2
                         Layout.minimumHeight: Units.gridUnit * 10
                         value: 2
-                        maximumValue: 5.0
+                        to: 5.0
                         orientation: Qt.Vertical
                     }
                     Controls.Slider {
                         Layout.minimumWidth: 2
                         Layout.minimumHeight: Units.gridUnit * 10
                         value: 3
-                        tickmarksEnabled: true
-                        maximumValue: 5.0
+                        to: 5.0
                         stepSize: 1.0
                         orientation: Qt.Vertical
                     }

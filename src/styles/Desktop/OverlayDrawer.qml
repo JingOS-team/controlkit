@@ -18,7 +18,8 @@
  */
 
 import QtQuick 2.1
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
+import QtQuick.Templates 2.0
 
 import "../../templates" as T
 
@@ -36,18 +37,12 @@ T.OverlayDrawer {
 //BEGIN Properties
     background: Rectangle {
         color: Theme.viewBackgroundColor
-        property Item handleBackground: Item {
-        }
 
         Item {
             id: drawerHandle
-            z: -1
+            parent: root.handle
+            anchors.fill: parent
 
-            anchors {
-                right: root.edge == Qt.LeftEdge ? undefined : parent.left
-                left: root.edge == Qt.RightEdge ? undefined : parent.right
-                bottom: parent.bottom
-            }
             visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
             width: Units.iconSizes.medium + Units.smallSpacing * 2
             height: width
@@ -125,5 +120,12 @@ T.OverlayDrawer {
 
     //default to a sidebar in desktop mode
     modal: edge == Qt.TopEdge || edge == Qt.BottomEdge
-    opened: true
+    drawerOpen: true
+    closePolicy: modal ? Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
+    handleVisible: false
+    onPositionChanged: {
+        if (!modal && !root.peeking && !root.animating) {
+            position = 1;
+        }
+    }
 }

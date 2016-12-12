@@ -18,9 +18,9 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.2 as Controls
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 1.0
+import org.kde.kirigami 2.0
 
 ScrollablePage {
     id: page
@@ -31,11 +31,11 @@ ScrollablePage {
 
     actions {
         main: Action {
-            iconName: sheet.opened ? "dialog-cancel" : "document-edit"
+            iconName: sheet.sheetOpen ? "dialog-cancel" : "document-edit"
             text: "Main Action Text"
-            checked: sheet.opened
+            checked: sheet.sheetOpen
             checkable: true
-            onCheckedChanged: sheet.opened = checked;
+            onCheckedChanged: sheet.sheetOpen = checked;
         }
         left: Action {
             iconName: "go-previous"
@@ -64,7 +64,7 @@ ScrollablePage {
             },
             Action {
                 text: "Action for Sheet"
-                visible: sheet.opened
+                visible: sheet.sheetOpen
             }
         ]
     }
@@ -72,11 +72,11 @@ ScrollablePage {
 
     //Close the drawer with the back button
     onBackRequested: {
-        if (bottomDrawer.opened) {
+        if (bottomDrawer.drawerOpen) {
             event.accepted = true;
             bottomDrawer.close();
         }
-        if (sheet.opened) {
+        if (sheet.sheetOpen) {
             event.accepted = true;
             sheet.close();
         }
@@ -84,7 +84,6 @@ ScrollablePage {
 
     OverlayDrawer {
         id: bottomDrawer
-        anchors.fill: parent
         edge: Qt.BottomEdge
         contentItem: Item {
             implicitHeight: childrenRect.height + Units.gridUnit
@@ -104,6 +103,7 @@ ScrollablePage {
             }
         }
     }
+    
 
     OverlaySheet {
         id: sheet
@@ -187,34 +187,9 @@ ScrollablePage {
         }
         Controls.ToolButton {
             text: "Tool Button non flat"
-            property bool flat: false
+            flat: false
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: showPassiveNotification(text + " clicked")
-        }
-        Controls.ToolButton {
-            iconName: "go-previous"
-            property bool flat: false
-            anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: showPassiveNotification("Button clicked")
-        }
-        Row {
-            spacing: 0
-            anchors.horizontalCenter: parent.horizontalCenter
-            Controls.ToolButton {
-                iconName: "edit-cut"
-                property bool flat: false
-                onClicked: showPassiveNotification("Cut clicked")
-            }
-            Controls.ToolButton {
-                iconName: "edit-copy"
-                property bool flat: false
-                onClicked: showPassiveNotification("Copy clicked")
-            }
-            Controls.ToolButton {
-                iconName: "edit-paste"
-                property bool flat: false
-                onClicked: showPassiveNotification("Paste clicked")
-            }
         }
     }
 }
