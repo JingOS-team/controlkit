@@ -150,6 +150,9 @@ AbstractApplicationWindow {
                 }
             }
         }
+        Keys.onBackPressed: {
+            event.accepted = true
+        }
         Keys.onReleased: {
             if (event.key == Qt.Key_Back ||
             (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {

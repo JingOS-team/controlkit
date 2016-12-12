@@ -37,6 +37,14 @@ Kirigami.ScrollablePage {
         }
     }
 
+    //Close the drawer with the back button
+    onBackRequested: {
+        if (sheet.sheetOpen) {
+            event.accepted = true;
+            sheet.close();
+        }
+    }
+
     supportsRefreshing: true
     onRefreshingChanged: {
         if (refreshing) {
