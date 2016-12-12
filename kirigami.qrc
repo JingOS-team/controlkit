@@ -47,6 +47,7 @@
         <file alias="styles/Material/AbstractListItem.qml">src/styles/Material/AbstractListItem.qml</file>
         <file alias="styles/Material/Theme.qml">src/styles/Material/Theme.qml</file>
         <file alias="styles/Material/SwipeListItem.qml">src/styles/Material/SwipeListItem.qml</file>
+        <file alias="styles/Material/Label.qml">src/styles/Material/Label.qml</file>
         <file alias="styles/Desktop/AbstractListItem.qml">src/styles/Desktop/AbstractListItem.qml</file>
         <file alias="styles/Desktop/Theme.qml">src/styles/Desktop/Theme.qml</file>
         <file alias="styles/Desktop/OverlayDrawer.qml">src/styles/Desktop/OverlayDrawer.qml</file>
