@@ -14,7 +14,7 @@ set(kirigami_SRCS
 
 IF(STATIC_LIBRARY)
 
-qt5_add_resources(RESOURCES ${CMAKE_SOURCE_DIR}/kirigami.qrc)
+qt5_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../kirigami.qrc)
 
 add_library(kirigamiplugin STATIC ${kirigami_SRCS} ${RESOURCES})
 target_link_libraries(kirigamiplugin Qt5::Core  Qt5::Qml Qt5::Quick)
