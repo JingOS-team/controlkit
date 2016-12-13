@@ -39,7 +39,7 @@ Rectangle {
         ColorAnimation { duration: Units.longDuration }
     }
 
-    readonly property bool _firstElement: index !== undefined && index == 0
+    readonly property bool _firstElement: typeof(index) !== "undefined" && index == 0
 
     on_FirstElementChanged: {
         if (_firstElement) {
