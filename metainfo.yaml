@@ -10,7 +10,7 @@ deprecated: false
 release: true
 logo: logo.png
 libraries:
- - cmake: KF5::Kirigami
-cmakename: KF5Kirigami
+ - cmake: KF5::Kirigami2
+cmakename: KF5Kirigami2
 irc: plasma
 mailinglist: plasma-devel
