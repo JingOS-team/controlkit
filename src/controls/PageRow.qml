@@ -81,7 +81,7 @@ T.Control {
      * Otherwise the only way to go back will be programmatically
      * default: true
      */
-//    property alias interactive: mainView.interactive
+    property alias interactive: mainView.interactive
 
 //END PROPERTIES
 
@@ -217,7 +217,6 @@ T.Control {
         boundsBehavior: Flickable.StopAtBounds
         orientation: Qt.Horizontal
         snapMode: ListView.SnapToItem
-        interactive: root.interactive
         currentIndex: root.currentIndex
         rightMargin: count > 1 ? pagesLogic.get(count-1).page.width - pagesLogic.get(count-1).width : 0
         preferredHighlightBegin: 0
