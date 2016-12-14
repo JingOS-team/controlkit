@@ -18,21 +18,23 @@
  */
 
 import QtQuick 2.5
-import QtQuick.Controls 1.3 as Controls
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import QtQuick.Controls.Private 1.0
 import "private"
 import org.kde.kirigami 2.0
 
 
 /**
- * 
+ * This Application header represents a toolbar that
+ * will display the actions of the current page.
+ * Both Contextual actions and the main, left and right actions
  */
 ApplicationHeader {
     id: header
 
     preferredHeight: 38
     maximumHeight: preferredHeight
+    headerStyle: ApplicationHeaderStyle.Titles
 
     //FIXME: needs a property difinition to have its own type in qml
     property string _internal: ""
@@ -88,6 +90,16 @@ ApplicationHeader {
                     anchors.verticalCenter: parent.verticalCenter
                     action: modelData
                     visible: modelData.visible && x+layout.x+width*2 < delegateItem.width
+                    onVisibleChanged: {
+                        if (!modelData.visible) {
+                            return;
+                        }
+                        if (!visible) {
+                            menu.visibleChildren++;
+                        } else {
+                            menu.visibleChildren = Math.max(0, menu.visibleChildren-1);
+                        }
+                    }
                 }
             }
         }
@@ -110,42 +122,37 @@ ApplicationHeader {
             }
 
             //TODO: we need a kebab icon
-            iconName: "application-menu"
+            //iconName: "application-menu"
+            Icon {
+                anchors.fill: parent
+                source: "application-menu"
+                anchors.margins: 4
+            }
+            checkable: true
+            checked: menu.visible
             visible: menu.visibleChildren > 0
-            onClicked: page.actions.main
+            onClicked: menu.open()
 
-            menu: Controls.Menu {
+            Controls.Menu {
                 id: menu
-
+                y: moreButton.height
                 property int visibleChildren: 0
-                Instantiator {
+
+                Repeater {
                     model: page && page.actions.contextualActions ? page.actions.contextualActions : null
                     delegate: Controls.MenuItem {
                         text: modelData ? modelData.text : ""
-                        iconName: modelData.iconName
-                        shortcut: modelData.shortcut
+                        checkable:  modelData.checkable
+                        //FIXME: icons
+                        //iconName: modelData.iconName
                         onTriggered: modelData.trigger();
                         //skip the 3 buttons and 2 separators
-                        visible: !layout.children[index+5].visible && modelData.visible
+                        visible: modelData.visible
+                        height: visible ? implicitHeight : 0
                         enabled: modelData.enabled
-                        onVisibleChanged: {
-                            if (visible) {
-                                menu.visibleChildren++;
-                            } else {
-                                menu.visibleChildren = Math.max(0, menu.visibleChildren-1);
-                            }
-                        }
-                    }
-                    onObjectAdded: {
-                        menu.insertItem(index, object);
-                        if (object.visible) {
-                            menu.visibleChildren++;
-                        }
-                    }
-                    onObjectRemoved: {
-                        menu.removeItem(object);
-                        if (object.visible) {
-                            menu.visibleChildren = Math.max(0, menu.visibleChildren-1);
+                        Component.onCompleted: {
+                            menu.addItem(this);
+                            menu.implicitWidth = Math.max(this.implicitWidth, menu.implicitWidth);
                         }
                     }
                 }

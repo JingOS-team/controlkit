@@ -22,6 +22,7 @@
 #include "kirigamiplugin.h"
 #include "enums.h"
 #include "desktopicon.h"
+#include "settings.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -58,6 +59,12 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //TODO: in this plugin it will end up something similar to
     //PlasmaCore's ColorScope?
+
+    qmlRegisterSingletonType<Settings>(uri, 2, 0, "Settings",
+         [](QQmlEngine*, QJSEngine*) -> QObject* {
+             return new Settings;
+         }
+     );
 
     qmlRegisterUncreatableType<ApplicationHeaderStyle>(uri, 2, 0, "ApplicationHeaderStyle", "Cannot create objects of type ApplicationHeaderStyle");
 

@@ -8,6 +8,7 @@ set(kirigami_SRCS
     kirigamiplugin.cpp
     enums.cpp
     desktopicon.cpp
+    settings.cpp
     ${kirigami_QM_LOADER}
     )
 

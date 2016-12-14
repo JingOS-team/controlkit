@@ -19,7 +19,6 @@
 
 import QtQuick 2.7
 import QtQuick.Layouts 1.2
-import QtQuick.Controls.Private 1.0
 import org.kde.kirigami 2.0
 import "../private"
 import QtQuick.Templates 2.0 as T2

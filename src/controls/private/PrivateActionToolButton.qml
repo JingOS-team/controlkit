@@ -19,13 +19,10 @@
 
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
-import QtQuick.Templates 2.0 as T
-//QQC1 is needed for StyleItem to fully work
-import QtQuick.Controls 1.0 as QQC1
-import QtQuick.Controls.Private 1.0
+import QtQuick.Controls 2.0 as Controls
 import org.kde.kirigami 2.0
 
-T.ToolButton {
+Controls.ToolButton {
     id: control
 
     implicitWidth: Math.max(background.implicitWidth, layout.implicitWidth + 16)
@@ -35,7 +32,8 @@ T.ToolButton {
     property Action action
     property bool showText: true
 
-    text: action ? action.text : ""
+    //we need our own text delegate
+    text: ""
     checkable: action && action.checkable
     checked: action && action.checked
     enabled: action && action.enabled
@@ -61,22 +59,15 @@ T.ToolButton {
                 visible: control.action && control.action.iconName != ""
             }
             Label {
-                text: control.text
+                text: action ? action.text : ""
                 visible: control.showText
             }
         }
     }
-    background: StyleItem {
-        id: styleitem
-        elementType: control.flat ? "toolbutton" : "button"
-        sunken: control.pressed || (control.checkable && control.checked)
-        raised: !(control.pressed || (control.checkable && control.checked))
-        hover: control.hovered
-        activeControl: control.isDefault ? "default" : "f"
-    }
+
     Timer {
         interval: 1000
-        property string tooltip: action.tooltip.length ? action.tooltip : action.text
+        property string tooltip: action ? (action.tooltip.length ? action.tooltip : action.text) : ""
         running: control.hovered && !control.pressed && tooltip.length
         onTriggered: Tooltip.showText(contentItem, Qt.point(contentItem.mouseX, contentItem.mouseY), tooltip)
     }

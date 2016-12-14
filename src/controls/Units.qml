@@ -18,8 +18,8 @@
  */
 
 import QtQuick 2.4
-import QtQuick.Controls.Private 1.0
 import QtQuick.Window 2.2
+import org.kde.kirigami 2.0
 
 pragma Singleton
 
