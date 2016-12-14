@@ -33,9 +33,9 @@ ScrollablePage {
         main: Action {
             iconName: sheet.sheetOpen ? "dialog-cancel" : "document-edit"
             text: "Main Action Text"
-            checked: sheet.sheetOpen
             checkable: true
             onCheckedChanged: sheet.sheetOpen = checked;
+            shortcut: "Alt+S"
         }
         left: Action {
             iconName: "go-previous"
@@ -107,6 +107,7 @@ ScrollablePage {
 
     OverlaySheet {
         id: sheet
+        onSheetOpenChanged: page.actions.main.checked = sheetOpen
         ColumnLayout {
             Label {
                 Layout.fillWidth: true

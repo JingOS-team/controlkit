@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Marco Martin <mart@kde.org>
+ *   Copyright 2016 Marco Martin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -17,16 +17,29 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.1
-import QtQuick.Controls 1.3 as Controls
+import QtQuick 2.7
 
 /**
  * An item that represents an abstract Action
  *
- * @inherit Controls.Action
+ * @inherit QtObject
  */
-Controls.Action {
+QtObject {
     id: root
+
+    /**
+     * Emitted whenever a action's checked property changes.
+     * This usually happens at the same time as triggered.
+     * @param checked
+     */
+    signal toggled(bool checked)
+
+    /**
+     * Emitted when either the menu item or its bound action have been activated. Includes the object that triggered the event if relevant (e.g. a Button).
+     * You shouldn't need to emit this signal, use trigger() instead.
+     * @param source Object that triggered the event if relevant, often null
+     */
+    signal triggered(QtObject source)
 
     /**
      * visible: bool
@@ -35,6 +48,52 @@ Controls.Action {
      * It's up to the action representation to honor this property.
      */
     property bool visible: true
+
+    /**
+     * checkable: bool
+     * Whether action can be checked, or toggled. Defaults to false.
+     */
+    property bool checkable: false
+
+    /**
+     * checked: bool
+     * Whether the action is checked. Defaults to false.
+     */
+    property bool checked: false
+
+    /**
+     * enabled: bool
+     * Whether the action is enabled, and can be triggered. Defaults to true.
+     */
+    property bool enabled: true
+
+    /**
+     * iconName: string
+     * Sets the icon name for the action. This will pick the icon with the given name from the current theme.
+     */
+    property string iconName
+
+    /**
+     * iconSource: string
+     * Sets the icon file or resource url for the action. Defaults to the empty URL. Use this if you want a specific file rather than an icon from the theme
+     */
+    property string iconSource
+
+    /**
+     * shortcut : keysequence
+     * Shortcut bound to the action. The keysequence can be a string or a Qt standard key.
+     */
+    property alias shortcut: shortcutItem.sequence
+
+    /**
+     * Text for the action. This text will show as the button text, or as title in a menu item, depending from the way the developer will choose to represent it
+     */
+    property string text
+
+    /**
+     * A tooltip text to be shown when hovering the control bound to this action. Not all controls support tooltips on all platforms
+     */
+    property string tooltip
 
     /**
      * children: list<Action>
@@ -54,4 +113,21 @@ Controls.Action {
      */
     default property alias children: root.__children
     property list<QtObject> __children
+    property Shortcut __shortcut: Shortcut {
+        property bool checked: false
+        id: shortcutItem
+        onActivated: root.trigger();
+    }
+    function trigger(source) {
+        if (!enabled) {
+            return;
+        }
+        root.triggered(source);
+        if (root.checkable) {
+            root.checked = !root.checked;
+            root.toggled(root.checked);
+        }
+    }
+
+    onCheckedChanged: root.toggled(root.checked);
 }
