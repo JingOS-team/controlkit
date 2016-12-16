@@ -195,7 +195,7 @@ AbstractApplicationHeader {
 
             width: {
                 //more columns shown?
-                if (__appWindow.wideScreen && delegateLoader.page) {
+                if ((header.headerStyle == ApplicationHeaderStyle.Titles || __appWindow.wideScreen) && delegateLoader.page) {
                     return delegateLoader.page.width;
                 } else {
                     return Math.min(titleList.width, delegateLoader.implicitWidth + Units.smallSpacing);
