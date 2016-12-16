@@ -37,8 +37,7 @@ ScrollablePage {
                 onClicked: menu.open();
                 Controls.Menu {
                     id: menu
-                    x: parent.width - width
-                    transformOrigin: Controls.Menu.TopRight
+                    y: parent.height
 
                     Controls.MenuItem {
                         checkable: true
