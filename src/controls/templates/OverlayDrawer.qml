@@ -76,7 +76,7 @@ T2.Drawer {
      **/
     readonly property Item handle: MouseArea {
         id: drawerHandle
-        z: 2000000
+        z: root.peeking || root.drawerOpen ? 2000001 : 2000000
         preventStealing: true
         parent: applicationWindow().overlay.parent
 
