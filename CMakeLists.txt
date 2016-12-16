@@ -2,7 +2,7 @@ project(kirigami2)
 
 cmake_minimum_required(VERSION 2.8.12)
 set(KF5_MIN_VERSION "5.18.0")
-set(QT_MIN_VERSION "5.5.0")
+set(QT_MIN_VERSION "5.7.0")
 
 ################# Disallow in-source build #################
 
@@ -24,7 +24,7 @@ IF(STATIC_LIBRARY)
 	set(CMAKE_INCLUDE_CURRENT_DIR ON)
 	ADD_DEFINITIONS(-DKIRIGAMI_BUILD_TYPE_STATIC)
 	find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg)
-	set (QT_MIN_VERSION "5.5.0")
+	set (QT_MIN_VERSION "5.7.0")
 	if(UNIX)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
 	endif()
@@ -100,7 +100,7 @@ endif()
 
 ################# now find all used packages #################
 
-set (QT_MIN_VERSION "5.5.0")
+set (QT_MIN_VERSION "5.7.0")
 
 find_package(PkgConfig)
 #########################################################################
