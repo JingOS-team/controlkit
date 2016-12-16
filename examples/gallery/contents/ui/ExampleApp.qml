@@ -18,8 +18,7 @@
  */
 
 import QtQuick 2.1
-import QtQuick.Controls 1.4 as Controls
-import QtQuick.Controls 2.0 as QQC2
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.0 as Kirigami
 import "gallery"
@@ -87,17 +86,17 @@ Kirigami.ApplicationWindow {
             }
             ]
 
-        QQC2.CheckBox {
+        Controls.CheckBox {
             checked: true
             text: "Option 1"
         }
-        QQC2.CheckBox {
+        Controls.CheckBox {
             text: "Option 2"
         }
-        QQC2.CheckBox {
+        Controls.CheckBox {
             text: "Option 3"
         }
-        QQC2.Slider {
+        Controls.Slider {
             Layout.fillWidth: true
             value: 0.5
         }
@@ -117,7 +116,6 @@ Kirigami.ApplicationWindow {
                 anchors.fill: parent
                 Controls.Button {
                     anchors.centerIn: parent
-                    iconName: "go-previous"
                     text: "Remove Page"
                     onClicked: applicationWindow().pageStack.pop();
                 }
