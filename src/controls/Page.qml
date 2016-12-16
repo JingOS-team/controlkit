@@ -234,6 +234,8 @@ T2.Page {
         }
     }
 
+    //on material the shadow would bleed over
+    clip: header !== undefined
     Loader {
         z: 9999
         parent: root
