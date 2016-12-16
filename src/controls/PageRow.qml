@@ -222,6 +222,7 @@ T.Control {
         preferredHighlightBegin: 0
         preferredHighlightEnd: 0
         highlightMoveDuration: Units.longDuration
+        highlightFollowsCurrentItem: true
         onMovementEnded: currentIndex = indexAt(contentX, 0)
         onFlickEnded: onMovementEnded();
         model: ObjectModel {
@@ -333,6 +334,8 @@ T.Control {
                 }
             }
         }
+
+        onContentWidthChanged: mainView.positionViewAtIndex(root.currentIndex, ListView.Contain)
     }
 
     Component {
