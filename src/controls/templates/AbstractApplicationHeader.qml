@@ -109,6 +109,20 @@ Item {
 
         height: __appWindow.reachableMode ? root.maximumHeight : root.preferredHeight
 
+        function updatePageHeader() {
+            if (!__appWindow || !__appWindow.pageStack || !__appWindow.pageStack.currentItem || !__appWindow.pageStack.currentItem.header || !__appWindow.pageStack.currentItem.flickable) {
+                return;
+            }
+
+            if (__appWindow.wideScreen) {
+                __appWindow.pageStack.currentItem.header.y = 0;
+            } else {
+                __appWindow.pageStack.currentItem.header.y = headerItem.height + headerItem.y -1;
+            }
+        }
+        onYChanged: updatePageHeader()
+        onHeightChanged: updatePageHeader()
+
         Connections {
             id: headerSlideConnection
             target: __appWindow.pageStack.currentItem ? __appWindow.pageStack.currentItem.flickable : null
@@ -152,6 +166,7 @@ Item {
                     headerSlideConnection.oldContentY = 0;
                 }
                 headerItem.y = 0;
+                headerItem.updatePageHeader()
             }
         }
 
