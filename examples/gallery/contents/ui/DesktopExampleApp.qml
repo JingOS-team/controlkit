@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.1
-import QtQuick.Controls 1.4 as Controls
+import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.0 as Kirigami
 import "gallery"
@@ -113,7 +113,6 @@ Kirigami.ApplicationWindow {
                 anchors.fill: parent
                 Controls.Button {
                     anchors.centerIn: parent
-                    iconName: "go-previous"
                     text: "Remove Page"
                     onClicked: applicationWindow().pageStack.pop();
                 }
