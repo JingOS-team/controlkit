@@ -28,15 +28,15 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
-QString KirigamiPlugin::componentPath(const QString &fileName) const
+QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
 {
     foreach (const QString &style, m_stylesFallbackChain) {
         const QString candidate = QStringLiteral("styles/") + style + QLatin1Char('/') + fileName;
         if (QFile::exists(resolveFilePath(candidate))) {
-            return resolveFileUrl(candidate);
+            return QUrl(resolveFileUrl(candidate));
         }
     }
-    return resolveFileUrl(fileName);
+    return QUrl(resolveFileUrl(fileName));
 }
 
 
@@ -68,41 +68,41 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     qmlRegisterUncreatableType<ApplicationHeaderStyle>(uri, 2, 0, "ApplicationHeaderStyle", "Cannot create objects of type ApplicationHeaderStyle");
 
-    qmlRegisterSingletonType(componentPath(QStringLiteral("Theme.qml")), uri, 2, 0, "Theme");
-    qmlRegisterSingletonType(componentPath(QStringLiteral("Units.qml")), uri, 2, 0, "Units");
+    qmlRegisterSingletonType(componentUrl(QStringLiteral("Theme.qml")), uri, 2, 0, "Theme");
+    qmlRegisterSingletonType(componentUrl(QStringLiteral("Units.qml")), uri, 2, 0, "Units");
 
-    qmlRegisterType(componentPath(QStringLiteral("Action.qml")), uri, 2, 0, "Action");
-    qmlRegisterType(componentPath(QStringLiteral("AbstractApplicationHeader.qml")), uri, 2, 0, "AbstractApplicationHeader");
-    qmlRegisterType(componentPath(QStringLiteral("AbstractApplicationWindow.qml")), uri, 2, 0, "AbstractApplicationWindow");
-    qmlRegisterType(componentPath(QStringLiteral("AbstractListItem.qml")), uri, 2, 0, "AbstractListItem");
-    qmlRegisterType(componentPath(QStringLiteral("ApplicationHeader.qml")), uri, 2, 0, "ApplicationHeader");
-    qmlRegisterType(componentPath(QStringLiteral("ToolBarApplicationHeader.qml")), uri, 2, 0, "ToolBarApplicationHeader");
-    qmlRegisterType(componentPath(QStringLiteral("ApplicationWindow.qml")), uri, 2, 0, "ApplicationWindow");
-    qmlRegisterType(componentPath(QStringLiteral("BasicListItem.qml")), uri, 2, 0, "BasicListItem");
-    qmlRegisterType(componentPath(QStringLiteral("OverlayDrawer.qml")), uri, 2, 0, "OverlayDrawer");
-    qmlRegisterType(componentPath(QStringLiteral("ContextDrawer.qml")), uri, 2, 0, "ContextDrawer");
-    qmlRegisterType(componentPath(QStringLiteral("GlobalDrawer.qml")), uri, 2, 0, "GlobalDrawer");
-    qmlRegisterType(componentPath(QStringLiteral("Heading.qml")), uri, 2, 0, "Heading");
-    qmlRegisterType(componentPath(QStringLiteral("Separator.qml")), uri, 2, 0, "Separator");
-    qmlRegisterType(componentPath(QStringLiteral("PageRow.qml")), uri, 2, 0, "PageRow");
+    qmlRegisterType(componentUrl(QStringLiteral("Action.qml")), uri, 2, 0, "Action");
+    qmlRegisterType(componentUrl(QStringLiteral("AbstractApplicationHeader.qml")), uri, 2, 0, "AbstractApplicationHeader");
+    qmlRegisterType(componentUrl(QStringLiteral("AbstractApplicationWindow.qml")), uri, 2, 0, "AbstractApplicationWindow");
+    qmlRegisterType(componentUrl(QStringLiteral("AbstractListItem.qml")), uri, 2, 0, "AbstractListItem");
+    qmlRegisterType(componentUrl(QStringLiteral("ApplicationHeader.qml")), uri, 2, 0, "ApplicationHeader");
+    qmlRegisterType(componentUrl(QStringLiteral("ToolBarApplicationHeader.qml")), uri, 2, 0, "ToolBarApplicationHeader");
+    qmlRegisterType(componentUrl(QStringLiteral("ApplicationWindow.qml")), uri, 2, 0, "ApplicationWindow");
+    qmlRegisterType(componentUrl(QStringLiteral("BasicListItem.qml")), uri, 2, 0, "BasicListItem");
+    qmlRegisterType(componentUrl(QStringLiteral("OverlayDrawer.qml")), uri, 2, 0, "OverlayDrawer");
+    qmlRegisterType(componentUrl(QStringLiteral("ContextDrawer.qml")), uri, 2, 0, "ContextDrawer");
+    qmlRegisterType(componentUrl(QStringLiteral("GlobalDrawer.qml")), uri, 2, 0, "GlobalDrawer");
+    qmlRegisterType(componentUrl(QStringLiteral("Heading.qml")), uri, 2, 0, "Heading");
+    qmlRegisterType(componentUrl(QStringLiteral("Separator.qml")), uri, 2, 0, "Separator");
+    qmlRegisterType(componentUrl(QStringLiteral("PageRow.qml")), uri, 2, 0, "PageRow");
 
     //The icon is "special: we have to use a wrapper class to QIcon on desktops
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     if (!m_stylesFallbackChain.isEmpty() && m_stylesFallbackChain.first() == QStringLiteral("Desktop")) {
         qmlRegisterType<DesktopIcon>(uri, 2, 0, "Icon");
     } else {
-        qmlRegisterType(componentPath(QStringLiteral("Icon.qml")), uri, 2, 0, "Icon");
+        qmlRegisterType(componentUrl(QStringLiteral("Icon.qml")), uri, 2, 0, "Icon");
     }
 #else
-    qmlRegisterType(componentPath(QStringLiteral("Icon.qml")), uri, 2, 0, "Icon");
+    qmlRegisterType(componentUrl(QStringLiteral("Icon.qml")), uri, 2, 0, "Icon");
 #endif
 
-    qmlRegisterType(componentPath(QStringLiteral("Label.qml")), uri, 2, 0, "Label");
-    qmlRegisterType(componentPath(QStringLiteral("OverlaySheet.qml")), uri, 2, 0, "OverlaySheet");
-    qmlRegisterType(componentPath(QStringLiteral("Page.qml")), uri, 2, 0, "Page");
-    qmlRegisterType(componentPath(QStringLiteral("ScrollablePage.qml")), uri, 2, 0, "ScrollablePage");
-    qmlRegisterType(componentPath(QStringLiteral("SplitDrawer.qml")), uri, 2, 0, "SplitDrawer");
-    qmlRegisterType(componentPath(QStringLiteral("SwipeListItem.qml")), uri, 2, 0, "SwipeListItem");
+    qmlRegisterType(componentUrl(QStringLiteral("Label.qml")), uri, 2, 0, "Label");
+    qmlRegisterType(componentUrl(QStringLiteral("OverlaySheet.qml")), uri, 2, 0, "OverlaySheet");
+    qmlRegisterType(componentUrl(QStringLiteral("Page.qml")), uri, 2, 0, "Page");
+    qmlRegisterType(componentUrl(QStringLiteral("ScrollablePage.qml")), uri, 2, 0, "ScrollablePage");
+    qmlRegisterType(componentUrl(QStringLiteral("SplitDrawer.qml")), uri, 2, 0, "SplitDrawer");
+    qmlRegisterType(componentUrl(QStringLiteral("SwipeListItem.qml")), uri, 2, 0, "SwipeListItem");
 }
 
 #include "moc_kirigamiplugin.cpp"

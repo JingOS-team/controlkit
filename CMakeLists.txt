@@ -105,6 +105,8 @@ set (QT_MIN_VERSION "5.7.0")
 find_package(PkgConfig)
 #########################################################################
 
+add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
+
 add_subdirectory(autotests)
 add_subdirectory(src)
 #TODO: conditional

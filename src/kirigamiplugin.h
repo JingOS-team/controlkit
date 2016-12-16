@@ -53,7 +53,7 @@ public:
 
 private:
     KirigamiPlugin() {}
-    QString componentPath(const QString &fileName) const;
+    QUrl componentUrl(const QString &fileName) const;
     QString resolveFilePath(const QString &path) const
     {
         return QLatin1Char(':') + path;
@@ -79,7 +79,7 @@ public:
     void registerTypes(const char *uri);
 
 private:
-    QString componentPath(const QString &fileName) const;
+    QUrl componentUrl(const QString &fileName) const;
     QString resolveFilePath(const QString &path) const
     {
         return baseUrl().toLocalFile() + QLatin1Char('/') + path;
