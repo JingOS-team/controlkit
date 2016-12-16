@@ -147,23 +147,32 @@ P.ScrollView {
             }
 
             onYChanged: {
-                if (y > busyIndicatorFrame.height*1.5 + topPadding && applicationWindow() && root.flickableItem.atYBeginning && applicationWindow().pageStack.anchors.bottomMargin == 0 && root.width < root.height) {
-                    applicationWindow().reachableMode = true;
-                    overshootResetTimer.restart();
+                //not reachable and not overshooting enough, stop reachability countdown
+                if (!applicationWindow().reachableMode && y < busyIndicatorFrame.height) {
+                    overshootResetTimer.running = false;
+                //it's overshooting and not reachable: start countdown for reachability
+                } else if (!applicationWindow().reachableMode) {
+                    //it's important it doesn't restart
+                    overshootResetTimer.running = true;
                 }
 
                 if (!supportsRefreshing) {
                     return;
                 }
+
                 if (!root.refreshing && y > busyIndicatorFrame.height/2 + topPadding) {
                     root.refreshing = true;
                 }
             }
             Timer {
                 id: overshootResetTimer
-                interval: 8000
+                interval: applicationWindow().reachableMode ? 8000 : 1000
                 onTriggered: {
-                    applicationWindow().reachableMode = false;
+                    //put it there because widescreen may have changed since timer start
+                    if (applicationWindow().wideScreen) {
+                        return;
+                    }
+                    applicationWindow().reachableMode = !applicationWindow().reachableMode;
                 }
             }
             Binding {
