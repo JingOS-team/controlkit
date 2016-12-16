@@ -147,13 +147,13 @@ P.ScrollView {
             }
 
             onYChanged: {
+                //it's overshooting enough and not reachable: start countdown for reachability
+                if (y > root.topPadding + Units.gridUnit && !applicationWindow().reachableMode) {
+                    overshootResetTimer.running = true;
                 //not reachable and not overshooting enough, stop reachability countdown
-                if (!applicationWindow().reachableMode && y < busyIndicatorFrame.height) {
-                    overshootResetTimer.running = false;
-                //it's overshooting and not reachable: start countdown for reachability
                 } else if (!applicationWindow().reachableMode) {
                     //it's important it doesn't restart
-                    overshootResetTimer.running = true;
+                    overshootResetTimer.running = false;
                 }
 
                 if (!supportsRefreshing) {
@@ -162,6 +162,12 @@ P.ScrollView {
 
                 if (!root.refreshing && y > busyIndicatorFrame.height/2 + topPadding) {
                     root.refreshing = true;
+                }
+            }
+            Connections {
+                target: applicationWindow()
+                onReachableModeChanged: {
+                    overshootResetTimer.running = applicationWindow().reachableMode;
                 }
             }
             Timer {
