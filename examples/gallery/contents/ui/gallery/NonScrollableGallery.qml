@@ -31,7 +31,6 @@ Page {
         main: Action {
             iconName: sheet.sheetOpen ? "dialog-cancel" : "document-edit"
             text: "Main Action Text"
-            checked: sheet.sheetOpen
             checkable: true
             onCheckedChanged: sheet.sheetOpen = checked;
         }
@@ -48,6 +47,7 @@ Page {
 
     OverlaySheet {
         id: sheet
+        onSheetOpenChanged: page.actions.main.checked = sheetOpen;
         Label {
             property int implicitWidth: Units.gridUnit * 30
             wrapMode: Text.WordWrap
