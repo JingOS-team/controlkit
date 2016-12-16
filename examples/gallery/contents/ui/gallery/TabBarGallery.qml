@@ -70,12 +70,6 @@ Page {
                     Controls.TabButton {
                         text: "Second"
                     }
-                    Controls.TabButton {
-                        text: "Third"
-                    }
-                    Controls.TabButton {
-                        text: "Fourth"
-                    }
                 }
             }
         }
