@@ -31,7 +31,6 @@ Kirigami.ScrollablePage {
         main: Kirigami.Action {
             iconName: sheet.sheetOpen ? "dialog-cancel" : "document-edit"
             text: "Main Action Text"
-            checked: sheet.sheetOpen
             checkable: true
             onCheckedChanged: sheet.sheetOpen = checked;
         }
@@ -59,6 +58,7 @@ Kirigami.ScrollablePage {
     }
     Kirigami.OverlaySheet {
         id: sheet
+        onSheetOpenChanged: page.actions.main.checked = sheetOpen;
         parent: applicationWindow().overlay
         ListView {
             model: 100
