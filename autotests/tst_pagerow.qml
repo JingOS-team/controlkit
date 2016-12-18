@@ -105,18 +105,27 @@ TestCase {
         compare(mainWindow.pageStack.depth, 1)
     }
 
-    readonly property int destructions: 0
+    property int destructions: 0
     Component {
         id: destroyedPage
         Kirigami.Page {
+            id: page
             Rectangle {
                 anchors.fill: parent
                 color: "blue"
-                Component.onDestruction: testCase.destructions++
+                Component.onDestruction: {
+                    console.log("ko", page)
+                    testCase.destructions++
+                }
             }
         }
     }
-    function test_cleanup() {
+    SignalSpy {
+        id: spyDestructions
+        target: testCase
+        signalName: "destructionsChanged"
+    }
+    function test_clearPages() {
         mainWindow.pageStack.push(destroyedPage)
         mainWindow.pageStack.push(destroyedPage)
         mainWindow.pageStack.push(destroyedPage)
@@ -124,6 +133,7 @@ TestCase {
         mainWindow.pageStack.clear()
 
         compare(mainWindow.pageStack.depth, 0)
+        console.log(spyDestructions.wait())
         compare(testCase.destructions, 3)
     }
 }

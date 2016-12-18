@@ -250,6 +250,9 @@ T.Control {
                 //is destroy just an async deleteLater() that isn't executed immediately or it actually leaks?
                 pagesLogic.remove(id);
                 item.parent = root;
+                if (item.page.parent==item) {
+                    item.page.destroy(1)
+                }
                 item.destroy();
             }
             function clearPages () {
