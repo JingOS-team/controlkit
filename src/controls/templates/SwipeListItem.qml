@@ -307,8 +307,9 @@ T2.ItemDelegate {
         }
     }
     Connections {
-        target: enabled ? listItem.ListView && listItem.ListView.view && listItem.ListView.view.parent && listItem.ListView.view.parent.parent && listItem.ListView.view.parent.parent._swipeFilter : null
-        property bool enabled: listItem.ListView.view.parent.parent._swipeFilter ? listItem.ListView.view.parent.parent._swipeFilter.currentItem === listItem : false
+        id: swipeFilterConnection
+        target: enabled ? listItem.ListView.view.parent.parent && listItem.ListView.view.parent.parent._swipeFilter : null
+        readonly property bool enabled: (listItem.ListView && listItem.ListView.view && listItem.ListView.view.parent && listItem.ListView.view.parent.parent) && listItem.ListView.view.parent.parent._swipeFilter ? listItem.ListView.view.parent.parent._swipeFilter.currentItem === listItem : false
         onPeekChanged: listItem.background.x = -(listItem.background.width - listItem.background.height) * listItem.ListView.view.parent.parent._swipeFilter.peek
         onCurrentItemChanged: {
             if (!enabled) {
