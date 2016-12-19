@@ -300,13 +300,14 @@ T2.ItemDelegate {
     }
     Component.onCompleted: {
         //this will happen only once
-        if (Settings.isMobile && !listItem.ListView.view.parent.parent._swipeFilter) {
+        if ((listItem.ListView && listItem.ListView.view && listItem.ListView.view.parent && listItem.ListView.view.parent.parent) &&
+            (Settings.isMobile && !listItem.ListView.view.parent.parent._swipeFilter)) {
             var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
             listItem.ListView.view.parent.parent._swipeFilter = component.createObject(listItem.ListView.view.parent.parent);
         }
     }
     Connections {
-        target: enabled ? listItem.ListView.view.parent.parent._swipeFilter : null
+        target: enabled ? listItem.ListView && listItem.ListView.view && listItem.ListView.view.parent && listItem.ListView.view.parent.parent && listItem.ListView.view.parent.parent._swipeFilter : null
         property bool enabled: listItem.ListView.view.parent.parent._swipeFilter ? listItem.ListView.view.parent.parent._swipeFilter.currentItem === listItem : false
         onPeekChanged: listItem.background.x = -(listItem.background.width - listItem.background.height) * listItem.ListView.view.parent.parent._swipeFilter.peek
         onCurrentItemChanged: {
