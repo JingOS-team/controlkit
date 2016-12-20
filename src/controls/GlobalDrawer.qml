@@ -397,6 +397,7 @@ OverlayDrawer {
                                     } else if (root.resetMenuOnTriggered) {
                                         root.resetMenu();
                                     }
+                                    checked = Qt.binding(function() { return modelData.checked });
                                 }
                             }
                         }
