@@ -210,6 +210,8 @@ T.Control {
 
 //END FUNCTIONS
 
+    Keys.forwardTo: [currentItem]
+
     ListView {
         id: mainView
         z: 99

@@ -149,15 +149,24 @@ AbstractApplicationWindow {
                 }
             }
         }
+        function goForward() {
+            root.pageStack.currentIndex = Math.min(root.pageStack.depth-1, root.pageStack.currentIndex + 1);
+        }
         Keys.onBackPressed: {
+            goBack();
             event.accepted = true
         }
-        Keys.onReleased: {
-            if (event.key == Qt.Key_Back ||
-            (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {
-                event.accepted = true;
-                goBack();
-            }
+        Shortcut {
+            sequence: "Forward"
+            onActivated: __pageStack.goForward();
+        }
+        Shortcut {
+            sequence: StandardKey.Forward
+            onActivated: __pageStack.goForward();
+        }
+        Shortcut {
+            sequence: StandardKey.Back
+            onActivated: __pageStack.goBack();
         }
 
         Rectangle {
