@@ -242,8 +242,6 @@ T2.ItemDelegate {
         property int startX
         property int startMouseX
 
-        property MouseArea edgeFilter
-
         onClicked: {
             positionAnimation.from = background.x;
             if (listItem.background.x > -listItem.background.width/2) {
@@ -300,17 +298,17 @@ T2.ItemDelegate {
     }
     Component.onCompleted: {
         //this will happen only once
-        if ((listItem.ListView && listItem.ListView.view && listItem.ListView.view.parent && listItem.ListView.view.parent.parent) &&
-            (Settings.isMobile && !listItem.ListView.view.parent.parent._swipeFilter)) {
+        if (Settings.isMobile && !swipeFilterConnection.swipeFilterItem) {
             var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
             listItem.ListView.view.parent.parent._swipeFilter = component.createObject(listItem.ListView.view.parent.parent);
         }
     }
     Connections {
         id: swipeFilterConnection
-        target: enabled ? listItem.ListView.view.parent.parent && listItem.ListView.view.parent.parent._swipeFilter : null
-        readonly property bool enabled: (listItem.ListView && listItem.ListView.view && listItem.ListView.view.parent && listItem.ListView.view.parent.parent) && listItem.ListView.view.parent.parent._swipeFilter ? listItem.ListView.view.parent.parent._swipeFilter.currentItem === listItem : false
-        onPeekChanged: listItem.background.x = -(listItem.background.width - listItem.background.height) * listItem.ListView.view.parent.parent._swipeFilter.peek
+        readonly property QtObject swipeFilterItem: (listItem.ListView && listItem.ListView.view && listItem.ListView.view.parent && listItem.ListView.view.parent.parent) ? listItem.ListView.view.parent.parent._swipeFilter : null
+        readonly property bool enabled: swipeFilterItem ? swipeFilterItem.currentItem === listItem : false
+        target: enabled ? swipeFilterItem : null
+        onPeekChanged: listItem.background.x = -(listItem.background.width - listItem.background.height) * swipeFilterItem.peek
         onCurrentItemChanged: {
             if (!enabled) {
                 positionAnimation.to = 0;
