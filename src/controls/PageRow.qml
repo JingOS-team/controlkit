@@ -229,15 +229,9 @@ T.Control {
         onFlickEnded: onMovementEnded();
         model: ObjectModel {
             id: pagesLogic
-            property var componentCache
+            readonly property var componentCache: new Array()
+            readonly property int roundedDefaultColumnWidth: root.width < root.defaultColumnWidth*2 ? root.width : root.defaultColumnWidth
 
-            property int roundedDefaultColumnWidth: root.width < root.defaultColumnWidth*2 ? root.width : root.defaultColumnWidth
-
-            //NOTE:seems to only work if the array is defined in a declarative way,
-            //the Object in an imperative way, espacially on Android
-            Component.onCompleted: {
-                componentCache = {};
-            }
             function removePage(id) {
                 if (id < 0 || id >= count) {
                     print("Tried to remove an invalid page index:" + id);
