@@ -319,7 +319,7 @@ OverlayDrawer {
                     Layout.fillWidth: true
                     Layout.minimumHeight: currentItem ? currentItem.implicitHeight : 0
                     Layout.maximumHeight: Layout.minimumHeight
-                    initialItem: menuComponent.createObject(stackView)
+                    initialItem: menuComponent
                 }
                 Item {
                     Layout.fillWidth: true
