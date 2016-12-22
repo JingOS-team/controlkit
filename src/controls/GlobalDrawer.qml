@@ -200,7 +200,7 @@ OverlayDrawer {
      * Reverts the menu back to its initial state
      */
     function resetMenu() {
-        stackView.pop(stackView.get(0, StackView.DontLoad));
+        stackView.pop(stackView.get(0, QQC2.StackView.DontLoad));
         if (root.modal) {
             root.drawerOpen = false;
         }
