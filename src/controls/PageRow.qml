@@ -253,7 +253,7 @@ T.Control {
             }
             function clearPages () {
                 while (count > 0) {
-                    removePage(0);
+                    removePage(count-1);
                 }
             }
             function initPage(page, properties) {
