@@ -118,6 +118,7 @@ T.OverlayDrawer {
         }
     }
 
+    focus: false
     //default to a sidebar in desktop mode
     modal: edge == Qt.TopEdge || edge == Qt.BottomEdge
     drawerOpen: true

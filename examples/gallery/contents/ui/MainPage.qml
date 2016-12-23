@@ -59,6 +59,7 @@ Kirigami.ScrollablePage {
 
     ListView {
         id: mainListView
+        currentIndex: -1
 
         model: ListModel {
             ListElement {
@@ -129,6 +130,7 @@ Kirigami.ScrollablePage {
                 ownPage = root.pageStack.push(Qt.resolvedUrl("gallery/" + model.component + "Gallery.qml"));
             }
             checked: ownPage && root.pageStack.lastItem == ownPage
+            highlighted: focus && ListView.isCurrentItem
         }
     }
 }

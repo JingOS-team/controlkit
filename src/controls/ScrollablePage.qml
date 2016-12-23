@@ -92,6 +92,16 @@ Page {
      */
     default property QtObject mainItem
 
+    /**
+     * keyboardNavigationEnabled: bool
+     * If true, and if flickable is an item view, like a ListView or
+     * a GridView, it will be possible to navigate the list current item
+     * to next and previous items with keyboard up/down arrow buttons.
+     * Also, any key event will be forwarded to the current list item.
+     * default is true.
+     */
+    property bool keyboardNavigationEnabled: true
+
     RefreshableScrollView {
         id: scrollView
         z: 0
@@ -109,6 +119,17 @@ Page {
 
     anchors.topMargin: 0
 
+    Keys.onUpPressed: {
+        if (root.keyboardNavigationEnabled && root.flickable.decrementCurrentIndex) {
+            root.flickable.decrementCurrentIndex()
+        }
+    }
+    Keys.onDownPressed: {
+        if (root.keyboardNavigationEnabled && root.flickable.incrementCurrentIndex) {
+            root.flickable.incrementCurrentIndex()
+        }
+    }
+    Keys.forwardTo: root.keyboardNavigationEnabled && ("currentItem" in root.flickable) ? [ root.flickable.currentItem ] : []
     Item {
         id: overlay
         parent: root
