@@ -14,9 +14,9 @@ RESOURCES   += $$PWD/kirigami.qrc
 
 API_VER=1.0
 
-TARGET = $$qtLibraryTarget(org/kde/kirigami/kirigamiplugin)
+TARGET = $$qtLibraryTarget(org/kde/kirigami.2/kirigamiplugin)
 
-importPath = $$[QT_INSTALL_QML]/org/kde/kirigami
+importPath = $$[QT_INSTALL_QML]/org/kde/kirigami.2
 target.path = $${importPath}
 
 controls.path = $${importPath}
