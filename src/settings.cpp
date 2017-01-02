@@ -54,5 +54,5 @@ bool Settings::isMobile() const
     return m_mobile;
 }
 
-#include "settings.moc"
+#include "moc_settings.cpp"
 
