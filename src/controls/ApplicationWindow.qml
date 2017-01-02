@@ -128,25 +128,20 @@ AbstractApplicationWindow {
         onCurrentIndexChanged: root.reachableMode = false;
 
         function goBack() {
-            if (root.contextDrawer && root.contextDrawer.drawerOpen && root.contextDrawer.modal) {
-                root.contextDrawer.close();
-            } else if (root.globalDrawer && root.globalDrawer.drawerOpen && root.globalDrawer.modal) {
-                root.globalDrawer.close();
-            } else {
-                var backEvent = {accepted: false}
-                if (root.pageStack.currentIndex >= 1) {
-                    root.pageStack.currentItem.backRequested(backEvent);
-                    if (!backEvent.accepted) {
-                        if (root.pageStack.depth > 1) {
-                            root.pageStack.currentIndex = Math.max(0, root.pageStack.currentIndex - 1);
-                            backEvent.accepted = true;
-                        }
+            //NOTE: drawers are handling the back button by themselves
+            var backEvent = {accepted: false}
+            if (root.pageStack.currentIndex >= 1) {
+                root.pageStack.currentItem.backRequested(backEvent);
+                if (!backEvent.accepted) {
+                    if (root.pageStack.depth > 1) {
+                        root.pageStack.currentIndex = Math.max(0, root.pageStack.currentIndex - 1);
+                        backEvent.accepted = true;
                     }
                 }
+            }
 
-                if (Kirigami.Settings.isMobile && !backEvent.accepted && Qt.platform.os !== "ios") {
-                    Qt.quit();
-                }
+            if (Kirigami.Settings.isMobile && !backEvent.accepted && Qt.platform.os !== "ios") {
+                Qt.quit();
             }
         }
         function goForward() {
