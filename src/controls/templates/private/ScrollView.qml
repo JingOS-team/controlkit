@@ -47,9 +47,11 @@ Item {
         flickableItem.ScrollBar.vertical = scrollComponent.createObject(root);
         flickableItem.ScrollBar.vertical.anchors.right = root.right
         flickableItem.ScrollBar.vertical.anchors.top = root.top
-        flickableItem.ScrollBar.vertical.anchors.bottom = root.bottom
+        //flickableItem.ScrollBar.vertical.anchors.bottom = root.bottom
     }
 
+    //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
+    onHeightChanged: flickableItem.ScrollBar.vertical.height = root.height
     Item {
         id: flickableParent
         anchors {
