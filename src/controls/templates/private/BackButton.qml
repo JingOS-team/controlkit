@@ -23,14 +23,16 @@ import QtQuick.Controls 2.0 as Controls
 import org.kde.kirigami 2.0
 
 Controls.ToolButton {
-    enabled: !Settings.isMobile &&__appWindow.pageStack.currentIndex
+    enabled: !Settings.isMobile && (__appWindow.pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0)
     height: parent.height
-    width: height
+    width: visible ? height : 0
     implicitWidth: height
+    visible: applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.contentItem.width
     z: 99
     onClicked: applicationWindow().pageStack.goBack();
     Icon {
         anchors.fill: parent
+        opacity: parent.enabled ? 1 : 0.6
         selected: header.background && header.background.color && header.background.color == Theme.highlightColor
         source: "go-previous"
     }

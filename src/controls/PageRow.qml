@@ -204,14 +204,47 @@ T.Control {
         return pagesLogic.clearPages();
     }
 
+    /**
+     * @return the page at idx
+     * @param idx the depth of the page we want
+     */
     function get(idx) {
         return pagesLogic.get(idx).page;
+    }
+
+    /**
+     * go back to the previous index and scroll to the left to show one more column
+     */
+    function flickBack() {
+        if (depth > 1) {
+            currentIndex = Math.max(0, currentIndex - 1);
+        }
+        if (mainView.contentX - mainView.originX > 0) {
+            mainViewScrollAnim.from = mainView.contentX
+            mainViewScrollAnim.to = Math.max(0, mainView.contentX - mainView.originX - defaultColumnWidth)
+            mainViewScrollAnim.running = true;
+        }
     }
 
 //END FUNCTIONS
 
     Keys.forwardTo: [currentItem]
 
+    SequentialAnimation {
+        id: mainViewScrollAnim
+        property real from
+        property real to
+        NumberAnimation {
+            target: mainView
+            properties: "contentX"
+            duration: Units.shortDuration
+            from: mainViewScrollAnim.from
+            to: mainViewScrollAnim.to
+        }
+        ScriptAction {
+            script: mainView.flick(100, 0)
+        }
+    }
     ListView {
         id: mainView
         z: 99

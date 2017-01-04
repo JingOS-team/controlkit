@@ -133,10 +133,8 @@ AbstractApplicationWindow {
             if (root.pageStack.currentIndex >= 1) {
                 root.pageStack.currentItem.backRequested(backEvent);
                 if (!backEvent.accepted) {
-                    if (root.pageStack.depth > 1) {
-                        root.pageStack.currentIndex = Math.max(0, root.pageStack.currentIndex - 1);
-                        backEvent.accepted = true;
-                    }
+                    root.pageStack.flickBack();
+                    backEvent.accepted = true;
                 }
             }
 
