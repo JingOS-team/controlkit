@@ -56,8 +56,6 @@ Item {
         id: flickableParent
         anchors {
             fill: parent
-            //FIXME: depending from properietary extension _desktopStyle?
-            //rightMargin: flickableItem.ScrollBar.vertical.visible && flickableItem.ScrollBar.vertical.size < 1.0 && flickableItem.ScrollBar.vertical._desktopStyle ? flickableItem.ScrollBar.vertical.width : 0
         }
         clip: true
     }
