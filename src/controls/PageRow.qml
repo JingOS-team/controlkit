@@ -63,7 +63,6 @@ T.Control {
     /**
      * The main flickable of this Row
      */
-//    property alias contentItem: mainView
     contentItem: mainView
 
     /**
@@ -227,6 +226,13 @@ T.Control {
     }
 
 //END FUNCTIONS
+
+    onInitialPageChanged: {
+        clear();
+        if (initialPage) {
+            push(initialPage, null)
+        }
+    }
 
     Keys.forwardTo: [currentItem]
 
@@ -447,12 +453,6 @@ T.Control {
                     }
                 }
             ]
-        }
-    }
-
-    Component.onCompleted: {
-        if (initialPage) {
-            push(initialPage, null)
         }
     }
 }
