@@ -259,7 +259,7 @@ OverlayDrawer {
                             right: parent.right
                             top: parent.top
                         }
-                        visible: bannerImageSource != ""
+                        visible: bannerImageSource != "" && root.title != ""
                         height: title.height * 1.3
                         start: Qt.point(0, 0)
                         end: Qt.point(0, height)
