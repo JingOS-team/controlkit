@@ -19,6 +19,8 @@
 
 import QtQuick 2.1
 import org.kde.kirigami 2.0
+import QtQuick.Controls 1.0
+import QtQuick.Controls.Private 1.0 as QtQuickControlsPrivate
 import QtQuick.Templates 2.0 as T2
 
 /**
@@ -40,7 +42,7 @@ T2.Label {
     verticalAlignment: lineCount > 1 ? Text.AlignTop : Text.AlignVCenter
 
     activeFocusOnTab: false
-    renderType: Text.NativeRendering
+    renderType: QtQuickControlsPrivate.Settings.isMobile ? Text.QtRendering : Text.NativeRendering
 
     font.capitalization: Theme.defaultFont.capitalization
     font.family: Theme.defaultFont.family
