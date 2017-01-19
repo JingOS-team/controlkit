@@ -121,8 +121,8 @@ Item {
                 rightButtonPressedUnderMouse = !buttonPressedUnderMouse && rightAction && mouse.x > buttonGraphics.x + buttonGraphics.width;
             }
             onReleased: {
-                globalDrawer.peeking = false;
-                contextDrawer.peeking = false;
+                if (globalDrawer) globalDrawer.peeking = false;
+                if (contextDrawer) contextDrawer.peeking = false;
                 //pixel/second
                 var x = button.x + button.width/2;
                 var speed = ((x - startX) / ((new Date()).getTime() - downTimestamp) * 1000);
