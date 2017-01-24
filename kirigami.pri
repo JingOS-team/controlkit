@@ -18,6 +18,11 @@ DEFINES     += KIRIGAMI_BUILD_TYPE_STATIC
 API_VER=1.0
 
 RESOURCES += $$PWD/kirigami.qrc
-RESOURCES += $$PWD/kirigami-icons.qrc
 
-#QML_IMPORT_PATH += $$PWD
+exists($$_PRO_FILE_PWD_/kirigami-icons.qrc) {
+    message("Using icons QRC file shipped by the project")
+    RESOURCES += $$_PRO_FILE_PWD_/kirigami-icons.qrc
+} else {
+    message("Using icons QRCfile shipped in kirigami")
+    RESOURCES += $$PWD/kirigami-icons.qrc
+}
