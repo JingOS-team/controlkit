@@ -27,10 +27,7 @@ Settings::Settings(QObject *parent)
 #if defined(Q_OS_IOS) || defined(Q_OS_ANDROID) || defined(Q_OS_BLACKBERRY) || defined(Q_OS_QNX) || defined(Q_OS_WINRT)
     m_mobile = true;
 #else
-    if (qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE")) {
-        m_mobile = true;
-    }
-    m_mobile = false;
+    m_mobile = qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE");
 #endif
 }
 
