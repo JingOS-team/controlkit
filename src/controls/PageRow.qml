@@ -107,7 +107,7 @@ T.Control {
      * @return The new created page
      */
     function push(page, properties) {
-        pop(currentItem);
+        popScrollAnim.popPageCleanup(currentItem);
 
         // figure out if more than one page is being pushed
         var pages;
@@ -157,19 +157,59 @@ T.Control {
             return;
         }
 
-        var oldPage = pagesLogic.get(pagesLogic.count-1).page;
-        if (page !== undefined) {
-            // an unwind target has been specified - pop until we find it
-            while (page != oldPage && pagesLogic.count > 1) {
-                pagesLogic.removePage(oldPage.parent.level);
-
-                oldPage = pagesLogic.get(pagesLogic.count-1).page;
-            }
-        } else {
-            pagesLogic.removePage(pagesLogic.count-1);
+        if (popScrollAnim.running) {
+            popScrollAnim.running = false;
+            popScrollAnim.popPageCleanup(popScrollAnim.pendingPage);
         }
+
+        popScrollAnim.from = mainView.contentX
+
+        popScrollAnim.to = page ? page.parent.x : (mainView.contentX > 10 ? mainView.itemAt(mainView.contentX - 10, 1).x : 0);
+        popScrollAnim.pendingPage = page;
+        popScrollAnim.running = true;
+
     }
 
+    SequentialAnimation {
+        id: popScrollAnim
+        property real from
+        property real to
+        property var pendingPage
+        function popPageCleanup(page) {
+            if (depth == 0) {
+                return;
+            }
+            if (popScrollAnim.running) {
+                popScrollAnim.running = false;
+            }
+
+            var oldPage = pagesLogic.get(pagesLogic.count-1).page;
+            if (page !== undefined) {
+                // an unwind target has been specified - pop until we find it
+                while (page != oldPage && pagesLogic.count > 1) {
+                    pagesLogic.removePage(oldPage.parent.level);
+
+                    oldPage = pagesLogic.get(pagesLogic.count-1).page;
+                }
+            } else {
+                pagesLogic.removePage(pagesLogic.count-1);
+            }
+        }
+        NumberAnimation {
+            target: mainView
+            properties: "contentX"
+            duration: Units.shortDuration
+            from: popScrollAnim.from
+            to: popScrollAnim.to
+        }
+        ScriptAction {
+            script: {
+                //snap
+                mainView.flick(100, 0)
+                popScrollAnim.popPageCleanup(popScrollAnim.pendingPage);
+            }
+        }
+    }
     /**
      * Replaces a page on the stack.
      * @param page The page can also be given as an array of pages.
@@ -187,9 +227,9 @@ T.Control {
      */
     function replace(page, properties) {
         if (currentIndex>=1)
-            pop(pagesLogic.get(currentIndex-1).page);
+            popScrollAnim.popPageCleanup(pagesLogic.get(currentIndex-1).page);
         else if (currentIndex==0)
-            pop();
+            popScrollAnim.popPageCleanup();
         else
             console.warn("There's no page to replace");
         return push(page, properties);
