@@ -41,6 +41,7 @@ Item {
     property int preferredHeight: Units.gridUnit * 2
     property int maximumHeight: Units.gridUnit * 3
     default property alias contentItem: mainItem.data
+    readonly property int paintedHeight: headerItem.y + headerItem.height - 1
 
     //FIXME: remove
     property QtObject __appWindow: applicationWindow();

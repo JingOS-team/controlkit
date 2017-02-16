@@ -131,7 +131,8 @@ P.ScrollView {
                 opacity: 0.8
                 border.color: Theme.viewBackgroundColor
                 border.width: Math.ceil(Units.smallSpacing/4)
-                property real progress: supportsRefreshing && !refreshing ? (parent.y/busyIndicatorFrame.height) : 0
+                //also take into account the listview header height if present
+                property real progress: supportsRefreshing && !refreshing ? ((parent.y - (root.flickableItem.headerItem ? root.flickableItem.headerItem.height : 0))/busyIndicatorFrame.height) : 0
                 
             }
             ConicalGradient {
@@ -148,7 +149,7 @@ P.ScrollView {
 
             onYChanged: {
                 //it's overshooting enough and not reachable: start countdown for reachability
-                if (y > root.topPadding + Units.gridUnit && !applicationWindow().reachableMode) {
+                if (y - (root.flickableItem.headerItem ? root.flickableItem.headerItem.height : 0) > root.topPadding + Units.gridUnit && !applicationWindow().reachableMode) {
                     overshootResetTimer.running = true;
                 //not reachable and not overshooting enough, stop reachability countdown
                 } else if (!applicationWindow().reachableMode) {
@@ -160,7 +161,8 @@ P.ScrollView {
                     return;
                 }
 
-                if (!root.refreshing && y > busyIndicatorFrame.height/2 + topPadding) {
+                //also take into account the listview header height if present
+                if (!root.refreshing && y - (root.flickableItem.headerItem ? root.flickableItem.headerItem.height : 0) > busyIndicatorFrame.height/2 + topPadding) {
                     root.refreshing = true;
                 }
             }
@@ -184,7 +186,9 @@ P.ScrollView {
             Binding {
                 target: root.flickableItem
                 property: "topMargin"
-                value: applicationWindow().wideScreen ? 0 : Math.max(root.topPadding + (root.refreshing ? busyIndicatorFrame.height : 0), applicationWindow().header.height)
+                value: applicationWindow().wideScreen
+                       ? (root.refreshing ? busyIndicatorFrame.height : 0)
+                       : Math.max(Math.max(root.topPadding - (root.flickableItem.headerItem ? root.flickableItem.headerItem.height : 0), 0) + (root.refreshing ? busyIndicatorFrame.height : 0), applicationWindow().header.height)
             }
 
             Binding {
@@ -211,7 +215,7 @@ P.ScrollView {
                 interval: 100
                 onTriggered: {
                     if (applicationWindow() && applicationWindow().header && !applicationWindow().wideScreen) {
-                        flickableItem.contentY = -applicationWindow().header.preferredHeight;
+                        flickableItem.contentY = -applicationWindow().header.preferredHeight - (root.flickableItem.headerItem ? root.flickableItem.headerItem.height : 0);
                     }
 
                     if (root.contentItem == root.flickableItem) {

@@ -17,9 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.4
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.1 as Kirigami
 
 Kirigami.ScrollablePage {
     id: page
@@ -74,6 +74,13 @@ Kirigami.ScrollablePage {
             interval: 3000
             onTriggered: page.refreshing = false
         }
+        headerPositioning: ListView.OverlayHeader
+        //headerPositioning: ListView.PullBackHeader
+        header: Kirigami.ItemViewHeader {
+            backgroundImage.source: "../banner.jpg"
+            title: page.title
+        }
+
         model: 200
         delegate: Kirigami.SwipeListItem {
             id: listItem
