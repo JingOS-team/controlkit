@@ -38,21 +38,37 @@ Kirigami.AbstractItemViewHeader {
 
     property alias backgroundImage: image
 
+    maximumHeight: (backgroundImage.status == Image.Ready ? 10 : 6) * Kirigami.Units.gridUnit
+
     background: Rectangle {
-        color: Kirigami.Theme.highlightColor
+        color: Kirigami.Theme.backgroundColor
         Image {
             id: image
-            anchors.fill: parent
+            anchors {
+                fill: parent
+                bottomMargin: rect.height
+            }
             fillMode: Image.PreserveAspectCrop
             asynchronous: true
         }
         EdgeShadow {
-            edge: root.ListView.view.headerPositioning == ListView.InlineHeader ? Qt.BottomEdge : Qt.TopEdge
+            edge: root.view.headerPositioning == ListView.InlineHeader ? Qt.BottomEdge : Qt.TopEdge
             anchors {
                 right: parent.right
                 left: parent.left
-                top: root.ListView.view.headerPositioning == ListView.InlineHeader ? undefined : parent.bottom
-                bottom: root.ListView.view.headerPositioning == ListView.InlineHeader ? parent.top : undefined
+                top: root.view.headerPositioning == ListView.InlineHeader ? undefined : parent.bottom
+                bottom: root.view.headerPositioning == ListView.InlineHeader ? parent.top : undefined
+            }
+        }
+
+        Rectangle {
+            id: rect
+            color: page.isCurrentPage ? Kirigami.Theme.highlightColor : Kirigami.Theme.disabledTextColor
+            height: Kirigami.Units.smallSpacing
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
             }
         }
     }
@@ -60,23 +76,30 @@ Kirigami.AbstractItemViewHeader {
     contentItem: Item {
         Kirigami.Heading {
             id: heading
-            anchors.fill: parent
+            anchors {
+                fill: parent
+                margins:  Kirigami.Units.smallSpacing
+            }
+
             height: undefined
             text: page.title
             fontSizeMode: Text.Fit
             minimumPointSize: 10
-            font.pointSize: 40
+            font.pointSize: 30
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignBottom
-            color: Kirigami.Theme.highlightedTextColor
+            color: root.backgroundImage.status === Image.Ready ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.highlightColor
             opacity: 1
-            layer.enabled: true
+            elide: Text.ElideRight
+            rightPadding: Kirigami.Units.gridUnit
+
+            layer.enabled: root.backgroundImage.status === Image.Ready
             layer.effect: DropShadow {
                 horizontalOffset: 0
                 verticalOffset: 2
                 radius: Kirigami.Units.smallSpacing*2
                 samples: 32
-                color: Qt.rgba(0, 0, 0, 0.5)
+                color: Qt.rgba(0, 0, 0, 0.7)
             }
         }
     }

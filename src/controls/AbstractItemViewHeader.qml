@@ -29,11 +29,13 @@ import org.kde.kirigami 2.0 as Kirigami
  * @since 2.1
  */
 T2.Control {
-    property int minimumHeight: Kirigami.Units.gridUnit * 3
+    property int minimumHeight: Kirigami.Units.gridUnit * 2
     property int maximumHeight: Kirigami.Units.gridUnit * 6
 
+    property Flickable view: ListView.view
+
     width: page.width
-    implicitHeight: Math.min(maximumHeight, Math.max(minimumHeight, -page.flickable.contentY - (ListView.view.headerPositioning == ListView.InlineHeader ? minimumHeight : 0) + minimumHeight)) + topPadding
+    implicitHeight: Math.min(maximumHeight, Math.max(minimumHeight, -page.flickable.contentY - (view.headerPositioning == ListView.InlineHeader ? minimumHeight : 0) + minimumHeight)) + topPadding + bottomPadding
     z: 9
     topPadding: applicationWindow() && !applicationWindow().wideScreen && applicationWindow().header ? applicationWindow().header.paintedHeight : 0
     rightPadding: Kirigami.Units.gridUnit
