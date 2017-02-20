@@ -74,13 +74,6 @@ Kirigami.ScrollablePage {
             interval: 3000
             onTriggered: page.refreshing = false
         }
-        headerPositioning: ListView.OverlayHeader
-        //headerPositioning: ListView.PullBackHeader
-        header: Kirigami.ItemViewHeader {
-            backgroundImage.source: "../banner.jpg"
-            title: page.title
-        }
-
         model: 200
         delegate: Kirigami.SwipeListItem {
             id: listItem

@@ -107,6 +107,10 @@ Kirigami.ScrollablePage {
                 component: "ListView"
             }
             ListElement {
+                text: "List Headers"
+                component: "ListViewHeaderItems"
+            }
+            ListElement {
                 text: "Non Scrollable Page"
                 component: "NonScrollable"
             }
