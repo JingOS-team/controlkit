@@ -222,7 +222,6 @@ P.ScrollView {
                     } else {
                         flickableItem.contentY = -busyIndicatorFrame.headerItemHeight;
                     }
-
                     if (root.contentItem == root.flickableItem) {
                         flickableItem.anchors.leftMargin = 0;
                         flickableItem.anchors.topMargin = 0;

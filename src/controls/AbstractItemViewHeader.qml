@@ -35,7 +35,9 @@ T2.Control {
     property Flickable view: ListView.view
 
     width: page.width
+
     implicitHeight: Math.min(maximumHeight, Math.max(minimumHeight, -page.flickable.contentY - (view.headerPositioning == ListView.InlineHeader ? minimumHeight : 0) + minimumHeight)) + topPadding + bottomPadding
+
     z: 9
     topPadding: applicationWindow() && !applicationWindow().wideScreen && applicationWindow().header ? applicationWindow().header.paintedHeight : 0
     rightPadding: Kirigami.Units.gridUnit
