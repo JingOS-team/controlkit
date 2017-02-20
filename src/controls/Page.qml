@@ -199,6 +199,15 @@ T2.Page {
      */
     readonly property alias actions: actionsGroup
 
+    /**
+     * isCurrentPage: bool
+     *
+     * Specifies if it's the currently selected page in the window's pages row.
+     *
+     * @since 2.1
+     */
+    readonly property bool isCurrentPage: applicationWindow().pageStack.currentItem == root
+
     PageActionPropertyGroup {
         id: actionsGroup
     }
