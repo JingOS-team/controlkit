@@ -29,9 +29,31 @@ Kirigami.ScrollablePage {
     actions {
         contextualActions: [
             Kirigami.Action {
-                text:"Action 1"
+                id: overlayHeaderAction
+                checkable: true
+                checked: true
+                text:"Overlay Header"
                 onTriggered: {
-                    
+                    mainList.headerPositioning = ListView.OverlayHeader;
+                    overlayHeaderAction.checked = pullBackHeaderAction.checked = inlineHeaderAction.checked = false;
+                }
+            },
+            Kirigami.Action {
+                id: pullBackHeaderAction
+                checkable: true
+                text:"PullBack Header"
+                onTriggered: {
+                    mainList.headerPositioning = ListView.PullBackHeader;
+                    overlayHeaderAction.checked = pullBackHeaderAction.checked = inlineHeaderAction.checked = false;
+                }
+            },
+            Kirigami.Action {
+                id: inlineHeaderAction
+                checkable: true
+                text:"Inline Header"
+                onTriggered: {
+                    mainList.headerPositioning = ListView.InlineHeader;
+                    overlayHeaderAction.checked = pullBackHeaderAction.checked = inlineHeaderAction.checked = false;
                 }
             }
         ]
@@ -51,6 +73,7 @@ Kirigami.ScrollablePage {
     }
 
     ListView {
+        id: mainList
         Timer {
             id: refreshRequestTimer
             interval: 3000
