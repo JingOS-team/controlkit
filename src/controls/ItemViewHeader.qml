@@ -61,6 +61,13 @@ Kirigami.AbstractItemViewHeader {
             }
         }
 
+        property Page page: function findPage() {
+            var obj = root;
+            while(obj && !obj.hasOwnProperty("title") && !obj.hasOwnProperty("isCurrentPage")) {
+                obj = obj.parent
+            }
+            return obj;
+        }
         Rectangle {
             id: rect
             color: page.isCurrentPage ? Kirigami.Theme.highlightColor : Kirigami.Theme.disabledTextColor
@@ -91,7 +98,6 @@ Kirigami.AbstractItemViewHeader {
             color: root.backgroundImage.status === Image.Ready ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.highlightColor
             opacity: 1
             elide: Text.ElideRight
-            rightPadding: Kirigami.Units.gridUnit
 
             layer.enabled: root.backgroundImage.status === Image.Ready
             layer.effect: DropShadow {

@@ -29,7 +29,7 @@ import org.kde.kirigami 2.0 as Kirigami
  * @since 2.1
  */
 T2.Control {
-    property int minimumHeight: Kirigami.Units.gridUnit * 2
+    property int minimumHeight: Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing * 2
     property int maximumHeight: Kirigami.Units.gridUnit * 6
 
     property Flickable view: ListView.view
