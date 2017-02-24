@@ -64,11 +64,11 @@ Controls.ToolButton {
             }
         }
     }
-
-    Timer {
-        interval: 1000
-        property string tooltip: action ? (action.tooltip.length ? action.tooltip : action.text) : ""
-        running: control.hovered && !control.pressed && tooltip.length
-        onTriggered: Tooltip.showText(contentItem, Qt.point(contentItem.mouseX, contentItem.mouseY), tooltip)
+    Controls.ToolTip {
+        visible: control.hovered
+        text: action ? (action.tooltip.length ? action.tooltip : action.text) : ""
+        delay: 1000
+        timeout: 5000
+        y: control.height
     }
 }

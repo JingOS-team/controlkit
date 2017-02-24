@@ -140,7 +140,7 @@ OverlayDrawer {
                 icon: modelData.iconName
                 supportsMouseEvents: true
                 separatorVisible: false
-                label: model ? model.text : modelData.text
+                label: model ? model.text : (modelData.tooltip ? modelData.tooltip : modelData.text)
                 enabled: model ? model.enabled : modelData.enabled
                 visible: model ? model.visible : modelData.visible
                 opacity: enabled ? 1.0 : 0.6
