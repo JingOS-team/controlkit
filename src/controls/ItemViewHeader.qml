@@ -62,7 +62,7 @@ Kirigami.AbstractItemViewHeader {
         }
 
         property Page page: {
-            var obj = root;
+            var obj = root.view;
             while(obj && !obj.hasOwnProperty("title") && !obj.hasOwnProperty("isCurrentPage")) {
                 obj = obj.parent
             }
