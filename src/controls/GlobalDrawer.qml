@@ -323,7 +323,7 @@ OverlayDrawer {
                 }
                 Item {
                     Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    Layout.fillHeight: root.actions.length>0
                     Layout.minimumHeight: Units.smallSpacing
                 }
 
