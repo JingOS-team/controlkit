@@ -43,7 +43,7 @@ public:
     ~DesktopIcon();
 
     void setSource(const QVariant &source);
-    QIcon source() const;
+    QVariant source() const;
 
     int implicitWidth() const;
     int implicitHeight() const;
@@ -73,9 +73,10 @@ Q_SIGNALS:
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) Q_DECL_OVERRIDE;
-
+    QImage findIcon(const QSize& size);
+    QIcon::Mode iconMode() const;
 private:
-    QIcon m_icon;
+    QVariant m_source;
     bool m_smooth;
     bool m_changed;
     bool m_active;

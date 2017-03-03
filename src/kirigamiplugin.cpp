@@ -88,11 +88,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //The icon is "special: we have to use a wrapper class to QIcon on desktops
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
-    if (!m_stylesFallbackChain.isEmpty() && m_stylesFallbackChain.first() == QStringLiteral("Desktop")) {
-        qmlRegisterType<DesktopIcon>(uri, 2, 0, "Icon");
-    } else {
-        qmlRegisterType(componentUrl(QStringLiteral("Icon.qml")), uri, 2, 0, "Icon");
-    }
+    qmlRegisterType<DesktopIcon>(uri, 2, 0, "Icon");
 #else
     qmlRegisterType(componentUrl(QStringLiteral("Icon.qml")), uri, 2, 0, "Icon");
 #endif

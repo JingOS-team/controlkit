@@ -23,12 +23,14 @@
 #include <QSGSimpleTextureNode>
 #include <qquickwindow.h>
 #include <QIcon>
+#include <QBitmap>
 #include <QSGTexture>
 #include <QDebug>
 #include <QSGSimpleTextureNode>
 #include <QSGTexture>
 #include <QSharedPointer>
-
+#include <QtQml>
+#include <QQuickImageProvider>
 
 class ManagedTextureNode : public QSGSimpleTextureNode
 {
@@ -140,21 +142,18 @@ DesktopIcon::~DesktopIcon()
 
 void DesktopIcon::setSource(const QVariant &icon)
 {
-    if(icon.canConvert<QIcon>()) {
-        m_icon = icon.value<QIcon>();
-    } else if(icon.canConvert<QString>()) {
-        m_icon = QIcon::fromTheme(icon.toString());
-    } else {
-        m_icon = QIcon();
+    if (m_source == icon) {
+        return;
     }
+    m_source = icon;
     m_changed = true;
     update();
     emit sourceChanged();
 }
 
-QIcon DesktopIcon::source() const
+QVariant DesktopIcon::source() const
 {
-    return m_icon;
+    return m_source;
 }
 
 void DesktopIcon::setEnabled(const bool enabled)
@@ -187,7 +186,7 @@ bool DesktopIcon::active() const
 
 bool DesktopIcon::valid() const
 {
-    return !m_icon.isNull();
+    return !m_source.isNull();
 }
 
 void DesktopIcon::setSelected(const bool selected)
@@ -234,34 +233,53 @@ bool DesktopIcon::smooth() const
 
 QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* /*data*/)
 {
-    if (m_icon.isNull()) {
+    if (m_source.isNull()) {
         delete node;
         return Q_NULLPTR;
     }
 
     if (m_changed || node == 0) {
+        QImage img;
+        const QSize size(width(), height());
+
+        switch(m_source.type()){
+        case QVariant::Pixmap:
+            img = m_source.value<QPixmap>().toImage();
+            break;
+        case QVariant::Image:
+            img = m_source.value<QImage>();
+            break;
+        case QVariant::Bitmap:
+            img = m_source.value<QBitmap>().toImage();
+            break;
+        case QVariant::Icon:
+            img = m_source.value<QIcon>().pixmap(size, iconMode(), QIcon::On).toImage();
+            break;
+        case QVariant::String:
+            img = findIcon(size);
+            break;
+        case QVariant::Brush:
+        case QVariant::Color:
+            //perhaps fill image instead?
+        default:
+            break;
+        }
+
+        if (img.isNull()){
+            img = QImage(size, QImage::Format_Alpha8);
+            img.fill(Qt::transparent);
+        }
+        if (img.size() != size){
+            img = img.scaled(size, Qt::IgnoreAspectRatio, m_smooth ? Qt::SmoothTransformation : Qt::FastTransformation );
+        }
         m_changed = false;
 
         ManagedTextureNode* mNode = dynamic_cast<ManagedTextureNode*>(node);
-        if(!mNode) {
+        if (!mNode) {
             delete node;
             mNode = new ManagedTextureNode;
         }
 
-        QIcon::Mode mode = QIcon::Normal;
-        if (!isEnabled()) {
-            mode = QIcon::Disabled;
-        } else if (m_selected) {
-            mode = QIcon::Selected;
-        } else if (m_active) {
-            mode = QIcon::Active;
-        }
-
-        QImage img;
-        const QSize size(width(), height());
-        if (!size.isEmpty()) {
-            img = m_icon.pixmap(size, mode, QIcon::On).toImage();
-        }
         mNode->setTexture(s_iconImageCache->loadTexture(window(), img));
         mNode->setRect(QRect(QPoint(0,0), size));
         node = mNode;
@@ -277,4 +295,55 @@ void DesktopIcon::geometryChanged(const QRectF &newGeometry, const QRectF &oldGe
         update();
     }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+}
+
+QImage DesktopIcon::findIcon(const QSize &size)
+{
+    QImage img;
+    QString iconSource = m_source.toString();
+    if (iconSource.startsWith("image://")){
+        QUrl iconUrl(iconSource);
+        QString iconProviderId = iconUrl.host();
+        QString iconId = iconUrl.path();
+        QSize actualSize;
+        QQuickImageProvider* imageProvider = dynamic_cast<QQuickImageProvider*>(
+                    qmlEngine(this)->imageProvider(iconProviderId));
+        if (!imageProvider)
+            return img;
+        switch(imageProvider->imageType()){
+        case QQmlImageProviderBase::Image:
+            img = imageProvider->requestImage(iconId, &actualSize, size);
+        case QQmlImageProviderBase::Pixmap:
+            img = imageProvider->requestPixmap(iconId, &actualSize, size).toImage();
+        case QQmlImageProviderBase::Texture:
+        case QQmlImageProviderBase::Invalid:
+        case QQmlImageProviderBase::ImageResponse:
+            //will have to investigate this more
+            break;
+        }
+    }else {
+        if (iconSource.startsWith("qrc:/")){
+            iconSource = iconSource.mid(3);
+        }
+        QIcon icon(iconSource);
+        if (icon.isNull()){
+            icon = QIcon::fromTheme(iconSource);
+        }
+        if (!icon.isNull()){
+            img = icon.pixmap(size, iconMode(), QIcon::On).toImage();
+        }
+    }
+    return img;
+}
+
+QIcon::Mode DesktopIcon::iconMode() const
+{
+    if (!isEnabled()) {
+        return QIcon::Disabled;
+    } else if (m_selected) {
+        return QIcon::Selected;
+    } else if (m_active) {
+        return QIcon::Active;
+    }
+    return QIcon::Normal;
 }
