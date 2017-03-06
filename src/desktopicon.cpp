@@ -321,15 +321,15 @@ QImage DesktopIcon::findIcon(const QSize &size)
             //will have to investigate this more
             break;
         }
-    }else {
+    } else {
         if (iconSource.startsWith("qrc:/")){
             iconSource = iconSource.mid(3);
         }
         QIcon icon(iconSource);
-        if (icon.isNull()){
+        if (icon.availableSizes().isEmpty()) {
             icon = QIcon::fromTheme(iconSource);
         }
-        if (!icon.isNull()){
+        if (!icon.availableSizes().isEmpty()){
             img = icon.pixmap(size, iconMode(), QIcon::On).toImage();
         }
     }
