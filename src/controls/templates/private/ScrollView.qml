@@ -37,7 +37,7 @@ MouseArea {
 
     drag.filterChildren: !Settings.isMobile
     onWheel: {
-        if (Settings.isMobile) {
+        if (Settings.isMobile || flickableItem.contentHeight<flickableItem.height) {
             return;
         }
         //TODO: config of how many lines the wheel scrolls
