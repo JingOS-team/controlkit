@@ -20,7 +20,7 @@ import QtQuick 2.5
 import QtQuick.Controls 2.0 
 import org.kde.kirigami 2.0
 
-Item {
+MouseArea {
     id: root
     default property Item contentItem
     property Flickable flickableItem
@@ -35,6 +35,25 @@ Item {
         flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy == Qt.ScrollBarAlwaysOff
     }
 
+    drag.filterChildren: !Settings.isMobile
+    onWheel: {
+        if (Settings.isMobile) {
+            return;
+        }
+        //TODO: config of how many lines the wheel scrolls
+        var y = wheel.pixelDelta.y != 0 ? wheel.pixelDelta.y : (wheel.angleDelta.y > 0 ? Units.gridUnit : -Units.gridUnit)
+
+        flickableItem.contentY = Math.min(Math.max(flickableItem.headerItem ? -flickableItem.headerItem.height : 0, flickableItem.contentY - y), Math.max(0, flickableItem.contentHeight - flickableItem.height));
+        //this is just for making the scrollbar appear
+        flickableItem.flick(0, 0);
+        cancelFlickStateTimer.restart();
+    }
+
+    Timer {
+        id: cancelFlickStateTimer
+        interval: 150
+        onTriggered: flickableItem.cancelFlick()
+    }
     onContentItemChanged: {
         if (contentItem.hasOwnProperty("contentY")) {
             flickableItem = contentItem;
@@ -43,6 +62,8 @@ Item {
             flickableItem = flickableComponent.createObject(flickableParent);
             contentItem.parent = flickableItem.contentItem;
         }
+        //TODO: find a way to make flicking work on laptops with touch screen
+        flickableItem.interactive = Settings.isMobile;
         flickableItem.anchors.fill = flickableParent;
         flickableItem.ScrollBar.vertical = scrollComponent.createObject(root);
         flickableItem.ScrollBar.vertical.anchors.right = root.right
