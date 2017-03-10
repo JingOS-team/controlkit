@@ -48,7 +48,7 @@ T.Control {
     /**
      * The currently visible Item
      */
-    readonly property Item currentItem: mainView.currentItem.page
+    readonly property Item currentItem: mainView.currentItem ? mainView.currentItem.page : null
 
     /**
      * the index of the currently visible Item
