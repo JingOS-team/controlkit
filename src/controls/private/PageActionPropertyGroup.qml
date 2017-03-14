@@ -20,7 +20,6 @@
 import QtQml 2.1
 
 QtObject {
-    id: actionsGroup
     property QtObject main
     property QtObject left
     property QtObject right

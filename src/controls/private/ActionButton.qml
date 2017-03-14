@@ -36,11 +36,9 @@ Item {
     clip: true
 
     //either Action or QAction should work here
-    property QtObject action: root.parent.parent ? root.parent.parent.mainAction : null
-    property QtObject leftAction: root.parent.parent ? root.parent.parent.leftAction : null
-    property QtObject rightAction: root.parent.parent ? root.parent.parent.rightAction : null
-
-    onWidthChanged: button.x = root.width/2 - button.width/2
+    readonly property QtObject action: root.parent.parent ? root.parent.parent.mainAction : null
+    readonly property QtObject leftAction: root.parent.parent ? root.parent.parent.leftAction : null
+    readonly property QtObject rightAction: root.parent.parent ? root.parent.parent.rightAction : null
 
     transform: Translate {
         id: translateTransform
@@ -48,6 +46,7 @@ Item {
 
     Item {
         id: button
+        x: root.width/2 - button.width/2
 
         anchors {
             bottom: parent.bottom
@@ -243,7 +242,7 @@ Item {
                         selected: buttonGraphics.pressed
                         anchors {
                             fill: parent
-                            margins: Units.smallSpacing
+                            margins: Units.smallSpacing * 3
                         }
                     }
                     Behavior on color {
@@ -282,7 +281,7 @@ Item {
                             left: parent.left
                             top: parent.top
                             bottom: parent.bottom
-                            margins: Units.smallSpacing
+                            margins: Units.smallSpacing * 2
                         }
                     }
                 }
@@ -308,7 +307,7 @@ Item {
                             right: parent.right
                             top: parent.top
                             bottom: parent.bottom
-                            margins: Units.smallSpacing
+                            margins: Units.smallSpacing * 2
                         }
                     }
                 }
