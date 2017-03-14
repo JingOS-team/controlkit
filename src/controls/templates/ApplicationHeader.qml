@@ -58,7 +58,8 @@ AbstractApplicationHeader {
             Icon {
                 //in tabbar mode this is just a spacer
                 visible: !__appWindow.wideScreen && (modelData > 0 || titleList.internalHeaderStyle == ApplicationHeaderStyle.TabBar)
-                height: title.height
+                anchors.verticalCenter: parent.verticalCenter
+                height: Units.iconSizes.small
                 width: height
                 selected: header.background && header.background.color && header.background.color == Theme.highlightColor
                 source: titleList.isTabBar ? "" : "go-next"

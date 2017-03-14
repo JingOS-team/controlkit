@@ -31,40 +31,48 @@ Item {
     opacity: 0.8
     layer.enabled: true
 
-    Rectangle {
+    Item {
+        id: iconRoot
         anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: parent.top
-            leftMargin: canvas.width/4 * morph
+            fill: parent
+            margins: Units.smallSpacing
         }
-        antialiasing: true
-        transformOrigin: Item.Left
-        width: (1 - morph) * height + morph * ((parent.width / Math.sqrt(2)) - height/2)
-        height: Math.round(Units.smallSpacing / 2)
-        color: canvas.color
-        rotation: 45 * morph
-    }
-
-    Rectangle {
-        anchors.centerIn: parent
-        width: height * (1 - morph)
-        height: Math.round(Units.smallSpacing / 2)
-        color: canvas.color
-    }
-
-
-    Rectangle {
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            bottom: parent.bottom
-            leftMargin: canvas.width/4 * morph
+        property int thickness: Math.round(Units.smallSpacing / 2)
+        Rectangle {
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                leftMargin: canvas.width/4 * morph
+            }
+            antialiasing: true
+            transformOrigin: Item.Left
+            width: (1 - morph) * height + morph * ((parent.width / Math.sqrt(2)) - height/2)
+            height: iconRoot.thickness + iconRoot.thickness*0.5 * (1-morph)
+            color: canvas.color
+            rotation: 45 * morph
         }
-        antialiasing: true
-        transformOrigin: Item.Left
-        width: (1 - morph) * height + morph * ((parent.width / Math.sqrt(2)) - height/2)
-        height: Math.round(Units.smallSpacing / 2)
-        color: canvas.color
-        rotation: -45 * morph
+
+        Rectangle {
+            anchors.centerIn: parent
+            width: height * (1 - morph)
+            height: iconRoot.thickness + iconRoot.thickness*0.5 * (1-morph)
+            color: canvas.color
+        }
+
+
+        Rectangle {
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.bottom
+                leftMargin: canvas.width/4 * morph
+            }
+            antialiasing: true
+            transformOrigin: Item.Left
+            width: (1 - morph) * height + morph * ((parent.width / Math.sqrt(2)) - height/2)
+            height: iconRoot.thickness + iconRoot.thickness*0.5 * (1-morph)
+            color: canvas.color
+            rotation: -45 * morph
+        }
     }
 }
 

@@ -31,39 +31,45 @@ Item {
     opacity: 0.8
     layer.enabled: true
 
-    Rectangle {
+    Item {
         anchors {
-            right: parent.right
-            top: parent.top
-            rightMargin: canvas.width/4 * morph
+            fill: parent
+            margins: Units.smallSpacing
         }
-        antialiasing: true
-        transformOrigin: Item.Right
-        width: (1 - morph) * parent.width + morph * ((parent.width / Math.sqrt(2)) - height/2)
-        height: Math.round(Units.smallSpacing / 2)
-        color: canvas.color
-        rotation: -45 * morph
-    }
-
-    Rectangle {
-        anchors.centerIn: parent
-        width: parent.width - parent.width * morph
-        height: Math.round(Units.smallSpacing / 2)
-        color: canvas.color
-    }
-
-    Rectangle {
-        anchors {
-            right: parent.right
-            bottom: parent.bottom
-            rightMargin: canvas.width/4 * morph
+        Rectangle {
+            anchors {
+                right: parent.right
+                top: parent.top
+                rightMargin: canvas.width/4 * morph
+            }
+            antialiasing: true
+            transformOrigin: Item.Right
+            width: (1 - morph) * parent.width + morph * ((parent.width / Math.sqrt(2)) - height/2)
+            height: Math.round(Units.smallSpacing / 2)
+            color: canvas.color
+            rotation: -45 * morph
         }
-        antialiasing: true
-        transformOrigin: Item.Right
-        width: (1 - morph) * parent.width + morph * ((parent.width / Math.sqrt(2)) - height/2)
-        height: Math.round(Units.smallSpacing / 2)
-        color: canvas.color
-        rotation: 45 * morph
+
+        Rectangle {
+            anchors.centerIn: parent
+            width: parent.width - parent.width * morph
+            height: Math.round(Units.smallSpacing / 2)
+            color: canvas.color
+        }
+
+        Rectangle {
+            anchors {
+                right: parent.right
+                bottom: parent.bottom
+                rightMargin: canvas.width/4 * morph
+            }
+            antialiasing: true
+            transformOrigin: Item.Right
+            width: (1 - morph) * parent.width + morph * ((parent.width / Math.sqrt(2)) - height/2)
+            height: Math.round(Units.smallSpacing / 2)
+            color: canvas.color
+            rotation: 45 * morph
+        }
     }
 }
 
