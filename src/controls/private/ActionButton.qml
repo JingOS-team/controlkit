@@ -378,7 +378,7 @@ Item {
         ContextIcon {
             anchors.centerIn: parent
             width: height
-            height: Units.iconSizes.smallMedium - Units.smallSpacing * 2
+            height: Units.iconSizes.smallMedium
         }
 
         onPressed: mouseArea.onPressed(mouse)

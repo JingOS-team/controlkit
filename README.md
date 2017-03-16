@@ -38,7 +38,7 @@ cd into kirigami sources directory.
 mkdir build
 cd build
 
-cmake ..  -DCMAKE_TOOLCHAIN_FILE=/path/to/share/ECM/toolchain/Android.cmake -DQTANDROID_EXPORTED_TARGET=kirigami2gallery -DANDROID_APK_DIR=../examples/android/ -DCMAKE_PREFIX_PATH=/path/to/Qt5.7.0/5.7/android_armv7/ -DCMAKE_INSTALL_PREFIX=/path/to/dummy/install/prefix -DECM_DIR=/path/to/share/ECM/cmake
+cmake ..  -DCMAKE_TOOLCHAIN_FILE=/path/to/share/ECM/toolchain/Android.cmake -DCMAKE_PREFIX_PATH=/path/to/Qt5.7.0/5.7/android_armv7/ -DCMAKE_INSTALL_PREFIX=/path/to/dummy/install/prefix -DECM_DIR=/path/to/share/ECM/cmake
 
 ```
 make
@@ -56,7 +56,7 @@ cd into your application sources directory.
 mkdir build
 cd build
 
-cmake ..  -DCMAKE_TOOLCHAIN_FILE=/path/to/share/ECM/toolchain/Android.cmake -DQTANDROID_EXPORTED_TARGET=kirigami2gallery -DANDROID_APK_DIR=../examples/android/ -DCMAKE_PREFIX_PATH=/path/to/Qt5.7.0/5.7/android_armv7/ -DCMAKE_INSTALL_PREFIX=/path/to/dummy/install/prefix
+cmake ..  -DCMAKE_TOOLCHAIN_FILE=/path/to/share/ECM/toolchain/Android.cmake -DQTANDROID_EXPORTED_TARGET=yourapp -DANDROID_APK_DIR=../examples/android/ -DCMAKE_PREFIX_PATH=/path/to/Qt5.7.0/5.7/android_armv7/ -DCMAKE_INSTALL_PREFIX=/path/to/dummy/install/prefix
 
 Note, -DCMAKE_INSTALL_PREFIX folder will be the same as where kirigami was installed, since you need to create an apk package that contains both the kirigami build and the build of your application.
 
