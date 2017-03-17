@@ -57,7 +57,7 @@ ScrollablePage {
         focus: true
         x: (page.width - width) / 2
         y: page.height / 2 - height
-        width: Units.gridUnit * 20
+        width: Math.min(page.width - Units.gridUnit * 4, Units.gridUnit * 20)
         contentHeight: popupColumn.height
 
         Column {
