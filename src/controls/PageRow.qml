@@ -319,6 +319,7 @@ T.Control {
 
                 var item = pagesLogic.get(id);
                 if (item.owner) {
+                    item.page.visible = false;
                     item.page.parent = item.owner;
                 }
                 //FIXME: why reparent ing is necessary?
