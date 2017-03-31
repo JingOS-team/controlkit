@@ -371,8 +371,6 @@ T.Control {
                 container.page = page;
                 if (page.parent == null || page.parent == container.pageParent) {
                     container.owner = null;
-                } else {
-                    container.owner = page.parent;
                 }
 
                 // the page has to be reparented
@@ -433,6 +431,7 @@ T.Control {
             property Item page
             property Item owner
             onPageChanged: {
+                owner = page.parent;
                 page.parent = container;
                 page.anchors.fill = container;
             }
