@@ -92,6 +92,8 @@ MouseArea {
     }
     Component {
         id: scrollComponent
-        ScrollBar { }
+        ScrollBar {
+            visible: root.contentItem.visible
+        }
     }
 }
