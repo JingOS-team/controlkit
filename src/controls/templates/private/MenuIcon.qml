@@ -32,10 +32,12 @@ Item {
     layer.enabled: true
 
     Item {
+        id: iconRoot
         anchors {
             fill: parent
             margins: Units.smallSpacing
         }
+        property int thickness: Math.round(Units.smallSpacing / 2)
         Rectangle {
             anchors {
                 right: parent.right
@@ -45,7 +47,7 @@ Item {
             antialiasing: true
             transformOrigin: Item.Right
             width: (1 - morph) * parent.width + morph * ((parent.width / Math.sqrt(2)) - height/2)
-            height: Math.round(Units.smallSpacing / 2)
+            height: iconRoot.thickness
             color: canvas.color
             rotation: -45 * morph
         }
@@ -53,7 +55,7 @@ Item {
         Rectangle {
             anchors.centerIn: parent
             width: parent.width - parent.width * morph
-            height: Math.round(Units.smallSpacing / 2)
+            height: iconRoot.thickness
             color: canvas.color
         }
 
@@ -66,7 +68,7 @@ Item {
             antialiasing: true
             transformOrigin: Item.Right
             width: (1 - morph) * parent.width + morph * ((parent.width / Math.sqrt(2)) - height/2)
-            height: Math.round(Units.smallSpacing / 2)
+            height: iconRoot.thickness
             color: canvas.color
             rotation: 45 * morph
         }
