@@ -103,6 +103,9 @@ T2.Drawer {
             root.peeking = false;
             
             if (Math.abs(mapToItem(parent, mouse.x, 0).x - mappedStartX) < Qt.styleHints.startDragDistance) {
+                if (!root.drawerOpen) {
+                    root.close();
+                }
                 root.drawerOpen = !root.drawerOpen;
             }
         }
