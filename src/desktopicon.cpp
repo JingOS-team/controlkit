@@ -31,6 +31,7 @@
 #include <QSharedPointer>
 #include <QtQml>
 #include <QQuickImageProvider>
+#include <QGuiApplication>
 
 class ManagedTextureNode : public QSGSimpleTextureNode
 {
@@ -240,7 +241,7 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
 
     if (m_changed || node == 0) {
         QImage img;
-        const QSize size(width(), height());
+        const QSize size = QSize(width(), height()) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
 
         switch(m_source.type()){
         case QVariant::Pixmap:
@@ -281,7 +282,7 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
         }
 
         mNode->setTexture(s_iconImageCache->loadTexture(window(), img));
-        mNode->setRect(QRect(QPoint(0,0), size));
+        mNode->setRect(QRect(QPoint(0,0), QSize(width(), height())));
         node = mNode;
     }
 
