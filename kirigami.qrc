@@ -34,6 +34,8 @@
         <file alias="Units.qml">src/controls/Units.qml</file>
         <file alias="SwipeListItem.qml">src/controls/SwipeListItem.qml</file>
         <file alias="ApplicationWindow.qml">src/controls/ApplicationWindow.qml</file>
+	<file alias="AbstractApplicationItem.qml">src/controls/AbstractApplicationItem.qml</file>
+	<file alias="ApplicationItem.qml">src/controls/ApplicationItem.qml</file>
         <file alias="ApplicationHeader.qml">src/controls/ApplicationHeader.qml</file>
         <file alias="Heading.qml">src/controls/Heading.qml</file>
         <file alias="ScrollablePage.qml">src/controls/ScrollablePage.qml</file>
