@@ -107,6 +107,12 @@ T.Control {
      * @return The new created page
      */
     function push(page, properties) {
+        //don't push again things already there
+        if (page.createObject === undefined && typeof page != "string" && pagesLogic.containsPage(page)) {
+            print("The item " + page + " is already in the PageRow");
+            return;
+        }
+
         popScrollAnim.popPageCleanup(currentItem);
 
         // figure out if more than one page is being pushed
@@ -127,6 +133,10 @@ T.Control {
                 var tPage = pages[i];
                 var tProps;
                 if (tPage.createObject === undefined && tPage.parent === undefined && typeof tPage != "string") {
+                    if (pagesLogic.containsPage(tPage)) {
+                        print("The item " + page + " is already in the PageRow");
+                        continue;
+                    }
                     tProps = tPage.properties;
                     tPage = tPage.page;
                 }
@@ -380,6 +390,15 @@ T.Control {
                 }
 
                 return container;
+            }
+            function containsPage(page) {
+                for (var i = 0; i < pagesLogic.count; ++i) {
+                    var candidate = pagesLogic.get(i);
+                    if (candidate.page == page) {
+                        print("The item " + page + " is already in the PageRow");
+                        return;
+                    }
+                }
             }
         }
         T.ScrollIndicator.horizontal: T.ScrollIndicator {
