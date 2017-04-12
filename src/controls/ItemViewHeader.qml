@@ -38,9 +38,10 @@ Kirigami.AbstractItemViewHeader {
 
     property alias backgroundImage: image
 
-    maximumHeight: (backgroundImage.status == Image.Ready ? 10 : 6) * Kirigami.Units.gridUnit
+    maximumHeight: (backgroundImage.status == Image.Ready || backgroundImage.status == Image.Loading ? 10 : 6) * Kirigami.Units.gridUnit
 
     background: Rectangle {
+        id: backgroundItem
         color: Kirigami.Theme.backgroundColor
         Image {
             id: image
@@ -61,7 +62,7 @@ Kirigami.AbstractItemViewHeader {
             }
         }
 
-        property Page page: {
+        readonly property Page page: {
             var obj = root.view;
             while(obj && !obj.hasOwnProperty("title") && !obj.hasOwnProperty("isCurrentPage")) {
                 obj = obj.parent
@@ -70,7 +71,7 @@ Kirigami.AbstractItemViewHeader {
         }
         Rectangle {
             id: rect
-            color: page.isCurrentPage ? Kirigami.Theme.highlightColor : Kirigami.Theme.disabledTextColor
+            color: backgroundItem.page.isCurrentPage ? Kirigami.Theme.highlightColor : Kirigami.Theme.disabledTextColor
             height: Kirigami.Units.smallSpacing
             anchors {
                 left: parent.left
