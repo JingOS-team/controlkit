@@ -129,7 +129,7 @@ Page {
             root.flickable.incrementCurrentIndex()
         }
     }
-    Keys.forwardTo: root.keyboardNavigationEnabled && ("currentItem" in root.flickable) ? [ root.flickable.currentItem ] : []
+    Keys.forwardTo: root.keyboardNavigationEnabled && ("currentItem" in root.flickable) && root.flickable.currentItem && root.flickable.currentItem.Component.status == Component.Ready ? [ root.flickable.currentItem ] : []
     Item {
         id: overlay
         parent: root
