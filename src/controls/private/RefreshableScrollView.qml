@@ -191,7 +191,7 @@ P.ScrollView {
                 property: "topMargin"
                 value: applicationWindow().wideScreen
                        ? (root.refreshing ? busyIndicatorFrame.height : 0)
-                       : Math.max(Math.max(root.topPadding - busyIndicatorFrame.headerItemHeight, 0) + (root.refreshing ? busyIndicatorFrame.height : 0), applicationWindow().header.height)
+                       : Math.max(Math.max(root.topPadding - busyIndicatorFrame.headerItemHeight, 0) + (root.refreshing ? busyIndicatorFrame.height : 0), (applicationWindow().header ? applicationWindow().header.height : 0))
             }
 
             Binding {
