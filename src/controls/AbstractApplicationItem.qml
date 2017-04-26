@@ -101,8 +101,12 @@ Item {
             anchors.fill: parent
         }
         Window.onWindowChanged: {
-            globalDrawer.visible = globalDrawer.drawerOpen
-            contextDrawer.visible = contextDrawer.drawerOpen
+            if (globalDrawer) {
+                globalDrawer.visible = globalDrawer.drawerOpen;
+            }
+            if (contextDrawer) {
+                contextDrawer.visible = contextDrawer.drawerOpen;
+            }
         }
     }
 
@@ -303,7 +307,7 @@ Item {
             when: root.header
             target: root.header
             property: "y"
-            value: -root.header.height
+            value: root.header ? -root.header.height : 0
         }
     }
 
