@@ -46,15 +46,20 @@ void KirigamiPlugin::registerTypes(const char *uri)
     const QString style = QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_STYLE"));
 
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
-    if (style.isEmpty() && QFile::exists(resolveFilePath(QStringLiteral("/styles/Desktop")))) {
-        m_stylesFallbackChain.prepend(QStringLiteral("Desktop"));
+    //org.kde.desktop.plasma is a couple of files that fall back to desktop by purpose
+    if ((style.isEmpty() || style == QStringLiteral("org.kde.desktop.plasma")) && QFile::exists(resolveFilePath(QStringLiteral("/styles/org.kde.desktop")))) {
+        m_stylesFallbackChain.prepend(QStringLiteral("org.kde.desktop"));
     }
 #endif
 
     if (!style.isEmpty() && QFile::exists(resolveFilePath(QStringLiteral("/styles/") + style))) {
         m_stylesFallbackChain.prepend(style);
+        //if we have plasma deps installed, use them for extra integration
+        if (style == QStringLiteral("org.kde.desktop") && QFile::exists(resolveFilePath(QStringLiteral("/styles/org.kde.desktop.plasma")))) {
+            m_stylesFallbackChain.prepend("org.kde.desktop.plasma");
+        }
     }
-    //At this point the fallback chain will be selected->Desktop->Fallback
+    //At this point the fallback chain will be selected->org.kde.desktop->Fallback
 
 
     //TODO: in this plugin it will end up something similar to
@@ -86,7 +91,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("Separator.qml")), uri, 2, 0, "Separator");
     qmlRegisterType(componentUrl(QStringLiteral("PageRow.qml")), uri, 2, 0, "PageRow");
 
-    //The icon is "special: we have to use a wrapper class to QIcon on desktops
+    //The icon is "special: we have to use a wrapper class to QIcon on org.kde.desktops
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     qmlRegisterType<DesktopIcon>(uri, 2, 0, "Icon");
 #else
