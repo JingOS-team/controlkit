@@ -69,6 +69,7 @@ AbstractListItem {
             id: labelItem
             Layout.fillWidth: true
             color: listItem.checked || listItem.pressed ? listItem.activeTextColor : listItem.textColor
+            elide: Text.ElideRight
         }
     }
 }
