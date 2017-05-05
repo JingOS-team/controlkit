@@ -40,6 +40,7 @@ T2.Control {
                                                     ? maximumHeight
                                                     : Math.min(maximumHeight, Math.max(minimumHeight, maximumHeight - Math.max(0, view.contentY))))
 
+
     z: 9
     topPadding: applicationWindow() && !applicationWindow().wideScreen && applicationWindow().header ? applicationWindow().header.paintedHeight : 0
     rightPadding: Kirigami.Units.gridUnit

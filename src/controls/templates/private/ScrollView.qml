@@ -43,7 +43,14 @@ MouseArea {
         //TODO: config of how many lines the wheel scrolls
         var y = wheel.pixelDelta.y != 0 ? wheel.pixelDelta.y : (wheel.angleDelta.y > 0 ? Units.gridUnit : -Units.gridUnit)
 
-        flickableItem.contentY = Math.min(Math.max(flickableItem.headerItem ? -flickableItem.headerItem.height : 0, flickableItem.contentY - y), Math.max(0, flickableItem.contentHeight - flickableItem.height));
+        var minYExtent = flickableItem.topMargin;
+        var maxYExtent = flickableItem.height - (flickableItem.contentHeight - flickableItem.bottomMargin);
+
+        if (typeof(flickableItem.headerItem) !== "undefined" && flickableItem.headerItem) {
+            minYExtent += flickableItem.headerItem.height
+        }
+        flickableItem.contentY = Math.min(-maxYExtent, Math.max(-minYExtent, flickableItem.contentY - y));
+
         //this is just for making the scrollbar appear
         flickableItem.flick(0, 0);
         cancelFlickStateTimer.restart();
