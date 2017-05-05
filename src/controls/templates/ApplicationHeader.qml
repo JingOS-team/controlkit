@@ -222,7 +222,7 @@ AbstractApplicationHeader {
             Loader {
                 id: delegateLoader
                 height: parent.height
-                x: Units.smallSpacing + __appWindow.wideScreen ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + (titleList.backButton ? titleList.backButton.width : 0)))) : 0
+                x: Units.smallSpacing + __appWindow.wideScreen ? (Math.min(delegate.width - implicitWidth, Math.max(Units.smallSpacing, titleList.contentX - delegate.x + (titleList.backButton ? titleList.backButton.width : 0)))) : 0
                 width: parent.width - x
 
                 sourceComponent: header.pageDelegate
