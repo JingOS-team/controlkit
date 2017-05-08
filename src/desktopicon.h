@@ -25,6 +25,8 @@
 #include <QQuickItem>
 #include <QVariant>
 
+class QNetworkAccessManager;
+class QNetworkReply;
 class DesktopIcon : public QQuickItem
 {
     Q_OBJECT
@@ -74,6 +76,8 @@ Q_SIGNALS:
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) Q_DECL_OVERRIDE;
     QImage findIcon(const QSize& size);
+    void handleFinished(QNetworkAccessManager* qnam, QNetworkReply* reply);
+    void handleReadyRead(QNetworkReply* reply);
     QIcon::Mode iconMode() const;
 private:
     QVariant m_source;
@@ -81,6 +85,7 @@ private:
     bool m_changed;
     bool m_active;
     bool m_selected;
+    QImage m_loadedImage;
 };
 
 #endif

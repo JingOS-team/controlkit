@@ -298,6 +298,47 @@ void DesktopIcon::geometryChanged(const QRectF &newGeometry, const QRectF &oldGe
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
+void DesktopIcon::handleFinished(QNetworkAccessManager* qnam, QNetworkReply* reply) {
+    if (reply->error() == QNetworkReply::NoError) {
+        const QUrl possibleRedirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+        if (!possibleRedirectUrl.isEmpty()) {
+            const QUrl redirectUrl = reply->url().resolved(possibleRedirectUrl);
+            if (redirectUrl == reply->url()) {
+                // no infinite redirections thank you very much
+                reply->deleteLater();
+                return;
+            }
+            reply->deleteLater();
+            QNetworkRequest request(possibleRedirectUrl);
+            request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
+            QNetworkReply* newReply = qnam->get(request);
+            connect(newReply, &QNetworkReply::readyRead, this, [this, newReply](){ handleReadyRead(newReply); });
+            connect(newReply, &QNetworkReply::finished, this, [this, qnam, newReply](){ handleFinished(qnam, newReply); });
+            return;
+        }
+    }
+}
+
+void DesktopIcon::handleReadyRead(QNetworkReply* reply)
+{
+    if (reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isNull()) {
+        QByteArray data;
+        do {
+            data.append(reply->read(32768));
+            // Because we are in the main thread, this could be potentially very expensive, so let's not block
+            qApp->processEvents();
+        } while(!reply->atEnd());
+        m_loadedImage = QImage::fromData(data);
+        if (m_loadedImage.isNull()) {
+            // broken image from data, inform the user of this with some useful broken-image thing...
+            const QSize size = QSize(width(), height()) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
+            m_loadedImage = QIcon::fromTheme("unknown").pixmap(size, iconMode(), QIcon::On).toImage();
+        }
+        m_changed = true;
+        update();
+    }
+}
+
 QImage DesktopIcon::findIcon(const QSize &size)
 {
     QImage img;
@@ -322,6 +363,21 @@ QImage DesktopIcon::findIcon(const QSize &size)
             //will have to investigate this more
             break;
         }
+    } else if(iconSource.startsWith("http://") || iconSource.startsWith("https://")) {
+        if(!m_loadedImage.isNull()) {
+            return m_loadedImage.scaled(size, Qt::KeepAspectRatio, m_smooth ? Qt::SmoothTransformation : Qt::FastTransformation );
+        }
+        QQmlEngine* engine = qmlEngine(this);
+        QNetworkAccessManager* qnam;
+        if (engine && (qnam = qmlEngine(this)->networkAccessManager())) {
+            QNetworkRequest request(m_source.toUrl());
+            request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
+            QNetworkReply* reply = qnam->get(request);
+            connect(reply, &QNetworkReply::readyRead, this, [this, reply](){ handleReadyRead(reply); });
+            connect(reply, &QNetworkReply::finished, this, [this, qnam, reply](){ handleFinished(qnam, reply); });
+        }
+        // Temporary icon while we wait for the real image to load...
+        img = QIcon::fromTheme("image-x-icon").pixmap(size, iconMode(), QIcon::On).toImage();
     } else {
         if (iconSource.startsWith("qrc:/")){
             iconSource = iconSource.mid(3);
