@@ -32,6 +32,8 @@ TestCase {
     when: mainWindow.visible
     name: "GoBack"
 
+    function applicationWindow() { return mainWindow; }
+
     Kirigami.ApplicationWindow {
         id: mainWindow
         width: 480

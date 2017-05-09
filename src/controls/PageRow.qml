@@ -177,7 +177,7 @@ T.Control {
         popScrollAnim.to = page ? page.parent.x : (mainView.contentX > 10 ? mainView.itemAt(mainView.contentX - 10, 1).x : 0);
         popScrollAnim.pendingPage = page;
         popScrollAnim.running = true;
-
+        //popScrollAnim.popPageCleanup(popScrollAnim.pendingPage);
     }
 
     SequentialAnimation {
