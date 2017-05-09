@@ -23,6 +23,9 @@ import org.kde.kirigami 2.0 as Kirigami
 Kirigami.ApplicationWindow {
     id: root
 
+    header: Kirigami.ApplicationHeader {
+    }
+
     globalDrawer: Kirigami.GlobalDrawer {
         title: "Hello App"
         titleIcon: "applications-graphics"
