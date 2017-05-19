@@ -38,7 +38,7 @@ T.Control {
     /**
      * This property holds the number of items currently pushed onto the view
      */
-    readonly property alias depth: pagesLogic.count
+    readonly property int depth: popScrollAnim.running && popScrollAnim.pendingDepth > -1 ? popScrollAnim.pendingDepth : pagesLogic.count
 
     /**
      * The last Page in the Row
@@ -113,6 +113,11 @@ T.Control {
             return;
         }
 
+        if (popScrollAnim.running) {
+            popScrollAnim.running = false;
+            popScrollAnim.popPageCleanup(popScrollAnim.pendingPage);
+        }
+
         popScrollAnim.popPageCleanup(currentItem);
 
         // figure out if more than one page is being pushed
@@ -167,17 +172,25 @@ T.Control {
             return;
         }
 
+        //if a pop was animating, stop it
         if (popScrollAnim.running) {
             popScrollAnim.running = false;
             popScrollAnim.popPageCleanup(popScrollAnim.pendingPage);
+        //if a push was animating, stop it
+        } else {
+            mainView.positionViewAtIndex(mainView.currentIndex, ListView.Beginning);
         }
 
         popScrollAnim.from = mainView.contentX
 
-        popScrollAnim.to = page ? page.parent.x : (mainView.contentX > 10 ? mainView.itemAt(mainView.contentX - 10, 1).x : 0);
+        if ((!page || !page.parent) && pagesLogic.count > 1) {
+            page = pagesLogic.get(pagesLogic.count - 2).page;
+        }
+        popScrollAnim.to = page && page.parent ? page.parent.x : 0;
         popScrollAnim.pendingPage = page;
+        popScrollAnim.pendingDepth = page && page.parent ? page.parent.level + 1 : 0;
+
         popScrollAnim.running = true;
-        //popScrollAnim.popPageCleanup(popScrollAnim.pendingPage);
     }
 
     SequentialAnimation {
@@ -185,8 +198,9 @@ T.Control {
         property real from
         property real to
         property var pendingPage
+        property int pendingDepth: -1
         function popPageCleanup(page) {
-            if (depth == 0) {
+            if (pagesLogic.count == 0) {
                 return;
             }
             if (popScrollAnim.running) {
@@ -342,6 +356,8 @@ T.Control {
                 item.destroy();
             }
             function clearPages () {
+                popScrollAnim.running = false;
+                popScrollAnim.pendingDepth = -1;
                 while (count > 0) {
                     removePage(count-1);
                 }
