@@ -467,9 +467,11 @@ T.Control {
             property Item page
             property Item owner
             onPageChanged: {
-                owner = page.parent;
-                page.parent = container;
-                page.anchors.fill = container;
+                if (page) {
+                    owner = page.parent;
+                    page.parent = container;
+                    page.anchors.fill = container;
+                }
             }
             drag.filterChildren: true
             onClicked: root.currentIndex = level;
@@ -496,7 +498,7 @@ T.Control {
                         width: root.width
                     }
                     PropertyChanges {
-                        target: container.page.anchors
+                        target: container.page ? container.page.anchors : null
                         rightMargin: 0
                     }
                 },
