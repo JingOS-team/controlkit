@@ -134,6 +134,10 @@ DesktopIcon::DesktopIcon(QQuickItem *parent)
       m_selected(false)
 {
     setFlag(ItemHasContents, true);
+    connect(qApp, &QGuiApplication::paletteChanged, this, [this]() {
+        m_changed = true;
+        update();
+    });
 }
 
 
