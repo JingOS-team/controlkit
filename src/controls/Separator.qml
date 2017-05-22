@@ -30,8 +30,7 @@ import org.kde.kirigami 2.0
  */
 
 Rectangle {
-    opacity: 0.2
     height: Units.devicePixelRatio
     width: Units.devicePixelRatio
-    color: Theme.textColor
+    color: Qt.tint(Theme.textColor, Qt.rgba(Theme.viewBackgroundColor.r, Theme.viewBackgroundColor.g, Theme.viewBackgroundColor.b, 0.7))
 }

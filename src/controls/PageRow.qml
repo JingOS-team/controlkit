@@ -479,16 +479,13 @@ T.Control {
                 }
             }
 
-            Rectangle {
+            Separator {
                 z: 999
                 anchors {
                     top: parent.top
                     bottom: parent.bottom
                     right: parent.right
                 }
-                width: Math.ceil(Units.smallSpacing / 5)
-                color: Theme.textColor
-                opacity: 0.3
                 visible: container.level < root.depth-1
             }
             states: [
