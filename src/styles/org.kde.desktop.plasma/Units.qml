@@ -20,6 +20,7 @@
 import QtQuick 2.4
 import QtQuick.Window 2.2
 import org.kde.plasma.core 2.0 as PlasmaCore
+import QtQuick.Controls.Private 1.0 as QtQuickControlsPrivate
 
 pragma Singleton
 
@@ -95,6 +96,14 @@ QtObject {
      * hover events, etc..
      */
     property int shortDuration: units.shortDuration
+
+    readonly property QtQuickControlsPrivate.StyleItem __styleItem: QtQuickControlsPrivate.StyleItem {elementType: "frame" }
+
+    /**
+     * How much the mouse scroll wheel scrolls, expressed in lines of text.
+     * Note: this is strictly for classical mouse wheels, touchpads 2 figer scrolling won't be affected
+     */
+    readonly property int wheelScrollLines: __styleItem.styleHint("wheelScrollLines")
 
     property variant fontMetrics: TextMetrics {
         text: "M"

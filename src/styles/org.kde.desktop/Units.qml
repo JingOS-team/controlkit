@@ -95,6 +95,14 @@ QtObject {
      */
     property int shortDuration: 150
 
+    readonly property QtQuickControlsPrivate.StyleItem __styleItem: QtQuickControlsPrivate.StyleItem {elementType: "frame" }
+
+    /**
+     * How much the mouse scroll wheel scrolls, expressed in lines of text.
+     * Note: this is strictly for classical mouse wheels, touchpads 2 figer scrolling won't be affected
+     */
+    readonly property int wheelScrollLines: 3//__styleItem.styleHint("wheelScrollLines")
+
     property variant fontMetrics: TextMetrics {
         text: "M"
     }

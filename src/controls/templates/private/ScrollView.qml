@@ -40,15 +40,18 @@ MouseArea {
         if (Settings.isMobile || flickableItem.contentHeight<flickableItem.height) {
             return;
         }
+        var sampleItem = flickableItem.itemAt ? flickableItem.itemAt(0,flickableItem.contentY) : null;
+        var step = Math.min((sampleItem ? sampleItem.height : (Units.gridUnit + Units.smallSpacing * 2)) * Units.wheelScrollLines, Units.gridUnit * 8);
         //TODO: config of how many lines the wheel scrolls
-        var y = wheel.pixelDelta.y != 0 ? wheel.pixelDelta.y : (wheel.angleDelta.y > 0 ? Units.gridUnit : -Units.gridUnit)
+        var y = wheel.pixelDelta.y != 0 ? wheel.pixelDelta.y : (wheel.angleDelta.y > 0 ? step : -step)
 
         var minYExtent = flickableItem.topMargin;
-        var maxYExtent = flickableItem.height - (flickableItem.contentHeight - flickableItem.bottomMargin);
+        var maxYExtent = flickableItem.height - (flickableItem.contentHeight + flickableItem.bottomMargin);
 
         if (typeof(flickableItem.headerItem) !== "undefined" && flickableItem.headerItem) {
             minYExtent += flickableItem.headerItem.height
         }
+
         flickableItem.contentY = Math.min(-maxYExtent, Math.max(-minYExtent, flickableItem.contentY - y));
 
         //this is just for making the scrollbar appear
