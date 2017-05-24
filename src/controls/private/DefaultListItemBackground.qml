@@ -52,7 +52,6 @@ Rectangle {
             bottom: parent.bottom
         }
         visible: listItem.separatorVisible
-        color: listItem.textColor
     }
 }
 
