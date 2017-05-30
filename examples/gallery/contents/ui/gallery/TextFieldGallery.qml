@@ -63,7 +63,7 @@ ScrollablePage {
             text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eu nisl ac nibh malesuada pretium ut sit amet libero. Nulla libero arcu, pharetra a dignissim nec, iaculis sit amet metus. Suspendisse quis justo efficitur, pharetra dui maximus, aliquam dolor. Vestibulum vel imperdiet turpis. Mauris ut leo mauris. Praesent ut libero sollicitudin, tincidunt nisi a, efficitur erat. Curabitur lacinia leo et tempor aliquam."
             Layout.minimumWidth: Units.gridUnit * 12
             Layout.minimumHeight: Units.gridUnit * 12
-            wrapMode: TextArea.WordWrap
+            wrapMode: Controls.TextArea.WordWrap
         }
     }
 }
