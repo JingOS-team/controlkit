@@ -120,10 +120,10 @@ T.OverlayDrawer {
 
     focus: false
     //default to a sidebar in desktop mode
-    modal: edge == Qt.TopEdge || edge == Qt.BottomEdge
+    modal: (applicationWindow() && applicationWindow().width < width*2) || edge == Qt.TopEdge || edge == Qt.BottomEdge
     drawerOpen: true
     closePolicy: modal ? Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
-    handleVisible: false
+    handleVisible: modal || !drawerOpen
     onPositionChanged: {
         if (!modal && !root.peeking && !root.animating) {
             position = 1;
