@@ -46,7 +46,7 @@ MouseArea {
         var y = wheel.pixelDelta.y != 0 ? wheel.pixelDelta.y : (wheel.angleDelta.y > 0 ? step : -step)
 
         var minYExtent = flickableItem.topMargin;
-        var maxYExtent = flickableItem.height - (flickableItem.contentHeight + flickableItem.bottomMargin);
+        var maxYExtent = flickableItem.height - (flickableItem.contentHeight + flickableItem.bottomMargin + flickableItem.originY);
 
         if (typeof(flickableItem.headerItem) !== "undefined" && flickableItem.headerItem) {
             minYExtent += flickableItem.headerItem.height
