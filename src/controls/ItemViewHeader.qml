@@ -38,7 +38,7 @@ Kirigami.AbstractItemViewHeader {
 
     property alias backgroundImage: image
 
-    maximumHeight: (backgroundImage.status == Image.Ready || backgroundImage.status == Image.Loading ? 10 : 6) * Kirigami.Units.gridUnit
+    maximumHeight: (backgroundImage.hasImage ? 10 : 6) * Kirigami.Units.gridUnit - (applicationWindow().header ? applicationWindow().header.height : 0)
 
     background: Rectangle {
         id: backgroundItem
@@ -49,6 +49,7 @@ Kirigami.AbstractItemViewHeader {
                 fill: parent
                 bottomMargin: rect.height
             }
+            readonly property bool hasImage: backgroundImage.status === Image.Ready || backgroundImage.status === Image.Loading
             fillMode: Image.PreserveAspectCrop
             asynchronous: true
         }
@@ -96,11 +97,11 @@ Kirigami.AbstractItemViewHeader {
             font.pointSize: 30
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignBottom
-            color: root.backgroundImage.status === Image.Ready ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.highlightColor
+            color: root.backgroundImage.hasImage ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.highlightColor
             opacity: 1
             elide: Text.ElideRight
 
-            layer.enabled: root.backgroundImage.status === Image.Ready
+            layer.enabled: root.backgroundImage.hasImage
             layer.effect: DropShadow {
                 horizontalOffset: 0
                 verticalOffset: 2

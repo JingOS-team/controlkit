@@ -227,7 +227,7 @@ OverlayDrawer {
                     Layout.fillWidth: true
 
                     Layout.preferredWidth: title.implicitWidth
-                    Layout.preferredHeight: bannerImageSource != "" ? Math.max(title.implicitHeight, Math.floor(width / (sourceSize.width/sourceSize.height))) : title.implicitHeight
+                    Layout.preferredHeight: 10 * Units.gridUnit
                     Layout.minimumHeight: Math.max(headingIcon.height, heading.height) + Units.smallSpacing * 2
 
                     MouseArea {
