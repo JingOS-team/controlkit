@@ -23,6 +23,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 PlasmaCore.IconItem {
     property bool selected: false
+    usesPlasmaTheme: false
     onSelectedChanged: {
         if (selected) {
             status = PlasmaCore.Svg.Selected;
