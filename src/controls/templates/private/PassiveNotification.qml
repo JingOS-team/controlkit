@@ -121,8 +121,10 @@ MouseArea {
             anchors.centerIn: parent
             Label {
                 id: messageLabel
-                width: Math.min(root.parent.width - Units.largeSpacing*2, implicitWidth)
+                Layout.maximumWidth: Math.min(root.parent.width - Units.largeSpacing*2, implicitWidth)
                 elide: Text.ElideRight
+                wrapMode: Text.WordWrap
+                maximumLineCount: 4
                 color: Theme.backgroundColor
             }
             QQC2.Button {
