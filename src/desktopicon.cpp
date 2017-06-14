@@ -32,6 +32,7 @@
 #include <QtQml>
 #include <QQuickImageProvider>
 #include <QGuiApplication>
+#include <QPointer>
 
 class ManagedTextureNode : public QSGSimpleTextureNode
 {
@@ -326,11 +327,18 @@ void DesktopIcon::handleFinished(QNetworkAccessManager* qnam, QNetworkReply* rep
 void DesktopIcon::handleReadyRead(QNetworkReply* reply)
 {
     if (reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isNull()) {
+        // We're handing the event loop back while doing network work, and it turns out
+        // this fairly regularly results in things being deleted under us. So, just
+        // handle that and crash less :)
+        QPointer<DesktopIcon> me(this);
         QByteArray data;
         do {
             data.append(reply->read(32768));
             // Because we are in the main thread, this could be potentially very expensive, so let's not block
             qApp->processEvents();
+            if(!me) {
+                return;
+            }
         } while(!reply->atEnd());
         m_loadedImage = QImage::fromData(data);
         if (m_loadedImage.isNull()) {
@@ -359,8 +367,10 @@ QImage DesktopIcon::findIcon(const QSize &size)
         switch(imageProvider->imageType()){
         case QQmlImageProviderBase::Image:
             img = imageProvider->requestImage(iconId, &actualSize, size);
+            break;
         case QQmlImageProviderBase::Pixmap:
             img = imageProvider->requestPixmap(iconId, &actualSize, size).toImage();
+            break;
         case QQmlImageProviderBase::Texture:
         case QQmlImageProviderBase::Invalid:
         case QQmlImageProviderBase::ImageResponse:
