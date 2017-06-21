@@ -276,7 +276,7 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
             img.fill(Qt::transparent);
         }
         if (img.size() != size){
-            img = img.scaled(size, Qt::IgnoreAspectRatio, m_smooth ? Qt::SmoothTransformation : Qt::FastTransformation );
+            img = img.scaled(size, Qt::KeepAspectRatioByExpanding, m_smooth ? Qt::SmoothTransformation : Qt::FastTransformation );
         }
         m_changed = false;
 
