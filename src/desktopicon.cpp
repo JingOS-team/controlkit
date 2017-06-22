@@ -246,37 +246,41 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
 
     if (m_changed || node == 0) {
         QImage img;
-        const QSize size = QSize(width(), height()) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
+        const QSize itemSize(width(), height());
 
-        switch(m_source.type()){
-        case QVariant::Pixmap:
-            img = m_source.value<QPixmap>().toImage();
-            break;
-        case QVariant::Image:
-            img = m_source.value<QImage>();
-            break;
-        case QVariant::Bitmap:
-            img = m_source.value<QBitmap>().toImage();
-            break;
-        case QVariant::Icon:
-            img = m_source.value<QIcon>().pixmap(size, iconMode(), QIcon::On).toImage();
-            break;
-        case QVariant::String:
-            img = findIcon(size);
-            break;
-        case QVariant::Brush:
-        case QVariant::Color:
-            //perhaps fill image instead?
-        default:
-            break;
-        }
+        if (itemSize.width() != 0 && itemSize.height() != 0) {
+            const QSize size = itemSize * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
 
-        if (img.isNull()){
-            img = QImage(size, QImage::Format_Alpha8);
-            img.fill(Qt::transparent);
-        }
-        if (img.size() != size){
-            img = img.scaled(size, Qt::KeepAspectRatioByExpanding, m_smooth ? Qt::SmoothTransformation : Qt::FastTransformation );
+            switch(m_source.type()){
+            case QVariant::Pixmap:
+                img = m_source.value<QPixmap>().toImage();
+                break;
+            case QVariant::Image:
+                img = m_source.value<QImage>();
+                break;
+            case QVariant::Bitmap:
+                img = m_source.value<QBitmap>().toImage();
+                break;
+            case QVariant::Icon:
+                img = m_source.value<QIcon>().pixmap(size, iconMode(), QIcon::On).toImage();
+                break;
+            case QVariant::String:
+                img = findIcon(size);
+                break;
+            case QVariant::Brush:
+            case QVariant::Color:
+                //perhaps fill image instead?
+            default:
+                break;
+            }
+
+            if (img.isNull()){
+                img = QImage(size, QImage::Format_Alpha8);
+                img.fill(Qt::transparent);
+            }
+            if (img.size() != size){
+                img = img.scaled(size, Qt::KeepAspectRatioByExpanding, m_smooth ? Qt::SmoothTransformation : Qt::FastTransformation );
+            }
         }
         m_changed = false;
 
@@ -285,9 +289,8 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
             delete node;
             mNode = new ManagedTextureNode;
         }
-
         mNode->setTexture(s_iconImageCache->loadTexture(window(), img));
-        mNode->setRect(QRect(QPoint(0,0), QSize(width(), height())));
+        mNode->setRect(QRect(QPoint(0,0), itemSize));
         node = mNode;
     }
 
