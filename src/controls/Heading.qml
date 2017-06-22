@@ -18,6 +18,7 @@
 */
 
 import QtQuick 2.0
+import QtQuick.Controls 2.0 as QQC2
 import org.kde.kirigami 2.0
 
 /**
@@ -44,8 +45,9 @@ import org.kde.kirigami 2.0
  * The most important property is "text", which applies to the text property of
  * Label. See PlasmaComponents Label and primitive QML Text element API for
  * additional properties, methods and signals.
+ * @inherits QtQuick.Controls.Label
  */
-Label {
+QQC2.Label {
     id: heading
 
     /**
@@ -61,7 +63,7 @@ Label {
      */
     property int step: 2
 
-    height: Math.round(paintedHeight * 1.2)
+    lineHeight: 1.2
     font.pointSize: headerPointSize(level)
     font.weight: Font.Light
     wrapMode: Text.WordWrap
