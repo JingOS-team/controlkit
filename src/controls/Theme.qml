@@ -21,7 +21,10 @@ import QtQuick 2.4
 
 pragma Singleton
 
-
+/**
+ * A set of named colors for the application
+ * @inherit QtQuick.QtObject
+ */
 QtObject {
     id: theme
 

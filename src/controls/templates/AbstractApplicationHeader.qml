@@ -33,6 +33,7 @@ import org.kde.kirigami 2.0
  * * preferredHeight: default is Units.gridUnit * 3
  *
  * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
+ * @inherit QtQuick.Item
  */
 Item {
     id: root

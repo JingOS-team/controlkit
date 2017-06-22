@@ -57,7 +57,6 @@ import "private"
  * }
  * @endcode
  *
- * @inherit Page
  */
 Page {
     id: root

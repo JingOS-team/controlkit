@@ -21,12 +21,41 @@ import QtQuick 2.0
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.0
 
+/**
+ * Graphical representatrion of an Icon
+ * @inherit QtQuick.Item
+ */
 Item {
     id: root
+    /**
+     * source: string
+     * It can be any string Image would recognize as source, or a system-wide icon
+     * name that would be defined in a desktop icon theme, such as "go-up"
+     */
     property string source
+
+    /**
+     * smooth: bool
+     * render smoothly
+     */
     property alias smooth: image.smooth
+
+    /**
+     * active: bool
+     * the icon is in an active state, such as under the umouse
+     */
     property bool active: false
+
+    /**
+     * valid: bool
+     * if true the icon loaded correctly
+     */
     property bool valid: image.status == Image.Ready 
+
+    /**
+     * The icon is in a "selected" status, which usually means its color scheme
+     * is inverted and is over a colored background
+     */
     property bool selected: false
 
     implicitWidth: image.source != "" ? Units.iconSizes.smallMedium : 0

@@ -62,7 +62,6 @@ import "templates/private"
  * }
  * @endcode
  *
- * @inherit AbstractDrawer
  */
 OverlayDrawer {
     id: root

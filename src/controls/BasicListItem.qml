@@ -27,7 +27,6 @@ import org.kde.kirigami 2.0
  * It's intended to make all listviews look coherent.
  * It has a default icon and a label
  *
- * @inherit AbstractListItem
  */
 AbstractListItem {
     id: listItem

@@ -27,7 +27,7 @@ import QtQuick.Templates 2.0 as T2
  *
  * It's intended to make all listviews look coherent.
  *
- * @inherit QtQuick.Item
+ * @inherit QtQuick.Templates.ItemDelegate
  */
 T2.ItemDelegate {
     id: listItem

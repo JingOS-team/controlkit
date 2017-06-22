@@ -28,6 +28,7 @@ import QtQuick.Templates 2.0 as T2
  * ApplicationWindow stackView should be a Page instabnce (or a subclass,
  * such as ScrollablePage)
  * @see ScrollablePage
+ * @inherit QtQuick.Templates.Page
  */
 T2.Page {
     id: root

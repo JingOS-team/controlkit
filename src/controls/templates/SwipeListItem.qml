@@ -50,7 +50,7 @@ import QtQuick.Templates 2.0 as T2
  * }
  * @endcode
  *
- * @inherit QtQuick.Item
+ * @inherit QtQuick.Templates.ItemDelegate
  */
 T2.ItemDelegate {
     id: listItem

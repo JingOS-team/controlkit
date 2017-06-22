@@ -27,6 +27,7 @@ import org.kde.kirigami 2.0 as Kirigami
  * automatically shrink when the list is scrolled, like the behavior
  * of list headers in many mobile applications.
  * @since 2.1
+ * @inherit QtQuick.Controls.Control
  */
 T2.Control {
     property int minimumHeight: Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing * 2

@@ -28,7 +28,7 @@ import "private"
  * For example in Okular Active, an Overlay Drawer is used to display
  * thumbnails of all pages within a document along with a search field.
  * This is used for the distinct task of navigating to another page.
- *
+ * @inherits: QtQuick.Templates.Drawer
  */
 T2.Drawer {
     id: root

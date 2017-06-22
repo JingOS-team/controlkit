@@ -48,7 +48,6 @@ import "templates" as T
  * }
  * @endcode
  *
- * @inherit QtQuick.Item
  */
 T.SwipeListItem {
     id: root

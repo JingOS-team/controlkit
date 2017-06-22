@@ -31,7 +31,7 @@ import QtQuick.Templates 2.0 as T2
  * You can use all elements of the QML Text component, in particular the "text"
  * property to define the label text.
  *
- * @inherit QtQuick.Text
+ * @inherit QtQuick.Templates.Label
  */
 T2.Label {
     id: root

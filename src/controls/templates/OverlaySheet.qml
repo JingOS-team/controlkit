@@ -30,6 +30,7 @@ import "private"
  * Use this for big, modal dialogs or information display, that can't be
  * logically done as a new separate Page, even if potentially
  * are taller than the screen space.
+ * @inherits: QtQuick.QtObject
  */
 QtObject {
     id: root

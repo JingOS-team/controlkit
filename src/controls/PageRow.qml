@@ -30,6 +30,7 @@ import org.kde.kirigami 2.0
  * A PageRowcan show a single page or a multiple set of columns, depending
  * on the window width: on a phone a single column should be fullscreen,
  * while on a tablet or a desktop more than one column should be visible.
+ * @inherit QtQuick.Templates.Control
  */
 T.Control {
     id: root
