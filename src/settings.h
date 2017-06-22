@@ -26,6 +26,7 @@ class Settings : public QObject
     Q_OBJECT
 
     Q_PROPERTY(bool isMobile READ isMobile NOTIFY isMobileChanged)
+    Q_PROPERTY(QString style READ style CONSTANT)
 
 public:
     Settings(QObject *parent=0);
@@ -34,11 +35,14 @@ public:
     void setIsMobile(bool mobile);
     bool isMobile() const;
 
+    QString style() const;
+    void setStyle(const QString &style);
 
 Q_SIGNALS:
     void isMobileChanged();
 
 private:
+    QString m_style;
     bool m_mobile : 1;
 };
 

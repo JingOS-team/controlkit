@@ -51,5 +51,15 @@ bool Settings::isMobile() const
     return m_mobile;
 }
 
+QString Settings::style() const
+{
+    return m_style;
+}
+
+void Settings::setStyle(const QString &style)
+{
+    m_style = style;
+}
+
 #include "moc_settings.cpp"
 

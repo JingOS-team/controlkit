@@ -28,6 +28,8 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
+static QString s_selectedStyle;
+
 QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
 {
     foreach (const QString &style, m_stylesFallbackChain) {
@@ -64,10 +66,12 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //TODO: in this plugin it will end up something similar to
     //PlasmaCore's ColorScope?
-
+    s_selectedStyle = m_stylesFallbackChain.first();
     qmlRegisterSingletonType<Settings>(uri, 2, 0, "Settings",
          [](QQmlEngine*, QJSEngine*) -> QObject* {
-             return new Settings;
+             Settings *settings = new Settings;
+             settings->setStyle(s_selectedStyle);
+             return settings;
          }
      );
 

@@ -234,12 +234,14 @@ Item {
                     width: height
                     visible: root.action
                     readonly property bool pressed: root.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || root.action.checked)
-                    color: pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor
+                    color: Settings.style.toLowerCase() == "material"
+                        ? (pressed ? Qt.lighter(Theme.buttonHoverColor, 1.3) : Theme.buttonHoverColor)
+                        : (pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor)
 
                     Icon {
                         id: icon
                         source: root.action && root.action.iconName ? root.action.iconName : ""
-                        selected: buttonGraphics.pressed
+                        selected: Settings.style.toLowerCase() == "material" ? true : buttonGraphics.pressed
                         anchors {
                             fill: parent
                             margins: Units.smallSpacing * 3
@@ -273,6 +275,12 @@ Item {
 
                     readonly property bool pressed: root.leftAction && ((mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || root.leftAction.checked)
                     color: pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Units.longDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
                     Icon {
                         source: root.leftAction && root.leftAction.iconName ? root.leftAction.iconName : ""
                         width: height
@@ -299,6 +307,12 @@ Item {
                     visible: root.rightAction
                     readonly property bool pressed: root.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || root.rightAction.checked)
                     color: pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Units.longDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
                     Icon {
                         source: root.rightAction && root.rightAction.iconName ? root.rightAction.iconName : ""
                         width: height
@@ -316,10 +330,10 @@ Item {
             DropShadow {
                 anchors.fill: background
                 horizontalOffset: 0
-                verticalOffset: Units.smallSpacing/3
-                radius: Units.gridUnit / 3
+                verticalOffset: Units.devicePixelRatio
+                radius: Units.gridUnit /2
                 samples: 16
-                color: Qt.rgba(0, 0, 0, 0.5)
+                color: Qt.rgba(0, 0, 0, mouseArea.pressed ? 0.6 : 0.4)
                 source: background
             }
         }
