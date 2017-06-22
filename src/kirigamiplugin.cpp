@@ -47,12 +47,16 @@ void KirigamiPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QLatin1String("org.kde.kirigami"));
     const QString style = QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_STYLE"));
 
-#if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     //org.kde.desktop.plasma is a couple of files that fall back to desktop by purpose
     if ((style.isEmpty() || style == QStringLiteral("org.kde.desktop.plasma")) && QFile::exists(resolveFilePath(QStringLiteral("/styles/org.kde.desktop")))) {
+#if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
         m_stylesFallbackChain.prepend(QStringLiteral("org.kde.desktop"));
-    }
+#elif defined(Q_OS_ANDROID)
+        m_stylesFallbackChain.prepend(QStringLiteral("material"));
+#else // do we have an iOS specific style?
+        m_stylesFallbackChain.prepend(QStringLiteral("material"));
 #endif
+    }
 
     if (!style.isEmpty() && QFile::exists(resolveFilePath(QStringLiteral("/styles/") + style))) {
         m_stylesFallbackChain.prepend(style);
