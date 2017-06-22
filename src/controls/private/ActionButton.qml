@@ -317,7 +317,7 @@ Item {
                 anchors.fill: background
                 horizontalOffset: 0
                 verticalOffset: Units.smallSpacing/3
-                radius: Units.gridUnit / 3.5
+                radius: Units.gridUnit / 3
                 samples: 16
                 color: Qt.rgba(0, 0, 0, 0.5)
                 source: background
