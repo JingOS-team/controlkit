@@ -20,6 +20,7 @@
 import QtQuick 2.4
 import QtQuick.Window 2.2
 import org.kde.plasma.core 2.0 as PlasmaCore
+import QtQuick.Controls 1.4 as QtQuickControls
 import QtQuick.Controls.Private 1.0 as QtQuickControlsPrivate
 
 pragma Singleton
