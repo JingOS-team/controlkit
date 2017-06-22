@@ -234,7 +234,7 @@ Item {
                     width: height
                     visible: root.action
                     readonly property bool pressed: root.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || root.action.checked)
-                    color: pressed ? Theme.highlightColor : Theme.backgroundColor
+                    color: pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor
 
                     Icon {
                         id: icon
@@ -272,7 +272,7 @@ Item {
                     visible: root.leftAction
 
                     readonly property bool pressed: root.leftAction && ((mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || root.leftAction.checked)
-                    color: pressed ? Theme.highlightColor : Theme.backgroundColor
+                    color: pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor
                     Icon {
                         source: root.leftAction && root.leftAction.iconName ? root.leftAction.iconName : ""
                         width: height
@@ -298,7 +298,7 @@ Item {
                     width: height + (root.action ? Units.iconSizes.smallMedium : 0)
                     visible: root.rightAction
                     readonly property bool pressed: root.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || root.rightAction.checked)
-                    color: pressed ? Theme.highlightColor : Theme.backgroundColor
+                    color: pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor
                     Icon {
                         source: root.rightAction && root.rightAction.iconName ? root.rightAction.iconName : ""
                         width: height

@@ -25,6 +25,8 @@ pragma Singleton
 
 QtObject {
     id: theme
+    //NOTE: this is useless per se, but it forces the Material attached property to be created
+    Material.elevation:2
 
     property color textColor: theme.Material.foreground
     onTextColorChanged: theme.Material.foreground = textColor
