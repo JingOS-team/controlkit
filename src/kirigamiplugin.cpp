@@ -103,6 +103,8 @@ void KirigamiPlugin::registerTypes(const char *uri)
 #endif
 
     qmlRegisterType(componentUrl(QStringLiteral("Label.qml")), uri, 2, 0, "Label");
+    //TODO: uncomment for 2.3 release
+    //qmlRegisterTypeNotAvailable(uri, 2, 3, "Label", "Label type not supported anymore, use QtQuick.Controls.Label 2.0 instead");
     qmlRegisterType(componentUrl(QStringLiteral("OverlaySheet.qml")), uri, 2, 0, "OverlaySheet");
     qmlRegisterType(componentUrl(QStringLiteral("Page.qml")), uri, 2, 0, "Page");
     qmlRegisterType(componentUrl(QStringLiteral("ScrollablePage.qml")), uri, 2, 0, "ScrollablePage");
