@@ -67,6 +67,9 @@ MouseArea {
     onContentItemChanged: {
         if (contentItem.hasOwnProperty("contentY")) {
             flickableItem = contentItem;
+            if (typeof(flickableItem.keyNavigationEnabled) != "undefined") {
+                flickableItem.keyNavigationEnabled = true;
+            }
             contentItem.parent = flickableParent;
         } else {
             flickableItem = flickableComponent.createObject(flickableParent);

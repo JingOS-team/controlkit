@@ -114,7 +114,7 @@ T2.ItemDelegate {
 
     height: visible ? implicitHeight : 0
 
-    hoverEnabled:true
+    hoverEnabled: true
 
     Accessible.role: Accessible.ListItem
 }

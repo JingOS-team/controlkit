@@ -118,17 +118,10 @@ Page {
 
     anchors.topMargin: 0
 
-    Keys.onUpPressed: {
-        if (root.keyboardNavigationEnabled && root.flickable.decrementCurrentIndex) {
-            root.flickable.decrementCurrentIndex()
-        }
-    }
-    Keys.onDownPressed: {
-        if (root.keyboardNavigationEnabled && root.flickable.incrementCurrentIndex) {
-            root.flickable.incrementCurrentIndex()
-        }
-    }
-    Keys.forwardTo: root.keyboardNavigationEnabled && ("currentItem" in root.flickable) && root.flickable.currentItem && root.flickable.currentItem.Component.status == Component.Ready ? [ root.flickable.currentItem ] : []
+    Keys.forwardTo: root.keyboardNavigationEnabled && root.flickable
+                        ? (("currentItem" in root.flickable) && root.flickable.currentItem ?  
+                           [ root.flickable.currentItem, root.flickable ] : [ root.flickable ])
+                        : []
     Item {
         id: overlay
         parent: root
