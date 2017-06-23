@@ -5,8 +5,12 @@ set(kirigami2gallery_SRCS
 
 qt5_add_resources(RESOURCES resources.qrc)
 
+if (CMAKE_SYSTEM_NAME STREQUAL "Android")
+    set(kirigami2gallery_EXTRA_LIBS Qt5::AndroidExtras)
+endif()
+
 add_executable(kirigami2gallery ${kirigami2gallery_SRCS} ${RESOURCES})
-target_link_libraries(kirigami2gallery Qt5::Core  Qt5::Qml Qt5::Quick Qt5::Svg Qt5::QuickControls2)
+target_link_libraries(kirigami2gallery Qt5::Core  Qt5::Qml Qt5::Quick Qt5::Svg Qt5::QuickControls2 ${kirigami2gallery_EXTRA_LIBS})
 
 install(TARGETS kirigami2gallery ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 

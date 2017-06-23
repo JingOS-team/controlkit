@@ -75,6 +75,11 @@ ecm_setup_version(${KF5_VERSION}
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg QuickControls2)
 
+if(BUILD_EXAMPLES AND CMAKE_SYSTEM_NAME STREQUAL "Android")
+# treat plasma as an optinal dep: full functionality is expected with only Qt
+find_package(Qt5AndroidExtras ${QT_MIN_VERSION} REQUIRED)
+endif()
+
 if(PLASMA_ENABLED)
 # treat plasma as an optinal dep: full functionality is expected with only Qt
 find_package(KF5Plasma ${KF5_MIN_VERSION})
