@@ -81,7 +81,7 @@ endif()
 
 if(PLASMA_ENABLED)
 # treat plasma as an optional dep: full functionality is expected with only Qt
-find_package(KF5Plasma ${KF5_MIN_VERSION})
+find_package(KF5Plasma ${KF5_DEP_VERSION})
 set_package_properties(KF5Plasma PROPERTIES DESCRIPTION "Plasma framework"
                        TYPE OPTIONAL
                        PURPOSE "Optional Look and feel integration with Plasma Mobile."
