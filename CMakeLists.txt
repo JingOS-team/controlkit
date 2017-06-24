@@ -88,14 +88,6 @@ set_package_properties(KF5Plasma PROPERTIES DESCRIPTION "Plasma framework"
                       )
 endif()
 
-if(KF5Plasma_FOUND AND THEME STREQUAL "Plasma")
-  set(PLASMA_ENABLED 1)
-endif()
-
-if(KF5Declarative_FOUND AND THEME STREQUAL "System")
-  set(DESKTOP_ENABLED 1)
-endif()
-
 ################# Enable C++11 features for clang and gcc #################
 
 if(UNIX)
