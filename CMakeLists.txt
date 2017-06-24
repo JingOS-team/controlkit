@@ -1,8 +1,11 @@
-project(kirigami2)
+cmake_minimum_required(VERSION 3.0)
 
-cmake_minimum_required(VERSION 2.8.12)
-set(KF5_MIN_VERSION "5.18.0")
-set(QT_MIN_VERSION "5.7.0")
+set(KF5_VERSION "5.36.0") # handled by release scripts
+set(KF5_DEP_VERSION "5.35.0") # handled by release scripts
+
+project(kirigami2 VERSION ${KF5_VERSION})
+
+set(REQUIRED_QT_VERSION "5.7.0")
 
 ################# Disallow in-source build #################
 
@@ -23,11 +26,7 @@ IF(STATIC_LIBRARY)
 	set(CMAKE_AUTOMOC ON)
 	set(CMAKE_INCLUDE_CURRENT_DIR ON)
 	ADD_DEFINITIONS(-DKIRIGAMI_BUILD_TYPE_STATIC)
-	find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg)
-	set (QT_MIN_VERSION "5.7.0")
-	if(UNIX)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
-	endif()
+	find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg)
 	add_subdirectory(src)
 
 ELSE(STATIC_LIBRARY)
@@ -35,7 +34,8 @@ ELSE(STATIC_LIBRARY)
 
 ################# set KDE specific information #################
 
-find_package(ECM 0.0.8 REQUIRED NO_MODULE)
+find_package(ECM 5.35.0 NO_MODULE)
+set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://projects.kde.org/projects/kdesupport/extra-cmake-modules")
 
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
@@ -66,22 +66,21 @@ install(FILES
 )
 
 
-set(KF5_VERSION "5.22.0")
 ecm_setup_version(${KF5_VERSION}
     VARIABLE_PREFIX KIRIGAMI
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kirigami_version.h"
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5Kirigami2ConfigVersion.cmake"
     SOVERSION 5)
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg QuickControls2)
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg QuickControls2)
 
 if(BUILD_EXAMPLES AND CMAKE_SYSTEM_NAME STREQUAL "Android")
 # treat plasma as an optinal dep: full functionality is expected with only Qt
-find_package(Qt5AndroidExtras ${QT_MIN_VERSION} REQUIRED)
+find_package(Qt5AndroidExtras ${REQUIRED_QT_VERSION} REQUIRED)
 endif()
 
 if(PLASMA_ENABLED)
-# treat plasma as an optinal dep: full functionality is expected with only Qt
+# treat plasma as an optional dep: full functionality is expected with only Qt
 find_package(KF5Plasma ${KF5_MIN_VERSION})
 set_package_properties(KF5Plasma PROPERTIES DESCRIPTION "Plasma framework"
                        TYPE OPTIONAL
@@ -105,8 +104,6 @@ endif()
 
 ################# now find all used packages #################
 
-set (QT_MIN_VERSION "5.7.0")
-
 find_package(PkgConfig)
 #########################################################################
 
@@ -114,7 +111,7 @@ add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 add_subdirectory(autotests)
 add_subdirectory(src)
-#TODO: conditional
+
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
