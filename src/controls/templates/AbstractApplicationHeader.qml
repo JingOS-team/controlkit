@@ -109,7 +109,7 @@ Item {
             right: parent.right
         }
 
-        height: __appWindow.reachableMode ? root.maximumHeight : root.preferredHeight
+        height: __appWindow.reachableMode && __appWindow.reachableModeEnabled ? root.maximumHeight : root.preferredHeight
 
         function updatePageHeader() {
             if (!__appWindow || !__appWindow.pageStack || !__appWindow.pageStack.currentItem || !__appWindow.pageStack.currentItem.header || !__appWindow.pageStack.currentItem.flickable) {

@@ -220,17 +220,22 @@ QQC2.ApplicationWindow {
      * reachableMode: bool
      * When true the application is in reachable mode for single hand use.
      * the whole content of the application is moved down the screen to be
-     * reachable with the thumb. if wideScreen is true, tis property has
-     * no effect.
+     * reachable with the thumb. if wideScreen is true, or reachableModeEnabled is false,
+     * tis property has no effect.
      */
     property bool reachableMode: false
+
+    /**
+     * When true the application will go into reachable mode on pull down
+     */
+    property bool reachableModeEnabled: true
 
     MouseArea {
         parent: contentItem.parent
         z: -1
         anchors.fill: parent
         onClicked: root.reachableMode = false;
-        visible: root.reachableMode
+        visible: root.reachableMode && root.reachableModeEnabled
         Rectangle {
             anchors.fill: parent
             color: Qt.rgba(0, 0, 0, 0.3)
@@ -257,7 +262,7 @@ QQC2.ApplicationWindow {
                 easing.type: Easing.InOutQuad
             }
         }
-        y: root.reachableMode && !root.wideScreen ? root.height/2 : 0
+        y: root.reachableMode && root.reachableModeEnabled && !root.wideScreen ? root.height/2 : 0
         x: root.globalDrawer && root.globalDrawer.modal === true && root.globalDrawer.toString().indexOf("SplitDrawer") === 0 ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
     }
     //Don't want overscroll in landscape mode
