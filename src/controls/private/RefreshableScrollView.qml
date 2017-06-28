@@ -166,7 +166,19 @@ P.ScrollView {
 
                 //also take into account the listview header height if present
                 if (!root.refreshing && y - busyIndicatorFrame.headerItemHeight > busyIndicatorFrame.height/2 + topPadding) {
-                    root.refreshing = true;
+                    refreshTriggerTimer.running = true;
+                } else {
+                    refreshTriggerTimer.running = false;
+                }
+            }
+            Timer {
+                id: refreshTriggerTimer
+                interval: 500
+                onTriggered: {
+                    //also take into account the listview header height if present
+                    if (!root.refreshing && parent.y - busyIndicatorFrame.headerItemHeight > busyIndicatorFrame.height/2 + topPadding) {
+                        root.refreshing = true;
+                    }
                 }
             }
             Connections {
@@ -177,7 +189,7 @@ P.ScrollView {
             }
             Timer {
                 id: overshootResetTimer
-                interval: applicationWindow().reachableMode ? 8000 : 1000
+                interval: applicationWindow().reachableMode ? 8000 : 2000
                 onTriggered: {
                     //put it there because widescreen may have changed since timer start
                     if (applicationWindow().wideScreen) {
