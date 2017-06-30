@@ -264,6 +264,7 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
             case QVariant::Icon:
                 img = m_source.value<QIcon>().pixmap(size, iconMode(), QIcon::On).toImage();
                 break;
+            case QVariant::Url:
             case QVariant::String:
                 img = findIcon(size);
                 break;
