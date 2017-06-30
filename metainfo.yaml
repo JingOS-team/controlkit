@@ -1,6 +1,6 @@
 maintainer: mart
 description: QtQuick plugins to build user interfaces based on the KDE UX guidelines
-tier: 2
+tier: 1
 type: functional
 platforms:
     - name: Linux
@@ -14,3 +14,5 @@ libraries:
 cmakename: KF5Kirigami2
 irc: plasma
 mailinglist: plasma-devel
+group: Frameworks
+subgroup: Tier 1
