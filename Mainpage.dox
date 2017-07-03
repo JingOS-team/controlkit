@@ -48,7 +48,6 @@ It will eventually become a Tier-1 KDE Framework.
 - \link org::kde::kirigami::SwipeListItem  SwipeListItem \endlink
 - \link org::kde::kirigami::Heading Heading  \endlink
 - \link org::kde::kirigami::Label Label  \endlink
-- \link org::kde::kirigami::SplitDrawer SplitDrawer  \endlink
 
 
 \section example Minimal Example
