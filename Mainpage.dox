@@ -54,15 +54,17 @@ It will eventually become a Tier-1 KDE Framework.
 
 @code
 import QtQuick 2.1
+import QtQuick.Controls 2.0 as QQC2
 import org.kde.kirigami 2.0 as Kirigami
 
 Kirigami.ApplicationWindow {
     id: root
 
+    header: Kirigami.ApplicationHeader {}
+
     globalDrawer: Kirigami.GlobalDrawer {
         title: "Hello App"
         titleIcon: "applications-graphics"
-
         actions: [
             Kirigami.Action {
                 text: "View"
@@ -88,19 +90,17 @@ Kirigami.ApplicationWindow {
     contextDrawer: Kirigami.ContextDrawer {
         id: contextDrawer
     }
-
     pageStack.initialPage: mainPageComponent
-
     Component {
         id: mainPageComponent
         Kirigami.ScrollablePage {
             title: "Hello"
             actions {
                 main: Kirigami.Action {
-                    iconName: sheet.opened ? "dialog-cancel" : "document-edit"
+                    iconName: sheet.sheetOpen ? "dialog-cancel" : "document-edit"
                     onTriggered: {
                         print("Action button in buttons page clicked");
-                        sheet.opened = !sheet.opened
+                        sheet.sheetOpen = !sheet.sheetOpen
                     }
                 }
                 left: Kirigami.Action {
@@ -128,9 +128,17 @@ Kirigami.ApplicationWindow {
                     },
                     Kirigami.Action {
                         text: "Action for Sheet"
-                        visible: sheet.opened
+                        visible: sheet.sheetOpen
                     }
                 ]
+            }
+            Kirigami.OverlaySheet {
+                id: sheet
+                onSheetOpenChanged: page.actions.main.checked = sheetOpen
+                QQC2.Label {
+                    wrapMode: Text.WordWrap
+                    text: "Lorem ipsum dolor sit amet"
+                }
             }
             //Page contents...
         }
