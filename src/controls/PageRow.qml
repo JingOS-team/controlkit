@@ -83,6 +83,12 @@ T.Control {
      */
     property alias interactive: mainView.interactive
 
+    /**
+     * wideMode: bool
+     * If true, the PageRow is wide enough that willshow more than one column at once
+     * @since 5.37
+     */
+    readonly property bool wideMode: root.width >= root.defaultColumnWidth*2 && pagesLogic.count >= 2
 //END PROPERTIES
 
 //BEGIN FUNCTIONS
@@ -458,7 +464,7 @@ T.Control {
             id: container
             height: mainView.height
             width: root.width
-            state: page ? (root.width < root.defaultColumnWidth*2 || pagesLogic.count < 2 ? "vertical" : (container.level >= pagesLogic.count - 1 ? "last" : "middle")) : "";
+            state: page ? (!root.wideMode ? "vertical" : (container.level >= pagesLogic.count - 1 ? "last" : "middle")) : "";
 
             property int level
 

@@ -57,7 +57,7 @@ AbstractApplicationHeader {
 
             Icon {
                 //in tabbar mode this is just a spacer
-                visible: !__appWindow.wideScreen && (modelData > 0 || titleList.internalHeaderStyle == ApplicationHeaderStyle.TabBar)
+                visible: !titleList.wideMode && (modelData > 0 || titleList.internalHeaderStyle == ApplicationHeaderStyle.TabBar)
                 anchors.verticalCenter: parent.verticalCenter
                 height: Units.iconSizes.small
                 width: height
@@ -106,7 +106,8 @@ AbstractApplicationHeader {
 
     ListView {
         id: titleList
-        property int internalHeaderStyle: header.headerStyle == ApplicationHeaderStyle.Auto ? (__appWindow.wideScreen ? ApplicationHeaderStyle.Titles : ApplicationHeaderStyle.Breadcrumb) : header.headerStyle
+        readonly property bool wideMode: typeof __appWindow.pageStack.wideMode !== "undefined" ?  __appWindow.pageStack.wideMode : titleList.wideMode
+        property int internalHeaderStyle: header.headerStyle == ApplicationHeaderStyle.Auto ? (titleList.wideMode ? ApplicationHeaderStyle.Titles : ApplicationHeaderStyle.Breadcrumb) : header.headerStyle
         //uses this to have less strings comparisons
         property bool isTabBar: header.headerStyle == ApplicationHeaderStyle.TabBar
         Component.onCompleted: {
@@ -120,7 +121,7 @@ AbstractApplicationHeader {
         clip: true
         anchors {
             fill: parent
-            leftMargin: __appWindow.wideScreen ? 0 : backButton.width
+            leftMargin: titleList.wideMode ? 0 : backButton.width
         }
         cacheBuffer: width ? Math.max(0, width * count) : 0
         displayMarginBeginning: __appWindow.pageStack.width * count
@@ -132,7 +133,7 @@ AbstractApplicationHeader {
 
         function gotoIndex(idx) {
             //don't actually scroll in widescreen mode
-            if (__appWindow.wideScreen) {
+            if (titleList.wideMode) {
                 return;
             }
             listScrollAnim.running = false
@@ -165,7 +166,7 @@ AbstractApplicationHeader {
         onContentWidthChanged: gotoIndex(currentIndex);
 
         onContentXChanged: {
-            if (__appWindow.wideScreen && !__appWindow.pageStack.contentItem.moving && titleList.moving) {
+            if (titleList.wideMode && !__appWindow.pageStack.contentItem.moving && titleList.moving) {
                 __appWindow.pageStack.contentItem.contentX = titleList.contentX
             }
         }
@@ -173,7 +174,7 @@ AbstractApplicationHeader {
             titleList.returnToBounds()
         }
         onMovementEnded: {
-            if (__appWindow.wideScreen) {
+            if (titleList.wideMode) {
                 //this will trigger snap as well
                 __appWindow.pageStack.contentItem.flick(0,0);
             }
@@ -196,7 +197,7 @@ AbstractApplicationHeader {
 
             width: {
                 //more columns shown?
-                if ((header.headerStyle == ApplicationHeaderStyle.Titles || __appWindow.wideScreen) && delegateLoader.page) {
+                if ((header.headerStyle == ApplicationHeaderStyle.Titles || titleList.wideMode) && delegateLoader.page) {
                     return delegateLoader.page.width;
                 } else {
                     return Math.min(titleList.width, delegateLoader.implicitWidth + Units.smallSpacing);
@@ -222,7 +223,7 @@ AbstractApplicationHeader {
             Loader {
                 id: delegateLoader
                 height: parent.height
-                x: Units.smallSpacing + __appWindow.wideScreen ? (Math.min(delegate.width - implicitWidth, Math.max(Units.smallSpacing, titleList.contentX - delegate.x + (titleList.backButton ? titleList.backButton.width : 0)))) : 0
+                x: Units.smallSpacing + titleList.wideMode ? (Math.min(delegate.width - implicitWidth, Math.max(Units.smallSpacing, titleList.contentX - delegate.x + (titleList.backButton ? titleList.backButton.width : 0)))) : 0
                 width: parent.width - x
 
                 sourceComponent: header.pageDelegate
@@ -237,7 +238,7 @@ AbstractApplicationHeader {
             }
         }
         Connections {
-            target: __appWindow.wideScreen ? __appWindow.pageStack.contentItem : null
+            target: titleList.wideMode ? __appWindow.pageStack.contentItem : null
             onContentXChanged: {
                 if (!titleList.contentItem.moving) {
                     titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
