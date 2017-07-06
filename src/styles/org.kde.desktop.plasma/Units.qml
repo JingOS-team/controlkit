@@ -34,7 +34,7 @@ QtObject {
      * Given the screen has an accurate DPI settings, it corresponds to a width of
      * the capital letter M
      */
-    property int gridUnit: fontMetrics.height
+    property int gridUnit: units.gridUnit
 
     /**
      * units.iconSizes provides access to platform-dependent icon sizing
@@ -54,12 +54,12 @@ QtObject {
      * * desktop
      */
     property QtObject iconSizes: QtObject {
-        property int small: 16 * devicePixelRatio
-        property int smallMedium: 22 * devicePixelRatio
-        property int medium: 32 * devicePixelRatio
-        property int large: 48 * devicePixelRatio
-        property int huge: 64 * devicePixelRatio
-        property int enormous: 128 * devicePixelRatio
+        property int small: units.iconSizes.small
+        property int smallMedium: units.iconSizes.smallMedium
+        property int medium: units.iconSizes.medium
+        property int large: units.iconSizes.large
+        property int huge: units.iconSizes.huge
+        property int enormous: units.iconSizes.enormous
     }
 
     /**
@@ -84,7 +84,7 @@ QtObject {
      * use theme.mSize(theme.defaultFont), units.smallSpacing and units.largeSpacing.
      * The devicePixelRatio follows the definition of "device independent pixel" by Microsoft.
      */
-    property real devicePixelRatio: Math.floor(fontMetrics.font.pixelSize / fontMetrics.font.pointSize)
+    property real devicePixelRatio: units.devicePixelRatio
 
     /**
      * units.longDuration should be used for longer, screen-covering animations, for opening and
