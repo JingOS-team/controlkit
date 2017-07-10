@@ -205,6 +205,8 @@ OverlayDrawer {
         }
     }
 
+    rightPadding: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : 0
+
     contentItem: ScrollView {
         id: scrollView
         anchors.fill: parent
@@ -380,6 +382,7 @@ OverlayDrawer {
                                     anchors {
                                         verticalCenter: contentItem.verticalCenter
                                         right: contentItem.right
+                                        rightMargin: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : 0
                                     }
                                     height: Units.iconSizes.smallMedium
                                     selected: listItem.checked || listItem.pressed
