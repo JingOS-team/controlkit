@@ -205,7 +205,7 @@ OverlayDrawer {
         }
     }
 
-    rightPadding: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : 0
+    rightPadding: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : Units.smallSpacing
 
     contentItem: ScrollView {
         id: scrollView
