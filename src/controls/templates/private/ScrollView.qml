@@ -106,6 +106,7 @@ MouseArea {
     Component {
         id: scrollComponent
         ScrollBar {
+            z: flickableParent.z + 1
             visible: root.contentItem.visible
         }
     }

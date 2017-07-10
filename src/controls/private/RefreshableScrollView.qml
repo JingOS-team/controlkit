@@ -235,9 +235,14 @@ P.ScrollView {
                         flickableItem.contentY = -busyIndicatorFrame.headerItemHeight;
                     }
                     if (root.contentItem == root.flickableItem) {
-                        flickableItem.anchors.leftMargin = 0;
+                        if (typeof root.flickableItem.cellWidth != "undefined") {
+                            flickableItem.anchors.leftMargin = leftPadding;
+                            flickableItem.anchors.rightMargin = rightPadding;
+                        } else {
+                            flickableItem.anchors.leftMargin = 0;
+                            flickableItem.anchors.rightMargin = 0;
+                        }
                         flickableItem.anchors.topMargin = 0;
-                        flickableItem.anchors.rightMargin = 0;
                         flickableItem.anchors.bottomMargin = 0;
                     } else {
                         flickableItem.anchors.leftMargin = leftPadding;
@@ -285,9 +290,15 @@ P.ScrollView {
     }
 
     onLeftPaddingChanged: {
+        //for gridviews do apply margins
         if (root.contentItem == root.flickableItem) {
-            flickableItem.anchors.leftMargin = 0;
-            flickableItem.anchors.topMargin = 0;
+            if (typeof root.flickableItem.cellWidth != "undefined") {
+                flickableItem.anchors.leftMargin = leftPadding;
+                flickableItem.anchors.rightMargin = rightPadding;
+            } else {
+                flickableItem.anchors.leftMargin = 0;
+                flickableItem.anchors.rightMargin = 0;
+            }
             flickableItem.anchors.rightMargin = 0;
             flickableItem.anchors.bottomMargin = 0;
         } else {
