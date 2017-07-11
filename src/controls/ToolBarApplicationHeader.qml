@@ -84,7 +84,7 @@ ApplicationHeader {
                 delegate: PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
                     action: modelData
-                    visible: modelData.visible && x+layout.x+width +(menu.visibleChildren > 0 ? height : 0) < delegateItem.width
+                    visible: modelData.visible && x+layout.x+width +(menu.visibleChildren > 1 ? height : 0) < delegateItem.width
                     onVisibleChanged: {
                         if (!modelData.visible) {
                             return;
