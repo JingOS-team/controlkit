@@ -493,9 +493,9 @@ T.Control {
                 anchors {
                     top: parent.top
                     bottom: parent.bottom
-                    right: parent.right
+                    left: parent.left
                 }
-                visible: container.level < root.depth-1
+                visible: container.level > 0
             }
             states: [
                 State {

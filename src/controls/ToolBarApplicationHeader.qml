@@ -53,12 +53,10 @@ ApplicationHeader {
             anchors.verticalCenter: parent.verticalCenter
             spacing: 2
 
-            Rectangle {
+            Separator {
                 anchors.verticalCenter: parent.verticalCenter
-                color: Theme.textColor
-                opacity: 0.3
-                width: Units.devicePixelRatio
                 height: parent.height * 0.6
+                visible: index > 0
             }
             PrivateActionToolButton {
                 anchors.verticalCenter: parent.verticalCenter
@@ -75,11 +73,8 @@ ApplicationHeader {
                 action: page && page.actions ? page.actions.right : null
                 showText: false
             }
-            Rectangle {
+            Separator {
                 anchors.verticalCenter: parent.verticalCenter
-                color: Theme.textColor
-                opacity: 0.3
-                width: Units.devicePixelRatio
                 height: parent.height * 0.6
                 visible: page && page.actions && (page.actions.left || page.actions.main || page.actions.right)
             }

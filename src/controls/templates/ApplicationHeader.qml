@@ -55,6 +55,8 @@ AbstractApplicationHeader {
 
             spacing: Units.smallSpacing
 
+            x: Units.smallSpacing
+
             Icon {
                 //in tabbar mode this is just a spacer
                 visible: !titleList.wideMode && (modelData > 0 || titleList.internalHeaderStyle == ApplicationHeaderStyle.TabBar)
@@ -67,7 +69,7 @@ AbstractApplicationHeader {
 
             Heading {
                 id: title
-                width:Math.min(titleList.width, implicitWidth)
+                width: Math.min(titleList.width, implicitWidth) + Units.smallSpacing
                 anchors.verticalCenter: parent.verticalCenter
                 opacity: current ? 1 : 0.4
                 //Scaling animate NativeRendering is too slow
@@ -223,7 +225,7 @@ AbstractApplicationHeader {
             Loader {
                 id: delegateLoader
                 height: parent.height
-                x: Units.smallSpacing + titleList.wideMode ? (Math.min(delegate.width - implicitWidth, Math.max(Units.smallSpacing, titleList.contentX - delegate.x + (titleList.backButton ? titleList.backButton.width : 0)))) : 0
+                x: titleList.wideMode ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + (titleList.backButton ? titleList.backButton.width : 0)))) : 0
                 width: parent.width - x
 
                 sourceComponent: header.pageDelegate

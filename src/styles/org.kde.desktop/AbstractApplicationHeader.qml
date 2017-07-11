@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.5
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.1
 
 import "../../templates" as T
 
@@ -39,15 +39,13 @@ T.AbstractApplicationHeader {
 
     background: Rectangle {
         color: Theme.backgroundColor
-        Rectangle {
+        Separator {
             anchors {
                 left: parent.left
                 right: parent.right
-                bottom: parent.bottom
+                bottom: root.y <= 0 ? parent.bottom : undefined
+                top: root.y <= 0 ? undefined :  parent.top 
             }
-            color: Theme.textColor
-            opacity: 0.3
-            height: Math.ceil(Units.smallSpacing / 5)
         }
     }
 }
