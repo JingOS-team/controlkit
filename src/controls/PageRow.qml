@@ -289,9 +289,10 @@ T.Control {
         if (depth > 1) {
             currentIndex = Math.max(0, currentIndex - 1);
         }
+
         if (mainView.contentX - mainView.originX > 0) {
             mainViewScrollAnim.from = mainView.contentX
-            mainViewScrollAnim.to = Math.max(0, mainView.contentX - mainView.originX - defaultColumnWidth)
+            mainViewScrollAnim.to =  Math.max(mainView.originX, mainView.contentX - defaultColumnWidth)
             mainViewScrollAnim.running = true;
         }
     }
@@ -314,7 +315,7 @@ T.Control {
         NumberAnimation {
             target: mainView
             properties: "contentX"
-            duration: Units.shortDuration
+            duration: Units.longDuration
             from: mainViewScrollAnim.from
             to: mainViewScrollAnim.to
         }
