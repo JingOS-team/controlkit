@@ -69,7 +69,7 @@ AbstractApplicationHeader {
 
             Heading {
                 id: title
-                width: Math.min(titleList.width, implicitWidth) + Units.smallSpacing
+                width: Math.min(parent.width, Math.min(titleList.width, implicitWidth)) + Units.smallSpacing
                 anchors.verticalCenter: parent.verticalCenter
                 opacity: current ? 1 : 0.4
                 //Scaling animate NativeRendering is too slow
@@ -226,7 +226,7 @@ AbstractApplicationHeader {
                 id: delegateLoader
                 height: parent.height
                 x: titleList.wideMode ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + (titleList.backButton ? titleList.backButton.width : 0)))) : 0
-                width: parent.width - x
+                width: index == titleList.count-1 ? parent.width : parent.width - x
 
                 sourceComponent: header.pageDelegate
 
