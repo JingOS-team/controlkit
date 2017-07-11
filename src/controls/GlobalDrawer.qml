@@ -229,7 +229,7 @@ OverlayDrawer {
 
                     Layout.preferredWidth: title.implicitWidth
                     Layout.preferredHeight: bannerImageSource != "" ? 10 * Units.gridUnit : Layout.minimumHeight
-                    Layout.minimumHeight: Math.max(headingIcon.height, heading.height) + Units.smallSpacing * 2
+                    Layout.minimumHeight: title.height > 0 ? title.height + Units.smallSpacing * 2 : 0
 
                     MouseArea {
                         anchors.fill: parent
@@ -287,11 +287,13 @@ OverlayDrawer {
                             id: headingIcon
                             Layout.minimumWidth: Units.iconSizes.large
                             Layout.minimumHeight: width
+                            visible: valid
                         }
                         Heading {
                             id: heading
                             Layout.fillWidth: true
                             Layout.rightMargin: heading.height
+                            visible: text.length > 0
                             level: 1
                             color: bannerImageSource != "" ? "white" : Theme.textColor
                             elide: Text.ElideRight
