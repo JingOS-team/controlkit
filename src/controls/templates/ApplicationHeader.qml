@@ -49,6 +49,20 @@ AbstractApplicationHeader {
      */
     property int headerStyle: ApplicationHeaderStyle.Auto
 
+    /**
+     * backButtonEnabled: bool
+     * if true, there will be a back button present that will make the pagerow scroll back when clicked
+     */
+    property bool backButtonEnabled: (!titleList.isTabBar && (!Settings.isMobile || Qt.platform.os == "ios"))
+
+    onBackButtonEnabledChanged: {
+        if (backButtonEnabled) {
+            var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
+            titleList.backButton = component.createObject(titleList.parent);
+        } else {
+            titleList.backButton.destroy();
+        }
+    }
     property Component pageDelegate: Component {
         Row {
             height: parent.height
@@ -114,7 +128,7 @@ AbstractApplicationHeader {
         property bool isTabBar: header.headerStyle == ApplicationHeaderStyle.TabBar
         Component.onCompleted: {
             //only iOS and desktop systems put the back button on top left corner
-            if (!titleList.isTabBar && (!Settings.isMobile || Qt.platform.os == "ios")) {
+            if (header.backButtonEnabled) {
                 var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
                 titleList.backButton = component.createObject(titleList.parent);
             }
