@@ -255,7 +255,9 @@ T2.Page {
             bottom: parent.bottom
         }
         height: item ? item.height : 0
-        source: applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") !== 0 ? Qt.resolvedUrl("./private/ActionButton.qml") : ""
+        source: (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0) ||
+                (applicationWindow().footer && applicationWindow().footer.toString().indexOf("ToolBarApplicationHeader") === 0)
+                ? "" : Qt.resolvedUrl("./private/ActionButton.qml")
     }
 
     Layout.fillWidth: true
