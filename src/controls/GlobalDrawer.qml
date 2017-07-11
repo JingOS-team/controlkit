@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.1
-import QtQuick.Controls 2.0 as QQC2
+import QtQuick.Templates 2.0 as T2
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.0
@@ -199,7 +199,7 @@ OverlayDrawer {
      * Reverts the menu back to its initial state
      */
     function resetMenu() {
-        stackView.pop(stackView.get(0, QQC2.StackView.DontLoad));
+        stackView.pop(stackView.get(0, T2.StackView.DontLoad));
         if (root.modal) {
             root.drawerOpen = false;
         }
@@ -317,12 +317,38 @@ OverlayDrawer {
                     visible: children.length > 0 && childrenRect.height > 0
                 }
 
-                QQC2.StackView {
+                T2.StackView {
                     id: stackView
                     Layout.fillWidth: true
                     Layout.minimumHeight: currentItem ? currentItem.implicitHeight : 0
                     Layout.maximumHeight: Layout.minimumHeight
                     initialItem: menuComponent
+                    //NOTE: it's important those are NumberAnimation and not XAnimators
+                    // as while the animation is running the drawer may close, and
+                    //the animator would stop when not drawing see BUG 381576
+                    popEnter: Transition {
+                        NumberAnimation { property: "x"; from: (stackView.mirrored ? -1 : 1) * -stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
+                    }
+
+                    popExit: Transition {
+                        NumberAnimation { property: "x"; from: 0; to: (stackView.mirrored ? -1 : 1) * stackView.width; duration: 400; easing.type: Easing.OutCubic }
+                    }
+
+                    pushEnter: Transition {
+                        NumberAnimation { property: "x"; from: (stackView.mirrored ? -1 : 1) * stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
+                    }
+
+                    pushExit: Transition {
+                        NumberAnimation { property: "x"; from: 0; to: (stackView.mirrored ? -1 : 1) * -stackView.width; duration: 400; easing.type: Easing.OutCubic }
+                    }
+
+                    replaceEnter: Transition {
+                        NumberAnimation { property: "x"; from: (stackView.mirrored ? -1 : 1) * stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
+                    }
+
+                    replaceExit: Transition {
+                        NumberAnimation { property: "x"; from: 0; to: (stackView.mirrored ? -1 : 1) * -stackView.width; duration: 400; easing.type: Easing.OutCubic }
+                    }
                 }
                 Item {
                     Layout.fillWidth: true
