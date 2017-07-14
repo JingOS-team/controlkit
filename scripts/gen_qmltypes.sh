@@ -14,4 +14,4 @@ esac
 
 echo "using '${QMLPLUGINDUMP}' as dump tool" >&2
 
-${QMLPLUGINDUMP} -noinstantiate -platform xcb org.kde.kirigami 2.0 "${1}"
+${QMLPLUGINDUMP} -noinstantiate -notrelocatable -platform xcb org.kde.kirigami 2.0 "${1}"
