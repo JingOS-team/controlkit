@@ -68,3 +68,11 @@ make create-apk-yourapp
 
 where make create-apk-yourapp dependes from the actual name of your application
 
+# Build a QMake-based application
+
+* Base upon the example in examples/minimalqmake
+* on android, it builds it statically, on desktop systems it uses the one distribution provided (static linking mode may be useful for other systems such as iOS or Windows)
+* in order to have static linking working, clone kirigami.git and breeze-icons.git under the 3rdparty folder
+* in your main.cpp you'll have, only on android KirigamiPlugin::getInstance().registerTypes(); which will make the import work
+* qtcreator should be able to do deployment on android out of the box
+
