@@ -106,7 +106,7 @@ Item {
 
             onPressed: {
                 //search if we have a page to set to current
-                if (applicationWindow !== undefined && applicationWindow().pageStack.currentIndex !== undefined) {
+                if (applicationWindow !== undefined && applicationWindow().pageStack.currentIndex !== undefined && root.parent.parent.parent.level !== undefined) {
                     //search the button parent's parent, that is the page parent
                     //this will make the context drawer open for the proper page
                     applicationWindow().pageStack.currentIndex = root.parent.parent.parent.level;
