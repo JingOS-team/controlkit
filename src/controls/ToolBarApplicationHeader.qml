@@ -44,7 +44,8 @@ ApplicationHeader {
         readonly property bool current: __appWindow.pageStack.currentIndex == index
         property Row layout
 
-        implicitWidth: layout.width > 0 ? layout.width : heading.width
+        //don't scroll except just the button
+        implicitWidth: parent.parent.width - height
         width: parent.width
         height: parent.height
 
@@ -84,7 +85,7 @@ ApplicationHeader {
                 delegate: PrivateActionToolButton {
                     anchors.verticalCenter: parent.verticalCenter
                     action: modelData
-                    visible: modelData.visible && x+layout.x+width +(menu.visibleChildren > 1 ? height : 0) < delegateItem.width
+                    visible: modelData.visible && x+layout.x+width < delegateItem.width
                     onVisibleChanged: {
                         if (!modelData.visible) {
                             return;

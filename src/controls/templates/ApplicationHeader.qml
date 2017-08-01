@@ -124,7 +124,10 @@ AbstractApplicationHeader {
         id: titleList
         readonly property bool wideMode: typeof __appWindow.pageStack.wideMode !== "undefined" ?  __appWindow.pageStack.wideMode : titleList.wideMode
         property int internalHeaderStyle: header.headerStyle == ApplicationHeaderStyle.Auto ? (titleList.wideMode ? ApplicationHeaderStyle.Titles : ApplicationHeaderStyle.Breadcrumb) : header.headerStyle
+        //if scrolling the titlebar should scroll also the pages and vice versa
+        property bool scrollingLocked: (header.headerStyle == ApplicationHeaderStyle.Titles || titleList.wideMode)
         //uses this to have less strings comparisons
+        property bool scrollMutex
         property bool isTabBar: header.headerStyle == ApplicationHeaderStyle.TabBar
         Component.onCompleted: {
             //only iOS and desktop systems put the back button on top left corner
@@ -137,7 +140,7 @@ AbstractApplicationHeader {
         clip: true
         anchors {
             fill: parent
-            leftMargin: titleList.wideMode ? 0 : backButton.width
+            leftMargin: titleList.scrollingLocked && titleList.wideMode ? 0 : backButton.width
         }
         cacheBuffer: width ? Math.max(0, width * count) : 0
         displayMarginBeginning: __appWindow.pageStack.width * count
@@ -182,15 +185,17 @@ AbstractApplicationHeader {
         onContentWidthChanged: gotoIndex(currentIndex);
 
         onContentXChanged: {
-            if (titleList.wideMode && !__appWindow.pageStack.contentItem.moving && titleList.moving) {
-                __appWindow.pageStack.contentItem.contentX = titleList.contentX
+            if (titleList.scrollingLocked && !__appWindow.pageStack.contentItem.moving && titleList.moving) {
+                titleList.scrollMutex = true;
+                __appWindow.pageStack.contentItem.contentX = titleList.contentX - titleList.originX + __appWindow.pageStack.contentItem.originX;
+                titleList.scrollMutex = false;
             }
         }
         onHeightChanged: {
             titleList.returnToBounds()
         }
         onMovementEnded: {
-            if (titleList.wideMode) {
+            if (titleList.scrollingLocked) {
                 //this will trigger snap as well
                 __appWindow.pageStack.contentItem.flick(0,0);
             }
@@ -213,7 +218,7 @@ AbstractApplicationHeader {
 
             width: {
                 //more columns shown?
-                if ((header.headerStyle == ApplicationHeaderStyle.Titles || titleList.wideMode) && delegateLoader.page) {
+                if (titleList.scrollingLocked && delegateLoader.page) {
                     return delegateLoader.page.width;
                 } else {
                     return Math.min(titleList.width, delegateLoader.implicitWidth + Units.smallSpacing);
@@ -254,9 +259,9 @@ AbstractApplicationHeader {
             }
         }
         Connections {
-            target: titleList.wideMode ? __appWindow.pageStack.contentItem : null
+            target: titleList.scrollingLocked ? __appWindow.pageStack.contentItem : null
             onContentXChanged: {
-                if (!titleList.contentItem.moving) {
+                if (!titleList.contentItem.moving && !titleList.scrollMutex) {
                     titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
                 }
             }
