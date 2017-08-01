@@ -185,7 +185,7 @@ AbstractApplicationHeader {
         onContentWidthChanged: gotoIndex(currentIndex);
 
         onContentXChanged: {
-            if (titleList.scrollingLocked && !__appWindow.pageStack.contentItem.moving && titleList.moving) {
+            if (titleList.scrollingLocked && !__appWindow.pageStack.contentItem.moving) {
                 titleList.scrollMutex = true;
                 __appWindow.pageStack.contentItem.contentX = titleList.contentX - titleList.originX + __appWindow.pageStack.contentItem.originX;
                 titleList.scrollMutex = false;
@@ -200,6 +200,7 @@ AbstractApplicationHeader {
                 __appWindow.pageStack.contentItem.flick(0,0);
             }
         }
+        onFlickEnded: movementEnded();
 
         NumberAnimation {
             id: scrollTopAnimation
