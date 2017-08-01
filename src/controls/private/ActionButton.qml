@@ -397,18 +397,26 @@ Item {
 
         onPressed: mouseArea.onPressed(mouse)
         onReleased: {
-            globalDrawer.peeking = false;
-            contextDrawer.peeking = false;
-            var pos = root.mapFromItem(fakeContextMenuButton, mouse.x, mouse.y);
-            if (pos.x < root.width/2 || (!contextDrawer.drawerOpen && mouse.x > 0 && mouse.x < width)) {
-                contextDrawer.open();
-            } else if (contextDrawer.drawerOpen && mouse.x > 0 && mouse.x < width) {
-                contextDrawer.close();
+            if (globalDrawer) {
+                globalDrawer.peeking = false;
             }
-            if (globalDrawer.position > 0.5) {
-                globalDrawer.open();
-            } else {
-                globalDrawer.close();
+            if (contextDrawer) {
+                contextDrawer.peeking = false;
+            }
+            var pos = root.mapFromItem(fakeContextMenuButton, mouse.x, mouse.y);
+            if (contextDrawer) {
+                if (pos.x < root.width/2 || (!contextDrawer.drawerOpen && mouse.x > 0 && mouse.x < width)) {
+                    contextDrawer.open();
+                } else if (contextDrawer.drawerOpen && mouse.x > 0 && mouse.x < width) {
+                    contextDrawer.close();
+                }
+            }
+            if (globalDrawer) {
+                if (globalDrawer.position > 0.5) {
+                    globalDrawer.open();
+                } else {
+                    globalDrawer.close();
+                }
             }
         }
     }
