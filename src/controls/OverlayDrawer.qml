@@ -43,7 +43,6 @@ T.OverlayDrawer {
             parent: root.handle
             anchors.fill: parent
             Item {
-                opacity: 0.4 + root.position
                 anchors {
                     fill: parent
                     topMargin: -Units.gridUnit
