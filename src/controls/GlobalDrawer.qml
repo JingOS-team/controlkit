@@ -288,7 +288,8 @@ OverlayDrawer {
                             Layout.minimumWidth: Units.iconSizes.large
                             Layout.minimumHeight: width
                             visible: valid
-                            enabled: false
+                            //TODO: find a better way to control selective coloring on Android
+                            enabled: !Settings.isMobile
                         }
                         Heading {
                             id: heading
