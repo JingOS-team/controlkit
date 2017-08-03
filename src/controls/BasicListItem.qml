@@ -57,6 +57,7 @@ AbstractListItem {
 
     RowLayout {
         id: layout
+        spacing: Units.smallSpacing*2
         Icon {
             id: iconItem
             Layout.minimumHeight: Units.iconSizes.smallMedium
