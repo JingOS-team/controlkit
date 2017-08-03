@@ -125,7 +125,7 @@ T2.Drawer {
 
         anchors.bottom: parent.bottom
         visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
-        width: Units.iconSizes.medium + Units.smallSpacing * 2
+        width: Units.iconSizes.smallMedium + Units.smallSpacing * 4
         height: width
         opacity: root.handleVisible ? 1 : 0
         Behavior on opacity {

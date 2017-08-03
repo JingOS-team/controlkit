@@ -52,8 +52,8 @@ Item {
             bottom: parent.bottom
             bottomMargin: Units.smallSpacing
         }
-        implicitWidth: implicitHeight + Units.iconSizes.smallMedium*3
-        implicitHeight: Units.iconSizes.large + Units.largeSpacing
+        implicitWidth: implicitHeight + Units.iconSizes.smallMedium*2 + Units.gridUnit
+        implicitHeight: Units.iconSizes.medium + Units.largeSpacing
 
 
         onXChanged: {
@@ -269,8 +269,8 @@ Item {
                         verticalCenter: parent.verticalCenter
                     }
                     radius: Units.smallSpacing
-                    height: Units.iconSizes.medium + Units.smallSpacing * 2
-                    width: height + (root.action ? Units.iconSizes.smallMedium : 0)
+                    height: Units.iconSizes.smallMedium + Units.smallSpacing * 2
+                    width: height + (root.action ? Units.gridUnit : 0)
                     visible: root.leftAction
 
                     readonly property bool pressed: root.leftAction && ((mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || root.leftAction.checked)
@@ -302,8 +302,8 @@ Item {
                         verticalCenter: parent.verticalCenter
                     }
                     radius: Units.smallSpacing
-                    height: Units.iconSizes.medium + Units.smallSpacing * 2
-                    width: height + (root.action ? Units.iconSizes.smallMedium : 0)
+                    height: Units.iconSizes.smallMedium + Units.smallSpacing * 2
+                    width: height + (root.action ? Units.gridUnit : 0)
                     visible: root.rightAction
                     readonly property bool pressed: root.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || root.rightAction.checked)
                     color: pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor

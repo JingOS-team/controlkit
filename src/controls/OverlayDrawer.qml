@@ -57,9 +57,10 @@ T.OverlayDrawer {
                 }
                 FastBlur {
                     z: -1
+                    opacity: 0.6
                     anchors.fill: shadowRect
                     source: shadowRect
-                    radius: Units.gridUnit
+                    radius: Units.gridUnit/2
                     transparentBorder: true
                 }
                 Rectangle {
