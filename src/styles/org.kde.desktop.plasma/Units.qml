@@ -34,7 +34,7 @@ QtObject {
      * Given the screen has an accurate DPI settings, it corresponds to a width of
      * the capital letter M
      */
-    property int gridUnit: units.gridUnit
+    property int gridUnit: fontMetrics.height
 
     /**
      * units.iconSizes provides access to platform-dependent icon sizing
@@ -68,7 +68,7 @@ QtObject {
      * the default font as rendered on the screen, so it takes user-configured font size and DPI
      * into account.
      */
-    property int smallSpacing: Math.round(gridUnit/4)
+    property int smallSpacing: Math.floor(gridUnit/4)
 
     /**
      * units.largeSpacing is the amount of spacing that should be used inside bigger UI elements,
