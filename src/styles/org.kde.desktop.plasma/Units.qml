@@ -54,12 +54,12 @@ QtObject {
      * * desktop
      */
     property QtObject iconSizes: QtObject {
-        property int small: units.iconSizes.small
-        property int smallMedium: units.iconSizes.smallMedium
-        property int medium: units.iconSizes.medium
-        property int large: units.iconSizes.large
-        property int huge: units.iconSizes.huge
-        property int enormous: units.iconSizes.enormous
+        property int small: Math.floor(units.iconSizes.small * devicePixelRatio)
+        property int smallMedium: Math.floor(units.iconSizes.smallMedium * devicePixelRatio)
+        property int medium: Math.floor(units.iconSizes.medium * devicePixelRatio)
+        property int large: Math.floor(units.iconSizes.large * devicePixelRatio)
+        property int huge: Math.floor(units.iconSizes.huge * devicePixelRatio)
+        property int enormous: Math.floor(units.iconSizes.enormous * devicePixelRatio)
     }
 
     /**
@@ -68,7 +68,7 @@ QtObject {
      * the default font as rendered on the screen, so it takes user-configured font size and DPI
      * into account.
      */
-    property int smallSpacing: gridUnit/4
+    property int smallSpacing: Math.round(gridUnit/4)
 
     /**
      * units.largeSpacing is the amount of spacing that should be used inside bigger UI elements,
@@ -84,7 +84,7 @@ QtObject {
      * use theme.mSize(theme.defaultFont), units.smallSpacing and units.largeSpacing.
      * The devicePixelRatio follows the definition of "device independent pixel" by Microsoft.
      */
-    property real devicePixelRatio: units.devicePixelRatio
+    property real devicePixelRatio: Math.max(1, (fontMetrics.font.pixelSize / fontMetrics.font.pointSize))
 
     /**
      * units.longDuration should be used for longer, screen-covering animations, for opening and

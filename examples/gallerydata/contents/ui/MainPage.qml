@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.1
-import QtQuick.Controls 2.0 as Controls
+import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.0 as Kirigami
 
@@ -117,6 +117,10 @@ Kirigami.ScrollablePage {
             ListElement {
                 text: "Colors"
                 component: "Colors"
+            }
+            ListElement {
+                text: "Metrics"
+                component: "Metrics"
             }
         }
         delegate: Kirigami.BasicListItem {

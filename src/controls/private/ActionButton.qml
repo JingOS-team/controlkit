@@ -355,11 +355,10 @@ Item {
         }
         visible: root.parent.parent.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
 
-        width: Units.iconSizes.medium + Units.smallSpacing * 2
+        width: Units.iconSizes.smallMedium + Units.smallSpacing * 4
         height: width
 
         Item {
-            opacity: 0.4
             anchors {
                 fill:parent
                 margins: -Units.gridUnit
@@ -375,9 +374,10 @@ Item {
             }
             FastBlur {
                 z: -1
+                opacity: 0.6
                 anchors.fill: shadowRect
                 source: shadowRect
-                radius: Units.gridUnit
+                radius: Units.gridUnit/2
                 transparentBorder: true
             }
             Rectangle {
