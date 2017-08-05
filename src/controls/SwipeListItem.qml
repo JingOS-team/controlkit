@@ -50,7 +50,7 @@ import "templates" as T
  *
  */
 T.SwipeListItem {
-    id: root
+    id: listItem
 
     background: DefaultListItemBackground {}
 }
