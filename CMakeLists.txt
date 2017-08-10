@@ -94,9 +94,6 @@ if(UNIX)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
 endif()
 
-################# now find all used packages #################
-
-find_package(PkgConfig)
 #########################################################################
 
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
