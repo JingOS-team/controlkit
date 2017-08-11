@@ -58,7 +58,7 @@ T.OverlayDrawer {
                 color: root.handle.pressed ? Theme.highlightColor : Theme.buttonBackgroundColor
                 width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                 height: width
-                radius: Units.devicePixelRatio
+                radius: Units.devicePixelRatio * 2
                 Loader {
                     anchors.centerIn: parent
                     width: height

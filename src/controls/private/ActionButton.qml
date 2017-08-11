@@ -268,7 +268,7 @@ Item {
                         bottom: parent.bottom
                         bottomMargin: Units.smallSpacing
                     }
-                    radius: Units.devicePixelRatio
+                    radius: Units.devicePixelRatio*2
                     height: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                     width: height + (root.action ? Units.gridUnit*2 : 0)
                     visible: root.leftAction
@@ -303,7 +303,7 @@ Item {
                         bottom: parent.bottom
                         bottomMargin: Units.smallSpacing
                     }
-                    radius: Units.devicePixelRatio
+                    radius: Units.devicePixelRatio*2
                     height: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                     width: height + (root.action ? Units.gridUnit*2 : 0)
                     visible: root.rightAction
