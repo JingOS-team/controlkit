@@ -234,14 +234,12 @@ Item {
                     width: height
                     visible: root.action
                     readonly property bool pressed: root.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || root.action.checked)
-                    color: Settings.style.toLowerCase() == "material"
-                        ? (pressed ? Qt.lighter(Theme.buttonHoverColor, 1.3) : Theme.buttonHoverColor)
-                        : (pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor)
+                    color: pressed ? Qt.lighter(Theme.buttonHoverColor, 1.3) : Theme.buttonHoverColor
 
                     Icon {
                         id: icon
                         source: root.action && root.action.iconName ? root.action.iconName : ""
-                        selected: Settings.style.toLowerCase() == "material" ? true : buttonGraphics.pressed
+                        selected: true
                         anchors {
                             fill: parent
                             margins: Units.smallSpacing * 3
@@ -266,11 +264,13 @@ Item {
                     z: -1
                     anchors {
                         left: parent.left
-                        verticalCenter: parent.verticalCenter
+                        //verticalCenter: parent.verticalCenter
+                        bottom: parent.bottom
+                        bottomMargin: Units.smallSpacing
                     }
-                    radius: Units.smallSpacing
+                    radius: Units.devicePixelRatio
                     height: Units.iconSizes.smallMedium + Units.smallSpacing * 2
-                    width: height + (root.action ? Units.gridUnit : 0)
+                    width: height + (root.action ? Units.gridUnit*2 : 0)
                     visible: root.leftAction
 
                     readonly property bool pressed: root.leftAction && ((mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || root.leftAction.checked)
@@ -299,11 +299,13 @@ Item {
                     z: -1
                     anchors {
                         right: parent.right
-                        verticalCenter: parent.verticalCenter
+                        //verticalCenter: parent.verticalCenter
+                        bottom: parent.bottom
+                        bottomMargin: Units.smallSpacing
                     }
-                    radius: Units.smallSpacing
+                    radius: Units.devicePixelRatio
                     height: Units.iconSizes.smallMedium + Units.smallSpacing * 2
-                    width: height + (root.action ? Units.gridUnit : 0)
+                    width: height + (root.action ? Units.gridUnit*2 : 0)
                     visible: root.rightAction
                     readonly property bool pressed: root.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || root.rightAction.checked)
                     color: pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor
@@ -344,18 +346,16 @@ Item {
         anchors {
             right: edgeMouseArea.right
             bottom: edgeMouseArea.bottom
-            margins: -1
         }
         drag {
             target: button
-            //filterChildren: true
             axis: Drag.XAxis
             minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
             maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
         }
         visible: root.parent.parent.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
 
-        width: Units.iconSizes.smallMedium + Units.smallSpacing * 4
+        width: Units.iconSizes.medium + Units.smallSpacing*2
         height: width
 
         Item {
@@ -363,36 +363,36 @@ Item {
                 fill:parent
                 margins: -Units.gridUnit
             }
-            layer.enabled: true
-            Rectangle {
-                id: shadowRect
-                anchors {
-                    fill: parent
-                    margins: Units.gridUnit
-                }
-                color: "black"
-            }
-            FastBlur {
-                z: -1
-                opacity: 0.6
-                anchors.fill: shadowRect
-                source: shadowRect
-                radius: Units.gridUnit/2
-                transparentBorder: true
-            }
-            Rectangle {
-                color: Theme.viewBackgroundColor
-                anchors {
-                    fill:parent
-                    margins: Units.gridUnit
-                }
-            }
-        }
 
-        ContextIcon {
-            anchors.centerIn: parent
-            width: height
-            height: Units.iconSizes.smallMedium
+            DropShadow {
+                anchors.fill: handleGraphics
+                horizontalOffset: 0
+                verticalOffset: Units.devicePixelRatio
+                radius: Units.gridUnit /2
+                samples: 16
+                color: Qt.rgba(0, 0, 0, fakeContextMenuButton.pressed ? 0.6 : 0.4)
+                source: handleGraphics
+            }
+            Rectangle {
+                id: handleGraphics
+                anchors.centerIn: parent
+                color: fakeContextMenuButton.pressed ? Theme.highlightColor : Theme.buttonBackgroundColor
+                width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
+                height: width
+                radius: Units.devicePixelRatio
+                ContextIcon {
+                    anchors.centerIn: parent
+                    width: height
+                    height: Units.iconSizes.smallMedium
+                    color: fakeContextMenuButton.pressed ? Theme.highlightedTextColor : Theme.buttonTextColor
+                }
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Units.longDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
         }
 
         onPressed: mouseArea.onPressed(mouse)

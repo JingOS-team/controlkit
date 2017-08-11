@@ -33,7 +33,7 @@ import "private"
 T2.Drawer {
     id: root
 
-    z: modal ? (drawerOpen ? 100 : 99 ): 0
+    z: modal ? (Math.round((position * 100) / 10) ): 0
 
 //BEGIN Properties
     /**
@@ -76,7 +76,7 @@ T2.Drawer {
      **/
     readonly property Item handle: MouseArea {
         id: drawerHandle
-        z: root.position > 0.5 ? 2000001 : 2000000
+        z: root.modal ? applicationWindow().overlay.z + (root.position > 0 ? +1 : -1) : root.background.parent.z + 1
         preventStealing: true
         parent: applicationWindow().overlay.parent
 
@@ -124,8 +124,9 @@ T2.Drawer {
         }
 
         anchors.bottom: parent.bottom
+
         visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
-        width: Units.iconSizes.smallMedium + Units.smallSpacing * 4
+        width: Units.iconSizes.medium + Units.smallSpacing*2
         height: width
         opacity: root.handleVisible ? 1 : 0
         Behavior on opacity {
@@ -179,7 +180,13 @@ T2.Drawer {
              */
             property bool animating
             ScriptAction {
-                script: enterAnimation.animating = true
+                script: {
+                    enterAnimation.animating = true
+                    //on non modal dialog we don't want drawers in the overlay
+                    if (!root.modal) {
+                        root.background.parent.parent = applicationWindow().overlay.parent
+                    }
+                }
             }
             SmoothedAnimation {
                 velocity: 5

@@ -42,51 +42,44 @@ T.OverlayDrawer {
         Item {
             parent: root.handle
             anchors.fill: parent
-            Item {
-                anchors {
-                    fill: parent
-                    topMargin: -Units.gridUnit
-                    leftMargin: root.edge == Qt.RightEdge ? -Units.gridUnit : 0
-                    rightMargin: root.edge == Qt.RightEdge ? 0 : -Units.gridUnit
-                }
-                layer.enabled: true
-                Rectangle {
-                    id: shadowRect
-                    anchors.fill: handleGraphics
-                    color: "black"
-                }
-                FastBlur {
-                    z: -1
-                    opacity: 0.6
-                    anchors.fill: shadowRect
-                    source: shadowRect
-                    radius: Units.gridUnit/2
-                    transparentBorder: true
-                }
-                Rectangle {
-                    id: handleGraphics
-                    color: Theme.viewBackgroundColor
-                    anchors {
-                        fill: parent
-                        topMargin: Units.gridUnit
-                        leftMargin: root.edge == Qt.RightEdge ? Units.gridUnit : 0
-                        rightMargin: root.edge == Qt.RightEdge ? 0 : Units.gridUnit
+
+            DropShadow {
+                anchors.fill: handleGraphics
+                horizontalOffset: 0
+                verticalOffset: Units.devicePixelRatio
+                radius: Units.gridUnit /2
+                samples: 16
+                color: Qt.rgba(0, 0, 0, root.handle.pressed ? 0.6 : 0.4)
+                source: handleGraphics
+            }
+            Rectangle {
+                id: handleGraphics
+                anchors.centerIn: parent
+                color: root.handle.pressed ? Theme.highlightColor : Theme.buttonBackgroundColor
+                width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
+                height: width
+                radius: Units.devicePixelRatio
+                Loader {
+                    anchors.centerIn: parent
+                    width: height
+                    height: Units.iconSizes.small
+                    source: root.edge == Qt.LeftEdge ? Qt.resolvedUrl("templates/private/MenuIcon.qml") : (root.edge == Qt.RightEdge ? Qt.resolvedUrl("templates/private/ContextIcon.qml") : "")
+                    onItemChanged: {
+                        if(item) {
+                            item.morph = Qt.binding(function(){return root.position})
+                            item.color = Qt.binding(function(){return root.handle.pressed ? Theme.highlightedTextColor : Theme.buttonTextColor})
+                        }
                     }
                 }
-            }
-
-            Loader {
-                anchors.centerIn: parent
-                width: height
-                height: Units.iconSizes.smallMedium
-                source: root.edge == Qt.LeftEdge ? Qt.resolvedUrl("templates/private/MenuIcon.qml") : (root.edge == Qt.RightEdge ? Qt.resolvedUrl("templates/private/ContextIcon.qml") : "")
-                onItemChanged: {
-                    if(item) {
-                        item.morph = Qt.binding(function(){return root.position})
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Units.longDuration
+                        easing.type: Easing.InOutQuad
                     }
                 }
             }
         }
+
 
         EdgeShadow {
             z: -2
