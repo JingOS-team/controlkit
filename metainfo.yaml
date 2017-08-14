@@ -5,6 +5,8 @@ type: functional
 platforms:
     - name: Linux
     - name: Android
+    - name: Windows
+    - name: MacOSX
 public_lib: true
 deprecated: false
 release: true
