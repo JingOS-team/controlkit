@@ -29,7 +29,13 @@ Controls.ToolButton {
     implicitWidth: height
     visible: applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.contentItem.width
     z: 99
-    onClicked: applicationWindow().pageStack.goBack();
+    onClicked: {
+        if (applicationWindow().pageStack.layers && applicationWindow().pageStack.layers.depth > 1) {
+            applicationWindow().pageStack.layers.pop();
+        } else {
+            applicationWindow().pageStack.goBack();
+        }
+    }
     Icon {
         anchors.fill: parent
         opacity: parent.enabled ? 1 : 0.6

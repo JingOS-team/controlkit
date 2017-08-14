@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.5
+import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.2
 import "private"
 import org.kde.kirigami 2.0
@@ -56,10 +57,10 @@ AbstractApplicationHeader {
     property bool backButtonEnabled: (!titleList.isTabBar && (!Settings.isMobile || Qt.platform.os == "ios"))
 
     onBackButtonEnabledChanged: {
-        if (backButtonEnabled) {
+        if (backButtonEnabled && !titleList.backButton) {
             var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
             titleList.backButton = component.createObject(titleList.parent);
-        } else {
+        } else if (titleList.backButton) {
             titleList.backButton.destroy();
         }
     }
@@ -92,7 +93,7 @@ AbstractApplicationHeader {
                 elide: Text.ElideRight
                 text: page ? page.title : ""
                 font.pixelSize: titleList.height / 1.6
-                height: parent.height
+                verticalAlignment: Text.AlignVCenter
                 Rectangle {
                     anchors {
                         bottom: parent.bottom
@@ -120,6 +121,23 @@ AbstractApplicationHeader {
         opacity: 0.4
     }
 
+    QQC2.StackView {
+        id: stack
+        anchors {
+            fill: parent
+            leftMargin: titleList.scrollingLocked && titleList.wideMode ? 0 : titleList.backButton.width
+        }
+        initialItem: titleList
+    }
+    Repeater {
+        model: __appWindow.pageStack.layers.depth -1
+        delegate: Loader {
+            sourceComponent: header.pageDelegate
+            readonly property Page page: __appWindow.pageStack.layers.get(modelData+1)
+            Component.onCompleted: stack.push(this)
+            Component.onDestruction: stack.pop()
+        }
+    }
     ListView {
         id: titleList
         readonly property bool wideMode: typeof __appWindow.pageStack.wideMode !== "undefined" ?  __appWindow.pageStack.wideMode : titleList.wideMode
@@ -129,19 +147,10 @@ AbstractApplicationHeader {
         //uses this to have less strings comparisons
         property bool scrollMutex
         property bool isTabBar: header.headerStyle == ApplicationHeaderStyle.TabBar
-        Component.onCompleted: {
-            //only iOS and desktop systems put the back button on top left corner
-            if (header.backButtonEnabled) {
-                var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
-                titleList.backButton = component.createObject(titleList.parent);
-            }
-        }
+
         property Item backButton
         clip: true
-        anchors {
-            fill: parent
-            leftMargin: titleList.scrollingLocked && titleList.wideMode ? 0 : backButton.width
-        }
+
         cacheBuffer: width ? Math.max(0, width * count) : 0
         displayMarginBeginning: __appWindow.pageStack.width * count
         orientation: ListView.Horizontal

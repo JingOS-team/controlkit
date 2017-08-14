@@ -64,7 +64,7 @@ Kirigami.ApplicationWindow {
             },
             Kirigami.Action {
                 text: "Checkable"
-                iconName: "view-list-details"
+                iconName: "go-next"
                 checkable: true
                 checked: false
                 onTriggered: {
@@ -73,7 +73,7 @@ Kirigami.ApplicationWindow {
             },
             Kirigami.Action {
                 text: "Open A Page"
-                iconName: "configure"
+                iconName: "view-list-details"
                 checkable: true
                 //Need to do this, otherwise it breaks the bindings
                 property bool current: pageStack.currentItem ? pageStack.currentItem.objectName == "settingsPage" : false
@@ -82,6 +82,13 @@ Kirigami.ApplicationWindow {
                 }
                 onTriggered: {
                     pageStack.push(settingsComponent);
+                }
+            },
+            Kirigami.Action {
+                text: "Open A Layer"
+                iconName: "configure"
+                onTriggered: {
+                    pageStack.layers.push(Qt.resolvedUrl("gallery/LayersGallery.qml"));
                 }
             }
             ]

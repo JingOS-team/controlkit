@@ -42,6 +42,13 @@ Item {
 
     transform: Translate {
         id: translateTransform
+        y: mouseArea.internalVisibility ? 0 : button.height
+        Behavior on y {
+            NumberAnimation {
+                duration: Units.longDuration
+                easing.type: mouseArea.internalVisibility == true ? Easing.InQuad : Easing.OutQuad
+            }
+        }
     }
 
     Item {
@@ -78,15 +85,6 @@ Item {
             visible: action != null || leftAction != null || rightAction != null
             property bool internalVisibility: (applicationWindow === undefined || (applicationWindow().controlsVisible && applicationWindow().height > root.height*2)) && (root.action === null || root.action.visible === undefined || root.action.visible)
             preventStealing: true
-            onInternalVisibilityChanged: {
-                showAnimation.running = false;
-                if (internalVisibility) {
-                    showAnimation.to = 0;
-                } else {
-                    showAnimation.to = button.height;
-                }
-                showAnimation.running = true;
-            }
 
             drag {
                 target: button
@@ -213,13 +211,6 @@ Item {
                 }
             }
 
-            NumberAnimation {
-                id: showAnimation
-                target: translateTransform
-                properties: "y"
-                duration: Units.longDuration
-                easing.type: mouseArea.internalVisibility == true ? Easing.InQuad : Easing.OutQuad
-            }
             Item {
                 id: background
                 anchors {

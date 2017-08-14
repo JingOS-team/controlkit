@@ -21,6 +21,7 @@ import QtQuick 2.5
 import QtQuick.Layouts 1.2
 import QtQml.Models 2.2
 import QtQuick.Templates 2.0 as T
+import QtQuick.Controls 2.0 as QQC2
 import org.kde.kirigami 2.0
 
 /**
@@ -297,6 +298,14 @@ T.Control {
         }
     }
 
+    /**
+     * layers: QtQuick.Controls.PageStack
+     * Access to the modal layers.
+     * Sometimes an application needs a modal page that always covers all the rows.
+     * For instance the full screen image of an image viewer or a settings page.
+     * @since 5.38
+     */
+    property alias layers: layersStack
 //END FUNCTIONS
 
     onInitialPageChanged: {
@@ -323,9 +332,21 @@ T.Control {
             script: mainView.flick(100, 0)
         }
     }
+    QQC2.StackView {
+        id: layersStack
+        z: 99
+        anchors.fill: parent
+        initialItem: mainView
+        function clear () {
+            //don't let it kill the main page row
+            var d = root.depth;
+            for (var i = 1; i < d; ++i) {
+                pop();
+            } 
+        }
+    }
     ListView {
         id: mainView
-        z: 99
         anchors.fill: parent
         boundsBehavior: Flickable.StopAtBounds
         orientation: Qt.Horizontal

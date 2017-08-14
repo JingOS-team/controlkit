@@ -81,7 +81,9 @@ OverlayDrawer {
      * This can be any type of object that a ListView can accept as model. 
      * It expects items compatible with either QAction or Kirigami Action
      */
-    property var actions: pageStack.currentItem ? pageStack.currentItem.contextualActions : null
+    property var actions: pageStack.layers.depth > 1
+        ? pageStack.layers.currentItem.contextualActions
+        : (pageStack.currentItem ? pageStack.currentItem.contextualActions : null)
     enabled: menu.count > 0
     edge: Qt.RightEdge
     drawerOpen: false
@@ -92,14 +94,6 @@ OverlayDrawer {
     bottomPadding: 0
 
     handleVisible: applicationWindow == undefined || applicationWindow().wideScreen == true ? false : applicationWindow().controlsVisible
-
-    Connections {
-        target: pageStack
-        onCurrentItemChanged: {
-            if (pageStack.currentItem)
-                actions = pageStack.currentItem.contextualActions
-        }
-    }
 
     contentItem: ScrollView {
         implicitWidth: Units.gridUnit * 20

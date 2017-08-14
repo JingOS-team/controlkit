@@ -16,6 +16,8 @@
         <file alias="contents/ui/gallery/TabBarGallery.qml">../gallerydata/contents/ui/gallery/TabBarGallery.qml</file>
         <file alias="contents/ui/gallery/TextFieldGallery.qml">../gallerydata/contents/ui/gallery/TextFieldGallery.qml</file>
         <file alias="contents/ui/gallery/ColorsGallery.qml">../gallerydata/contents/ui/gallery/ColorsGallery.qml</file>
+        <file alias="contents/ui/gallery/MetricsGallery.qml">../gallerydata/contents/ui/gallery/MetricsGallery.qml</file>
+        <file alias="contents/ui/gallery/LayersGallery.qml">../gallerydata/contents/ui/gallery/LayersGallery.qml</file>
         <file alias="contents/ui/ExampleApp.qml">../gallerydata/contents/ui/ExampleApp.qml</file>
         <file alias="contents/ui/DesktopExampleApp.qml">../gallerydata/contents/ui/DesktopExampleApp.qml</file>
         <file alias="metadata.desktop">../gallerydata/metadata.desktop</file>
