@@ -54,12 +54,12 @@ QtObject {
      * * desktop
      */
     property QtObject iconSizes: QtObject {
-        property int small: Math.floor(units.iconSizes.small * devicePixelRatio)
-        property int smallMedium: Math.floor(units.iconSizes.smallMedium * devicePixelRatio)
-        property int medium: Math.floor(units.iconSizes.medium * devicePixelRatio)
-        property int large: Math.floor(units.iconSizes.large * devicePixelRatio)
-        property int huge: Math.floor(units.iconSizes.huge * devicePixelRatio)
-        property int enormous: Math.floor(units.iconSizes.enormous * devicePixelRatio)
+        property int small: 16 * devicePixelRatio
+        property int smallMedium: 22 * devicePixelRatio
+        property int medium: 32 * devicePixelRatio
+        property int large: 48 * devicePixelRatio
+        property int huge: 64 * devicePixelRatio
+        property int enormous: 128 * devicePixelRatio
     }
 
     /**
