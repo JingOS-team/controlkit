@@ -74,7 +74,7 @@ AbstractApplicationHeader {
 
             Icon {
                 //in tabbar mode this is just a spacer
-                visible: !titleList.wideMode && (modelData > 0 || titleList.internalHeaderStyle == ApplicationHeaderStyle.TabBar)
+                visible: !titleList.wideMode && ((typeof(modelData) != "undefined" && modelData > 0) || titleList.internalHeaderStyle == ApplicationHeaderStyle.TabBar)
                 anchors.verticalCenter: parent.verticalCenter
                 height: Units.iconSizes.small
                 width: height
@@ -134,6 +134,7 @@ AbstractApplicationHeader {
         delegate: Loader {
             sourceComponent: header.pageDelegate
             readonly property Page page: __appWindow.pageStack.layers.get(modelData+1)
+            readonly property bool current: true;
             Component.onCompleted: stack.push(this)
             Component.onDestruction: stack.pop()
         }
