@@ -347,7 +347,6 @@ T.Control {
     }
     ListView {
         id: mainView
-        anchors.fill: parent
         boundsBehavior: Flickable.StopAtBounds
         orientation: Qt.Horizontal
         snapMode: ListView.SnapToItem
