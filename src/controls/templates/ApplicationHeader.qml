@@ -125,7 +125,7 @@ AbstractApplicationHeader {
         id: stack
         anchors {
             fill: parent
-            leftMargin: titleList.backButton.width
+            leftMargin: titleList.scrollingLocked && titleList.wideMode && depth < 2 ? 0 : titleList.backButton.width
         }
         initialItem: titleList
     }
