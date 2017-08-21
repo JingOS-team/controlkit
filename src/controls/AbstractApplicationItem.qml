@@ -94,7 +94,17 @@ Item {
     Item {
         anchors.fill: parent
         parent: root.parent
-        z: 99999999
+        z: 999999
+        Rectangle {
+                z: -1
+                anchors.fill: parent
+                color: "black"
+                opacity: contextDrawer && contextDrawer.modal && contextDrawer.position > 0
+                          ? contextDrawer.position * 0.6
+                          : (globalDrawer && globalDrawer.modal && globalDrawer.position > 0
+                              ? globalDrawer.position * 0.6
+                              : 0)
+            }
         Item {
             id: overlayRoot
             z: -1
