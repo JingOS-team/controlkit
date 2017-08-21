@@ -96,15 +96,21 @@ Item {
         parent: root.parent
         z: 999999
         Rectangle {
-                z: -1
-                anchors.fill: parent
-                color: "black"
-                opacity: contextDrawer && contextDrawer.modal && contextDrawer.position > 0
-                          ? contextDrawer.position * 0.6
-                          : (globalDrawer && globalDrawer.modal && globalDrawer.position > 0
-                              ? globalDrawer.position * 0.6
-                              : 0)
-            }
+            z: -1
+            anchors.fill: parent
+            color: "black"
+            visible: contextDrawer && contextDrawer.modal
+            parent: contextDrawer ? contextDrawer.background.parent.parent : overlayRoot
+            opacity: contextDrawer ? contextDrawer.position * 0.6 : 0
+        }
+        Rectangle {
+            z: -1
+            anchors.fill: parent
+            color: "black"
+            visible: globalDrawer && globalDrawer.modal
+            parent: contextDrawer ? globalDrawer.background.parent.parent : overlayRoot
+            opacity: contextDrawer ? globalDrawer.position * 0.6 : 0
+        }
         Item {
             id: overlayRoot
             z: -1
