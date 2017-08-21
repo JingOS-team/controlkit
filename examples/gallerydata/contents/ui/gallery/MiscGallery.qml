@@ -26,6 +26,43 @@ ScrollablePage {
     id: page
     title: "Misc controls"
 
+    actions {
+        main: Action {
+            iconName: "document-edit"
+            text: "Main Action Text"
+        }
+        left: Action {
+            iconName: "go-previous"
+            text: "Left Action Text"
+            onTriggered: {
+                showPassiveNotification("Left action triggered")
+            }
+        }
+        right: Action {
+            iconName: "go-next"
+            text: "Right Action Text"
+            onTriggered: {
+                showPassiveNotification("Right action triggered")
+            }
+        }
+        contextualActions: [
+            Action {
+                text:"Action for buttons"
+                iconName: "bookmarks"
+                onTriggered: showPassiveNotification("Action 1 clicked")
+            },
+            Action {
+                text:"Disabled Action"
+                iconName: "folder"
+                enabled: false
+            },
+            Action {
+                text: "Action for Sheet"
+                visible: sheet.sheetOpen
+            }
+        ]
+    }
+
     header: Controls.ToolBar {
         RowLayout {
             anchors.verticalCenter: parent.verticalCenter
@@ -47,6 +84,25 @@ ScrollablePage {
                         text: "Item2"
                     }
                 }
+            }
+        }
+    }
+
+    footer: Rectangle {
+        color: Theme.viewBackground
+        height: Units.gridUnit * 3
+        Controls.TextField {
+            topPadding: 0
+            bottomPadding: 0
+            leftPadding: Units.smallSpacing
+            rightPadding: Units.smallSpacing
+            anchors.fill: parent
+        }
+        Separator {
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
             }
         }
     }

@@ -123,7 +123,33 @@ T2.Drawer {
             }
         }
 
-        anchors.bottom: parent.bottom
+        anchors {
+            bottom: parent.bottom
+            bottomMargin: {
+                if (!applicationWindow()) {
+                    return;
+                }
+
+                if (!applicationWindow() || !applicationWindow().pageStack ||
+                    !applicationWindow().pageStack.contentItem ||
+                    !applicationWindow().pageStack.contentItem.itemAt) {
+                    return 0;
+                }
+
+                var footer = applicationWindow().pageStack.contentItem.itemAt(applicationWindow().pageStack.contentItem.contentX + drawerHandle.x, drawerHandle.y).page.footer
+                if (footer) {
+                    return footer.height
+                } else {
+                    return 0;
+                }
+            }
+            Behavior on bottomMargin {
+                NumberAnimation {
+                    duration: Units.shortDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
 
         visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
         width: Units.iconSizes.medium + Units.smallSpacing*2

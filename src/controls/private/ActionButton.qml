@@ -29,7 +29,8 @@ Item {
     anchors {
         left: parent.left
         right: parent.right
-        bottom:parent.bottom
+        bottom: parent.bottom
+        bottomMargin: root.parent.parent.header ? root.parent.parent.header.height : 0
     }
     //smallSpacing for the shadow
     height: button.height + Units.smallSpacing
