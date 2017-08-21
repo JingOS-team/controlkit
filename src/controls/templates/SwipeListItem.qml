@@ -284,8 +284,9 @@ T2.ItemDelegate {
         }
     }
 
-    XAnimator {
+    NumberAnimation {
         id: positionAnimation
+        property: "x"
         target: background
         duration: Units.longDuration
         easing.type: Easing.InOutQuad
