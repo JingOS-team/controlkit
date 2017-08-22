@@ -207,7 +207,9 @@ T2.Page {
      *
      * @since 2.1
      */
-    readonly property bool isCurrentPage: applicationWindow().pageStack.currentItem == root
+    readonly property bool isCurrentPage: applicationWindow().pageStack.layers.depth > 1
+        ? applicationWindow().pageStack.layers.currentItem == root
+        : applicationWindow().pageStack.currentItem == root
 
     PageActionPropertyGroup {
         id: actionsGroup
