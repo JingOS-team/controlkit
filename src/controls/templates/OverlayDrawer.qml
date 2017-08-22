@@ -136,7 +136,8 @@ T2.Drawer {
                     return 0;
                 }
 
-                var footer = applicationWindow().pageStack.contentItem.itemAt(applicationWindow().pageStack.contentItem.contentX + drawerHandle.x, drawerHandle.y).page.footer
+                var item = applicationWindow().pageStack.contentItem.itemAt(applicationWindow().pageStack.contentItem.contentX + drawerHandle.x, drawerHandle.y)
+                var footer = item ? item.page.footer : undefined;
                 if (footer) {
                     return footer.height
                 } else {
