@@ -109,7 +109,9 @@ P.ScrollView {
         Item {
             id: busyIndicatorFrame
             z: 99
-            y: -root.flickableItem.contentY-height
+            y: root.flickableItem.verticalLayoutDirection === ListView.BottomToTop
+                ? -root.flickableItem.contentY+height
+                : -root.flickableItem.contentY-height
             width: root.flickableItem.width
             height: busyIndicator.height + Units.gridUnit * 2
             QQC2.BusyIndicator {
@@ -136,7 +138,6 @@ P.ScrollView {
                 border.width: Math.ceil(Units.smallSpacing/4)
                 //also take into account the listview header height if present
                 property real progress: supportsRefreshing && !refreshing ? ((parent.y - busyIndicatorFrame.headerItemHeight)/busyIndicatorFrame.height) : 0
-                
             }
             ConicalGradient {
                 source: spinnerProgress
@@ -152,6 +153,7 @@ P.ScrollView {
 
             onYChanged: {
                 //it's overshooting enough and not reachable: start countdown for reachability
+
                 if (y - busyIndicatorFrame.headerItemHeight > root.topPadding + Units.gridUnit && !applicationWindow().reachableMode) {
                     overshootResetTimer.running = true;
                 //not reachable and not overshooting enough, stop reachability countdown
@@ -192,7 +194,7 @@ P.ScrollView {
                 interval: applicationWindow().reachableMode ? 8000 : 2000
                 onTriggered: {
                     //put it there because widescreen may have changed since timer start
-                    if (applicationWindow().wideScreen) {
+                    if (applicationWindow().wideScreen || root.flickableItem.verticalLayoutDirection === ListView.BottomToTop) {
                         return;
                     }
                     applicationWindow().reachableMode = !applicationWindow().reachableMode;
