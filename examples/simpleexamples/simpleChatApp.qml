@@ -116,7 +116,6 @@ Kirigami.ApplicationWindow {
             }
         }
 
-        //trick with repeater gives a single scrollbar to everything as is using the internal flickable, an own scrollview scrolls only this area
         ColumnLayout {
             spacing: 0
             Kirigami.Separator {
