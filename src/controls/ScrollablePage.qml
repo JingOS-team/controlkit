@@ -113,6 +113,7 @@ Page {
         anchors {
             fill: parent
             topMargin: root.header ? root.header.height : 0
+            bottomMargin: root.footer ? root.footer.height : 0
         }
     }
 
