@@ -108,7 +108,7 @@ ApplicationHeader {
             color: Theme.textColor
             elide: Text.ElideRight
             text: page ? page.title : ""
-            font.pixelSize: parent.height / 1.6
+            font.pointSize: Math.max(1, (parent.height / 1.6) / Units.devicePixelRatio)
         }
         Controls.ToolButton {
             id: moreButton
