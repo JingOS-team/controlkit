@@ -90,6 +90,14 @@ T.Control {
      * @since 5.37
      */
     readonly property bool wideMode: root.width >= root.defaultColumnWidth*2 && pagesLogic.count >= 2
+
+    /**
+     * separatorVisible: bool
+     * True if the separator between pages should be visible
+     * default: true
+     * @since 5.38
+     */
+    property bool separatorVisible: true
 //END PROPERTIES
 
 //BEGIN FUNCTIONS
@@ -516,7 +524,7 @@ T.Control {
                     bottom: parent.bottom
                     left: parent.left
                 }
-                visible: container.level > 0
+                visible: root.separatorVisible && container.level > 0
             }
             states: [
                 State {
