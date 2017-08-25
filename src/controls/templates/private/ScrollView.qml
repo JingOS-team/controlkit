@@ -45,7 +45,7 @@ MouseArea {
         //TODO: config of how many lines the wheel scrolls
         var y = wheel.pixelDelta.y != 0 ? wheel.pixelDelta.y : (wheel.angleDelta.y > 0 ? step : -step)
 
-        var minYExtent = flickableItem.topMargin;
+        var minYExtent = flickableItem.topMargin - flickableItem.originY;
         var maxYExtent = flickableItem.height - (flickableItem.contentHeight + flickableItem.bottomMargin + flickableItem.originY);
 
         if (typeof(flickableItem.headerItem) !== "undefined" && flickableItem.headerItem) {
