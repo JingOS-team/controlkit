@@ -60,6 +60,8 @@ Kirigami.ScrollablePage {
     ListView {
         id: mainListView
         currentIndex: -1
+        //currentIndex has focus, openPageIndex is the one actually open now
+        property int openPageIndex: -1
 
         model: ListModel {
             ListElement {
@@ -135,9 +137,10 @@ Kirigami.ScrollablePage {
                     return;
                 }
                 root.pageStack.pop(pageRoot);
-                ownPage = root.pageStack.push(Qt.resolvedUrl("gallery/" + model.component + "Gallery.qml"));
+                root.pageStack.push(Qt.resolvedUrl("gallery/" + model.component + "Gallery.qml"));
+                mainListView.openPageIndex = index;
             }
-            checked: ownPage && root.pageStack.lastItem == ownPage
+            checked: mainListView.openPageIndex == index
             highlighted: focus && ListView.isCurrentItem
         }
     }
