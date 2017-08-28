@@ -59,7 +59,7 @@ AbstractApplicationHeader {
     onBackButtonEnabledChanged: {
         if (backButtonEnabled && !titleList.backButton) {
             var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
-            titleList.backButton = component.createObject(titleList.parent);
+            titleList.backButton = component.createObject(header);
         } else if (titleList.backButton) {
             titleList.backButton.destroy();
         }

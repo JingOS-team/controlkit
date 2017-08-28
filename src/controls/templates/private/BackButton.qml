@@ -23,12 +23,17 @@ import QtQuick.Controls 2.0 as Controls
 import org.kde.kirigami 2.0
 
 Controls.ToolButton {
-    enabled: !Settings.isMobile && (__appWindow.pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0)
-    height: parent.height
+    anchors {
+        left: parent.left
+        top: parent.top
+        bottom: parent.bottom
+    }
     width: visible ? height : 0
-    implicitWidth: height
-    visible: applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.contentItem.width
     z: 99
+    enabled: !Settings.isMobile && (__appWindow.pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0)
+    implicitWidth: height
+    visible: applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
+
     onClicked: {
         if (applicationWindow().pageStack.layers && applicationWindow().pageStack.layers.depth > 1) {
             applicationWindow().pageStack.layers.pop();
