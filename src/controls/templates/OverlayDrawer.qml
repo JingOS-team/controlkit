@@ -142,7 +142,7 @@ T2.Drawer {
                     item = applicationWindow().pageStack.get(applicationWindow().pageStack.depth-1);
                 }
 
-                var footer = item && item.page ? item.page.footer : undefined;
+                var footer = item && item.page ? item.page.footer : (item ? item.footer : undefined);
                 if (footer) {
                     return footer.height
                 } else {

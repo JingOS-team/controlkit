@@ -61,6 +61,7 @@ Kirigami.ApplicationWindow {
         edge: Qt.RightEdge
         modal: !root.wideScreen
         onModalChanged: drawerOpen = !modal
+        handleVisible: applicationWindow == undefined ? false : applicationWindow().controlsVisible
 
         //here padding 0 as listitems look better without as opposed to any other control
         topPadding: 0
