@@ -94,6 +94,7 @@ AbstractApplicationHeader {
                 text: page ? page.title : ""
                 font.pointSize: Math.max(1, titleList.height / (1.6 * Units.devicePixelRatio))
                 verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.NoWrap
                 Rectangle {
                     anchors {
                         bottom: parent.bottom
