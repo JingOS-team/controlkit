@@ -54,7 +54,7 @@ Item {
     height: {
         if (!__appWindow.controlsVisible) {
             return 1;
-        } else if (__appWindow.wideScreen) {
+        } else if (__appWindow.wideScreen || !Settings.isMobile) {
             return preferredHeight;
         } else {
             return 1;
@@ -116,7 +116,7 @@ Item {
                 return;
             }
 
-            if (__appWindow.wideScreen) {
+            if (__appWindow.wideScreen || !Settings.isMobile) {
                 __appWindow.pageStack.currentItem.header.y = 0;
             } else {
                 __appWindow.pageStack.currentItem.header.y = headerItem.height + headerItem.y -1;
@@ -138,7 +138,7 @@ Item {
                     return;
                 }
 
-                if (__appWindow.wideScreen) {
+                if (__appWindow.wideScreen || !Settings.isMobile) {
                     headerItem.y = 0;
                 } else {
                     headerItem.y = Math.max(root.minimumHeight - root.preferredHeight, Math.min(0, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));

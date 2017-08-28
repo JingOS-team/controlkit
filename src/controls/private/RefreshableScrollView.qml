@@ -194,7 +194,7 @@ P.ScrollView {
                 interval: applicationWindow().reachableMode ? 8000 : 2000
                 onTriggered: {
                     //put it there because widescreen may have changed since timer start
-                    if (applicationWindow().wideScreen || root.flickableItem.verticalLayoutDirection === ListView.BottomToTop) {
+                    if (!Settings.isMobile || applicationWindow().wideScreen || root.flickableItem.verticalLayoutDirection === ListView.BottomToTop) {
                         return;
                     }
                     applicationWindow().reachableMode = !applicationWindow().reachableMode;
@@ -203,7 +203,7 @@ P.ScrollView {
             Binding {
                 target: root.flickableItem
                 property: "topMargin"
-                value: applicationWindow().wideScreen
+                value: !Settings.isMobile || applicationWindow().wideScreen
                        ? (root.refreshing ? busyIndicatorFrame.height : 0)
                        : Math.max(Math.max(root.topPadding - busyIndicatorFrame.headerItemHeight, 0) + (root.refreshing ? busyIndicatorFrame.height : 0), (applicationWindow().header ? applicationWindow().header.height : 0))
             }
@@ -231,7 +231,7 @@ P.ScrollView {
                 id: resetTimer
                 interval: 100
                 onTriggered: {
-                    if (applicationWindow() && applicationWindow().header && !applicationWindow().wideScreen) {
+                    if (!Settings.isMobile && applicationWindow() && applicationWindow().header && !applicationWindow().wideScreen) {
                         flickableItem.contentY = -applicationWindow().header.preferredHeight - busyIndicatorFrame.headerItemHeight;
                     } else {
                         flickableItem.contentY = -busyIndicatorFrame.headerItemHeight;
@@ -310,6 +310,4 @@ P.ScrollView {
             flickableItem.anchors.bottomMargin = bottomPadding;
         }
     }
-
-    onFlickableItemChanged: resetTimer.restart()
 }

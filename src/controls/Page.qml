@@ -225,7 +225,7 @@ T2.Page {
      */
     signal backRequested(var event);
 
-    anchors.topMargin: (applicationWindow() && !applicationWindow().wideScreen && applicationWindow().controlsVisible && applicationWindow().header ? applicationWindow().header.preferredHeight : 0)
+    anchors.topMargin: (applicationWindow() && !applicationWindow().wideScreen && Settings.isMobile && applicationWindow().controlsVisible && applicationWindow().header ? applicationWindow().header.preferredHeight : 0)
 
     //NOTE: This exists just because control instances require it
     contentItem: Item { 
