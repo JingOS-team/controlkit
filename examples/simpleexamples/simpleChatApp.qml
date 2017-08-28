@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.2 as QQC2
 import org.kde.kirigami 2.0 as Kirigami
@@ -156,6 +156,50 @@ Kirigami.ApplicationWindow {
 
     pageStack.defaultColumnWidth: columnWidth
     pageStack.initialPage: [channelsComponent, chatComponent]
+    //Experiment: custom animation for layers
+    pageStack.layers.popEnter: Transition {
+        PauseAnimation {
+            duration: Kirigami.Units.longDuration
+        }
+    }
+    pageStack.layers.popExit: Transition {
+        YAnimator {
+            from: 0
+            to: pageStack.layers.height
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.OutCubic
+        }
+    }
+
+    pageStack.layers.pushEnter: Transition {
+        YAnimator {
+            from: pageStack.layers.height
+            to: 0
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.OutCubic 
+        }
+    }
+
+    pageStack.layers.pushExit: Transition {
+        PauseAnimation {
+            duration: Kirigami.Units.longDuration
+        }
+    }
+
+    pageStack.layers.replaceEnter: Transition {
+        YAnimator {
+            from: pageStack.layers.width
+            to: 0
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.OutCubic
+        }
+    }
+
+    pageStack.layers.replaceExit: Transition {
+        PauseAnimation {
+            duration: Kirigami.Units.longDuration
+        }
+    }
 
     Component {
         id: channelsComponent
@@ -182,6 +226,7 @@ Kirigami.ApplicationWindow {
                             height: width
                             source: "configure"
                         }
+                        onClicked: root.pageStack.layers.push(secondLayerComponent);
                     }
                     QQC2.ComboBox {
                         Layout.fillWidth: true
@@ -294,6 +339,31 @@ Kirigami.ApplicationWindow {
                             text: "Message " + modelData
                         }
                     }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: secondLayerComponent
+        Kirigami.Page {
+            title: "Settings"
+            background: Rectangle {
+                color: Kirigami.Theme.backgroundColor
+            }
+            footer: QQC2.ToolBar {
+                height: root.footerHeight
+                QQC2.ToolButton {
+                    Layout.fillHeight: true
+                    //make it square
+                    implicitWidth: height
+                    Kirigami.Icon {
+                        anchors.centerIn: parent
+                        width: Kirigami.Units.iconSizes.smallMedium
+                        height: width
+                        source: "configure"
+                    }
+                    onClicked: root.pageStack.layers.pop();
                 }
             }
         }

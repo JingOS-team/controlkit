@@ -136,7 +136,13 @@ T2.Drawer {
                     return 0;
                 }
 
-                var item = applicationWindow().pageStack.contentItem.itemAt(applicationWindow().pageStack.contentItem.contentX + drawerHandle.x, 0)
+                var item;
+                if (applicationWindow().pageStack.layers.depth > 1) {
+                    item = applicationWindow().pageStack.layers.currentItem;
+                } else {
+                    item = applicationWindow().pageStack.contentItem.itemAt(applicationWindow().pageStack.contentItem.contentX + drawerHandle.x, 0);
+                }
+
                 //try to take the last item
                 if (!item) {
                     item = applicationWindow().pageStack.get(applicationWindow().pageStack.depth-1);
