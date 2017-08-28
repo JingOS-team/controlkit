@@ -225,35 +225,6 @@ P.ScrollView {
                 property: "width"
                 value: root.flickableItem.width
             }
-
-            //FIXME: this shouldn't exist
-            Timer {
-                id: resetTimer
-                interval: 100
-                onTriggered: {
-                    if (!Settings.isMobile && applicationWindow() && applicationWindow().header && !applicationWindow().wideScreen) {
-                        flickableItem.contentY = -applicationWindow().header.preferredHeight - busyIndicatorFrame.headerItemHeight;
-                    } else {
-                        flickableItem.contentY = -busyIndicatorFrame.headerItemHeight;
-                    }
-                    if (root.contentItem == root.flickableItem) {
-                        if (typeof root.flickableItem.cellWidth != "undefined") {
-                            flickableItem.anchors.leftMargin = leftPadding;
-                            flickableItem.anchors.rightMargin = rightPadding;
-                        } else {
-                            flickableItem.anchors.leftMargin = 0;
-                            flickableItem.anchors.rightMargin = 0;
-                        }
-                        flickableItem.anchors.topMargin = 0;
-                        flickableItem.anchors.bottomMargin = 0;
-                    } else {
-                        flickableItem.anchors.leftMargin = leftPadding;
-                        flickableItem.anchors.topMargin = topPadding;
-                        flickableItem.anchors.rightMargin = rightPadding;
-                        flickableItem.anchors.bottomMargin = bottomPadding;
-                    }
-                }
-            }
         }
     ]
 
