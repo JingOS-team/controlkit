@@ -48,10 +48,6 @@ MouseArea {
         var minYExtent = flickableItem.topMargin - flickableItem.originY;
         var maxYExtent = flickableItem.height - (flickableItem.contentHeight + flickableItem.bottomMargin + flickableItem.originY);
 
-        if (typeof(flickableItem.headerItem) !== "undefined" && flickableItem.headerItem) {
-            minYExtent += flickableItem.headerItem.height
-        }
-
         flickableItem.contentY = Math.min(-maxYExtent, Math.max(-minYExtent, flickableItem.contentY - y));
 
         //this is just for making the scrollbar appear
