@@ -346,6 +346,8 @@ Item {
             maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
         }
         visible: root.parent.parent.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
+            //using internal pagerow api
+            && root.parent.parent.parent.level < applicationWindow().pageStack.depth-1
 
         width: Units.iconSizes.medium + Units.smallSpacing*2
         height: width

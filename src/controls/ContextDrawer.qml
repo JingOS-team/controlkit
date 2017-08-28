@@ -93,7 +93,7 @@ OverlayDrawer {
     rightPadding: 0
     bottomPadding: 0
 
-    handleVisible: applicationWindow == undefined || applicationWindow().wideScreen == true ? false : applicationWindow().controlsVisible
+    handleVisible: applicationWindow == undefined ? false : applicationWindow().controlsVisible
 
     contentItem: ScrollView {
         implicitWidth: Units.gridUnit * 20
