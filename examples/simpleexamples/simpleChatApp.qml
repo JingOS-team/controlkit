@@ -126,7 +126,7 @@ Kirigami.ApplicationWindow {
 
             QQC2.ScrollView {
                 Layout.fillWidth: true
-                    Layout.fillHeight: true
+                Layout.fillHeight: true
                 ListView {
                     model: 50
                     delegate: Kirigami.BasicListItem {
