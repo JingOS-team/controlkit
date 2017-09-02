@@ -1,9 +1,19 @@
 # Kirigami
 
-Build the gallery example app on Android:
-```
+## Build examples to desktop
+Build all examples available
+```sh
 mkdir build
 cd build
+cmake .. -DBUILD_EXAMPLES=ON
+make
+```
+Than, you can run:
+```sh
+./examples/applicationitemapp/applicationitemapp
+# or
+./examples/galleryapp/kirigami2gallery
+```
 
 cmake ..  -DCMAKE_TOOLCHAIN_FILE=/path/to/share/ECM/toolchain/Android.cmake -DQTANDROID_EXPORTED_TARGET=kirigami2gallery -DANDROID_APK_DIR=../examples/galleryapp/ -DCMAKE_PREFIX_PATH=/path/to/Qt5.7.0/5.7/android_armv7/ -DCMAKE_INSTALL_PREFIX=/path/to/dummy/install/prefix -DECM_DIR=/path/to/share/ECM/cmake -DBUILD_EXAMPLES=ON
 ```
