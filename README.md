@@ -25,7 +25,18 @@ to directly install on a phone:
 ```
 adb install -r ./kirigami2gallery_build_apk/bin/QtApp-debug.apk
 ```
+To perform this, your device need to be configureted with `USB debugging` and `install via USB` in `Developer options`.
 
+> Some ambient variables must be set before the process: `ANDROID_NDK`, `ANDROID_SDK_ROOT`, `Qt5_android` and `JAVA_HOME`
+```
+export ANDROID_NDK=/path/to/android-ndk
+export ANDROID_SDK_ROOT=/path/to/android-sdk
+export Qt5_android=/path/to/android-qt5/5.7.0/{arch}
+export PATH=$ANDROID_SDK_ROOT/platform-tools/:$PATH
+# adapt the following path to your ant installation
+export ANT=/usr/bin/ant
+export JAVA_HOME=/path/to/lib/jvm/java-8-openjdk/
+```
 # Build on your application Android, ship it together Kirigami
 
 1) Build kirigami
