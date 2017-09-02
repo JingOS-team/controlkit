@@ -15,7 +15,18 @@ Than, you can run:
 ./examples/galleryapp/kirigami2gallery
 ```
 
-cmake ..  -DCMAKE_TOOLCHAIN_FILE=/path/to/share/ECM/toolchain/Android.cmake -DQTANDROID_EXPORTED_TARGET=kirigami2gallery -DANDROID_APK_DIR=../examples/galleryapp/ -DCMAKE_PREFIX_PATH=/path/to/Qt5.7.0/5.7/android_armv7/ -DCMAKE_INSTALL_PREFIX=/path/to/dummy/install/prefix -DECM_DIR=/path/to/share/ECM/cmake -DBUILD_EXAMPLES=ON
+## Build the gallery example app on Android:
+Make sure to install **android-sdk**, **android-ndk** and **android-qt5-arch**, where **arch** should be the same architecture that you aim to deploy.
+```sh
+mkdir build
+cd build
+cmake .. \
+    -DQTANDROID_EXPORTED_TARGET=kirigami2gallery \
+    -DANDROID_APK_DIR=../examples/galleryapp \
+    -DECM_DIR=/path/to/share/ECM/cmake \
+    -DCMAKE_TOOLCHAIN_FILE=/usr/share/ECM/toolchain/Android.cmake \
+    -DECM_ADDITIONAL_FIND_ROOT_PATH=/path/to/Qt5.7.0/5.7/{arch} \
+    -DCMAKE_PREFIX_PATH=/path/to/Qt5.7.0/5.7/{arch}/path/to/Qt5Core
 ```
 
 You need a `-DCMAKE_INSTALL_PREFIX` to somewhere in your home, but using an absolute path.
@@ -24,16 +35,14 @@ If you have a local checkout of the breeze-icons repo, you can avoid the cloning
 by passing also `-DBREEZEICONS_DIR=/path/to/existing/sources/of/breeze-icons`
 
 ```
-make
-make install
 make create-apk-kirigami2gallery
 ```
 
-`kirigamigallery_build_apk/bin/QtApp-debug.apk` will be generated
+`./kirigami2gallery_build_apk/build/outputs/apk/kirigami2gallery_build_apk-debug.apk` will be generated
 
 To directly install on a phone:
 ```
-adb install -r ./kirigami2gallery_build_apk/bin/QtApp-debug.apk
+adb install -r ./kirigami2gallery_build_apk/build/outputs/apk/kirigami2gallery_build_apk-debug.apk
 ```
 To perform this, your device need to be configureted with `USB debugging` and `install via USB` in `Developer options`.
 
