@@ -62,6 +62,8 @@ Kirigami.ScrollablePage {
         currentIndex: -1
         //currentIndex has focus, openPageIndex is the one actually open now
         property int openPageIndex: -1
+        activeFocusOnTab: true
+        focus: true
 
         model: ListModel {
             ListElement {
@@ -131,6 +133,7 @@ Kirigami.ScrollablePage {
             reserveSpaceForIcon: false
             label: model.text
 
+            Accessible.role: Accessible.MenuItem
             property Item ownPage
             onClicked: {
                 if (!model.component) {

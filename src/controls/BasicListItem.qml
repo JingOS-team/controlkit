@@ -35,7 +35,7 @@ AbstractListItem {
      * string: bool
      * A single text label the list item will contain
      */
-    property alias label: labelItem.text
+    property alias label: listItem.text
 
     /**
      * icon: var
@@ -67,6 +67,7 @@ AbstractListItem {
         }
         Label {
             id: labelItem
+            text: listItem.text
             Layout.fillWidth: true
             color: listItem.checked || listItem.pressed ? listItem.activeTextColor : listItem.textColor
             elide: Text.ElideRight

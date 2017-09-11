@@ -116,5 +116,5 @@ T2.ItemDelegate {
 
     hoverEnabled: true
 
-    Accessible.role: Accessible.ListItem
+    Accessible.role: Accessible.MenuItem
 }
