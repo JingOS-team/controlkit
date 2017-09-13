@@ -38,7 +38,7 @@ Name[zh_TW]=Kirigami 藝廊
 
 Encoding=UTF-8
 Type=Application
-Exec=kpackagelauncherqml -a org.kde.kirigami.gallery
+Exec=kpackagelauncherqml -a org.kde.kirigami2.gallery
 Icon=preferences-desktop-theme
 X-KDE-ParentApp=
 X-KDE-PluginInfo-Author=Marco Martin
