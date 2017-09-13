@@ -44,6 +44,11 @@ TestCase {
         target: mainWindow
         signalName: "activeChanged"
     }
+    SignalSpy {
+        id: spyCurrentIndex
+        target: mainWindow.pageStack.currentItem.flickable
+        signalName: "currentIndexChanged"
+    }
 
     function test_press() {
         compare(mainWindow.pageStack.depth, 1)
@@ -53,6 +58,7 @@ TestCase {
         verify(mainWindow.active)
         compare(mainWindow.pageStack.currentItem.flickable.currentIndex, 0)
         keyClick(Qt.Key_Down)
+        spyCurrentIndex.wait()
         compare(mainWindow.pageStack.currentItem.flickable.currentIndex, 1)
     }
 }

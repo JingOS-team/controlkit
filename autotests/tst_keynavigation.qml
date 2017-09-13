@@ -43,6 +43,11 @@ TestCase {
         target: mainWindow
         signalName: "activeChanged"
     }
+    SignalSpy {
+        id: spyLastKey
+        target: mainWindow.pageStack.currentItem
+        signalName: "lastKeyChanged"
+    }
 
     function test_press() {
         compare(mainWindow.pageStack.depth, 2)
@@ -51,11 +56,13 @@ TestCase {
             spyActive.wait(5000)
         verify(mainWindow.active)
         keyClick("A")
+        spyLastKey.wait()
         compare(mainWindow.pageStack.currentItem.lastKey, "A")
         keyClick(Qt.Key_Left, Qt.AltModifier)
         compare(mainWindow.pageStack.currentIndex, 0)
         compare(mainWindow.pageStack.currentItem.lastKey, "")
         keyClick("B")
+        spyLastKey.wait()
         compare(mainWindow.pageStack.currentItem.lastKey, "B")
     }
 }
