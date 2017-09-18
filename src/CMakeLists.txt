@@ -22,7 +22,22 @@ target_link_libraries(kirigamiplugin Qt5::Core  Qt5::Qml Qt5::Quick)
 ELSE(STATIC_LIBRARY)
 
 add_library(kirigamiplugin SHARED ${kirigami_SRCS})
+set_target_properties(kirigamiplugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2)
 target_link_libraries(kirigamiplugin Qt5::Core  Qt5::Qml Qt5::Quick)
+
+
+add_custom_target(copy)
+
+file(MAKE_DIRECTORY {CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2)
+add_custom_command(TARGET copy PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E
+                        copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/controls ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2/)
+add_custom_command(TARGET copy PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E
+                        copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/styles  ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2/styles)
+
+add_dependencies(kirigamiplugin copy)
+
 
 install(TARGETS kirigamiplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2)
 
