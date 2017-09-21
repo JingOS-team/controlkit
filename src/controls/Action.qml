@@ -116,6 +116,7 @@ QtObject {
     property Shortcut __shortcut: Shortcut {
         property bool checked: false
         id: shortcutItem
+        enabled: root.enabled
         onActivated: root.trigger();
     }
     function trigger(source) {
