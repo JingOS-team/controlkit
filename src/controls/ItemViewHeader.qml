@@ -39,16 +39,15 @@ Kirigami.AbstractItemViewHeader {
     property alias backgroundImage: image
 
     maximumHeight: (backgroundImage.hasImage ? 10 : 6) * Kirigami.Units.gridUnit - (applicationWindow().header ? applicationWindow().header.height : 0)
+    bottomPadding: Kirigami.Units.smallSpacing
+    leftPadding: Kirigami.Units.smallSpacing
 
     background: Rectangle {
         id: backgroundItem
         color: Kirigami.Theme.backgroundColor
         Image {
             id: image
-            anchors {
-                fill: parent
-                bottomMargin: rect.height
-            }
+            anchors.fill: parent
             readonly property bool hasImage: backgroundImage.status === Image.Ready || backgroundImage.status === Image.Loading
             fillMode: Image.PreserveAspectCrop
             asynchronous: true
@@ -73,7 +72,7 @@ Kirigami.AbstractItemViewHeader {
         Rectangle {
             id: rect
             color: backgroundItem.page.isCurrentPage ? Kirigami.Theme.highlightColor : Kirigami.Theme.disabledTextColor
-            height: Kirigami.Units.smallSpacing
+            height: root.bottomPadding
             anchors {
                 left: parent.left
                 right: parent.right
