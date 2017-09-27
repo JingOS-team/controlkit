@@ -58,18 +58,19 @@ AbstractListItem {
     RowLayout {
         id: layout
         spacing: Units.smallSpacing*2
+        property bool indicateActiveFocus: Settings.isMobile || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
         Icon {
             id: iconItem
             Layout.minimumHeight: Units.iconSizes.smallMedium
             Layout.maximumHeight: Layout.minimumHeight
             Layout.minimumWidth: height
-            selected: listItem.checked || listItem.pressed
+            selected: layout.indicateActiveFocus && (listItem.checked || listItem.pressed)
         }
         Label {
             id: labelItem
             text: listItem.text
             Layout.fillWidth: true
-            color: listItem.checked || listItem.pressed ? listItem.activeTextColor : listItem.textColor
+            color: layout.indicateActiveFocus && (listItem.checked || listItem.pressed) ? listItem.activeTextColor : listItem.textColor
             elide: Text.ElideRight
             font: listItem.font
         }

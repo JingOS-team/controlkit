@@ -22,14 +22,16 @@ import org.kde.kirigami 2.0
 
 Rectangle {
     id: background
-    color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeBackgroundColor : listItem.backgroundColor
+    color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? (internal.indicateActiveFocus ? listItem.activeBackgroundColor : Qt.tint(listItem.backgroundColor, Qt.rgba(listItem.activeBackgroundColor.r, listItem.activeBackgroundColor.g, listItem.activeBackgroundColor.b, 0.3))) : listItem.backgroundColor
 
     visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
     Rectangle {
+        id: internal
+        property bool indicateActiveFocus: Settings.isMobile || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
         anchors.fill: parent
         visible: !Settings.isMobile
         color: listItem.activeBackgroundColor
-        opacity: (listItem.hovered || listItem.highlighted) && !listItem.pressed ? 0.2 : 0
+        opacity: (listItem.hovered || (listItem.highlighted && indicateActiveFocus)) && !listItem.pressed ? 0.2 : 0
         Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
     }
     Behavior on color {
