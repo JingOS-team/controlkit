@@ -36,6 +36,7 @@ Name[uk]=Галерея Kirigami
 Name[x-test]=xxKirigami Galleryxx
 Name[zh_CN]=Kirigami 画廊
 Name[zh_TW]=Kirigami 藝廊
+Comment=Shows examples of Kirigami components and allows you to play with them
 
 Encoding=UTF-8
 Type=Application
