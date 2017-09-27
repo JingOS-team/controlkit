@@ -45,6 +45,6 @@ Controls.ToolButton {
         anchors.fill: parent
         opacity: parent.enabled ? 1 : 0.6
         selected: header.background && header.background.color && header.background.color == Theme.highlightColor
-        source: "go-previous"
+        source: (LayoutMirroring.enabled ? "go-previous-symbolic-rtl" : "go-previous-symbolic")
     }
 }

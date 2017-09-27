@@ -43,6 +43,8 @@ Item {
     property int maximumHeight: Units.gridUnit * 3
     default property alias contentItem: mainItem.data
     readonly property int paintedHeight: headerItem.y + headerItem.height - 1
+    LayoutMirroring.enabled: Qt.application.layoutDirection == Qt.RightToLeft 
+    LayoutMirroring.childrenInherit: true
 
     //FIXME: remove
     property QtObject __appWindow: applicationWindow();

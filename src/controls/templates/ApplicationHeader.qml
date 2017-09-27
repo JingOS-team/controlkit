@@ -79,7 +79,7 @@ AbstractApplicationHeader {
                 height: Units.iconSizes.small
                 width: height
                 selected: header.background && header.background.color && header.background.color == Theme.highlightColor
-                source: titleList.isTabBar ? "" : "go-next"
+                source: titleList.isTabBar ? "" : (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
             }
 
             Heading {

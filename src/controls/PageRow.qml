@@ -299,10 +299,18 @@ T.Control {
             currentIndex = Math.max(0, currentIndex - 1);
         }
 
-        if (mainView.contentX - mainView.originX > 0) {
-            mainViewScrollAnim.from = mainView.contentX
-            mainViewScrollAnim.to =  Math.max(mainView.originX, mainView.contentX - defaultColumnWidth)
-            mainViewScrollAnim.running = true;
+        if (LayoutMirroring.enabled) {
+            if (!mainView.atEnd) {
+                mainViewScrollAnim.from = mainView.contentX
+                mainViewScrollAnim.to =  Math.min(mainView.contentWidth - mainView.width, mainView.contentX + defaultColumnWidth)
+                mainViewScrollAnim.running = true;
+            }
+        } else {
+            if (mainView.contentX - mainView.originX > 0) {
+                mainViewScrollAnim.from = mainView.contentX
+                mainViewScrollAnim.to =  Math.max(mainView.originX, mainView.contentX - defaultColumnWidth)
+                mainViewScrollAnim.running = true;
+            }
         }
     }
 
@@ -353,13 +361,16 @@ T.Control {
             } 
         }
     }
+
     ListView {
         id: mainView
         boundsBehavior: Flickable.StopAtBounds
         orientation: Qt.Horizontal
         snapMode: ListView.SnapToItem
         currentIndex: root.currentIndex
-        rightMargin: count > 1 ? pagesLogic.get(count-1).page.width - pagesLogic.get(count-1).width : 0
+        property int marginForLast: count > 1 ? pagesLogic.get(count-1).page.width - pagesLogic.get(count-1).width : 0
+        leftMargin: LayoutMirroring.enabled ? marginForLast : 0
+        rightMargin: LayoutMirroring.enabled ? 0 : marginForLast
         preferredHighlightBegin: 0
         preferredHighlightEnd: 0
         highlightMoveDuration: Units.longDuration

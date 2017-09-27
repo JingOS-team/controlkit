@@ -85,7 +85,7 @@ OverlayDrawer {
         ? pageStack.layers.currentItem.contextualActions
         : (pageStack.currentItem ? pageStack.currentItem.contextualActions : null)
     enabled: menu.count > 0
-    edge: Qt.RightEdge
+    edge: Qt.application.layoutDirection == Qt.RightToLeft ? Qt.LeftEdge : Qt.RightEdge
     drawerOpen: false
 
     //list items go to edges, have their own padding

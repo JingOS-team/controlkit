@@ -88,6 +88,8 @@ QQC2.ApplicationWindow {
      * Put a container here, such as QQuickControls PageStack
      */
     property Item pageStack
+    LayoutMirroring.enabled: Qt.application.layoutDirection == Qt.RightToLeft 
+    LayoutMirroring.childrenInherit: true
 
     /**
      * Shows a little passive notification at the bottom of the app window

@@ -89,6 +89,8 @@ Item {
      * Put a container here, such as QQuickControls PageStack
      */
     property Item pageStack
+    LayoutMirroring.enabled: Qt.application.layoutDirection == Qt.RightToLeft 
+    LayoutMirroring.childrenInherit: true
 
     property alias overlay: overlayRoot
     Item {
