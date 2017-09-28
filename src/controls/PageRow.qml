@@ -375,7 +375,7 @@ T.Control {
         preferredHighlightEnd: 0
         highlightMoveDuration: Units.longDuration
         highlightFollowsCurrentItem: true
-        onMovementEnded: currentIndex = indexAt(contentX, 0)
+        onMovementEnded: currentIndex = Math.max(0, indexAt(contentX, 0))
         onFlickEnded: onMovementEnded();
         onCurrentIndexChanged: currentItem.page.forceActiveFocus()
         model: ObjectModel {
