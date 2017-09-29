@@ -28,7 +28,7 @@ target_link_libraries(kirigamiplugin Qt5::Core  Qt5::Qml Qt5::Quick)
 
 add_custom_target(copy)
 
-file(MAKE_DIRECTORY {CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2)
 add_custom_command(TARGET copy PRE_BUILD
                     COMMAND ${CMAKE_COMMAND} -E
                         copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/controls ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2/)
