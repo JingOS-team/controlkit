@@ -37,6 +37,12 @@ Name[x-test]=xxKirigami Galleryxx
 Name[zh_CN]=Kirigami 画廊
 Name[zh_TW]=Kirigami 藝廊
 Comment=Shows examples of Kirigami components and allows you to play with them
+Comment[ca]=Mostra exemples de components del Kirigami i permet jugar-hi
+Comment[nl]=Toont voorbeelden van Kirigami componenten en laat u met ze spelen
+Comment[pt]=Mostra exemplos dos componentes do Kirigami e permite-lhe jogar com eles
+Comment[sv]=Visar exempel på Kirigami-komponenter och låter dig leka med dem
+Comment[uk]=Показує приклади компонентів Kirigami і надає вам змогу попрацювати з ними
+Comment[x-test]=xxShows examples of Kirigami components and allows you to play with themxx
 
 Encoding=UTF-8
 Type=Application
