@@ -60,7 +60,7 @@ ScrollablePage {
         }
         Controls.TextField {
             inputMask: "99999999"
-            inputMethodHints: Qt.ImhPreferNumbers
+            inputMethodHints: Qt.ImhDigitsOnly
             Layout.alignment: Qt.AlignHCenter
         }
         Label {
