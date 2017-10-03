@@ -203,12 +203,12 @@ public:
     QFont defaultFont() const;
     void setDefaultFont(const QFont &defaultFont);
 
+    //this may is used by the desktop QQC2 to set the styleoption palettes
     QPalette palette() const;
     void setPalette(const QPalette &palette);
 
     //this will be used by desktopicon to fetch icons with KIconLoader
     virtual Q_INVOKABLE QIcon iconFromTheme(const QString &name, const QColor &customColor = Qt::transparent);
-    //this may be used somehow by the desktop QQC2 to set the styleoption palettes
 
     //QML attached property
     static PlatformTheme *qmlAttachedProperties(QObject *object);

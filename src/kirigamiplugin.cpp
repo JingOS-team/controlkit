@@ -27,6 +27,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQuickItem>
+#include <QQuickStyle>
 
 #ifdef KIRIGAMI_BUILD_TYPE_STATIC
 #include "libkirigami/platformtheme.h"
@@ -51,7 +52,7 @@ QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
 void KirigamiPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.kirigami"));
-    const QString style = QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_STYLE"));
+    const QString style = QQuickStyle::name();
 
     //org.kde.desktop.plasma is a couple of files that fall back to desktop by purpose
     if ((style.isEmpty() || style == QStringLiteral("org.kde.desktop.plasma")) && QFile::exists(resolveFilePath(QStringLiteral("/styles/org.kde.desktop")))) {
@@ -70,12 +71,15 @@ void KirigamiPlugin::registerTypes(const char *uri)
         if (style == QStringLiteral("org.kde.desktop") && QFile::exists(resolveFilePath(QStringLiteral("/styles/org.kde.desktop.plasma")))) {
             m_stylesFallbackChain.prepend("org.kde.desktop.plasma");
         }
+    } else {
+        m_stylesFallbackChain.prepend(QStringLiteral("org.kde.desktop"));
     }
     //At this point the fallback chain will be selected->org.kde.desktop->Fallback
 
     Kirigami::PlatformTheme::setFallbackThemeQmlPath(componentUrl(QStringLiteral("Theme.qml")));
 
     s_selectedStyle = m_stylesFallbackChain.first();
+
     qmlRegisterSingletonType<Settings>(uri, 2, 0, "Settings",
          [](QQmlEngine*, QJSEngine*) -> QObject* {
              Settings *settings = new Settings;

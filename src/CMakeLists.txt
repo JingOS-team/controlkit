@@ -25,7 +25,7 @@ IF(STATIC_LIBRARY)
 qt5_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../kirigami.qrc)
 
 add_library(kirigamiplugin STATIC ${kirigami_SRCS} ${RESOURCES})
-target_link_libraries(kirigamiplugin Qt5::Core  Qt5::Qml Qt5::Quick)
+target_link_libraries(kirigamiplugin Qt5::Core  Qt5::Qml Qt5::Quick Qt5::QuickControls2)
 
 ELSE(STATIC_LIBRARY)
 
@@ -33,7 +33,7 @@ add_subdirectory(libkirigami)
 add_library(kirigamiplugin SHARED ${kirigami_SRCS})
 
 set_target_properties(kirigamiplugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2)
-target_link_libraries(kirigamiplugin KF5::Kirigami2 Qt5::Core  Qt5::Qml Qt5::Quick)
+target_link_libraries(kirigamiplugin KF5::Kirigami2 Qt5::Core  Qt5::Qml Qt5::Quick Qt5::QuickControls2)
 
 
 add_custom_target(copy)
