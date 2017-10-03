@@ -21,7 +21,7 @@ import QtQuick 2.1
 import QtQuick.Templates 2.0 as T2
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 
 import "private"
 import "templates/private"
@@ -33,7 +33,7 @@ import "templates/private"
  *
  * Example usage:
  * @code
- * import org.kde.kirigami 2.0 as Kirigami
+ * import org.kde.kirigami 2.2 as Kirigami
  *
  * Kirigami.ApplicationWindow {
  *  [...]
@@ -95,7 +95,7 @@ OverlayDrawer {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 2.0 as Kirigami
+     * import org.kde.kirigami 2.2 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]
@@ -134,7 +134,7 @@ OverlayDrawer {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 2.0 as Kirigami
+     * import org.kde.kirigami 2.2 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]
@@ -158,7 +158,7 @@ OverlayDrawer {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 2.0 as Kirigami
+     * import org.kde.kirigami 2.2 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]
@@ -209,6 +209,8 @@ OverlayDrawer {
 
     contentItem: ScrollView {
         id: scrollView
+        //ensure the attached property exists
+        Theme.inherit: true
         anchors.fill: parent
         implicitWidth: Math.min (Units.gridUnit * 20, root.parent.width * 0.8)
         horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
@@ -288,6 +290,7 @@ OverlayDrawer {
                             Layout.minimumWidth: Units.iconSizes.large
                             Layout.minimumHeight: width
                             visible: valid
+                            isMask: false
                             //TODO: find a better way to control selective coloring on Android
                             enabled: !Settings.isMobile
                         }
@@ -409,6 +412,7 @@ OverlayDrawer {
                                 enabled: model ? model.enabled : modelData.enabled
                                 opacity: enabled ? 1.0 : 0.3
                                 Icon {
+                                    isMask: true
                                     anchors {
                                         verticalCenter: contentItem.verticalCenter
                                         right: contentItem.right

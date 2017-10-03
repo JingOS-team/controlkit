@@ -31,8 +31,14 @@ QtObject {
     property color highlightColor: palette.highlight
     property color highlightedTextColor: palette.highlightedText
     property color backgroundColor: palette.window
-    property color linkColor: "#2196F3"
-    property color visitedLinkColor: "#2196F3"
+    property color activeTextColor: palette.highlight
+    property color linkColor: "#2980B9"
+    property color visitedLinkColor: "#7F8C8D"
+    property color hoverColor: palette.highlight
+    property color focusColor: palette.highlight
+    property color negativeTextColor: "#DA4453"
+    property color neutralTextColor: "#F67400"
+    property color positiveTextColor: "#27AE60"
 
     property color buttonTextColor: palette.buttonText
     property color buttonBackgroundColor: palette.button
@@ -43,6 +49,21 @@ QtObject {
     property color viewBackgroundColor: palette.base
     property color viewHoverColor: palette.highlight
     property color viewFocusColor: palette.highlight
+
+    property color selectionTextColor: palette.highlightedText
+    property color selectionBackgroundColor: palette.highlight
+    property color selectionHoverColor: palette.highlight
+    property color selectionFocusColor: palette.highlight
+
+    property color tooltipTextColor: palette.base
+    property color tooltipBackgroundColor: palette.text
+    property color tooltipHoverColor: palette.highlight
+    property color tooltipFocusColor: palette.highlight
+
+    property color complementaryTextColor: palette.base
+    property color complementaryBackgroundColor: palette.text
+    property color complementaryHoverColor: palette.highlight
+    property color complementaryFocusColor: palette.highlight
 
     property font defaultFont: fontMetrics.font
 
@@ -59,4 +80,6 @@ QtObject {
             colorGroup: SystemPalette.Disabled
         }
     ]
+
+    function __propagateColorSet(object, context) {}
 }

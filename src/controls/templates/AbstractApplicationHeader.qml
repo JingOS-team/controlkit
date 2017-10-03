@@ -20,7 +20,7 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.2
 import "private"
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 
 
 /**

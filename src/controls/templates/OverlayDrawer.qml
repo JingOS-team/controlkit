@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Templates 2.0 as T2
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 import "private"
 
 /**
@@ -185,6 +185,11 @@ T2.Drawer {
         }
     }
 
+    Theme.colorSet: Theme.View
+    Theme.onColorSetChanged: {
+        contentItem.Theme.colorSet = Theme.colorSet
+        background.Theme.colorSet = Theme.colorSet
+    }
 //END Properties
 
 
@@ -299,6 +304,8 @@ T2.Drawer {
             root.enter.enabled = true;
         }
         __internal.completed = true;
+        contentItem.Theme.colorSet = Theme.colorSet;
+        background.Theme.colorSet = Theme.colorSet;
     }
 //END signal handlers
 

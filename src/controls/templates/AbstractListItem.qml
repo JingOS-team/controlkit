@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.0
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 import QtQuick.Templates 2.0 as T2
 
 /**
@@ -65,19 +65,19 @@ T2.ItemDelegate {
     /**
      * textColor: color
      * Color for the text in the item
-     * It is advised to leave the default value (Theme.viewTextColor)
+     * It is advised to leave the default value (Theme.textColor)
      *
      * Note: if custom text elements are inserted in an AbstractListItem,
      * their color proprty will ahve to be manually binded with this property
      */
-    property color textColor: Theme.viewTextColor
+    property color textColor: Theme.textColor
 
     /**
      * backgroundColor: color
      * Color for the background of the item
      * It is advised to leave the default value (Theme.viewBackgroundColor)
      */
-    property color backgroundColor: Theme.viewBackgroundColor
+    property color backgroundColor: Theme.backgroundColor
 
     /**
      * activeTextColor: color
@@ -98,6 +98,7 @@ T2.ItemDelegate {
 
     default property alias _default: listItem.contentItem
 
+    Theme.colorSet: Theme.View
     leftPadding: Units.smallSpacing * 2
     topPadding: Units.smallSpacing * 2
     rightPadding: Units.smallSpacing * 2
@@ -116,5 +117,5 @@ T2.ItemDelegate {
 
     hoverEnabled: true
 
-    Accessible.role: Accessible.MenuItem
+    Accessible.role: Accessible.ListItem
 }

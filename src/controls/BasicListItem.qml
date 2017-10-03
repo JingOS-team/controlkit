@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 
 /**
  * An item delegate for the primitive ListView component.
@@ -58,7 +58,7 @@ AbstractListItem {
     RowLayout {
         id: layout
         spacing: Units.smallSpacing*2
-        property bool indicateActiveFocus: Settings.isMobile || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
+        property bool indicateActiveFocus: listItem.pressed || Settings.isMobile || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
         Icon {
             id: iconItem
             Layout.minimumHeight: Units.iconSizes.smallMedium

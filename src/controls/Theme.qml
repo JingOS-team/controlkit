@@ -19,7 +19,7 @@
 
 import QtQuick 2.4
 
-pragma Singleton
+//pragma Singleton
 
 /**
  * A set of named colors for the application
@@ -34,8 +34,13 @@ QtObject {
     property color highlightColor: "#2196F3"
     property color highlightedTextColor: "#eff0fa"
     property color backgroundColor: "#eff0f1"
+    property color activeTextColor: "#0176D3"
     property color linkColor: "#2196F3"
     property color visitedLinkColor: "#2196F3"
+
+    property color negativeTextColor: "#DA4453"
+    property color neutralTextColor: "#F67400"
+    property color positiveTextColor: "#27AE60"
 
     property color buttonTextColor: "#31363b"
     property color buttonBackgroundColor: "#eff0f1"
@@ -46,6 +51,21 @@ QtObject {
     property color viewBackgroundColor: "#fcfcfc"
     property color viewHoverColor: "#2196F3"
     property color viewFocusColor: "#2196F3"
+
+    property color selectionTextColor: "#eff0fa"
+    property color selectionBackgroundColor: "#2196F3"
+    property color selectionHoverColor: "#2196F3"
+    property color selectionFocusColor: "#2196F3"
+
+    property color tooltipTextColor: "#eff0f1"
+    property color tooltipBackgroundColor: "#31363b"
+    property color tooltipHoverColor: "#2196F3"
+    property color tooltipFocusColor: "#2196F3"
+
+    property color complementaryTextColor: "#eff0f1"
+    property color complementaryBackgroundColor: "#31363b"
+    property color complementaryHoverColor: "#2196F3"
+    property color complementaryFocusColor: "#2196F3"
 
     property font defaultFont: fontMetrics.font
 

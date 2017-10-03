@@ -20,7 +20,7 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.2 as QQC2
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.2 as Kirigami
 
 Kirigami.ApplicationWindow {
     id: root
@@ -207,7 +207,7 @@ Kirigami.ApplicationWindow {
             title: "Channels"
             background: Rectangle {
                 anchors.fill: parent
-                color: Kirigami.Theme.viewBackgroundColor
+                color: Kirigami.Theme.backgroundColor
             }
             footer: QQC2.ToolBar {
                 height: root.footerHeight
@@ -281,13 +281,13 @@ Kirigami.ApplicationWindow {
             ]
             background: Rectangle {
                 anchors.fill: parent
-                color: Kirigami.Theme.viewBackgroundColor
+                color: Kirigami.Theme.backgroundColor
             }
             footer: QQC2.Control {
                 height: footerHeight
                 padding: Kirigami.Units.smallSpacing
                 background: Rectangle {
-                    color: Kirigami.Theme.viewBackgroundColor
+                    color: Kirigami.Theme.backgroundColor
                     Kirigami.Separator {
                         Rectangle {
                             anchors.fill: parent

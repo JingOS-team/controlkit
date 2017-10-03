@@ -22,7 +22,7 @@ import QtQuick.Layouts 1.2
 import QtQml.Models 2.2
 import QtQuick.Templates 2.0 as T
 import QtQuick.Controls 2.0 as QQC2
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 
 /**
  * PageRow implements a row-based navigation model, which can be used

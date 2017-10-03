@@ -20,12 +20,14 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 
 import "../templates/private"
 
 Item {
     id: root
+    Theme.colorSet: Theme.Button
+    Theme.inherit: false
     anchors {
         left: parent.left
         right: parent.right
@@ -226,7 +228,7 @@ Item {
                     width: height
                     visible: root.action
                     readonly property bool pressed: root.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || root.action.checked)
-                    color: pressed ? Qt.lighter(Theme.buttonHoverColor, 1.3) : Theme.buttonHoverColor
+                    color: pressed ? Qt.lighter(Theme.hoverColor, 1.3) : Theme.hoverColor
 
                     Icon {
                         id: icon
@@ -266,7 +268,7 @@ Item {
                     visible: root.leftAction
 
                     readonly property bool pressed: root.leftAction && ((mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || root.leftAction.checked)
-                    color: pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor
+                    color: pressed ? Theme.hoverColor : Theme.backgroundColor
                     Behavior on color {
                         ColorAnimation {
                             duration: Units.longDuration
@@ -300,7 +302,7 @@ Item {
                     width: height + (root.action ? Units.gridUnit*2 : 0)
                     visible: root.rightAction
                     readonly property bool pressed: root.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || root.rightAction.checked)
-                    color: pressed ? Theme.buttonHoverColor : Theme.buttonBackgroundColor
+                    color: pressed ? Theme.hoverColor : Theme.backgroundColor
                     Behavior on color {
                         ColorAnimation {
                             duration: Units.longDuration
@@ -370,7 +372,7 @@ Item {
             Rectangle {
                 id: handleGraphics
                 anchors.centerIn: parent
-                color: fakeContextMenuButton.pressed ? Theme.highlightColor : Theme.buttonBackgroundColor
+                color: fakeContextMenuButton.pressed ? Theme.highlightColor : Theme.backgroundColor
                 width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                 height: width
                 radius: Units.devicePixelRatio
@@ -378,7 +380,7 @@ Item {
                     anchors.centerIn: parent
                     width: height
                     height: Units.iconSizes.smallMedium
-                    color: fakeContextMenuButton.pressed ? Theme.highlightedTextColor : Theme.buttonTextColor
+                    color: fakeContextMenuButton.pressed ? Theme.highlightedTextColor : Theme.textColor
                 }
                 Behavior on color {
                     ColorAnimation {

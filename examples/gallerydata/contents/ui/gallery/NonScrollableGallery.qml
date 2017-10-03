@@ -19,7 +19,7 @@
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 
 Page {
     id: page

@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 import "private"
 
 /**
@@ -101,6 +101,8 @@ Page {
      */
     property bool keyboardNavigationEnabled: true
 
+    Theme.colorSet: flickable && flickable.hasOwnProperty("model") ? Theme.View : Theme.Window
+
     RefreshableScrollView {
         id: scrollView
         z: 0
@@ -116,6 +118,7 @@ Page {
             bottomMargin: root.footer ? root.footer.height : 0
         }
     }
+    
 
     anchors.topMargin: 0
 

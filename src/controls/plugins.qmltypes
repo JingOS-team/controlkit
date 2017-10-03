@@ -1386,7 +1386,6 @@ Module {
         exportMetaObjectRevisions: [0]
         isComposite: true
         isCreatable: false
-        isSingleton: true
         Property { name: "textColor"; type: "QColor" }
         Property { name: "disabledTextColor"; type: "QColor" }
         Property { name: "highlightColor"; type: "QColor" }

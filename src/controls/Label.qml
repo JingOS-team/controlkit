@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Window 2.2
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 import QtQuick.Templates 2.0 as T2
 
 /**

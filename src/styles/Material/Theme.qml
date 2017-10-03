@@ -19,6 +19,7 @@
 
 import QtQuick 2.7
 import QtQuick.Controls.Material 2.0
+import org.kde.kirigami 2.2 as Kirigami
 
 pragma Singleton
 
@@ -37,8 +38,14 @@ QtObject {
     //FIXME: something better?
     property color highlightedTextColor: theme.Material.background
     property color backgroundColor: theme.Material.background
-    property color linkColor: "#2196F3"
-    property color visitedLinkColor: "#2196F3"
+    property color activeTextColor: theme.Material.primary
+    property color linkColor: "#2980B9"
+    property color visitedLinkColor: "#7F8C8D"
+    property color hoverColor: theme.Material.highlightedButtonColor
+    property color focusColor: theme.Material.highlightedButtonColor
+    property color negativeTextColor: "#DA4453"
+    property color neutralTextColor: "#F67400"
+    property color positiveTextColor: "#27AE60"
 
     property color buttonTextColor: theme.Material.foreground
     property color buttonBackgroundColor: theme.Material.buttonColor
@@ -50,11 +57,37 @@ QtObject {
     property color viewHoverColor: theme.Material.listHighlightColor
     property color viewFocusColor: theme.Material.listHighlightColor
 
+    property color selectionTextColor: theme.Material.primaryHighlightedTextColor
+    property color selectionBackgroundColor: theme.Material.textSelectionColor
+    property color selectionHoverColor: theme.Material.highlightedButtonColor
+    property color selectionFocusColor: theme.Material.highlightedButtonColor
+
+    property color tooltipTextColor: fontMetrics.Material.foreground
+    property color tooltipBackgroundColor: fontMetrics.Material.tooltipColor
+    property color tooltipHoverColor: fontMetrics.Material.highlightedButtonColor
+    property color tooltipFocusColor: fontMetrics.Material.highlightedButtonColor
+
+    property color complementaryTextColor: fontMetrics.Material.foreground
+    property color complementaryBackgroundColor: fontMetrics.Material.background
+    property color complementaryHoverColor: theme.Material.highlightedButtonColor
+    property color complementaryFocusColor: theme.Material.highlightedButtonColor
+
     property font defaultFont: fontMetrics.font
 
     property list<QtObject> children: [
         TextMetrics {
             id: fontMetrics
+            //this is to get a source of dark colors
+            Material.theme: Material.Dark
         }
     ]
+    //for internal use
+    function __propagateColorSet(object, context) {
+        //TODO: actually check if it's a dark or light color
+        if (context == Kirigami.Theme.Complementary) {
+            object.Material.theme = Material.Dark;
+        } else {
+            object.Material.theme = Material.Light;
+        }
+    }
 }

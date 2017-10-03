@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 import QtQuick.Templates 2.0
 
 import "../../templates" as T
@@ -37,7 +37,7 @@ T.OverlayDrawer {
 
 //BEGIN Properties
     background: Rectangle {
-        color: Theme.viewBackgroundColor
+        color: Theme.backgroundColor
 
         Item {
             parent: root.handle
@@ -55,7 +55,7 @@ T.OverlayDrawer {
             Rectangle {
                 id: handleGraphics
                 anchors.centerIn: parent
-                color: root.handle.pressed ? Theme.highlightColor : Theme.buttonBackgroundColor
+                color: root.handle.pressed ? Theme.highlightColor : Theme.backgroundColor
                 width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                 height: width
                 radius: Units.devicePixelRatio*2
@@ -67,7 +67,7 @@ T.OverlayDrawer {
                     onItemChanged: {
                         if(item) {
                             item.morph = Qt.binding(function(){return root.position})
-                            item.color = Qt.binding(function(){return root.handle.pressed ? Theme.highlightedTextColor : Theme.buttonTextColor})
+                            item.color = Qt.binding(function(){return root.handle.pressed ? Theme.highlightedTextColor : Theme.textColor})
                         }
                     }
                 }

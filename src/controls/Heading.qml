@@ -19,7 +19,7 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 2.0 as QQC2
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 
 /**
  * A heading label used for subsections of texts.
@@ -31,7 +31,7 @@ import org.kde.kirigami 2.0
  * Example usage:
  *
  * @code
- * import org.kde.kirigami 2.0 as Kirigami
+ * import org.kde.kirigami 2.2 as Kirigami
  * [...]
  * Column {
  *     Kirigami.Heading {

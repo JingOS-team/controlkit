@@ -28,6 +28,12 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
+#ifdef KIRIGAMI_BUILD_TYPE_STATIC
+#include "libkirigami/platformtheme.h"
+#else
+#include <platformtheme.h>
+#endif
+
 static QString s_selectedStyle;
 
 QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
@@ -52,9 +58,9 @@ void KirigamiPlugin::registerTypes(const char *uri)
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
         m_stylesFallbackChain.prepend(QStringLiteral("org.kde.desktop"));
 #elif defined(Q_OS_ANDROID)
-        m_stylesFallbackChain.prepend(QStringLiteral("material"));
+        m_stylesFallbackChain.prepend(QStringLiteral("Material"));
 #else // do we have an iOS specific style?
-        m_stylesFallbackChain.prepend(QStringLiteral("material"));
+        m_stylesFallbackChain.prepend(QStringLiteral("Material"));
 #endif
     }
 
@@ -67,9 +73,8 @@ void KirigamiPlugin::registerTypes(const char *uri)
     }
     //At this point the fallback chain will be selected->org.kde.desktop->Fallback
 
+    Kirigami::PlatformTheme::setFallbackThemeQmlPath(componentUrl(QStringLiteral("Theme.qml")));
 
-    //TODO: in this plugin it will end up something similar to
-    //PlasmaCore's ColorScope?
     s_selectedStyle = m_stylesFallbackChain.first();
     qmlRegisterSingletonType<Settings>(uri, 2, 0, "Settings",
          [](QQmlEngine*, QJSEngine*) -> QObject* {
@@ -82,6 +87,8 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<ApplicationHeaderStyle>(uri, 2, 0, "ApplicationHeaderStyle", "Cannot create objects of type ApplicationHeaderStyle");
 
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Theme.qml")), uri, 2, 0, "Theme");
+    //Theme changed from a singleton to an attached property
+    qmlRegisterUncreatableType<Kirigami::PlatformTheme>(uri, 2, 2, "Theme", "Cannot create objects of type Theme, use it as an attached poperty");
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Units.qml")), uri, 2, 0, "Units");
 
     qmlRegisterType(componentUrl(QStringLiteral("Action.qml")), uri, 2, 0, "Action");
@@ -101,7 +108,12 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //The icon is "special: we have to use a wrapper class to QIcon on org.kde.desktops
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
-    qmlRegisterType<DesktopIcon>(uri, 2, 0, "Icon");
+    //we know that we want a different implementation with Material and Plasma styles
+    if (s_selectedStyle == QStringLiteral("Material") || s_selectedStyle == QStringLiteral("Plasma")) {
+        qmlRegisterType(componentUrl(QStringLiteral("Icon.qml")), uri, 2, 0, "Icon");
+    } else {
+        qmlRegisterType<DesktopIcon>(uri, 2, 0, "Icon");
+    }
 #else
     qmlRegisterType(componentUrl(QStringLiteral("Icon.qml")), uri, 2, 0, "Icon");
 #endif

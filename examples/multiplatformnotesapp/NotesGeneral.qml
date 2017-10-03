@@ -45,7 +45,7 @@ Kirigami.ApplicationWindow {
             ]
         }
         background: Rectangle {
-            color: Kirigami.Thmeme.viewBackgroundColor
+            color: Kirigami.Thmeme.backgroundColor
         }
 
         GridView {
@@ -117,7 +117,7 @@ Kirigami.ApplicationWindow {
                 ]
             }
             background: Rectangle {
-                color: Kirigami.Theme.viewBackgroundColor
+                color: Kirigami.Theme.backgroundColor
                 Rectangle {
                     anchors.fill: parent
                     color: "yellow"

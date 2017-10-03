@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2 as Kirigami
 import "private"
 import QtQuick.Templates 2.0 as T2
 
@@ -37,25 +37,25 @@ T2.Page {
      * leftPadding: int
      * default contents padding at left
      */
-    leftPadding: Units.gridUnit
+    leftPadding: Kirigami.Units.gridUnit
 
     /**
      * topPadding: int
      * default contents padding at top
      */
-    topPadding: Units.gridUnit
+    topPadding: Kirigami.Units.gridUnit
 
     /**
      * rightPadding: int
      * default contents padding at right
      */
-    rightPadding: Units.gridUnit
+    rightPadding: Kirigami.Units.gridUnit
 
     /**
      * bottomPadding: int
      * default contents padding at bottom
      */
-    bottomPadding: Units.gridUnit
+    bottomPadding: Kirigami.Units.gridUnit
 
     /**
      * flickable: Flickable
@@ -75,7 +75,7 @@ T2.Page {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 2.0 as Kirigami
+     * import org.kde.kirigami 2.2 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]
@@ -87,7 +87,7 @@ T2.Page {
      * @endcode
      *
      * @code
-     * import org.kde.kirigami 2.0 as Kirigami
+     * import org.kde.kirigami 2.2 as Kirigami
      *
      * Kirigami.Page {
      *   [...]
@@ -122,7 +122,7 @@ T2.Page {
      * Example usage:
      *
      * @code
-     * import org.kde.kirigami 2.0 as Kirigami
+     * import org.kde.kirigami 2.2 as Kirigami
      * Kirigami.Page {
      *     actions.main: Kirigami.Action {
      *         iconName: "edit"
@@ -144,7 +144,7 @@ T2.Page {
      * Example usage:
      *
      * @code
-     * import org.kde.kirigami 2.0 as Kirigami
+     * import org.kde.kirigami 2.2 as Kirigami
      * Kirigami.Page {
      *     actions.left: Kirigami.Action {
      *         iconName: "edit"
@@ -166,7 +166,7 @@ T2.Page {
      * Example usage:
      *
      * @code
-     * import org.kde.kirigami 2.0 as Kirigami
+     * import org.kde.kirigami 2.2 as Kirigami
      * Kirigami.Page {
      *     actions.right: Kirigami.Action {
      *         iconName: "edit"
@@ -184,7 +184,7 @@ T2.Page {
      * Actions properties are grouped.
      *
      * @code
-     * import org.kde.kirigami 2.0 as Kirigami
+     * import org.kde.kirigami 2.2 as Kirigami
      * Kirigami.Page {
      *     actions {
      *         main: Kirigami.Action {...}
@@ -228,7 +228,7 @@ T2.Page {
     anchors.topMargin: (applicationWindow() && !applicationWindow().wideScreen && Settings.isMobile && applicationWindow().controlsVisible && applicationWindow().header ? applicationWindow().header.preferredHeight : 0)
 
     //NOTE: This exists just because control instances require it
-    contentItem: Item { 
+    contentItem: Item {
         onChildrenChanged: {
             //NOTE: make sure OverlaySheets are directly under the root
             //so they are over all the contents and don't have margins

@@ -19,7 +19,7 @@
 
 import QtQuick 2.0
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 
 /**
  * Graphical representatrion of an Icon
@@ -58,6 +58,21 @@ Item {
      */
     property bool selected: false
 
+    /**
+     * isMask: bool
+     * true if the icon should be treated as a monochrome icon which can be tinted
+     * @since 2.2
+     */
+    property bool isMask: true
+
+    /**
+     * color: color
+     * Allow to set the main color of the icon as a particular color
+     * default: transparent
+     * @since 2.2
+     */
+    property color color: "transparent"
+
     implicitWidth: image.source != "" ? Units.iconSizes.smallMedium : 0
     implicitHeight: image.source != "" ? Units.iconSizes.smallMedium : 0
 
@@ -73,8 +88,8 @@ Item {
 
         anchors.fill: parent
         source: image
-        color: root.selected ? Theme.highlightedTextColor : Theme.textColor
+        color: root.selected ? Theme.highlightedTextColor : (root.color != "trasparent" ? root.color : Theme.textColor)
         cached: true
-        visible: root.enabled && root.valid
+        visible: root.enabled && root.valid && root.isMask
     }
 }

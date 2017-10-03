@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 
 LinearGradient {
     id: shadow

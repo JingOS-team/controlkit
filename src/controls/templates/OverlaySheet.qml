@@ -18,7 +18,7 @@
 */
 
 import QtQuick 2.5
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Templates 2.0 as T2
 import "private"
@@ -34,6 +34,9 @@ import "private"
  */
 QtObject {
     id: root
+
+    Theme.colorSet: Theme.View
+    Theme.inherit: false
 
     /**
      * contentItem: Item
@@ -142,6 +145,8 @@ QtObject {
 
     readonly property Item rootItem: MouseArea {
         id: mainItem
+        Theme.colorSet: root.Theme.colorSet
+        Theme.inherit: root.Theme.inherit
         //we want to be over any possible OverlayDrawers, including handles
         parent: root.parent == applicationWindow().overlay ? root.parent.parent : root.parent
         anchors.fill: parent
@@ -323,7 +328,7 @@ QtObject {
             z: -1
             parent: scrollView.verticalScrollBar.background
             anchors.fill:parent
-            color: Theme.viewBackgroundColor
+            color: Theme.backgroundColor
         }
         Binding {
             target: scrollView.verticalScrollBar

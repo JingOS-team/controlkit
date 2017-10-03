@@ -20,14 +20,14 @@
 import QtQuick 2.1
 import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.2 as Kirigami
 
 Kirigami.ScrollablePage {
     id: pageRoot
 
     implicitWidth: Kirigami.Units.gridUnit * 20
     background: Rectangle {
-        color: Kirigami.Theme.viewBackgroundColor
+        color: Kirigami.Theme.backgroundColor
     }
 
     title: "Gallery"
@@ -121,6 +121,10 @@ Kirigami.ScrollablePage {
             ListElement {
                 text: "Colors"
                 component: "Colors"
+            }
+            ListElement {
+                text: "Color Sets"
+                component: "ColorSet"
             }
             ListElement {
                 text: "Metrics"

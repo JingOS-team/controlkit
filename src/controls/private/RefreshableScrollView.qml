@@ -21,7 +21,7 @@ import QtQuick 2.5
 import QtQuick.Controls 2.0 as QQC2
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 import "../templates/private" as P
 
 /**
@@ -33,7 +33,7 @@ import "../templates/private" as P
  * Example usage:
  *
  * @code
- * import org.kde.kirigami 2.0 as Kirigami
+ * import org.kde.kirigami 2.2 as Kirigami
  * [...]
  * 
  * Kirigami.RefreshableScrollView {
@@ -134,7 +134,7 @@ P.ScrollView {
                 visible: supportsRefreshing && !refreshing && progress > 0
                 color: "transparent"
                 opacity: 0.8
-                border.color: Theme.viewBackgroundColor
+                border.color: Theme.backgroundColor
                 border.width: Math.ceil(Units.smallSpacing/4)
                 //also take into account the listview header height if present
                 property real progress: supportsRefreshing && !refreshing ? ((parent.y - busyIndicatorFrame.headerItemHeight)/busyIndicatorFrame.height) : 0

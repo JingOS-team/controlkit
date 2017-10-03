@@ -19,6 +19,7 @@
  */
 
 #include "desktopicon.h"
+#include "platformtheme.h"
 
 #include <QSGSimpleTextureNode>
 #include <qquickwindow.h>
@@ -33,6 +34,7 @@
 #include <QQuickImageProvider>
 #include <QGuiApplication>
 #include <QPointer>
+#include <QPainter>
 
 class ManagedTextureNode : public QSGSimpleTextureNode
 {
@@ -132,9 +134,11 @@ DesktopIcon::DesktopIcon(QQuickItem *parent)
       m_smooth(false),
       m_changed(false),
       m_active(false),
-      m_selected(false)
+      m_selected(false),
+      m_isMask(false)
 {
     setFlag(ItemHasContents, true);
+    //FIXME: not necessary anymore
     connect(qApp, &QGuiApplication::paletteChanged, this, [this]() {
         m_changed = true;
         update();
@@ -153,6 +157,17 @@ void DesktopIcon::setSource(const QVariant &icon)
     }
     m_source = icon;
     m_changed = true;
+
+    if (!m_theme) {
+        m_theme = static_cast<Kirigami::PlatformTheme *>(qmlAttachedPropertiesObject<Kirigami::PlatformTheme>(this, true));
+        Q_ASSERT(m_theme);
+
+        connect(m_theme, &Kirigami::PlatformTheme::colorsChanged, this, [this]() {
+            m_changed = true;
+            update();
+        });
+    }
+
     update();
     emit sourceChanged();
 }
@@ -210,6 +225,37 @@ bool DesktopIcon::selected() const
 {
     return m_selected;
 }
+
+void DesktopIcon::setIsMask(bool mask)
+{
+    if (m_isMask == mask) {
+        return;
+    }
+
+    m_isMask = mask;
+    emit isMaskChanged();
+}
+
+bool DesktopIcon::isMask() const
+{
+    return m_isMask;
+}
+
+void DesktopIcon::setColor(const QColor &color)
+{
+    if (m_color == color) {
+        return;
+    }
+
+    m_color = color;
+    emit colorChanged();
+}
+
+QColor DesktopIcon::color() const
+{
+    return m_color;
+}
+
 
 int DesktopIcon::implicitWidth() const
 {
@@ -269,8 +315,11 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
                 img = findIcon(size);
                 break;
             case QVariant::Brush:
+                //todo: fill here too?
             case QVariant::Color:
-                //perhaps fill image instead?
+                img = QImage(size, QImage::Format_Alpha8);
+                img.fill(m_source.value<QColor>());
+                break;
             default:
                 break;
             }
@@ -402,10 +451,16 @@ QImage DesktopIcon::findIcon(const QSize &size)
         }
         QIcon icon(iconSource);
         if (icon.availableSizes().isEmpty()) {
-            icon = QIcon::fromTheme(iconSource);
+            icon = m_theme->iconFromTheme(iconSource, m_color);
         }
         if (!icon.availableSizes().isEmpty()){
             img = icon.pixmap(size, iconMode(), QIcon::On).toImage();
+            if (m_isMask || icon.isMask()) {
+                QPainter p(&img);
+                p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+                p.fillRect(img.rect(), m_theme->textColor());
+                p.end();
+            }
         }
     }
     return img;

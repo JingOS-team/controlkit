@@ -13,7 +13,7 @@ function(kirigami_package_breeze_icons)
     endif()
 
     #include icons used by Kirigami components themselves
-    set(ARG_ICONS ${ARG_ICONS} go-next go-previous go-up handle-left handle-right)
+    set(ARG_ICONS ${ARG_ICONS} go-next go-previous go-up handle-left handle-right go-next-symbolic go-next-symbolic-rtl go-previous-symbolic go-previous-symbolic-rtl)
 
     function(_find_breeze_icon icon varName)
         #HACKY
@@ -26,6 +26,9 @@ function(kirigami_package_breeze_icons)
             if (NOT EXISTS ${path})
                 file(GLOB_RECURSE path ${_BREEZEICONS_DIR}/icons/*/22/${icon}.svg )
             endif()
+        endif()
+        if (NOT EXISTS ${path})
+            file(GLOB_RECURSE path ${_BREEZEICONS_DIR}/icons/*/symbolic/${icon}.svg )
         endif()
         if (NOT EXISTS ${path})
             return()

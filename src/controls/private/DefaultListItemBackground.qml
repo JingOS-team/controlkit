@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.1
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 
 Rectangle {
     id: background
@@ -27,7 +27,7 @@ Rectangle {
     visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
     Rectangle {
         id: internal
-        property bool indicateActiveFocus: Settings.isMobile || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
+        property bool indicateActiveFocus: listItem.pressed || Settings.isMobile || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
         anchors.fill: parent
         visible: !Settings.isMobile
         color: listItem.activeBackgroundColor
@@ -42,7 +42,7 @@ Rectangle {
 
     on_FirstElementChanged: {
         if (_firstElement) {
-            var newObject = Qt.createQmlObject('import QtQuick 2.0; import org.kde.kirigami 2.0; Separator {anchors {left: parent.left; right: parent.right; bottom: parent.top} visible: listItem.separatorVisible}',
+            var newObject = Qt.createQmlObject('import QtQuick 2.0; import org.kde.kirigami 2.2; Separator {anchors {left: parent.left; right: parent.right; bottom: parent.top} visible: listItem.separatorVisible}',
                                    background);
         }
     }

@@ -20,7 +20,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.0
+import org.kde.kirigami 2.2
 
 ScrollablePage {
     id: page
@@ -89,7 +89,7 @@ ScrollablePage {
     }
 
     footer: Rectangle {
-        color: Theme.viewBackground
+        color: Theme.backgroundColor
         height: Units.gridUnit * 3
         Controls.TextField {
             topPadding: 0
