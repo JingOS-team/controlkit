@@ -33,8 +33,8 @@ target_link_libraries(KF5Kirigami2
 )
 
 set_target_properties(KF5Kirigami2 PROPERTIES
-    VERSION     ${KIRIGAMI_VERSION_STRING}
-    SOVERSION   ${KIRIGAMI_SOVERSION}
+    VERSION     ${KIRIGAMI2_VERSION_STRING}
+    SOVERSION   ${KIRIGAMI2_SOVERSION}
     EXPORT_NAME "Kirigami2"
 )
 
