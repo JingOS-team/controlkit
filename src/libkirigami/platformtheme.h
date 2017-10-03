@@ -177,7 +177,33 @@ public:
     //decoration colors
     QColor focusColor() const;
     QColor hoverColor() const;
-    
+
+    QFont defaultFont() const;
+
+    //this may is used by the desktop QQC2 to set the styleoption palettes
+    QPalette palette() const;
+
+    //this will be used by desktopicon to fetch icons with KIconLoader
+    virtual Q_INVOKABLE QIcon iconFromTheme(const QString &name, const QColor &customColor = Qt::transparent);
+
+    //QML attached property
+    static PlatformTheme *qmlAttachedProperties(QObject *object);
+
+    /**
+     * @internal
+     */
+    static void setFallbackThemeQmlPath(const QUrl &path);
+    static QUrl fallbackThemeQmlPath();
+
+Q_SIGNALS:
+    //TODO: parameters to signals as this is also a c++ api
+    void colorsChanged();
+    void defaultFontChanged(const QFont &font);
+    void colorSetChanged(Kirigami::PlatformTheme::ColorSet colorSet);
+    void paletteChanged(const QPalette &pal);
+    void inheritChanged(bool inherit);
+
+protected:
     //Setters, not accessible from QML but from implementations
     
     //foreground colors
@@ -199,33 +225,8 @@ public:
     void setFocusColor(const QColor &color);
     void setHoverColor(const QColor &color);
 
-
-    QFont defaultFont() const;
     void setDefaultFont(const QFont &defaultFont);
-
-    //this may is used by the desktop QQC2 to set the styleoption palettes
-    QPalette palette() const;
     void setPalette(const QPalette &palette);
-
-    //this will be used by desktopicon to fetch icons with KIconLoader
-    virtual Q_INVOKABLE QIcon iconFromTheme(const QString &name, const QColor &customColor = Qt::transparent);
-
-    //QML attached property
-    static PlatformTheme *qmlAttachedProperties(QObject *object);
-
-    /**
-     * @internal
-     */
-    static void setFallbackThemeQmlPath(const QUrl &path);
-    static QUrl fallbackThemeQmlPath();
-
-Q_SIGNALS:
-    //TODO: parameters to signals as this is also a c++ api
-    void colorsChanged();
-    void defaultFontChanged(const QFont &font);
-    void colorSetChanged(Kirigami::PlatformTheme::ColorSet colorSet);
-    void paletteChanged(const QPalette &pal);
-    void inheritChanged(bool inherit);
 
 private:
     PlatformThemePrivate *d;
