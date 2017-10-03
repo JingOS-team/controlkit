@@ -56,6 +56,14 @@ ScrollablePage {
             Layout.alignment: Qt.AlignHCenter
         }
         Label {
+            text: "Numbers:"
+        }
+        Controls.TextField {
+            inputMask: "99999999"
+            inputMethodHints: Qt.ImhPreferNumbers
+            Layout.alignment: Qt.AlignHCenter
+        }
+        Label {
             text: "Text area:"
         }
         //this to make text selection work on Android
