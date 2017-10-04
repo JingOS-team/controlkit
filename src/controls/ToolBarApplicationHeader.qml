@@ -46,7 +46,6 @@ ApplicationHeader {
 
         //don't scroll except just the button
         implicitWidth: parent.parent.width - height
-        width: parent.width
         height: parent.height
 
         Row {
@@ -117,11 +116,9 @@ ApplicationHeader {
                 verticalCenter: parent.verticalCenter
             }
 
-            //TODO: we need a kebab icon
-            //iconName: "application-menu"
             Icon {
                 anchors.fill: parent
-                source: "application-menu"
+                source: "overflow-menu"
                 anchors.margins: 4
             }
             checkable: true
