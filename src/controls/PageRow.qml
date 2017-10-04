@@ -377,7 +377,11 @@ T.Control {
         highlightFollowsCurrentItem: true
         onMovementEnded: currentIndex = Math.max(0, indexAt(contentX, 0))
         onFlickEnded: onMovementEnded();
-        onCurrentIndexChanged: currentItem.page.forceActiveFocus()
+        onCurrentIndexChanged: {
+            if (currentItem) {
+                currentItem.page.forceActiveFocus();
+            }
+        }
         model: ObjectModel {
             id: pagesLogic
             readonly property var componentCache: new Array()
