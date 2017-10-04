@@ -126,7 +126,7 @@ AbstractApplicationHeader {
         id: stack
         anchors {
             fill: parent
-            leftMargin: titleList.scrollingLocked && titleList.wideMode && depth < 2 ? 0 : titleList.backButton.width
+            leftMargin: (titleList.scrollingLocked && titleList.wideMode) || headerStyle == ApplicationHeaderStyle.Titles && depth < 2 ? 0 : titleList.backButton.width
         }
         initialItem: titleList
     }
@@ -142,7 +142,7 @@ AbstractApplicationHeader {
     }
     ListView {
         id: titleList
-        readonly property bool wideMode: typeof __appWindow.pageStack.wideMode !== "undefined" ?  __appWindow.pageStack.wideMode : titleList.wideMode
+        readonly property bool wideMode: typeof __appWindow.pageStack.wideMode !== "undefined" ?  __appWindow.pageStack.wideMode : __appWindow.wideMode
         property int internalHeaderStyle: header.headerStyle == ApplicationHeaderStyle.Auto ? (titleList.wideMode ? ApplicationHeaderStyle.Titles : ApplicationHeaderStyle.Breadcrumb) : header.headerStyle
         //if scrolling the titlebar should scroll also the pages and vice versa
         property bool scrollingLocked: (header.headerStyle == ApplicationHeaderStyle.Titles || titleList.wideMode)
@@ -256,7 +256,7 @@ AbstractApplicationHeader {
             Loader {
                 id: delegateLoader
                 height: parent.height
-                x: titleList.wideMode ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + (titleList.backButton ? titleList.backButton.width : 0)))) : 0
+                x: titleList.wideMode || headerStyle == ApplicationHeaderStyle.Titles ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + (titleList.backButton ? titleList.backButton.width : 0)))) : 0
                 width: index == titleList.count-1 ? parent.width : parent.width - x
 
                 sourceComponent: header.pageDelegate
