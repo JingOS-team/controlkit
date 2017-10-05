@@ -78,21 +78,31 @@ ApplicationHeader {
                 height: parent.height * 0.6
                 visible: page && page.actions && (page.actions.left || page.actions.main || page.actions.right)
             }
-            Repeater {
-                id: repeater
-                model: page && page.actions.contextualActions ? page.actions.contextualActions : null
-                delegate: PrivateActionToolButton {
-                    anchors.verticalCenter: parent.verticalCenter
-                    action: modelData
-                    visible: modelData.visible && x+layout.x+width < delegateItem.width
-                    onVisibleChanged: {
-                        if (!modelData.visible) {
-                            return;
+
+            Row {
+                id: contextActionsContainer
+                property int hiddenCount
+                Repeater {
+                    id: repeater
+                    model: page && page.actions.contextualActions ? page.actions.contextualActions : null
+                    delegate: PrivateActionToolButton {
+                        anchors.verticalCenter: parent.verticalCenter
+                        action: modelData
+                        visible: modelData.visible && x+contextActionsContainer.x+layout.x+width < delegateItem.width
+                        Connections {
+                            target: modelData
+                            onVisibleChanged: {
+                                if (modelData.visible) {
+                                    ++contextActionsContainer.hiddenCount;
+                                } else {
+                                    --contextActionsContainer.hiddenCount;
+                                }
+                            }
                         }
-                        if (!visible) {
-                            menu.visibleChildren++;
-                        } else {
-                            menu.visibleChildren = Math.max(0, menu.visibleChildren-1);
+                        Component.onCompleted: {
+                            if (!modelData.visible) {
+                                ++contextActionsContainer.hiddenCount;
+                            }
                         }
                     }
                 }
@@ -123,30 +133,28 @@ ApplicationHeader {
             }
             checkable: true
             checked: menu.visible
-            visible: menu.visibleChildren > 0
+            visible: contextActionsContainer.visibleChildren.length + contextActionsContainer.hiddenCount <= repeater.count
             onClicked: menu.open()
 
             Controls.Menu {
                 id: menu
                 y: moreButton.height
-                property int visibleChildren: 0
+                x: -width + moreButton.width
 
                 Repeater {
                     model: page && page.actions.contextualActions ? page.actions.contextualActions : null
-                    delegate: Controls.MenuItem {
+                    delegate: BasicListItem {
                         text: modelData ? modelData.text : ""
+                        icon: modelData.iconName
                         checkable:  modelData.checkable
-                        //FIXME: icons
-                        //iconName: modelData.iconName
-                        onTriggered: modelData.trigger();
-                        //skip the 3 buttons and 2 separators
-                        visible: modelData.visible
-                        height: visible ? implicitHeight : 0
-                        enabled: modelData.enabled
-                        Component.onCompleted: {
-                            menu.addItem(this);
-                            menu.implicitWidth = Math.max(this.implicitWidth, menu.implicitWidth);
+                        onClicked: {
+                            modelData.trigger();
+                            menu.visible = false;
                         }
+                        separatorVisible: false
+                        backgroundColor: "transparent"
+                        visible: index+1 >= contextActionsContainer.visibleChildren.length + contextActionsContainer.hiddenCount && modelData.visible
+                        enabled: modelData.enabled
                     }
                 }
             }

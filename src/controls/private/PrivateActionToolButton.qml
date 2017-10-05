@@ -25,7 +25,7 @@ import org.kde.kirigami 2.2
 Controls.ToolButton {
     id: control
 
-    implicitWidth: Math.max(background.implicitWidth, layout.implicitWidth + 16)
+    implicitWidth: showText ? Math.max(background.implicitWidth, layout.implicitWidth + 16) : height
     implicitHeight: background.implicitHeight
 
     hoverEnabled: true
@@ -49,6 +49,8 @@ Controls.ToolButton {
     contentItem: MouseArea {
         hoverEnabled: true
         onPressed: mouse.accepted = false
+        Theme.colorSet: checked ? Theme.Selection : Theme.Window
+        Theme.inherit: false
         RowLayout {
             id: layout
             anchors.centerIn: parent
