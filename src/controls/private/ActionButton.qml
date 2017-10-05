@@ -56,6 +56,7 @@ Item {
         }
     }
 
+    onWidthChanged: button.x = root.width/2 - button.width/2
     Item {
         id: button
         x: root.width/2 - button.width/2
