@@ -19,6 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
+import QtQuick.Controls 2.0 as Controls
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.2
 
@@ -32,16 +33,17 @@ Item {
         left: parent.left
         right: parent.right
         bottom: parent.bottom
-        bottomMargin: root.parent.parent.footer ? root.parent.parent.footer.height : 0
+        bottomMargin: root.page.footer ? root.page.footer.height : 0
     }
     //smallSpacing for the shadow
     height: button.height + Units.smallSpacing
     clip: true
 
+    readonly property Page page: root.parent.page
     //either Action or QAction should work here
-    readonly property QtObject action: root.parent.parent ? root.parent.parent.mainAction : null
-    readonly property QtObject leftAction: root.parent.parent ? root.parent.parent.leftAction : null
-    readonly property QtObject rightAction: root.parent.parent ? root.parent.parent.rightAction : null
+    readonly property QtObject action: root.page ? root.page.mainAction : null
+    readonly property QtObject leftAction: root.page ? root.page.leftAction : null
+    readonly property QtObject rightAction: root.page ? root.page.rightAction : null
 
     transform: Translate {
         id: translateTransform
@@ -107,10 +109,10 @@ Item {
 
             onPressed: {
                 //search if we have a page to set to current
-                if (applicationWindow !== undefined && applicationWindow().pageStack.currentIndex !== undefined && root.parent.parent.parent.level !== undefined) {
+                if (applicationWindow !== undefined && applicationWindow().pageStack.currentIndex !== undefined && root.page.parent.level !== undefined) {
                     //search the button parent's parent, that is the page parent
                     //this will make the context drawer open for the proper page
-                    applicationWindow().pageStack.currentIndex = root.parent.parent.parent.level;
+                    applicationWindow().pageStack.currentIndex = root.page.parent.level;
                 }
                 downTimestamp = (new Date()).getTime();
                 startX = button.x + button.width/2;
@@ -347,9 +349,9 @@ Item {
             minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
             maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
         }
-        visible: root.parent.parent.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
+        visible: root.page.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
             //using internal pagerow api
-            && root.parent.parent.parent.level < applicationWindow().pageStack.depth-1
+            && root.page.parent.level < applicationWindow().pageStack.depth-1
 
         width: Units.iconSizes.medium + Units.smallSpacing*2
         height: width
@@ -376,11 +378,11 @@ Item {
                 width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                 height: width
                 radius: Units.devicePixelRatio
-                ContextIcon {
+                Icon {
                     anchors.centerIn: parent
-                    width: height
-                    height: Units.iconSizes.smallMedium
-                    color: fakeContextMenuButton.pressed ? Theme.highlightedTextColor : Theme.textColor
+                    width: Units.iconSizes.smallMedium
+                    height: width
+                    source: "overflow-menu"
                 }
                 Behavior on color {
                     ColorAnimation {
@@ -391,7 +393,9 @@ Item {
             }
         }
 
-        onPressed: mouseArea.onPressed(mouse)
+        onPressed: {
+            mouseArea.onPressed(mouse)
+        }
         onReleased: {
             if (globalDrawer) {
                 globalDrawer.peeking = false;
@@ -401,7 +405,7 @@ Item {
             }
             var pos = root.mapFromItem(fakeContextMenuButton, mouse.x, mouse.y);
             if (contextDrawer) {
-                if (pos.x < root.width/2 || (!contextDrawer.drawerOpen && mouse.x > 0 && mouse.x < width)) {
+                if (pos.x < root.width/2) {
                     contextDrawer.open();
                 } else if (contextDrawer.drawerOpen && mouse.x > 0 && mouse.x < width) {
                     contextDrawer.close();
@@ -412,6 +416,25 @@ Item {
                     globalDrawer.open();
                 } else {
                     globalDrawer.close();
+                }
+            }
+            if (containsMouse && (!globalDrawer || !globalDrawer.drawerOpen) &&
+                (!contextDrawer || !contextDrawer.drawerOpen)) {
+                contextMenu.visible = true;
+            }
+        }
+        Controls.Menu {
+            id: contextMenu
+            x: parent.width - width
+            y: -height
+            Repeater {
+                model: root.page.actions.contextualActions
+                delegate: BasicListItem {
+                    text: model.text
+                    icon: model.iconName
+                    visible: model.visible
+                    separatorVisible: false
+                    onClicked: modelData.trigger()
                 }
             }
         }
