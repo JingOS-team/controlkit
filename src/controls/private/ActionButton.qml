@@ -230,7 +230,7 @@ Item {
                     width: height
                     visible: root.action
                     readonly property bool pressed: root.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || root.action.checked)
-                    color: pressed ? Qt.lighter(Theme.hoverColor, 1.3) : Theme.hoverColor
+                    color: pressed ? Qt.lighter(Theme.highlightColor, 1.3) : Theme.highlightColor
 
                     Icon {
                         id: icon
@@ -270,7 +270,7 @@ Item {
                     visible: root.leftAction
 
                     readonly property bool pressed: root.leftAction && ((mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || root.leftAction.checked)
-                    color: pressed ? Theme.hoverColor : Theme.backgroundColor
+                    color: pressed ? Theme.highlightColor : Theme.backgroundColor
                     Behavior on color {
                         ColorAnimation {
                             duration: Units.longDuration
@@ -304,7 +304,7 @@ Item {
                     width: height + (root.action ? Units.gridUnit*2 : 0)
                     visible: root.rightAction
                     readonly property bool pressed: root.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || root.rightAction.checked)
-                    color: pressed ? Theme.hoverColor : Theme.backgroundColor
+                    color: pressed ? Theme.highlightColor : Theme.backgroundColor
                     Behavior on color {
                         ColorAnimation {
                             duration: Units.longDuration
