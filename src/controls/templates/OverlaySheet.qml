@@ -329,6 +329,7 @@ QtObject {
             parent: scrollView.verticalScrollBar.background
             anchors.fill:parent
             color: Theme.backgroundColor
+            opacity: 0.6
         }
         Binding {
             target: scrollView.verticalScrollBar
