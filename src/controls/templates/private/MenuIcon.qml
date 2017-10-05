@@ -37,7 +37,7 @@ Item {
             fill: parent
             margins: Units.smallSpacing
         }
-        property int thickness: Math.round(Units.smallSpacing / 2)
+        property int thickness: Math.floor(Units.devicePixelRatio)*2
         Rectangle {
             anchors {
                 right: parent.right

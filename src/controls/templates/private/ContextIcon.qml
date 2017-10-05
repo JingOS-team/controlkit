@@ -37,7 +37,7 @@ Item {
             fill: parent
             margins: Units.smallSpacing
         }
-        property int thickness: Math.round(Units.smallSpacing / 2)
+        property int thickness: Math.floor(Units.devicePixelRatio)*2
         Rectangle {
             anchors {
                 horizontalCenter: parent.horizontalCenter
@@ -47,7 +47,7 @@ Item {
             antialiasing: true
             transformOrigin: Item.Left
             width: (1 - morph) * height + morph * ((parent.width / Math.sqrt(2)) - height/2)
-            height: iconRoot.thickness + iconRoot.thickness*0.5 * (1-morph)
+            height: iconRoot.thickness
             color: canvas.color
             rotation: 45 * morph
         }
@@ -55,7 +55,7 @@ Item {
         Rectangle {
             anchors.centerIn: parent
             width: height * (1 - morph)
-            height: iconRoot.thickness + iconRoot.thickness*0.5 * (1-morph)
+            height: iconRoot.thickness * (1-morph)
             color: canvas.color
         }
 
@@ -69,7 +69,7 @@ Item {
             antialiasing: true
             transformOrigin: Item.Left
             width: (1 - morph) * height + morph * ((parent.width / Math.sqrt(2)) - height/2)
-            height: iconRoot.thickness + iconRoot.thickness*0.5 * (1-morph)
+            height: iconRoot.thickness
             color: canvas.color
             rotation: -45 * morph
         }
