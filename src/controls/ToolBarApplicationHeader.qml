@@ -147,6 +147,7 @@ ApplicationHeader {
                         text: modelData ? modelData.text : ""
                         icon: modelData.iconName
                         checkable:  modelData.checkable
+                        checked: modelData.checked
                         onClicked: {
                             modelData.trigger();
                             menu.visible = false;

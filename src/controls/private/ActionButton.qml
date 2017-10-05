@@ -418,9 +418,9 @@ Item {
                     globalDrawer.close();
                 }
             }
-            if (containsMouse && (!globalDrawer || !globalDrawer.drawerOpen) &&
-                (!contextDrawer || !contextDrawer.drawerOpen)) {
-                contextMenu.visible = true;
+            if (containsMouse && (!globalDrawer || !globalDrawer.drawerOpen || !globalDrawer.modal) &&
+                (!contextDrawer || !contextDrawer.drawerOpen || !contextDrawer.modal)) {
+                contextMenu.visible = !contextMenu.visible;
             }
         }
         Controls.Menu {
@@ -432,9 +432,16 @@ Item {
                 delegate: BasicListItem {
                     text: model.text
                     icon: model.iconName
+                    backgroundColor: "transparent"
                     visible: model.visible
+                    enabled: modelData.enabled
+                    checkable:  modelData.checkable
+                    checked: modelData.checked
                     separatorVisible: false
-                    onClicked: modelData.trigger()
+                    onClicked: {
+                        modelData.trigger();
+                        contextMenu.visible = false;
+                    }
                 }
             }
         }
