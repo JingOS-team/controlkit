@@ -44,8 +44,8 @@ ApplicationHeader {
         readonly property bool current: __appWindow.pageStack.currentIndex == index
         property Row layout
 
-        //don't scroll except just the button
-        implicitWidth: parent.parent.width - height
+        //don't scroll except just the nav buttons
+        implicitWidth: parent.parent.width - height*3
         height: parent.height
 
         Row {
@@ -90,7 +90,7 @@ ApplicationHeader {
                         id: actionDelegate
                         anchors.verticalCenter: parent.verticalCenter
                         action: modelData
-                        property bool fits: x+contextActionsContainer.x+layout.x+width < delegateItem.width
+                        property bool fits: x+contextActionsContainer.x+layout.x+width < delegateItem.width - moreButton.width
                         onFitsChanged: updateOverflowSet()
                         function updateOverflowSet() {
                             var index = contextActionsContainer.overflowSet.findIndex(function(act){

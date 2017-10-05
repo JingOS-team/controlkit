@@ -30,28 +30,24 @@ Controls.ToolButton {
     }
     width: visible ? height : 0
     z: 99
-    enabled: !Settings.isMobile && (__appWindow.pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0)
-    implicitWidth: height
-    visible: applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
 
-    onClicked: {
-        if (applicationWindow().pageStack.layers && applicationWindow().pageStack.layers.depth > 1) {
-            applicationWindow().pageStack.layers.pop();
-        } else {
-            applicationWindow().pageStack.goBack();
-        }
-    }
+    property Flickable headerFlickable
+    implicitWidth: height
+    visible: headerFlickable.internalHeaderStyle == ApplicationHeaderStyle.Titles && !applicationWindow().pageStack.contentItem.atXEnd && applicationWindow().pageStack.layers.depth < 2
+
+    onClicked: applicationWindow().pageStack.goForward();
+
     Icon {
         anchors.centerIn: parent
         width: Math.min(parent.width, Units.iconSizes.smallMedium)
         height: width
         opacity: parent.enabled ? 1 : 0.6
         selected: header.background && header.background.color && header.background.color == Theme.highlightColor
-        source: (LayoutMirroring.enabled ? "go-previous-symbolic-rtl" : "go-previous-symbolic")
+        source: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
     }
     Controls.ToolTip {
         visible: button.hovered
-        text: qsTr("Navigate Back")
+        text: qsTr("Navigate Forward")
         delay: 1000
         timeout: 5000
         y: button.height

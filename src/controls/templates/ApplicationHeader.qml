@@ -59,9 +59,12 @@ AbstractApplicationHeader {
     onBackButtonEnabledChanged: {
         if (backButtonEnabled && !titleList.backButton) {
             var component = Qt.createComponent(Qt.resolvedUrl("private/BackButton.qml"));
-            titleList.backButton = component.createObject(header);
+            titleList.backButton = component.createObject(navButtons);
+            component = Qt.createComponent(Qt.resolvedUrl("private/ForwardButton.qml"));
+            titleList.forwardButton = component.createObject(navButtons, {"headerFlickable": titleList});
         } else if (titleList.backButton) {
             titleList.backButton.destroy();
+            titleList.forwardButton.destroy();
         }
     }
     property Component pageDelegate: Component {
@@ -126,7 +129,7 @@ AbstractApplicationHeader {
         id: stack
         anchors {
             fill: parent
-            leftMargin: (titleList.scrollingLocked && titleList.wideMode) || headerStyle == ApplicationHeaderStyle.Titles && depth < 2 ? 0 : titleList.backButton.width
+            leftMargin: (titleList.scrollingLocked && titleList.wideMode) || headerStyle == ApplicationHeaderStyle.Titles && depth < 2 ? 0 : navButtons.width
         }
         initialItem: titleList
     }
@@ -140,6 +143,16 @@ AbstractApplicationHeader {
             Component.onDestruction: stack.pop()
         }
     }
+
+    Row {
+        id: navButtons
+        anchors {
+            left: parent.left
+            top: parent.top
+            bottom: parent.bottom
+        }
+    }
+
     ListView {
         id: titleList
         readonly property bool wideMode: typeof __appWindow.pageStack.wideMode !== "undefined" ?  __appWindow.pageStack.wideMode : __appWindow.wideMode
@@ -151,6 +164,7 @@ AbstractApplicationHeader {
         property bool isTabBar: header.headerStyle == ApplicationHeaderStyle.TabBar
 
         property Item backButton
+        property Item forwardButton
         clip: true
 
         cacheBuffer: width ? Math.max(0, width * count) : 0
@@ -256,8 +270,8 @@ AbstractApplicationHeader {
             Loader {
                 id: delegateLoader
                 height: parent.height
-                x: titleList.wideMode || headerStyle == ApplicationHeaderStyle.Titles ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + (titleList.backButton ? titleList.backButton.width : 0)))) : 0
-                width: index == titleList.count-1 ? parent.width : parent.width - x
+                x: titleList.wideMode || headerStyle == ApplicationHeaderStyle.Titles ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + navButtons.width))) : 0
+                width: parent.width - x
 
                 sourceComponent: header.pageDelegate
 

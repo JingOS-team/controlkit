@@ -26,6 +26,7 @@
         <file alias="templates/private/ContextIcon.qml">src/controls/templates/private/ContextIcon.qml</file>
         <file alias="templates/private/ScrollView.qml">src/controls/templates/private/ScrollView.qml</file>
         <file alias="templates/private/BackButton.qml">src/controls/templates/private/BackButton.qml</file>
+        <file alias="templates/private/ForwardButton.qml">src/controls/templates/private/ForwardButton.qml</file>
         <file alias="templates/OverlayDrawer.qml">src/controls/templates/OverlayDrawer.qml</file>
         <file alias="templates/OverlaySheet.qml">src/controls/templates/OverlaySheet.qml</file>
         <file alias="templates/SwipeListItem.qml">src/controls/templates/SwipeListItem.qml</file>
