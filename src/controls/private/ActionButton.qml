@@ -230,16 +230,15 @@ Item {
                     width: height
                     visible: root.action
                     readonly property bool pressed: root.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || root.action.checked)
-                    color: pressed ? Qt.lighter(Theme.highlightColor, 1.3) : Theme.highlightColor
+                    color: pressed ? Qt.darker(Theme.highlightColor, 1.3) : Theme.highlightColor
 
                     Icon {
                         id: icon
+                        anchors.centerIn: parent
+                        width: Units.iconSizes.smallMedium
+                        height: width
                         source: root.action && root.action.iconName ? root.action.iconName : ""
                         selected: true
-                        anchors {
-                            fill: parent
-                            margins: Units.smallSpacing * 3
-                        }
                     }
                     Behavior on color {
                         ColorAnimation {
@@ -279,12 +278,12 @@ Item {
                     }
                     Icon {
                         source: root.leftAction && root.leftAction.iconName ? root.leftAction.iconName : ""
-                        width: height
+                        width: Units.iconSizes.smallMedium
+                        height: width
                         selected: leftButtonGraphics.pressed
                         anchors {
                             left: parent.left
-                            top: parent.top
-                            bottom: parent.bottom
+                            verticalCenter: parent.verticalCenter
                             margins: Units.smallSpacing * 2
                         }
                     }
@@ -313,12 +312,12 @@ Item {
                     }
                     Icon {
                         source: root.rightAction && root.rightAction.iconName ? root.rightAction.iconName : ""
-                        width: height
+                        width: Units.iconSizes.smallMedium
+                        height: width
                         selected: rightButtonGraphics.pressed
                         anchors {
                             right: parent.right
-                            top: parent.top
-                            bottom: parent.bottom
+                            verticalCenter: parent.verticalCenter
                             margins: Units.smallSpacing * 2
                         }
                     }

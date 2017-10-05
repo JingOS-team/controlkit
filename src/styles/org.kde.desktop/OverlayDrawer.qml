@@ -62,7 +62,7 @@ T.OverlayDrawer {
                 Loader {
                     anchors.centerIn: parent
                     width: height
-                    height: Units.iconSizes.small
+                    height: Units.iconSizes.smallMedium
                     source: root.edge == Qt.LeftEdge ? Qt.resolvedUrl("../../templates/private/MenuIcon.qml") : (root.edge == Qt.RightEdge ? Qt.resolvedUrl("../../templates/private/ContextIcon.qml") : "")
                     onItemChanged: {
                         if(item) {
