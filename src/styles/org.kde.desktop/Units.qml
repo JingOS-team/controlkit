@@ -53,11 +53,11 @@ QtObject {
      * * desktop
      */
     property QtObject iconSizes: QtObject {
-        property int small: 16 * devicePixelRatio
-        property int smallMedium: 22 * devicePixelRatio
-        property int medium: 32 * devicePixelRatio
-        property int large: 48 * devicePixelRatio
-        property int huge: 64 * devicePixelRatio
+        property int small: fontMetrics.roundedIconSize(16 * devicePixelRatio)
+        property int smallMedium: fontMetrics.roundedIconSize(22 * devicePixelRatio)
+        property int medium: fontMetrics.roundedIconSize(32 * devicePixelRatio)
+        property int large: fontMetrics.roundedIconSize(48 * devicePixelRatio)
+        property int huge: fontMetrics.roundedIconSize(64 * devicePixelRatio)
         property int enormous: 128 * devicePixelRatio
     }
 
@@ -107,5 +107,20 @@ QtObject {
 
     property variant fontMetrics: TextMetrics {
         text: "M"
+        function roundedIconSize(size) {
+            if (size < 16) {
+                return size;
+            } else if (size < 22) {
+                return 16;
+            } else if (size < 32) {
+                return 22;
+            } else if (size < 48) {
+                return 32;
+            } else if (size < 64) {
+                return 48;
+            } else {
+                return size;
+            }
+        }
     }
 }
