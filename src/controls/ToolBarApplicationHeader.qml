@@ -81,28 +81,36 @@ ApplicationHeader {
 
             Row {
                 id: contextActionsContainer
-                property int hiddenCount
+                property var overflowSet: []
+
                 Repeater {
                     id: repeater
                     model: page && page.actions.contextualActions ? page.actions.contextualActions : null
                     delegate: PrivateActionToolButton {
+                        id: actionDelegate
                         anchors.verticalCenter: parent.verticalCenter
                         action: modelData
-                        visible: modelData.visible && x+contextActionsContainer.x+layout.x+width < delegateItem.width
+                        property bool fits: x+contextActionsContainer.x+layout.x+width < delegateItem.width
+                        onFitsChanged: updateOverflowSet()
+                        function updateOverflowSet() {
+                            var index = contextActionsContainer.overflowSet.findIndex(function(act){
+                                return act == modelData});
+
+                            if ((fits || !modelData.visible) && index > -1) {
+                                contextActionsContainer.overflowSet.splice(index, 1);
+                            } else if (!fits && modelData.visible && index == -1) {
+                                contextActionsContainer.overflowSet.push(modelData);
+                            }
+                            contextActionsContainer.overflowSetChanged();
+                        }
+                        visible: modelData.visible && fits
+
                         Connections {
                             target: modelData
-                            onVisibleChanged: {
-                                if (modelData.visible) {
-                                    ++contextActionsContainer.hiddenCount;
-                                } else {
-                                    --contextActionsContainer.hiddenCount;
-                                }
-                            }
+                            onVisibleChanged: actionDelegate.updateOverflowSet();
                         }
                         Component.onCompleted: {
-                            if (!modelData.visible) {
-                                ++contextActionsContainer.hiddenCount;
-                            }
+                            actionDelegate.updateOverflowSet();
                         }
                     }
                 }
@@ -133,7 +141,7 @@ ApplicationHeader {
             }
             checkable: true
             checked: menu.visible
-            visible: contextActionsContainer.visibleChildren.length + contextActionsContainer.hiddenCount <= repeater.count
+            visible: contextActionsContainer.overflowSet.length > 0;
             onClicked: menu.open()
 
             Controls.Menu {
@@ -154,7 +162,8 @@ ApplicationHeader {
                         }
                         separatorVisible: false
                         backgroundColor: "transparent"
-                        visible: index+1 >= contextActionsContainer.visibleChildren.length + contextActionsContainer.hiddenCount && modelData.visible
+                        visible: contextActionsContainer.overflowSet.findIndex(function(act) {
+                                return act == modelData}) > -1 && modelData.visible
                         enabled: modelData.enabled
                     }
                 }
