@@ -45,7 +45,7 @@ ApplicationHeader {
         property Row layout
 
         //don't scroll except just the nav buttons
-        implicitWidth: parent.parent.width - height*3
+        implicitWidth: parent.parent.width - height*2
         height: parent.height
 
         Row {
