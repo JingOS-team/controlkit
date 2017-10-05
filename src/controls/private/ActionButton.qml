@@ -381,6 +381,7 @@ Item {
                 Icon {
                     anchors.centerIn: parent
                     width: Units.iconSizes.smallMedium
+                    selected: fakeContextMenuButton.pressed
                     height: width
                     source: "overflow-menu"
                 }
