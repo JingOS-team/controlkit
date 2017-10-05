@@ -351,7 +351,7 @@ Item {
         }
         visible: root.page.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
             //using internal pagerow api
-            && root.page.parent.level < applicationWindow().pageStack.depth-1
+            && (root.page && root.page.parent ? root.page.parent.level < applicationWindow().pageStack.depth-1 : false)
 
         width: Units.iconSizes.medium + Units.smallSpacing*2
         height: width
