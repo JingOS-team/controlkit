@@ -36,8 +36,6 @@ public:
     BasicThemeDeclarative();
     virtual ~BasicThemeDeclarative();
 
-    void setQmlPath(const QUrl &path);
-    QUrl qmlPath() const;
     QObject *instance(const BasicTheme *theme);
 
     QTimer *m_colorSyncTimer;

@@ -76,8 +76,6 @@ void KirigamiPlugin::registerTypes(const char *uri)
     }
     //At this point the fallback chain will be selected->org.kde.desktop->Fallback
 
-    Kirigami::PlatformTheme::setFallbackThemeQmlPath(componentUrl(QStringLiteral("Theme.qml")));
-
     s_selectedStyle = m_stylesFallbackChain.first();
 
     qmlRegisterSingletonType<Settings>(uri, 2, 0, "Settings",

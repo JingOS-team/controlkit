@@ -189,12 +189,6 @@ public:
     //QML attached property
     static PlatformTheme *qmlAttachedProperties(QObject *object);
 
-    /**
-     * @internal
-     */
-    static void setFallbackThemeQmlPath(const QUrl &path);
-    static QUrl fallbackThemeQmlPath();
-
 Q_SIGNALS:
     //TODO: parameters to signals as this is also a c++ api
     void colorsChanged();

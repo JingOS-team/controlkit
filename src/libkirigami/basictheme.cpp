@@ -51,16 +51,6 @@ BasicThemeDeclarative::~BasicThemeDeclarative()
     delete m_colorSyncTimer;
 }
 
-void BasicThemeDeclarative::setQmlPath(const QUrl &path)
-{
-    m_qmlPath = path;
-}
-
-QUrl BasicThemeDeclarative::qmlPath() const
-{
-    return m_qmlPath;
-}
-
 QObject *BasicThemeDeclarative::instance(const BasicTheme *theme)
 {
     if (m_declarativeBasicTheme) {
@@ -71,9 +61,14 @@ QObject *BasicThemeDeclarative::instance(const BasicTheme *theme)
     Q_ASSERT(engine);
 
     QQmlComponent c(engine);
-    c.loadUrl(m_qmlPath);
+    c.setData("import QtQuick 2.6\n\
+            import org.kde.kirigami 2.0 as Kirigami\n\
+            QtObject {\n\
+                property QtObject theme: Kirigami.Theme\n\
+            }", QUrl());
 
-    m_declarativeBasicTheme = c.create();
+    QObject *obj = c.create();
+    m_declarativeBasicTheme = obj->property("theme").value<QObject *>();
 
     return m_declarativeBasicTheme;
 }
