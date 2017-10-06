@@ -146,18 +146,6 @@ BasicTheme::~BasicTheme()
 {
 }
 
-QStringList BasicTheme::keys() const
-{
-    QStringList props;
-    for (int i = metaObject()->propertyOffset(); i < metaObject()->propertyCount(); ++i) {
-        const QString prop = metaObject()->property(i).name();
-        if (prop != "keys") {
-            props << prop;
-        }
-    }
-    return props;
-}
-
 //TODO: tint for which we need to chain to m_parentBasicTheme's color
 #define RESOLVECOLOR(colorName, upperCaseColor) \
     QColor color;\
