@@ -1,5 +1,11 @@
 # Kirigami
 
+QtQuick plugins to build user interfaces based on the KDE UX guidelines
+
+## Introduction
+
+Kirigami is a set of QtQuick components at the moment targeted for mobile use (in the future desktop as well) targeting both Plasma Mobile and Android. It’s not a whole set of components, all the “Primitive” ones like buttons and textboxes are a job for QtQuickControls (soon QtQuickControls2) but it’s a set of high level components to make the creation of applications that look and feel great on mobile as well as desktop devices and follow the Kirigami Human Interface Guidelines.
+
 ## Build examples to desktop
 Build all examples available
 ```sh
