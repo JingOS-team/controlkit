@@ -1,7 +1,6 @@
 
 include(CMakeParseArguments)
 include(ExternalProject)
-find_package(Git)
 
 
 function(kirigami_package_breeze_icons)
@@ -52,6 +51,7 @@ function(kirigami_package_breeze_icons)
         # replacement for ExternalProject_Add not yet working
         # first time config?
         if (NOT EXISTS ${_BREEZEICONS_DIR})
+            find_package(Git)
             execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 git://anongit.kde.org/breeze-icons.git ${_BREEZEICONS_DIR})
         endif()
 
