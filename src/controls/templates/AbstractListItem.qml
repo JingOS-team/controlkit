@@ -77,7 +77,7 @@ T2.ItemDelegate {
      * Color for the background of the item
      * It is advised to leave the default value (Theme.viewBackgroundColor)
      */
-    property color backgroundColor: Theme.backgroundColor
+    property color backgroundColor: "transparent"
 
     /**
      * activeTextColor: color
