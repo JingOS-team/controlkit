@@ -30,7 +30,7 @@ import "templates" as T
  * ListView {
  *     model: myModel
  *     delegate: SwipeListItem {
- *         Label {
+ *         QQC2.Label {
  *             text: model.text
  *         }
  *         actions: [

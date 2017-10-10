@@ -119,7 +119,7 @@ MouseArea {
         RowLayout {
             id: mainLayout
             anchors.centerIn: parent
-            Label {
+            QQC2.Label {
                 id: messageLabel
                 Layout.maximumWidth: Math.min(root.parent.width - Units.largeSpacing*2, implicitWidth)
                 elide: Text.ElideRight

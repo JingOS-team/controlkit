@@ -19,6 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
+import QtQuick.Controls 2.0 as QQC2
 import org.kde.kirigami 2.2
 
 /**
@@ -66,7 +67,7 @@ AbstractListItem {
             Layout.minimumWidth: height
             selected: layout.indicateActiveFocus && (listItem.checked || listItem.pressed)
         }
-        Label {
+        QQC2.Label {
             id: labelItem
             text: listItem.text
             Layout.fillWidth: true

@@ -32,7 +32,7 @@ import QtQuick.Templates 2.0 as T2
  * ListView {
  *     model: myModel
  *     delegate: SwipeListItem {
- *         Label {
+ *         QQC2.Label {
  *             text: model.text
  *         }
  *         actions: [
