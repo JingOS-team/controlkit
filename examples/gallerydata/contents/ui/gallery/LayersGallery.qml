@@ -63,7 +63,7 @@ ScrollablePage {
         width: page.width
         spacing: Units.smallSpacing
 
-        Label {
+        Controls.Label {
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
             text: "This page is used to test multiple layers: it will cover all the columns"

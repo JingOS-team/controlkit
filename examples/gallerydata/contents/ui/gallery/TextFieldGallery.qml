@@ -33,14 +33,14 @@ ScrollablePage {
         width: page.width
         spacing: Units.smallSpacing
 
-        Label {
+        Controls.Label {
             text: "Placeholder text:"
         }
         Controls.TextField {
             placeholderText: "Search..."
             Layout.alignment: Qt.AlignHCenter
         }
-        Label {
+        Controls.Label {
             text: "Disabled field:"
         }
         Controls.TextField {
@@ -48,14 +48,14 @@ ScrollablePage {
             enabled: false
             Layout.alignment: Qt.AlignHCenter
         }
-        Label {
+        Controls.Label {
             text: "Password:"
         }
         Controls.TextField {
             echoMode: TextInput.Password
             Layout.alignment: Qt.AlignHCenter
         }
-        Label {
+        Controls.Label {
             text: "Numbers:"
         }
         Controls.TextField {
@@ -63,7 +63,7 @@ ScrollablePage {
             inputMethodHints: Qt.ImhDigitsOnly
             Layout.alignment: Qt.AlignHCenter
         }
-        Label {
+        Controls.Label {
             text: "Text area:"
         }
         //this to make text selection work on Android

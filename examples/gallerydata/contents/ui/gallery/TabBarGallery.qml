@@ -52,9 +52,9 @@ Page {
             model: 3
 
             Item {
-                Label {
+                Controls.Label {
                     width: parent.width
-                    wrapMode: Label.Wrap
+                    wrapMode: Controls.Label.Wrap
                     horizontalAlignment: Qt.AlignHCenter
                     text: "Page " + modelData
                 }

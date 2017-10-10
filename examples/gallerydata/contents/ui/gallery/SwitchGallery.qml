@@ -43,14 +43,14 @@ ScrollablePage {
                     width: 1
                     height: 1
                 }
-                Label {
+                Controls.Label {
                     text: "Normal"
                 }
-                Label {
+                Controls.Label {
                     text: "Disabled"
                     enabled: false
                 }
-                Label {
+                Controls.Label {
                     text: "On"
                 }
                 Controls.Switch {
@@ -62,7 +62,7 @@ ScrollablePage {
                     enabled: false
                     text: "On"
                 }
-                Label {
+                Controls.Label {
                     text: "Off"
                 }
                 Controls.Switch {

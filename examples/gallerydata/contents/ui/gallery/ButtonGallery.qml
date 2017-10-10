@@ -110,7 +110,7 @@ ScrollablePage {
         id: sheet
         onSheetOpenChanged: page.actions.main.checked = sheetOpen
         ColumnLayout {
-            Label {
+            Controls.Label {
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
                 text: "
@@ -121,7 +121,7 @@ ScrollablePage {
                 Layout.alignment: Qt.AlignHCenter
             }
 
-            Label {
+            Controls.Label {
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
                 text: "

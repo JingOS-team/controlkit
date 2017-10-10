@@ -19,6 +19,7 @@
 
 import QtQuick 2.4
 import QtQuick.Layouts 1.2
+import QtQuick.Controls 2.0 as Controls
 import org.kde.kirigami 2.2 as Kirigami
 
 Kirigami.ScrollablePage {
@@ -77,7 +78,7 @@ Kirigami.ScrollablePage {
         model: 200
         delegate: Kirigami.SwipeListItem {
             id: listItem
-            contentItem: Kirigami.Label {
+            contentItem: Controls.Label {
                 height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
                 anchors.verticalCenter: parent.verticalCenter
                 text: "Item " + modelData

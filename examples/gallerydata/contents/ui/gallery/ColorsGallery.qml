@@ -20,6 +20,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.2
+import QtQuick.Controls 2.0 as Controls
 
 ScrollablePage {
     id: page
@@ -99,7 +100,7 @@ ScrollablePage {
                                     color: "black"
                                 }
                             }
-                            Label {
+                            Controls.Label {
                                 Theme.colorSet: Theme.Window
                                 Theme.inherit: false
                                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter

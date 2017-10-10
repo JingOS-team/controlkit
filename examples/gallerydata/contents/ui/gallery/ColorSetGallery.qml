@@ -32,7 +32,7 @@ Kirigami.ScrollablePage {
     ColumnLayout {
         GridLayout {
             columns: 2
-            Kirigami.Label {
+            Controls.Label {
                 text: "Global Drawer color set:"
                 Layout.alignment: Qt.AlignRight
             }
@@ -43,7 +43,7 @@ Kirigami.ScrollablePage {
                 onCurrentTextChanged: applicationWindow().globalDrawer.Kirigami.Theme.colorSet = currentText
             }
 
-            Kirigami.Label {
+            Controls.Label {
                 text: "Page color set:"
                 Layout.alignment: Qt.AlignRight
             }
@@ -66,7 +66,7 @@ Kirigami.ScrollablePage {
             }
             contentItem: ColumnLayout {
                 width: parent.width
-                Kirigami.Label {
+                Controls.Label {
                     text: "Set inherited from parent Item"
                 }
                 Kirigami.BasicListItem {
@@ -93,7 +93,7 @@ Kirigami.ScrollablePage {
             }
             contentItem: ColumnLayout {
                 width: parent.width
-                Kirigami.Label {
+                Controls.Label {
                     text: "Window Set"
                 }
                 Kirigami.BasicListItem {
@@ -120,7 +120,7 @@ Kirigami.ScrollablePage {
             }
             contentItem: ColumnLayout {
                 width: parent.width
-                Kirigami.Label {
+                Controls.Label {
                     text: "View Set"
                 }
                 Kirigami.BasicListItem {
@@ -146,7 +146,7 @@ Kirigami.ScrollablePage {
                 color: Kirigami.Theme.backgroundColor
             }
             contentItem: ColumnLayout {
-                Kirigami.Label {
+                Controls.Label {
                     text: "Complementary Set"
                 }
                 Kirigami.BasicListItem {
