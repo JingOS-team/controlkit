@@ -38,7 +38,6 @@ MouseArea {
     drag.filterChildren: !Settings.isMobile
     onPressed: {
         mouse.accepted = false;
-        print(flickableParent.touchPressed)
         if (flickableParent.touchPressed) {
             return;
         }
