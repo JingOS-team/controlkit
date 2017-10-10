@@ -20,42 +20,23 @@
 import QtQuick 2.1
 import QtQuick.Window 2.2
 import org.kde.kirigami 2.2
-import QtQuick.Templates 2.0 as T2
+import QtQuick.Controls 2.0 as Controls
 
 /**
- * This is a label which uses the plasma Theme.
+ * This is a label which uses the current Theme.
  *
  * The characteristics of the text will be automatically set according to the
- * plasma Theme. If you need a more customized text item use the Text component
+ * current Theme. If you need a more customized text item use the Text component
  * from QtQuick.
  *
  * You can use all elements of the QML Text component, in particular the "text"
  * property to define the label text.
  *
  * @inherit QtQuick.Templates.Label
+ * @deprecated use QtQuick.Templates.Label directly, it will be styled appropriately
  */
-T2.Label {
-    id: root
-
-    height: Math.round(Math.max(paintedHeight, Units.gridUnit * 1.6))
-    verticalAlignment: lineCount > 1 ? Text.AlignTop : Text.AlignVCenter
-
-    activeFocusOnTab: false
-    renderType: Settings.isMobile || Window.devicePixelRatio % 2 != 0 ? Text.QtRendering : Text.NativeRendering
-
-    font.capitalization: Theme.defaultFont.capitalization
-    font.family: Theme.defaultFont.family
-    font.italic: Theme.defaultFont.italic
-    font.letterSpacing: Theme.defaultFont.letterSpacing
-    font.pointSize: Theme.defaultFont.pointSize
-    font.strikeout: Theme.defaultFont.strikeout
-    font.underline: Theme.defaultFont.underline
-    font.weight: Theme.defaultFont.weight
-    font.wordSpacing: Theme.defaultFont.wordSpacing
-    color: Theme.textColor
-
-    opacity: enabled? 1 : 0.6
-
-    Accessible.role: Accessible.StaticText
-    Accessible.name: text
+Controls.Label {
+    Component.onCompleted: {
+        console.warn("Kirigami.Label is deprecated. Use QtQuickControls2.Label instead")
+    }
 }
