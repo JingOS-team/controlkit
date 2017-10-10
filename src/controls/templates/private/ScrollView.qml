@@ -36,7 +36,16 @@ MouseArea {
     }
 
     drag.filterChildren: !Settings.isMobile
+    onPressed: {
+        mouse.accepted = false;
+        print(flickableParent.touchPressed)
+        if (flickableParent.touchPressed) {
+            return;
+        }
+        flickableItem.interactive = Settings.isMobile;
+    }
     onWheel: {
+        flickableItem.interactive = Settings.isMobile;
         if (Settings.isMobile || flickableItem.contentHeight<flickableItem.height) {
             return;
         }
@@ -81,12 +90,21 @@ MouseArea {
 
     //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
     onHeightChanged: flickableItem.ScrollBar.vertical.height = root.height
-    Item {
+    MultiPointTouchArea {
         id: flickableParent
         anchors {
             fill: parent
         }
         clip: true
+        mouseEnabled: false
+        maximumTouchPoints: 1
+        property bool touchPressed: false
+        onPressed: {
+            touchPressed = true;
+            flickableItem.interactive = true;
+        }
+        onReleased: touchPressed = false;
+        onCanceled: touchPressed = false;
     }
     Component {
         id: flickableComponent
