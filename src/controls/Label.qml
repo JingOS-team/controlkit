@@ -36,6 +36,11 @@ import QtQuick.Controls 2.0 as Controls
  * @deprecated use QtQuick.Templates.Label directly, it will be styled appropriately
  */
 Controls.Label {
+    height: Math.round(Math.max(paintedHeight, Units.gridUnit * 1.6))
+    verticalAlignment: lineCount > 1 ? Text.AlignTop : Text.AlignVCenter
+
+    activeFocusOnTab: false
+
     Component.onCompleted: {
         console.warn("Kirigami.Label is deprecated. Use QtQuickControls2.Label instead")
     }
