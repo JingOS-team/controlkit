@@ -347,6 +347,7 @@ QtObject {
         ScrollView {
             id: scrollView
             anchors.fill: parent
+            alwaysInteractive: true
             horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
         }
     }

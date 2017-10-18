@@ -31,6 +31,9 @@ MouseArea {
 
     readonly property Item verticalScrollBar: flickableItem.ScrollBar.vertical ? flickableItem.ScrollBar.vertical : null
 
+    //FIXME: better api?
+    property bool alwaysInteractive: false
+
     onVerticalScrollBarPolicyChanged: {
         flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy == Qt.ScrollBarAlwaysOff
     }
@@ -38,13 +41,17 @@ MouseArea {
     drag.filterChildren: !Settings.isMobile
     onPressed: {
         mouse.accepted = false;
+        if (alwaysInteractive) {
+            return;
+        }
+
         if (flickableParent.touchPressed) {
             return;
         }
-        flickableItem.interactive = Settings.isMobile;
+        flickableItem.interactive = Settings.isMobile || root.alwaysInteractive;
     }
     onWheel: {
-        flickableItem.interactive = Settings.isMobile;
+        flickableItem.interactive = Settings.isMobile || root.alwaysInteractive;
         if (Settings.isMobile || flickableItem.contentHeight<flickableItem.height) {
             return;
         }
@@ -79,7 +86,7 @@ MouseArea {
             contentItem.parent = flickableItem.contentItem;
         }
         //TODO: find a way to make flicking work on laptops with touch screen
-        flickableItem.interactive = Settings.isMobile;
+        flickableItem.interactive = Settings.isMobile || root.alwaysInteractive;
         flickableItem.anchors.fill = flickableParent;
         flickableItem.ScrollBar.vertical = scrollComponent.createObject(root);
         flickableItem.ScrollBar.vertical.anchors.right = root.right
