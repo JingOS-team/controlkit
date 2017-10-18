@@ -58,6 +58,7 @@ Encoding=UTF-8
 Type=Application
 Exec=kpackagelauncherqml -a org.kde.kirigami2.gallery
 Icon=preferences-desktop-theme
+Categories=Qt;KDE;Development;
 X-KDE-ParentApp=
 X-KDE-PluginInfo-Author=Marco Martin
 X-KDE-PluginInfo-Email=mart@kde.org
