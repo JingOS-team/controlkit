@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.0 as Controls
+import QtQuick 2.6
+import QtQuick.Controls 2.1 as Controls
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.2
 
@@ -107,30 +107,22 @@ ScrollablePage {
         }
     }
 
-    Controls.Popup {
+    Controls.Dialog {
         id: dialog
         modal: true
         focus: true
         x: (page.width - width) / 2
         y: page.height / 2 - height
         width: Math.min(page.width - Units.gridUnit * 4, Units.gridUnit * 20)
-        contentHeight: popupColumn.height
+        standardButtons: Controls.Dialog.Ok
+        title: "Title"
 
-        Column {
-            id: popupColumn
-            spacing: 20
-
-            Controls.Label {
-                width: dialog.availableWidth
-                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id risus id augue euismod accumsan. Nunc vestibulum placerat bibendum. Morbi commodo auctor varius. Donec molestie euismod ultrices. Sed facilisis augue nec eros auctor."
-                wrapMode: Label.Wrap
-            }
-            Controls.Button {
-                anchors.right: parent.right
-                text: "Ok"
-                onClicked: dialog.close()
-            }
+        Controls.Label {
+            width: dialog.availableWidth
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id risus id augue euismod accumsan. Nunc vestibulum placerat bibendum. Morbi commodo auctor varius. Donec molestie euismod ultrices. Sed facilisis augue nec eros auctor."
+            wrapMode: Label.Wrap
         }
+
     }
 
     ColumnLayout {
