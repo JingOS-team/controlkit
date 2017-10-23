@@ -133,7 +133,7 @@ T2.ItemDelegate {
 
     leftPadding: Units.smallSpacing * 2
     topPadding: Units.smallSpacing * 2
-    rightPadding: Units.smallSpacing * 2
+    rightPadding: Units.smallSpacing * 2 + handleMouse.width
     bottomPadding: Units.smallSpacing * 2
 
 //END properties
@@ -234,7 +234,7 @@ T2.ItemDelegate {
             right: parent.right
             top: parent.top
             bottom: parent.bottom
-            rightMargin: listItem.rightPadding
+            rightMargin: Units.smallSpacing
         }
         preventStealing: true
         width: height

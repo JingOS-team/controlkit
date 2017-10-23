@@ -25,7 +25,6 @@ import "../../templates" as T
 T.SwipeListItem {
     id: listItem
 
-    rightPadding: Units.gridUnit
     background: DefaultListItemBackground {}
     implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 4
 }
