@@ -26,5 +26,4 @@ Base.ApplicationWindow {
     id: root
     width: Units.gridUnit * 55
     height: Units.gridUnit * 40
-    wideScreen: true
 }

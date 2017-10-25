@@ -110,7 +110,7 @@ AbstractApplicationWindow {
     property alias pageStack: __pageStack
 
     //redefines here as here we can know a pointer to PageRow
-    wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth*2
+    wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth * 1.5
 
     PageRow {
         id: __pageStack
