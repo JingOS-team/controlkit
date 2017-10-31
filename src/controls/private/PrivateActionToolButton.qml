@@ -61,7 +61,7 @@ Controls.ToolButton {
                 visible: control.action && control.action.iconName != ""
                 color: control.action && control.action.icon && control.action.icon.color.a > 0 ? control.action.icon.color : Qt.rgba(0, 0, 0, 0)                                                                                     
             }
-            Label {
+            Controls.Label {
                 text: action ? action.text : ""
                 visible: control.showText
             }

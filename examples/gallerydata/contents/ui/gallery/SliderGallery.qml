@@ -55,7 +55,7 @@ ScrollablePage {
                 anchors.centerIn: parent
                 spacing: Units.smallSpacing
 
-                Label {
+                Controls.Label {
                     text: "Normal:"
                 }
                 Controls.Slider {
@@ -69,7 +69,7 @@ ScrollablePage {
                         text: slider.position.toFixed(1)
                     }
                 }
-                Label {
+                Controls.Label {
                     text: "Disabled:"
                 }
                 Controls.Slider {
@@ -78,7 +78,7 @@ ScrollablePage {
                     value: 2
                     to: 5.0
                 }
-                Label {
+                Controls.Label {
                     text: "Thickmarks:"
                 }
                 Controls.Slider {
@@ -94,7 +94,7 @@ ScrollablePage {
                     }
                 }
                 Controls.RangeSlider {}
-                Label {
+                Controls.Label {
                     text: "Vertical:"
                 }
                 RowLayout {

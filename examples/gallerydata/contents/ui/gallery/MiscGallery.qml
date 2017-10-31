@@ -57,7 +57,10 @@ ScrollablePage {
         contextualActions: [
             Action {
                 text:"Action for buttons"
-                icon.name: "bookmarks"
+                icon {
+                    name: "bookmarks"
+                    color: Theme.activeTextColor
+                }
                 onTriggered: showPassiveNotification("Action 1 clicked")
             },
             Action {

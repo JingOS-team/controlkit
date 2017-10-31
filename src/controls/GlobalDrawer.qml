@@ -405,7 +405,7 @@ OverlayDrawer {
                                 id: listItem
                                 supportsMouseEvents: true
                                 checked: modelData.checked
-                                icon: modelData.iconName
+                                icon: modelData.icon
                                 label: modelData.text
                                 separatorVisible: false
                                 visible: model ? model.visible || model.visible===undefined : modelData.visible

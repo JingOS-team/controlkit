@@ -40,11 +40,12 @@ AbstractListItem {
 
     /**
      * icon: var
-     * A single icon that will be displayed in the list item. The icon can
-     * be either a QIcon, a string name of a fdo compatible name,
+     * A single icon that will be displayed in the list item.
+     * The icon can be a grouped property with name,size,color etc, as QtQuickControls2 icons are defined.
+     * The icon can also be either a QIcon, a string name of a fdo compatible name,
      * or any url accepted by the Image element.
      */
-    property alias icon: iconItem.source
+    property var icon
 
     /**
      * reserveSpaceForIcon: bool
@@ -62,10 +63,12 @@ AbstractListItem {
         property bool indicateActiveFocus: listItem.pressed || Settings.isMobile || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
         Icon {
             id: iconItem
+            source: listItem.icon && listItem.icon.hasOwnProperty && listItem.icon.hasOwnProperty("name") ? listItem.icon.name : listItem.icon
             Layout.minimumHeight: Units.iconSizes.smallMedium
             Layout.maximumHeight: Layout.minimumHeight
             Layout.minimumWidth: height
             selected: layout.indicateActiveFocus && (listItem.checked || listItem.pressed)
+            color: listItem.icon && listItem.icon.color && listItem.icon.color.a > 0 ? listItem.icon.color : Qt.rgba(0, 0, 0, 0)  
         }
         QQC2.Label {
             id: labelItem
