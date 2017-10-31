@@ -231,7 +231,8 @@ Item {
                     width: height
                     visible: root.action
                     readonly property bool pressed: root.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || root.action.checked)
-                    color: pressed ? Qt.darker(Theme.highlightColor, 1.3) : Theme.highlightColor
+                    property color baseColor: root.action && root.action.icon && root.action.icon.color && root.action.icon.color != undefined && root.action.icon.color.a > 0 ? root.action.icon.color : Theme.highlightColor
+                    color: pressed ? Qt.darker(baseColor, 1.3) : baseColor
 
                     Icon {
                         id: icon
@@ -270,7 +271,8 @@ Item {
                     visible: root.leftAction
 
                     readonly property bool pressed: root.leftAction && ((mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || root.leftAction.checked)
-                    color: pressed ? Theme.highlightColor : Theme.backgroundColor
+                    property color baseColor: root.leftAction && root.leftAction.icon && root.leftAction.icon.color && root.leftAction.icon.color != undefined && root.leftAction.icon.color.a > 0 ? root.leftAction.icon.color : Theme.highlightColor
+                    color: pressed ? baseColor : Theme.backgroundColor
                     Behavior on color {
                         ColorAnimation {
                             duration: Units.longDuration
@@ -304,7 +306,8 @@ Item {
                     width: height + (root.action ? Units.gridUnit*2 : 0)
                     visible: root.rightAction
                     readonly property bool pressed: root.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || root.rightAction.checked)
-                    color: pressed ? Theme.highlightColor : Theme.backgroundColor
+                    property color baseColor: root.rightAction && root.rightAction.icon && root.rightAction.icon.color && root.rightAction.icon.color != undefined && root.rightAction.icon.color.a > 0 ? root.rightAction.icon.color : Theme.highlightColor
+                    color: pressed ? baseColor : Theme.backgroundColor
                     Behavior on color {
                         ColorAnimation {
                             duration: Units.longDuration

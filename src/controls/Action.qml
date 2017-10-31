@@ -104,7 +104,7 @@ QtObject {
      * *color	This property holds the color of the icon.
      *   The icon is tinted with the specified color, unless the color is set to "transparent".
      */
-    property QtObject icon: ActionIconGroup {
+    property ActionIconGroup icon: ActionIconGroup {
         id: iconGroup
     }
 
