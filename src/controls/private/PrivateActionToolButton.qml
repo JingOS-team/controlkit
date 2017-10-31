@@ -57,8 +57,9 @@ Controls.ToolButton {
             Icon {
                 Layout.minimumWidth: 22
                 Layout.minimumHeight: 22
-                source: control.action ? control.action.iconName : ""
+                source: control.action ? (control.action.icon ? control.action.icon.name : control.action.iconName) : ""
                 visible: control.action && control.action.iconName != ""
+                color: control.action && control.action.icon && control.action.icon.color.a > 0 ? control.action.icon.color : Qt.rgba(0, 0, 0, 0)                                                                                     
             }
             Label {
                 text: action ? action.text : ""
