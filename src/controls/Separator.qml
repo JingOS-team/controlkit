@@ -19,6 +19,7 @@
  */
 
 import QtQuick 2.1
+import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.2
 
 /**
@@ -32,5 +33,7 @@ import org.kde.kirigami 2.2
 Rectangle {
     height: Units.devicePixelRatio
     width: Units.devicePixelRatio
+    Layout.preferredWidth: Units.devicePixelRatio
+    Layout.preferredHeight: Units.devicePixelRatio
     color: Qt.tint(Theme.textColor, Qt.rgba(Theme.backgroundColor.r, Theme.backgroundColor.g, Theme.backgroundColor.b, 0.7))
 }
