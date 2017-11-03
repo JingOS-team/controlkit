@@ -256,7 +256,8 @@ T2.Page {
             right: parent.right
             bottom: parent.bottom
         }
-        property T2.Page page: root
+        //It should be T2.Page, Qt 5.7 doesn't like it
+        property Item page: root
         height: item ? item.height : 0
         source: (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0) ||
                 (applicationWindow().footer && applicationWindow().footer.visible && applicationWindow().footer.toString().indexOf("ToolBarApplicationHeader") === 0)
