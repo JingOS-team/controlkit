@@ -31,7 +31,7 @@ Rectangle {
         anchors.fill: parent
         visible: !Settings.isMobile
         color: listItem.activeBackgroundColor
-        opacity: (listItem.hovered || (listItem.highlighted && indicateActiveFocus)) && !listItem.pressed ? 0.2 : 0
+        opacity: (listItem.hovered || listItem.highlighted) && !listItem.pressed ? (indicateActiveFocus ? 0.2 : 0.1 ) : 0
         Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
     }
     Behavior on color {
