@@ -148,9 +148,9 @@ QtObject {
         Theme.colorSet: root.Theme.colorSet
         Theme.inherit: root.Theme.inherit
         //we want to be over any possible OverlayDrawers, including handles
-        parent: root.parent == applicationWindow().overlay ? root.parent.parent : root.parent
+        parent: root.parent
         anchors.fill: parent
-        z: 2000000
+        z: root.parent == applicationWindow().overlay ? 0 : 2000000
         visible: false
         drag.filterChildren: true
         hoverEnabled: true
