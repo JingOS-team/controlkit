@@ -58,6 +58,7 @@ Comment[tr]=Kirigami bileşenlerinin örneklerini gösterir ve onlarla oynamanı
 Comment[uk]=Показує приклади компонентів Kirigami і надає вам змогу попрацювати з ними
 Comment[x-test]=xxShows examples of Kirigami components and allows you to play with themxx
 Comment[zh_CN]=显示 Kirigami 组件实例并允许您试用它们
+Comment[zh_TW]=顯示 Kirigami 組件的範例，讓您可以玩玩看
 
 Encoding=UTF-8
 Type=Application
