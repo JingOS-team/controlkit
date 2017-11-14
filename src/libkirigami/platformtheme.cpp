@@ -67,6 +67,7 @@ public:
     QFont font;
     QPalette palette;
     bool m_inherit = true;
+    bool m_init = true;
 };
 
 PlatformThemePrivate::PlatformThemePrivate(PlatformTheme *q)
@@ -129,6 +130,7 @@ PlatformTheme::PlatformTheme(QObject *parent)
             d->findParentStyle();
         });
     }
+    d->m_init = false;
     //TODO: needs https://codereview.qt-project.org/#/c/206889/ for font changes
 }
 
@@ -153,8 +155,10 @@ void PlatformTheme::setColorSet(PlatformTheme::ColorSet colorSet)
         }
     }
 
-    emit colorSetChanged(colorSet);
-    d->setColorCompressTimer->start();
+    if (!d->m_init) {
+        emit colorSetChanged(colorSet);
+        d->setColorCompressTimer->start();
+    }
 }
 
 PlatformTheme::ColorSet PlatformTheme::colorSet() const
