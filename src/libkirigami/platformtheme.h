@@ -148,6 +148,7 @@ public:
         Tooltip, /** Color set used by tooltips */
         Complementary /** Color set meant to be complementary to Window: usually is a dark theme for light themes */
     };
+    Q_ENUM(ColorSet)
 
     explicit PlatformTheme(QObject *parent = 0);
     ~PlatformTheme();
