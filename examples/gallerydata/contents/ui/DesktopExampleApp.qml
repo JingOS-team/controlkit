@@ -86,7 +86,10 @@ Kirigami.ApplicationWindow {
             },
             Kirigami.Action {
                 text: "Open A Layer"
-                iconName: "configure"
+                icon {
+                    name: "configure"
+                    color: Kirigami.Theme.activeTextColor
+                }
                 onTriggered: {
                     pageStack.layers.push(Qt.resolvedUrl("gallery/LayersGallery.qml"));
                 }

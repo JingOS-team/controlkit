@@ -153,7 +153,7 @@ ApplicationHeader {
                     model: page && page.actions.contextualActions ? page.actions.contextualActions : null
                     delegate: BasicListItem {
                         text: modelData ? modelData.text : ""
-                        icon: modelData.iconName
+                        icon: modelData.icon
                         checkable:  modelData.checkable
                         checked: modelData.checked
                         onClicked: {

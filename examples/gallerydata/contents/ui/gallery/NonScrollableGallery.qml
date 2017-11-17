@@ -29,7 +29,9 @@ Page {
 
     actions {
         main: Action {
-            iconName: sheet.sheetOpen ? "dialog-cancel" : "document-edit"
+            icon {
+                name: sheet.sheetOpen ? "dialog-cancel" : "document-edit"
+            }
             text: "Main Action Text"
             checkable: true
             onCheckedChanged: sheet.sheetOpen = checked;

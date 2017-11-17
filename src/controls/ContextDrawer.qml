@@ -133,7 +133,7 @@ OverlayDrawer {
             }
             delegate: BasicListItem {
                 checked: modelData.checked
-                icon: modelData.iconName
+                icon: modelData.icon
                 supportsMouseEvents: true
                 separatorVisible: false
                 label: model ? (model.tooltip ? model.tooltip : model.text) : (modelData.tooltip ? modelData.tooltip : modelData.text)

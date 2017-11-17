@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.7
+import "private"
 
 /**
  * An item that represents an abstract Action
@@ -71,13 +72,41 @@ QtObject {
      * iconName: string
      * Sets the icon name for the action. This will pick the icon with the given name from the current theme.
      */
-    property string iconName
+    property alias iconName: iconGroup.name
 
     /**
      * iconSource: string
      * Sets the icon file or resource url for the action. Defaults to the empty URL. Use this if you want a specific file rather than an icon from the theme
      */
-    property string iconSource
+    property alias iconSource: iconGroup.source
+
+    /**
+     * metadata for the icon, such as width/height.name and source
+     * * name	This property holds the name of the icon to use.
+     *       The icon will be loaded from the platform theme.
+     *       If the icon is found in the theme, it will always be used;
+     *       even if icon.source is also set. If the icon is not found,
+     *       icon.source will be used instead.
+     *       For more information on theme icons, see QIcon::fromTheme().
+     *
+     * * source	This property holds the name of the icon to use.
+     *       The icon will be loaded as a regular image.
+     *       If icon.name is set and refers to a valid theme icon,
+     *       it will always be used instead of this property.
+     *
+     * * width	This property holds the width of the icon.
+     *   The icon's width will never exceed this value,
+     *   though it will shrink when necessary.
+     *   height	This property holds the height of the icon.
+     *   The icon's height will never exceed this value,
+     *   though it will shrink when necessary.
+     *
+     * *color	This property holds the color of the icon.
+     *   The icon is tinted with the specified color, unless the color is set to "transparent".
+     */
+    property ActionIconGroup icon: ActionIconGroup {
+        id: iconGroup
+    }
 
     /**
      * shortcut : keysequence
