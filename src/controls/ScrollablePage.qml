@@ -108,10 +108,10 @@ Page {
         z: 0
         //child of root as it shouldn't have margins
         parent: root
-        topPadding: (applicationWindow() && applicationWindow().header ? applicationWindow().header.preferredHeight : 0) + (contentItem == flickable ? 0 : root.topPadding)
+        topPadding: (applicationWindow() && applicationWindow().header ? applicationWindow().header.preferredHeight : 0) + (contentItem == flickableItem ? 0 : root.topPadding)
         leftPadding: root.leftPadding
         rightPadding: root.rightPadding
-        bottomPadding: contentItem == flickable ? 0 : root.bottomPadding
+        bottomPadding: contentItem == flickableItem ? 0 : root.bottomPadding
         anchors {
             fill: parent
             topMargin: root.header ? root.header.height : 0
