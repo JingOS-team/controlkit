@@ -89,13 +89,8 @@ MouseArea {
         flickableItem.interactive = Settings.isMobile || root.alwaysInteractive;
         flickableItem.anchors.fill = flickableParent;
         flickableItem.ScrollBar.vertical = scrollComponent.createObject(root);
-        flickableItem.ScrollBar.vertical.anchors.right = root.right
-        flickableItem.ScrollBar.vertical.anchors.top = root.top
-        //flickableItem.ScrollBar.vertical.anchors.bottom = root.bottom
     }
 
-    //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
-    onHeightChanged: flickableItem.ScrollBar.vertical.height = root.height
     MultiPointTouchArea {
         id: flickableParent
         anchors {
@@ -127,6 +122,14 @@ MouseArea {
         ScrollBar {
             z: flickableParent.z + 1
             visible: root.contentItem.visible && size < 1
+
+            //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
+            height: parent.height - anchors.topMargin
+            anchors {
+                topMargin: parent.flickableItem.headerItem ? parent.flickableItem.headerItem.height : 0
+                right: parent.right
+                top: parent.top
+            }
         }
     }
 }
