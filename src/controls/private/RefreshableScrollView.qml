@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.5
+import QtQuick.Window 2.2
 import QtQuick.Controls 2.0 as QQC2
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.2
@@ -157,7 +158,7 @@ P.ScrollView {
                 if (y - busyIndicatorFrame.headerItemHeight > root.topPadding + Units.gridUnit && !applicationWindow().reachableMode) {
                     overshootResetTimer.running = true;
                 //not reachable and not overshooting enough, stop reachability countdown
-                } else if (!applicationWindow().reachableMode) {
+                } else if (typeof(applicationWindow) == "undefined" || !applicationWindow().reachableMode) {
                     //it's important it doesn't restart
                     overshootResetTimer.running = false;
                 }
@@ -229,14 +230,19 @@ P.ScrollView {
     ]
 
     onHeightChanged: {
-        if (!applicationWindow() || !applicationWindow().activeFocusItem) {
+        if (!Window.window) {
+            return;
+        }
+        var focusItem = Window.window.activeFocusItem;
+
+        if (!focusItem) {
             return;
         }
 
         //NOTE: there is no function to know if an item is descended from another,
         //so we have to walk the parent hyerarchy by hand
         var isDescendent = false;
-        var candidate = applicationWindow().activeFocusItem.parent;
+        var candidate = focusItem.parent;
         while (candidate) {
             if (candidate == root) {
                 isDescendent = true;
@@ -249,11 +255,11 @@ P.ScrollView {
         }
 
         var cursorY = 0;
-        if (applicationWindow().activeFocusItem.cursorPosition !== undefined) {
-            cursorY = applicationWindow().activeFocusItem.positionToRectangle(applicationWindow().activeFocusItem.cursorPosition).y;
+        if (focusItem.cursorPosition !== undefined) {
+            cursorY = focusItem.positionToRectangle(focusItem.cursorPosition).y;
         }
 
-        var pos = applicationWindow().activeFocusItem.mapToItem(root.contentItem, 0, cursorY);
+        var pos = focusItem.mapToItem(root.contentItem, 0, cursorY);
 
         //focused item alreqady visible? add some margin for the space of the action buttons
         if (pos.y >= root.flickableItem.contentY && pos.y <= root.flickableItem.contentY + root.flickableItem.height - Units.gridUnit * 8) {
