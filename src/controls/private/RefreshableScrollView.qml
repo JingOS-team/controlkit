@@ -103,6 +103,10 @@ P.ScrollView {
      */
     property int bottomPadding: Units.gridUnit
 
+    /**
+     * Set when this scrollview manages a whole page
+     */
+    property Page page
 
     property Item _swipeFilter
 
@@ -218,7 +222,7 @@ P.ScrollView {
             Binding {
                 target: root.flickableItem
                 property: "bottomMargin"
-                value: Units.gridUnit * 5
+                value: root.page.bottomPadding
             }
 
             Binding {

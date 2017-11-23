@@ -108,6 +108,7 @@ Page {
         z: 0
         //child of root as it shouldn't have margins
         parent: root
+        page: root
         topPadding: (applicationWindow() && applicationWindow().header ? applicationWindow().header.preferredHeight : 0) + (contentItem == flickableItem ? 0 : root.topPadding)
         leftPadding: root.leftPadding
         rightPadding: root.rightPadding

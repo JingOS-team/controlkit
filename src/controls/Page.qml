@@ -55,7 +55,7 @@ T2.Page {
      * bottomPadding: int
      * default contents padding at bottom
      */
-    bottomPadding: Kirigami.Units.gridUnit
+    bottomPadding: actionButtons.item ? actionButtons.height : Kirigami.Units.gridUnit
 
     /**
      * flickable: Flickable
@@ -249,6 +249,7 @@ T2.Page {
     //on material the shadow would bleed over
     clip: header !== undefined
     Loader {
+        id: actionButtons
         z: 9999
         parent: root
         anchors {
