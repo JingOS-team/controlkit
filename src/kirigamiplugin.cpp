@@ -23,6 +23,8 @@
 #include "enums.h"
 #include "desktopicon.h"
 #include "settings.h"
+#include "formlayoutattached.h"
+#include "mnemonicattached.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -88,9 +90,9 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     qmlRegisterUncreatableType<ApplicationHeaderStyle>(uri, 2, 0, "ApplicationHeaderStyle", "Cannot create objects of type ApplicationHeaderStyle");
 
+    //old legacy retrocompatible Theme
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Theme.qml")), uri, 2, 0, "Theme");
-    //Theme changed from a singleton to an attached property
-    qmlRegisterUncreatableType<Kirigami::PlatformTheme>(uri, 2, 2, "Theme", "Cannot create objects of type Theme, use it as an attached poperty");
+
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Units.qml")), uri, 2, 0, "Units");
 
     qmlRegisterType(componentUrl(QStringLiteral("Action.qml")), uri, 2, 0, "Action");
@@ -134,6 +136,15 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("ItemViewHeader.qml")), uri, 2, 1, "ItemViewHeader");
     qmlRegisterType(componentUrl(QStringLiteral("AbstractApplicationItem.qml")), uri, 2, 1, "AbstractApplicationItem");
     qmlRegisterType(componentUrl(QStringLiteral("ApplicationItem.qml")), uri, 2, 1, "ApplicationItem");
+
+    //2.2
+    //Theme changed from a singleton to an attached property
+    qmlRegisterUncreatableType<Kirigami::PlatformTheme>(uri, 2, 2, "Theme", "Cannot create objects of type Theme, use it as an attached poperty");
+
+    //2.3
+    qmlRegisterType(componentUrl(QStringLiteral("FormLayout.qml")), uri, 2, 3, "FormLayout");
+    qmlRegisterUncreatableType<FormLayoutAttached>(uri, 2, 3, "FormData", "Cannot create objects of type FormData, use it as an attached poperty");
+    qmlRegisterUncreatableType<MnemonicAttached>(uri, 2, 3, "MnemonicData", "Cannot create objects of type MnemonicData, use it as an attached poperty");
 
     qmlProtectModule(uri, 2);
 }

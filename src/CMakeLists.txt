@@ -16,6 +16,8 @@ set(kirigami_SRCS
     enums.cpp
     desktopicon.cpp
     settings.cpp
+    formlayoutattached.cpp
+    mnemonicattached.cpp
     ${kirigami_QM_LOADER}
     ${KIRIGAMI_STATIC_FILES}
     )

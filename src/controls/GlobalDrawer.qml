@@ -17,11 +17,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import QtQuick.Templates 2.0 as T2
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.2
+import org.kde.kirigami 2.3
 
 import "private"
 import "templates/private"
@@ -390,12 +390,22 @@ OverlayDrawer {
 
 
                         BasicListItem {
+                            id: backItem
                             visible: level > 0
                             supportsMouseEvents: true
                             icon: (LayoutMirroring.enabled ? "go-previous-symbolic-rtl" : "go-previous-symbolic")
-                            label: qsTr("Back")
+
+                            label: MnemonicData.richTextLabel
+                            MnemonicData.enabled: backItem.enabled && backItem.visible
+                            MnemonicData.controlType: MnemonicData.MenuItem
+                            MnemonicData.label: qsTr("Back")
+
                             separatorVisible: false
                             onClicked: stackView.pop()
+                        }
+                        Shortcut {
+                            sequence: backItem.MnemonicData.sequence
+                            onActivated: backItem.clicked()
                         }
 
                         Repeater {
@@ -405,13 +415,23 @@ OverlayDrawer {
                                 id: listItem
                                 supportsMouseEvents: true
                                 checked: modelData.checked
-                                icon: modelData.icon
-                                label: modelData.text
+
+                                icon: modelData.iconName
+
+                                label: MnemonicData.richTextLabel
+                                MnemonicData.enabled: listItem.enabled && listItem.visible
+                                MnemonicData.controlType: MnemonicData.MenuItem
+                                MnemonicData.label: modelData.text
+
                                 separatorVisible: false
                                 visible: model ? model.visible || model.visible===undefined : modelData.visible
                                 enabled: model ? model.enabled : modelData.enabled
                                 opacity: enabled ? 1.0 : 0.3
                                 Icon {
+                                    Shortcut {
+                                        sequence: listItem.MnemonicData.sequence
+                                        onActivated: listItem.clicked()
+                                    }
                                     isMask: true
                                     anchors {
                                         verticalCenter: contentItem.verticalCenter

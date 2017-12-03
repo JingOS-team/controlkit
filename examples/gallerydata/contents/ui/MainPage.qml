@@ -99,6 +99,10 @@ Kirigami.ScrollablePage {
                 component: "TextField"
             }
             ListElement {
+                text: "Form Layout"
+                component: "FormLayout"
+            }
+            ListElement {
                 text: "Multiple Columns"
                 component: "MultipleColumns"
             }

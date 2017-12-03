@@ -145,7 +145,7 @@ ScrollablePage {
         spacing: Units.smallSpacing
 
         Controls.Button {
-            text: "Open Bottom drawer"
+            text: "Open &Bottom drawer"
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: bottomDrawer.open()
         }

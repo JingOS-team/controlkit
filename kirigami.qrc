@@ -44,6 +44,7 @@
         <file alias="Label.qml">src/controls/Label.qml</file>
         <file alias="BasicListItem.qml">src/controls/BasicListItem.qml</file>
         <file alias="AbstractApplicationHeader.qml">src/controls/AbstractApplicationHeader.qml</file>
+        <file alias="FormLayout.qml">src/controls/FormLayout.qml</file>
         <file alias="styles/Plasma/Theme.qml">src/styles/Plasma/Theme.qml</file>
         <file alias="styles/Plasma/Units.qml">src/styles/Plasma/Units.qml</file>
         <file alias="styles/Plasma/Icon.qml">src/styles/Plasma/Icon.qml</file>
