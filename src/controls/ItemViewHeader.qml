@@ -38,7 +38,7 @@ Kirigami.AbstractItemViewHeader {
 
     property alias backgroundImage: image
 
-    maximumHeight: (backgroundImage.hasImage ? 10 : 6) * Kirigami.Units.gridUnit - (applicationWindow().header ? applicationWindow().header.height : 0)
+    maximumHeight: (backgroundImage.hasImage ? 10 : 6) * Kirigami.Units.gridUnit - (applicationWindow().header ? applicationWindow().header.height : 0) - bottomPadding
     bottomPadding: Kirigami.Units.smallSpacing
     leftPadding: Kirigami.Units.smallSpacing
 
