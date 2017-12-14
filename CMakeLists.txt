@@ -13,7 +13,6 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
    message(FATAL_ERROR "kirigami requires an out of source build. Please create a separate build directory and run 'cmake path_to_kirigami [options]' there.")
 endif()
 
-option(PLASMA_ENABLED "Build and install The Plasma style" ON)
 option(DESKTOP_ENABLED "Build and install The Desktop style" ON)
 option(STATIC_LIBRARY "Build as a static library" OFF)
 option(BUILD_EXAMPLES "Build and install examples" OFF)
@@ -87,17 +86,7 @@ ecm_setup_version(${KF5_VERSION}
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Svg QuickControls2)
 
 if(BUILD_EXAMPLES AND CMAKE_SYSTEM_NAME STREQUAL "Android")
-# treat plasma as an optinal dep: full functionality is expected with only Qt
 find_package(Qt5AndroidExtras ${REQUIRED_QT_VERSION} REQUIRED)
-endif()
-
-if(PLASMA_ENABLED)
-# treat plasma as an optional dep: full functionality is expected with only Qt
-find_package(KF5 ${KF5_DEP_VERSION} COMPONENTS Plasma)
-set_package_properties(KF5Plasma PROPERTIES DESCRIPTION "Plasma framework"
-                       TYPE OPTIONAL
-                       PURPOSE "Optional Look and feel integration with Plasma Mobile."
-                      )
 endif()
 
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
