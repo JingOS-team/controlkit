@@ -12,6 +12,7 @@
         <file alias="private/RefreshableScrollView.qml">src/controls/private/RefreshableScrollView.qml</file>
         <file alias="private/SwipeItemEventFilter.qml">src/controls/private/SwipeItemEventFilter.qml</file>
         <file alias="private/PageActionPropertyGroup.qml">src/controls/private/PageActionPropertyGroup.qml</file>
+        <file alias="private/ActionIconGroup.qml">src/controls/private/ActionIconGroup.qml</file>
         <file alias="private/CornerShadow.qml">src/controls/private/CornerShadow.qml</file>
         <file alias="private/ActionButton.qml">src/controls/private/ActionButton.qml</file>
         <file alias="private/DefaultListItemBackground.qml">src/controls/private/DefaultListItemBackground.qml</file>
@@ -45,9 +46,6 @@
         <file alias="BasicListItem.qml">src/controls/BasicListItem.qml</file>
         <file alias="AbstractApplicationHeader.qml">src/controls/AbstractApplicationHeader.qml</file>
         <file alias="FormLayout.qml">src/controls/FormLayout.qml</file>
-        <file alias="styles/Plasma/Theme.qml">src/styles/Plasma/Theme.qml</file>
-        <file alias="styles/Plasma/Units.qml">src/styles/Plasma/Units.qml</file>
-        <file alias="styles/Plasma/Icon.qml">src/styles/Plasma/Icon.qml</file>
         <file alias="styles/Material/AbstractListItem.qml">src/styles/Material/AbstractListItem.qml</file>
         <file alias="styles/Material/Theme.qml">src/styles/Material/Theme.qml</file>
         <file alias="styles/Material/SwipeListItem.qml">src/styles/Material/SwipeListItem.qml</file>
@@ -59,6 +57,5 @@
         <file alias="styles/org.kde.desktop/SwipeListItem.qml">src/styles/org.kde.desktop/SwipeListItem.qml</file>
         <file alias="styles/org.kde.desktop/ApplicationWindow.qml">src/styles/org.kde.desktop/ApplicationWindow.qml</file>
         <file alias="styles/org.kde.desktop/AbstractApplicationHeader.qml">src/styles/org.kde.desktop/AbstractApplicationHeader.qml</file>
-        <file alias="styles/org.kde.desktop.plasma/Units.qml">src/styles/org.kde.desktop.plasma/Units.qml</file>
     </qresource>
 </RCC>
