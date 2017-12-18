@@ -56,14 +56,14 @@ private:
     QUrl componentUrl(const QString &fileName) const;
     QString resolveFilePath(const QString &path) const
     {
-        return QLatin1Char(':') + path;
+        return QStringLiteral(":/org/kde/kirigami/") + path;
     }
     QString resolveFileUrl(const QString &filePath) const
     {
         if (filePath.startsWith(QLatin1Char(':'))) {
             return QStringLiteral("qrc:") + filePath.right(filePath.length() - 1);
         }
-        return QStringLiteral("qrc:/") + filePath;
+        return QStringLiteral("qrc:/org/kde/kirigami/") + filePath;
     }
     QStringList m_stylesFallbackChain;
 };
