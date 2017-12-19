@@ -27,6 +27,8 @@ class Settings : public QObject
 
     Q_PROPERTY(bool isMobile READ isMobile NOTIFY isMobileChanged)
     Q_PROPERTY(QString style READ style CONSTANT)
+    //TODO: make this adapt without file watchers?
+    Q_PROPERTY(int mouseWheelScrollLines READ mouseWheelScrollLines CONSTANT)
 
 public:
     Settings(QObject *parent=0);
@@ -38,11 +40,14 @@ public:
     QString style() const;
     void setStyle(const QString &style);
 
+    int mouseWheelScrollLines() const;
+
 Q_SIGNALS:
     void isMobileChanged();
 
 private:
     QString m_style;
+    int m_scrollLines = 0;
     bool m_mobile : 1;
 };
 

@@ -20,6 +20,9 @@
 #include "settings.h"
 
 #include <QDebug>
+#include <QStandardPaths>
+#include <QSettings>
+#include <QFile>
 
 Settings::Settings(QObject *parent)
     : QObject(parent)
@@ -31,6 +34,15 @@ Settings::Settings(QObject *parent)
         (QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_MOBILE")) == QStringLiteral("1") ||
          QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_MOBILE")) == QStringLiteral("true"));
 #endif
+
+    const QString configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation, QStringLiteral("kdeglobals"));
+    if (QFile::exists(configPath)) {
+        QSettings globals(configPath, QSettings::IniFormat);
+        globals.beginGroup(QStringLiteral("KDE"));
+        m_scrollLines = qMax(1, globals.value(QStringLiteral("WheelScrollLines"), 3).toInt());
+    } else {
+        m_scrollLines = 3;
+    }
 }
 
 
@@ -61,6 +73,11 @@ QString Settings::style() const
 void Settings::setStyle(const QString &style)
 {
     m_style = style;
+}
+
+int Settings::mouseWheelScrollLines() const
+{
+    return m_scrollLines;
 }
 
 #include "moc_settings.cpp"
