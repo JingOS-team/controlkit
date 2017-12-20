@@ -10,8 +10,7 @@ Kirigami.ScrollablePage {
 
     Kirigami.FormLayout {
         id: layout
-        width: 500
-        height: 500
+
         TextField {
             Kirigami.FormData.label: "Label:"
         }
