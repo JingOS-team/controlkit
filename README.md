@@ -36,7 +36,8 @@ cmake .. \
     -DCMAKE_PREFIX_PATH=/path/to/Qt5.7.0/5.7/{arch}/path/to/Qt5Core \
     -DANDROID_NDK=/path/to/Android/Sdk/ndk-bundle \
     -DANDROID_SDK_ROOT=/path/to/Android/Sdk/ \
-    -DANDROID_SDK_BUILD_TOOLS_REVISION=26.0.2
+    -DANDROID_SDK_BUILD_TOOLS_REVISION=26.0.2 \
+    -DCMAKE_INSTALL_PREFIX=/path/to/dummy/install/prefix
 ```
 
 You need a `-DCMAKE_INSTALL_PREFIX` to somewhere in your home, but using an absolute path.
