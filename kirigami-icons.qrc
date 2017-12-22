@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/org/kde/kirigami/">
         <file alias="icons/application-menu.svg">breeze-icons/icons/actions/32/application-menu.svg</file>
         <file alias="icons/document-decrypt.svg">breeze-icons/icons/actions/32/document-decrypt.svg</file>
         <file alias="icons/folder-sync.svg">breeze-icons/icons/actions/32/folder-sync.svg</file>
