@@ -31,9 +31,6 @@ MouseArea {
 
     readonly property Item verticalScrollBar: flickableItem.ScrollBar.vertical ? flickableItem.ScrollBar.vertical : null
 
-    //FIXME: better api?
-    property bool alwaysInteractive: false
-
     onVerticalScrollBarPolicyChanged: {
         flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy == Qt.ScrollBarAlwaysOff
     }
@@ -41,21 +38,17 @@ MouseArea {
     drag.filterChildren: !Settings.isMobile
     onPressed: {
         mouse.accepted = false;
-        if (alwaysInteractive) {
-            return;
-        }
-
-        if (flickableParent.touchPressed) {
-            return;
-        }
-        flickableItem.interactive = Settings.isMobile || root.alwaysInteractive;
+        flickableItem.interactive = true;
+    }
+    onReleased:  {
+        mouse.accepted = false;
+        flickableItem.interactive = false;
     }
     onWheel: {
-        flickableItem.interactive = Settings.isMobile || root.alwaysInteractive;
+        flickableItem.interactive = false;
         if (Settings.isMobile || flickableItem.contentHeight<flickableItem.height) {
             return;
         }
-        //TODO: config how many lines to scroll?
         var y = wheel.pixelDelta.y != 0 ? wheel.pixelDelta.y : wheel.angleDelta.y / 8;
 
         //if we don't have a pixeldelta, apply the configured mouse wheel lines
@@ -70,14 +63,14 @@ MouseArea {
 
         //this is just for making the scrollbar appear
         flickableItem.flick(0, 0);
-        cancelFlickStateTimer.restart();
+        flickableItem.cancelFlick();
+    }
+    Connections {
+        target: flickableItem
+        onFlickEnded: flickableItem.interactive = false;
+        onMovementEnded: flickableItem.interactive = false;
     }
 
-    Timer {
-        id: cancelFlickStateTimer
-        interval: 150
-        onTriggered: flickableItem.cancelFlick()
-    }
     onContentItemChanged: {
         if (contentItem.hasOwnProperty("contentY")) {
             flickableItem = contentItem;
@@ -91,7 +84,7 @@ MouseArea {
             contentItem.parent = flickableItem.contentItem;
         }
         //TODO: find a way to make flicking work on laptops with touch screen
-        flickableItem.interactive = Settings.isMobile || root.alwaysInteractive;
+        flickableItem.interactive = Settings.isMobile;
         flickableItem.anchors.fill = flickableParent;
         flickableItem.ScrollBar.vertical = scrollComponent.createObject(root);
     }

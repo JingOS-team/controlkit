@@ -137,7 +137,6 @@ QtObject {
     }
 
     Component.onCompleted: {
-        scrollView.flickableItem.interactive = true;
         if (!root.parent) {
             root.parent = applicationWindow().overlay
         }
@@ -290,9 +289,10 @@ QtObject {
             value: scrollView.height
         }
 
-        Connections {
-            target: scrollView.flickableItem
-            function movementEnded() {
+        Timer {
+            id: positionResetTimer
+            interval: 150
+            onTriggered: {
                 //close
                 if ((mainItem.height + scrollView.flickableItem.contentY) < mainItem.height/2) {
                     closeAnimation.to = -mainItem.height;
@@ -313,8 +313,13 @@ QtObject {
                     openAnimation.running = true;
                 }
             }
-            onMovementEnded: movementEnded();
-            onFlickEnded: movementEnded();
+        }
+        Connections {
+            target: scrollView.flickableItem
+            onMovementEnded: positionResetTimer.restart();
+            onFlickEnded: positionResetTimer.restart();
+            onMovementStarted: positionResetTimer.running = false;
+            onFlickStarted: positionResetTimer.running = false;
             onContentHeightChanged: {
                 if (openAnimation.running) {
                     openAnimation.running = false;
@@ -347,7 +352,6 @@ QtObject {
         ScrollView {
             id: scrollView
             anchors.fill: parent
-            alwaysInteractive: true
             horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
         }
     }
