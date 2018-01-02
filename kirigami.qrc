@@ -17,6 +17,7 @@
         <file alias="private/ActionButton.qml">src/controls/private/ActionButton.qml</file>
         <file alias="private/DefaultListItemBackground.qml">src/controls/private/DefaultListItemBackground.qml</file>
         <file alias="private/EdgeShadow.qml">src/controls/private/EdgeShadow.qml</file>
+        <file alias="private/ActionIconGroup.qml">src/controls/private/ActionIconGroup.qml</file>
         <file alias="Separator.qml">src/controls/Separator.qml</file>
         <file alias="OverlayDrawer.qml">src/controls/OverlayDrawer.qml</file>
         <file alias="OverlaySheet.qml">src/controls/OverlaySheet.qml</file>
