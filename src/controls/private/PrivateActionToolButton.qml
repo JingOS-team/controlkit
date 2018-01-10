@@ -29,19 +29,20 @@ Controls.ToolButton {
     implicitHeight: background.implicitHeight
 
     hoverEnabled: true
-    property Action action
+    //TODO: replace with upstream action when we can
+    property Action kirigamiAction
     property bool showText: true
 
     //we need our own text delegate
     text: ""
-    checkable: action && action.checkable
-    checked: action && action.checked
-    enabled: action && action.enabled
+    checkable: kirigamiAction && kirigamiAction.checkable
+    checked: kirigamiAction && kirigamiAction.checked
+    enabled: kirigamiAction && kirigamiAction.enabled
     opacity: enabled ? 1 : 0.4
-    visible: action && action.visible
+    visible: kirigamiAction && kirigamiAction.visible
     onClicked: {
-        if (action) {
-            action.trigger();
+        if (kirigamiAction) {
+            kirigamiAction.trigger();
         }
     }
 
@@ -57,19 +58,19 @@ Controls.ToolButton {
             Icon {
                 Layout.minimumWidth: 22
                 Layout.minimumHeight: 22
-                source: control.action ? (control.action.icon ? control.action.icon.name : control.action.iconName) : ""
-                visible: control.action && control.action.iconName != ""
-                color: control.action && control.action.icon && control.action.icon.color.a > 0 ? control.action.icon.color : Qt.rgba(0, 0, 0, 0)                                                                                     
+                source: control.kirigamiAction ? (control.kirigamiAction.icon ? control.kirigamiAction.icon.name : control.kirigamiAction.iconName) : ""
+                visible: control.kirigamiAction && control.kirigamiAction.iconName != ""
+                color: control.kirigamiAction && control.kirigamiAction.icon && control.kirigamiAction.icon.color.a > 0 ? control.kirigamiAction.icon.color : Qt.rgba(0, 0, 0, 0)                                                                                     
             }
             Controls.Label {
-                text: action ? action.text : ""
+                text: kirigamiAction ? kirigamiAction.text : ""
                 visible: control.showText
             }
         }
     }
     Controls.ToolTip {
         visible: control.hovered
-        text: action ? (action.tooltip.length ? action.tooltip : action.text) : ""
+        text: kirigamiAction ? (kirigamiAction.tooltip.length ? kirigamiAction.tooltip : kirigamiAction.text) : ""
         delay: 1000
         timeout: 5000
         y: control.height

@@ -60,17 +60,17 @@ ApplicationHeader {
             }
             PrivateActionToolButton {
                 anchors.verticalCenter: parent.verticalCenter
-                action: page && page.actions ? page.actions.left : null
+                kirigamiAction: page && page.actions ? page.actions.left : null
                 showText: false
             }
             PrivateActionToolButton {
                 anchors.verticalCenter: parent.verticalCenter
-                action: page && page.actions ? page.actions.main : null
+                kirigamiAction: page && page.actions ? page.actions.main : null
                 showText: false
             }
             PrivateActionToolButton {
                 anchors.verticalCenter: parent.verticalCenter
-                action: page && page.actions ? page.actions.right : null
+                kirigamiAction: page && page.actions ? page.actions.right : null
                 showText: false
             }
             Separator {
@@ -89,7 +89,7 @@ ApplicationHeader {
                     delegate: PrivateActionToolButton {
                         id: actionDelegate
                         anchors.verticalCenter: parent.verticalCenter
-                        action: modelData
+                        kirigamiAction: modelData
                         property bool fits: x+contextActionsContainer.x+layout.x+width < delegateItem.width - moreButton.width
                         onFitsChanged: updateOverflowSet()
                         function updateOverflowSet() {
