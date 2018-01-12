@@ -293,6 +293,7 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
     if (m_changed || node == 0) {
         QImage img;
         const QSize itemSize(width(), height());
+        QRect nodeRect(QPoint(0,0), itemSize);
 
         if (itemSize.width() != 0 && itemSize.height() != 0) {
             const QSize size = itemSize * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
@@ -329,7 +330,11 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
                 img.fill(Qt::transparent);
             }
             if (img.size() != size){
-                img = img.scaled(size, Qt::KeepAspectRatioByExpanding, m_smooth ? Qt::SmoothTransformation : Qt::FastTransformation );
+                // At this point, the image will already be scaled, but we need to output it in
+                // the correct aspect ratio, painted centered in the viewport. So:
+                QRect destination(QPoint(0, 0), img.size().scaled(itemSize, Qt::KeepAspectRatio));
+                destination.moveCenter(nodeRect.center());
+                nodeRect = destination;
             }
         }
         m_changed = false;
@@ -340,7 +345,7 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
             mNode = new ManagedTextureNode;
         }
         mNode->setTexture(s_iconImageCache->loadTexture(window(), img));
-        mNode->setRect(QRect(QPoint(0,0), itemSize));
+        mNode->setRect(nodeRect);
         node = mNode;
     }
 
