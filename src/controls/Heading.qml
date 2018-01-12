@@ -67,7 +67,6 @@ QQC2.Label {
     font.pointSize: headerPointSize(level)
     font.weight: level <= 4 ? Font.Light : Font.Normal
     wrapMode: Text.WordWrap
-    opacity: 0.8
 
     function headerPointSize(l) {
         var n = Theme.defaultFont.pointSize;
