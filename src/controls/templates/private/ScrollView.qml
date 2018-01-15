@@ -56,6 +56,15 @@ MouseArea {
             y *= Settings.mouseWheelScrollLines;
         }
 
+        // Scroll one page regardless of delta:
+        if ((wheel.modifiers & Qt.ControlModifier) || (wheel.modifiers & Qt.ShiftModifier)) {
+            if (y > 0) {
+                y = flickableItem.height;
+            } else if (y < 0) {
+                y = -flickableItem.height;
+            }
+        }
+
         var minYExtent = flickableItem.topMargin - flickableItem.originY;
         var maxYExtent = flickableItem.height - (flickableItem.contentHeight + flickableItem.bottomMargin + flickableItem.originY);
 
