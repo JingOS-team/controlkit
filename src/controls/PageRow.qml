@@ -510,6 +510,7 @@ T.Control {
             height: mainView.height
             width: root.width
             state: page ? (!root.wideMode ? "vertical" : (container.level >= pagesLogic.count - 1 ? "last" : "middle")) : "";
+            acceptedButtons: Qt.LeftButton | Qt.BackButton | Qt.ForwardButton
 
             property int level
 
@@ -526,7 +527,19 @@ T.Control {
                 }
             }
             drag.filterChildren: true
-            onClicked: root.currentIndex = level;
+            onClicked: {
+                switch (mouse.button) {
+                case Qt.BackButton:
+                    root.flickBack();
+                    break;
+                case Qt.ForwardButton:
+                    root.currentIndex = Math.min(root.depth, root.currentIndex + 1);
+                    break;
+                default:
+                    root.currentIndex = level;
+                    break;
+                }
+            }
             onFocusChanged: {
                 if (focus) {
                     root.currentIndex = level;
