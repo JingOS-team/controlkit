@@ -104,9 +104,22 @@ Item {
             property int startX
             property int startMouseY
             property real drawerShowAdjust
-            property bool buttonPressedUnderMouse: false
-            property bool leftButtonPressedUnderMouse: false
-            property bool rightButtonPressedUnderMouse: false
+
+            readonly property int currentThird: (3*mouseX)/width
+            readonly property QtObject actionUnderMouse: {
+                switch(currentThird) {
+                    case 0: return leftAction;
+                    case 1: return action;
+                    case 2: return rightAction;
+                    default: return null
+                }
+            }
+
+            hoverEnabled: true
+
+            Controls.ToolTip.visible: containsMouse && !Settings.isMobile && actionUnderMouse
+            Controls.ToolTip.text: actionUnderMouse ? actionUnderMouse.text : ""
+            Controls.ToolTip.delay: Units.toolTipDelay
 
             onPressed: {
                 //search if we have a page to set to current
@@ -119,9 +132,6 @@ Item {
                 startX = button.x + button.width/2;
                 startMouseY = mouse.y;
                 drawerShowAdjust = 0;
-                buttonPressedUnderMouse = mouse.x > buttonGraphics.x && mouse.x < buttonGraphics.x + buttonGraphics.width;
-                leftButtonPressedUnderMouse = !buttonPressedUnderMouse && leftAction && mouse.x < buttonGraphics.x;
-                rightButtonPressedUnderMouse = !buttonPressedUnderMouse && rightAction && mouse.x > buttonGraphics.x + buttonGraphics.width;
             }
             onReleased: {
                 if (globalDrawer) globalDrawer.peeking = false;
@@ -157,22 +167,13 @@ Item {
                 //*the finger is still on the button
                 if (Math.abs((button.x + button.width/2) - startX) < Units.gridUnit &&
                     mouse.y > 0) {
-                    var action;
-                    if (buttonPressedUnderMouse) {
-                        action = root.action;
-                    } else if (leftButtonPressedUnderMouse) {
-                        action = root.leftAction;
-                    } else if (rightButtonPressedUnderMouse) {
-                        action = root.rightAction;
-                    }
-
-                    if (!action) {
+                    if (!actionUnderMouse) {
                         return;
                     }
 
                     //if an action has been assigned, trigger it
-                    if (action && action.trigger) {
-                        action.trigger();
+                    if (actionUnderMouse && actionUnderMouse.trigger) {
+                        actionUnderMouse.trigger();
                     }
                 }
             }
@@ -182,22 +183,13 @@ Item {
                 button.xChanged();
             }
             onPressAndHold: {
-                var action;
-                if (buttonPressedUnderMouse) {
-                    action = root.action;
-                } else if (leftButtonPressedUnderMouse) {
-                    action = root.leftAction;
-                } else if (rightButtonPressedUnderMouse) {
-                    action = root.rightAction;
-                }
-
-                if (!action) {
+                if (!actionUnderMouse) {
                     return;
                 }
 
                 //if an action has been assigned, show a message like a tooltip
-                if (action && action.text) {
-                    showPassiveNotification(action.text);
+                if (actionUnderMouse && actionUnderMouse.text && Settings.isMobile) {
+                    Controls.ToolTip.show(actionUnderMouse.text, 3000)
                 }
             }
             Connections {
@@ -230,7 +222,7 @@ Item {
                     height: parent.height - Units.smallSpacing*2
                     width: height
                     visible: root.action
-                    readonly property bool pressed: root.action && ((mouseArea.buttonPressedUnderMouse && mouseArea.pressed) || root.action.checked)
+                    readonly property bool pressed: root.action && ((root.action == mouseArea.actionUnderMouse && mouseArea.pressed) || root.action.checked)
                     property color baseColor: root.action && root.action.icon && root.action.icon.color && root.action.icon.color != undefined && root.action.icon.color.a > 0 ? root.action.icon.color : Theme.highlightColor
                     color: pressed ? Qt.darker(baseColor, 1.3) : baseColor
 
@@ -270,7 +262,7 @@ Item {
                     width: height + (root.action ? Units.gridUnit*2 : 0)
                     visible: root.leftAction
 
-                    readonly property bool pressed: root.leftAction && ((mouseArea.leftButtonPressedUnderMouse && mouseArea.pressed) || root.leftAction.checked)
+                    readonly property bool pressed: root.leftAction && ((mouseArea.actionUnderMouse == root.leftAction && mouseArea.pressed) || root.leftAction.checked)
                     property color baseColor: root.leftAction && root.leftAction.icon && root.leftAction.icon.color && root.leftAction.icon.color != undefined && root.leftAction.icon.color.a > 0 ? root.leftAction.icon.color : Theme.highlightColor
                     color: pressed ? baseColor : Theme.backgroundColor
                     Behavior on color {
@@ -305,7 +297,7 @@ Item {
                     height: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                     width: height + (root.action ? Units.gridUnit*2 : 0)
                     visible: root.rightAction
-                    readonly property bool pressed: root.rightAction && ((mouseArea.rightButtonPressedUnderMouse && mouseArea.pressed) || root.rightAction.checked)
+                    readonly property bool pressed: root.rightAction && ((mouseArea.actionUnderMouse == root.rightAction && mouseArea.pressed) || root.rightAction.checked)
                     property color baseColor: root.rightAction && root.rightAction.icon && root.rightAction.icon.color && root.rightAction.icon.color != undefined && root.rightAction.icon.color.a > 0 ? root.rightAction.icon.color : Theme.highlightColor
                     color: pressed ? baseColor : Theme.backgroundColor
                     Behavior on color {

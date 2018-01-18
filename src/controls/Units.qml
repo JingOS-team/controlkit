@@ -100,6 +100,13 @@ QtObject {
     property int shortDuration: 150
 
     /**
+     * time in ms by which the display of tooltips will be delayed.
+     *
+     * @sa ToolTip.delay property
+     */
+    property int toolTipDelay: 700
+
+    /**
      * How much the mouse scroll wheel scrolls, expressed in lines of text.
      * Note: this is strictly for classical mouse wheels, touchpads 2 figer scrolling won't be affected
      */

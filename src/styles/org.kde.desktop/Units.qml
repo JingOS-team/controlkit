@@ -97,6 +97,8 @@ QtObject {
      */
     property int shortDuration: 150
 
+    property int toolTipDelay: 700
+
     readonly property QtObject __styleItem: QtQuickControlsPrivate.StyleItem {elementType: "frame" }
 
     /**
