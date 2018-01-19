@@ -66,28 +66,33 @@ void KirigamiPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QLatin1String("org.kde.kirigami"));
     const QString style = QQuickStyle::name();
 
+#if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     //org.kde.desktop.plasma is a couple of files that fall back to desktop by purpose
     if ((style.isEmpty() || style == QStringLiteral("org.kde.desktop.plasma")) && QFile::exists(resolveFilePath(QStringLiteral("/styles/org.kde.desktop")))) {
-#if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
         m_stylesFallbackChain.prepend(QStringLiteral("org.kde.desktop"));
-#elif defined(Q_OS_ANDROID)
-        m_stylesFallbackChain.prepend(QStringLiteral("Material"));
-#else // do we have an iOS specific style?
-        m_stylesFallbackChain.prepend(QStringLiteral("Material"));
-#endif
     }
+#elif defined(Q_OS_ANDROID)
+    if (!m_stylesFallbackChain.contains(QStringLiteral("Material"))) {
+        m_stylesFallbackChain.prepend(QStringLiteral("Material"));
+    }
+#else // do we have an iOS specific style?
+    if (!m_stylesFallbackChain.contains(QStringLiteral("Material"))) {
+        m_stylesFallbackChain.prepend(QStringLiteral("Material"));
+    }
+#endif
 
-    if (!style.isEmpty() && QFile::exists(resolveFilePath(QStringLiteral("/styles/") + style))) {
+    if (!style.isEmpty() && QFile::exists(resolveFilePath(QStringLiteral("/styles/") + style)) && !m_stylesFallbackChain.contains(style)) {
         m_stylesFallbackChain.prepend(style);
         //if we have plasma deps installed, use them for extra integration
         if (style == QStringLiteral("org.kde.desktop") && QFile::exists(resolveFilePath(QStringLiteral("/styles/org.kde.desktop.plasma")))) {
             m_stylesFallbackChain.prepend("org.kde.desktop.plasma");
         }
     } else {
+#if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
         m_stylesFallbackChain.prepend(QStringLiteral("org.kde.desktop"));
+#endif
     }
     //At this point the fallback chain will be selected->org.kde.desktop->Fallback
-
     s_selectedStyle = m_stylesFallbackChain.first();
 
     qmlRegisterSingletonType<Settings>(uri, 2, 0, "Settings",

@@ -36,6 +36,12 @@ public:
     void registerTypes(const char *uri) Q_DECL_OVERRIDE;
 
 #ifdef KIRIGAMI_BUILD_TYPE_STATIC
+    static KirigamiPlugin& getInstance()
+    {
+         static KirigamiPlugin instance;
+         return instance;
+    }
+
     static void registerTypes()
     {
         static KirigamiPlugin instance;
