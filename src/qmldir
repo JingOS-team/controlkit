@@ -1,24 +1,39 @@
 module org.kde.kirigami
 
-AbstractApplicationHeader 2.0 templates/AbstractApplicationHeader.qml
-AbstractApplicationWindow 2.0 templates/AbstractApplicationWindow.qml
-AbstractListItem 2.0 templates/AbstractListItem.qml
-Action 2.0 templates/Action.qml
-ApplicationHeader 2.0 templates/ApplicationHeader.qml
-ApplicationWindow 2.0 templates/ApplicationWindow.qml
-OverlayDrawer 2.0 templates/OverlayDrawer.qml
-OverlaySheet 2.0 templates/OverlaySheet.qml
-Page 2.0 templates/Page.qml
-SplitDrawer 2.0 templates/SplitDrawer.qml
-SwipeListItem 2.0 templates/SwipeListItem.qml
+classname KirigamiPlugin
+depends QtQuick.Controls 1.4
+depends QtQuick.Controls.Private 1.0
+depends QtQuick.Controls 2.0
+depends QtGraphicalEffects 1.0
+designersupported
 
-PageRow 2.0 controls/PageRow.qml
-BasicListItem 2.0 controls/BasicListItem.qml
-ContextDrawer 2.0 controls/ContextDrawer.qml
-GlobalDrawer 2.0 controls/GlobalDrawer.qml
-Heading 2.0 controls/Heading.qml
-Icon 2.0 controls/Icon.qml
-Label 2.0 controls/Label.qml
-ScrollablePage 2.0 controls/ScrollablePage.qml
-Theme 2.0 controls/Theme.qml
-Units 2.0 controls/Units.qml
+typeinfo plugins.qmltypes
+
+singleton Theme 2.2 Theme.qml
+
+OverlaySheet 2.0 OverlaySheet.qml
+ApplicationItem 2.1 ApplicationItem.qml
+AbstractApplicationWindow 2.0 AbstractApplicationWindow.qml
+FormLayout 2.3 FormLayout.qml
+GlobalDrawer 2.0 GlobalDrawer.qml
+BasicListItem 2.0 BasicListItem.qml
+AbstractItemViewHeader 2.1 AbstractItemViewHeader.qml
+Heading 2.0 Heading.qml
+Action 2.0 Action.qml
+Separator 2.0 Separator.qml
+ItemViewHeader 2.1 ItemViewHeader.qml
+SwipeListItem 2.0 SwipeListItem.qml
+AbstractListItem 2.0 AbstractListItem.qml
+Icon 2.0 Icon.qml
+Units 2.0 Units.qml
+Page 2.0 Page.qml
+Label 2.0 Label.qml
+AbstractApplicationItem 2.1 AbstractApplicationItem.qml
+ToolBarApplicationHeader 2.0 ToolBarApplicationHeader.qml
+ScrollablePage 2.0 ScrollablePage.qml
+ApplicationHeader 2.0 ApplicationHeader.qml
+AbstractApplicationHeader 2.0 AbstractApplicationHeader.qml
+ContextDrawer 2.0 ContextDrawer.qml
+ApplicationWindow 2.0 ApplicationWindow.qml
+PageRow 2.0 PageRow.qml
+

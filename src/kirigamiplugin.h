@@ -22,53 +22,10 @@
 #ifndef MOBILECOMPONENTSPLUGIN_H
 #define MOBILECOMPONENTSPLUGIN_H
 
-#ifdef KIRIGAMI_BUILD_TYPE_STATIC
-#include <QObject>
-#include <QString>
 #include <QUrl>
-#else
+
 #include <QQmlEngine>
 #include <QQmlExtensionPlugin>
-#include <QUrl>
-#endif
-
-
-#ifdef KIRIGAMI_BUILD_TYPE_STATIC
-
-class KirigamiPlugin : public QObject
-{
-public:
-    static KirigamiPlugin& getInstance()
-    {
-        static KirigamiPlugin instance;
-        return instance;
-    }
-    KirigamiPlugin(KirigamiPlugin const&) = delete;
-    void operator=(KirigamiPlugin const&) = delete;
-    void registerTypes(const char *uri);
-    static void registerTypes()
-    {
-        getInstance().registerTypes("org.kde.kirigami");
-    }
-
-private:
-    KirigamiPlugin() {}
-    QUrl componentUrl(const QString &fileName) const;
-    QString resolveFilePath(const QString &path) const
-    {
-        return QStringLiteral(":/org/kde/kirigami/") + path;
-    }
-    QString resolveFileUrl(const QString &filePath) const
-    {
-        if (filePath.startsWith(QLatin1Char(':'))) {
-            return QStringLiteral("qrc:") + filePath.right(filePath.length() - 1);
-        }
-        return QStringLiteral("qrc:/org/kde/kirigami/") + filePath;
-    }
-    QStringList m_stylesFallbackChain;
-};
-
-#else
 
 class KirigamiPlugin : public QQmlExtensionPlugin
 {
@@ -78,19 +35,33 @@ class KirigamiPlugin : public QQmlExtensionPlugin
 public:
     void registerTypes(const char *uri) Q_DECL_OVERRIDE;
 
+#ifdef KIRIGAMI_BUILD_TYPE_STATIC
+    static void registerTypes()
+    {
+        static KirigamiPlugin instance;
+        instance.registerTypes("org.kde.kirigami");
+    }
+#endif
+
 private:
     QUrl componentUrl(const QString &fileName) const;
     QString resolveFilePath(const QString &path) const
     {
+#ifdef KIRIGAMI_BUILD_TYPE_STATIC
+        return QStringLiteral(":/org/kde/kirigami/") + path;
+#else
         return baseUrl().toLocalFile() + QLatin1Char('/') + path;
+#endif
     }
     QString resolveFileUrl(const QString &filePath) const
     {
+#ifdef KIRIGAMI_BUILD_TYPE_STATIC
+        return filePath;
+#else
         return baseUrl().toString() + QLatin1Char('/') + filePath;
+#endif
     }
     QStringList m_stylesFallbackChain;
 };
-
-#endif
 
 #endif

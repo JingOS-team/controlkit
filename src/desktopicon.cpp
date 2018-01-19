@@ -19,7 +19,7 @@
  */
 
 #include "desktopicon.h"
-#include "platformtheme.h"
+#include "libkirigami/platformtheme.h"
 
 #include <QSGSimpleTextureNode>
 #include <qquickwindow.h>
