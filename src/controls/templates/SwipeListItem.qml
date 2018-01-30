@@ -147,7 +147,7 @@ T2.ItemDelegate {
         }
         Rectangle {
             id: shadowHolder
-            color: Theme.backgroundColor
+            color: Qt.darker(Theme.backgroundColor, 1.05);
             anchors.fill: parent
         }
         EdgeShadow {
