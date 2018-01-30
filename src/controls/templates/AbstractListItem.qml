@@ -99,9 +99,9 @@ T2.ItemDelegate {
     default property alias _default: listItem.contentItem
 
     Theme.colorSet: Theme.View
-    leftPadding: Units.smallSpacing * 2
+    leftPadding: !LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical ? Units.smallSpacing * 2 : internal.view.T2.ScrollBar.vertical.width
     topPadding: Units.smallSpacing * 2
-    rightPadding: Units.smallSpacing * 2
+    rightPadding: LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical ? Units.smallSpacing * 2 : internal.view.T2.ScrollBar.vertical.width
     bottomPadding: Units.smallSpacing * 2
 
     implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
@@ -116,6 +116,11 @@ T2.ItemDelegate {
     height: visible ? implicitHeight : 0
 
     hoverEnabled: true
+
+    QtObject {
+        id: internal
+        property Flickable view: listItem.ListView.view || listItem.parent.ListView.view
+    }
 
     Accessible.role: Accessible.ListItem
 }
