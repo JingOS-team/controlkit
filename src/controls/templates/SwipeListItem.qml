@@ -142,6 +142,7 @@ T2.ItemDelegate {
         id: behindItem
         parent: listItem
         z: -1
+        property Flickable view: listItem.ListView.view || listItem.parent.ListView.view
         anchors {
             fill: parent
         }
@@ -234,7 +235,7 @@ T2.ItemDelegate {
             right: parent.right
             top: parent.top
             bottom: parent.bottom
-            rightMargin: listItem.ListView && listItem.ListView.view.T2.ScrollBar && listItem.ListView.view.T2.ScrollBar.vertical && listItem.ListView.view.T2.ScrollBar.vertical.interactive ? listItem.ListView.view.T2.ScrollBar.vertical.width : Units.smallSpacing
+            rightMargin: behindItem.view && behindItem.view.T2.ScrollBar && behindItem.view.T2.ScrollBar.vertical && behindItem.view.T2.ScrollBar.vertical.interactive ? behindItem.view.T2.ScrollBar.vertical.width : Units.smallSpacing
         }
         preventStealing: true
         width: height
@@ -308,12 +309,12 @@ T2.ItemDelegate {
         //this will happen only once
         if (Settings.isMobile && !swipeFilterConnection.swipeFilterItem) {
             var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
-            listItem.ListView.view.parent.parent._swipeFilter = component.createObject(listItem.ListView.view.parent.parent);
+            behindItem.view.parent.parent._swipeFilter = component.createObject(behindItem.view.parent.parent);
         }
     }
     Connections {
         id: swipeFilterConnection
-        readonly property QtObject swipeFilterItem: (listItem.ListView && listItem.ListView.view && listItem.ListView.view.parent && listItem.ListView.view.parent.parent) ? listItem.ListView.view.parent.parent._swipeFilter : null
+        readonly property QtObject swipeFilterItem: (behindItem.view && behindItem.view && behindItem.view.parent && behindItem.view.parent.parent) ? behindItem.view.parent.parent._swipeFilter : null
         readonly property bool enabled: swipeFilterItem ? swipeFilterItem.currentItem === listItem : false
         target: enabled ? swipeFilterItem : null
         onPeekChanged: listItem.background.x = -(listItem.background.width - listItem.background.height) * swipeFilterItem.peek
