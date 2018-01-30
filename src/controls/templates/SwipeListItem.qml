@@ -131,9 +131,9 @@ T2.ItemDelegate {
     width: parent ? parent.width : implicitWidth
     implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5
 
-    leftPadding: Units.smallSpacing * 2
+    leftPadding: Units.smallSpacing * 2 + (LayoutMirroring.enabled ?  handleMouse.width + handleMouse.anchors.rightMargin : 0)
     topPadding: Units.smallSpacing * 2
-    rightPadding: Units.smallSpacing * 2 + handleMouse.width + handleMouse.anchors.rightMargin
+    rightPadding: Units.smallSpacing * 2 + (LayoutMirroring.enabled ?  0 : handleMouse.width + handleMouse.anchors.rightMargin)
     bottomPadding: Units.smallSpacing * 2
 
 //END properties
@@ -159,8 +159,8 @@ T2.ItemDelegate {
             }
         }
         EdgeShadow {
-            edge: Qt.LeftEdge
-            x: listItem.background.x + listItem.background.width
+            edge: LayoutMirroring.enabled ? Qt.RightEdge : Qt.LeftEdge
+            x: LayoutMirroring.enabled ? listItem.background.x - width : (listItem.background.x + listItem.background.width)
             anchors {
                 top: parent.top
                 bottom: parent.bottom
@@ -182,7 +182,7 @@ T2.ItemDelegate {
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
-                rightMargin: listItem.rightPadding
+                rightMargin: LayoutMirroring.enabled ? listItem.leftPadding : listItem.rightPadding
             }
             height: Math.min( parent.height / 1.5, Units.iconSizes.medium)
             width: childrenRect.width
@@ -245,7 +245,7 @@ T2.ItemDelegate {
         onClicked: {
             positionAnimation.from = background.x;
             if (listItem.background.x > -listItem.background.width/2) {
-                positionAnimation.to = -listItem.width + height + handleMouse.anchors.rightMargin;
+                positionAnimation.to = (LayoutMirroring.enabled ? -1 : +1) * (-listItem.width + height + handleMouse.anchors.rightMargin);
             } else {
                 positionAnimation.to = 0;
             }
@@ -257,16 +257,23 @@ T2.ItemDelegate {
             startMouseX = mouse.x;
         }
         onPositionChanged: {
-            listItem.background.x = Math.min(0, Math.max(-listItem.width + height, listItem.background.x - (startMouseX - mouse.x)));
+            if (LayoutMirroring.enabled) {
+                listItem.background.x = Math.max(0, Math.min(listItem.width - height, listItem.background.x - (startMouseX - mouse.x)));
+            } else {
+                listItem.background.x = Math.min(0, Math.max(-listItem.width + height, listItem.background.x - (startMouseX - mouse.x)));
+            }
         }
         onReleased: {
             var speed = ((startX - listItem.background.x) / ((new Date()).getTime() - downTimestamp) * 1000);
+            if (LayoutMirroring.enabled) {
+                speed = -speed;
+            }
 
             if (Math.abs(speed) < Units.gridUnit) {
                 return;
             }
             if (speed > listItem.width/2) {
-                positionAnimation.to = -listItem.width + height + handleMouse.anchors.rightMargin;
+                positionAnimation.to = (LayoutMirroring.enabled ? -1 : +1) * (-listItem.width + height + handleMouse.anchors.rightMargin);
             } else {
                 positionAnimation.to = 0;
             }
@@ -280,7 +287,7 @@ T2.ItemDelegate {
             width: Units.iconSizes.smallMedium
             height: width
             x: y
-            source: listItem.background.x < -listItem.background.width/2 ? "handle-right" : "handle-left"
+            source: (LayoutMirroring.enabled ? (listItem.background.x < listItem.background.width/2 ? "handle-right" : "handle-left") : (listItem.background.x < -listItem.background.width/2 ? "handle-right" : "handle-left"))
         }
     }
 
