@@ -234,7 +234,7 @@ T2.ItemDelegate {
             right: parent.right
             top: parent.top
             bottom: parent.bottom
-            rightMargin: listItem.ListView && listItem.ListView.view.T2.ScrollBar && listItem.ListView.view.T2.ScrollBar.vertical ? listItem.ListView.view.T2.ScrollBar.vertical.width : Units.smallSpacing
+            rightMargin: listItem.ListView && listItem.ListView.view.T2.ScrollBar && listItem.ListView.view.T2.ScrollBar.vertical && listItem.ListView.view.T2.ScrollBar.vertical.interactive ? listItem.ListView.view.T2.ScrollBar.vertical.width : Units.smallSpacing
         }
         preventStealing: true
         width: height
@@ -245,7 +245,7 @@ T2.ItemDelegate {
         onClicked: {
             positionAnimation.from = background.x;
             if (listItem.background.x > -listItem.background.width/2) {
-                positionAnimation.to = -listItem.width + height;
+                positionAnimation.to = -listItem.width + height + handleMouse.anchors.rightMargin;
             } else {
                 positionAnimation.to = 0;
             }
