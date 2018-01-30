@@ -266,7 +266,7 @@ T2.ItemDelegate {
                 return;
             }
             if (speed > listItem.width/2) {
-                positionAnimation.to = -listItem.width + height;
+                positionAnimation.to = -listItem.width + height + handleMouse.anchors.rightMargin;
             } else {
                 positionAnimation.to = 0;
             }
