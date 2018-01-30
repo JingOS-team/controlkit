@@ -133,7 +133,7 @@ T2.ItemDelegate {
 
     leftPadding: Units.smallSpacing * 2
     topPadding: Units.smallSpacing * 2
-    rightPadding: Units.smallSpacing * 2 + handleMouse.width
+    rightPadding: Units.smallSpacing * 2 + handleMouse.width + handleMouse.anchors.rightMargin
     bottomPadding: Units.smallSpacing * 2
 
 //END properties
@@ -234,7 +234,7 @@ T2.ItemDelegate {
             right: parent.right
             top: parent.top
             bottom: parent.bottom
-            rightMargin: Units.smallSpacing
+            rightMargin: listItem.ListView && listItem.ListView.view.T2.ScrollBar && listItem.ListView.view.T2.ScrollBar.vertical ? listItem.ListView.view.T2.ScrollBar.vertical.width : Units.smallSpacing
         }
         preventStealing: true
         width: height
