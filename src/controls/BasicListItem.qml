@@ -67,14 +67,14 @@ AbstractListItem {
             Layout.minimumHeight: Units.iconSizes.smallMedium
             Layout.maximumHeight: Layout.minimumHeight
             Layout.minimumWidth: height
-            selected: layout.indicateActiveFocus && (listItem.checked || listItem.pressed)
+            selected: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || listItem.pressed)
             color: listItem.icon && listItem.icon.color && listItem.icon.color.a > 0 ? listItem.icon.color : Qt.rgba(0, 0, 0, 0)  
         }
         QQC2.Label {
             id: labelItem
             text: listItem.text
             Layout.fillWidth: true
-            color: layout.indicateActiveFocus && (listItem.checked || listItem.pressed) ? listItem.activeTextColor : listItem.textColor
+            color: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || listItem.pressed) ? listItem.activeTextColor : listItem.textColor
             elide: Text.ElideRight
             font: listItem.font
         }
