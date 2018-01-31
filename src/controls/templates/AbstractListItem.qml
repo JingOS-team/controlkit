@@ -122,7 +122,7 @@ T2.ItemDelegate {
 
     QtObject {
         id: internal
-        property Flickable view: listItem.ListView.view || listItem.parent.ListView.view
+        property Flickable view: listItem.ListView.view || (listItem.parent ? listItem.parent.ListView.view : null)
         property bool indicateActiveFocus: listItem.pressed || Settings.isMobile || listItem.activeFocus || (view ? view.activeFocus : false)
     }
 
