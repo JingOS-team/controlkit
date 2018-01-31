@@ -98,7 +98,7 @@ T2.ItemDelegate {
      * Color for the text in the item
      *
      * Note: if custom text elements are inserted in an AbstractListItem,
-     * their color proprty will ahve to be manually binded with this property
+     * their color property will have to be manually bound with this property
      */
     property color textColor: Theme.textColor
 
@@ -114,7 +114,7 @@ T2.ItemDelegate {
      * It is advised to leave the default value (Theme.highlightedTextColor)
      *
      * Note: if custom text elements are inserted in an AbstractListItem,
-     * their color proprty will ahve to be manually binded with this property
+     * their color property will have to be manually bound with this property
      */
     property color activeTextColor: Theme.highlightedTextColor
 
