@@ -99,9 +99,9 @@ T2.ItemDelegate {
     default property alias _default: listItem.contentItem
 
     Theme.colorSet: Theme.View
-    leftPadding: !LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical ? Units.smallSpacing * 2 : internal.view.T2.ScrollBar.vertical.width
+    leftPadding: !LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical ? internal.view.T2.ScrollBar.vertical.width : Units.smallSpacing * 2
     topPadding: Units.smallSpacing * 2
-    rightPadding: LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical ? Units.smallSpacing * 2 : internal.view.T2.ScrollBar.vertical.width
+    rightPadding: LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical ? internal.view.T2.ScrollBar.vertical.width : Units.smallSpacing * 2
     bottomPadding: Units.smallSpacing * 2
 
     implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
