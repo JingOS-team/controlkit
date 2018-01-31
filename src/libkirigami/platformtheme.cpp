@@ -45,6 +45,7 @@ public:
     PlatformTheme *q;
     QTimer *setColorCompressTimer;
     PlatformTheme::ColorSet m_colorSet = PlatformTheme::Window;
+    PlatformTheme::ColorGroup m_colorGroup = PlatformTheme::Active;
     QSet<PlatformTheme *> m_childThemes;
     QPointer<PlatformTheme> m_parentTheme;
 
@@ -164,6 +165,31 @@ void PlatformTheme::setColorSet(PlatformTheme::ColorSet colorSet)
 PlatformTheme::ColorSet PlatformTheme::colorSet() const
 {
     return d->m_colorSet;
+}
+
+void PlatformTheme::setColorGroup(PlatformTheme::ColorGroup colorGroup)
+{
+    if (d->m_colorGroup == colorGroup) {
+        return;
+    }
+
+    d->m_colorGroup = colorGroup;
+
+    for (PlatformTheme *t : d->m_childThemes) {
+        if (t->inherit()) {
+            t->setColorGroup(colorGroup);
+        }
+    }
+
+    if (!d->m_init) {
+        emit colorGroupChanged(colorGroup);
+        d->setColorCompressTimer->start();
+    }
+}
+
+PlatformTheme::ColorGroup PlatformTheme::colorGroup() const
+{
+    return d->m_colorGroup;
 }
 
 bool PlatformTheme::inherit() const

@@ -134,11 +134,25 @@ BasicTheme::BasicTheme(QObject *parent)
                     QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagateColorSet", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, colorSet()));
                 }
             });
+    connect(this, &BasicTheme::colorGroupChanged,
+            this, &BasicTheme::syncColors);
     syncColors();
 }
 
 BasicTheme::~BasicTheme()
 {
+}
+
+static inline QColor colorGroupTint(const QColor &color, PlatformTheme::ColorGroup group)
+{
+    switch (group) {
+    case PlatformTheme::Inactive:
+        return QColor::fromHsvF(color.hueF(), color.saturationF() * 0.5, color.valueF());
+    case PlatformTheme::Disabled:
+        return QColor::fromHsvF(color.hueF(), color.saturationF() * 0.5, color.valueF()*0.8);
+    default:
+        return color;
+    }
 }
 
 //TODO: tint for which we need to chain to m_parentBasicTheme's color
@@ -164,10 +178,12 @@ BasicTheme::~BasicTheme()
     default:\
         color = basicThemeDeclarative()->instance(this)->property(#colorName).value<QColor>();\
     }\
+    color = colorGroupTint(color, colorGroup());
 
 
 #define PROXYCOLOR(colorName, upperCaseColor) \
-    basicThemeDeclarative()->instance(this)->property(#colorName).value<QColor>()
+    colorGroupTint(basicThemeDeclarative()->instance(this)->property(#colorName).value<QColor>(), colorGroup())
+
 
 
 void BasicTheme::syncColors()

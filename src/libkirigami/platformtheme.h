@@ -57,6 +57,14 @@ class KIRIGAMI2_EXPORT PlatformTheme : public QObject
     Q_PROPERTY(ColorSet colorSet READ colorSet WRITE setColorSet NOTIFY colorSetChanged)
 
     /**
+     * This enumeration describes the color group used to generate the colors.
+     * The enum value is based upon QPalette::CpolorGroup and has the same values.
+     * It's redefined here in order to make it work with QML
+     * @since 4.43
+     */
+    Q_PROPERTY(ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
+
+    /**
      * If true, the colorSet will be inherited from the colorset of a theme of one
      * of the ancestor items
      * default: true
@@ -134,9 +142,8 @@ class KIRIGAMI2_EXPORT PlatformTheme : public QObject
 
     // font and palette
     Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
+    //Active palette
     Q_PROPERTY(QPalette palette READ palette NOTIFY paletteChanged)
-
-    Q_ENUMS(ColorSet)
 
 public:
 
@@ -150,11 +157,22 @@ public:
     };
     Q_ENUM(ColorSet)
 
+    enum ColorGroup {
+        Disabled = QPalette::Disabled,
+        Active = QPalette::Active,
+        Inactive = QPalette::Inactive,
+        Normal = QPalette::Normal
+    };
+    Q_ENUM(ColorGroup)
+
     explicit PlatformTheme(QObject *parent = 0);
     ~PlatformTheme();
 
     void setColorSet(PlatformTheme::ColorSet);
     PlatformTheme::ColorSet colorSet() const;
+
+    void setColorGroup(PlatformTheme::ColorGroup);
+    PlatformTheme::ColorGroup colorGroup() const;
 
     bool inherit() const;
     void setInherit(bool inherit);
@@ -195,6 +213,7 @@ Q_SIGNALS:
     void colorsChanged();
     void defaultFontChanged(const QFont &font);
     void colorSetChanged(Kirigami::PlatformTheme::ColorSet colorSet);
+    void colorGroupChanged(Kirigami::PlatformTheme::ColorGroup colorGroup);
     void paletteChanged(const QPalette &pal);
     void inheritChanged(bool inherit);
 

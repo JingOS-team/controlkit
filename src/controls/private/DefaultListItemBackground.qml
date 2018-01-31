@@ -22,7 +22,7 @@ import org.kde.kirigami 2.2
 
 Rectangle {
     id: background
-    color: listItem.checked || (listItem.supportsMouseEvents && listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? (internal.indicateActiveFocus ? listItem.activeBackgroundColor : Qt.tint(listItem.backgroundColor, Qt.rgba(listItem.activeBackgroundColor.r, listItem.activeBackgroundColor.g, listItem.activeBackgroundColor.b, 0.3))) : listItem.backgroundColor
+    color: listItem.checked || (listItem.supportsMouseEvents && listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeBackgroundColor : listItem.backgroundColor
 
     visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
     Rectangle {
