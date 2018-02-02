@@ -44,6 +44,9 @@ QtObject {
      *
      * Note: The content item is automatically resized inside the
      * padding of the control.
+     * Conversely, the Sheet will be sized based on the size hints
+     * of the contentItem, so if you need a cusom size sheet,
+     * redefine contentWidth and contentHeight of your contentItem
      */
     default property Item contentItem
 
