@@ -84,6 +84,18 @@ Page {
     property alias flickable: scrollView.flickableItem
 
     /**
+     * verticalScrollBarPolicy: Qt.ScrollBarPolicy
+     * The vertical scrollbar policy
+     */
+    property alias verticalScrollBarPolicy: scrollView.verticalScrollBarPolicy
+
+    /**
+     * horizontalScrollBarPolicy: Qt.ScrollBarPolicy
+     * The horizontal scrollbar policy
+     */
+    property alias horizontalScrollBarPolicy: scrollView.horizontalScrollBarPolicy
+
+    /**
      * The main content Item of this page.
      * In the case of a ListView or GridView, both contentItem and flickable
      * will be a pointer to the ListView (or GridView)

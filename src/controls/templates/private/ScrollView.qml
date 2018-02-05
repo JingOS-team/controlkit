@@ -32,7 +32,8 @@ MouseArea {
     readonly property Item verticalScrollBar: flickableItem.ScrollBar.vertical ? flickableItem.ScrollBar.vertical : null
 
     onVerticalScrollBarPolicyChanged: {
-        flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy == Qt.ScrollBarAlwaysOff
+        if (flickableItem.ScrollBar.vertical)
+            flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy != Qt.ScrollBarAlwaysOff
     }
 
     drag.filterChildren: !Settings.isMobile
@@ -95,7 +96,9 @@ MouseArea {
         //TODO: find a way to make flicking work on laptops with touch screen
         flickableItem.interactive = Settings.isMobile;
         flickableItem.anchors.fill = flickableParent;
-        flickableItem.ScrollBar.vertical = scrollComponent.createObject(root);
+
+        if ((!flickableItem.ScrollBar.vertical) && verticalScrollBarPolicy != Qt.ScrollBarAlwaysOff)
+            flickableItem.ScrollBar.vertical = scrollComponent.createObject(root);
     }
 
     MultiPointTouchArea {
