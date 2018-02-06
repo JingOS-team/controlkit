@@ -32,8 +32,16 @@ MouseArea {
     readonly property Item verticalScrollBar: flickableItem.ScrollBar.vertical ? flickableItem.ScrollBar.vertical : null
 
     onVerticalScrollBarPolicyChanged: {
-        if (flickableItem.ScrollBar.vertical)
-            flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy != Qt.ScrollBarAlwaysOff
+        if (flickableItem.ScrollBar.vertical) {
+            flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy != Qt.ScrollBarAlwaysOff;
+        }
+        scrollBarCreationTimer.restart();
+    }
+    onHorizontalScrollBarPolicyChanged: {
+        if (flickableItem.ScrollBar.horizontal) {
+            flickableItem.ScrollBar.horizontal.visible = horizontalScrollBarPolicy != Qt.ScrollBarAlwaysOff;
+        }
+        scrollBarCreationTimer.restart();
     }
 
     drag.filterChildren: !Settings.isMobile
@@ -97,10 +105,32 @@ MouseArea {
         flickableItem.interactive = Settings.isMobile;
         flickableItem.anchors.fill = flickableParent;
 
-        if ((!flickableItem.ScrollBar.vertical) && verticalScrollBarPolicy != Qt.ScrollBarAlwaysOff)
-            flickableItem.ScrollBar.vertical = scrollComponent.createObject(root);
+        scrollBarCreationTimer.restart();
     }
 
+    Timer {
+        id: scrollBarCreationTimer
+        interval: 0
+        onTriggered: {
+            //create or destroy the vertical scrollbar
+            if ((!flickableItem.ScrollBar.vertical) && 
+                verticalScrollBarPolicy != Qt.ScrollBarAlwaysOff) {
+                flickableItem.ScrollBar.vertical = verticalScrollComponent.createObject(root);
+            } else if (flickableItem.ScrollBar.vertical &&
+                verticalScrollBarPolicy == Qt.ScrollBarAlwaysOff) {
+                flickableItem.ScrollBar.vertical.destroy();
+            }
+
+            //create or destroy the horizontal scrollbar
+            if ((!flickableItem.ScrollBar.horizontal) && 
+                horizontalScrollBarPolicy != Qt.ScrollBarAlwaysOff) {
+                flickableItem.ScrollBar.horizontal = horizontalScrollComponent.createObject(root);
+            } else if (flickableItem.ScrollBar.horizontal &&
+                horizontalScrollBarPolicy == Qt.ScrollBarAlwaysOff) {
+                flickableItem.ScrollBar.horizontal.destroy();
+            }
+        }
+    }
     MultiPointTouchArea {
         id: flickableParent
         anchors {
@@ -128,7 +158,7 @@ MouseArea {
         }
     }
     Component {
-        id: scrollComponent
+        id: verticalScrollComponent
         ScrollBar {
             z: flickableParent.z + 1
             visible: root.contentItem.visible && size < 1
@@ -139,6 +169,21 @@ MouseArea {
                 topMargin: parent.flickableItem.headerItem ? parent.flickableItem.headerItem.height : 0
                 right: parent.right
                 top: parent.top
+            }
+        }
+    }
+    Component {
+        id: horizontalScrollComponent
+        ScrollBar {
+            z: flickableParent.z + 1
+            visible: root.contentItem.visible && size < 1
+
+            //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
+            height: parent.height - anchors.topMargin
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
             }
         }
     }
