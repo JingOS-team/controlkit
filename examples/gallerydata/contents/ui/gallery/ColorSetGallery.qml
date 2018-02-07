@@ -171,10 +171,44 @@ Kirigami.ScrollablePage {
             text: "Dynamic Color Button"
         }
         Kirigami.Icon {
+            id: customColorIcon
             source: "media-record-symbolic"
             color: "green"
             Layout.minimumWidth: 32
             Layout.minimumHeight: 32
+        }
+        RowLayout {
+            Controls.Label {
+                text: "RGB color for icon:"
+            }
+            Controls.SpinBox{
+                id: red
+                editable: true
+                from: 0
+                to: 255
+                onValueChanged: {
+                    customColorIcon.color = Qt.rgba(red.value/255, green.value/255, blue.value/255, 1);
+                }
+            }
+            Controls.SpinBox{
+                id: green
+                editable: true
+                from: 0
+                to: 255
+                value: 255
+                onValueChanged: {
+                    customColorIcon.color = Qt.rgba(red.value/255, green.value/255, blue.value/255, 1);
+                }
+            }
+            Controls.SpinBox{
+                id: blue
+                editable: true
+                from: 0
+                to: 255
+                onValueChanged: {
+                    customColorIcon.color = Qt.rgba(red.value/255, green.value/255, blue.value/255, 1);
+                }
+            }
         }
     }
 }

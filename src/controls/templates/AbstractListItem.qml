@@ -98,8 +98,6 @@ T2.ItemDelegate {
 
     default property alias _default: listItem.contentItem
 
-    Theme.inherit: false
-    Theme.colorSet: Theme.View
     Theme.colorGroup: internal.indicateActiveFocus ? Theme.Active : Theme.Inactive
 
     leftPadding: !LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical ? internal.view.T2.ScrollBar.vertical.width : Units.smallSpacing * 2

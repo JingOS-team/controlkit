@@ -233,6 +233,8 @@ void DesktopIcon::setIsMask(bool mask)
     }
 
     m_isMask = mask;
+    m_changed = true;
+    update();
     emit isMaskChanged();
 }
 
@@ -248,6 +250,8 @@ void DesktopIcon::setColor(const QColor &color)
     }
 
     m_color = color;
+    m_changed = true;
+    update();
     emit colorChanged();
 }
 
@@ -454,16 +458,21 @@ QImage DesktopIcon::findIcon(const QSize &size)
         if (iconSource.startsWith("qrc:/")){
             iconSource = iconSource.mid(3);
         }
-        QIcon icon(iconSource);
-        if (icon.availableSizes().isEmpty()) {
-            icon = m_theme->iconFromTheme(iconSource, m_color);
+        QIcon icon;
+        const QColor tintColor = m_color == Qt::transparent ? m_theme->textColor() : m_color;
+        const bool isPath = iconSource.contains("/");
+qWarning()<<tintColor<<iconSource;
+        if (isPath) {
+            icon = QIcon(iconSource);
+        } else {
+            icon = m_theme->iconFromTheme(iconSource, tintColor);
         }
         if (!icon.availableSizes().isEmpty()){
             img = icon.pixmap(size, iconMode(), QIcon::On).toImage();
-            if (m_isMask || icon.isMask()) {
+            if (m_isMask || icon.isMask() || (isPath && tintColor != Qt::transparent)) {
                 QPainter p(&img);
                 p.setCompositionMode(QPainter::CompositionMode_SourceIn);
-                p.fillRect(img.rect(), m_theme->textColor());
+                p.fillRect(img.rect(), tintColor);
                 p.end();
             }
         }
