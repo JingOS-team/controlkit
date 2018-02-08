@@ -351,6 +351,9 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
         mNode->setTexture(s_iconImageCache->loadTexture(window(), img));
         mNode->setRect(nodeRect);
         node = mNode;
+        if (m_smooth) {
+            mNode->setFiltering(QSGTexture::Linear);
+        }
     }
 
     return node;
