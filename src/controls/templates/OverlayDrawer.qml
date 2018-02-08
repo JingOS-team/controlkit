@@ -130,10 +130,15 @@ T2.Drawer {
                     return;
                 }
 
+                var margin = 0;
+                if (applicationWindow().footer) {
+                    margin = applicationWindow().footer.height;
+                }
+
                 if (!applicationWindow() || !applicationWindow().pageStack ||
                     !applicationWindow().pageStack.contentItem ||
                     !applicationWindow().pageStack.contentItem.itemAt) {
-                    return 0;
+                    return margin;
                 }
 
                 var item;
@@ -148,12 +153,12 @@ T2.Drawer {
                     item = applicationWindow().pageStack.get(applicationWindow().pageStack.depth-1);
                 }
 
-                var footer = item && item.page ? item.page.footer : (item ? item.footer : undefined);
-                if (footer) {
-                    return footer.height
-                } else {
-                    return 0;
+                var pageFooter = item && item.page ? item.page.footer : (item ? item.footer : undefined);
+                if (pageFooter) {
+                    margin += pageFooter.height;
                 }
+
+                return margin;
             }
             Behavior on bottomMargin {
                 NumberAnimation {
