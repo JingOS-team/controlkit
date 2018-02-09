@@ -300,7 +300,8 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
         QRect nodeRect(QPoint(0,0), itemSize);
 
         if (itemSize.width() != 0 && itemSize.height() != 0) {
-            const QSize size = itemSize * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
+            const auto multiplier = QCoreApplication::instance()->testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
+            const QSize size = itemSize * multiplier;
 
             switch(m_source.type()){
             case QVariant::Pixmap:
