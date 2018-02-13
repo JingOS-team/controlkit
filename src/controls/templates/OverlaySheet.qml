@@ -96,11 +96,11 @@ QtObject {
 
 
     function open() {
-        mainItem.visible = true;
         openAnimation.from = -mainItem.height;
         openAnimation.to = openAnimation.topOpenPosition;
         openAnimation.running = true;
         root.sheetOpen = true;
+        mainItem.visible = true;
     }
 
     function close() {
@@ -112,7 +112,6 @@ QtObject {
         closeAnimation.running = true;
     }
 
-    
     onBackgroundChanged: {
         background.parent = flickableContents;
         background.z = -1;
@@ -216,9 +215,9 @@ QtObject {
         }
 
         NumberAnimation {
-            id: openAnimation
-            property int topOpenPosition: Math.min(-mainItem.height*0.15, scrollView.flickableItem.contentHeight - mainItem.height + Units.gridUnit * 5)
-            property int bottomOpenPosition: (scrollView.flickableItem.contentHeight - mainItem.height) + (Units.gridUnit * 5)
+            id: openAnimation 
+            property int margins: Units.gridUnit * 5
+            property int topOpenPosition: Math.min(-mainItem.height*0.15, scrollView.flickableItem.contentHeight - mainItem.height + margins)
             target: scrollView.flickableItem
             properties: "contentY"
             from: -mainItem.height
@@ -226,6 +225,7 @@ QtObject {
             duration: Units.longDuration
             easing.type: Easing.OutQuad
             onRunningChanged: {
+                //hack to center listviews
                 if (!running && contentItem.contentItem) {
                     var width = Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth));
                     contentItem.contentItem.x = (mainItem.width - width)/2
@@ -283,50 +283,37 @@ QtObject {
             when: scrollView.flickableItem != null
             target: scrollView.flickableItem
             property: "topMargin"
-            value: scrollView.height
+            //hack needed for smoother open anim
+            value: openAnimation.running ? -scrollView.flickableItem.contentY : -openAnimation.topOpenPosition
         }
         Binding {
             when: scrollView.flickableItem != null
             target: scrollView.flickableItem
             property: "bottomMargin"
-            value: scrollView.height
+            value: openAnimation.margins
         }
 
-        Timer {
-            id: positionResetTimer
-            interval: 150
-            onTriggered: {
-                //close
-                if ((mainItem.height + scrollView.flickableItem.contentY) < mainItem.height/2) {
-                    closeAnimation.to = -mainItem.height;
-                    closeAnimation.running = true;
-                } else if ((mainItem.height*0.6 + scrollView.flickableItem.contentY) > scrollView.flickableItem.contentHeight) {
-                    closeAnimation.to = scrollView.flickableItem.contentHeight
-                    closeAnimation.running = true;
-
-                //reset to the default sheetOpen position
-                } else if (scrollView.flickableItem.contentY < openAnimation.topOpenPosition) {
-                    openAnimation.from = scrollView.flickableItem.contentY;
-                    openAnimation.to = openAnimation.topOpenPosition;
-                    openAnimation.running = true;
-                //reset to the default "bottom" sheetOpen position
-                } else if (scrollView.flickableItem.contentY > openAnimation.bottomOpenPosition) {
-                    openAnimation.from = scrollView.flickableItem.contentY;
-                    openAnimation.to = openAnimation.bottomOpenPosition;
-                    openAnimation.running = true;
-                }
-            }
-        }
         Connections {
             target: scrollView.flickableItem
-            onMovementEnded: positionResetTimer.restart();
-            onFlickEnded: positionResetTimer.restart();
-            onMovementStarted: positionResetTimer.running = false;
-            onFlickStarted: positionResetTimer.running = false;
             onContentHeightChanged: {
                 if (openAnimation.running) {
                     openAnimation.running = false;
                     open();
+                }
+            }
+            onDraggingChanged: {
+                if (scrollView.flickableItem.dragging) {
+                    return;
+                }
+
+                //close
+                if ((mainItem.height + scrollView.flickableItem.contentY) < mainItem.height/2) {
+                    closeAnimation.to = -mainItem.height;
+                    closeAnimation.running = true;
+
+                } else if ((mainItem.height*0.6 + scrollView.flickableItem.contentY) > scrollView.flickableItem.contentHeight) {
+                    closeAnimation.to = scrollView.flickableItem.contentHeight;
+                    closeAnimation.running = true;
                 }
             }
         }
