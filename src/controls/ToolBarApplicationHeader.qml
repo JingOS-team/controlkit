@@ -32,7 +32,7 @@ import org.kde.kirigami 2.2
 ApplicationHeader {
     id: header
 
-    preferredHeight: 38
+    preferredHeight: 42
     maximumHeight: preferredHeight
     headerStyle: ApplicationHeaderStyle.Titles
 
@@ -60,6 +60,7 @@ ApplicationHeader {
             }
             PrivateActionToolButton {
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.leftMargin: 4
                 kirigamiAction: page && page.actions ? page.actions.left : null
                 showText: false
             }

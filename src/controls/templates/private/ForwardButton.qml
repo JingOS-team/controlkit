@@ -27,6 +27,7 @@ Controls.ToolButton {
     anchors {
         top: parent.top
         bottom: parent.bottom
+        margins: 4
     }
     width: visible ? height : 0
     z: 99
