@@ -344,5 +344,21 @@ QtObject {
             anchors.fill: parent
             horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
         }
+        //FIXME: replace with a ToolButton when we can use Qt 5.10
+        Icon {
+            anchors {
+                right: parent.right
+                rightMargin: Units.gridUnit
+                top: parent.top
+            }
+            visible: !Settings.isMobile
+            width: Units.iconSizes.smallMedium
+            height: width
+            source: "dialog-close"
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.close();
+            }
+        }
     }
 }
