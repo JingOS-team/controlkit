@@ -60,6 +60,18 @@ Kirigami.ScrollablePage {
         id: sheet
         onSheetOpenChanged: page.actions.main.checked = sheetOpen;
         parent: applicationWindow().overlay
+        header: Kirigami.Heading {
+            text: "Title"
+        }
+        footer: RowLayout {
+            Controls.Label {
+                text: "Footer:"
+            }
+            Controls.TextField {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignCenter
+            }
+        }
         ListView {
             model: 100
             implicitWidth: Kirigami.Units.gridUnit * 30

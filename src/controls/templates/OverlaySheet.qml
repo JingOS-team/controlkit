@@ -18,10 +18,12 @@
 */
 
 import QtQuick 2.5
+import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Templates 2.0 as T2
 import "private"
+import "../private"
 
 /**
  * An overlay sheet that covers the current Page content.
@@ -82,6 +84,21 @@ QtObject {
     property int bottomPadding: Units.gridUnit
 
     /**
+     * header: Item
+     * an optional item which will be used as the sheet's header,
+     * always kept on screen
+     * @since 5.43
+     */
+    property Item header
+
+    /**
+     * header: Item
+     * an optional item which will be used as the sheet's footer,
+     * always kept on screen
+     * @since 5.43
+     */
+    property Item footer
+    /**
      * background: Item
      * This property holds the background item.
      *
@@ -136,6 +153,16 @@ QtObject {
             close();
             Qt.inputMethod.hide();
         }
+    }
+    onHeaderChanged: {
+        header.parent = headerParent;
+        header.anchors.fill = headerParent;
+
+        //TODO: special case for actual ListViews
+    }
+    onFooterChanged: {
+        footer.parent = footerParent;
+        footer.anchors.fill = footerParent;
     }
 
     Component.onCompleted: {
@@ -259,21 +286,118 @@ QtObject {
                 (2 + (scrollView.flickableItem.contentHeight - scrollView.flickableItem.contentY - scrollView.flickableItem.topMargin - scrollView.flickableItem.bottomMargin)/scrollView.flickableItem.height))
         }
 
+        Icon {
+            id: closeIcon
+            anchors {
+                right: headerItem.right
+                rightMargin: Units.smallSpacing
+                verticalCenter: headerItem.verticalCenter
+            }
+            z: 3
+            visible: !Settings.isMobile
+            width: Units.iconSizes.smallMedium
+            height: width
+            source: "dialog-close"
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.close();
+            }
+        }
+        Rectangle {
+            id: headerItem
+            width: flickableContents.width
+            x: flickableContents.x
+            visible: root.header
+            height: Math.max(headerParent.implicitHeight, closeIcon.height) + Units.smallSpacing * 2
+            color: Theme.backgroundColor
+            y: Math.max(0, -scrollView.flickableItem.contentY)
+            z: 2
+            Item {
+                id: headerParent
+                implicitHeight: header.implicitHeight
+                anchors {
+                    fill: parent
+                    margins: Units.smallSpacing
+                    rightMargin: closeIcon.width + Units.smallSpacing
+                }
+            }
+            
+            EdgeShadow {
+                z: -2
+                edge: Qt.TopEdge
+                anchors {
+                    right: parent.right
+                    left: parent.left
+                    top: parent.bottom
+                }
+
+                opacity: parent.y == 0 ? 1 : 0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Units.longDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+        }
+        Rectangle {
+            id: footerItem
+            width: flickableContents.width
+            x: flickableContents.x
+            visible: root.footer
+            height: footerParent.implicitHeight + Units.smallSpacing * 2
+            color: Theme.backgroundColor
+            y: Math.min(mainItem.height, -scrollView.flickableItem.contentY + scrollView.flickableItem.contentHeight) - height
+            z: 2
+            Item {
+                id: footerParent
+                implicitHeight: footer.implicitHeight
+                anchors {
+                    fill: parent
+                    margins: Units.smallSpacing
+                }
+            }
+
+            EdgeShadow {
+                z: -2
+                edge: Qt.BottomEdge
+                anchors {
+                    right: parent.right
+                    left: parent.left
+                    bottom: parent.top
+                }
+
+                opacity: parent.y + parent.height < mainItem.height ? 0 : 1
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Units.longDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+        }
+
         Item {
             id: flickableContents
             //anchors.horizontalCenter: parent.horizontalCenter
             x: (mainItem.width - width) / 2
 
             readonly property real headerHeight: scrollView.flickableItem && root.contentItem.headerItem ? root.contentItem.headerItem.height : 0
+
             y: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? -scrollView.flickableItem.contentY - headerHeight : 0
             width: root.contentItem.implicitWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth))
-            height: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? scrollView.flickableItem.contentHeight + headerHeight : (root.contentItem.height + topPadding + bottomPadding)
+
+            //FIXME: why Units.smallSpacing*2 ?
+            height: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? scrollView.flickableItem.contentHeight + headerHeight : (root.contentItem.height + topPadding + bottomPadding) + (footerItem.visible ? footerItem.height + Units.smallSpacing*2 : 0)
+
             Item {
                 id: contentItemParent
                 anchors {
                     fill: parent
                     leftMargin: leftPadding
-                    topMargin: topPadding
+                    topMargin: topPadding + headerItem.visible ? headerParent.height : 0
                     rightMargin: rightPadding
                     bottomMargin: bottomPadding
                 }
@@ -291,6 +415,25 @@ QtObject {
             target: scrollView.flickableItem
             property: "bottomMargin"
             value: openAnimation.margins
+        }
+
+        Binding {
+            when: scrollView.verticalScrollBar != null
+            target: scrollView.verticalScrollBar.anchors
+            property: "topMargin"
+            value: headerItem.y + headerItem.height
+        }
+        Binding {
+            when: scrollView.verticalScrollBar != null
+            target: scrollView.verticalScrollBar
+            property: "height"
+            value: mainItem.height - scrollView.verticalScrollBar.anchors.topMargin - (mainItem.height - footerItem.y)
+        }
+        Binding {
+            when: scrollView.verticalScrollBar != null
+            target: scrollView.verticalScrollBar.anchors
+            property: "rightMargin"
+            value: mainItem.width - flickableContents.width - flickableContents.x
         }
 
         Connections {
@@ -318,14 +461,6 @@ QtObject {
             }
         }
 
-        //add an extra background for the scrollbar
-        Rectangle {
-            z: -1
-            parent: scrollView.verticalScrollBar.background
-            anchors.fill:parent
-            color: Theme.backgroundColor
-            opacity: 0.6
-        }
         Binding {
             target: scrollView.verticalScrollBar
             property: "visible"
@@ -343,22 +478,6 @@ QtObject {
             id: scrollView
             anchors.fill: parent
             horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
-        }
-        //FIXME: replace with a ToolButton when we can use Qt 5.10
-        Icon {
-            anchors {
-                right: parent.right
-                rightMargin: Units.gridUnit
-                top: parent.top
-            }
-            visible: !Settings.isMobile
-            width: Units.iconSizes.smallMedium
-            height: width
-            source: "dialog-close"
-            MouseArea {
-                anchors.fill: parent
-                onClicked: root.close();
-            }
         }
     }
 }

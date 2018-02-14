@@ -109,6 +109,18 @@ ScrollablePage {
     OverlaySheet {
         id: sheet
         onSheetOpenChanged: page.actions.main.checked = sheetOpen
+        header: Heading {
+            text: "Title"
+        }
+        footer: RowLayout {
+            Controls.Label {
+                text: "Footer:"
+            }
+            Controls.TextField {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignCenter
+            }
+        }
         ColumnLayout {
             Controls.Label {
                 Layout.fillWidth: true
