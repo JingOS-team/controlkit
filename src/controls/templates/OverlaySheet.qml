@@ -267,7 +267,7 @@ QtObject {
             readonly property real headerHeight: scrollView.flickableItem && root.contentItem.headerItem ? root.contentItem.headerItem.height : 0
             y: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? -scrollView.flickableItem.contentY - headerHeight : 0
             width: root.contentItem.implicitWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth))
-            height: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? scrollView.flickableItem.contentHeight + headerHeight : (root.contentItem.height + topPadding + bottomPadding + Units.iconSizes.medium + Units.gridUnit)
+            height: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? scrollView.flickableItem.contentHeight + headerHeight : (root.contentItem.height + topPadding + bottomPadding)
             Item {
                 id: contentItemParent
                 anchors {
