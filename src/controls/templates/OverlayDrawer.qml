@@ -150,7 +150,7 @@ T2.Drawer {
 
                 //try to take the last item
                 if (!item) {
-                    item = applicationWindow().pageStack.get(applicationWindow().pageStack.depth-1);
+                    item = applicationWindow().pageStack.lastItem;
                 }
 
                 var pageFooter = item && item.page ? item.page.footer : (item ? item.footer : undefined);

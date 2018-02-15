@@ -273,6 +273,11 @@ AbstractApplicationHeader {
                 x: titleList.wideMode || headerStyle == ApplicationHeaderStyle.Titles ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + navButtons.width))) : 0
                 width: parent.width - x
 
+                Connections {
+                    target: delegateLoader.page
+                    Component.onDestruction: delegateLoader.sourceComponent = null
+                }
+
                 sourceComponent: header.pageDelegate
 
                 readonly property Page page: __appWindow.pageStack.get(modelData)

@@ -314,7 +314,7 @@ QtObject {
             z: 2
             Item {
                 id: headerParent
-                implicitHeight: header.implicitHeight
+                implicitHeight: header ? header.implicitHeight : 0
                 anchors {
                     fill: parent
                     margins: Units.smallSpacing
@@ -352,7 +352,7 @@ QtObject {
             z: 2
             Item {
                 id: footerParent
-                implicitHeight: footer.implicitHeight
+                implicitHeight: footer ? footer.implicitHeight : 0
                 anchors {
                     fill: parent
                     margins: Units.smallSpacing
@@ -418,20 +418,17 @@ QtObject {
         }
 
         Binding {
-            when: scrollView.verticalScrollBar != null
-            target: scrollView.verticalScrollBar.anchors
+            target: scrollView.verticalScrollBar ? scrollView.verticalScrollBar.anchors : null
             property: "topMargin"
             value: headerItem.y + headerItem.height
         }
         Binding {
-            when: scrollView.verticalScrollBar != null
             target: scrollView.verticalScrollBar
             property: "height"
-            value: mainItem.height - scrollView.verticalScrollBar.anchors.topMargin - (mainItem.height - footerItem.y)
+            value: mainItem.height - (scrollView.verticalScrollBar ? scrollView.verticalScrollBar.anchors.topMargin : 0) - (mainItem.height - footerItem.y)
         }
         Binding {
-            when: scrollView.verticalScrollBar != null
-            target: scrollView.verticalScrollBar.anchors
+            target: scrollView.verticalScrollBar ? scrollView.verticalScrollBar.anchors : null
             property: "rightMargin"
             value: mainItem.width - flickableContents.width - flickableContents.x
         }
