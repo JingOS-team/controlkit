@@ -127,6 +127,9 @@ T2.ItemDelegate {
 
     default property alias _default: listItem.contentItem
 
+    Theme.colorGroup: behindItem.indicateActiveFocus ? Theme.Active : Theme.Inactive
+
+    hoverEnabled: true
     implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
     width: parent ? parent.width : implicitWidth
     implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5
@@ -142,6 +145,7 @@ T2.ItemDelegate {
         id: behindItem
         parent: listItem
         z: -1
+        property bool indicateActiveFocus: listItem.pressed || Settings.isMobile || listItem.activeFocus || (view ? view.activeFocus : false)
         property Flickable view: listItem.ListView.view || listItem.parent.ListView.view
         anchors {
             fill: parent
