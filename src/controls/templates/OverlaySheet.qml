@@ -290,8 +290,8 @@ QtObject {
             id: closeIcon
             anchors {
                 right: headerItem.right
-                rightMargin: Units.smallSpacing
-                verticalCenter: headerItem.verticalCenter
+                margins: Units.smallSpacing
+                top: headerItem.top
             }
             z: 3
             visible: !Settings.isMobile
@@ -310,7 +310,8 @@ QtObject {
             visible: root.header
             height: Math.max(headerParent.implicitHeight, closeIcon.height) + Units.smallSpacing * 2
             color: Theme.backgroundColor
-            y: Math.max(0, -scrollView.flickableItem.contentY)
+            //different y depending if we're a listview or a normal item
+            y: Math.max(0, -scrollView.flickableItem.contentY - (scrollView.contentItem != flickableContents ? height : 0))
             z: 2
             Item {
                 id: headerParent
@@ -348,7 +349,11 @@ QtObject {
             visible: root.footer
             height: footerParent.implicitHeight + Units.smallSpacing * 2
             color: Theme.backgroundColor
-            y: Math.min(mainItem.height, -scrollView.flickableItem.contentY + scrollView.flickableItem.contentHeight) - height
+            y: mainItem.mapFromItem(flickableContents, 0, flickableContents.height).y - height
+            Connections {
+                target: scrollView.flickableItem
+                onContentYChanged: footerItem.y = Math.min(mainItem.height, mainItem.mapFromItem(flickableContents, 0, flickableContents.height).y) - footerItem.height
+            }
             z: 2
             Item {
                 id: footerParent
@@ -384,22 +389,22 @@ QtObject {
             //anchors.horizontalCenter: parent.horizontalCenter
             x: (mainItem.width - width) / 2
 
-            readonly property real headerHeight: scrollView.flickableItem && root.contentItem.headerItem ? root.contentItem.headerItem.height : 0
+            readonly property real listHeaderHeight: scrollView.flickableItem && root.contentItem.headerItem ? root.contentItem.headerItem.height : 0
 
-            y: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? -scrollView.flickableItem.contentY - headerHeight : 0
+            y: (scrollView.contentItem != flickableContents ? -scrollView.flickableItem.contentY - listHeaderHeight  - (headerItem.visible ? headerItem.height : 0): 0)
+
             width: root.contentItem.implicitWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth))
 
-            //FIXME: why Units.smallSpacing*2 ?
-            height: scrollView.flickableItem && root.contentItem.hasOwnProperty("contentY") ? scrollView.flickableItem.contentHeight + headerHeight : (root.contentItem.height + topPadding + bottomPadding) + (footerItem.visible ? footerItem.height + Units.smallSpacing*2 : 0)
+            height: (scrollView.contentItem != flickableContents ? scrollView.flickableItem.contentHeight + listHeaderHeight : (root.contentItem.height + topPadding + bottomPadding)) + (headerItem.visible ? headerItem.height : 0) + (footerItem.visible ? footerItem.height : 0)
 
             Item {
                 id: contentItemParent
                 anchors {
                     fill: parent
                     leftMargin: leftPadding
-                    topMargin: topPadding + headerItem.visible ? headerParent.height : 0
+                    topMargin: topPadding + (headerItem.visible ? headerItem.height : 0)
                     rightMargin: rightPadding
-                    bottomMargin: bottomPadding
+                    bottomMargin: bottomPadding + (footerItem.visible ? footerItem.height : 0)
                 }
             }
         }
