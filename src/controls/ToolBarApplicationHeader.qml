@@ -121,8 +121,11 @@ ApplicationHeader {
         Heading {
             id: heading
             anchors.verticalCenter: parent.verticalCenter
+            leftPadding: units.gridUnit
             visible: layout.width <= 0
             opacity: delegateItem.current ? 1 : 0.4
+            maximumLineCount: 1
+            width: parent.width
             color: Theme.textColor
             elide: Text.ElideRight
             text: page ? page.title : ""
