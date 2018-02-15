@@ -144,7 +144,7 @@ AbstractApplicationHeader {
         }
     }
 
-    Row {
+    RowLayout {
         id: navButtons
         anchors {
             left: parent.left
