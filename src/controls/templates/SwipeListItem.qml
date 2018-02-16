@@ -145,6 +145,8 @@ T2.ItemDelegate {
         id: behindItem
         parent: listItem
         z: -1
+        //TODO: a global "open" state
+        enabled: background.x !== 0
         property bool indicateActiveFocus: listItem.pressed || Settings.isMobile || listItem.activeFocus || (view ? view.activeFocus : false)
         property Flickable view: listItem.ListView.view || listItem.parent.ListView.view
         anchors {
