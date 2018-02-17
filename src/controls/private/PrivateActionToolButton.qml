@@ -44,6 +44,18 @@ Controls.ToolButton {
         if (kirigamiAction) {
             kirigamiAction.trigger();
         }
+        if (menu.count>0 && !menu.visible) {
+            menu.popup(control, 0, control.height)
+        }
+    }
+
+    ActionsMenu {
+        id: menu
+        y: control.height
+        actions: control.kirigamiAction ? control.kirigamiAction.children : ""
+        submenuComponent: Component {
+            ActionsMenu {}
+        }
     }
 
     flat: true
