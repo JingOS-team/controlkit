@@ -57,17 +57,14 @@ ApplicationHeader {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.leftMargin: 4
                 kirigamiAction: page && page.actions ? page.actions.left : null
-                showText: false
             }
             PrivateActionToolButton {
                 anchors.verticalCenter: parent.verticalCenter
                 kirigamiAction: page && page.actions ? page.actions.main : null
-                showText: false
             }
             PrivateActionToolButton {
                 anchors.verticalCenter: parent.verticalCenter
                 kirigamiAction: page && page.actions ? page.actions.right : null
-                showText: false
             }
             Separator {
                 anchors.verticalCenter: parent.verticalCenter
