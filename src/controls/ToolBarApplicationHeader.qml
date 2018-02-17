@@ -42,11 +42,6 @@ ApplicationHeader {
     pageDelegate: Item {
         id: delegateItem
         readonly property bool current: __appWindow.pageStack.currentIndex == index
-        property Row layout
-
-        //don't scroll except just the nav buttons
-        implicitWidth: parent.parent.width - height*2
-        height: parent.height
 
         Row {
             id: layout
