@@ -19,7 +19,7 @@
  */
 
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.3 as QQC2
 import org.kde.kirigami 2.2 as Kirigami
 
 Kirigami.ApplicationWindow
@@ -29,27 +29,30 @@ Kirigami.ApplicationWindow
     header: Kirigami.ToolBarApplicationHeader {}
 
     pageStack.initialPage: Kirigami.Page {
-
-        Button {
+        QQC2.Button {
             text: "button"
             onClicked: menu.popup()
-            Menu {
+            QQC2.Menu {
                 id: menu
 
-                MenuItem { text: "xxx" }
-                MenuItem { text: "xxx" }
-                MenuItem {
+                QQC2.MenuItem { text: "xxx" }
+                QQC2.MenuItem { text: "xxx" }
+                QQC2.MenuItem {
                     text: "yyy"
-                    Menu {
-                        MenuItem { text: "yyy" }
+                    QQC2.Menu {
+                        QQC2.MenuItem { text: "yyy" }
                     }
                 }
             }
         }
 
+        QQC2.ActionGroup {
+            id: group
+        }
+
         contextualActions: [
             Kirigami.Action {
-                text: "fua"
+                text: "submenus"
                 icon.name: "kalgebra"
 
                 Kirigami.Action { text: "xxx"; onTriggered: console.log("xxx") }
@@ -61,6 +64,28 @@ Kirigami.ApplicationWindow
                     Kirigami.Action { text: "yyy" }
                     Kirigami.Action { text: "yyy" }
                     Kirigami.Action { text: "yyy" }
+                }
+            },
+            Kirigami.Action {
+                id: optionsAction
+                text: "Options"
+                icon.name: "kate"
+
+                Kirigami.Action {
+                    QQC2.ActionGroup.group: group
+                    text: "A"
+                    checkable: true
+                    checked: true
+                }
+                Kirigami.Action {
+                    QQC2.ActionGroup.group: group
+                    text: "B"
+                    checkable: true
+                }
+                Kirigami.Action {
+                    QQC2.ActionGroup.group: group
+                    text: "C"
+                    checkable: true
                 }
             }
         ]

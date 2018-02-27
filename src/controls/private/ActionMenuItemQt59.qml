@@ -17,20 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.3
-import QtQuick.Controls 2.1 as Controls
-
-Controls.Menu
+ActionMenuItemBase
 {
-    id: theMenu
-    property alias actions: actionsRepeater.model
-    property Component submenuComponent
-
-    Repeater {
-        id: actionsRepeater
-
-        delegate: ActionMenuItem {
-            ourAction: modelData
-        }
-    }
 }

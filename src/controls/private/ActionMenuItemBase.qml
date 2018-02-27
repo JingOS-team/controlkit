@@ -20,17 +20,19 @@
 import QtQuick 2.3
 import QtQuick.Controls 2.1 as Controls
 
-Controls.Menu
-{
-    id: theMenu
-    property alias actions: actionsRepeater.model
-    property Component submenuComponent
+Controls.MenuItem {
+    id: menuItem
 
-    Repeater {
-        id: actionsRepeater
+    property QtObject ourAction
 
-        delegate: ActionMenuItem {
-            ourAction: modelData
-        }
+    text: ourAction.text
+    visible: ourAction.visible
+    enabled: ourAction.enabled
+    checkable: ourAction.checkable
+    checked: ourAction.checked
+    onTriggered: {
+        ourAction.trigger()
     }
+
+    readonly property var ourMenu: theMenu.submenuComponent ? theMenu.submenuComponent.createObject(menuItem, { actions: ourAction.children }) : null
 }

@@ -64,6 +64,13 @@ if (NOT STATIC_LIBRARY)
     add_dependencies(kirigamiplugin copy)
 
     install(DIRECTORY controls/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2)
+    if(Qt5Qml_VERSION VERSION_GREATER 5.10)
+        install(FILES controls/private/ActionMenuItemQt510.qml DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/private
+                RENAME ActionMenuItem.qml)
+    else()
+        install(FILES controls/private/ActionMenuItemQt59.qml DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/private
+                RENAME ActionMenuItem.qml)
+    endif()
 
     if (PLASMA_ENABLED)
         install(DIRECTORY styles/Plasma DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles)

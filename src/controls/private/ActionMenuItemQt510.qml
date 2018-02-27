@@ -18,19 +18,10 @@
  */
 
 import QtQuick 2.3
-import QtQuick.Controls 2.1 as Controls
+import QtQuick.Controls 2.3 as Controls
 
-Controls.Menu
+ActionMenuItemBase
 {
-    id: theMenu
-    property alias actions: actionsRepeater.model
-    property Component submenuComponent
-
-    Repeater {
-        id: actionsRepeater
-
-        delegate: ActionMenuItem {
-            ourAction: modelData
-        }
-    }
+    icon.name: ourAction.iconName
+    autoExclusive: ourAction.Controls.ActionGroup && ourAction.Controls.ActionGroup.group.exclusive
 }
