@@ -26,7 +26,7 @@ Controls.MenuItem {
     property QtObject ourAction
 
     text: ourAction.text
-    visible: ourAction.visible
+    visible: ourAction.visible !== undefined ? ourAction.visible : true
     enabled: ourAction.enabled
     checkable: ourAction.checkable
     checked: ourAction.checked
