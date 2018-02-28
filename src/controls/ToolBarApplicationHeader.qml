@@ -43,97 +43,62 @@ ApplicationHeader {
         id: delegateItem
         readonly property bool current: __appWindow.pageStack.currentIndex == index
 
-        Row {
-            id: layout
+        RowLayout {
+            id: actionsLayout
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 2
 
+            readonly property bool toobig: Units.iconSizes.medium * 8 > parent.width/3
             Separator {
                 anchors.verticalCenter: parent.verticalCenter
-                height: parent.height * 0.6
+                Layout.preferredHeight: parent.height * 0.6
                 visible: index > 0
             }
             PrivateActionToolButton {
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.leftMargin: 4
                 kirigamiAction: page && page.actions ? page.actions.left : null
+                showText: !parent.toobig
             }
             PrivateActionToolButton {
                 anchors.verticalCenter: parent.verticalCenter
                 kirigamiAction: page && page.actions ? page.actions.main : null
+                showText: !parent.toobig
             }
             PrivateActionToolButton {
                 anchors.verticalCenter: parent.verticalCenter
                 kirigamiAction: page && page.actions ? page.actions.right : null
-            }
-            Separator {
-                anchors.verticalCenter: parent.verticalCenter
-                height: parent.height * 0.6
-                visible: page && page.actions && (page.actions.left || page.actions.main || page.actions.right)
-            }
-
-            Row {
-                id: contextActionsContainer
-                property var overflowSet: []
-
-                Repeater {
-                    id: repeater
-                    model: page && page.actions.contextualActions ? page.actions.contextualActions : null
-                    delegate: PrivateActionToolButton {
-                        id: actionDelegate
-                        anchors.verticalCenter: parent.verticalCenter
-                        kirigamiAction: modelData
-                        property bool fits: x+contextActionsContainer.x+layout.x+width < delegateItem.width - moreButton.width
-                        onFitsChanged: updateOverflowSet()
-                        function updateOverflowSet() {
-                            var index = contextActionsContainer.overflowSet.findIndex(function(act){
-                                return act == modelData});
-
-                            if ((fits || !modelData.visible) && index > -1) {
-                                contextActionsContainer.overflowSet.splice(index, 1);
-                            } else if (!fits && modelData.visible && index == -1) {
-                                contextActionsContainer.overflowSet.push(modelData);
-                            }
-                            contextActionsContainer.overflowSetChanged();
-                        }
-                        visible: modelData.visible && fits
-
-                        Connections {
-                            target: modelData
-                            onVisibleChanged: actionDelegate.updateOverflowSet();
-                        }
-                        Component.onCompleted: {
-                            actionDelegate.updateOverflowSet();
-                        }
-                    }
-                }
+                showText: !parent.toobig
             }
         }
 
         Heading {
-            id: heading
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.centerIn: parent
+            width: parent.width - 2 * Math.max(ctxActions.width, actionsLayout.width)
+            visible: x>(actionsLayout.x + actionsLayout.width)
             leftPadding: units.gridUnit
-            visible: layout.width <= 0
             opacity: delegateItem.current ? 1 : 0.4
             maximumLineCount: 1
-            width: parent.width
             color: Theme.textColor
             elide: Text.ElideRight
+            horizontalAlignment: Text.AlignHCenter
             text: page ? page.title : ""
             font.pointSize: Math.max(1, (parent.height / 1.6) / Units.devicePixelRatio)
         }
+
         PrivateActionToolButton {
-            id: moreButton
+            id: ctxActions
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
+                rightMargin: Units.smallSpacing
             }
-            kirigamiAction: Action {
-                icon.name: "overflow-menu"
-                visible: contextActionsContainer.overflowSet.length > 0
-                children: contextActionsContainer.overflowSet
+            Action {
+                id: overflowAction
+                icon.name: "view-more-symbolic"
+                visible: children.length > 0
+                children: page && page.actions.contextualActions ? page.actions.contextualActions : null
             }
+
+            kirigamiAction: page && page.actions.contextualActions.length === 1 ? page.actions.contextualActions[0] : overflowAction
         }
     }
 }

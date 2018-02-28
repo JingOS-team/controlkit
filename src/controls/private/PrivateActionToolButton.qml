@@ -78,6 +78,12 @@ Controls.ToolButton {
                 text: kirigamiAction ? kirigamiAction.text : ""
                 visible: control.showText && text.length > 0
             }
+            Icon {
+                Layout.minimumWidth: Units.iconSizes.small
+                Layout.minimumHeight: Units.iconSizes.small
+                source: "arrow-down"
+                visible: menu.count > 0
+            }
         }
     }
     Controls.ToolTip {
