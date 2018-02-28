@@ -37,11 +37,10 @@ Kirigami.ApplicationWindow
 
                 QQC2.MenuItem { text: "xxx" }
                 QQC2.MenuItem { text: "xxx" }
-                QQC2.MenuItem {
-                    text: "yyy"
-                    QQC2.Menu {
-                        QQC2.MenuItem { text: "yyy" }
-                    }
+                QQC2.Menu {
+                    title: "yyy"
+                    QQC2.MenuItem { text: "yyy" }
+                    QQC2.MenuItem { text: "yyy" }
                 }
             }
         }

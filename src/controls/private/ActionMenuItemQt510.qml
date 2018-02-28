@@ -23,5 +23,5 @@ import QtQuick.Controls 2.3 as Controls
 ActionMenuItemBase
 {
     icon.name: ourAction.icon.name
-    autoExclusive: ourAction.Controls.ActionGroup && ourAction.Controls.ActionGroup.group.exclusive
+    autoExclusive: ourAction.Controls.ActionGroup && ourAction.Controls.ActionGroup.group && ourAction.Controls.ActionGroup.group.exclusive
 }

@@ -76,12 +76,12 @@ Controls.ToolButton {
             }
             Controls.Label {
                 text: kirigamiAction ? kirigamiAction.text : ""
-                visible: control.showText
+                visible: control.showText && text.length > 0
             }
         }
     }
     Controls.ToolTip {
-        visible: control.hovered
+        visible: control.hovered && text.length > 0
         text: kirigamiAction ? (kirigamiAction.tooltip.length ? kirigamiAction.tooltip : kirigamiAction.text) : ""
         delay: 1000
         timeout: 5000
