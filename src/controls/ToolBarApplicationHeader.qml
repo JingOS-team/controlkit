@@ -123,46 +123,16 @@ ApplicationHeader {
             text: page ? page.title : ""
             font.pointSize: Math.max(1, (parent.height / 1.6) / Units.devicePixelRatio)
         }
-        Controls.ToolButton {
+        PrivateActionToolButton {
             id: moreButton
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
             }
-
-            Icon {
-                anchors.fill: parent
-                source: "overflow-menu"
-                anchors.margins: 4
-            }
-            checkable: true
-            checked: menu.visible
-            visible: contextActionsContainer.overflowSet.length > 0;
-            onClicked: menu.open()
-
-            Controls.Menu {
-                id: menu
-                y: moreButton.height
-                x: -width + moreButton.width
-
-                Repeater {
-                    model: page && page.actions.contextualActions ? page.actions.contextualActions : null
-                    delegate: BasicListItem {
-                        text: modelData ? modelData.text : ""
-                        icon: modelData.icon
-                        checkable:  modelData.checkable
-                        checked: modelData.checked
-                        onClicked: {
-                            modelData.trigger();
-                            menu.visible = false;
-                        }
-                        separatorVisible: false
-                        backgroundColor: "transparent"
-                        visible: contextActionsContainer.overflowSet.findIndex(function(act) {
-                                return act == modelData}) > -1 && modelData.visible
-                        enabled: modelData.enabled
-                    }
-                }
+            kirigamiAction: Action {
+                icon.name: "overflow-menu"
+                visible: contextActionsContainer.overflowSet.length > 0
+                children: contextActionsContainer.overflowSet
             }
         }
     }
