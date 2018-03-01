@@ -29,14 +29,14 @@ Controls.ToolButton {
     implicitHeight: background.implicitHeight
 
     hoverEnabled: true
-    //TODO: replace with upstream action when we can
+    //TODO: replace with upstream action when we depend on Qt 5.10
     property Action kirigamiAction
     property bool showText: true
 
     //we need our own text delegate
     text: ""
     checkable: kirigamiAction && kirigamiAction.checkable
-    checked: kirigamiAction && kirigamiAction.checked
+    checked: (kirigamiAction && kirigamiAction.checked) || menu.visible
     enabled: kirigamiAction && kirigamiAction.enabled
     opacity: enabled ? 1 : 0.4
     visible: kirigamiAction && kirigamiAction.visible
