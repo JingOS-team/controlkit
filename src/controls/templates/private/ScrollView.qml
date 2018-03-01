@@ -162,6 +162,7 @@ MouseArea {
         ScrollBar {
             z: flickableParent.z + 1
             visible: root.contentItem.visible && size < 1
+            interactive: !Settings.isMobile
 
             //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
             height: parent.height - anchors.topMargin
@@ -177,6 +178,7 @@ MouseArea {
         ScrollBar {
             z: flickableParent.z + 1
             visible: root.contentItem.visible && size < 1
+            interactive: !Settings.isMobile
 
             //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
             height: parent.height - anchors.topMargin
