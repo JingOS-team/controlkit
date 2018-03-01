@@ -86,7 +86,12 @@ Kirigami.ApplicationWindow
                     text: "C"
                     checkable: true
                 }
-            }
+            },
+            Kirigami.Action { text: "stuffing..." },
+            Kirigami.Action { text: "stuffing..." },
+            Kirigami.Action { text: "stuffing..." },
+            Kirigami.Action { text: "stuffing..." },
+            Kirigami.Action { text: "stuffing..." }
         ]
     }
 }

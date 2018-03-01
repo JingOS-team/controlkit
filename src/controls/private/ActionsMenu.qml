@@ -23,14 +23,41 @@ import QtQuick.Controls 2.1 as Controls
 Controls.Menu
 {
     id: theMenu
-    property alias actions: actionsRepeater.model
+    property alias actions: actionsInstantiator.model
     property Component submenuComponent
 
-    Repeater {
-        id: actionsRepeater
+    Component {
+        id: menuItemComponent
+        ActionMenuItem {}
+    }
+    Instantiator {
+        id: actionsInstantiator
 
-        delegate: ActionMenuItem {
-            ourAction: modelData
+        delegate: QtObject {
+            readonly property QtObject action: modelData
+            property QtObject item: null
+
+            Component.onDestruction: if (item) item.destroy()
+
+            function create() {
+                if (!action.children || action.children.length === 0) {
+                    item = menuItemComponent.createObject(null, { ourAction: action });
+                    theMenu.addItem(item)
+                } else if (theMenu.submenuComponent) {
+                    item = theMenu.submenuComponent.createObject(null, { title: action.text, actions: action.children });
+                    theMenu.addMenu(item)
+                }
+            }
+            function remove() {
+                if (action.children.length === 0) {
+                    theMenu.removeItem(item)
+                } else if (theMenu.submenuComponent) {
+                    theMenu.removeMenu(item)
+                }
+            }
         }
+
+        onObjectAdded: object.create()
+        onObjectRemoved: object.remove()
     }
 }
