@@ -44,13 +44,13 @@ MouseArea {
         appearAnimation.appear = true;
         appearAnimation.running = true;
         if (timeout == "short") {
-            timer.interval = 1000;
+            timer.interval = 4000;
         } else if (timeout == "long") {
-            timer.interval = 4500;
+            timer.interval = 12000;
         } else if (timeout > 0) {
             timer.interval = timeout;
         } else {
-            timer.interval = 4500;
+            timer.interval = 7000;
         }
         messageLabel.text = message ? message : "";
         actionButton.text = actionText ? actionText : "";
