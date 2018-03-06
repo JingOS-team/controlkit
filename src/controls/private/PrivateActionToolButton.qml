@@ -25,7 +25,7 @@ import org.kde.kirigami 2.2
 Controls.ToolButton {
     id: control
 
-    implicitWidth: showText ? Math.max(background.implicitWidth, layout.implicitWidth + 16) : height
+    implicitWidth: showText && text.length > 0 ? Math.max(background.implicitWidth, layout.implicitWidth + 16) : implicitHeight
     implicitHeight: background.implicitHeight
 
     hoverEnabled: true
