@@ -32,6 +32,7 @@ Controls.ToolButton {
     //TODO: replace with upstream action when we depend on Qt 5.10
     property Action kirigamiAction
     property bool showText: true
+    property bool showMenuArrow: true
 
     //we need our own text delegate
     text: ""
@@ -68,6 +69,7 @@ Controls.ToolButton {
             id: layout
             anchors.centerIn: parent
             Icon {
+                id: mainIcon
                 Layout.minimumWidth: 22
                 Layout.minimumHeight: 22
                 source: control.kirigamiAction ? (control.kirigamiAction.icon ? control.kirigamiAction.icon.name : control.kirigamiAction.iconName) : ""
@@ -82,7 +84,7 @@ Controls.ToolButton {
                 Layout.minimumWidth: Units.iconSizes.small
                 Layout.minimumHeight: Units.iconSizes.small
                 source: "arrow-down"
-                visible: menu.count > 0
+                visible: showMenuArrow && menu.count > 0
             }
         }
     }

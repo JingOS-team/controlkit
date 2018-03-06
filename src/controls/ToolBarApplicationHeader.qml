@@ -86,6 +86,7 @@ ApplicationHeader {
 
         PrivateActionToolButton {
             id: ctxActions
+            showMenuArrow: false
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
@@ -93,7 +94,7 @@ ApplicationHeader {
             }
             Action {
                 id: overflowAction
-                icon.name: "view-more-symbolic"
+                icon.name: "overflow-menu"
                 visible: children.length > 0
                 children: page && page.actions.contextualActions ? page.actions.contextualActions : null
             }
