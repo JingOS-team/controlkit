@@ -71,18 +71,21 @@ ApplicationHeader {
         }
 
         Heading {
-            anchors.centerIn: parent
-            width: parent.width - 2 * Math.max(ctxActions.width, actionsLayout.width)
-            visible: x>(actionsLayout.x + actionsLayout.width)
+            anchors {
+                left: actionsLayout.right
+                verticalCenter: parent.verticalCenter
+            }
+            
+            width: parent.width - Math.max(ctxActions.width, actionsLayout.width)
             leftPadding: units.gridUnit
             opacity: delegateItem.current ? 1 : 0.4
             maximumLineCount: 1
             color: Theme.textColor
             elide: Text.ElideRight
-            horizontalAlignment: Text.AlignHCenter
             text: page ? page.title : ""
             font.pointSize: Math.max(1, (parent.height / 1.6) / Units.devicePixelRatio)
         }
+
 
         PrivateActionToolButton {
             id: ctxActions
