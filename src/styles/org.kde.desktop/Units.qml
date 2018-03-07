@@ -98,7 +98,7 @@ QtObject {
 
     property int toolTipDelay: 700
 
-    readonly property QtObject __styleItem: QtQuickControlsPrivate.StyleItem {elementType: "frame" }
+    //readonly property QtObject __styleItem: QtQuickControlsPrivate.StyleItem {elementType: "frame" }
 
     /**
      * How much the mouse scroll wheel scrolls, expressed in lines of text.
