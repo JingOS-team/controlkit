@@ -270,7 +270,7 @@ AbstractApplicationHeader {
             Loader {
                 id: delegateLoader
                 height: parent.height
-                x: titleList.wideMode || headerStyle == ApplicationHeaderStyle.Titles ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + navButtons.width))) : 0
+                x: titleList.wideMode || headerStyle == ApplicationHeaderStyle.Titles ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + navButtons.width + (navButtons.width > 0 ? Units.smallSpacing : 0)))) : 0
                 width: parent.width - x
 
                 Connections {

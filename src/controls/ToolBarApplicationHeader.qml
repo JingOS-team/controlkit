@@ -42,17 +42,58 @@ ApplicationHeader {
     pageDelegate: Item {
         id: delegateItem
         readonly property bool current: __appWindow.pageStack.currentIndex == index
+        implicitWidth: titleTextMetrics.width/2 + buttonTextMetrics.collapsedButtonsWidth
+
+        RowLayout {
+            id: titleLayout
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+                right: actionsLayout.left
+            }
+            Separator {
+                id: separator
+                Layout.preferredHeight: parent.height * 0.6
+                //assumption on the internal structure of the parent
+                visible: index > 0 || delegateItem.parent.x > 0
+            }
+
+            Heading {
+                id: title
+                Layout.fillWidth: true
+
+                Layout.preferredWidth: implicitWidth
+                Layout.minimumWidth: Math.min(titleTextMetrics.width, delegateItem.width - buttonTextMetrics.requiredWidth)
+                leftPadding: delegateItem.parent.x > 0 ? 0 : Units.largeSpacing
+                opacity: delegateItem.current ? 1 : 0.4
+                maximumLineCount: 1
+                color: Theme.textColor
+                elide: Text.ElideRight
+                text: page ? page.title : ""
+            }
+        }
+
+        TextMetrics {
+            id: titleTextMetrics
+            text: page ? page.title : ""
+            font: title.font
+        }
+        TextMetrics {
+            id: buttonTextMetrics
+            text: (page.actions.left ? page.actions.left.text : "") + (page.actions.main ? page.actions.main.text : "") + (page.actions.right ? page.actions.right.text : "")
+            readonly property int collapsedButtonsWidth: ctxActionsButton.width + (page.actions.left ? ctxActionsButton.width + Units.gridUnit : 0) + (page.actions.main ? ctxActionsButton.width + Units.gridUnit : 0) + (page.actions.right ? ctxActionsButton.width + Units.gridUnit : 0)
+            readonly property int requiredWidth: width + collapsedButtonsWidth
+        }
 
         RowLayout {
             id: actionsLayout
-            anchors.verticalCenter: parent.verticalCenter
-
-            readonly property bool toobig: Units.iconSizes.medium * 8 > parent.width/3
-            Separator {
-                anchors.verticalCenter: parent.verticalCenter
-                Layout.preferredHeight: parent.height * 0.6
-                visible: index > 0
+            anchors {
+                verticalCenter: parent.verticalCenter
+                right: ctxActionsButton.visible ? ctxActionsButton.left : parent.right
             }
+
+            readonly property bool toobig: delegateItem.width - titleTextMetrics.width - Units.gridUnit < buttonTextMetrics.requiredWidth
+
             PrivateActionToolButton {
                 anchors.verticalCenter: parent.verticalCenter
                 kirigamiAction: page && page.actions ? page.actions.left : null
@@ -70,26 +111,9 @@ ApplicationHeader {
             }
         }
 
-        Heading {
-            anchors {
-                left: actionsLayout.right
-                verticalCenter: parent.verticalCenter
-            }
-            
-            width: parent.width - Math.max(ctxActions.width, actionsLayout.width)
-            leftPadding: units.gridUnit
-            opacity: delegateItem.current ? 1 : 0.4
-            maximumLineCount: 1
-            color: Theme.textColor
-            elide: Text.ElideRight
-            text: page ? page.title : ""
-            font.pointSize: Math.max(1, (parent.height / 1.6) / Units.devicePixelRatio)
-        }
-
-
         PrivateActionToolButton {
-            id: ctxActions
-            showMenuArrow: false
+            id: ctxActionsButton
+            showMenuArrow: page.actions.contextualActions.length == 1
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
@@ -98,6 +122,7 @@ ApplicationHeader {
             Action {
                 id: overflowAction
                 icon.name: "overflow-menu"
+                tooltip: qsTr("More Actions")
                 visible: children.length > 0
                 children: page && page.actions.contextualActions ? page.actions.contextualActions : null
             }
