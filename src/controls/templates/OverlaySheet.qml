@@ -109,6 +109,13 @@ QtObject {
      */
     property Item background
 
+    /**
+     * showCloseButton: bool
+     * whether to show the close button in the top-right corner
+     * @since 5.44
+     */
+    property alias showCloseButton: closeIcon.visible
+
     property Item parent
 
 
