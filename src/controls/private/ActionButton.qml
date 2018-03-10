@@ -66,7 +66,7 @@ Item {
             bottomMargin: Units.smallSpacing
         }
         implicitWidth: implicitHeight + Units.iconSizes.smallMedium*2 + Units.gridUnit
-        implicitHeight: Units.iconSizes.medium + Units.largeSpacing
+        implicitHeight: Units.iconSizes.medium + Units.largeSpacing * 2
 
 
         onXChanged: {
