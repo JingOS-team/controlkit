@@ -50,8 +50,7 @@ Kirigami.ScrollablePage {
             }
             Controls.ToolButton {
                 text: "Source code..."
-                onClicked: Qt.openUrlExternally("https://cgit.kde.org/kirigami.git/tree/examples/gallerydata/contents/ui/gallery/CardsGridViewGallery.qml
-                ")
+                onClicked: Qt.openUrlExternally("https://cgit.kde.org/kirigami.git/tree/examples/gallerydata/contents/ui/gallery/CardsGridViewGallery.qml")
             }
         }
 
