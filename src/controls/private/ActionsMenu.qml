@@ -49,7 +49,7 @@ Controls.Menu
                 }
             }
             function remove() {
-                if (action.children.length === 0) {
+                if (!action.children || action.children.length === 0) {
                     theMenu.removeItem(item)
                 } else if (theMenu.submenuComponent) {
                     theMenu.removeMenu(item)
