@@ -46,18 +46,25 @@ MouseArea {
 
     drag.filterChildren: !Settings.isMobile
     onPressed: {
+        if (Settings.isMobile) {
+            return;
+        }
         mouse.accepted = false;
         flickableItem.interactive = true;
     }
     onReleased:  {
+        if (Settings.isMobile) {
+            return;
+        }
         mouse.accepted = false;
         flickableItem.interactive = false;
     }
     onWheel: {
-        flickableItem.interactive = false;
         if (Settings.isMobile || flickableItem.contentHeight<flickableItem.height) {
             return;
         }
+
+        flickableItem.interactive = false;
         var y = wheel.pixelDelta.y != 0 ? wheel.pixelDelta.y : wheel.angleDelta.y / 8;
 
         //if we don't have a pixeldelta, apply the configured mouse wheel lines
@@ -85,6 +92,7 @@ MouseArea {
     }
     Connections {
         target: flickableItem
+        enabled: !Settings.isMobile
         onFlickEnded: flickableItem.interactive = false;
         onMovementEnded: flickableItem.interactive = false;
     }

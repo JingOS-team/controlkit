@@ -103,6 +103,18 @@ Kirigami.ScrollablePage {
                 component: "FormLayout"
             }
             ListElement {
+                text: "Cards Layout"
+                component: "CardsLayout"
+            }
+            ListElement {
+                text: "List view of cards"
+                component: "CardsListView"
+            }
+            ListElement {
+                text: "Grid view of cards"
+                component: "CardsGridView"
+            }
+            ListElement {
                 text: "Multiple Columns"
                 component: "MultipleColumns"
             }

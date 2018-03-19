@@ -225,8 +225,6 @@ T2.Page {
      */
     signal backRequested(var event);
 
-    anchors.topMargin: (applicationWindow() && !applicationWindow().wideScreen && Kirigami.Settings.isMobile && applicationWindow().controlsVisible && applicationWindow().header ? applicationWindow().header.preferredHeight : 0)
-
     //NOTE: This exists just because control instances require it
     contentItem: Item {
         onChildrenChanged: {

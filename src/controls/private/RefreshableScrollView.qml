@@ -205,13 +205,6 @@ P.ScrollView {
                     applicationWindow().reachableMode = !applicationWindow().reachableMode;
                 }
             }
-            Binding {
-                target: root.flickableItem
-                property: "topMargin"
-                value: !Settings.isMobile || applicationWindow().wideScreen
-                       ? (root.refreshing ? busyIndicatorFrame.height : 0)
-                       : Math.max(Math.max(root.topPadding - busyIndicatorFrame.headerItemHeight, 0) + (root.refreshing ? busyIndicatorFrame.height : 0), (applicationWindow().header ? applicationWindow().header.height : 0))
-            }
 
             Binding {
                 target: root.flickableItem

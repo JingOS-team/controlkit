@@ -53,15 +53,7 @@ Item {
         left: parent.left
         right: parent.right
     }
-    height: {
-        if (!__appWindow.controlsVisible) {
-            return 1;
-        } else if (__appWindow.wideScreen || !Settings.isMobile) {
-            return preferredHeight;
-        } else {
-            return 1;
-        }
-    }
+    height: preferredHeight
 
     /**
      * background: Item
@@ -76,7 +68,7 @@ Item {
         background.anchors.fill = headerItem;
     }
 
-    opacity: height > 0 && -translateTransform.y <= height ? 1 : 0
+    opacity: height > 0 ? 1 : 0
     Behavior on opacity {
         OpacityAnimator {
             duration: Units.longDuration
@@ -84,77 +76,73 @@ Item {
         }
     }
 
-    transform: Translate {
-        id: translateTransform
-        y: {
-            if (__appWindow === undefined) {
-                return 0;
-            }
-            if (!__appWindow.controlsVisible) {
-                return -headerItem.height - Units.smallSpacing;
-            } else {
-                return 0;
-            }
+    Behavior on height {
+        enabled: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable && !__appWindow.pageStack.currentItem.flickable.moving
+        NumberAnimation {
+            duration: Units.longDuration
+            easing.type: Easing.InOutQuad
         }
-        Behavior on y {
-            NumberAnimation {
-                duration: Units.longDuration
-                easing.type: translateTransform.y < 0 ? Easing.OutQuad : Easing.InQuad
-            }
-        }
+    }
+
+    Connections {
+        target: __appWindow
+        onControlsVisibleChanged: root.height = __appWindow.controlsVisible ? root.preferredHeight : 0;
     }
 
     Item {
         id: headerItem
+        property real computedRootHeight: root.preferredHeight
         anchors {
             left: parent.left
             right: parent.right
+            bottom: parent.bottom
         }
 
         height: __appWindow.reachableMode && __appWindow.reachableModeEnabled ? root.maximumHeight : root.preferredHeight
-
-        function updatePageHeader() {
-            if (!__appWindow || !__appWindow.pageStack || !__appWindow.pageStack.currentItem || !__appWindow.pageStack.currentItem.header || !__appWindow.pageStack.currentItem.flickable) {
-                return;
-            }
-
-            if (__appWindow.wideScreen || !Settings.isMobile) {
-                __appWindow.pageStack.currentItem.header.y = 0;
-            } else {
-                __appWindow.pageStack.currentItem.header.y = headerItem.height + headerItem.y -1;
-            }
-        }
-        onYChanged: updatePageHeader()
-        onHeightChanged: updatePageHeader()
 
         Connections {
             id: headerSlideConnection
             target: __appWindow.pageStack.currentItem ? __appWindow.pageStack.currentItem.flickable : null
             property int oldContentY
             onContentYChanged: {
-                if (!__appWindow.pageStack.currentItem) {
-                    return;
-                }
-                if (__appWindow.pageStack.currentItem.flickable.atYBeginning ||
+                if (!Settings.isMobile ||
+                    !__appWindow.controlsVisible ||
+                    !__appWindow.pageStack.currentItem ||
+                    __appWindow.pageStack.currentItem.flickable.atYBeginning ||
                     __appWindow.pageStack.currentItem.flickable.atYEnd) {
                     return;
-                }
+                //if moves but not dragging, just update oldContentY
+                } else if (!__appWindow.pageStack.currentItem.flickable.dragging) {
+                    oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
+                    return;
+                } 
+                
 
                 if (__appWindow.wideScreen || !Settings.isMobile) {
-                    headerItem.y = 0;
+                    root.height = root.preferredHeight;
                 } else {
-                    headerItem.y = Math.max(root.minimumHeight - root.preferredHeight, Math.min(0, headerItem.y + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
-                    
-                    oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
+                    var oldHeight = root.height;
+
+                    root.height = Math.max(root.minimumHeight,
+                                            Math.min(root.preferredHeight,
+                                                 root.height + oldContentY - __appWindow.pageStack.currentItem.flickable.contentY));
+                
+                    //if the height is changed, use that to simulate scroll
+                    if (oldHeight != height) {
+                        __appWindow.pageStack.currentItem.flickable.contentY = oldContentY;
+                    } else {
+                        oldContentY = __appWindow.pageStack.currentItem.flickable.contentY;
+                    }
                 }
             }
             onMovementEnded: {
-                if (headerItem.y > root.preferredHeight) {
-                    //if don't change the position if more then preferredSize is shown
-                } else if (headerItem.y < -(root.preferredHeight - root.minimumHeight)/2 ) {
-                    headerItem.y = root.minimumHeight - root.preferredHeight;
+                if (__appWindow.wideScreen || !Settings.isMobile) {
+                    return;
+                }
+                if (root.height > (root.preferredHeight - root.minimumHeight)/2 ) {
+                    root.height = root.preferredHeight;
                 } else {
-                    headerItem.y = 0;
+                    root.height = root.minimumHeight;
                 }
             }
         }
@@ -169,8 +157,7 @@ Item {
                 } else {
                     headerSlideConnection.oldContentY = 0;
                 }
-                headerItem.y = 0;
-                headerItem.updatePageHeader()
+                root.height = root.preferredHeight;
             }
         }
 
@@ -178,13 +165,6 @@ Item {
             id: mainItem
             anchors {
                 fill: parent
-            }
-        }
-        Behavior on y {
-            enabled: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable && !__appWindow.pageStack.currentItem.flickable.moving
-            NumberAnimation {
-                duration: Units.longDuration
-                easing.type: Easing.InOutQuad
             }
         }
     }

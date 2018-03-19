@@ -71,14 +71,14 @@ OverlayDrawer {
      * title: string
      * A title to be displayed on top of the drawer
      */
-    property alias title: heading.text
+    property alias title: bannerImage.title
 
     /**
      * icon: var
      * An icon to be displayed alongside the title.
      * It can be a QIcon, a fdo-compatible icon name, or any url understood by Image
      */
-    property alias titleIcon: headingIcon.source
+    property alias titleIcon: bannerImage.titleIcon
 
     /**
      * bannerImageSource: string
@@ -224,29 +224,16 @@ OverlayDrawer {
                 spacing: 0
                 height: Math.max(root.height, Layout.minimumHeight)
 
-                Image {
+                BannerImage {
                     id: bannerImage
 
                     Layout.fillWidth: true
 
-                    Layout.preferredWidth: title.implicitWidth
-                    Layout.preferredHeight: bannerImageSource != "" ? 10 * Units.gridUnit : Layout.minimumHeight
-                    Layout.minimumHeight: title.height > 0 ? title.height + Units.smallSpacing * 2 : 0
-
+                    fillMode: Image.PreserveAspectCrop
                     MouseArea {
                         anchors.fill: parent
                         onClicked: root.bannerClicked()
                     }
-
-                    fillMode: Image.PreserveAspectCrop
-                    asynchronous: true
-
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        top: parent.top
-                    }
-
                     EdgeShadow {
                         edge: Qt.BottomEdge
                         visible: bannerImageSource != ""
@@ -254,54 +241,6 @@ OverlayDrawer {
                             left: parent.left
                             right: parent.right
                             bottom: parent.top
-                        }
-                    }
-                    LinearGradient {
-                        anchors {
-                            left: parent.left
-                            right: parent.right
-                            top: parent.top
-                        }
-                        visible: bannerImageSource != "" && root.title != ""
-                        height: title.height * 1.3
-                        start: Qt.point(0, 0)
-                        end: Qt.point(0, height)
-                        gradient: Gradient {
-                            GradientStop {
-                                position: 0.0
-                                color: Qt.rgba(0, 0, 0, 0.8)
-                            }
-                            GradientStop {
-                                position: 1.0
-                                color: "transparent"
-                            }
-                        }
-                    }
-
-                    RowLayout {
-                        id: title
-                        anchors {
-                            left: parent.left
-                            top: parent.top
-                            margins: Units.smallSpacing * 2
-                        }
-                        Icon {
-                            id: headingIcon
-                            Layout.minimumWidth: Units.iconSizes.large
-                            Layout.minimumHeight: width
-                            visible: valid
-                            isMask: false
-                            //TODO: find a better way to control selective coloring on Android
-                            enabled: !Settings.isMobile
-                        }
-                        Heading {
-                            id: heading
-                            Layout.fillWidth: true
-                            Layout.rightMargin: heading.height
-                            visible: text.length > 0
-                            level: 1
-                            color: bannerImageSource != "" ? "white" : Theme.textColor
-                            elide: Text.ElideRight
                         }
                     }
                 }

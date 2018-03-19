@@ -36,4 +36,9 @@ AbstractApplicationHeader 2.0 AbstractApplicationHeader.qml
 ContextDrawer 2.0 ContextDrawer.qml
 ApplicationWindow 2.0 ApplicationWindow.qml
 PageRow 2.0 PageRow.qml
+AbstractCard 2.4 AbstractCard.qml
+Card 2.4 Card.qml
+CardsLayout 2.4 CardsLayout.qml
+CardsListView 2.4 CardsListView.qml
+CardsGridView 2.4 CardsGridView.qml
 

@@ -161,6 +161,13 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<FormLayoutAttached>(uri, 2, 3, "FormData", "Cannot create objects of type FormData, use it as an attached poperty");
     qmlRegisterUncreatableType<MnemonicAttached>(uri, 2, 3, "MnemonicData", "Cannot create objects of type MnemonicData, use it as an attached poperty");
 
+    //2.4
+    qmlRegisterType(componentUrl(QStringLiteral("AbstractCard.qml")), uri, 2, 4, "AbstractCard");
+    qmlRegisterType(componentUrl(QStringLiteral("Card.qml")), uri, 2, 4, "Card");
+    qmlRegisterType(componentUrl(QStringLiteral("CardsListView.qml")), uri, 2, 4, "CardsListView");
+    qmlRegisterType(componentUrl(QStringLiteral("CardsGridView.qml")), uri, 2, 4, "CardsGridView");
+    qmlRegisterType(componentUrl(QStringLiteral("CardsLayout.qml")), uri, 2, 4, "CardsLayout");
+
     qmlProtectModule(uri, 2);
 }
 

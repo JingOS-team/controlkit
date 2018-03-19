@@ -63,7 +63,6 @@ QQC2.Label {
      */
     property int step: 2
 
-    lineHeight: 1.2
     font.pointSize: headerPointSize(level)
     font.weight: level <= 4 ? Font.Light : Font.Normal
     wrapMode: Text.WordWrap
