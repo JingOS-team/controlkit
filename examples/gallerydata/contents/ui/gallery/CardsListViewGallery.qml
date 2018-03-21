@@ -61,55 +61,64 @@ Kirigami.ScrollablePage {
         }
     }
 
-    Kirigami.CardsListView {
-        model: 100
+    Component {
+        id: delegateComponent
+        Kirigami.AbstractCard {
 
-        delegate: Kirigami.AbstractCard {
-
-            //NOTE: never put a Layout as contentItem as it will cause binding loops
-            //SEE: https://bugreports.qt.io/browse/QTBUG-66826
-            contentItem: Item {
-                implicitWidth: delegateLayout.implicitWidth
-                implicitHeight: delegateLayout.implicitHeight
-                GridLayout {
-                    id: delegateLayout
-                    anchors {
-                        left: parent.left
-                        top: parent.top
-                        right: parent.right
-                        //IMPORTANT: never put the bottom margin
-                    }
-                    rowSpacing: Kirigami.Units.largeSpacing
-                    columnSpacing: Kirigami.Units.largeSpacing
-                    columns: width > Kirigami.Units.gridUnit * 20 ? 4 : 2
-                    Kirigami.Icon {
-                        source: "applications-graphics"
-                        Layout.fillHeight: true
-                        Layout.maximumHeight: Kirigami.Units.iconSizes.huge
-                        Layout.preferredWidth: height
-                    }
-                    ColumnLayout {
-                        Kirigami.Heading {
-                            level: 2
-                            text: "Product "+ modelData
+                //NOTE: never put a Layout as contentItem as it will cause binding loops
+                //SEE: https://bugreports.qt.io/browse/QTBUG-66826
+                contentItem: Item {
+                    implicitWidth: delegateLayout.implicitWidth
+                    implicitHeight: delegateLayout.implicitHeight
+                    GridLayout {
+                        id: delegateLayout
+                        anchors {
+                            left: parent.left
+                            top: parent.top
+                            right: parent.right
+                            //IMPORTANT: never put the bottom margin
                         }
-                        Kirigami.Separator {
-                            Layout.fillWidth: true
+                        rowSpacing: Kirigami.Units.largeSpacing
+                        columnSpacing: Kirigami.Units.largeSpacing
+                        columns: width > Kirigami.Units.gridUnit * 20 ? 4 : 2
+                        Kirigami.Icon {
+                            source: "applications-graphics"
+                            Layout.fillHeight: true
+                            Layout.maximumHeight: Kirigami.Units.iconSizes.huge
+                            Layout.preferredWidth: height
                         }
-                        Controls.Label {
-                            Layout.fillWidth: true
-                            wrapMode: Text.WordWrap
-                            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id risus id augue euismod accumsan."
+                        ColumnLayout {
+                            Kirigami.Heading {
+                                level: 2
+                                text: "Product "+ modelData
+                            }
+                            Kirigami.Separator {
+                                Layout.fillWidth: true
+                            }
+                            Controls.Label {
+                                Layout.fillWidth: true
+                                wrapMode: Text.WordWrap
+                                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id risus id augue euismod accumsan."
+                            }
                         }
-                    }
-                    Controls.Button {
-                        Layout.alignment: Qt.AlignRight|Qt.AlignVCenter
-                        Layout.columnSpan: 2 
-                        text: "Install"
-                        onClicked: showPassiveNotification("Install for Product " + modelData + " clicked");
+                        Controls.Button {
+                            Layout.alignment: Qt.AlignRight|Qt.AlignVCenter
+                            Layout.columnSpan: 2 
+                            text: "Install"
+                            onClicked: showPassiveNotification("Install for Product " + modelData + " clicked");
+                        }
                     }
                 }
             }
+        }
+    Kirigami.CardsListView {
+        id: view
+        model: 100
+
+        delegate: Kirigami.DelegateRecycler {
+            width: view.width
+            height: 150
+            sourceComponent: delegateComponent
         }
     }
 }
