@@ -25,7 +25,7 @@ import org.kde.kirigami 2.2 as Kirigami
 Kirigami.ApplicationWindow {
     id: root
 
-    header: Kirigami.ApplicationHeader {}
+    header: Kirigami.ToolBarApplicationHeader {}
     //FIXME: perhaps the default logic for going widescreen should be refined upstream
     wideScreen: width > columnWidth * 3
     property int columnWidth: Kirigami.Units.gridUnit * 13
@@ -205,6 +205,10 @@ Kirigami.ApplicationWindow {
         id: channelsComponent
         Kirigami.ScrollablePage {
             title: "Channels"
+            actions.main: Kirigami.Action {
+                icon.name: "search"
+                text: "Search"
+            }
             background: Rectangle {
                 anchors.fill: parent
                 color: Kirigami.Theme.backgroundColor
@@ -254,6 +258,16 @@ Kirigami.ApplicationWindow {
         id: chatComponent
         Kirigami.ScrollablePage {
             title: "#KDE"
+            actions {
+                left: Kirigami.Action {
+                    icon.name: "documentinfo"
+                    text: "Channel info"
+                }
+                main: Kirigami.Action {
+                    icon.name: "search"
+                    text: "Search"
+                }
+            }
             actions.contextualActions: [
                 Kirigami.Action {
                     text: "Room Settings"
