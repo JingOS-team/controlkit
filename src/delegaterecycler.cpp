@@ -161,25 +161,7 @@ void DelegateRecycler::resetSourceComponent()
     s_delegateCache->deref(m_sourceComponent);
     m_sourceComponent = nullptr;
 }
-/*
-int DelegateRecycler::implicitWidth() const
-{
-    if (!m_item) {
-        return -1;
-    }
 
-    return m_item->implicitWidth();
-}
-
-int DelegateRecycler::implicitHeight() const
-{
-    if (!m_item) {
-        return -1;
-    }
-
-    return m_item->implicitHeight();
-}
-*/
 void DelegateRecycler::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     if (m_item && newGeometry != oldGeometry) {

@@ -32,8 +32,6 @@ class DelegateRecycler : public QQuickItem
     Q_OBJECT
 
     Q_PROPERTY(QQmlComponent *sourceComponent READ sourceComponent WRITE setSourceComponent RESET resetSourceComponent NOTIFY sourceComponentChanged)
-   // Q_PROPERTY(int implicitWidth READ implicitWidth NOTIFY implicitWidthChanged)
-   // Q_PROPERTY(int implicitHeight READ implicitHeight NOTIFY implicitHeightChanged)
 
 public:
     DelegateRecycler(QQuickItem *parent=0);
@@ -43,9 +41,6 @@ public:
     QQmlComponent *sourceComponent() const;
     void setSourceComponent(QQmlComponent *component);
     void resetSourceComponent();
-
-   // int implicitWidth() const;
-   // int implicitHeight() const;
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
