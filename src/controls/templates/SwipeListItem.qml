@@ -308,7 +308,14 @@ T2.ItemDelegate {
 
 //BEGIN signal handlers
     onContentItemChanged: {
+        if (!contentItem) {
+            return;
+        }
         contentItem.parent = background;
+        contentItem.anchors.left = background.left;
+        contentItem.anchors.right = background.right;
+        contentItem.anchors.leftMargin = Qt.binding(function() {return listItem.leftPadding});
+        contentItem.anchors.rightMargin = Qt.binding(function() {return listItem.rightPadding});
         contentItem.z = 0;
     }
     Component.onCompleted: {
@@ -317,6 +324,7 @@ T2.ItemDelegate {
             var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
             behindItem.view.parent.parent._swipeFilter = component.createObject(behindItem.view.parent.parent);
         }
+        listItem.contentItemChanged();
     }
     Connections {
         id: swipeFilterConnection
