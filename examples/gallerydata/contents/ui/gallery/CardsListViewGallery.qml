@@ -61,7 +61,6 @@ Kirigami.ScrollablePage {
         }
     }
 
-        
     Kirigami.CardsListView {
         id: view
         model: 100

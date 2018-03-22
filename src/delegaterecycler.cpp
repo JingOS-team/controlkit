@@ -21,6 +21,7 @@
 #include "delegaterecycler.h"
 
 #include <QQmlComponent>
+#include <QQmlContext>
 #include <QQmlEngine>
 #include <QDebug>
 
@@ -141,11 +142,37 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
     m_item = s_delegateCache->take(component);
 
     if (!m_item) {
-        QObject * obj = component->create(QQmlEngine::contextForObject(this));
+        QQuickItem *candidate = parentItem();
+        QQmlContext *ctx = nullptr;
+        while (candidate) {
+            QQmlContext *parentCtx = QQmlEngine::contextForObject(candidate);
+            if (parentCtx) {
+                ctx = new QQmlContext(QQmlEngine::contextForObject(candidate), candidate);
+                break;
+            } else {
+                candidate = candidate->parentItem();
+            }
+            qWarning()<<candidate<<ctx;
+        }
+
+        QQmlContext *myCtx = QQmlEngine::contextForObject(this);
+        ctx->setContextProperty(QStringLiteral("model"), myCtx->contextProperty(QStringLiteral("model")));
+        ctx->setContextProperty(QStringLiteral("modelData"), myCtx->contextProperty(QStringLiteral("modelData")));
+        ctx->setContextProperty(QStringLiteral("index"), myCtx->contextProperty(QStringLiteral("index")));
+
+        QObject * obj = component->create(ctx);
         m_item = qobject_cast<QQuickItem *>(obj);
         if (!m_item) {
             obj->deleteLater();
         }
+    } else {
+        QQmlContext *myCtx = QQmlEngine::contextForObject(this);
+        QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
+
+        QObject *model = myCtx->contextProperty(QStringLiteral("model")).value<QObject*>();
+        ctx->setContextProperty(QStringLiteral("model"), QVariant::fromValue(model));
+        ctx->setContextProperty(QStringLiteral("modelData"), myCtx->contextProperty(QStringLiteral("modelData")));
+        ctx->setContextProperty(QStringLiteral("index"), myCtx->contextProperty(QStringLiteral("index")));
     }
 
     if (m_item) {
@@ -179,6 +206,9 @@ void DelegateRecycler::updateSize(bool parentResized)
     const bool needToUpdateWidth = parentResized && widthValid();
     const bool needToUpdateHeight = parentResized && heightValid();
 
+    if (parentResized) {
+        m_item->setPosition(QPoint(0,0));
+    }
     if (needToUpdateWidth && needToUpdateHeight) {
         m_item->setSize(QSizeF(width(), height()));
     } else if (needToUpdateWidth) {

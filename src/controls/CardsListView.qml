@@ -42,7 +42,7 @@ CardsListViewPrivate {
     spacing: Kirigami.Units.largeSpacing * 2
     topMargin: headerPositioning != ListView.InlineHeader ? spacing : 0
 
-    default property alias delegate: root._delegateComponent
+    property alias delegate: root._delegateComponent
     headerPositioning: ListView.OverlayHeader
 
     onContentHeightChanged: {

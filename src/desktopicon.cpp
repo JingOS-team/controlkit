@@ -167,7 +167,8 @@ void DesktopIcon::setSource(const QVariant &icon)
             update();
         });
     }
-
+    
+    m_loadedImage = QImage();
     update();
     emit sourceChanged();
 }
@@ -421,6 +422,7 @@ QImage DesktopIcon::findIcon(const QSize &size)
 {
     QImage img;
     QString iconSource = m_source.toString();
+
     if (iconSource.startsWith("image://")){
         QUrl iconUrl(iconSource);
         QString iconProviderId = iconUrl.host();

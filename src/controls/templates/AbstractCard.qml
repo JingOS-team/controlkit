@@ -72,8 +72,6 @@ T.ItemDelegate {
     
     implicitHeight: mainLayout.implicitHeight + topPadding + bottomPadding
 
-    x: internal.listView ? internal.listView.spacing : (internal.gridView ? internal.gridView.cellWidth - width: 0)
-
     hoverEnabled: !Kirigami.Settings.isMobile && showClickFeedback
     //if it's in a CardLayout, try to expand horizontal cards to both columns
     Layout.columnSpan: headerOrientation == Qt.Horizontal && parent.hasOwnProperty("columns") ? parent.columns : 1
@@ -130,12 +128,7 @@ T.ItemDelegate {
             Layout.preferredHeight: mainLayout.preferredHeight(footer)
         }
     }
-    QtObject {
-        id: internal
-        property bool completed: false
-        property ListView listView
-        property GridView gridView
-    }
+
 //BEGIN signal handlers
     onContentItemChanged: {
         if (!contentItem) {
@@ -166,12 +159,6 @@ T.ItemDelegate {
         footer.anchors.topMargin = Qt.binding(function() {return (root.height - root.bottomPadding - root.topPadding)  - (footerParent.y + footerParent.height)});
     }
     Component.onCompleted: {
-        internal.listView = ListView.view;
-        //only consider gridviews which are CardsGridView
-        if (GridView.view && GridView.view.hasOwnProperty("maximumColumnWidth")) {
-            internal.gridView = GridView.view;
-        }
-        internal.completed = true;
         contentItemChanged();
     }
 //END signal handlers

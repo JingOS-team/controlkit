@@ -49,8 +49,6 @@ protected:
 
 Q_SIGNALS:
     void sourceComponentChanged();
-    void implicitWidthChanged();
-    void implicitHeightChanged();
 
 private:
     QPointer<QQmlComponent> m_sourceComponent;
