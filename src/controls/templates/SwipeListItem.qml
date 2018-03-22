@@ -312,10 +312,12 @@ T2.ItemDelegate {
             return;
         }
         contentItem.parent = background;
+        contentItem.anchors.top = background.top;
         contentItem.anchors.left = background.left;
         contentItem.anchors.right = background.right;
         contentItem.anchors.leftMargin = Qt.binding(function() {return listItem.leftPadding});
         contentItem.anchors.rightMargin = Qt.binding(function() {return listItem.rightPadding});
+        contentItem.anchors.topMargin = Qt.binding(function() {return listItem.topPadding});
         contentItem.z = 0;
     }
     Component.onCompleted: {
