@@ -167,7 +167,11 @@ void DesktopIcon::setSource(const QVariant &icon)
             update();
         });
     }
-    
+
+    if (m_networkReply) {
+        //if there was a network query going on, interrupt it
+        m_networkReply->close();
+    }
     m_loadedImage = QImage();
     update();
     emit sourceChanged();
@@ -371,7 +375,7 @@ void DesktopIcon::geometryChanged(const QRectF &newGeometry, const QRectF &oldGe
 }
 
 void DesktopIcon::handleFinished(QNetworkAccessManager* qnam, QNetworkReply* reply) {
-    if (reply->error() == QNetworkReply::NoError) {
+    if (reply && reply->error() == QNetworkReply::NoError) {
         const QUrl possibleRedirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
         if (!possibleRedirectUrl.isEmpty()) {
             const QUrl redirectUrl = reply->url().resolved(possibleRedirectUrl);
@@ -383,9 +387,9 @@ void DesktopIcon::handleFinished(QNetworkAccessManager* qnam, QNetworkReply* rep
             reply->deleteLater();
             QNetworkRequest request(possibleRedirectUrl);
             request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
-            QNetworkReply* newReply = qnam->get(request);
-            connect(newReply, &QNetworkReply::readyRead, this, [this, newReply](){ handleReadyRead(newReply); });
-            connect(newReply, &QNetworkReply::finished, this, [this, qnam, newReply](){ handleFinished(qnam, newReply); });
+            m_networkReply = qnam->get(request);
+            connect(m_networkReply, &QNetworkReply::readyRead, this, [this](){handleReadyRead(m_networkReply); });
+            connect(m_networkReply, &QNetworkReply::finished, this, [this, qnam](){handleFinished(qnam, m_networkReply); });
             return;
         }
     }
@@ -393,20 +397,21 @@ void DesktopIcon::handleFinished(QNetworkAccessManager* qnam, QNetworkReply* rep
 
 void DesktopIcon::handleReadyRead(QNetworkReply* reply)
 {
-    if (reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isNull()) {
+    if (reply && reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isNull()) {
         // We're handing the event loop back while doing network work, and it turns out
         // this fairly regularly results in things being deleted under us. So, just
         // handle that and crash less :)
         QPointer<DesktopIcon> me(this);
+        QPointer<QNetworkReply> guardedReply(reply);
         QByteArray data;
         do {
-            data.append(reply->read(32768));
+            data.append(guardedReply->read(32768));
             // Because we are in the main thread, this could be potentially very expensive, so let's not block
             qApp->processEvents();
-            if(!me) {
+            if(!me || !guardedReply) {
                 return;
             }
-        } while(!reply->atEnd());
+        } while(!guardedReply->atEnd());
         m_loadedImage = QImage::fromData(data);
         if (m_loadedImage.isNull()) {
             // broken image from data, inform the user of this with some useful broken-image thing...
@@ -454,9 +459,9 @@ QImage DesktopIcon::findIcon(const QSize &size)
         if (engine && (qnam = qmlEngine(this)->networkAccessManager())) {
             QNetworkRequest request(m_source.toUrl());
             request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
-            QNetworkReply* reply = qnam->get(request);
-            connect(reply, &QNetworkReply::readyRead, this, [this, reply](){ handleReadyRead(reply); });
-            connect(reply, &QNetworkReply::finished, this, [this, qnam, reply](){ handleFinished(qnam, reply); });
+            m_networkReply = qnam->get(request);
+            connect(m_networkReply.data(), &QNetworkReply::readyRead, this, [this](){ handleReadyRead(m_networkReply); });
+            connect(m_networkReply.data(), &QNetworkReply::finished, this, [this, qnam](){ handleFinished(qnam, m_networkReply); });
         }
         // Temporary icon while we wait for the real image to load...
         img = QIcon::fromTheme("image-x-icon").pixmap(size, iconMode(), QIcon::On).toImage();
