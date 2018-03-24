@@ -116,7 +116,7 @@ Kirigami.AbstractCard {
             model: root.actions
             delegate: PrivateActionToolButton {
                 id: actionDelegate
-                property bool fits: {
+                readonly property bool fits: {
                     var minX = 0;
                     for (var i = 0; i < index; ++i) {
                         if (actionsLayout.children[i].visible) {

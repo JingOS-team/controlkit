@@ -39,7 +39,7 @@ AbstractApplicationHeader {
     id: header
 
     /**
-     * headerStyle: string
+     * headerStyle: int
      * The way the separator between pages should be drawn in the header.
      * Allowed values are:
      * * Breadcrumb: the pages are hyerarchical and the separator will look like a >
