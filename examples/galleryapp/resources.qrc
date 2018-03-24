@@ -19,6 +19,7 @@
         <file alias="contents/ui/gallery/CardsLayoutGallery.qml">../gallerydata/contents/ui/gallery/CardsLayoutGallery.qml</file>
         <file alias="contents/ui/gallery/CardsListViewGallery.qml">../gallerydata/contents/ui/gallery/CardsListViewGallery.qml</file>
         <file alias="contents/ui/gallery/CardsGridViewGallery.qml">../gallerydata/contents/ui/gallery/CardsGridViewGallery.qml</file>
+        <file alias="contents/ui/gallery/InlineMessagesGallery.qml">../gallerydata/contents/ui/gallery/InlineMessagesGallery.qml</file>
         <file alias="contents/ui/gallery/MetricsGallery.qml">../gallerydata/contents/ui/gallery/MetricsGallery.qml</file>
         <file alias="contents/ui/gallery/LayersGallery.qml">../gallerydata/contents/ui/gallery/LayersGallery.qml</file>
         <file alias="contents/ui/gallery/FormLayoutGallery.qml">../gallerydata/contents/ui/gallery/FormLayoutGallery.qml</file>

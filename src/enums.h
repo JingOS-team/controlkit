@@ -36,4 +36,18 @@ public:
     };
 };
 
+class MessageType : public QObject
+{
+    Q_OBJECT
+    Q_ENUMS(Type)
+
+public:
+    enum Type {
+        Information = 0,
+        Positive,
+        Warning,
+        Error
+    };
+};
+
 #endif // ENUMS_H

@@ -13,6 +13,8 @@
         <file alias="CardsLayout.qml">src/controls/CardsLayout.qml</file>
         <file alias="CardsListView.qml">src/controls/CardsListView.qml</file>
         <file alias="CardsGridView.qml">src/controls/CardsGridView.qml</file>
+        <file alias="templates/InlineMessage.qml">src/controls/templates/AbstractCard.qml</file>
+        <file alias="InlineMessage.qml">src/controls/InlineMessage.qml</file>
         <file alias="ToolBarApplicationHeader.qml">src/controls/ToolBarApplicationHeader.qml</file>
         <file alias="private/PrivateActionToolButton.qml">src/controls/private/PrivateActionToolButton.qml</file>
         <file alias="private/RefreshableScrollView.qml">src/controls/private/RefreshableScrollView.qml</file>

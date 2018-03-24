@@ -115,6 +115,10 @@ Kirigami.ScrollablePage {
                 component: "CardsGridView"
             }
             ListElement {
+                text: "Inline Messages"
+                component: "InlineMessages"
+            }
+            ListElement {
                 text: "Multiple Columns"
                 component: "MultipleColumns"
             }
