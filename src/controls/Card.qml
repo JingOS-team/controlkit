@@ -102,6 +102,16 @@ Kirigami.AbstractCard {
         property var overflowSet: []
         visible: root.footer == actionsLayout
 
+        // TODO use Array.findIndex once we depend on Qt 5.9
+        function findIndex(array, cb) {
+            for (var i = 0, length = array.length; i < length; ++i) {
+                if (cb(array[i])) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         Repeater {
             model: root.actions
             delegate: PrivateActionToolButton {
@@ -121,7 +131,7 @@ Kirigami.AbstractCard {
                 kirigamiAction: modelData
                 onFitsChanged: updateOverflowSet()
                 function updateOverflowSet() {
-                    var index = actionsLayout.overflowSet.findIndex(function(act){
+                    var index = actionsLayout.findIndex(actionsLayout.overflowSet, function(act){
                         return act == modelData});
 
                     if ((fits || !modelData.visible) && index > -1) {
@@ -172,7 +182,7 @@ Kirigami.AbstractCard {
                         }
                         separatorVisible: false
                         backgroundColor: "transparent"
-                        visible: actionsLayout.overflowSet.findIndex(function(act) {
+                        visible: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {
                                 return act == modelData}) > -1 && modelData.visible
                         enabled: modelData.enabled
                     }
