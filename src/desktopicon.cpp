@@ -463,9 +463,8 @@ QImage DesktopIcon::findIcon(const QSize &size)
             iconSource = iconSource.mid(3);
         }
         QIcon icon;
-        const QColor tintColor = m_color == Qt::transparent ? m_theme->textColor() : m_color;
+        const QColor tintColor = m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
         const bool isPath = iconSource.contains("/");
-
         if (isPath) {
             icon = QIcon(iconSource);
         } else {
@@ -473,7 +472,11 @@ QImage DesktopIcon::findIcon(const QSize &size)
         }
         if (!icon.availableSizes().isEmpty()){
             img = icon.pixmap(size, iconMode(), QIcon::On).toImage();
-            if (m_isMask || icon.isMask() || (isPath && tintColor != Qt::transparent)) {
+            if (m_isMask ||
+                //this is an heuristic to decide when to tint and when to just draw
+                //(fullcolor icons) in reality on basic styles the only colored icons should be -symbolic, this heuristic is the most compatible middle ground
+                (icon.isMask() && (iconSource.endsWith("-symbolic") || size.width() < 48)) ||
+                (isPath && tintColor != Qt::transparent)) {
                 QPainter p(&img);
                 p.setCompositionMode(QPainter::CompositionMode_SourceIn);
                 p.fillRect(img.rect(), tintColor);
