@@ -372,11 +372,8 @@ OverlayDrawer {
                                         onActivated: listItem.clicked()
                                     }
                                     isMask: true
-                                    anchors {
-                                        verticalCenter: contentItem.verticalCenter
-                                        right: contentItem.right
-                                        rightMargin: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : 0
-                                    }
+                                    Layout.alignment: Qt.AlignVCenter
+                                    Layout.rightMargin: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : 0
                                     height: Units.iconSizes.smallMedium
                                     selected: listItem.checked || listItem.pressed
                                     width: height
