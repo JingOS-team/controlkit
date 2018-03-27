@@ -468,22 +468,24 @@ QImage DesktopIcon::findIcon(const QSize &size)
         if (isPath) {
             icon = QIcon(iconSource);
         } else {
-            QQmlContext *ctx = QQmlEngine::contextForObject(this);
-            if (ctx) {
-                QUrl overrideIconSource = ctx->baseUrl();
-                overrideIconSource.setPath(overrideIconSource.path().replace(QRegularExpression("kirigami\\.2\\/.*"), "kirigami.2/icons/" % iconSource % ".svg"));
-
-                icon = QIcon(overrideIconSource.path());
-            }
-            if (icon.availableSizes().isEmpty()) {
-                icon = m_theme->iconFromTheme(iconSource, tintColor);
+            icon = m_theme->iconFromTheme(iconSource, tintColor);
+            if (icon.isNull()) {
+                QQmlContext *ctx = QQmlEngine::contextForObject(this);
+                if (ctx) {
+                    QUrl localIconSource = ctx->baseUrl();
+                    localIconSource.setPath(localIconSource.path().replace(QRegularExpression("kirigami\\.2\\/.*"), "kirigami.2/icons/" % iconSource % ".svg"));
+                    icon = QIcon(localIconSource.path());
+                    //heuristic to set every icon as mask, maybe only android?
+                    icon.setIsMask(true);
+                }
             }
         }
-        if (!icon.availableSizes().isEmpty()){
+        if (!icon.isNull()) {
             img = icon.pixmap(size, iconMode(), QIcon::On).toImage();
             if (m_isMask ||
                 //this is an heuristic to decide when to tint and when to just draw
                 //(fullcolor icons) in reality on basic styles the only colored icons should be -symbolic, this heuristic is the most compatible middle ground
+                //TODO: screen cale factor
                 (icon.isMask() && (iconSource.endsWith("-symbolic") || size.width() < 48)) ||
                 (isPath && tintColor != Qt::transparent)) {
                 QPainter p(&img);
