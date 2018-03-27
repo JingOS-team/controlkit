@@ -468,7 +468,16 @@ QImage DesktopIcon::findIcon(const QSize &size)
         if (isPath) {
             icon = QIcon(iconSource);
         } else {
-            icon = m_theme->iconFromTheme(iconSource, tintColor);
+            QQmlContext *ctx = QQmlEngine::contextForObject(this);
+            if (ctx) {
+                QUrl overrideIconSource = ctx->baseUrl();
+                overrideIconSource.setPath(overrideIconSource.path().replace(QRegularExpression("kirigami\\.2\\/.*"), "kirigami.2/icons/" % iconSource % ".svg"));
+
+                icon = QIcon(overrideIconSource.path());
+            }
+            if (icon.availableSizes().isEmpty()) {
+                icon = m_theme->iconFromTheme(iconSource, tintColor);
+            }
         }
         if (!icon.availableSizes().isEmpty()){
             img = icon.pixmap(size, iconMode(), QIcon::On).toImage();
