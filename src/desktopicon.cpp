@@ -35,6 +35,7 @@
 #include <QGuiApplication>
 #include <QPointer>
 #include <QPainter>
+#include <QScreen>
 
 class ManagedTextureNode : public QSGSimpleTextureNode
 {
@@ -506,11 +507,15 @@ QImage DesktopIcon::findIcon(const QString &source, const QSize &size)
         }
         if (!icon.isNull()) {
             img = icon.pixmap(size, iconMode(), QIcon::On).toImage();
+            qreal ratio = 1;
+            if (window() && window()->screen()) {
+                ratio = window()->screen()->devicePixelRatio();
+            }
             if (m_isMask ||
                 //this is an heuristic to decide when to tint and when to just draw
                 //(fullcolor icons) in reality on basic styles the only colored icons should be -symbolic, this heuristic is the most compatible middle ground
-                //TODO: screen cale factor
-                (icon.isMask() && (iconSource.endsWith("-symbolic") || size.width() < 48)) ||
+                //48 is the usual value for "big" icons (enum we can't access from here) which we need to take dpis into account
+                (icon.isMask() && (iconSource.endsWith("-symbolic") || size.width() < 48.0 * ratio)) ||
                 (isPath && tintColor != Qt::transparent)) {
                 QPainter p(&img);
                 p.setCompositionMode(QPainter::CompositionMode_SourceIn);
