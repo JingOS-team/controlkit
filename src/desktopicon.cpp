@@ -150,6 +150,24 @@ DesktopIcon::~DesktopIcon()
 {
 }
 
+void DesktopIcon::setName(const QString &name)
+{
+    if (m_name == name) {
+        return;
+    }
+
+    m_name = name;
+    m_changed = true;
+
+    update();
+    emit nameChanged();
+}
+
+QString DesktopIcon::name() const
+{
+    return m_name;
+}
+
 void DesktopIcon::setSource(const QVariant &icon)
 {
     if (m_source == icon) {
@@ -303,38 +321,44 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
             const auto multiplier = QCoreApplication::instance()->testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
             const QSize size = itemSize * multiplier;
 
-            switch(m_source.type()){
-            case QVariant::Pixmap:
-                img = m_source.value<QPixmap>().toImage();
-                break;
-            case QVariant::Image:
-                img = m_source.value<QImage>();
-                break;
-            case QVariant::Bitmap:
-                img = m_source.value<QBitmap>().toImage();
-                break;
-            case QVariant::Icon:
-                img = m_source.value<QIcon>().pixmap(size, iconMode(), QIcon::On).toImage();
-                break;
-            case QVariant::Url:
-            case QVariant::String:
-                img = findIcon(size);
-                break;
-            case QVariant::Brush:
-                //todo: fill here too?
-            case QVariant::Color:
-                img = QImage(size, QImage::Format_Alpha8);
-                img.fill(m_source.value<QColor>());
-                break;
-            default:
-                break;
+            if (!m_name.isEmpty()) {
+                img = findIcon(m_name, size);
+            }
+            //did loading from name fail?
+            if (img.isNull()) {
+                switch(m_source.type()) {
+                case QVariant::Pixmap:
+                    img = m_source.value<QPixmap>().toImage();
+                    break;
+                case QVariant::Image:
+                    img = m_source.value<QImage>();
+                    break;
+                case QVariant::Bitmap:
+                    img = m_source.value<QBitmap>().toImage();
+                    break;
+                case QVariant::Icon:
+                    img = m_source.value<QIcon>().pixmap(size, iconMode(), QIcon::On).toImage();
+                    break;
+                case QVariant::Url:
+                case QVariant::String:
+                    img = findIcon(m_source.toString(), size);
+                    break;
+                case QVariant::Brush:
+                    //todo: fill here too?
+                case QVariant::Color:
+                    img = QImage(size, QImage::Format_Alpha8);
+                    img.fill(m_source.value<QColor>());
+                    break;
+                default:
+                    break;
+                }
             }
 
-            if (img.isNull()){
+            if (img.isNull()) {
                 img = QImage(size, QImage::Format_Alpha8);
                 img.fill(Qt::transparent);
             }
-            if (img.size() != size){
+            if (img.size() != size) {
                 // At this point, the image will already be scaled, but we need to output it in
                 // the correct aspect ratio, painted centered in the viewport. So:
                 QRect destination(QPoint(0, 0), img.size().scaled(itemSize, Qt::KeepAspectRatio));
@@ -417,10 +441,10 @@ void DesktopIcon::handleReadyRead(QNetworkReply* reply)
     }
 }
 
-QImage DesktopIcon::findIcon(const QSize &size)
+QImage DesktopIcon::findIcon(const QString &source, const QSize &size)
 {
     QImage img;
-    QString iconSource = m_source.toString();
+    QString iconSource = source;
     if (iconSource.startsWith("image://")){
         QUrl iconUrl(iconSource);
         QString iconProviderId = iconUrl.host();
