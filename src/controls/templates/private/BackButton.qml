@@ -24,13 +24,7 @@ import org.kde.kirigami 2.2
 
 Controls.ToolButton {
     id: button
-    anchors {
-        top: parent.top
-        bottom: parent.bottom
-        margins: 4
-        left: parent.left
-    }
-    width: visible ? height : 0
+
     z: 99
     enabled: !Settings.isMobile && (__appWindow.pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0)
     implicitWidth: height

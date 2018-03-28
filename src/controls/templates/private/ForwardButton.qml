@@ -24,12 +24,6 @@ import org.kde.kirigami 2.2
 
 Controls.ToolButton {
     id: button
-    anchors {
-        top: parent.top
-        bottom: parent.bottom
-        margins: 4
-    }
-    width: visible ? height : 0
     z: 99
 
     property Flickable headerFlickable
