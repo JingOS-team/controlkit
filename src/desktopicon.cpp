@@ -477,7 +477,9 @@ QImage DesktopIcon::findIcon(const QSize &size)
                     localIconSource.setPath(localIconSource.path().replace(QRegularExpression("kirigami\\.2\\/.*"), "kirigami.2/icons/" % iconSource % ".svg"));
                     icon = QIcon(localIconSource.path());
                     //heuristic to set every icon as mask, maybe only android?
-                    icon.setIsMask(true);
+                    if (!icon.isNull()) {
+                        icon.setIsMask(true);
+                    }
                 }
             }
         }
