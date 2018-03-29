@@ -36,7 +36,6 @@ class DesktopIcon : public QQuickItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QVariant source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
     Q_PROPERTY(int implicitWidth READ implicitWidth CONSTANT)
@@ -51,9 +50,6 @@ class DesktopIcon : public QQuickItem
 public:
     DesktopIcon(QQuickItem *parent=0);
     ~DesktopIcon();
-
-    void setName(const QString &name);
-    QString name() const;
 
     void setSource(const QVariant &source);
     QVariant source() const;
@@ -83,7 +79,6 @@ public:
     QSGNode* updatePaintNode(QSGNode* node, UpdatePaintNodeData* data) Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
-    void nameChanged();
     void sourceChanged();
     void smoothChanged();
     void enabledChanged();
@@ -95,14 +90,13 @@ Q_SIGNALS:
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) Q_DECL_OVERRIDE;
-    QImage findIcon(const QString &source, const QSize& size);
+    QImage findIcon(const QSize& size);
     void handleFinished(QNetworkAccessManager* qnam, QNetworkReply* reply);
     void handleReadyRead(QNetworkReply* reply);
     QIcon::Mode iconMode() const;
 
 private:
     Kirigami::PlatformTheme *m_theme = nullptr;
-    QString m_name;
     QVariant m_source;
     bool m_smooth;
     bool m_changed;
