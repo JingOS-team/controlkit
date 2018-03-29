@@ -94,8 +94,6 @@ Image {
             Layout.minimumHeight: width
             visible: valid
             isMask: false
-            //TODO: find a better way to control selective coloring on Android
-            enabled: !Kirigami.Settings.isMobile
         }
         Kirigami.Heading {
             id: heading

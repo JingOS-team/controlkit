@@ -35,6 +35,7 @@
 #include <QGuiApplication>
 #include <QPointer>
 #include <QPainter>
+#include <QScreen>
 
 class ManagedTextureNode : public QSGSimpleTextureNode
 {
@@ -463,17 +464,35 @@ QImage DesktopIcon::findIcon(const QSize &size)
             iconSource = iconSource.mid(3);
         }
         QIcon icon;
-        const QColor tintColor = m_color == Qt::transparent ? m_theme->textColor() : m_color;
+        const QColor tintColor = m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
         const bool isPath = iconSource.contains("/");
-
         if (isPath) {
             icon = QIcon(iconSource);
         } else {
             icon = m_theme->iconFromTheme(iconSource, tintColor);
+            if (icon.isNull()) {
+                QQmlContext *ctx = QQmlEngine::contextForObject(this);
+                if (ctx) {
+                    QUrl localIconSource = ctx->baseUrl();
+                    localIconSource.setPath(localIconSource.path().replace(QRegularExpression("kirigami\\.2\\/.*"), "kirigami.2/icons/" % iconSource % ".svg"));
+                    icon = QIcon(localIconSource.path());
+                    //heuristic to set every icon as mask, maybe only android?
+                    icon.setIsMask(true);
+                }
+            }
         }
-        if (!icon.availableSizes().isEmpty()){
+        if (!icon.isNull()) {
             img = icon.pixmap(size, iconMode(), QIcon::On).toImage();
-            if (m_isMask || icon.isMask() || (isPath && tintColor != Qt::transparent)) {
+            qreal ratio = 1;
+            if (window() && window()->screen()) {
+                ratio = window()->screen()->devicePixelRatio();
+            }
+            if (m_isMask ||
+                //this is an heuristic to decide when to tint and when to just draw
+                //(fullcolor icons) in reality on basic styles the only colored icons should be -symbolic, this heuristic is the most compatible middle ground
+                //48 is the usual value for "big" icons (enum we can't access from here) which we need to take dpis into account
+                (icon.isMask() && (iconSource.endsWith("-symbolic") || size.width() < 48.0 * ratio)) ||
+                (isPath && tintColor != Qt::transparent)) {
                 QPainter p(&img);
                 p.setCompositionMode(QPainter::CompositionMode_SourceIn);
                 p.fillRect(img.rect(), tintColor);

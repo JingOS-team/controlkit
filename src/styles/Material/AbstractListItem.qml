@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.7
-import org.kde.kirigami 2.2
+import org.kde.kirigami 2.4
 import QtQuick.Controls.Material 2.1 as Mat
 import QtQuick.Controls.Material.impl 2.1 as MatImp
 import "../../private"
