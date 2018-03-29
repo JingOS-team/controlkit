@@ -126,11 +126,18 @@ QQmlComponent *DelegateRecycler::sourceComponent() const
 
 void DelegateRecycler::setSourceComponent(QQmlComponent *component)
 {
+    
+    if (component && component->parent() == this) {
+        qWarning() << "Error: source components cannot be declared inside DelegateRecycler";
+        return;
+    }
     if (m_sourceComponent == component) {
         return;
     }
     if (m_sourceComponent) {
         if (m_item) {
+            disconnect(m_item, &QQuickItem::implicitWidthChanged, this, &DelegateRecycler::updateHints);
+            disconnect(m_item, &QQuickItem::implicitHeightChanged, this, &DelegateRecycler::updateHints);
             s_delegateCache->insert(component, m_item);
         }
         s_delegateCache->deref(component);
@@ -177,6 +184,8 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
 
     if (m_item) {
         m_item->setParentItem(this);
+        connect(m_item, &QQuickItem::implicitWidthChanged, this, &DelegateRecycler::updateHints);
+        connect(m_item, &QQuickItem::implicitHeightChanged, this, &DelegateRecycler::updateHints);
         updateSize(true);
     }
 
@@ -195,6 +204,11 @@ void DelegateRecycler::geometryChanged(const QRectF &newGeometry, const QRectF &
         updateSize(true);
     }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+}
+
+void DelegateRecycler::updateHints()
+{
+    updateSize(false);
 }
 
 void DelegateRecycler::updateSize(bool parentResized)

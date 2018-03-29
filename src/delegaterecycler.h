@@ -45,6 +45,7 @@ public:
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
+    void updateHints();
     void updateSize(bool parentResized);
 
 Q_SIGNALS:
