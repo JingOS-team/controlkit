@@ -27,10 +27,31 @@
 
 class DelegateCache;
 
+/**
+ * This class may be used as a delegate of a ListView or a GridView in the case
+ * the intended delegate is a bit heavy, with many objects inside.
+ * This will ensure the delegate instances will be put back in a commoin pool after
+ * destruction, so when scrolling a big list, the delegates from old delete items will
+ * be taken from the pool and reused, minimizing the need of instantiating new objects
+ * and deleting old ones. It ensures scrolling of lists with heavy delegates is
+ * smoother and helps with memory fragmentations as well.
+ * 
+ * NOTE: CardListView and CardGridView are already using this recycler, so do NOT use it 
+ * as a delegate for those 2 views.
+ * Also, do NOT use this with a Repeater.
+ * @since 2.4
+ */
 class DelegateRecycler : public QQuickItem
 {
     Q_OBJECT
 
+    /**
+     * The Component the actual delegates will be built from.
+     * Note: the component may not be a child of this object, therefore it can't be
+     * declared inside the DelegateRecycler declaration.
+     * The DelegateRecycler will not take ownership of the delegate Component, so it's up
+     * to the caller to delete it (usually with the normal child/parent relationship)
+     */
     Q_PROPERTY(QQmlComponent *sourceComponent READ sourceComponent WRITE setSourceComponent RESET resetSourceComponent NOTIFY sourceComponentChanged)
 
 public:

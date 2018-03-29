@@ -73,7 +73,6 @@ void DelegateCache::deref(QQmlComponent *component)
         if (m_unusedItems.contains(component)) {
             qDeleteAll(m_unusedItems[component]);
             m_unusedItems.remove(component);
-            component->deleteLater();
         }
     }
 }
@@ -126,7 +125,6 @@ QQmlComponent *DelegateRecycler::sourceComponent() const
 
 void DelegateRecycler::setSourceComponent(QQmlComponent *component)
 {
-    
     if (component && component->parent() == this) {
         qWarning() << "Error: source components cannot be declared inside DelegateRecycler";
         return;
