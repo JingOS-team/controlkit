@@ -80,7 +80,6 @@ void DelegateCache::deref(QQmlComponent *component)
 void DelegateCache::insert(QQmlComponent *component, QQuickItem *item)
 {
     if (m_unusedItems.contains(component) && m_unusedItems[component].length() >= s_cacheSize) {
-        qWarning()<<"THROWING AWAY AN ITEM"<<item;
         item->deleteLater();
         return;
     }
@@ -94,10 +93,8 @@ QQuickItem *DelegateCache::take(QQmlComponent *component)
     if (m_unusedItems.contains(component) && !m_unusedItems[component].isEmpty()) {
         QQuickItem *item = m_unusedItems[component].first();
         m_unusedItems[component].pop_front();
-        qWarning()<<"RECYCLED"<<item;
         return item;
     }
-    qWarning()<<"BOOOOH FAILED TO RECYCLE";
     return nullptr;
 }
 
@@ -157,7 +154,6 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
             } else {
                 candidate = candidate->parentItem();
             }
-            qWarning()<<candidate<<ctx;
         }
 
         QQmlContext *myCtx = QQmlEngine::contextForObject(this);
