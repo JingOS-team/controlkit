@@ -20,8 +20,8 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.3 as Kirigami
-
+import org.kde.kirigami 2.4 as Kirigami
+import "private"
 /**
  * CardsListView is a ListView which can have AbstractCard as its delegete: it will
  * automatically assign the proper spacings and margins around the cards adhering
@@ -37,11 +37,12 @@ import org.kde.kirigami 2.3 as Kirigami
  * @inherits ListView
  * @since 2.4
  */
-ListView {
+CardsListViewPrivate {
     id: root
     spacing: Kirigami.Units.largeSpacing * 2
     topMargin: headerPositioning != ListView.InlineHeader ? spacing : 0
 
+    property alias delegate: root._delegateComponent
     headerPositioning: ListView.OverlayHeader
 
     onContentHeightChanged: {

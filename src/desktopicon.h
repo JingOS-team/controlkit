@@ -24,6 +24,7 @@
 #include <QIcon>
 #include <QQuickItem>
 #include <QVariant>
+#include <QPointer>
 
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -97,6 +98,7 @@ protected:
 
 private:
     Kirigami::PlatformTheme *m_theme = nullptr;
+    QPointer<QNetworkReply> m_networkReply;
     QVariant m_source;
     bool m_smooth;
     bool m_changed;

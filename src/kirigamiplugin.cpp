@@ -25,6 +25,7 @@
 #include "settings.h"
 #include "formlayoutattached.h"
 #include "mnemonicattached.h"
+#include "delegaterecycler.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -164,6 +165,8 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("CardsLayout.qml")), uri, 2, 4, "CardsLayout");
     qmlRegisterType(componentUrl(QStringLiteral("InlineMessage.qml")), uri, 2, 4, "InlineMessage");
     qmlRegisterUncreatableType<MessageType>(uri, 2, 4, "MessageType", "Cannot create objects of type MessageType");
+
+    qmlRegisterType<DelegateRecycler>(uri, 2, 4, "DelegateRecycler");
 
     qmlProtectModule(uri, 2);
 }

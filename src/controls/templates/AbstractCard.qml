@@ -68,20 +68,9 @@ T.ItemDelegate {
 
     Layout.fillWidth: true
 
-    implicitWidth: internal.completed
-            ? (internal.listView ? internal.listView.width - internal.listView.spacing * 2 :   
-              (internal.gridView ? Math.min(internal.gridView.cellWidth, internal.gridView.maximumColumnWidth) - Kirigami.Units.largeSpacing*2 : Math.max(background.implicitWidth, mainLayout.implicitWidth) + leftPadding + rightPadding))
-            : 0
+    implicitWidth: Math.max(background.implicitWidth, mainLayout.implicitWidth) + leftPadding + rightPadding
     
-    implicitHeight: internal.completed && internal.gridView
-        ? internal.gridView.cellHeight - Kirigami.Units.largeSpacing*2
-        : mainLayout.implicitHeight + topPadding + bottomPadding
-
-    x: internal.listView ? internal.listView.spacing : (internal.gridView ? internal.gridView.cellWidth - width: 0)
-
-    //in grid views align the cells in the middle
-    anchors.left: internal.gridView !== null ? parent.left : undefined
-    anchors.leftMargin: internal.gridView === null || internal.gridView.width <= internal.gridView.maximumColumnWidth ? 0 : (index % 2 === 0 ? Math.max(0, internal.gridView.cellWidth - internal.gridView.maximumColumnWidth) : internal.gridView.cellWidth)
+    implicitHeight: mainLayout.implicitHeight + topPadding + bottomPadding
 
     hoverEnabled: !Kirigami.Settings.isMobile && showClickFeedback
     //if it's in a CardLayout, try to expand horizontal cards to both columns
@@ -139,12 +128,7 @@ T.ItemDelegate {
             Layout.preferredHeight: mainLayout.preferredHeight(footer)
         }
     }
-    QtObject {
-        id: internal
-        property bool completed: false
-        property ListView listView
-        property GridView gridView
-    }
+
 //BEGIN signal handlers
     onContentItemChanged: {
         if (!contentItem) {
@@ -175,12 +159,6 @@ T.ItemDelegate {
         footer.anchors.topMargin = Qt.binding(function() {return (root.height - root.bottomPadding - root.topPadding)  - (footerParent.y + footerParent.height)});
     }
     Component.onCompleted: {
-        internal.listView = ListView.view;
-        //only consider gridviews which are CardsGridView
-        if (GridView.view && GridView.view.hasOwnProperty("maximumColumnWidth")) {
-            internal.gridView = GridView.view;
-        }
-        internal.completed = true;
         contentItemChanged();
     }
 //END signal handlers

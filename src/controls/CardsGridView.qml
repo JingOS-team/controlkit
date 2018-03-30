@@ -21,6 +21,7 @@ import QtQuick 2.6
 import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.3 as Kirigami
+import "private"
 
 /**
  * CardsGridView is used to display a grid of Cards generated from any model.
@@ -35,7 +36,7 @@ import org.kde.kirigami 2.3 as Kirigami
  * @see CardsLayout
  * @since 2.4
  */
-GridView {
+CardsGridViewPrivate {
     id: root
 
     /**
@@ -50,6 +51,8 @@ GridView {
     property int maximumColumnWidth: Kirigami.Units.gridUnit * 20
     cellWidth: width > maximumColumnWidth ? width/2 : width
     cellHeight: Math.max(Kirigami.Units.gridUnit * 15, Math.min(cellWidth, maximumColumnWidth) / 1.2)
+
+    default property alias delegate: root._delegateComponent
 
     topMargin: Kirigami.Units.largeSpacing * 2
 }
