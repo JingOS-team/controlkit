@@ -476,18 +476,22 @@ QImage DesktopIcon::findIcon(const QSize &size)
         if (isPath) {
             icon = QIcon(iconSource);
         } else {
-            icon = m_theme->iconFromTheme(iconSource, tintColor);
             if (icon.isNull()) {
                 QQmlContext *ctx = QQmlEngine::contextForObject(this);
                 if (ctx) {
                     QUrl localIconSource = ctx->baseUrl();
-                    localIconSource.setPath(localIconSource.path().replace(QRegularExpression("kirigami\\.2\\/.*"), "kirigami.2/icons/" % iconSource % ".svg"));
-                    icon = QIcon(localIconSource.path());
+                    localIconSource.setPath(localIconSource.path().replace(QRegularExpression("\\/kirigami(..)\\/.*"), "/kirigami\\1/icons/" % iconSource % ".svg"));
+                    if (QFile::exists(localIconSource.path())) {
+                        icon = QIcon(localIconSource.path());
+                    }
                     //heuristic to set every icon as mask, maybe only android?
                     if (!icon.isNull()) {
                         icon.setIsMask(true);
                     }
                 }
+            }
+            if (icon.isNull()) {
+                icon = m_theme->iconFromTheme(iconSource, tintColor);
             }
         }
         if (!icon.isNull()) {
