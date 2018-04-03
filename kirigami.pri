@@ -7,7 +7,8 @@ HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/mnemonicattached.h \
                $$PWD/src/libkirigami/basictheme_p.h \
                $$PWD/src/libkirigami/platformtheme.h \
-               $$PWD/src/libkirigami/kirigamipluginfactory.h
+               $$PWD/src/libkirigami/kirigamipluginfactory.h \
+               $$PWD/src/desktopicon.h
 SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/enums.cpp \
                $$PWD/src/settings.cpp \
@@ -15,15 +16,10 @@ SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/mnemonicattached.cpp \
                $$PWD/src/libkirigami/basictheme.cpp \
                $$PWD/src/libkirigami/platformtheme.cpp \
-               $$PWD/src/libkirigami/kirigamipluginfactory.cpp
+               $$PWD/src/libkirigami/kirigamipluginfactory.cpp \
+               $$PWD/src/desktopicon.cpp
 INCLUDEPATH += $$PWD/src $$PWD/src/libkirigami
 DEFINES     += KIRIGAMI_BUILD_TYPE_STATIC
-
-!ios:!android {
-    message( "compiling for desktop" )
-    HEADERS += $$PWD/src/desktopicon.h
-    SOURCES += $$PWD/src/desktopicon.cpp
-}
 
 API_VER=1.0
 
