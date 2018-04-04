@@ -1,5 +1,5 @@
 
-QT          += qml quick gui svg quickcontrols2
+QT          += core qml quick gui svg network quickcontrols2
 HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/enums.h \
                $$PWD/src/settings.h \

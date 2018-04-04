@@ -389,8 +389,8 @@ void DesktopIcon::handleFinished(QNetworkAccessManager* qnam, QNetworkReply* rep
             QNetworkRequest request(possibleRedirectUrl);
             request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
             m_networkReply = qnam->get(request);
-            connect(m_networkReply, &QNetworkReply::readyRead, this, [this](){handleReadyRead(m_networkReply); });
-            connect(m_networkReply, &QNetworkReply::finished, this, [this, qnam](){handleFinished(qnam, m_networkReply); });
+            connect(m_networkReply.data(), &QNetworkReply::readyRead, this, [this](){handleReadyRead(m_networkReply); });
+            connect(m_networkReply.data(), &QNetworkReply::finished, this, [this, qnam](){handleFinished(qnam, m_networkReply); });
             return;
         }
     }

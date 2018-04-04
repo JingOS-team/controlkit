@@ -131,8 +131,8 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
     }
     if (m_sourceComponent) {
         if (m_item) {
-            disconnect(m_item, &QQuickItem::implicitWidthChanged, this, &DelegateRecycler::updateHints);
-            disconnect(m_item, &QQuickItem::implicitHeightChanged, this, &DelegateRecycler::updateHints);
+            disconnect(m_item.data(), &QQuickItem::implicitWidthChanged, this, &DelegateRecycler::updateHints);
+            disconnect(m_item.data(), &QQuickItem::implicitHeightChanged, this, &DelegateRecycler::updateHints);
             s_delegateCache->insert(component, m_item);
         }
         s_delegateCache->deref(component);
@@ -178,8 +178,8 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
 
     if (m_item) {
         m_item->setParentItem(this);
-        connect(m_item, &QQuickItem::implicitWidthChanged, this, &DelegateRecycler::updateHints);
-        connect(m_item, &QQuickItem::implicitHeightChanged, this, &DelegateRecycler::updateHints);
+        connect(m_item.data(), &QQuickItem::implicitWidthChanged, this, &DelegateRecycler::updateHints);
+        connect(m_item.data(), &QQuickItem::implicitHeightChanged, this, &DelegateRecycler::updateHints);
         updateSize(true);
     }
 
