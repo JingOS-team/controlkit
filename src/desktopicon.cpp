@@ -37,6 +37,8 @@
 #include <QPainter>
 #include <QScreen>
 
+QString DesktopIcon::s_internalIconPath = QString();
+
 class ManagedTextureNode : public QSGSimpleTextureNode
 {
 Q_DISABLE_COPY(ManagedTextureNode)
@@ -479,10 +481,9 @@ QImage DesktopIcon::findIcon(const QSize &size)
             if (icon.isNull()) {
                 QQmlContext *ctx = QQmlEngine::contextForObject(this);
                 if (ctx) {
-                    QUrl localIconSource = ctx->baseUrl();
-                    localIconSource.setPath(localIconSource.path().replace(QRegularExpression("\\/kirigami(..)\\/.*"), "/kirigami\\1/icons/" % iconSource % ".svg"));
-                    if (QFile::exists(localIconSource.path())) {
-                        icon = QIcon(localIconSource.path());
+                    const QString localIconSource = s_internalIconPath % "/" % iconSource % ".svg";
+                    if (QFile::exists(localIconSource)) {
+                        icon = QIcon(localIconSource);
                     }
                     //heuristic to set every icon as mask, maybe only android?
                     if (!icon.isNull()) {

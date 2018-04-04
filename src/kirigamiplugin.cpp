@@ -130,6 +130,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     if (s_selectedStyle == QStringLiteral("Plasma")) {
         qmlRegisterType(componentUrl(QStringLiteral("Icon.qml")), uri, 2, 0, "Icon");
     } else {
+        DesktopIcon::s_internalIconPath = resolveFilePath(QStringLiteral("icons"));
         qmlRegisterType<DesktopIcon>(uri, 2, 0, "Icon");
     }
 
