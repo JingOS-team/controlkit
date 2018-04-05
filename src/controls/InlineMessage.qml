@@ -341,7 +341,7 @@ T.InlineMessage {
 
                 onClicked: menu.visible ? menu.close() : menu.open()
 
-                Icon {
+                Kirigami.Icon {
                     anchors.fill: parent
                     source: "overflow-menu"
                     anchors.margins: 4

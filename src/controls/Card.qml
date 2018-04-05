@@ -153,7 +153,7 @@ Kirigami.AbstractCard {
         Controls.ToolButton {
             id: moreButton
 
-            Icon {
+            Kirigami.Icon {
                 anchors.fill: parent
                 source: "overflow-menu"
                 anchors.margins: 4
