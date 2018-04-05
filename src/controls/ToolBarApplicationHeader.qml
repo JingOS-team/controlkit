@@ -95,17 +95,17 @@ ApplicationHeader {
             readonly property bool toobig: delegateItem.width - titleTextMetrics.width - Units.gridUnit < buttonTextMetrics.requiredWidth
 
             PrivateActionToolButton {
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.alignment: Qt.AlignVCenter
                 kirigamiAction: page && page.actions ? page.actions.left : null
                 showText: !parent.toobig
             }
             PrivateActionToolButton {
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.alignment: Qt.AlignVCenter
                 kirigamiAction: page && page.actions ? page.actions.main : null
                 showText: !parent.toobig
             }
             PrivateActionToolButton {
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.alignment: Qt.AlignVCenter
                 kirigamiAction: page && page.actions ? page.actions.right : null
                 showText: !parent.toobig
             }
