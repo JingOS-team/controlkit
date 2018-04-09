@@ -42,5 +42,7 @@ target_link_libraries(kirigami2gallery Qt5::Core  Qt5::Qml Qt5::Quick Qt5::Svg $
 
 install(TARGETS kirigami2gallery ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
+if (CMAKE_SYSTEM_NAME STREQUAL "Android")
 include(${CMAKE_SOURCE_DIR}/KF5Kirigami2Macros.cmake)
 kirigami_package_breeze_icons(ICONS applications-graphics view-list-icons folder-sync view-list-details configure document-edit dialog-information dialog-positive dialog-warning dialog-error dialog-cancel document-decrypt system-run mail-reply-sender bookmarks folder media-record-symbolic add-placemark address-book-new-symbolic)
+endif()
