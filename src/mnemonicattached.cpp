@@ -87,7 +87,7 @@ bool MnemonicAttached::eventFilter(QObject *watched, QEvent *e)
         QKeyEvent *ke = static_cast<QKeyEvent *>(e);
         if (ke->key() == Qt::Key_Alt) {
             m_actualRichTextLabel = m_label;
-            m_actualRichTextLabel.replace(QRegularExpression("\\&[^\\&]"), QString());
+            m_actualRichTextLabel.replace(QRegularExpression("\\&[^\\&]"), QStringLiteral("\\1"));
             emit richTextLabelChanged();
         }
     }
@@ -176,7 +176,7 @@ void MnemonicAttached::updateSequence()
 
     if (!m_enabled) {
         m_actualRichTextLabel = text;
-        m_actualRichTextLabel.replace(QRegularExpression("\\&[^\\&]"), QString());
+        m_actualRichTextLabel.replace(QRegularExpression("\\&[^\\&]"), QStringLiteral("\\1"));
         //was the label already completely plain text? try to limit signal emission
         if (m_mnemonicLabel != m_actualRichTextLabel) {
             m_mnemonicLabel = m_actualRichTextLabel;
@@ -207,9 +207,10 @@ void MnemonicAttached::updateSequence()
             s_sequenceToObject[ks] = this;
             s_objectToSequence[this] = ks;
             m_richTextLabel = text;
-            m_richTextLabel.replace(QRegularExpression("\\&[^\\&]"), QString());
+            m_richTextLabel.replace(QRegularExpression("\\&([^\\&])"), QStringLiteral("\\1"));
             m_actualRichTextLabel = m_richTextLabel;
             m_mnemonicLabel = m_richTextLabel;
+            qWarning()<<"CANEDIMMERDA"<<m_mnemonicLabel;
             m_mnemonicLabel.replace(c, "&" % c);
             m_richTextLabel.replace(QString(c), "<u>" % c % "</u>");
 
@@ -226,7 +227,7 @@ void MnemonicAttached::updateSequence()
         emit sequenceChanged();
     } else {
         m_actualRichTextLabel = text;
-        m_actualRichTextLabel.replace(QRegularExpression("\\&[^\\&]"), QString());
+        m_actualRichTextLabel.replace(QRegularExpression("\\&[^\\&]"), QStringLiteral("\\1"));
         m_mnemonicLabel = m_actualRichTextLabel;
     }
 
