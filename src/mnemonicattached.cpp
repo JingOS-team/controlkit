@@ -210,7 +210,6 @@ void MnemonicAttached::updateSequence()
             m_richTextLabel.replace(QRegularExpression("\\&([^\\&])"), QStringLiteral("\\1"));
             m_actualRichTextLabel = m_richTextLabel;
             m_mnemonicLabel = m_richTextLabel;
-            qWarning()<<"CANEDIMMERDA"<<m_mnemonicLabel;
             m_mnemonicLabel.replace(c, "&" % c);
             m_richTextLabel.replace(QString(c), "<u>" % c % "</u>");
 
