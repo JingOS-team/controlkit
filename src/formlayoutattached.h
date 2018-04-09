@@ -95,6 +95,21 @@ class FormLayoutAttached : public QObject
     Q_PROPERTY(bool isSection READ isSection WRITE setIsSection NOTIFY isSectionChanged)
 
     /**
+     * If true a checkbox is prepended to the FormLayout item.
+     */
+    Q_PROPERTY(bool checkable READ checkable WRITE setCheckable NOTIFY checkableChanged)
+    
+    /**
+     * This property is true when the checkbox of the FormLayout item is checked, @see checkable.
+     */
+    Q_PROPERTY(bool checked READ checked WRITE setChecked NOTIFY checkedChanged)
+    
+    /**
+     * This property holds whether the label and the checkbox of the FormLayout item receive mouse and keyboard events.
+     */
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+
+    /**
      * The Item the label will be considered a "Buddy" for,
      * which will be the parent item the attached property is in.
      * A buddy item is useful for instance when the label has a keyboard accelerator,
@@ -114,6 +129,15 @@ public:
 
     void setIsSection(bool section);
     bool isSection() const;
+    
+    void setCheckable(bool checkable);
+    bool checkable() const;
+    
+    void setChecked(bool checked);
+    bool checked() const;
+    
+    void setEnabled(bool enabled);
+    bool enabled() const;
 
     QQuickItem *buddyFor() const;
 
@@ -123,6 +147,9 @@ public:
 Q_SIGNALS:
     void labelChanged();
     void isSectionChanged();
+    void checkableChanged();
+    void checkedChanged();
+    void enabledChanged();
 
 private:
     QString m_label;
@@ -130,6 +157,9 @@ private:
     QString m_decoratedLabel;
     QPointer <QQuickItem> m_buddyFor;
     bool m_isSection = false;
+    bool m_checkable = false;
+    bool m_checked = false;
+    bool m_enabled = true;
 };
 
 QML_DECLARE_TYPEINFO(FormLayoutAttached, QML_HAS_ATTACHED_PROPERTIES)

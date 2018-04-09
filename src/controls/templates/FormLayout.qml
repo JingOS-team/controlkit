@@ -126,8 +126,12 @@ Control {
                     itemContainer.parent = lay;
                 }
 
-                var buddy = buddyComponent.createObject(lay, {"item": item})
-
+                if (item.Kirigami.FormData.checkable) {
+                    var buddy = checkableBuddyComponent.createObject(lay, {"item": item})
+                } else {
+                    var buddy = buddyComponent.createObject(lay, {"item": item})
+                }
+                
                 itemContainer.parent = lay;
                 //if section, wee need another placeholder
                 if (item.Kirigami.FormData.isSection) {
@@ -211,6 +215,63 @@ Control {
             Shortcut {
                 sequence: labelItem.Kirigami.MnemonicData.sequence
                 onActivated: item.Kirigami.FormData.buddyFor.forceActiveFocus()
+            }
+        }
+    }
+    Component {
+        id: checkableBuddyComponent
+        CheckBox {
+            id: labelItem
+            property var item
+            visible: item.visible
+            Kirigami.MnemonicData.enabled: item.Kirigami.FormData.buddyFor && item.Kirigami.FormData.buddyFor.activeFocusOnTab
+            Kirigami.MnemonicData.controlType: Kirigami.MnemonicData.FormLabel
+            Kirigami.MnemonicData.label: item.Kirigami.FormData.label
+            
+            Layout.preferredHeight: item.Kirigami.FormData.label.length > 0 ? implicitHeight : Kirigami.Units.smallSpacing
+
+            Layout.alignment: root.wideMode
+                                ? (Qt.AlignRight | (item.Kirigami.FormData.buddyFor.height > height * 2 ? Qt.AlignTop : Qt.AlignVCenter))
+                                : (Qt.AlignLeft | Qt.AlignBottom)
+            Layout.topMargin: item.Kirigami.FormData.buddyFor.height > implicitHeight * 2 ? Kirigami.Units.smallSpacing/2 : 0
+            
+            activeFocusOnTab: indicator.visible && indicator.enabled
+            text: labelItem.Kirigami.MnemonicData.richTextLabel
+            enabled: labelItem.item.Kirigami.FormData.enabled
+            checked: labelItem.item.Kirigami.FormData.checked
+                
+            onItemChanged: {
+                if (!item) {
+                    labelItem.destroy();
+                }
+            }
+            Shortcut {
+                sequence: labelItem.Kirigami.MnemonicData.sequence
+                onActivated: {
+                    checked = !checked
+                    item.Kirigami.FormData.buddyFor.forceActiveFocus()
+                }
+            }
+            onCheckedChanged: {
+                item.Kirigami.FormData.checked = checked
+            }
+            contentItem: Kirigami.Heading {
+                id: labelItemHeading
+                level: labelItem.item.Kirigami.FormData.isSection ? 3 : 5
+                text: labelItem.text
+                verticalAlignment: root.wideMode ? Text.AlignVCenter : Text.AlignBottom
+                enabled: labelItem.item.Kirigami.FormData.enabled
+                leftPadding: parent.indicator.width
+            }
+            Rectangle {
+                enabled: labelItem.indicator.enabled
+                anchors.left: labelItemHeading.left
+                anchors.right: labelItemHeading.right
+                anchors.top: labelItemHeading.bottom
+                anchors.leftMargin: labelItemHeading.leftPadding
+                height: 1 * Kirigami.Units.devicePixelRatio
+                color: Kirigami.Theme.highlightColor
+                visible: labelItem.activeFocus && labelItem.indicator.visible
             }
         }
     }
