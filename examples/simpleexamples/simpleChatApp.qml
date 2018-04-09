@@ -156,50 +156,6 @@ Kirigami.ApplicationWindow {
 
     pageStack.defaultColumnWidth: columnWidth
     pageStack.initialPage: [channelsComponent, chatComponent]
-    //Experiment: custom animation for layers
-    pageStack.layers.popEnter: Transition {
-        PauseAnimation {
-            duration: Kirigami.Units.longDuration
-        }
-    }
-    pageStack.layers.popExit: Transition {
-        YAnimator {
-            from: 0
-            to: pageStack.layers.height
-            duration: Kirigami.Units.longDuration
-            easing.type: Easing.OutCubic
-        }
-    }
-
-    pageStack.layers.pushEnter: Transition {
-        YAnimator {
-            from: pageStack.layers.height
-            to: 0
-            duration: Kirigami.Units.longDuration
-            easing.type: Easing.OutCubic 
-        }
-    }
-
-    pageStack.layers.pushExit: Transition {
-        PauseAnimation {
-            duration: Kirigami.Units.longDuration
-        }
-    }
-
-    pageStack.layers.replaceEnter: Transition {
-        YAnimator {
-            from: pageStack.layers.width
-            to: 0
-            duration: Kirigami.Units.longDuration
-            easing.type: Easing.OutCubic
-        }
-    }
-
-    pageStack.layers.replaceExit: Transition {
-        PauseAnimation {
-            duration: Kirigami.Units.longDuration
-        }
-    }
 
     Component {
         id: channelsComponent

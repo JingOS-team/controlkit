@@ -360,6 +360,59 @@ T.Control {
                 pop();
             } 
         }
+
+        popEnter: Transition {
+            YAnimator {
+                from: -height
+                to: 0
+                duration: Units.longDuration
+                easing.type: Easing.OutCubic
+            }
+        }
+        popExit: Transition {
+            YAnimator {
+                from: 0
+                to: height
+                duration: Units.longDuration
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        pushEnter: Transition {
+            YAnimator {
+                from: height
+                to: 0
+                duration: Units.longDuration
+                easing.type: Easing.OutCubic 
+            }
+        }
+
+        pushExit: Transition {
+            YAnimator {
+                from: 0
+                to: -height
+                duration: Units.longDuration
+                easing.type: Easing.OutCubic 
+            }
+        }
+
+        replaceEnter: Transition {
+            YAnimator {
+                from: height
+                to: 0
+                duration: Units.longDuration
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        replaceExit: Transition {
+            YAnimator {
+                from: 0
+                to: -height
+                duration: Units.longDuration
+                easing.type: Easing.OutCubic
+            }
+        }
     }
 
     ListView {
