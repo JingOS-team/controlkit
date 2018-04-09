@@ -191,7 +191,8 @@ Kirigami.ScrollablePage {
                 enabled: !toggleMessage.visible
 
                 text: "Show additional message"
-                icon.name: "list-add"
+                //TODO: enable when we can depend from Qt 5.10
+               // icon.name: "list-add"
 
                 onClicked: toggleMessage.visible = true
             }

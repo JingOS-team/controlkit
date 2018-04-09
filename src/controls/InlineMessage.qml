@@ -277,9 +277,12 @@ T.InlineMessage {
             Repeater {
                 model: root.actions
 
-                delegate: Controls.Button {
+                //TODO: use a normal button when we can depend from Qt 5.10
+                delegate: PrivateActionToolButton {
                     id: actionButton
 
+                    flat: false
+                    kirigamiAction: modelData
                     visible: modelData.visible && fits
 
                     Layout.alignment: Qt.AlignVCenter
@@ -296,16 +299,6 @@ T.InlineMessage {
 
                         return minX + implicitWidth < contentLayout.width - moreButton.width;
                     }
-
-                    enabled: modelData.enabled
-
-                    checkable: modelData.checkable
-                    checked: modelData.checked
-
-                    text: modelData.text
-                    icon.name: modelData.icon.name
-
-                    onClicked: modelData.trigger()
 
                     onFitsChanged: updateOverflowSet()
 
@@ -390,7 +383,13 @@ T.InlineMessage {
             Layout.row: 0
             Layout.column: actionsLayout.Layout.row ? 2 : 3
 
-            icon.name: "dialog-close"
+            //TODO: use toolbuttons icons when we can depend from Qt 5.10
+            Kirigami.Icon {
+                anchors.centerIn: parent
+                source: "dialog-close"
+                width: Kirigami.Units.iconSizes.smallMedium
+                height: width
+            }
 
             onClicked: root.visible = false
         }
