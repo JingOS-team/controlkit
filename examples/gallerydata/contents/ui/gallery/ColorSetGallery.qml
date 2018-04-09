@@ -71,7 +71,7 @@ Kirigami.ScrollablePage {
                 }
                 Kirigami.BasicListItem {
                     width: parent.width
-                    icon: "media-record-symbolic"
+                    icon: "view-right-close"
                     label: "Delegate1"
                 }
                 Kirigami.BasicListItem {
@@ -98,7 +98,7 @@ Kirigami.ScrollablePage {
                 }
                 Kirigami.BasicListItem {
                     width: parent.width
-                    icon: "media-record-symbolic"
+                    icon: "view-right-close"
                     label: "Delegate1"
                 }
                 Kirigami.BasicListItem {
@@ -125,7 +125,7 @@ Kirigami.ScrollablePage {
                 }
                 Kirigami.BasicListItem {
                     width: parent.width
-                    icon: "media-record-symbolic"
+                    icon: "view-right-close"
                     label: "Delegate1"
                 }
                 Kirigami.BasicListItem {
@@ -151,7 +151,7 @@ Kirigami.ScrollablePage {
                 }
                 Kirigami.BasicListItem {
                     width: parent.width
-                    icon: "media-record-symbolic"
+                    icon: "view-right-close"
                     label: "Delegate1"
                 }
                 Kirigami.BasicListItem {
@@ -172,7 +172,7 @@ Kirigami.ScrollablePage {
         }
         Kirigami.Icon {
             id: customColorIcon
-            source: "media-record-symbolic"
+            source: "view-right-close"
             color: "green"
             Layout.minimumWidth: 32
             Layout.minimumHeight: 32
