@@ -31,9 +31,9 @@ import org.kde.kirigami 2.2
  */
 
 Rectangle {
-    height: Units.devicePixelRatio
-    width: Units.devicePixelRatio
-    Layout.preferredWidth: Units.devicePixelRatio
-    Layout.preferredHeight: Units.devicePixelRatio
+    height: Math.floor(Units.devicePixelRatio)
+    width: Math.floor(Units.devicePixelRatio)
+    Layout.preferredWidth: Math.floor(Units.devicePixelRatio)
+    Layout.preferredHeight: Math.floor(Units.devicePixelRatio)
     color: Qt.tint(Theme.textColor, Qt.rgba(Theme.backgroundColor.r, Theme.backgroundColor.g, Theme.backgroundColor.b, 0.7))
 }
