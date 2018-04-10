@@ -41,9 +41,9 @@ Item {
 
     readonly property Page page: root.parent.page
     //either Action or QAction should work here
-    readonly property QtObject action: root.page ? root.page.mainAction : null
-    readonly property QtObject leftAction: root.page ? root.page.leftAction : null
-    readonly property QtObject rightAction: root.page ? root.page.rightAction : null
+    readonly property QtObject action: root.page && root.page.mainAction && root.page.mainAction.enabled ? root.page.mainAction : null
+    readonly property QtObject leftAction: root.page && root.page.leftAction && root.page.leftAction.enabled ? root.page.leftAction : null
+    readonly property QtObject rightAction: root.page && root.page.rightAction && root.page.rightAction.enabled ? root.page.rightAction : null
 
     transform: Translate {
         id: translateTransform
