@@ -300,7 +300,7 @@ QtObject {
             visible: !Settings.isMobile
             width: Units.iconSizes.smallMedium
             height: width
-            source: "dialog-close"
+            source: "window-close-symbolic"
             MouseArea {
                 anchors.fill: parent
                 onClicked: root.close();
