@@ -19,6 +19,7 @@
 
 import QtQuick 2.5
 import QtQuick.Layouts 1.2
+import QtQuick.Window 2.2
 import org.kde.kirigami 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Templates 2.0 as T2
@@ -173,7 +174,7 @@ QtObject {
     }
 
     Component.onCompleted: {
-        if (!root.parent) {
+        if (!root.parent && typeof applicationWindow !== "undefined") {
             root.parent = applicationWindow().overlay
         }
     }
@@ -185,7 +186,7 @@ QtObject {
         //we want to be over any possible OverlayDrawers, including handles
         parent: root.parent
         anchors.fill: parent
-        z: root.parent == applicationWindow().overlay ? 0 : 2000000
+        z: root.parent == typeof applicationWindow !== "undefined" && applicationWindow().overlay ? 0 : 2000000
         visible: false
         drag.filterChildren: true
         hoverEnabled: true
@@ -208,14 +209,9 @@ QtObject {
         onHeightChanged: {
             var focusItem;
 
-            if (typeof applicationWindow !== "undefined") {
-                focusItem = applicationWindow().activeFocusItem;
-            //fallback: hope activeFocusItem is in context
-            } else {
-                focusItem = activeFocusItem;
-            }
+            focusItem = Window.activeFocusItem;
 
-            if (!activeFocusItem) {
+            if (!focusItem) {
                 return;
             }
 
