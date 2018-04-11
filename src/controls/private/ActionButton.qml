@@ -75,12 +75,12 @@ Item {
 
         onXChanged: {
             if (mouseArea.pressed || edgeMouseArea.pressed || fakeContextMenuButton.pressed) {
-                if (globalDrawer && globalDrawer.enabled && globalDrawer.modal) {
+                if (root.hasGlobalDrawer && globalDrawer.enabled && globalDrawer.modal) {
                     globalDrawer.peeking = true;
                     globalDrawer.visible = true;
                     globalDrawer.position = Math.min(1, Math.max(0, (x - root.width/2 + button.width/2)/globalDrawer.contentItem.width + mouseArea.drawerShowAdjust));
                 }
-                if (contextDrawer && contextDrawer.enabled && contextDrawer.modal) {
+                if (root.hasContextDrawer && contextDrawer.enabled && contextDrawer.modal) {
                     contextDrawer.peeking = true;
                     contextDrawer.visible = true;
                     contextDrawer.position = Math.min(1, Math.max(0, (root.width/2 - button.width/2 - x)/contextDrawer.contentItem.width + mouseArea.drawerShowAdjust));
@@ -127,7 +127,7 @@ Item {
 
             onPressed: {
                 //search if we have a page to set to current
-                if (applicationWindow !== undefined && applicationWindow().pageStack.currentIndex !== undefined && root.page.parent.level !== undefined) {
+                if (root.hasApplicationWindow && applicationWindow().pageStack.currentIndex !== undefined && root.page.parent.level !== undefined) {
                     //search the button parent's parent, that is the page parent
                     //this will make the context drawer open for the proper page
                     applicationWindow().pageStack.currentIndex = root.page.parent.level;
@@ -138,29 +138,29 @@ Item {
                 drawerShowAdjust = 0;
             }
             onReleased: {
-                if (globalDrawer) globalDrawer.peeking = false;
-                if (contextDrawer) contextDrawer.peeking = false;
+                if (root.hasGlobalDrawer) globalDrawer.peeking = false;
+                if (root.hasContextDrawer) contextDrawer.peeking = false;
                 //pixel/second
                 var x = button.x + button.width/2;
                 var speed = ((x - startX) / ((new Date()).getTime() - downTimestamp) * 1000);
                 drawerShowAdjust = 0;
 
                 //project where it would be a full second in the future
-                if (globalDrawer && globalDrawer.modal && x + speed > Math.min(root.width/4*3, root.width/2 + globalDrawer.contentItem.width/2)) {
+                if (root.hasContextDrawer && root.hasGlobalDrawer && globalDrawer.modal && x + speed > Math.min(root.width/4*3, root.width/2 + globalDrawer.contentItem.width/2)) {
                     globalDrawer.open();
                     contextDrawer.close();
-                } else if (contextDrawer && x + speed < Math.max(root.width/4, root.width/2 - contextDrawer.contentItem.width/2)) {
-                    if (contextDrawer && contextDrawer.modal) {
+                } else if (root.hasContextDrawer && x + speed < Math.max(root.width/4, root.width/2 - contextDrawer.contentItem.width/2)) {
+                    if (root.hasContextDrawer && contextDrawer.modal) {
                         contextDrawer.open();
                     }
-                    if (globalDrawer && globalDrawer.modal) {
+                    if (root.hasGlobalDrawer && globalDrawer.modal) {
                         globalDrawer.close();
                     }
                 } else {
-                    if (globalDrawer && globalDrawer.modal) {
+                    if (root.hasGlobalDrawer && globalDrawer.modal) {
                         globalDrawer.close();
                     }
-                    if (contextDrawer && contextDrawer.modal) {
+                    if (root.hasContextDrawer && contextDrawer.modal) {
                         contextDrawer.close();
                     }
                 }
