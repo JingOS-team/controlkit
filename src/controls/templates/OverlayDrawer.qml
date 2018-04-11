@@ -63,6 +63,33 @@ T2.Drawer {
     readonly property bool animating : enterAnimation.animating || exitAnimation.animating || positionResetAnim.running
 
     /**
+     * A grouped property describing an optional icon.
+     * * source: The source of the icon, a freedesktop-compatible icon name is recommended.
+     * * color: An optional tint color for the icon.
+     *
+     * If no custom icon is set, a menu icon is shown for the application  globalDrawer
+     * and an overflow menu icon is shown for the contextDrawer.
+     * That's the default for the GlobalDrawer and ContextDrawer components respectively.
+     * 
+     * For OverlayDrawer the default is view-right-close or view-left-close depending on the drawer location
+     * @since 2.5
+     */
+    readonly property QtObject handleOpenIcon: IconPropertiesGroup {source: root.edge == Qt.RightEdge ? "view-right-close" : "view-left-close"}
+
+    /**
+     * A grouped property describing an optional icon.
+     * * source: The source of the icon, a freedesktop-compatible icon name is recommended.
+     * * color: An optional tint color for the icon.
+     *
+     * If no custom icon is set, an X icon is shown,
+     * which will morph into the Menu or overflow icons
+     * 
+     * For OverlayDrawer the default is view-right-new or view-left-new depending on the drawer location
+     * @since 2.5
+     */
+    readonly property QtObject handleClosedIcon: IconPropertiesGroup {source: root.edge == Qt.RightEdge ? "view-right-new" : "view-left-new"}
+
+    /**
      * handleVisible: bool
      * If true, a little handle will be visible to make opening the drawer easier
      * Currently supported only on left and right drawers
@@ -78,16 +105,23 @@ T2.Drawer {
         id: drawerHandle
         z: root.modal ? applicationWindow().overlay.z + (root.position > 0 ? +1 : -1) : root.background.parent.z + 1
         preventStealing: true
+        hoverEnabled: desktopMode
         parent: applicationWindow().overlay.parent
 
         property int startX
         property int mappedStartX
+
+        property bool desktopMode: applicationWindow() && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") !== -1
+
         onPressed: {
             root.peeking = true;
             startX = mouse.x;
             mappedStartX = mapToItem(parent, startX, 0).x
         }
         onPositionChanged: {
+            if (!pressed) {
+                return;
+            }
             var pos = mapToItem(parent, mouse.x - startX, mouse.y);
             switch(root.edge) {
             case Qt.LeftEdge:
@@ -124,7 +158,10 @@ T2.Drawer {
         }
 
         anchors {
-            bottom: parent.bottom
+            top: drawerHandle.desktopMode ? parent.top : undefined
+
+            bottom: drawerHandle.desktopMode ? undefined : parent.bottom
+
             bottomMargin: {
                 if (!applicationWindow()) {
                     return;

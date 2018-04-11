@@ -18,17 +18,20 @@
  */
 
 import QtQuick 2.1
+import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.0 as Controls
 
-import org.kde.kirigami 2.2
+import org.kde.kirigami 2.4
 
 Controls.ToolButton {
     id: button
-    z: 99
 
     property Flickable headerFlickable
-    implicitWidth: height
-    visible: headerFlickable.internalHeaderStyle == ApplicationHeaderStyle.Titles && !applicationWindow().pageStack.contentItem.atXEnd && applicationWindow().pageStack.layers.depth < 2
+    //visible: headerFlickable.internalHeaderStyle == ApplicationHeaderStyle.Titles && !applicationWindow().pageStack.contentItem.atXEnd && applicationWindow().pageStack.layers.depth < 2
+    enabled: __appWindow.pageStack.currentIndex < __appWindow.pageStack.depth-1 || !applicationWindow().pageStack.contentItem.atXEnd
+    visible: applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
+    width: height
+    height: parent.height
 
     onClicked: applicationWindow().pageStack.goForward();
 

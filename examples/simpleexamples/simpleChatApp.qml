@@ -20,7 +20,7 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.2 as QQC2
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.4 as Kirigami
 
 Kirigami.ApplicationWindow {
     id: root
@@ -53,11 +53,9 @@ Kirigami.ApplicationWindow {
             }
         ]
     }
-    contextDrawer: Kirigami.GlobalDrawer {
+    contextDrawer: Kirigami.OverlayDrawer {
         id: contextDrawer
-        contentItem.implicitWidth: columnWidth
         //they can depend on the page like that or be defined directly here
-        actions: pageStack.get(1).contextualActions
         edge: Qt.RightEdge
         modal: !root.wideScreen
         onModalChanged: drawerOpen = !modal
@@ -69,59 +67,57 @@ Kirigami.ApplicationWindow {
         leftPadding: 0
         rightPadding: 0
         
-        topContent: QQC2.Control {
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-            background: Rectangle {
-                anchors.fill: parent
-                color: Kirigami.Theme.highlightColor
-                opacity: 0.8
-            }
-
-            padding: Kirigami.Units.gridUnit
-
-            contentItem: ColumnLayout {
-                id: titleLayout
-                spacing: Kirigami.Units.gridUnit
-              
-                RowLayout {
-                    spacing: Kirigami.Units.gridUnit
-                    Rectangle {
-                        color: Kirigami.Theme.highlightedTextColor
-                        radius: width
-                        implicitWidth: Kirigami.Units.iconSizes.medium
-                        implicitHeight: implicitWidth
-                    }
-                    ColumnLayout {
-                        QQC2.Label {
-                            Layout.fillWidth: true
-                            color: Kirigami.Theme.highlightedTextColor
-                            text: "KDE"
-                        }
-                        QQC2.Label {
-                            Layout.fillWidth: true
-                            color: Kirigami.Theme.highlightedTextColor
-                            font.pointSize: Kirigami.Units.fontMetrics.font.pointSize * 0.8
-                            text: "#kde: kde.org"
-                        }
-                    }
-                }
-                QQC2.Label {
-                    Layout.fillWidth: true
-                    color: Kirigami.Theme.highlightedTextColor
-                    text: "Main room for KDE community, other rooms are listed at kde.org/rooms"
-                    wrapMode: Text.WordWrap
-                }
-            }
-        }
-
-        ColumnLayout {
+        contentItem: ColumnLayout {
+            
+            readonly property int implicitWidth: root.columnWidth
             spacing: 0
+            QQC2.Control {
+                Layout.fillWidth: true
+                background: Rectangle {
+                    anchors.fill: parent
+                    color: Kirigami.Theme.highlightColor
+                    opacity: 0.8
+                }
+
+                padding: Kirigami.Units.gridUnit
+
+                contentItem: ColumnLayout {
+                    id: titleLayout
+                    spacing: Kirigami.Units.gridUnit
+                
+                    RowLayout {
+                        spacing: Kirigami.Units.gridUnit
+                        Rectangle {
+                            color: Kirigami.Theme.highlightedTextColor
+                            radius: width
+                            implicitWidth: Kirigami.Units.iconSizes.medium
+                            implicitHeight: implicitWidth
+                        }
+                        ColumnLayout {
+                            QQC2.Label {
+                                Layout.fillWidth: true
+                                color: Kirigami.Theme.highlightedTextColor
+                                text: "KDE"
+                            }
+                            QQC2.Label {
+                                Layout.fillWidth: true
+                                color: Kirigami.Theme.highlightedTextColor
+                                font.pointSize: Kirigami.Units.fontMetrics.font.pointSize * 0.8
+                                text: "#kde: kde.org"
+                            }
+                        }
+                    }
+                    QQC2.Label {
+                        Layout.fillWidth: true
+                        color: Kirigami.Theme.highlightedTextColor
+                        text: "Main room for KDE community, other rooms are listed at kde.org/rooms"
+                        wrapMode: Text.WordWrap
+                    }
+                }
+            }
+
             Kirigami.Separator {
                 Layout.fillWidth: true
-                Layout.maximumHeight: 1//implicitHeight
             }
 
             QQC2.ScrollView {
@@ -261,7 +257,7 @@ Kirigami.ApplicationWindow {
                     Kirigami.Separator {
                         Rectangle {
                             anchors.fill: parent
-                            color: Kirigami.Theme.viewFocusColor
+                            color: Kirigami.Theme.focusColor
                             visible: chatTextInput.activeFocus
                         }
                         anchors {
@@ -302,10 +298,10 @@ Kirigami.ApplicationWindow {
                     ColumnLayout {
                         x: Kirigami.Units.gridUnit
                         anchors.verticalCenter: parent.verticalCenter
-                        Kirigami.Label {
+                        QQC2.Label {
                             text: modelData % 2 ? "John Doe" : "John Applebaum"
                         }
-                        Kirigami.Label {
+                        QQC2.Label {
                             text: "Message " + modelData
                         }
                     }

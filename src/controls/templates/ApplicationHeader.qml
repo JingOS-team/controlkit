@@ -21,7 +21,7 @@ import QtQuick 2.5
 import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.2
 import "private"
-import org.kde.kirigami 2.2
+import org.kde.kirigami 2.4
 
 
 /**
@@ -129,7 +129,8 @@ AbstractApplicationHeader {
         id: stack
         anchors {
             fill: parent
-            leftMargin: (titleList.scrollingLocked && titleList.wideMode) || headerStyle == ApplicationHeaderStyle.Titles && depth < 2 ? 0 : navButtons.width
+            leftMargin: navButtons.width
+            rightMargin: __appWindow.contextDrawer && __appWindow.contextDrawer.handleVisible && __appWindow.contextDrawer.handle && __appWindow.contextDrawer.handle.y == 0 ? __appWindow.contextDrawer.handle.width : 0
         }
         initialItem: titleList
 
@@ -186,6 +187,24 @@ AbstractApplicationHeader {
             }
         }
     }
+    Separator {
+        id: separator
+        height: parent.height * 0.6
+        visible: navButtons.width > 0
+        anchors {
+            verticalCenter: parent.verticalCenter
+            left: navButtons.right
+        }
+    }
+    Separator {
+        height: parent.height * 0.6
+        visible: stack.anchors.rightMargin > 0
+        anchors {
+            verticalCenter: parent.verticalCenter
+            right: parent.right
+            rightMargin: stack.anchors.rightMargin
+        }
+    }
     Repeater {
         model: __appWindow.pageStack.layers.depth -1
         delegate: Loader {
@@ -197,16 +216,22 @@ AbstractApplicationHeader {
         }
     }
 
-    RowLayout {
+    Row {
         id: navButtons
         anchors {
             left: parent.left
             top: parent.top
             bottom: parent.bottom
+            topMargin: Units.smallSpacing
+            bottomMargin: Units.smallSpacing
+        }
+        Item {
+            height: parent.height
+            width: __appWindow.globalDrawer && __appWindow.globalDrawer.handleVisible && __appWindow.globalDrawer.handle && __appWindow.globalDrawer.handle.y == 0 ? __appWindow.globalDrawer.handle.width : 0
         }
     }
 
-    ListView {
+    Flickable {
         id: titleList
         readonly property bool wideMode: typeof __appWindow.pageStack.wideMode !== "undefined" ?  __appWindow.pageStack.wideMode : __appWindow.wideMode
         property int internalHeaderStyle: header.headerStyle == ApplicationHeaderStyle.Auto ? (titleList.wideMode ? ApplicationHeaderStyle.Titles : ApplicationHeaderStyle.Breadcrumb) : header.headerStyle
@@ -220,23 +245,24 @@ AbstractApplicationHeader {
         property Item forwardButton
         clip: true
 
-        cacheBuffer: width ? Math.max(0, width * count) : 0
-        displayMarginBeginning: __appWindow.pageStack.width * count
-        orientation: ListView.Horizontal
+
         boundsBehavior: Flickable.StopAtBounds
-        model: __appWindow.pageStack.depth
-        spacing: 0
-        currentIndex: __appWindow.pageStack && __appWindow.pageStack.currentIndex !== undefined ? __appWindow.pageStack.currentIndex : 0
+        readonly property alias model: mainRepeater.model
+        contentWidth: contentItem.width
+        contentHeight: height
+
+        readonly property int currentIndex: __appWindow.pageStack && __appWindow.pageStack.currentIndex !== undefined ? __appWindow.pageStack.currentIndex : 0
+        readonly property int count: mainRepeater.count
 
         function gotoIndex(idx) {
             //don't actually scroll in widescreen mode
-            if (titleList.wideMode) {
+            if (titleList.wideMode || contentItem.children.length < 2) {
                 return;
             }
             listScrollAnim.running = false
             var pos = titleList.contentX;
             var destPos;
-            titleList.positionViewAtIndex(idx, ListView.Center);
+            titleList.contentX = Math.max((contentItem.children[idx].x + contentItem.children[idx].width) - titleList.width, Math.min(titleList.contentX, contentItem.children[idx].x));
             destPos = titleList.contentX;
             listScrollAnim.from = pos;
             listScrollAnim.to = destPos;
@@ -263,7 +289,7 @@ AbstractApplicationHeader {
         onContentWidthChanged: gotoIndex(currentIndex);
 
         onContentXChanged: {
-            if (moving && !titleList.scrollMutex && titleList.scrollingLocked && !__appWindow.pageStack.contentItem.moving) {
+            if (movingHorizontally && !titleList.scrollMutex && titleList.scrollingLocked && !__appWindow.pageStack.contentItem.moving) {
                 titleList.scrollMutex = true;
                 __appWindow.pageStack.contentItem.contentX = titleList.contentX - titleList.originX + __appWindow.pageStack.contentItem.originX;
                 titleList.scrollMutex = false;
@@ -289,63 +315,72 @@ AbstractApplicationHeader {
             easing.type: Easing.InOutQuad
         }
 
-        delegate: MouseArea {
-            id: delegate
-            readonly property int currentIndex: index
-            readonly property var currentModelData: modelData
-            clip: true
+        Row {
+            id: contentItem
+            spacing: 0
+            Repeater {
+                id: mainRepeater
+                model: __appWindow.pageStack.depth
+                delegate: MouseArea {
+                    id: delegate
+                    readonly property int currentIndex: index
+                    readonly property var currentModelData: modelData
+                    clip: true
 
-            width: {
-                //more columns shown?
-                if (titleList.scrollingLocked && delegateLoader.page) {
-                    return delegateLoader.page.width;
-                } else {
-                    return Math.min(titleList.width, delegateLoader.implicitWidth + Units.smallSpacing);
-                }
-            }
-            height: titleList.height
-            onClicked: {
-                if (__appWindow.pageStack.currentIndex == modelData) {
-                    //scroll up if current otherwise make current
-                    if (!__appWindow.pageStack.currentItem.flickable) {
-                        return;
-                    }
-                    if (__appWindow.pageStack.currentItem.flickable.contentY > -__appWindow.header.height) {
-                        scrollTopAnimation.to = -__appWindow.pageStack.currentItem.flickable.topMargin;
-                        scrollTopAnimation.running = true;
+                    width: {
+                        //more columns shown?
+                        if (titleList.scrollingLocked && delegateLoader.page) {
+                            return delegateLoader.page.width - (index == 0 ? navButtons.width : 0) - (index == __appWindow.pageStack.depth-1  ? stack.anchors.rightMargin : 0);
+                        } else {
+                            return Math.min(titleList.width, delegateLoader.implicitWidth + Units.smallSpacing);
+                        }
                     }
 
-                } else {
-                    __appWindow.pageStack.currentIndex = modelData;
+                    height: titleList.height
+                    onClicked: {
+                        if (__appWindow.pageStack.currentIndex == modelData) {
+                            //scroll up if current otherwise make current
+                            if (!__appWindow.pageStack.currentItem.flickable) {
+                                return;
+                            }
+                            if (__appWindow.pageStack.currentItem.flickable.contentY > -__appWindow.header.height) {
+                                scrollTopAnimation.to = -__appWindow.pageStack.currentItem.flickable.topMargin;
+                                scrollTopAnimation.running = true;
+                            }
+
+                        } else {
+                            __appWindow.pageStack.currentIndex = modelData;
+                        }
+                    }
+
+                    Loader {
+                        id: delegateLoader
+                        height: parent.height
+                        x: titleList.wideMode || headerStyle == ApplicationHeaderStyle.Titles ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x))) : 0
+                        width: parent.width - x
+
+                        Connections {
+                            target: delegateLoader.page
+                            Component.onDestruction: delegateLoader.sourceComponent = null
+                        }
+
+                        sourceComponent: header.pageDelegate
+
+                        readonly property Page page: __appWindow.pageStack.get(modelData)
+                        //NOTE: why not use ListViewCurrentIndex? because listview itself resets
+                        //currentIndex in some situations (since here we are using an int as a model,
+                        //even more often) so the property binding gets broken
+                        readonly property bool current: __appWindow.pageStack.currentIndex == index
+                        readonly property int index: parent.currentIndex
+                        readonly property var modelData: parent.currentModelData
+                    }
                 }
-            }
-
-            Loader {
-                id: delegateLoader
-                height: parent.height
-                x: titleList.wideMode || headerStyle == ApplicationHeaderStyle.Titles ? (Math.min(delegate.width - implicitWidth, Math.max(0, titleList.contentX - delegate.x + navButtons.width + (navButtons.width > 0 ? Units.smallSpacing : 0)))) : 0
-                width: parent.width - x
-
-                Connections {
-                    target: delegateLoader.page
-                    Component.onDestruction: delegateLoader.sourceComponent = null
-                }
-
-                sourceComponent: header.pageDelegate
-
-                readonly property Page page: __appWindow.pageStack.get(modelData)
-                //NOTE: why not use ListViewCurrentIndex? because listview itself resets
-                //currentIndex in some situations (since here we are using an int as a model,
-                //even more often) so the property binding gets broken
-                readonly property bool current: __appWindow.pageStack.currentIndex == index
-                readonly property int index: parent.currentIndex
-                readonly property var modelData: parent.currentModelData
             }
         }
         Connections {
             target: titleList.scrollingLocked ? __appWindow.pageStack.contentItem : null
             onContentXChanged: {
-                if (!titleList.contentItem.moving && !titleList.scrollMutex) {
+                if (!titleList.dragging && !titleList.movingHorizontally && !titleList.scrollMutex) {
                     titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
                 }
             }

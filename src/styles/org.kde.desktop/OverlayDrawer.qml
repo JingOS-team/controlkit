@@ -44,6 +44,7 @@ T.OverlayDrawer {
             anchors.fill: parent
 
             DropShadow {
+                visible: !parent.parent.desktopMode || root.handle.pressed || (root.modal && root.position > 0)
                 anchors.fill: handleGraphics
                 horizontalOffset: 0
                 verticalOffset: Units.devicePixelRatio
@@ -59,15 +60,30 @@ T.OverlayDrawer {
                 width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                 height: width
                 radius: Units.devicePixelRatio*2
+                border.color: parent.parent.desktopMode && parent.parent.containsMouse ? Theme.highlightColor : "transparent"
                 Loader {
                     anchors.centerIn: parent
                     width: height
                     height: Units.iconSizes.smallMedium
-                    source: root.edge == Qt.LeftEdge ? Qt.resolvedUrl("../../templates/private/MenuIcon.qml") : (root.edge == Qt.RightEdge ? Qt.resolvedUrl("../../templates/private/ContextIcon.qml") : "")
+                    source: {
+                        switch(root.edge) {
+                        case Qt.LeftEdge:
+                            return Qt.resolvedUrl("../../templates/private/MenuIcon.qml");
+                        case Qt.RightEdge: {
+                            if (root.hasOwnProperty("actions")) {
+                                return Qt.resolvedUrl("../../templates/private/ContextIcon.qml");
+                            } else {
+                                return Qt.resolvedUrl("../../templates/private/GenericDrawerIcon.qml");
+                            }
+                        }
+                        default:
+                            return "";
+                        }
+                    }
                     onItemChanged: {
                         if(item) {
-                            item.morph = Qt.binding(function(){return root.position})
-                            item.color = Qt.binding(function(){return root.handle.pressed ? Theme.highlightedTextColor : Theme.textColor})
+                            item.drawer = Qt.binding(function(){return root});
+                            item.color = Qt.binding(function(){return root.handle.pressed ? Theme.highlightedTextColor : Theme.textColor});
                         }
                     }
                 }
@@ -96,7 +112,7 @@ T.OverlayDrawer {
 
     focus: false
     //default to a sidebar in desktop mode
-    modal: (applicationWindow() && applicationWindow().width < width*2) || edge == Qt.TopEdge || edge == Qt.BottomEdge
+    modal: true
     drawerOpen: !modal
     closePolicy: modal ? Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
     handleVisible: modal || !drawerOpen

@@ -1,6 +1,5 @@
 /*
- *   Copyright 2012 Marco Martin <mart@kde.org>
- *   Copyright 2016 Aleix Pol Gonzalez <aleixpol@kde.org>
+ *   Copyright 2015 Marco Martin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -20,20 +19,30 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.4
+import QtGraphicalEffects 1.0
+import org.kde.kirigami 2.4 as Kirigami
 
-/**
- * A visual separator
- *
- * Useful for splitting one set of items from another.
- *
- * @inherit QtQuick.Rectangle
- */
+Item {
+    width: height
+    height: Kirigami.Units.iconSizes.smallMedium
+    property Kirigami.OverlayDrawer drawer
+    property color color: Theme.textColor
+    opacity: 0.8
+    layer.enabled: true
 
-Rectangle {
-    height: Math.floor(Units.devicePixelRatio)
-    width: Math.floor(Units.devicePixelRatio)
-    Layout.preferredWidth: Math.floor(Units.devicePixelRatio)
-    Layout.preferredHeight: Math.floor(Units.devicePixelRatio)
-    color: Qt.tint(Theme.textColor, Qt.rgba(Theme.backgroundColor.r, Theme.backgroundColor.g, Theme.backgroundColor.b, 0.7))
+    Kirigami.Icon {
+        selected: drawer.handle.pressed
+        opacity: 1 - drawer.position
+        anchors.fill: parent
+        source: drawer.handleClosedIcon.source
+        color: drawer.handleClosedIcon.color
+    }
+    Kirigami.Icon {
+        selected: drawer.handle.pressed
+        opacity: drawer.position
+        anchors.fill: parent
+        source: drawer.handleOpenIcon.source
+        color: drawer.handleOpenIcon.color
+    }
 }
+

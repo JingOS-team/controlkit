@@ -18,17 +18,18 @@
  */
 
 import QtQuick 2.1
+import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.0 as Controls
 
-import org.kde.kirigami 2.2
+import org.kde.kirigami 2.4
 
 Controls.ToolButton {
     id: button
 
-    z: 99
     enabled: !Settings.isMobile && (__appWindow.pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0)
-    implicitWidth: height
     visible: applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
+    width: height
+    height: parent.height
 
     onClicked: {
         if (applicationWindow().pageStack.layers && applicationWindow().pageStack.layers.depth > 1) {

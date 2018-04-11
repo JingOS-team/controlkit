@@ -115,7 +115,7 @@ OverlayDrawer {
                             root.actions[0];
                 }
             }
-            topMargin: menu.height - menu.contentHeight
+            topMargin: root.handle.y > 0 ? menu.height - menu.contentHeight : 0
             header: Item {
                 height: heading.height
                 width: menu.width

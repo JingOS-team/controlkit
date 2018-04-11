@@ -20,13 +20,13 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.2
+import org.kde.kirigami 2.4
 
 Item {
     id: canvas
     width: height
     height: Units.iconSizes.smallMedium
-    property real morph: 0
+    property OverlayDrawer drawer
     property color color: Theme.textColor
     opacity: 0.8
     layer.enabled: true
@@ -38,23 +38,24 @@ Item {
             margins: Units.smallSpacing
         }
         property int thickness: Math.floor(Units.devicePixelRatio)*2
+
         Rectangle {
             anchors {
                 right: parent.right
                 top: parent.top
-                rightMargin: canvas.width/4 * morph
+                topMargin: -iconRoot.thickness/2 * drawer.position
             }
             antialiasing: true
             transformOrigin: Item.Right
-            width: (1 - morph) * parent.width + morph * ((parent.width / Math.sqrt(2)) - height/2)
+            width: (1 - drawer.position) * parent.width + drawer.position * (Math.sqrt(2*(parent.width*parent.width)))
             height: iconRoot.thickness
             color: canvas.color
-            rotation: -45 * morph
+            rotation: -45 * drawer.position
         }
 
         Rectangle {
             anchors.centerIn: parent
-            width: parent.width - parent.width * morph
+            width: parent.width - parent.width * drawer.position
             height: iconRoot.thickness
             color: canvas.color
         }
@@ -63,14 +64,14 @@ Item {
             anchors {
                 right: parent.right
                 bottom: parent.bottom
-                rightMargin: canvas.width/4 * morph
+                bottomMargin: -iconRoot.thickness/2 * drawer.position
             }
             antialiasing: true
             transformOrigin: Item.Right
-            width: (1 - morph) * parent.width + morph * ((parent.width / Math.sqrt(2)) - height/2)
+            width: (1 - drawer.position) * parent.width + drawer.position * (Math.sqrt(2*(parent.width*parent.width)))
             height: iconRoot.thickness
             color: canvas.color
-            rotation: 45 * morph
+            rotation: 45 * drawer.position
         }
     }
 }

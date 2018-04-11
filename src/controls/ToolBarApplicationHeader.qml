@@ -54,8 +54,6 @@ ApplicationHeader {
             Separator {
                 id: separator
                 Layout.preferredHeight: parent.height * 0.6
-                //assumption on the internal structure of the parent
-                visible: index > 0 || delegateItem.parent.x > 0
             }
 
             Heading {
@@ -64,7 +62,7 @@ ApplicationHeader {
 
                 Layout.preferredWidth: implicitWidth
                 Layout.minimumWidth: Math.min(titleTextMetrics.width, delegateItem.width - buttonTextMetrics.requiredWidth)
-                leftPadding: delegateItem.parent.x > 0 ? 0 : Units.largeSpacing
+                leftPadding: Units.largeSpacing
                 opacity: delegateItem.current ? 1 : 0.4
                 maximumLineCount: 1
                 color: Theme.textColor

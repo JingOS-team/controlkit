@@ -20,13 +20,13 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.2
+import org.kde.kirigami 2.4
 
 Item {
     id: canvas
     width: height
     height: Units.iconSizes.smallMedium
-    property real morph: 0
+    property OverlayDrawer drawer
     property color color: Theme.textColor
     opacity: 0.8
     layer.enabled: true
@@ -42,20 +42,21 @@ Item {
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 top: parent.top
-                leftMargin: canvas.width/4 * morph
+                //horizontalCenterOffset: -parent.width/2
+                topMargin: (parent.height/2 - iconRoot.thickness/2) * drawer.position
             }
             antialiasing: true
-            transformOrigin: Item.Left
-            width: (1 - morph) * height + morph * ((parent.width / Math.sqrt(2)) - height/2)
+            transformOrigin: Item.Center
+            width: (1 - drawer.position) * height + drawer.position * (Math.sqrt(2*(parent.width*parent.width)))
             height: iconRoot.thickness
             color: canvas.color
-            rotation: 45 * morph
+            rotation: 45 * drawer.position
         }
 
         Rectangle {
             anchors.centerIn: parent
-            width: height * (1 - morph)
-            height: iconRoot.thickness * (1-morph)
+            width: height
+            height: iconRoot.thickness
             color: canvas.color
         }
 
@@ -64,14 +65,15 @@ Item {
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 bottom: parent.bottom
-                leftMargin: canvas.width/4 * morph
+             //   topMargin: -iconRoot.thickness/2 * drawer.position
+                bottomMargin: (parent.height/2 - iconRoot.thickness/2) * drawer.position
             }
             antialiasing: true
-            transformOrigin: Item.Left
-            width: (1 - morph) * height + morph * ((parent.width / Math.sqrt(2)) - height/2)
+            transformOrigin: Item.Center
+            width: (1 - drawer.position) * height + drawer.position * (Math.sqrt(2*(parent.width*parent.width)))
             height: iconRoot.thickness
             color: canvas.color
-            rotation: -45 * morph
+            rotation: -45 * drawer.position
         }
     }
 }

@@ -33,6 +33,7 @@
         <file alias="GlobalDrawer.qml">src/controls/GlobalDrawer.qml</file>
         <file alias="templates/AbstractListItem.qml">src/controls/templates/AbstractListItem.qml</file>
         <file alias="templates/private/MenuIcon.qml">src/controls/templates/private/MenuIcon.qml</file>
+        <file alias="templates/private/GenericDrawerIcon.qml">src/controls/templates/private/GenericDrawerIcon.qml</file>
         <file alias="templates/private/PassiveNotification.qml">src/controls/templates/private/PassiveNotification.qml</file>
         <file alias="templates/private/ContextIcon.qml">src/controls/templates/private/ContextIcon.qml</file>
         <file alias="templates/private/ScrollView.qml">src/controls/templates/private/ScrollView.qml</file>

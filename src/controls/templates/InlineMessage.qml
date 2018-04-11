@@ -95,7 +95,7 @@ T2.Control {
 
     /**
      * A grouped property describing an optional icon.
-     * * source: The source of the icon.
+     * * source: The source of the icon, a freedesktop-compatible icon name is recommended.
      * * color: An optional tint color for the icon.
      *
      * If no custom icon is set, an icon appropriate to the message type

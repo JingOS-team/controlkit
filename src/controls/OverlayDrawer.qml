@@ -65,11 +65,25 @@ T.OverlayDrawer {
                     anchors.centerIn: parent
                     width: height
                     height: Units.iconSizes.smallMedium
-                    source: root.edge == Qt.LeftEdge ? Qt.resolvedUrl("templates/private/MenuIcon.qml") : (root.edge == Qt.RightEdge ? Qt.resolvedUrl("templates/private/ContextIcon.qml") : "")
+                    source: {
+                        switch(root.edge) {
+                        case Qt.LeftEdge:
+                            return Qt.resolvedUrl("templates/private/MenuIcon.qml");
+                        case Qt.RightEdge: {
+                            if (root.hasOwnProperty("actions")) {
+                                return Qt.resolvedUrl("templates/private/ContextIcon.qml");
+                            } else {
+                                return Qt.resolvedUrl("templates/private/GenericDrawerIcon.qml");
+                            }
+                        }
+                        default:
+                            return "";
+                        }
+                    }
                     onItemChanged: {
                         if(item) {
-                            item.morph = Qt.binding(function(){return root.position})
-                            item.color = Qt.binding(function(){return root.handle.pressed ? Theme.highlightedTextColor : Theme.textColor})
+                            item.drawer = Qt.binding(function(){return root});
+                            item.color = Qt.binding(function(){return root.handle.pressed ? Theme.highlightedTextColor : Theme.textColor});
                         }
                     }
                 }
