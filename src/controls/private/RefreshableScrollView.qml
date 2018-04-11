@@ -189,17 +189,18 @@ P.ScrollView {
                 }
             }
             Connections {
-                target: applicationWindow()
+                enabled: typeof applicationWindow !== "undefined" 
+                target: typeof applicationWindow !== "undefined" ? applicationWindow() : null
                 onReachableModeChanged: {
                     overshootResetTimer.running = applicationWindow().reachableMode;
                 }
             }
             Timer {
                 id: overshootResetTimer
-                interval: applicationWindow().reachableMode ? 8000 : 2000
+                interval: (typeof applicationWindow !== "undefined"  && applicationWindow().reachableMode) ? 8000 : 2000
                 onTriggered: {
                     //put it there because widescreen may have changed since timer start
-                    if (!Settings.isMobile || applicationWindow().wideScreen || root.flickableItem.verticalLayoutDirection === ListView.BottomToTop) {
+                    if (!Settings.isMobile || (typeof applicationWindow !== "undefined"  && applicationWindow().wideScreen) || root.flickableItem.verticalLayoutDirection === ListView.BottomToTop) {
                         return;
                     }
                     applicationWindow().reachableMode = !applicationWindow().reachableMode;

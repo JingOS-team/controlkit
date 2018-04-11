@@ -207,9 +207,11 @@ T2.Page {
      *
      * @since 2.1
      */
-    readonly property bool isCurrentPage: applicationWindow().pageStack.layers.depth > 1
-        ? applicationWindow().pageStack.layers.currentItem == root
-        : applicationWindow().pageStack.currentItem == root
+    readonly property bool isCurrentPage: typeof applicationWindow === "undefined"
+                ? true
+                : (applicationWindow().pageStack.layers.depth > 1
+                    ? applicationWindow().pageStack.layers.currentItem == root
+                    : applicationWindow().pageStack.currentItem == root)
 
     PageActionPropertyGroup {
         id: actionsGroup
@@ -258,8 +260,8 @@ T2.Page {
         //It should be T2.Page, Qt 5.7 doesn't like it
         property Item page: root
         height: item ? item.height : 0
-        source: (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0) ||
-                (applicationWindow().footer && applicationWindow().footer.visible && applicationWindow().footer.toString().indexOf("ToolBarApplicationHeader") === 0)
+        source: typeof applicationWindow !== "undefined" && ((applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0) ||
+                (applicationWindow().footer && applicationWindow().footer.visible && applicationWindow().footer.toString().indexOf("ToolBarApplicationHeader") === 0))
                 ? "" : Qt.resolvedUrl("./private/ActionButton.qml")
     }
 

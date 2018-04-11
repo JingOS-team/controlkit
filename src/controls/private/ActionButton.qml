@@ -45,6 +45,10 @@ Item {
     readonly property QtObject leftAction: root.page && root.page.leftAction && root.page.leftAction.enabled ? root.page.leftAction : null
     readonly property QtObject rightAction: root.page && root.page.rightAction && root.page.rightAction.enabled ? root.page.rightAction : null
 
+    readonly property bool hasApplicationWindow: typeof applicationWindow !== "undefined" && applicationWindow
+    readonly property bool hasGlobalDrawer: typeof globalDrawer !== "undefined" && globalDrawer
+    readonly property bool hasContextDrawer: typeof contextDrawer !== "undefined" && contextDrawer
+
     transform: Translate {
         id: translateTransform
         y: mouseArea.internalVisibility ? 0 : button.height
@@ -89,15 +93,15 @@ Item {
             anchors.fill: parent
 
             visible: action != null || leftAction != null || rightAction != null
-            property bool internalVisibility: (applicationWindow === undefined || (applicationWindow().controlsVisible && applicationWindow().height > root.height*2)) && (root.action === null || root.action.visible === undefined || root.action.visible)
+            property bool internalVisibility: (!root.hasApplicationWindow || (applicationWindow().controlsVisible && applicationWindow().height > root.height*2)) && (root.action === null || root.action.visible === undefined || root.action.visible)
             preventStealing: true
 
             drag {
                 target: button
                 //filterChildren: true
                 axis: Drag.XAxis
-                minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
-                maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
+                minimumX: root.hasContextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
+                maximumX: root.hasGlobalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
             }
 
             property var downTimestamp;
@@ -193,7 +197,7 @@ Item {
                 }
             }
             Connections {
-                target: globalDrawer
+                target: root.hasGlobalDrawer ? globalDrawer : null
                 onPositionChanged: {
                     if ( globalDrawer && globalDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
                         button.x = globalDrawer.contentItem.width * globalDrawer.position + root.width/2 - button.width/2;
@@ -201,7 +205,7 @@ Item {
                 }
             }
             Connections {
-                target: contextDrawer
+                target: root.hasContextDrawer ? globalDrawer : null
                 onPositionChanged: {
                     if (contextDrawer && contextDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
                         button.x = root.width/2 - button.width/2 - contextDrawer.contentItem.width * contextDrawer.position;
@@ -341,8 +345,8 @@ Item {
         drag {
             target: button
             axis: Drag.XAxis
-            minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
-            maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
+            minimumX: root.hasContextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
+            maximumX: root.hasGlobalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
         }
         visible: root.page.actions && root.page.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
             //using internal pagerow api
@@ -455,8 +459,8 @@ Item {
             target: button
             //filterChildren: true
             axis: Drag.XAxis
-            minimumX: contextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
-            maximumX: globalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
+            minimumX: root.hasContextDrawer && contextDrawer.enabled && contextDrawer.modal ? 0 : root.width/2 - button.width/2
+            maximumX: root.hasGlobalDrawer && globalDrawer.enabled && globalDrawer.modal ? root.width : root.width/2 - button.width/2
         }
         height: Units.smallSpacing * 3
 
