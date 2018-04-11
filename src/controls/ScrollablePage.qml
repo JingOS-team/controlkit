@@ -156,6 +156,9 @@ Page {
          } else if (mainItem.hasOwnProperty("dragMargin")) {
              return;
          }
+         if (overlay.oldMainItem && overlay.oldMainItem.hasOwnProperty("parent") && overlay.oldMainItem.parent != applicationWindow().overlay) {
+             overlay.oldMainItem.parent = overlay
+         }
          overlay.oldMainItem = mainItem
     }
 }
