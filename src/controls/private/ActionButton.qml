@@ -121,7 +121,7 @@ Item {
 
             hoverEnabled: true
 
-            Controls.ToolTip.visible: containsMouse && !Settings.isMobile && actionUnderMouse
+            Controls.ToolTip.visible: containsMouse && !Settings.tabletMode && actionUnderMouse
             Controls.ToolTip.text: actionUnderMouse ? actionUnderMouse.text : ""
             Controls.ToolTip.delay: Units.toolTipDelay
 
@@ -192,7 +192,7 @@ Item {
                 }
 
                 //if an action has been assigned, show a message like a tooltip
-                if (actionUnderMouse && actionUnderMouse.text && Settings.isMobile) {
+                if (actionUnderMouse && actionUnderMouse.text && Settings.tabletMode) {
                     Controls.ToolTip.show(actionUnderMouse.text, 3000)
                 }
             }

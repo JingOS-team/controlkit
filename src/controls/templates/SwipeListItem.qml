@@ -148,7 +148,7 @@ T2.ItemDelegate {
         z: -1
         //TODO: a global "open" state
         enabled: background.x !== 0
-        property bool indicateActiveFocus: listItem.pressed || Settings.isMobile || listItem.activeFocus || (view ? view.activeFocus : false)
+        property bool indicateActiveFocus: listItem.pressed || Settings.tabletMode || listItem.activeFocus || (view ? view.activeFocus : false)
         property Flickable view: listItem.ListView.view || listItem.parent.ListView.view
         anchors {
             fill: parent
@@ -187,8 +187,8 @@ T2.ItemDelegate {
         Row {
             id: actionsLayout
             z: 1
-            parent: Settings.isMobile ? behindItem : listItem
-            opacity: Settings.isMobile ? 1 : (listItem.hovered ? 1 : 0)
+            parent: Settings.tabletMode ? behindItem : listItem
+            opacity: Settings.tabletMode ? 1 : (listItem.hovered ? 1 : 0)
             Behavior on opacity {
                 OpacityAnimator {
                     duration: Units.longDuration
@@ -226,10 +226,10 @@ T2.ItemDelegate {
                         id: actionMouse
                         anchors {
                             fill: parent;
-                            margins: Settings.isMobile ? -Units.smallSpacing : 0;
+                            margins: Settings.tabletMode ? -Units.smallSpacing : 0;
                         }
                         enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
-                        hoverEnabled: !Settings.isMobile
+                        hoverEnabled: !Settings.tabletMode
                         onClicked: {
                             if (modelData && modelData.trigger !== undefined) {
                                 modelData.trigger();
@@ -240,7 +240,7 @@ T2.ItemDelegate {
                         }
                         Controls.ToolTip.delay: 1000
                         Controls.ToolTip.timeout: 5000
-                        Controls.ToolTip.visible: (Settings.isMobile ? actionMouse.pressed : actionMouse.containsMouse) && Controls.ToolTip.text.length > 0
+                        Controls.ToolTip.visible: (Settings.tabletMode ? actionMouse.pressed : actionMouse.containsMouse) && Controls.ToolTip.text.length > 0
                         Controls.ToolTip.text: modelData.tooltip || modelData.text
                     }
                     
@@ -252,7 +252,7 @@ T2.ItemDelegate {
     MouseArea {
         id: handleMouse
         parent: listItem.background
-        visible: Settings.isMobile
+        visible: Settings.tabletMode
         z: 99
         anchors {
             right: parent.right
@@ -339,11 +339,29 @@ T2.ItemDelegate {
     }
     Component.onCompleted: {
         //this will happen only once
-        if (Settings.isMobile && !swipeFilterConnection.swipeFilterItem) {
+        if (Settings.tabletMode && !swipeFilterConnection.swipeFilterItem) {
             var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
             behindItem.view.parent.parent._swipeFilter = component.createObject(behindItem.view.parent.parent);
         }
         listItem.contentItemChanged();
+    }
+    Connections {
+        target: Settings
+        onTabletModeChanged: {
+            if (Settings.tabletMode) {
+                if (!swipeFilterConnection.swipeFilterItem) {
+                    var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
+                    listItem.ListView.view.parent.parent._swipeFilter = component.createObject(listItem.ListView.view.parent.parent);
+                }
+            } else {
+                if (listItem.ListView.view.parent.parent._swipeFilter) {
+                    listItem.ListView.view.parent.parent._swipeFilter.destroy();
+                    positionAnimation.to = 0;
+                    positionAnimation.from = background.x;
+                    positionAnimation.running = true;
+                }
+            }
+        }
     }
     Connections {
         id: swipeFilterConnection

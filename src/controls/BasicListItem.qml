@@ -60,7 +60,7 @@ AbstractListItem {
     RowLayout {
         id: layout
         spacing: Units.smallSpacing*2
-        property bool indicateActiveFocus: listItem.pressed || Settings.isMobile || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
+        property bool indicateActiveFocus: listItem.pressed || Settings.tabletMode || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
         Icon {
             id: iconItem
             source: listItem.icon && listItem.icon.hasOwnProperty && listItem.icon.hasOwnProperty("name") ? listItem.icon.name : listItem.icon

@@ -60,24 +60,20 @@ Kirigami.ScrollablePage {
         Controls.Label {
             text: "Text area:"
         }
-        //this to make text selection work on Android
-        //QQC2 should do this by itself
-        MouseArea {
+
+        Controls.TextArea {
+            id: field
             Layout.fillWidth: true
-            drag.filterChildren: Settings.isMobile
-            implicitHeight: field.implicitHeight
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eu nisl ac nibh malesuada pretium ut sit amet libero. Nulla libero arcu, pharetra a dignissim nec, iaculis sit amet metus. Suspendisse quis justo efficitur, pharetra dui maximus, aliquam dolor. Vestibulum vel imperdiet turpis. Mauris ut leo mauris. Praesent ut libero sollicitudin, tincidunt nisi a, efficitur erat. Curabitur lacinia leo et tempor aliquam."
+            Layout.minimumWidth: Kirigami.Units.gridUnit * 12
+            Layout.minimumHeight: Kirigami.Units.gridUnit * 12
+            wrapMode: Controls.TextArea.WordWrap
+            //this to make text selection work on Android
+            //QQC2 should do this by itself
             onPressAndHold: {
-                field.forceActiveFocus();
-                field.cursorPosition = field.positionAt(mouse.x, mouse.y);
-                field.selectWord();
-            }
-            Controls.TextArea {
-                id: field
-                anchors.fill: parent
-                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eu nisl ac nibh malesuada pretium ut sit amet libero. Nulla libero arcu, pharetra a dignissim nec, iaculis sit amet metus. Suspendisse quis justo efficitur, pharetra dui maximus, aliquam dolor. Vestibulum vel imperdiet turpis. Mauris ut leo mauris. Praesent ut libero sollicitudin, tincidunt nisi a, efficitur erat. Curabitur lacinia leo et tempor aliquam."
-                Layout.minimumWidth: Kirigami.Units.gridUnit * 12
-                Layout.minimumHeight: Kirigami.Units.gridUnit * 12
-                wrapMode: Controls.TextArea.WordWrap
+                forceActiveFocus();
+                cursorPosition = positionAt(event.x, event.y);
+                selectWord();
             }
         }
     }

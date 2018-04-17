@@ -44,23 +44,23 @@ MouseArea {
         scrollBarCreationTimer.restart();
     }
 
-    drag.filterChildren: !Settings.isMobile
+    drag.filterChildren: !Settings.tabletMode
     onPressed: {
-        if (Settings.isMobile) {
+        if (Settings.tabletMode) {
             return;
         }
         mouse.accepted = false;
         flickableItem.interactive = true;
     }
     onReleased:  {
-        if (Settings.isMobile) {
+        if (Settings.tabletMode) {
             return;
         }
         mouse.accepted = false;
         flickableItem.interactive = false;
     }
     onWheel: {
-        if (Settings.isMobile || flickableItem.contentHeight<flickableItem.height) {
+        if (Settings.tabletMode || flickableItem.contentHeight<flickableItem.height) {
             return;
         }
 
@@ -92,7 +92,7 @@ MouseArea {
     }
     Connections {
         target: flickableItem
-        enabled: !Settings.isMobile
+        enabled: !Settings.tabletMode
         onFlickEnded: flickableItem.interactive = false;
         onMovementEnded: flickableItem.interactive = false;
     }
@@ -110,7 +110,7 @@ MouseArea {
             contentItem.parent = flickableItem.contentItem;
         }
         //TODO: find a way to make flicking work on laptops with touch screen
-        flickableItem.interactive = Settings.isMobile;
+        flickableItem.interactive = Settings.tabletMode;
         flickableItem.anchors.fill = flickableParent;
 
         scrollBarCreationTimer.restart();
@@ -170,7 +170,7 @@ MouseArea {
         ScrollBar {
             z: flickableParent.z + 1
             visible: root.contentItem.visible && size < 1
-            interactive: !Settings.isMobile
+            interactive: !Settings.tabletMode
 
             //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
             height: parent.height - anchors.topMargin
@@ -186,7 +186,7 @@ MouseArea {
         ScrollBar {
             z: flickableParent.z + 1
             visible: root.contentItem.visible && size < 1
-            interactive: !Settings.isMobile
+            interactive: !Settings.tabletMode
 
             //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
             height: parent.height - anchors.topMargin

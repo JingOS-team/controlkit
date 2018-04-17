@@ -27,9 +27,9 @@ Rectangle {
     visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
     Rectangle {
         id: internal
-        property bool indicateActiveFocus: listItem.pressed || Settings.isMobile || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
+        property bool indicateActiveFocus: listItem.pressed || Settings.tabletMode || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
         anchors.fill: parent
-        visible: !Settings.isMobile && listItem.supportsMouseEvents
+        visible: !Settings.tabletMode && listItem.supportsMouseEvents
         color: listItem.activeBackgroundColor
         opacity: (listItem.hovered || listItem.highlighted) && !listItem.pressed ? (indicateActiveFocus ? 0.2 : 0.1 ) : 0
         Behavior on opacity { NumberAnimation { duration: Units.longDuration } }

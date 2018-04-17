@@ -99,6 +99,11 @@ ecm_setup_version(${KF5_VERSION}
     SOVERSION 5
 )
 
+#use dbus on linux, bsd etc, but not andoid and apple stuff
+if (UNIX AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND NOT(APPLE))
+    find_package(Qt5DBus)
+endif()
+
 if(BUILD_EXAMPLES AND CMAKE_SYSTEM_NAME STREQUAL "Android")
     find_package(Qt5AndroidExtras ${REQUIRED_QT_VERSION} REQUIRED)
 endif()

@@ -72,7 +72,7 @@ T.ItemDelegate {
     
     implicitHeight: mainLayout.implicitHeight + topPadding + bottomPadding
 
-    hoverEnabled: !Kirigami.Settings.isMobile && showClickFeedback
+    hoverEnabled: !Kirigami.Settings.tabletMode && showClickFeedback
     //if it's in a CardLayout, try to expand horizontal cards to both columns
     Layout.columnSpan: headerOrientation == Qt.Horizontal && parent.hasOwnProperty("columns") ? parent.columns : 1
 
