@@ -99,10 +99,12 @@ Kirigami.ScrollablePage {
             actions: [
                 Kirigami.Action {
                     iconName: "document-decrypt"
+                    text: "Action 1"
                     onTriggered: showPassiveNotification(model.text + " Action 1 clicked")
                 },
                 Kirigami.Action {
                     iconName: "mail-reply-sender"
+                    text: "Action 2"
                     onTriggered: showPassiveNotification(model.text + " Action 2 clicked")
                 }]
         }

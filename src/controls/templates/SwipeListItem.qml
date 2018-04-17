@@ -19,7 +19,8 @@
 
 import QtQuick 2.7
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.2
+import QtQuick.Controls 2.0 as Controls
+import org.kde.kirigami 2.4
 import "../private"
 import QtQuick.Templates 2.0 as T2
 
@@ -134,9 +135,9 @@ T2.ItemDelegate {
     width: parent ? parent.width : implicitWidth
     implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5
 
-    leftPadding: Units.smallSpacing * 2 + (LayoutMirroring.enabled ?  handleMouse.width + handleMouse.anchors.rightMargin : 0)
+    leftPadding: Units.smallSpacing * 2 + (LayoutMirroring.enabled ? (handleMouse.visible ? handleMouse.width : 0) + handleMouse.anchors.rightMargin : 0)
     topPadding: Units.smallSpacing * 2
-    rightPadding: Units.smallSpacing * 2 + (LayoutMirroring.enabled ?  0 : handleMouse.width + handleMouse.anchors.rightMargin)
+    rightPadding: Units.smallSpacing * 2 + (LayoutMirroring.enabled ?  0 : (handleMouse.visible ? handleMouse.width : 0) + handleMouse.anchors.rightMargin)
     bottomPadding: Units.smallSpacing * 2
 
 //END properties
@@ -186,6 +187,14 @@ T2.ItemDelegate {
         Row {
             id: actionsLayout
             z: 1
+            parent: Settings.isMobile ? behindItem : listItem
+            opacity: Settings.isMobile ? 1 : (listItem.hovered ? 1 : 0)
+            Behavior on opacity {
+                OpacityAnimator {
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
@@ -214,11 +223,13 @@ T2.ItemDelegate {
                     enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
                     visible: (modelData && modelData.visible !== undefined) ? modelData.visible : true;
                     MouseArea {
+                        id: actionMouse
                         anchors {
                             fill: parent;
-                            margins: -Units.smallSpacing;
+                            margins: Settings.isMobile ? -Units.smallSpacing : 0;
                         }
                         enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
+                        hoverEnabled: !Settings.isMobile
                         onClicked: {
                             if (modelData && modelData.trigger !== undefined) {
                                 modelData.trigger();
@@ -227,7 +238,12 @@ T2.ItemDelegate {
                             positionAnimation.to = 0;
                             positionAnimation.running = true;
                         }
+                        Controls.ToolTip.delay: 1000
+                        Controls.ToolTip.timeout: 5000
+                        Controls.ToolTip.visible: (Settings.isMobile ? actionMouse.pressed : actionMouse.containsMouse) && Controls.ToolTip.text.length > 0
+                        Controls.ToolTip.text: modelData.tooltip || modelData.text
                     }
+                    
                 }
             }
         }
@@ -236,6 +252,7 @@ T2.ItemDelegate {
     MouseArea {
         id: handleMouse
         parent: listItem.background
+        visible: Settings.isMobile
         z: 99
         anchors {
             right: parent.right
