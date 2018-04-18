@@ -7,8 +7,11 @@ set(libkirigami_SRCS
     tabletmodewatcher.cpp
 )
 
-set(tabletmodemanager_xml org.kde.KWin.TabletModeManager.xml)
-qt5_add_dbus_interface(libkirigami_SRCS ${tabletmodemanager_xml} tabletmodemanager_interface)
+#use dbus on linux, bsd etc, but not andoid and apple stuff
+if (UNIX AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND NOT(APPLE))
+    qt5_add_dbus_interface(libkirigami_SRCS org.kde.KWin.TabletModeManager.xml tabletmodemanager_interface)
+    set(LIBKIRIGAMKI_EXTRA_LIBS Qt5::DBus)
+endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -26,12 +29,6 @@ add_library(KF5::Kirigami2 ALIAS KF5Kirigami2)
 target_include_directories(KF5Kirigami2
     INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/Kirigami2>"
 )
-
-#use dbus on linux, bsd etc, but not andoid and apple stuff
-if (UNIX AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND NOT(APPLE))
-    set(LIBKIRIGAMKI_EXTRA_LIBS Qt5::DBus)
-endif()
-
 
 target_link_libraries(KF5Kirigami2
     PUBLIC

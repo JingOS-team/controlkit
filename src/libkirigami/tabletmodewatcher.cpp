@@ -20,9 +20,9 @@
  */
 
 #include "tabletmodewatcher.h"
-#include "tabletmodemanager_interface.h"
 
-#ifdef Q_OS_ANDROID
+#ifndef Q_OS_ANDROID
+#include "tabletmodemanager_interface.h"
 #include <QDBusConnection>
 #endif
 
