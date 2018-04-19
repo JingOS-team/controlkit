@@ -244,35 +244,56 @@ QtObject {
             scrollView.flickableItem.contentY = pos.y;
         }
 
-        NumberAnimation {
+        ParallelAnimation {
             id: openAnimation 
             property int margins: Units.gridUnit * 5
             property int topOpenPosition: Math.min(-mainItem.height*0.15, scrollView.flickableItem.contentHeight - mainItem.height + margins)
-            target: scrollView.flickableItem
-            properties: "contentY"
-            from: -mainItem.height
-            to: topOpenPosition
-            duration: Units.longDuration
-            easing.type: Easing.OutQuad
-            onRunningChanged: {
-                //hack to center listviews
-                if (!running && contentItem.contentItem) {
-                    var width = Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth));
-                    contentItem.contentItem.x = (mainItem.width - width)/2
-                    contentItem.contentItem.width = width;
+            property alias from: openAnimationInternal.from
+            property alias to: openAnimationInternal.to
+            NumberAnimation {
+                id: openAnimationInternal
+                target: scrollView.flickableItem
+                properties: "contentY"
+                from: -mainItem.height
+                to: openAnimation.topOpenPosition
+                duration: Units.longDuration
+                easing.type: Easing.OutQuad
+                onRunningChanged: {
+                    //hack to center listviews
+                    if (!running && contentItem.contentItem) {
+                        var width = Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth));
+                        contentItem.contentItem.x = (mainItem.width - width)/2
+                        contentItem.contentItem.width = width;
+                    }
                 }
+            }
+            OpacityAnimator {
+                target: mainItem
+                from: 0
+                to: 1
+                duration: Units.longDuration
+                easing.type: Easing.InQuad
             }
         }
 
         SequentialAnimation {
             id: closeAnimation
             property int to: -mainItem.height
-            NumberAnimation {
-                target: scrollView.flickableItem
-                properties: "contentY"
-                to: closeAnimation.to
-                duration: Units.longDuration
-                easing.type: Easing.InQuad
+            ParallelAnimation {
+                NumberAnimation {
+                    target: scrollView.flickableItem
+                    properties: "contentY"
+                    to: closeAnimation.to
+                    duration: Units.longDuration
+                    easing.type: Easing.InQuad
+                }
+                OpacityAnimator {
+                    target: mainItem
+                    from: 1
+                    to: 0
+                    duration: Units.longDuration
+                    easing.type: Easing.InQuad
+                }
             }
             ScriptAction {
                 script: {
