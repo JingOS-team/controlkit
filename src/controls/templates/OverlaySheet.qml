@@ -301,7 +301,10 @@ QtObject {
             width: Units.iconSizes.smallMedium
             height: width
             source: "window-close-symbolic"
+            active: closeMouseArea.containsMouse
             MouseArea {
+                id: closeMouseArea
+                hoverEnabled: true
                 anchors.fill: parent
                 onClicked: root.close();
             }
