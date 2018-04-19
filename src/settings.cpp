@@ -41,6 +41,19 @@ Settings::Settings(QObject *parent)
                 setTabletMode(tabletMode);
             });
 
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+    m_mobile = true;
+#else
+    //Mostly for debug purposes and for platforms which are always mobile,
+    //such as Plasma Mobile
+    if (qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE")) {
+        m_mobile = (QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_MOBILE")) == QStringLiteral("1") ||
+            QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_MOBILE")) == QStringLiteral("true"));
+    } else {
+        m_mobile = false;
+    }
+#endif
+
     const QString configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation, QStringLiteral("kdeglobals"));
     if (QFile::exists(configPath)) {
         QSettings globals(configPath, QSettings::IniFormat);
