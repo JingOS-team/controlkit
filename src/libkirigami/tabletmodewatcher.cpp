@@ -21,7 +21,7 @@
 
 #include "tabletmodewatcher.h"
 
-#ifndef Q_OS_ANDROID
+#if defined(Q_OS_UNIX) && !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS) && !defined(Q_OS_MACOS)
 #include "tabletmodemanager_interface.h"
 #include <QDBusConnection>
 #endif
