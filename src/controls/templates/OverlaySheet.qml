@@ -380,6 +380,7 @@ QtObject {
             Connections {
                 target: scrollView.flickableItem
                 onContentYChanged: footerItem.y = Math.min(mainItem.height, mainItem.mapFromItem(flickableContents, 0, flickableContents.height).y) - footerItem.height
+                onHeightChanged: scrollView.flickableItem.contentYChanged()
             }
             z: 2
             Item {
