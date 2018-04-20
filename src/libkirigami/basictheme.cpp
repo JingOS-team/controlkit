@@ -61,6 +61,7 @@ QObject *BasicThemeDeclarative::instance(const BasicTheme *theme)
     Q_ASSERT(engine);
 
     QQmlComponent c(engine);
+    //NOTE: for now is important this import stays at 2.0
     c.setData("import QtQuick 2.6\n\
             import org.kde.kirigami 2.0 as Kirigami\n\
             QtObject {\n\

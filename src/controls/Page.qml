@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.4 as Kirigami
 import "private"
 import QtQuick.Templates 2.0 as T2
 
@@ -75,7 +75,7 @@ T2.Page {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 2.2 as Kirigami
+     * import org.kde.kirigami 2.4 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]
@@ -87,7 +87,7 @@ T2.Page {
      * @endcode
      *
      * @code
-     * import org.kde.kirigami 2.2 as Kirigami
+     * import org.kde.kirigami 2.4 as Kirigami
      *
      * Kirigami.Page {
      *   [...]
@@ -122,7 +122,7 @@ T2.Page {
      * Example usage:
      *
      * @code
-     * import org.kde.kirigami 2.2 as Kirigami
+     * import org.kde.kirigami 2.4 as Kirigami
      * Kirigami.Page {
      *     actions.main: Kirigami.Action {
      *         iconName: "edit"
@@ -144,7 +144,7 @@ T2.Page {
      * Example usage:
      *
      * @code
-     * import org.kde.kirigami 2.2 as Kirigami
+     * import org.kde.kirigami 2.4 as Kirigami
      * Kirigami.Page {
      *     actions.left: Kirigami.Action {
      *         iconName: "edit"
@@ -166,7 +166,7 @@ T2.Page {
      * Example usage:
      *
      * @code
-     * import org.kde.kirigami 2.2 as Kirigami
+     * import org.kde.kirigami 2.4 as Kirigami
      * Kirigami.Page {
      *     actions.right: Kirigami.Action {
      *         iconName: "edit"
@@ -184,7 +184,7 @@ T2.Page {
      * Actions properties are grouped.
      *
      * @code
-     * import org.kde.kirigami 2.2 as Kirigami
+     * import org.kde.kirigami 2.4 as Kirigami
      * Kirigami.Page {
      *     actions {
      *         main: Kirigami.Action {...}

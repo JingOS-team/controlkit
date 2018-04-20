@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.2
+import org.kde.kirigami 2.4
 
 import "templates/private"
 
@@ -29,7 +29,7 @@ import "templates/private"
  *
  * Example usage:
  * @code
- * import org.kde.kirigami 2.2 as Kirigami
+ * import org.kde.kirigami 2.4 as Kirigami
  *
  * Kirigami.ApplicationWindow {
  *  [...]
@@ -41,7 +41,7 @@ import "templates/private"
  * @endcode
  *
  * @code
- * import org.kde.kirigami 2.2 as Kirigami
+ * import org.kde.kirigami 2.4 as Kirigami
  *
  * Kirigami.Page {
  *   [...]

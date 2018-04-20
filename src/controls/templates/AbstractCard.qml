@@ -20,7 +20,7 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Templates 2.0 as T
-import org.kde.kirigami 2.3 as Kirigami
+import org.kde.kirigami 2.4 as Kirigami
 
 /**
  * A AbstractCard is the base for cards. A Card is a visual object that serves

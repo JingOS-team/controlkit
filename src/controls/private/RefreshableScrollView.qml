@@ -22,7 +22,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.0 as QQC2
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.2
+import org.kde.kirigami 2.4
 import "../templates/private" as P
 
 /**
@@ -34,7 +34,7 @@ import "../templates/private" as P
  * Example usage:
  *
  * @code
- * import org.kde.kirigami 2.2 as Kirigami
+ * import org.kde.kirigami 2.4 as Kirigami
  * [...]
  * 
  * Kirigami.RefreshableScrollView {

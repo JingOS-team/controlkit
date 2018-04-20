@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.2
+import org.kde.kirigami 2.4
 import QtQuick.Templates 2.0
 
 import "../../templates" as T

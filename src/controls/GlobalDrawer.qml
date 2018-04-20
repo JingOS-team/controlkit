@@ -21,7 +21,7 @@ import QtQuick 2.6
 import QtQuick.Templates 2.0 as T2
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.3
+import org.kde.kirigami 2.4
 
 import "private"
 import "templates/private"
@@ -33,7 +33,7 @@ import "templates/private"
  *
  * Example usage:
  * @code
- * import org.kde.kirigami 2.2 as Kirigami
+ * import org.kde.kirigami 2.4 as Kirigami
  *
  * Kirigami.ApplicationWindow {
  *  [...]
@@ -95,7 +95,7 @@ OverlayDrawer {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 2.2 as Kirigami
+     * import org.kde.kirigami 2.4 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]
@@ -134,7 +134,7 @@ OverlayDrawer {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 2.2 as Kirigami
+     * import org.kde.kirigami 2.4 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]
@@ -158,7 +158,7 @@ OverlayDrawer {
      *
      * Example usage:
      * @code
-     * import org.kde.kirigami 2.2 as Kirigami
+     * import org.kde.kirigami 2.4 as Kirigami
      *
      * Kirigami.ApplicationWindow {
      *  [...]

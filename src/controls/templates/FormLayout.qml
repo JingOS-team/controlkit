@@ -20,7 +20,7 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.2
-import org.kde.kirigami 2.3 as Kirigami
+import org.kde.kirigami 2.4 as Kirigami
 
 /**
  * This is the base class for Form layouts conforming to the

@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.1
-import org.kde.kirigami 2.2
+import org.kde.kirigami 2.4
 import "../../private"
 import "../../templates" as T
 
