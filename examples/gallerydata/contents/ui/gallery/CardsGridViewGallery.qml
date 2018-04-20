@@ -41,7 +41,7 @@ Kirigami.ScrollablePage {
         header: RowLayout {
             Kirigami.Heading {
                 Layout.fillWidth: true
-                text: "CardsGridView"
+                text: "Cards Grid View"
             }
             Controls.ToolButton {
                 text: "HIG..."
