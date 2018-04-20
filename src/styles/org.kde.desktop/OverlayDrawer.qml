@@ -115,7 +115,8 @@ T.OverlayDrawer {
     modal: true
     drawerOpen: !modal
     closePolicy: modal ? Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
-    handleVisible: modal || !drawerOpen
+    handleVisible: (modal || !drawerOpen) && (typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true)
+
     onPositionChanged: {
         if (!modal && !root.peeking && !root.animating) {
             position = 1;

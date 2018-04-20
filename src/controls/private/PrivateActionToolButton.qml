@@ -71,8 +71,8 @@ Controls.ToolButton {
             anchors.centerIn: parent
             Icon {
                 id: mainIcon
-                Layout.minimumWidth: 22
-                Layout.minimumHeight: 22
+                Layout.minimumWidth: Units.iconSizes.smallMedium
+                Layout.minimumHeight: Units.iconSizes.smallMedium
                 source: control.kirigamiAction ? (control.kirigamiAction.icon ? control.kirigamiAction.icon.name : control.kirigamiAction.iconName) : ""
                 visible: control.kirigamiAction && control.kirigamiAction.iconName != ""
                 color: control.kirigamiAction && control.kirigamiAction.icon && control.kirigamiAction.icon.color.a > 0 ? control.kirigamiAction.icon.color : Qt.rgba(0, 0, 0, 0)                                                                                     
