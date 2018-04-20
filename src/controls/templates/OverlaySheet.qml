@@ -321,7 +321,7 @@ QtObject {
             visible: !Settings.isMobile
             width: Units.iconSizes.smallMedium
             height: width
-            source: "window-close-symbolic"
+            source: closeMouseArea.containsMouse ? "window-close" : "window-close-symbolic"
             active: closeMouseArea.containsMouse
             MouseArea {
                 id: closeMouseArea
