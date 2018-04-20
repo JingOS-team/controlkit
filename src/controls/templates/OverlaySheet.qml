@@ -374,12 +374,24 @@ QtObject {
             width: flickableContents.width
             x: flickableContents.x
             visible: root.footer
-            height: footerParent.implicitHeight + Units.smallSpacing * 2
+            height: footerParent.implicitHeight + Units.smallSpacing * 2 + extraMargin
             color: Theme.backgroundColor
             y: mainItem.mapFromItem(flickableContents, 0, flickableContents.height).y - height
+            //Show an extra margin when:
+            //* the application is in mobile mode (no toolbarapplicationheader)
+            //* the bottom screen controls are visible
+            //* the sheet is disaplayed *under* the controls
+            property int extraMargin: (!root.parent ||
+                applicationWindow === "undefined" ||
+                (root.parent === applicationWindow().overlay && root.parent.action.main) ||
+                !applicationWindow().controlsVisible ||
+                !applicationWindow().header ||
+                applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0)
+                    ? 0 : Units.gridUnit * 3
             Connections {
                 target: scrollView.flickableItem
-                onContentYChanged: footerItem.y = Math.min(mainItem.height, mainItem.mapFromItem(flickableContents, 0, flickableContents.height).y) - footerItem.height
+                onContentYChanged: footerItem.y = Math.min(mainItem.height, mainItem.mapFromItem(flickableContents, 0, flickableContents.height).y) - footerItem.height;
+
                 onHeightChanged: scrollView.flickableItem.contentYChanged()
             }
             z: 2
@@ -387,7 +399,9 @@ QtObject {
                 id: footerParent
                 implicitHeight: footer ? footer.implicitHeight : 0
                 anchors {
-                    fill: parent
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
                     margins: Units.smallSpacing
                 }
             }
