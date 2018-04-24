@@ -122,7 +122,6 @@ Control {
                 if (item.Kirigami.FormData.isSection) {
                     //put an extra spacer
                     var placeHolder = placeHolderComponent.createObject(lay, {"item": item});
-                    placeHolder.Layout.colSpan = 2;
                     itemContainer.parent = lay;
                 }
 
@@ -133,11 +132,6 @@ Control {
                 }
                 
                 itemContainer.parent = lay;
-                //if section, wee need another placeholder
-                if (item.Kirigami.FormData.isSection) {
-                    var placeHolder = placeHolderComponent.createObject(lay, {"item": item});
-                    placeHolder.parent = lay;
-                }
             }
         }
     }
@@ -199,11 +193,14 @@ Control {
 
             level: item.Kirigami.FormData.isSection ? 3 : 5
 
+            Layout.columnSpan: item.Kirigami.FormData.isSection ? lay.columns : 1
             Layout.preferredHeight: item.Kirigami.FormData.label.length > 0 ? implicitHeight : Kirigami.Units.smallSpacing
 
-            Layout.alignment: root.wideMode
+            Layout.alignment: item.Kirigami.FormData.isSection
+                             ? Qt.AlignLeft
+                             : (root.wideMode
                                 ? (Qt.AlignRight | (item.Kirigami.FormData.buddyFor.height > height * 2 ? Qt.AlignTop : Qt.AlignVCenter))
-                                : (Qt.AlignLeft | Qt.AlignBottom)
+                                : (Qt.AlignLeft | Qt.AlignBottom))
             verticalAlignment: root.wideMode ? Text.AlignVCenter : Text.AlignBottom
 
             Layout.topMargin: item.Kirigami.FormData.buddyFor.height > implicitHeight * 2 ? Kirigami.Units.smallSpacing/2 : 0
@@ -227,19 +224,22 @@ Control {
             Kirigami.MnemonicData.enabled: item.Kirigami.FormData.buddyFor && item.Kirigami.FormData.buddyFor.activeFocusOnTab
             Kirigami.MnemonicData.controlType: Kirigami.MnemonicData.FormLabel
             Kirigami.MnemonicData.label: item.Kirigami.FormData.label
-            
+
+            Layout.columnSpan: item.Kirigami.FormData.isSection ? lay.columns : 1
             Layout.preferredHeight: item.Kirigami.FormData.label.length > 0 ? implicitHeight : Kirigami.Units.smallSpacing
 
-            Layout.alignment: root.wideMode
+            Layout.alignment: item.Kirigami.FormData.isSection
+                             ? Qt.AlignLeft
+                             : (root.wideMode
                                 ? (Qt.AlignRight | (item.Kirigami.FormData.buddyFor.height > height * 2 ? Qt.AlignTop : Qt.AlignVCenter))
-                                : (Qt.AlignLeft | Qt.AlignBottom)
+                                : (Qt.AlignLeft | Qt.AlignBottom))
             Layout.topMargin: item.Kirigami.FormData.buddyFor.height > implicitHeight * 2 ? Kirigami.Units.smallSpacing/2 : 0
             
             activeFocusOnTab: indicator.visible && indicator.enabled
             text: labelItem.Kirigami.MnemonicData.richTextLabel
             enabled: labelItem.item.Kirigami.FormData.enabled
             checked: labelItem.item.Kirigami.FormData.checked
-                
+
             onItemChanged: {
                 if (!item) {
                     labelItem.destroy();
