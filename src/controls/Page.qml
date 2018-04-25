@@ -207,7 +207,7 @@ T2.Page {
      *
      * @since 2.1
      */
-    readonly property bool isCurrentPage: typeof applicationWindow === "undefined"
+    readonly property bool isCurrentPage: typeof applicationWindow === "undefined" || !applicationWindow().pageStack
                 ? true
                 : (applicationWindow().pageStack.layers.depth > 1
                     ? applicationWindow().pageStack.layers.currentItem == root
