@@ -35,7 +35,10 @@ import "templates" as T
  * InlineMessage can be used to give information to the user or
  * interact with the user, without requiring the use of a dialog.
  *
- * The InlineMessage item is hidden by default.
+ * The InlineMessage item is hidden by default. It also manages its
+ * height (and implicitHeight) during an animated reveal when shown.
+ * You should avoid setting height on an InlineMessage unless it is
+ * already visible.
  *
  * Optionally an icon can be set, defaulting to an icon appropriate
  * to the message type otherwise.
@@ -77,34 +80,44 @@ import "templates" as T
 T.InlineMessage {
     id: root
 
-    implicitWidth: contentItem.width + (padding * 2)
-    implicitHeight: visible ? contentItem.implicitHeight + (padding * 2) : 0
+    implicitHeight: visible ? contentLayout.implicitHeight + (2 * (background.border.width + Kirigami.Units.smallSpacing)) : 0
+
+    property bool _animating: false
 
     Behavior on implicitHeight {
         enabled: !root.visible
 
         SequentialAnimation {
-            PropertyAction { targets: contentItem; property: "animating"; value: true }
+            PropertyAction { targets: root; property: "_animating"; value: true }
             NumberAnimation { duration: Kirigami.Units.longDuration }
-            // NOTE: This needs to be a script action as nested PropertyActions (see
-            // contentLayout) don't work.
-            ScriptAction { script: contentItem.opacity = 1.0 }
         }
     }
 
     onVisibleChanged: {
         if (!visible) {
-            contentItem.opacity = 0.0;
+            contentLayout.opacity = 0.0;
         }
     }
 
     opacity: visible ? 1.0 : 0.0
 
     Behavior on opacity {
+        enabled: !root.visible
+
         NumberAnimation { duration: Kirigami.Units.shortDuration }
     }
 
-    padding: background.border.width + Kirigami.Units.largeSpacing
+    onOpacityChanged: {
+        if (opacity == 0.0) {
+            contentLayout.opacity = 0.0;
+        } else if (opacity == 1.0) {
+            contentLayout.opacity = 1.0;
+        }
+    }
+
+    onImplicitHeightChanged: {
+        height = implicitHeight;
+    }
 
     background: Rectangle {
         id: bgBorderRect
@@ -154,10 +167,12 @@ T.InlineMessage {
         }
     }
 
-    contentItem: GridLayout {
+    GridLayout {
         id: contentLayout
 
-        Layout.fillWidth: true
+        x: background.border.width + Kirigami.Units.smallSpacing
+        y: background.border.width + Kirigami.Units.smallSpacing
+        width: parent.width - (2 * (background.border.width + Kirigami.Units.smallSpacing))
 
         // Used to defer opacity animation until we know if InlineMessage was
         // initialized visible.
@@ -168,11 +183,9 @@ T.InlineMessage {
 
             SequentialAnimation {
                 NumberAnimation { duration: Kirigami.Units.shortDuration * 2 }
-                PropertyAction { targets: contentItem; property: "animating"; value: false }
+                PropertyAction { targets: root; property: "_animating"; value: false }
             }
         }
-
-        property bool animating: false
 
         rowSpacing: Kirigami.Units.largeSpacing
         columnSpacing: Kirigami.Units.smallSpacing
@@ -394,9 +407,6 @@ T.InlineMessage {
             onClicked: root.visible = false
         }
 
-        Component.onCompleted: {
-            contentItem.opacity = visible ? 1.0 : 0.0;
-            complete = true;
-        }
+        Component.onCompleted: complete = true
     }
 }

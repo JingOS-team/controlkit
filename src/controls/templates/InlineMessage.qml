@@ -29,7 +29,10 @@ import "private"
  * InlineMessage can be used to give information to the user or
  * interact with the user, without requiring the use of a dialog.
  *
- * The InlineMessage item is hidden by default.
+ * The InlineMessage item is hidden by default. It also manages its
+ * height (and implicitHeight) during an animated reveal when shown.
+ * You should avoid setting height on an InlineMessage unless it is
+ * already visible.
  *
  * Optionally an icon can be set, defaulting to an icon appropriate
  * to the message type otherwise.
@@ -128,5 +131,5 @@ T2.Control {
      * animating: bool
      * True while the message item is animating.
      */
-    readonly property bool animating: contentItem.hasOwnProperty("animating") && contentItem.animating
+    readonly property bool animating: hasOwnProperty("_animating") && _animating
 }
