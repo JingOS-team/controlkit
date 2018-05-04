@@ -112,6 +112,7 @@ T2.Drawer {
         property int mappedStartX
 
         property bool desktopMode: applicationWindow() && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") !== -1
+        enabled: root.handleVisible && root.modal
 
         onPressed: {
             root.peeking = true;
