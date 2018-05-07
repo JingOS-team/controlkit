@@ -44,11 +44,4 @@ CardsListViewPrivate {
 
     property alias delegate: root._delegateComponent
     headerPositioning: ListView.OverlayHeader
-
-    onContentHeightChanged: {
-        var item = contentItem.children[0];
-        if (item && !item.hasOwnProperty("header") && !item.hasOwnProperty("_contentItem")) {
-            print("Warning: only AbstractCard items are supported in CardsListView")
-        }
-    }
 }
