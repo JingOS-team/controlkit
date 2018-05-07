@@ -383,7 +383,7 @@ QtObject {
             //* the sheet is disaplayed *under* the controls
             property int extraMargin: (!root.parent ||
                 applicationWindow === "undefined" ||
-                (root.parent === applicationWindow().overlay && root.parent.action.main) ||
+                (root.parent === applicationWindow().overlay && root.parent.action && root.parent.action.main) ||
                 !applicationWindow().controlsVisible ||
                 !applicationWindow().header ||
                 applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0)
