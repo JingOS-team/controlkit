@@ -312,7 +312,7 @@ Item {
 
         anchors.left: contentItem.parent.left
         anchors.right: contentItem.parent.right
-        anchors.topMargin: root.wideScreen && header && controlsVisible ? header.height : 0
+        anchors.topMargin: header && controlsVisible ? header.height : 0
         anchors.leftMargin: root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
         anchors.rightMargin: root.contextDrawer && root.contextDrawer.modal === false ? root.contextDrawer.contentItem.width * root.contextDrawer.position : 0
         transform: Translate {
