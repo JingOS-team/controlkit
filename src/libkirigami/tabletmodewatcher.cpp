@@ -92,7 +92,7 @@ public:
     void setIsTablet(bool tablet);
 
     TabletModeWatcher *q;
-#if (defined(Q_OS_LINUX) || defined(Q_OS_UNIX)) && !defined(Q_OS_ANDROID)
+#if (defined(Q_OS_LINUX) || defined(Q_OS_UNIX)) && !defined(Q_OS_ANDROID) && !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
     OrgKdeKWinTabletModeManagerInterface *m_interface = nullptr;
 #endif
     bool isTabletModeAvailable = false;
