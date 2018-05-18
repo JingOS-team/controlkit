@@ -45,7 +45,7 @@ import "private"
  * Example:
  * @code
  * InlineMessage {
- *     type: Kirigami.InlineMessageType.Error
+ *     type: Kirigami.MessageType.Error
  *
  *     text: "My error message"
  *
@@ -92,7 +92,7 @@ T2.Control {
      * type: int
      * The message type. One of Information, Positive, Warning or Error.
      *
-     * The default is Kirigami.InlineMessageType.Information.
+     * The default is Kirigami.MessageType.Information.
      */
     property int type: Kirigami.MessageType.Information
 
