@@ -8,6 +8,7 @@ HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/libkirigami/basictheme_p.h \
                $$PWD/src/libkirigami/platformtheme.h \
                $$PWD/src/libkirigami/kirigamipluginfactory.h \
+               $$PWD/src/libkirigami/tabletmodewatcher.h \
                $$PWD/src/desktopicon.h \
                $$PWD/src/delegaterecycler.h
 SOURCES     += $$PWD/src/kirigamiplugin.cpp \
@@ -18,6 +19,8 @@ SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/libkirigami/basictheme.cpp \
                $$PWD/src/libkirigami/platformtheme.cpp \
                $$PWD/src/libkirigami/kirigamipluginfactory.cpp \
+               $$PWD/src/libkirigami/tabletmodewatcher.cpp \
+               $$PWD/src/desktopicon.h \
                $$PWD/src/desktopicon.cpp \
                $$PWD/src/delegaterecycler.cpp
 INCLUDEPATH += $$PWD/src $$PWD/src/libkirigami
