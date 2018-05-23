@@ -77,7 +77,7 @@ public:
     void setColor(const QColor &color);
     QColor color() const;
 
-    QSGNode* updatePaintNode(QSGNode* node, UpdatePaintNodeData* data) Q_DECL_OVERRIDE;
+    QSGNode* updatePaintNode(QSGNode* node, UpdatePaintNodeData* data) override;
 
     //HACKY but we need the base path for internal icons registered by kirigamiplugin itself
     static QString s_internalIconPath;
@@ -93,7 +93,7 @@ Q_SIGNALS:
     void colorChanged();
 
 protected:
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) Q_DECL_OVERRIDE;
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
     QImage findIcon(const QSize& size);
     void handleFinished(QNetworkAccessManager* qnam, QNetworkReply* reply);
     void handleReadyRead(QNetworkReply* reply);
