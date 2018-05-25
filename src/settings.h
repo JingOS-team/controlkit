@@ -21,6 +21,10 @@
 
 #include <QObject>
 
+/**
+ * This class contains global kirigami settings about the current device setup
+ * It is exposed to QML as the singleton "Settings"
+ */
 class Settings : public QObject
 {
     Q_OBJECT
