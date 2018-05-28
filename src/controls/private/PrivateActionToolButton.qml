@@ -78,7 +78,11 @@ Controls.ToolButton {
                 color: control.kirigamiAction && control.kirigamiAction.icon && control.kirigamiAction.icon.color.a > 0 ? control.kirigamiAction.icon.color : Qt.rgba(0, 0, 0, 0)                                                                                     
             }
             Controls.Label {
-                text: kirigamiAction ? kirigamiAction.text : ""
+                MnemonicData.enabled: control.enabled
+                MnemonicData.controlType: MnemonicData.ActionElement
+                MnemonicData.label: control.kirigamiAction ? control.kirigamiAction.text : ""
+
+                text: MnemonicData.richTextLabel
                 visible: control.showText && text.length > 0
             }
             Icon {
