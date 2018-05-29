@@ -72,9 +72,15 @@ protected:
 Q_SIGNALS:
     void sourceComponentChanged();
 
+private Q_SLOTS:
+    void syncIndex();
+    void syncModel();
+    void syncModelData();
+
 private:
     QPointer<QQmlComponent> m_sourceComponent;
     QPointer<QQuickItem> m_item;
+    QObject *m_propertiesTracker = nullptr;
     bool m_updatingSize = false;
 };
 

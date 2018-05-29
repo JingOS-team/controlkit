@@ -149,7 +149,15 @@ T2.ItemDelegate {
         //TODO: a global "open" state
         enabled: background.x !== 0
         property bool indicateActiveFocus: listItem.pressed || Settings.tabletMode || listItem.activeFocus || (view ? view.activeFocus : false)
-        property Flickable view: listItem.ListView.view || listItem.parent.ListView.view
+        property Flickable view: listItem.ListView.view || (listItem.parent ? (listItem.parent.ListView.view || listItem.parent) : null)
+        onViewChanged: {
+            if (view && Settings.tabletMode && !behindItem.view.parent.parent._swipeFilter) {
+                var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
+                behindItem.view.parent.parent._swipeFilter = component.createObject(behindItem.view.parent.parent);
+                print("SSS"+behindItem.view.parent.parent._swipeFilter+internal.swipeFilterItem+" "+(behindItem.view && behindItem.view.parent && behindItem.view.parent.parent))
+            }
+        }
+
         anchors {
             fill: parent
         }
@@ -339,17 +347,13 @@ T2.ItemDelegate {
     }
     Component.onCompleted: {
         //this will happen only once
-        if (Settings.tabletMode && !swipeFilterConnection.swipeFilterItem) {
-            var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
-            behindItem.view.parent.parent._swipeFilter = component.createObject(behindItem.view.parent.parent);
-        }
         listItem.contentItemChanged();
     }
     Connections {
         target: Settings
         onTabletModeChanged: {
             if (Settings.tabletMode) {
-                if (!swipeFilterConnection.swipeFilterItem) {
+                if (!internal.swipeFilterItem) {
                     var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
                     listItem.ListView.view.parent.parent._swipeFilter = component.createObject(listItem.ListView.view.parent.parent);
                 }
@@ -363,20 +367,27 @@ T2.ItemDelegate {
             }
         }
     }
+    QtObject {
+        id: internal
+        readonly property QtObject swipeFilterItem: (behindItem.view && behindItem.view.parent && behindItem.view.parent.parent) ? behindItem.view.parent.parent._swipeFilter : null
+
+        readonly property bool edgeEnabled: swipeFilterItem ? swipeFilterItem.currentItem === listItem || swipeFilterItem.currentItem === listItem.parent : false
+    }
+
     Connections {
         id: swipeFilterConnection
-        readonly property QtObject swipeFilterItem: (behindItem.view && behindItem.view && behindItem.view.parent && behindItem.view.parent.parent) ? behindItem.view.parent.parent._swipeFilter : null
-        readonly property bool enabled: swipeFilterItem ? swipeFilterItem.currentItem === listItem : false
-        target: enabled ? swipeFilterItem : null
-        onPeekChanged: listItem.background.x = -(listItem.background.width - listItem.background.height) * swipeFilterItem.peek
+
+        target: internal.edgeEnabled ? internal.swipeFilterItem : null
+        onPeekChanged: listItem.background.x = -(listItem.background.width - listItem.background.height) * internal.swipeFilterItem.peek
         onCurrentItemChanged: {
-            if (!enabled) {
+            if (!internal.edgeEnabled) {
                 positionAnimation.to = 0;
                 positionAnimation.from = background.x;
                 positionAnimation.running = true;
             }
         }
     }
+
 //END signal handlers
 
     Accessible.role: Accessible.ListItem

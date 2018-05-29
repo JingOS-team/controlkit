@@ -38,22 +38,15 @@ Rectangle {
         ColorAnimation { duration: Units.longDuration }
     }
 
-    readonly property bool _firstElement: typeof(index) !== "undefined" && index == 0
+    readonly property bool __separatorVisible: listItem.separatorVisible
 
-    on_FirstElementChanged: {
-        if (_firstElement) {
+    on__SeparatorVisibleChanged: {
+        if (__separatorVisible) {
             var newObject = Qt.createQmlObject('import QtQuick 2.0; import org.kde.kirigami 2.4; Separator {anchors {left: parent.left; right: parent.right; bottom: parent.top} visible: listItem.separatorVisible}',
                                    background);
+            newObject = Qt.createQmlObject('import QtQuick 2.0; import org.kde.kirigami 2.4; Separator {anchors {left: parent.left; right: parent.right; bottom: parent.bottom} visible: listItem.separatorVisible}',
+                                   background);
         }
-    }
-
-    Separator {
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-        }
-        visible: listItem.separatorVisible
     }
 }
 

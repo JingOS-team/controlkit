@@ -115,6 +115,24 @@ DelegateRecycler::~DelegateRecycler()
     }
 }
 
+void DelegateRecycler::syncIndex()
+{
+    QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
+    ctx->setContextProperty(QStringLiteral("index"), m_propertiesTracker->property("trackedIndex"));
+}
+
+void DelegateRecycler::syncModel()
+{
+    QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
+    ctx->setContextProperty(QStringLiteral("model"), m_propertiesTracker->property("trackedModel"));
+}
+
+void DelegateRecycler::syncModelData()
+{
+    QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
+    ctx->setContextProperty(QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData"));
+}
+
 QQmlComponent *DelegateRecycler::sourceComponent() const
 {
     return m_sourceComponent;
@@ -129,6 +147,18 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
     if (m_sourceComponent == component) {
         return;
     }
+
+    if (!m_propertiesTracker) {
+        QQmlComponent *propertiesTrackerComponent = new QQmlComponent(qmlEngine(this), this);
+
+        propertiesTrackerComponent->setData(QByteArrayLiteral("import QtQuick 2.3\nQtObject{property int trackedIndex: index; property var trackedModel: typeof model != 'undefined' ? model : null; property var trackedModelData: typeof modelData != 'undefined' ? modelData : null}"), QUrl());
+        m_propertiesTracker = propertiesTrackerComponent->create(QQmlEngine::contextForObject(this));
+
+        connect(m_propertiesTracker, SIGNAL(trackedIndexChanged()), this, SLOT(syncIndex()));
+        connect(m_propertiesTracker, SIGNAL(trackedModelChanged()), this, SLOT(syncModel()));
+        connect(m_propertiesTracker, SIGNAL(trackedModelDataChanged()), this, SLOT(syncModelData()));
+    }
+
     if (m_sourceComponent) {
         if (m_item) {
             disconnect(m_item.data(), &QQuickItem::implicitWidthChanged, this, &DelegateRecycler::updateHints);
@@ -156,10 +186,9 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
             }
         }
 
-        QQmlContext *myCtx = QQmlEngine::contextForObject(this);
-        ctx->setContextProperty(QStringLiteral("model"), myCtx->contextProperty(QStringLiteral("model")));
-        ctx->setContextProperty(QStringLiteral("modelData"), myCtx->contextProperty(QStringLiteral("modelData")));
-        ctx->setContextProperty(QStringLiteral("index"), myCtx->contextProperty(QStringLiteral("index")));
+        ctx->setContextProperty(QStringLiteral("model"), m_propertiesTracker->property("trackedModel"));
+        ctx->setContextProperty(QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData"));
+        ctx->setContextProperty(QStringLiteral("index"), m_propertiesTracker->property("trackedIndex"));
 
         QObject * obj = component->create(ctx);
         m_item = qobject_cast<QQuickItem *>(obj);
@@ -167,13 +196,11 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
             obj->deleteLater();
         }
     } else {
-        QQmlContext *myCtx = QQmlEngine::contextForObject(this);
         QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
 
-        QObject *model = myCtx->contextProperty(QStringLiteral("model")).value<QObject*>();
-        ctx->setContextProperty(QStringLiteral("model"), QVariant::fromValue(model));
-        ctx->setContextProperty(QStringLiteral("modelData"), myCtx->contextProperty(QStringLiteral("modelData")));
-        ctx->setContextProperty(QStringLiteral("index"), myCtx->contextProperty(QStringLiteral("index")));
+        ctx->setContextProperty(QStringLiteral("model"), m_propertiesTracker->property("trackedModel"));
+        ctx->setContextProperty(QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData"));
+        ctx->setContextProperty(QStringLiteral("index"), m_propertiesTracker->property("trackedIndex"));
     }
 
     if (m_item) {
@@ -194,7 +221,7 @@ void DelegateRecycler::resetSourceComponent()
 
 void DelegateRecycler::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    if (m_item && newGeometry != oldGeometry) {
+    if (m_item && newGeometry.size() != oldGeometry.size()) {
         updateSize(true);
     }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);

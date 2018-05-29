@@ -20,7 +20,7 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.0 as Controls
-import org.kde.kirigami 2.4 as Kirigami
+import org.kde.kirigami 2.5 as Kirigami
 
 Kirigami.ScrollablePage {
     id: page
@@ -81,20 +81,23 @@ Kirigami.ScrollablePage {
         }
     }
 
-    ListView {
-        Timer {
-            id: refreshRequestTimer
-            interval: 3000
-            onTriggered: page.refreshing = false
-        }
-        model: 200
-        delegate: Kirigami.SwipeListItem {
+    Component {
+        id: delegateComponent
+        Kirigami.SwipeListItem {
             id: listItem
-            contentItem: Controls.Label {
-                height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
-                anchors.verticalCenter: parent.verticalCenter
-                text: "Item " + modelData
-                color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeTextColor : listItem.textColor
+            contentItem: RowLayout {
+                Kirigami.ListItemDragHandle {
+                    listItem: listItem
+                    listView: mainList
+                    onMoveRequested: listModel.move(oldIndex, newIndex, 1)
+                }
+
+                Controls.Label {
+                    Layout.fillWidth: true
+                    height: Math.max(implicitHeight, Kirigami.Units.iconSizes.smallMedium)
+                    text: model.title
+                    color: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeTextColor : listItem.textColor
+                }
             }
             actions: [
                 Kirigami.Action {
@@ -107,6 +110,36 @@ Kirigami.ScrollablePage {
                     text: "Action 2"
                     onTriggered: showPassiveNotification(model.text + " Action 2 clicked")
                 }]
+        }
+    }
+    ListView {
+        id: mainList
+        Timer {
+            id: refreshRequestTimer
+            interval: 3000
+            onTriggered: page.refreshing = false
+        }
+        model: ListModel {
+            id: listModel
+
+            Component.onCompleted: {
+                for (var i = 0; i < 200; ++i) {
+                    listModel.append({"title": "Item " + i,
+                        "actions": [{text: "Action 1", icon: "document-decrypt"},
+                                    {text: "Action 2", icon: "mail-reply-sender"}]
+                    })
+                }
+            }
+        }
+        moveDisplaced: Transition {
+            YAnimator {
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+        delegate: Kirigami.DelegateRecycler {
+            width: parent ? parent.width : implicitWidth
+            sourceComponent: delegateComponent
         }
     }
 }

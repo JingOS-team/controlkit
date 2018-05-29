@@ -60,7 +60,6 @@ T.SwipeListItem {
         }
     }
     background: DefaultListItemBackground {
-        clip: true
         //TODO: this will have to reuse QQC2.1 Ripple
         Rectangle {
             id: ripple

@@ -166,8 +166,10 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("CardsLayout.qml")), uri, 2, 4, "CardsLayout");
     qmlRegisterType(componentUrl(QStringLiteral("InlineMessage.qml")), uri, 2, 4, "InlineMessage");
     qmlRegisterUncreatableType<MessageType>(uri, 2, 4, "MessageType", "Cannot create objects of type MessageType");
-
     qmlRegisterType<DelegateRecycler>(uri, 2, 4, "DelegateRecycler");
+
+    //2.5
+    qmlRegisterType(componentUrl(QStringLiteral("ListItemDragHandle.qml")), uri, 2, 5, "ListItemDragHandle");
 
     qmlProtectModule(uri, 2);
 }
