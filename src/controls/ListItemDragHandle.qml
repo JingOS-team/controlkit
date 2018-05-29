@@ -120,7 +120,7 @@ MouseArea {
         property int mouseDownY
         property Item originalParent
         property int autoScrollThreshold: listItem.height * 3
-        opacity: root.pressed || listItem.hovered ? 1 : 0.6
+        opacity: root.pressed || (!Kirigami.Settings.tabletMode && listItem.hovered) ? 1 : 0.6
 
         function arrangeItem() {
             var newIndex = listView.indexAt(1, listView.contentItem.mapFromItem(listItem, 0, 0).y + internal.mouseDownY);
