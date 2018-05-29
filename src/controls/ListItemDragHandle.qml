@@ -107,8 +107,6 @@ MouseArea {
      */
     signal moveRequested(int oldIndex, int newIndex)
 
-    hoverEnabled: !Kirigami.Settings.tabletMode
-
     drag {
         target: listItem
         axis: Drag.YAxis
@@ -122,7 +120,7 @@ MouseArea {
         property int mouseDownY
         property Item originalParent
         property int autoScrollThreshold: listItem.height * 3
-        opacity: root.pressed || root.containsMouse ? 1 : 0.6
+        opacity: root.pressed || listItem.hovered ? 1 : 0.6
 
         function arrangeItem() {
             var newIndex = listView.indexAt(1, listView.contentItem.mapFromItem(listItem, 0, 0).y + internal.mouseDownY);
@@ -149,6 +147,9 @@ MouseArea {
     }
 
     onPositionChanged: {
+        if (!pressed) {
+            return;
+        }
         internal.arrangeItem();
 
         scrollTimer.interval = 500 * Math.max(0.1, (1-Math.max(internal.autoScrollThreshold - listItem.y, listItem.y - listView.height + internal.autoScrollThreshold + listItem.height) / internal.autoScrollThreshold));
@@ -187,6 +188,7 @@ MouseArea {
             } else {
                 listView.contentY = Math.min(listView.contentHeight - listView.height, listView.contentY + Kirigami.Units.gridUnit)
             }
+            print(listItem.y+" "+listView.contentY)
             internal.arrangeItem();
         }
     }
