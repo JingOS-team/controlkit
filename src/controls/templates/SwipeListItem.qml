@@ -154,7 +154,6 @@ T2.ItemDelegate {
             if (view && Settings.tabletMode && !behindItem.view.parent.parent._swipeFilter) {
                 var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
                 behindItem.view.parent.parent._swipeFilter = component.createObject(behindItem.view.parent.parent);
-                print("SSS"+behindItem.view.parent.parent._swipeFilter+internal.swipeFilterItem+" "+(behindItem.view && behindItem.view.parent && behindItem.view.parent.parent))
             }
         }
 
@@ -319,7 +318,7 @@ T2.ItemDelegate {
             width: Units.iconSizes.smallMedium
             height: width
             x: y
-            source: (LayoutMirroring.enabled ? (listItem.background.x < listItem.background.width/2 ? "handle-right" : "handle-left") : (listItem.background.x < -listItem.background.width/2 ? "handle-right" : "handle-left"))
+            source: (LayoutMirroring.enabled ? (listItem.background.x < listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left") : (listItem.background.x < -listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left"))
         }
     }
 
