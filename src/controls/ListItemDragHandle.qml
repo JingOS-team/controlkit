@@ -188,7 +188,6 @@ MouseArea {
             } else {
                 listView.contentY = Math.min(listView.contentHeight - listView.height, listView.contentY + Kirigami.Units.gridUnit)
             }
-            print(listItem.y+" "+listView.contentY)
             internal.arrangeItem();
         }
     }
