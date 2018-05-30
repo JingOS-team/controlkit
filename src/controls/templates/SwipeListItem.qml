@@ -368,7 +368,7 @@ T2.ItemDelegate {
     }
     QtObject {
         id: internal
-        readonly property QtObject swipeFilterItem: (behindItem.view && behindItem.view.parent && behindItem.view.parent.parent) ? behindItem.view.parent.parent._swipeFilter : null
+        readonly property QtObject swipeFilterItem: (behindItem.view && behindItem.view.parent && behindItem.view.parent.parent && behindItem.view.parent.parent._swipeFilter) ? behindItem.view.parent.parent._swipeFilter : null
 
         readonly property bool edgeEnabled: swipeFilterItem ? swipeFilterItem.currentItem === listItem || swipeFilterItem.currentItem === listItem.parent : false
     }
