@@ -77,10 +77,10 @@ import org.kde.kirigami 2.4 as Kirigami
  *   ...
  * @endcode
  *
- * @inherits MouseArea
+ * @inherits Item
  * @since 2.5
  */
-MouseArea {
+Item {
     id: root
 
     /**
@@ -107,88 +107,101 @@ MouseArea {
      */
     signal moveRequested(int oldIndex, int newIndex)
 
-    drag {
-        target: listItem
-        axis: Drag.YAxis
-        minimumY: 0
-        maximumY: listView.height - listItem.height
-    }
-    Kirigami.Icon {
-        id: internal
-        source: "handle-sort"
-        property int startY
-        property int mouseDownY
-        property Item originalParent
-        property int autoScrollThreshold: listItem.height * 3
-        opacity: root.pressed || (!Kirigami.Settings.tabletMode && listItem.hovered) ? 1 : 0.6
+    /**
+     * Emitted when the drag operation is complete and the item has been
+     * droppped in the new final position
+     */
+    signal dropped()
 
-        function arrangeItem() {
-            var newIndex = listView.indexAt(1, listView.contentItem.mapFromItem(listItem, 0, 0).y + internal.mouseDownY);
-
-            if (Math.abs(listItem.y - internal.startY) > height && newIndex > -1 && newIndex != index) {
-                root.moveRequested(index, newIndex);
-            }
-        }
-
-        anchors.fill: parent
-    }
-    preventStealing: true
     implicitWidth: Kirigami.Units.iconSizes.smallMedium
     implicitHeight: implicitWidth
 
-
-    onPressed: {
-        internal.originalParent = listItem.parent;
-        listItem.parent = listView;
-        listItem.y = internal.originalParent.mapToItem(listItem.parent, listItem.x, listItem.y).y;
-        internal.originalParent.z = 99;
-        internal.startY = listItem.y;
-        internal.mouseDownY = mouse.y;
-    }
-
-    onPositionChanged: {
-        if (!pressed) {
-            return;
-        }
-        internal.arrangeItem();
-
-        scrollTimer.interval = 500 * Math.max(0.1, (1-Math.max(internal.autoScrollThreshold - listItem.y, listItem.y - listView.height + internal.autoScrollThreshold + listItem.height) / internal.autoScrollThreshold));
-        scrollTimer.running = (listItem.y < internal.autoScrollThreshold ||
-                    listItem.y > listView.height - internal.autoScrollThreshold);
-    }
-    onReleased: {
-        listItem.y = internal.originalParent.mapFromItem(listItem, 0, 0).y;
-        listItem.parent = internal.originalParent;
-        dropAnimation.running = true;
-        scrollTimer.running = false;
-    }
-    onCanceled: released()
-    SequentialAnimation {
-        id: dropAnimation
-        YAnimator {
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        drag {
             target: listItem
-            from: listItem.y 
-            to: 0
-            duration: Kirigami.Units.longDuration
-            easing.type: Easing.InOutQuad
+            axis: Drag.YAxis
+            minimumY: 0
+            maximumY: listView.height - listItem.height
         }
-        PropertyAction {
-            target: listItem.parent
-            property: "z"
-            value: 0
+        Kirigami.Icon {
+            id: internal
+            source: "handle-sort"
+            property int startY
+            property int mouseDownY
+            property Item originalParent
+            property int autoScrollThreshold: listItem.height * 3
+            opacity: mouseArea.pressed || (!Kirigami.Settings.tabletMode && listItem.hovered) ? 1 : 0.6
+
+            function arrangeItem() {
+                var newIndex = listView.indexAt(1, listView.contentItem.mapFromItem(listItem, 0, 0).y + internal.mouseDownY);
+
+                if (Math.abs(listItem.y - internal.startY) > height && newIndex > -1 && newIndex != index) {
+                    root.moveRequested(index, newIndex);
+                }
+            }
+
+            anchors.fill: parent
         }
-    }
-    Timer {
-        id: scrollTimer
-        interval: 500
-        repeat: true
-        onTriggered: {
-            if (listItem.y < internal.autoScrollThreshold) {
-                listView.contentY = Math.max(0, listView.contentY - Kirigami.Units.gridUnit)
-            } else {
-                listView.contentY = Math.min(listView.contentHeight - listView.height, listView.contentY + Kirigami.Units.gridUnit)
+        preventStealing: true
+        
+
+        onPressed: {
+            internal.originalParent = listItem.parent;
+            listItem.parent = listView;
+            listItem.y = internal.originalParent.mapToItem(listItem.parent, listItem.x, listItem.y).y;
+            internal.originalParent.z = 99;
+            internal.startY = listItem.y;
+            internal.mouseDownY = mouse.y;
+        }
+
+        onPositionChanged: {
+            if (!pressed) {
+                return;
             }
             internal.arrangeItem();
+
+            scrollTimer.interval = 500 * Math.max(0.1, (1-Math.max(internal.autoScrollThreshold - listItem.y, listItem.y - listView.height + internal.autoScrollThreshold + listItem.height) / internal.autoScrollThreshold));
+            scrollTimer.running = (listItem.y < internal.autoScrollThreshold ||
+                        listItem.y > listView.height - internal.autoScrollThreshold);
+        }
+        onReleased: {
+            listItem.y = internal.originalParent.mapFromItem(listItem, 0, 0).y;
+            listItem.parent = internal.originalParent;
+            dropAnimation.running = true;
+            scrollTimer.running = false;
+            root.dropped();
+        }
+        onCanceled: released()
+        SequentialAnimation {
+            id: dropAnimation
+            YAnimator {
+                target: listItem
+                from: listItem.y 
+                to: 0
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+            PropertyAction {
+                target: listItem.parent
+                property: "z"
+                value: 0
+            }
+        }
+        Timer {
+            id: scrollTimer
+            interval: 500
+            repeat: true
+            onTriggered: {
+                if (listItem.y < internal.autoScrollThreshold) {
+                    listView.contentY = Math.max(0, listView.contentY - Kirigami.Units.gridUnit)
+                } else {
+                    listView.contentY = Math.min(listView.contentHeight - listView.height, listView.contentY + Kirigami.Units.gridUnit)
+                }
+                internal.arrangeItem();
+            }
         }
     }
 }
+
