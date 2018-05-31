@@ -137,7 +137,7 @@ T2.ItemDelegate {
 
     leftPadding: Units.smallSpacing * 2
 
-    rightPadding: Units.smallSpacing * 2 + (LayoutMirroring.enabled ? (handleMouse.visible ? handleMouse.width : hovered * actionsLayout.width) + handleMouse.anchors.rightMargin : 0 )
+    rightPadding: Units.smallSpacing * 2 + (handleMouse.visible ? handleMouse.width : hovered * actionsLayout.width) + handleMouse.anchors.rightMargin
     
     topPadding: Units.smallSpacing * 2
     bottomPadding: Units.smallSpacing * 2
