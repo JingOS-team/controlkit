@@ -247,7 +247,7 @@ T2.ItemDelegate {
                         }
                         Controls.ToolTip.delay: 1000
                         Controls.ToolTip.timeout: 5000
-                        Controls.ToolTip.visible: (Settings.tabletMode ? actionMouse.pressed : actionMouse.containsMouse) && Controls.ToolTip.text.length > 0
+                        Controls.ToolTip.visible: listItem.visible && (Settings.tabletMode ? actionMouse.pressed : actionMouse.containsMouse) && Controls.ToolTip.text.length > 0
                         Controls.ToolTip.text: modelData.tooltip || modelData.text
                     }
                     
