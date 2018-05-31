@@ -198,6 +198,12 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
             }
         }
 
+        Q_ASSERT(ctx);
+
+        if (QQmlEngine *eng = qmlEngine(this)) {
+            //share context object in order to never lose track of global i18n()
+            ctx->setContextObject(eng->rootContext()->contextObject());
+        }
         ctx->setContextProperty(QStringLiteral("model"), m_propertiesTracker->property("trackedModel"));
         ctx->setContextProperty(QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData"));
         ctx->setContextProperty(QStringLiteral("index"), m_propertiesTracker->property("trackedIndex"));
@@ -206,6 +212,8 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
         m_item = qobject_cast<QQuickItem *>(obj);
         if (!m_item) {
             obj->deleteLater();
+        } else {
+            connect(m_item, &QObject::destroyed, ctx, &QObject::deleteLater);
         }
     } else {
         QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
