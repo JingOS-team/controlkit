@@ -135,9 +135,11 @@ T2.ItemDelegate {
     width: parent ? parent.width : implicitWidth
     implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5
 
-    leftPadding: Units.smallSpacing * 2 + (LayoutMirroring.enabled ? (handleMouse.visible ? handleMouse.width : 0) + handleMouse.anchors.rightMargin : 0)
+    leftPadding: Units.smallSpacing * 2
+
+    rightPadding: Units.smallSpacing * 2 + (LayoutMirroring.enabled ? (handleMouse.visible ? handleMouse.width : hovered * actionsLayout.width) + handleMouse.anchors.rightMargin : 0 )
+    
     topPadding: Units.smallSpacing * 2
-    rightPadding: Units.smallSpacing * 2 + (LayoutMirroring.enabled ?  0 : (handleMouse.visible ? handleMouse.width : 0) + handleMouse.anchors.rightMargin)
     bottomPadding: Units.smallSpacing * 2
 
 //END properties
@@ -205,7 +207,7 @@ T2.ItemDelegate {
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
-                rightMargin: LayoutMirroring.enabled ? listItem.leftPadding : listItem.rightPadding
+                rightMargin: handleMouse.anchors.rightMargin
             }
             height: Math.min( parent.height / 1.5, Units.iconSizes.medium)
             width: childrenRect.width
@@ -259,16 +261,17 @@ T2.ItemDelegate {
     MouseArea {
         id: handleMouse
         parent: listItem.background
-        visible: Settings.tabletMode
+        visible: Settings.tabletMode && actions.length > 0
         z: 99
         anchors {
             right: parent.right
-            top: parent.top
-            bottom: parent.bottom
-            rightMargin: behindItem.view && behindItem.view.T2.ScrollBar && behindItem.view.T2.ScrollBar.vertical && behindItem.view.T2.ScrollBar.vertical.interactive ? behindItem.view.T2.ScrollBar.vertical.width : Units.smallSpacing
+            verticalCenter: parent.verticalCenter
+            rightMargin: behindItem.view && behindItem.view.T2.ScrollBar && behindItem.view.T2.ScrollBar.vertical  ? behindItem.view.T2.ScrollBar.vertical.width : Units.smallSpacing
         }
+
         preventStealing: true
-        width: height
+        width: Units.iconSizes.smallMedium
+        height: width
         property var downTimestamp;
         property int startX
         property int startMouseX
@@ -313,11 +316,8 @@ T2.ItemDelegate {
         }
         Icon {
             id: handleIcon
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.fill: parent
             selected: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate)
-            width: Units.iconSizes.smallMedium
-            height: width
-            x: y
             source: (LayoutMirroring.enabled ? (listItem.background.x < listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left") : (listItem.background.x < -listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left"))
         }
     }
