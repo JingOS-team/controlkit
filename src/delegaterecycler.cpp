@@ -117,20 +117,32 @@ DelegateRecycler::~DelegateRecycler()
 
 void DelegateRecycler::syncIndex()
 {
+    const QVariant newIndex = m_propertiesTracker->property("trackedIndex");
+    if (!newIndex.isValid()) {
+        return;
+    }
     QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
-    ctx->setContextProperty(QStringLiteral("index"), m_propertiesTracker->property("trackedIndex"));
+    ctx->setContextProperty(QStringLiteral("index"), newIndex);
 }
 
 void DelegateRecycler::syncModel()
 {
+    const QVariant newModel = m_propertiesTracker->property("trackedModel");
+    if (!newModel.isValid()) {
+        return;
+    }
     QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
-    ctx->setContextProperty(QStringLiteral("model"), m_propertiesTracker->property("trackedModel"));
+    ctx->setContextProperty(QStringLiteral("model"), newModel);
 }
 
 void DelegateRecycler::syncModelData()
 {
+    const QVariant newModelData = m_propertiesTracker->property("trackedModelData");
+    if (!newModelData.isValid()) {
+        return;
+    }
     QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
-    ctx->setContextProperty(QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData"));
+    ctx->setContextProperty(QStringLiteral("modelData"), newModelData);
 }
 
 QQmlComponent *DelegateRecycler::sourceComponent() const
