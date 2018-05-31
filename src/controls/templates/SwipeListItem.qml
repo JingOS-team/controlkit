@@ -377,7 +377,13 @@ T2.ItemDelegate {
         id: swipeFilterConnection
 
         target: internal.edgeEnabled ? internal.swipeFilterItem : null
-        onPeekChanged: listItem.background.x = -(listItem.background.width - listItem.background.height) * internal.swipeFilterItem.peek
+        onPeekChanged: {
+            if (listItem.LayoutMirroring.enabled) {
+                listItem.background.x = (listItem.background.width - listItem.background.height) * (1 - internal.swipeFilterItem.peek);
+            } else {
+                listItem.background.x = -(listItem.background.width - listItem.background.height) * internal.swipeFilterItem.peek;
+            }
+        }
         onCurrentItemChanged: {
             if (!internal.edgeEnabled) {
                 positionAnimation.to = 0;
