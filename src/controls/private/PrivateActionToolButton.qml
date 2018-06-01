@@ -59,7 +59,11 @@ Controls.ToolButton {
         }
     }
 
-    flat: true
+    Component.onCompleted: {
+        //NOTE: Make it a proper property when we depend on Qt 5.10
+        if (palette)
+            palette.button = Qt.binding(function() { return control.kirigamiAction ? control.kirigamiAction.icon.color : undefined});
+    }
     contentItem: MouseArea {
         hoverEnabled: true
         onPressed: mouse.accepted = false
@@ -75,9 +79,10 @@ Controls.ToolButton {
                 Layout.minimumHeight: Units.iconSizes.smallMedium
                 source: control.kirigamiAction ? (control.kirigamiAction.icon ? control.kirigamiAction.icon.name : control.kirigamiAction.iconName) : ""
                 visible: control.kirigamiAction && control.kirigamiAction.iconName != ""
-                color: control.kirigamiAction && control.kirigamiAction.icon && control.kirigamiAction.icon.color.a > 0 ? control.kirigamiAction.icon.color : Qt.rgba(0, 0, 0, 0)                                                                                     
+                color: control.flat && control.kirigamiAction && control.kirigamiAction.icon && control.kirigamiAction.icon.color.a > 0 ? control.kirigamiAction.icon.color : label.color
             }
             Controls.Label {
+                id: label
                 MnemonicData.enabled: control.enabled
                 MnemonicData.controlType: MnemonicData.ActionElement
                 MnemonicData.label: control.kirigamiAction ? control.kirigamiAction.text : ""

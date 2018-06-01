@@ -99,8 +99,10 @@ ApplicationHeader {
             }
             PrivateActionToolButton {
                 Layout.alignment: Qt.AlignVCenter
+                Layout.rightMargin: Units.smallSpacing
                 kirigamiAction: page && page.actions ? page.actions.main : null
                 showText: !parent.toobig
+                flat: false
             }
             PrivateActionToolButton {
                 Layout.alignment: Qt.AlignVCenter
