@@ -21,7 +21,7 @@
 
 #include "tabletmodewatcher.h"
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS) && !defined(Q_OS_MACOS)
+#if defined(KIRIGAMI_ENABLE_DBUS)
 #include "tabletmodemanager_interface.h"
 #include <QDBusConnection>
 #endif
@@ -45,13 +45,11 @@ public:
     TabletModeWatcherPrivate(TabletModeWatcher *watcher)
         : q(watcher)
     {
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+
+#if !defined(KIRIGAMI_ENABLE_DBUS) && (defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
         isTabletModeAvailable = true;
         isTabletMode = true;
-#elif defined(Q_OS_MACOS)
-        isTabletModeAvailable = false;
-        isTabletMode = false;
-#elif defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
+#elif defined(KIRIGAMI_ENABLE_DBUS)
         //Mostly for debug purposes and for platforms which are always mobile,
         //such as Plasma Mobile
         if (qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE") ||        
@@ -92,7 +90,7 @@ public:
     void setIsTablet(bool tablet);
 
     TabletModeWatcher *q;
-#if (defined(Q_OS_LINUX) || defined(Q_OS_UNIX)) && !defined(Q_OS_ANDROID) && !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
+#if defined(KIRIGAMI_ENABLE_DBUS)
     OrgKdeKWinTabletModeManagerInterface *m_interface = nullptr;
 #endif
     bool isTabletModeAvailable = false;

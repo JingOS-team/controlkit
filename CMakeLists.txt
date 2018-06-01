@@ -19,6 +19,7 @@ option(BUILD_SHARED_LIBS "Build a shared module" ON)
 option(DESKTOP_ENABLED "Build and install The Desktop style" ON)
 option(STATIC_LIBRARY "Build as a static library (deprecated, use BUILD_SHARED_LIBS instead)" OFF)
 option(BUILD_EXAMPLES "Build and install examples" OFF)
+option(DISABLE_DBUS "Build without D-Bus support" OFF)
 
 if(NOT BUILD_SHARED_LIBS)
     set(STATIC_LIBRARY 1)
@@ -100,8 +101,9 @@ ecm_setup_version(${KF5_VERSION}
 )
 
 #use dbus on linux, bsd etc, but not andoid and apple stuff
-if (UNIX AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND NOT(APPLE))
+if (UNIX AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND NOT(APPLE) AND NOT(DISABLE_DBUS))
     find_package(Qt5DBus)
+    add_definitions(-DKIRIGAMI_ENABLE_DBUS)
 endif()
 
 if(BUILD_EXAMPLES AND CMAKE_SYSTEM_NAME STREQUAL "Android")
