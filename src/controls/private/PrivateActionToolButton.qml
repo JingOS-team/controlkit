@@ -79,10 +79,9 @@ Controls.ToolButton {
                 Layout.minimumHeight: Units.iconSizes.smallMedium
                 source: control.kirigamiAction ? (control.kirigamiAction.icon ? control.kirigamiAction.icon.name : control.kirigamiAction.iconName) : ""
                 visible: control.kirigamiAction && control.kirigamiAction.iconName != ""
-                color: control.flat && control.kirigamiAction && control.kirigamiAction.icon && control.kirigamiAction.icon.color.a > 0 ? control.kirigamiAction.icon.color : label.color
+                color: control.flat && control.kirigamiAction && control.kirigamiAction.icon && control.kirigamiAction.icon.color.a > 0 ? control.kirigamiAction.icon.color : Theme.textColor
             }
             Controls.Label {
-                id: label
                 MnemonicData.enabled: control.enabled
                 MnemonicData.controlType: MnemonicData.ActionElement
                 MnemonicData.label: control.kirigamiAction ? control.kirigamiAction.text : ""
