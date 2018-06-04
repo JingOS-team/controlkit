@@ -62,7 +62,7 @@ Controls.ToolButton {
     Component.onCompleted: {
         //NOTE: Make it a proper property when we depend on Qt 5.10
         if (palette)
-            palette.button = Qt.binding(function() { return control.kirigamiAction ? control.kirigamiAction.icon.color : undefined});
+            palette.button = Qt.binding(function() { return control.kirigamiAction && control.kirigamiAction.icon.color.a ? control.kirigamiAction.icon.color : undefined});
     }
     contentItem: MouseArea {
         hoverEnabled: true
@@ -79,15 +79,17 @@ Controls.ToolButton {
                 Layout.minimumHeight: Units.iconSizes.smallMedium
                 source: control.kirigamiAction ? (control.kirigamiAction.icon ? control.kirigamiAction.icon.name : control.kirigamiAction.iconName) : ""
                 visible: control.kirigamiAction && control.kirigamiAction.iconName != ""
-                color: control.flat && control.kirigamiAction && control.kirigamiAction.icon && control.kirigamiAction.icon.color.a > 0 ? control.kirigamiAction.icon.color : Theme.textColor
+                color: control.flat && control.kirigamiAction && control.kirigamiAction.icon && control.kirigamiAction.icon.color.a > 0 ? control.kirigamiAction.icon.color : label.color
             }
             Controls.Label {
+                id: label
                 MnemonicData.enabled: control.enabled
                 MnemonicData.controlType: MnemonicData.ActionElement
                 MnemonicData.label: control.kirigamiAction ? control.kirigamiAction.text : ""
 
                 text: MnemonicData.richTextLabel
                 visible: control.showText && text.length > 0
+                color: control.flat || !control.palette || control.palette.button === Theme.backgroundColor ? Theme.textColor : Theme.highlightedTextColor
             }
             Icon {
                 Layout.minimumWidth: Units.iconSizes.small
