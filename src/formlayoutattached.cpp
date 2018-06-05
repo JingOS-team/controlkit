@@ -111,6 +111,16 @@ QQuickItem *FormLayoutAttached::buddyFor() const
     return m_buddyFor;
 }
 
+void FormLayoutAttached::setBuddyFor(QQuickItem *buddyfor)
+{
+    if (m_buddyFor == buddyfor || !m_buddyFor->isAncestorOf(buddyfor)) {
+        return;
+    }
+
+    m_buddyFor = buddyfor;
+    emit buddyForChanged();
+}
+
 FormLayoutAttached *FormLayoutAttached::qmlAttachedProperties(QObject *object)
 {
     return new FormLayoutAttached(object);

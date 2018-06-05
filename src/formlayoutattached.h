@@ -115,7 +115,7 @@ class FormLayoutAttached : public QObject
      * A buddy item is useful for instance when the label has a keyboard accelerator,
      * which on triggered will be given active keyboard focus to.
      */
-    Q_PROPERTY(QQuickItem *buddyFor READ buddyFor CONSTANT)
+    Q_PROPERTY(QQuickItem *buddyFor READ buddyFor WRITE setBuddyFor NOTIFY buddyForChanged)
 
 public:
 
@@ -140,6 +140,7 @@ public:
     bool enabled() const;
 
     QQuickItem *buddyFor() const;
+    void setBuddyFor(QQuickItem *buddyfor);
 
     //QML attached property
     static FormLayoutAttached *qmlAttachedProperties(QObject *object);
@@ -150,6 +151,7 @@ Q_SIGNALS:
     void checkableChanged();
     void checkedChanged();
     void enabledChanged();
+    void buddyForChanged();
 
 private:
     QString m_label;

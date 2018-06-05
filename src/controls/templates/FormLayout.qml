@@ -194,16 +194,16 @@ Control {
             level: item.Kirigami.FormData.isSection ? 3 : 5
 
             Layout.columnSpan: item.Kirigami.FormData.isSection ? lay.columns : 1
-            Layout.preferredHeight: item.Kirigami.FormData.label.length > 0 ? implicitHeight : Kirigami.Units.smallSpacing
+            Layout.preferredHeight: item.Kirigami.FormData.label.length > 0 ? Math.max(implicitHeight, item.Kirigami.FormData.buddyFor.height) : Kirigami.Units.smallSpacing
 
             Layout.alignment: item.Kirigami.FormData.isSection
                              ? Qt.AlignLeft
                              : (root.wideMode
-                                ? (Qt.AlignRight | (item.Kirigami.FormData.buddyFor.height > height * 2 ? Qt.AlignTop : Qt.AlignVCenter))
+                                ? (Qt.AlignRight | Qt.AlignTop)
                                 : (Qt.AlignLeft | Qt.AlignBottom))
             verticalAlignment: root.wideMode ? Text.AlignVCenter : Text.AlignBottom
 
-            Layout.topMargin: item.Kirigami.FormData.buddyFor.height > implicitHeight * 2 ? Kirigami.Units.smallSpacing/2 : 0
+            //Layout.topMargin: item.Kirigami.FormData.buddyFor.y
             onItemChanged: {
                 if (!item) {
                     labelItem.destroy();
