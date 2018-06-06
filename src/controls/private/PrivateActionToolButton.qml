@@ -28,9 +28,10 @@ Controls.ToolButton {
     implicitWidth: showText && ( kirigamiAction ? kirigamiAction.text.length > 0 : text.length > 0) ? Math.max(background.implicitWidth, control.background.contentWidth) : implicitHeight
     implicitHeight: background.implicitHeight
 
-    Theme.colorSet: kirigamiAction.icon.color.a ? Theme.Custom : Theme.Button
-    Theme.inherit: kirigamiAction.icon.color.a ? false : true
-    Theme.backgroundColor: Theme.colorSet == Theme.Custom ? kirigamiAction.icon.color : undefined
+    Theme.colorSet: Theme.Button
+    Theme.inherit: false
+    Theme.backgroundColor: kirigamiAction.icon.color.a ? kirigamiAction.icon.color : undefined
+    Theme.textColor: kirigamiAction.icon.color.a ? Theme.highlightedTextColor : undefined
 
     hoverEnabled: true
     //TODO: replace with upstream action when we depend on Qt 5.10
@@ -66,7 +67,7 @@ Controls.ToolButton {
     contentItem: MouseArea {
         hoverEnabled: true
         onPressed: mouse.accepted = false
-        Theme.colorSet: checked || (!control.flat && control.Theme.colorSet == Theme.Custom) ? Theme.Selection : Theme.Button
+        Theme.colorSet: checked || (!control.flat && control.kirigamiAction.icon.color.a) ? Theme.Selection : Theme.Button
         Theme.inherit: false
         RowLayout {
             id: layout

@@ -244,7 +244,7 @@ void BasicTheme::syncColors()
 
 void BasicTheme::syncCustomColorsToQML()
 {
-    if (basicThemeDeclarative()->instance(this) && colorSet() == Custom) {
+    if (basicThemeDeclarative()->instance(this)) {
         QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagateTextColor", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, textColor()));
         QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagateBackgroundColor", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, backgroundColor()));
         QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagatePrimaryColor", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, highlightColor()));

@@ -168,7 +168,7 @@ Kirigami.ScrollablePage {
 
         Controls.Frame {
             Kirigami.Theme.inherit: false
-            Kirigami.Theme.colorSet: Kirigami.Theme.Custom
+            Kirigami.Theme.colorSet: Kirigami.Theme.Window
             Kirigami.Theme.backgroundColor: "#b9d795"
             Kirigami.Theme.textColor: "#465c2b"
             Kirigami.Theme.highlightColor: "#89e51c"
@@ -182,7 +182,7 @@ Kirigami.ScrollablePage {
             contentItem: ColumnLayout {
                 spacing: 0
                 Controls.Label {
-                    text: "Custom Set"
+                    text: "Window set with Custom Colors"
                 }
                 Kirigami.BasicListItem {
                     width: parent.width

@@ -145,21 +145,20 @@ void PlatformThemePrivate::findParentStyle()
             m_parentTheme = t;
             if (m_inherit) {
                 q->setColorSet(t->colorSet());
-                if (m_colorSet == PlatformTheme::Custom) {
-                    q->setCustomTextColor(t->textColor());
-                    q->setCustomDisabledTextColor(t->disabledTextColor());
-                    q->setCustomHighlightedTextColor(t->highlightedTextColor());
-                    q->setCustomActiveTextColor(t->activeTextColor());
-                    q->setCustomLinkColor(t->linkColor());
-                    q->setCustomVisitedLinkColor(t->visitedLinkColor());
-                    q->setCustomNegativeTextColor(t->negativeTextColor());
-                    q->setCustomNeutralTextColor(t->neutralTextColor());
-                    q->setCustomPositiveTextColor(t->positiveTextColor());
-                    q->setCustomBackgroundColor(t->backgroundColor());
-                    q->setCustomHighlightColor(t->highlightColor());
-                    q->setCustomFocusColor(t->focusColor());
-                    q->setCustomHoverColor(t->hoverColor());
-                }
+
+                q->setCustomTextColor(t->d->customTextColor);
+                q->setCustomDisabledTextColor(t->d->customDisabledTextColor);
+                q->setCustomHighlightedTextColor(t->d->customHighlightedTextColor);
+                q->setCustomActiveTextColor(t->d->customActiveTextColor);
+                q->setCustomLinkColor(t->d->customLinkColor);
+                q->setCustomVisitedLinkColor(t->d->customVisitedLinkColor);
+                q->setCustomNegativeTextColor(t->d->customNegativeTextColor);
+                q->setCustomNeutralTextColor(t->d->customNeutralTextColor);
+                q->setCustomPositiveTextColor(t->d->customPositiveTextColor);
+                q->setCustomBackgroundColor(t->d->customBackgroundColor);
+                q->setCustomHighlightColor(t->d->customHighlightColor);
+                q->setCustomFocusColor(t->d->customFocusColor);
+                q->setCustomHoverColor(t->d->customHoverColor);
             }
             break;
         }
@@ -185,9 +184,7 @@ PlatformTheme::PlatformTheme(QObject *parent)
 {
     connect(d->setColorCompressTimer, &QTimer::timeout,
             this, [this]() {
-                if (d->m_colorSet == PlatformTheme::Custom) {
-                    d->syncCustomPalette();
-                }
+                d->syncCustomPalette();
                 emit colorsChanged();
             });
     d->findParentStyle();
@@ -222,7 +219,7 @@ void PlatformTheme::setColorSet(PlatformTheme::ColorSet colorSet)
     for (PlatformTheme *t : d->m_childThemes) {
         if (t->inherit()) {
             t->setColorSet(colorSet);
-            if (colorSet == Custom) {
+           /* if (colorSet == Custom) {
                 t->setCustomTextColor(textColor());
                 t->setCustomDisabledTextColor(disabledTextColor());
                 t->setCustomHighlightedTextColor(highlightedTextColor());
@@ -236,7 +233,7 @@ void PlatformTheme::setColorSet(PlatformTheme::ColorSet colorSet)
                 t->setCustomHighlightColor(highlightColor());
                 t->setCustomFocusColor(focusColor());
                 t->setCustomHoverColor(hoverColor());
-            }
+            }*/
         }
     }
 
@@ -296,78 +293,70 @@ void PlatformTheme::setInherit(bool inherit)
 
 QColor PlatformTheme::textColor() const
 {
-    return d->m_colorSet == Custom && d->customTextColor.isValid() ? d->customTextColor : d->textColor;
+    return d->customTextColor.isValid() ? d->customTextColor : d->textColor;
 }
 
 QColor PlatformTheme::disabledTextColor() const
 {
-    return d->m_colorSet == Custom && d->customDisabledTextColor.isValid() ? d->customDisabledTextColor : d->disabledTextColor;
+    return d->customDisabledTextColor.isValid() ? d->customDisabledTextColor : d->disabledTextColor;
 }
 
 QColor PlatformTheme::highlightColor() const
 {
-    return d->m_colorSet == Custom && d->customHighlightColor.isValid() ? d->customHighlightColor : d->highlightColor;
+    return d->customHighlightColor.isValid() ? d->customHighlightColor : d->highlightColor;
 }
 
 QColor PlatformTheme::highlightedTextColor() const
 {
-    return d->m_colorSet == Custom && d->customHighlightedTextColor.isValid() ? d->customHighlightedTextColor : d->highlightedTextColor;
+    return d->customHighlightedTextColor.isValid() ? d->customHighlightedTextColor : d->highlightedTextColor;
 }
 
 QColor PlatformTheme::backgroundColor() const
 {
-    return d->m_colorSet == Custom && d->customBackgroundColor.isValid() ? d->customBackgroundColor : d->backgroundColor;
+    return d->customBackgroundColor.isValid() ? d->customBackgroundColor : d->backgroundColor;
 }
 
 QColor PlatformTheme::activeTextColor() const
 {
-    return d->m_colorSet == Custom && d->customActiveTextColor.isValid() ? d->customActiveTextColor : d->activeTextColor;
+    return d->customActiveTextColor.isValid() ? d->customActiveTextColor : d->activeTextColor;
 }
 
 QColor PlatformTheme::linkColor() const
 {
-    return d->m_colorSet == Custom && d->customLinkColor.isValid() ? d->customLinkColor : d->linkColor;
+    return d->customLinkColor.isValid() ? d->customLinkColor : d->linkColor;
 }
 
 QColor PlatformTheme::visitedLinkColor() const
 {
-    return d->m_colorSet == Custom && d->customVisitedLinkColor.isValid() ? d->customVisitedLinkColor : d->visitedLinkColor;
+    return d->customVisitedLinkColor.isValid() ? d->customVisitedLinkColor : d->visitedLinkColor;
 }
 
 QColor PlatformTheme::negativeTextColor() const
 {
-    return d->m_colorSet == Custom && d->customNegativeTextColor.isValid() ? d->customNegativeTextColor : d->negativeTextColor;
+    return d->customNegativeTextColor.isValid() ? d->customNegativeTextColor : d->negativeTextColor;
 }
 
 QColor PlatformTheme::neutralTextColor() const
 {
-    return d->m_colorSet == Custom && d->customNeutralTextColor.isValid() ? d->customNeutralTextColor : d->neutralTextColor;
+    return d->customNeutralTextColor.isValid() ? d->customNeutralTextColor : d->neutralTextColor;
 }
 
 QColor PlatformTheme::positiveTextColor() const
 {
-    return d->m_colorSet == Custom && d->customPositiveTextColor.isValid() ? d->customPositiveTextColor : d->positiveTextColor;
+    return d->customPositiveTextColor.isValid() ? d->customPositiveTextColor : d->positiveTextColor;
 }
 
 QColor PlatformTheme::focusColor() const
 {
-    return d->m_colorSet == Custom && d->customFocusColor.isValid() ? d->customFocusColor : d->focusColor;
+    return d->customFocusColor.isValid() ? d->customFocusColor : d->focusColor;
 }
 
 QColor PlatformTheme::hoverColor() const
 {
-    return d->m_colorSet == Custom && d->customHoverColor.isValid() ? d->customHoverColor : d->hoverColor;
+    return d->customHoverColor.isValid() ? d->customHoverColor : d->hoverColor;
 }
 
-#define PROPAGATECUSTOMCOLOR(colorName, color)\
-          if (colorSet() == Custom) {\
-              for (PlatformTheme *t : d->m_childThemes) {\
-                  if (t->inherit() && t->colorSet() == Custom) {\
-                      t->set##colorName(color);\
-                  }\
-              }\
-          }
-
+//setters for theme implementations
 void PlatformTheme::setTextColor(const QColor &color)
 {
     if (d->textColor == color) {
@@ -513,6 +502,16 @@ void PlatformTheme::setDefaultFont(const QFont &font)
     emit defaultFontChanged(font);
 }
 
+
+#define PROPAGATECUSTOMCOLOR(colorName, color)\
+            for (PlatformTheme *t : d->m_childThemes) {\
+                if (t->inherit()) {\
+                    t->set##colorName(color);\
+                }\
+            }
+
+
+//setters for QML clients
 void PlatformTheme::setCustomTextColor(const QColor &color)
 {
     if (d->customTextColor == color) {
@@ -521,9 +520,7 @@ void PlatformTheme::setCustomTextColor(const QColor &color)
 
     d->customTextColor = color;
     PROPAGATECUSTOMCOLOR(CustomTextColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomDisabledTextColor(const QColor &color)
@@ -534,9 +531,7 @@ void PlatformTheme::setCustomDisabledTextColor(const QColor &color)
 
     d->customDisabledTextColor = color;
     PROPAGATECUSTOMCOLOR(CustomDisabledTextColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomBackgroundColor(const QColor &color)
@@ -547,9 +542,7 @@ void PlatformTheme::setCustomBackgroundColor(const QColor &color)
 
     d->customBackgroundColor = color;
     PROPAGATECUSTOMCOLOR(CustomBackgroundColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomHighlightColor(const QColor &color)
@@ -560,9 +553,7 @@ void PlatformTheme::setCustomHighlightColor(const QColor &color)
 
     d->customHighlightColor = color;
     PROPAGATECUSTOMCOLOR(CustomHighlightColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomHighlightedTextColor(const QColor &color)
@@ -573,9 +564,7 @@ void PlatformTheme::setCustomHighlightedTextColor(const QColor &color)
 
     d->customHighlightedTextColor = color;
     PROPAGATECUSTOMCOLOR(CustomHighlightedTextColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomActiveTextColor(const QColor &color)
@@ -586,9 +575,7 @@ void PlatformTheme::setCustomActiveTextColor(const QColor &color)
 
     d->customActiveTextColor = color;
     PROPAGATECUSTOMCOLOR(CustomActiveTextColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomLinkColor(const QColor &color)
@@ -599,9 +586,7 @@ void PlatformTheme::setCustomLinkColor(const QColor &color)
 
     d->customLinkColor = color;
     PROPAGATECUSTOMCOLOR(CustomLinkColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomVisitedLinkColor(const QColor &color)
@@ -612,9 +597,7 @@ void PlatformTheme::setCustomVisitedLinkColor(const QColor &color)
 
     d->customVisitedLinkColor = color;
     PROPAGATECUSTOMCOLOR(CustomVisitedLinkColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomNegativeTextColor(const QColor &color)
@@ -625,9 +608,7 @@ void PlatformTheme::setCustomNegativeTextColor(const QColor &color)
 
     d->customNegativeTextColor = color;
     PROPAGATECUSTOMCOLOR(CustomNegativeTextColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomNeutralTextColor(const QColor &color)
@@ -638,9 +619,7 @@ void PlatformTheme::setCustomNeutralTextColor(const QColor &color)
 
     d->customNeutralTextColor = color;
     PROPAGATECUSTOMCOLOR(CustomNeutralTextColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomPositiveTextColor(const QColor &color)
@@ -651,9 +630,7 @@ void PlatformTheme::setCustomPositiveTextColor(const QColor &color)
 
     d->customPositiveTextColor = color;
     PROPAGATECUSTOMCOLOR(CustomPositiveTextColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomHoverColor(const QColor &color)
@@ -664,9 +641,7 @@ void PlatformTheme::setCustomHoverColor(const QColor &color)
 
     d->customHoverColor = color;
     PROPAGATECUSTOMCOLOR(CustomHoverColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 void PlatformTheme::setCustomFocusColor(const QColor &color)
@@ -677,15 +652,14 @@ void PlatformTheme::setCustomFocusColor(const QColor &color)
 
     d->customFocusColor = color;
     PROPAGATECUSTOMCOLOR(CustomFocusColor, color)
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
+    d->setColorCompressTimer->start();
 }
 
 
 QPalette PlatformTheme::palette() const
 {
-    return d->m_colorSet == Custom ? d->customPalette : d->palette;
+    //check the most important custom colors to decide to return a custom palette
+    return d->customTextColor.isValid() || d->customBackgroundColor.isValid() || d->customHighlightColor.isValid() ? d->customPalette : d->palette;
 }
 
 void PlatformTheme::setPalette(const QPalette &palette)

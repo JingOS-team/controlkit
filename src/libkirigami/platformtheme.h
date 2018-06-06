@@ -153,8 +153,7 @@ public:
         Button, /** Color set used by buttons */
         Selection, /** Color set used by selectged areas */
         Tooltip, /** Color set used by tooltips */
-        Complementary, /** Color set meant to be complementary to Window: usually is a dark theme for light themes */
-        Custom /**  Custom color set: the user sets the colors himself from QML @since 5.46*/
+        Complementary /** Color set meant to be complementary to Window: usually is a dark theme for light themes */
     };
     Q_ENUM(ColorSet)
 
