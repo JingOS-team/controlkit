@@ -514,7 +514,7 @@ void PlatformTheme::setDefaultFont(const QFont &font)
 }
 
 void PlatformTheme::setCustomTextColor(const QColor &color)
-{qWarning()<<"E££E£E£E£E£E£E"<<color;
+{
     if (d->customTextColor == color) {
         return;
     }
