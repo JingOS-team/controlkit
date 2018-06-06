@@ -76,69 +76,69 @@ class KIRIGAMI2_EXPORT PlatformTheme : public QObject
      * Color for normal foregrounds, usually text, but not limited to it,
      * anything that should be painted with a clear contrast should use this color
      */
-    Q_PROPERTY(QColor textColor READ textColor WRITE setCustomTextColor RESET resetCustomTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor textColor READ textColor WRITE setCustomTextColor RESET setCustomTextColor NOTIFY colorsChanged)
 
     /**
      * Foreground color for disabled areas, usually a mid-gray
      */
-    Q_PROPERTY(QColor disabledTextColor READ disabledTextColor WRITE setCustomDisabledTextColor RESET resetCustomDisabledTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor disabledTextColor READ disabledTextColor WRITE setCustomDisabledTextColor RESET setCustomDisabledTextColor NOTIFY colorsChanged)
 
     /**
      * Color for text that has been highlighted, often is a light color while normal text is dark
      */
-    Q_PROPERTY(QColor highlightedTextColor READ highlightedTextColor WRITE setCustomHighlightedTextColor RESET resetCustomHighlightedTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor highlightedTextColor READ highlightedTextColor WRITE setCustomHighlightedTextColor RESET setCustomHighlightedTextColor NOTIFY colorsChanged)
 
     /**
      * Foreground for areas that are active or requesting attention
      */
-    Q_PROPERTY(QColor activeTextColor READ activeTextColor WRITE setCustomActiveTextColor RESET resetCustomActiveTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor activeTextColor READ activeTextColor WRITE setCustomActiveTextColor RESET setCustomActiveTextColor NOTIFY colorsChanged)
 
     /**
      * Color for links
      */
-    Q_PROPERTY(QColor linkColor READ linkColor WRITE setCustomLinkColor RESET resetCustomLinkColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor linkColor READ linkColor WRITE setCustomLinkColor RESET setCustomLinkColor NOTIFY colorsChanged)
 
     /**
      * Color for visited links, usually a bit darker than linkColor
      */
-    Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor WRITE setCustomVisitedLinkColor RESET resetCustomVisitedLinkColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor WRITE setCustomVisitedLinkColor RESET setCustomVisitedLinkColor NOTIFY colorsChanged)
 
     /**
      * Foreground color for negative areas, such as critical error text
      */
-    Q_PROPERTY(QColor negativeTextColor READ negativeTextColor WRITE setCustomNegativeTextColor RESET resetCustomNegativeTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor negativeTextColor READ negativeTextColor WRITE setCustomNegativeTextColor RESET setCustomNegativeTextColor NOTIFY colorsChanged)
 
     /**
      * Foreground color for neutral areas, such as warning texts (but not critical)
      */
-    Q_PROPERTY(QColor neutralTextColor READ neutralTextColor WRITE setCustomNeutralTextColor RESET resetCustomNeutralTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor neutralTextColor READ neutralTextColor WRITE setCustomNeutralTextColor RESET setCustomNeutralTextColor NOTIFY colorsChanged)
 
     /**
      * Success messages, trusted content
      */
-    Q_PROPERTY(QColor positiveTextColor READ positiveTextColor WRITE setCustomPositiveTextColor RESET resetCustomPositiveTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor positiveTextColor READ positiveTextColor WRITE setCustomPositiveTextColor RESET setCustomPositiveTextColor NOTIFY colorsChanged)
 
     //background colors
     /**
      * The generic background color
      */
-    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setCustomBackgroundColor RESET resetCustomBackgroundColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setCustomBackgroundColor RESET setCustomBackgroundColor NOTIFY colorsChanged)
 
     /**
      * The background color for selected areas
      */
-    Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setCustomHighlightColor RESET resetCustomHighlightColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setCustomHighlightColor RESET setCustomHighlightColor NOTIFY colorsChanged)
 
     //decoration colors
     /**
      * A decoration color that indicates active focus
      */
-    Q_PROPERTY(QColor focusColor READ focusColor WRITE setCustomFocusColor RESET resetCustomFocusColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor focusColor READ focusColor WRITE setCustomFocusColor RESET setCustomFocusColor NOTIFY colorsChanged)
 
     /**
      * A decoration color that indicates mouse hovering
      */
-    Q_PROPERTY(QColor hoverColor READ hoverColor WRITE setCustomHoverColor RESET resetCustomHoverColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor hoverColor READ hoverColor WRITE setCustomHoverColor RESET setCustomHoverColor NOTIFY colorsChanged)
 
     // font and palette
     Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
@@ -207,35 +207,21 @@ public:
     virtual Q_INVOKABLE QIcon iconFromTheme(const QString &name, const QColor &customColor = Qt::transparent);
 
     //foreground colors
-    void setCustomTextColor(const QColor &color);
-    void setCustomDisabledTextColor(const QColor &color);
-    void setCustomHighlightedTextColor(const QColor &color);
-    void setCustomActiveTextColor(const QColor &color);
-    void setCustomLinkColor(const QColor &color);
-    void setCustomVisitedLinkColor(const QColor &color);
-    void setCustomNegativeTextColor(const QColor &color);
-    void setCustomNeutralTextColor(const QColor &color);
-    void setCustomPositiveTextColor(const QColor &color);
+    void setCustomTextColor(const QColor &color = QColor());
+    void setCustomDisabledTextColor(const QColor &color = QColor());
+    void setCustomHighlightedTextColor(const QColor &color = QColor());
+    void setCustomActiveTextColor(const QColor &color = QColor());
+    void setCustomLinkColor(const QColor &color = QColor());
+    void setCustomVisitedLinkColor(const QColor &color = QColor());
+    void setCustomNegativeTextColor(const QColor &color = QColor());
+    void setCustomNeutralTextColor(const QColor &color = QColor());
+    void setCustomPositiveTextColor(const QColor &color = QColor());
     //background colors
-    void setCustomBackgroundColor(const QColor &color);
-    void setCustomHighlightColor(const QColor &color);
+    void setCustomBackgroundColor(const QColor &color = QColor());
+    void setCustomHighlightColor(const QColor &color = QColor());
     //decoration colors
-    void setCustomFocusColor(const QColor &color);
-    void setCustomHoverColor(const QColor &color);
-    //resetters
-    void resetCustomTextColor();
-    void resetCustomDisabledTextColor();
-    void resetCustomHighlightedTextColor();
-    void resetCustomActiveTextColor();
-    void resetCustomLinkColor();
-    void resetCustomVisitedLinkColor();
-    void resetCustomNegativeTextColor();
-    void resetCustomNeutralTextColor();
-    void resetCustomPositiveTextColor();
-    void resetCustomBackgroundColor();
-    void resetCustomHighlightColor();
-    void resetCustomFocusColor();
-    void resetCustomHoverColor();
+    void setCustomFocusColor(const QColor &color = QColor());
+    void setCustomHoverColor(const QColor &color = QColor());
 
     //QML attached property
     static PlatformTheme *qmlAttachedProperties(QObject *object);

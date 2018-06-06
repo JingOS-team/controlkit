@@ -107,17 +107,17 @@ PlatformThemePrivate::~PlatformThemePrivate()
 void PlatformThemePrivate::syncCustomPalette()
 {
     for (auto state : { QPalette::Active, QPalette::Inactive, QPalette::Disabled }) {
-        customPalette.setBrush(state, QPalette::WindowText, customTextColor);
-        customPalette.setBrush(state, QPalette::Window, customBackgroundColor);
-        customPalette.setBrush(state, QPalette::Base, customBackgroundColor);
-        customPalette.setBrush(state, QPalette::Text, customTextColor);
-        customPalette.setBrush(state, QPalette::Button, customBackgroundColor);
-        customPalette.setBrush(state, QPalette::ButtonText, customTextColor);
-        customPalette.setBrush(state, QPalette::Highlight, customHighlightColor);
-        customPalette.setBrush(state, QPalette::HighlightedText, customHighlightedTextColor);
-        customPalette.setBrush(state, QPalette::ToolTipBase, customBackgroundColor);
-        customPalette.setBrush(state, QPalette::ToolTipText, customTextColor);
-/*
+        customPalette.setBrush(state, QPalette::WindowText, q->textColor());
+        customPalette.setBrush(state, QPalette::Window, q->backgroundColor());
+        customPalette.setBrush(state, QPalette::Base, q->backgroundColor());
+        customPalette.setBrush(state, QPalette::Text, q->textColor());
+        customPalette.setBrush(state, QPalette::Button, q->backgroundColor());
+        customPalette.setBrush(state, QPalette::ButtonText, q->textColor());
+        customPalette.setBrush(state, QPalette::Highlight, q->highlightColor());
+        customPalette.setBrush(state, QPalette::HighlightedText, q->highlightedTextColor());
+        customPalette.setBrush(state, QPalette::ToolTipBase, q->backgroundColor());
+        customPalette.setBrush(state, QPalette::ToolTipText, q->textColor());
+/*Those shouldn't be needed
         customPalette.setColor(state, QPalette::Light, KColorScheme::shade(backgroundColor(), KColorScheme::LightShade));
         customPalette.setColor(state, QPalette::Midlight, KColorScheme::shade(backgroundColor(), KColorScheme::MidlightShade));
         customPalette.setColor(state, QPalette::Mid, KColorScheme::shade(backgroundColor(), KColorScheme::MidShade));
@@ -125,8 +125,8 @@ void PlatformThemePrivate::syncCustomPalette()
         customPalette.setColor(state, QPalette::Shadow, KColorScheme::shade(backgroundColor(), KColorScheme::ShadowShade));
 
         customPalette.setBrush(state, QPalette::AlternateBase, backgroundColor().darker(120));*/
-        customPalette.setBrush(state, QPalette::Link, customLinkColor);
-        customPalette.setBrush(state, QPalette::LinkVisited, customVisitedLinkColor);
+        customPalette.setBrush(state, QPalette::Link, q->linkColor());
+        customPalette.setBrush(state, QPalette::LinkVisited, q->visitedLinkColor());
         emit q->paletteChanged(customPalette);
     }
 }
@@ -514,7 +514,7 @@ void PlatformTheme::setDefaultFont(const QFont &font)
 }
 
 void PlatformTheme::setCustomTextColor(const QColor &color)
-{
+{qWarning()<<"E££E£E£E£E£E£E"<<color;
     if (d->customTextColor == color) {
         return;
     }
@@ -682,175 +682,6 @@ void PlatformTheme::setCustomFocusColor(const QColor &color)
     }
 }
 
-//resetters
-void PlatformTheme::resetCustomTextColor()
-{
-    if (!d->customTextColor.isValid()) {
-        return;
-    }
-
-    d->customTextColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomTextColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomDisabledTextColor()
-{
-    if (!d->customDisabledTextColor.isValid()) {
-        return;
-    }
-
-    d->customDisabledTextColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomDisabledTextColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomBackgroundColor()
-{
-    if (!d->customBackgroundColor.isValid()) {
-        return;
-    }
-
-    d->customBackgroundColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomBackgroundColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomHighlightColor()
-{
-    if (!d->customHighlightColor.isValid()) {
-        return;
-    }
-
-    d->customHighlightColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomHighlightColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomHighlightedTextColor()
-{
-    if (!d->customHighlightedTextColor.isValid()) {
-        return;
-    }
-
-    d->customHighlightedTextColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomHighlightedTextColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomActiveTextColor()
-{
-    if (!d->customActiveTextColor.isValid()) {
-        return;
-    }
-
-    d->customActiveTextColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomActiveTextColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomLinkColor()
-{
-    if (!d->customLinkColor.isValid()) {
-        return;
-    }
-
-    d->customLinkColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomLinkColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomVisitedLinkColor()
-{
-    if (!d->customVisitedLinkColor.isValid()) {
-        return;
-    }
-
-    d->customVisitedLinkColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomVisitedLinkColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomNegativeTextColor()
-{
-    if (!d->customNegativeTextColor.isValid()) {
-        return;
-    }
-
-    d->customNegativeTextColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomNegativeTextColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomNeutralTextColor()
-{
-    if (!d->customNeutralTextColor.isValid()) {
-        return;
-    }
-
-    d->customNeutralTextColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomNeutralTextColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomPositiveTextColor()
-{
-    if (!d->customPositiveTextColor.isValid()) {
-        return;
-    }
-
-    d->customPositiveTextColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomPositiveTextColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomHoverColor()
-{
-    if (!d->customHoverColor.isValid()) {
-        return;
-    }
-
-    d->customHoverColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomHoverColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
-
-void PlatformTheme::resetCustomFocusColor()
-{
-    if (!d->customFocusColor.isValid()) {
-        return;
-    }
-
-    d->customFocusColor = QColor();
-    PROPAGATECUSTOMCOLOR(CustomFocusColor, QColor())
-    if (d->m_colorSet == Custom) {
-        d->setColorCompressTimer->start();
-    }
-}
 
 QPalette PlatformTheme::palette() const
 {
