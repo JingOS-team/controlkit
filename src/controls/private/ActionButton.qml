@@ -41,9 +41,12 @@ Item {
 
     readonly property Page page: root.parent.page
     //either Action or QAction should work here
-    readonly property QtObject action: root.page && root.page.mainAction && root.page.mainAction.enabled ? root.page.mainAction : null
-    readonly property QtObject leftAction: root.page && root.page.leftAction && root.page.leftAction.enabled ? root.page.leftAction : null
-    readonly property QtObject rightAction: root.page && root.page.rightAction && root.page.rightAction.enabled ? root.page.rightAction : null
+
+    function isActionAvailable(action) { return action && action.enabled && (action.visible === undefined || action.visible); }
+
+    readonly property QtObject action: root.page && isActionAvailable(root.page.mainAction) ? root.page.mainAction : null
+    readonly property QtObject leftAction: root.page && isActionAvailable(root.page.leftAction) ? root.page.leftAction : null
+    readonly property QtObject rightAction: root.page && isActionAvailable(root.page.rightAction) ? root.page.rightAction : null
 
     readonly property bool hasApplicationWindow: typeof applicationWindow !== "undefined" && applicationWindow
     readonly property bool hasGlobalDrawer: typeof globalDrawer !== "undefined" && globalDrawer
