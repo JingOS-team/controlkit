@@ -66,6 +66,7 @@ Kirigami.ScrollablePage {
                 color: Kirigami.Theme.backgroundColor
             }
             contentItem: ColumnLayout {
+                spacing: 0
                 width: parent.width
                 Controls.Label {
                     text: "Set inherited from parent Item"
@@ -93,6 +94,7 @@ Kirigami.ScrollablePage {
                 color: Kirigami.Theme.backgroundColor
             }
             contentItem: ColumnLayout {
+                spacing: 0
                 width: parent.width
                 Controls.Label {
                     text: "Window Set"
@@ -120,6 +122,7 @@ Kirigami.ScrollablePage {
                 color: Kirigami.Theme.backgroundColor
             }
             contentItem: ColumnLayout {
+                spacing: 0
                 width: parent.width
                 Controls.Label {
                     text: "View Set"
@@ -147,6 +150,7 @@ Kirigami.ScrollablePage {
                 color: Kirigami.Theme.backgroundColor
             }
             contentItem: ColumnLayout {
+                spacing: 0
                 Controls.Label {
                     text: "Complementary Set"
                 }
@@ -176,6 +180,7 @@ Kirigami.ScrollablePage {
                 color: Kirigami.Theme.backgroundColor
             }
             contentItem: ColumnLayout {
+                spacing: 0
                 Controls.Label {
                     text: "Custom Set"
                 }
