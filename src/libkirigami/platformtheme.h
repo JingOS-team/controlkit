@@ -76,69 +76,69 @@ class KIRIGAMI2_EXPORT PlatformTheme : public QObject
      * Color for normal foregrounds, usually text, but not limited to it,
      * anything that should be painted with a clear contrast should use this color
      */
-    Q_PROPERTY(QColor textColor READ textColor WRITE setCustomTextColor RESET resetTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor textColor READ textColor WRITE setCustomTextColor RESET resetCustomTextColor NOTIFY colorsChanged)
 
     /**
      * Foreground color for disabled areas, usually a mid-gray
      */
-    Q_PROPERTY(QColor disabledTextColor READ disabledTextColor WRITE setCustomDisabledTextColor RESET resetDisabledTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor disabledTextColor READ disabledTextColor WRITE setCustomDisabledTextColor RESET resetCustomDisabledTextColor NOTIFY colorsChanged)
 
     /**
      * Color for text that has been highlighted, often is a light color while normal text is dark
      */
-    Q_PROPERTY(QColor highlightedTextColor READ highlightedTextColor WRITE setCustomHighlightedTextColor RESET resetHighlightedTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor highlightedTextColor READ highlightedTextColor WRITE setCustomHighlightedTextColor RESET resetCustomHighlightedTextColor NOTIFY colorsChanged)
 
     /**
      * Foreground for areas that are active or requesting attention
      */
-    Q_PROPERTY(QColor activeTextColor READ activeTextColor WRITE setCustomActiveTextColor RESET resetActiveTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor activeTextColor READ activeTextColor WRITE setCustomActiveTextColor RESET resetCustomActiveTextColor NOTIFY colorsChanged)
 
     /**
      * Color for links
      */
-    Q_PROPERTY(QColor linkColor READ linkColor WRITE setCustomLinkColor RESET resetLinkColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor linkColor READ linkColor WRITE setCustomLinkColor RESET resetCustomLinkColor NOTIFY colorsChanged)
 
     /**
      * Color for visited links, usually a bit darker than linkColor
      */
-    Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor WRITE setCustomVisitedLinkColor RESET resetVisitedLinkColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor WRITE setCustomVisitedLinkColor RESET resetCustomVisitedLinkColor NOTIFY colorsChanged)
 
     /**
      * Foreground color for negative areas, such as critical error text
      */
-    Q_PROPERTY(QColor negativeTextColor READ negativeTextColor WRITE setCustomNegativeTextColor RESET resetNegativeTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor negativeTextColor READ negativeTextColor WRITE setCustomNegativeTextColor RESET resetCustomNegativeTextColor NOTIFY colorsChanged)
 
     /**
      * Foreground color for neutral areas, such as warning texts (but not critical)
      */
-    Q_PROPERTY(QColor neutralTextColor READ neutralTextColor WRITE setCustomNeutralTextColor RESET resetNeutralTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor neutralTextColor READ neutralTextColor WRITE setCustomNeutralTextColor RESET resetCustomNeutralTextColor NOTIFY colorsChanged)
 
     /**
      * Success messages, trusted content
      */
-    Q_PROPERTY(QColor positiveTextColor READ positiveTextColor WRITE setCustomPositiveTextColor RESET resetPositiveTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor positiveTextColor READ positiveTextColor WRITE setCustomPositiveTextColor RESET resetCustomPositiveTextColor NOTIFY colorsChanged)
 
     //background colors
     /**
      * The generic background color
      */
-    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setCustomBackgroundColor RESET resetBackgroundColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setCustomBackgroundColor RESET resetCustomBackgroundColor NOTIFY colorsChanged)
 
     /**
      * The background color for selected areas
      */
-    Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setCustomHighlightColor RESET resetHighlightColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setCustomHighlightColor RESET resetCustomHighlightColor NOTIFY colorsChanged)
 
     //decoration colors
     /**
      * A decoration color that indicates active focus
      */
-    Q_PROPERTY(QColor focusColor READ focusColor WRITE setCustomFocusColor RESET resetFocusColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor focusColor READ focusColor WRITE setCustomFocusColor RESET resetCustomFocusColor NOTIFY colorsChanged)
 
     /**
      * A decoration color that indicates mouse hovering
      */
-    Q_PROPERTY(QColor hoverColor READ hoverColor WRITE setCustomHoverColor RESET resetHoverColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor hoverColor READ hoverColor WRITE setCustomHoverColor RESET resetCustomHoverColor NOTIFY colorsChanged)
 
     // font and palette
     Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
@@ -223,19 +223,19 @@ public:
     void setCustomFocusColor(const QColor &color);
     void setCustomHoverColor(const QColor &color);
     //resetters
-    void resetTextColor();
-    void resetDisabledTextColor();
-    void resetHighlightedTextColor();
-    void resetActiveTextColor();
-    void resetLinkColor();
-    void resetVisitedLinkColor();
-    void resetNegativeTextColor();
-    void resetNeutralTextColor();
-    void resetPositiveTextColor();
-    void resetBackgroundColor();
-    void resetHighlightColor();
-    void resetFocusColor();
-    void resetHoverColor();
+    void resetCustomTextColor();
+    void resetCustomDisabledTextColor();
+    void resetCustomHighlightedTextColor();
+    void resetCustomActiveTextColor();
+    void resetCustomLinkColor();
+    void resetCustomVisitedLinkColor();
+    void resetCustomNegativeTextColor();
+    void resetCustomNeutralTextColor();
+    void resetCustomPositiveTextColor();
+    void resetCustomBackgroundColor();
+    void resetCustomHighlightColor();
+    void resetCustomFocusColor();
+    void resetCustomHoverColor();
 
     //QML attached property
     static PlatformTheme *qmlAttachedProperties(QObject *object);

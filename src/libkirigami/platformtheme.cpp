@@ -683,7 +683,7 @@ void PlatformTheme::setCustomFocusColor(const QColor &color)
 }
 
 //resetters
-void PlatformTheme::resetTextColor()
+void PlatformTheme::resetCustomTextColor()
 {
     if (!d->customTextColor.isValid()) {
         return;
@@ -696,7 +696,7 @@ void PlatformTheme::resetTextColor()
     }
 }
 
-void PlatformTheme::resetDisabledTextColor()
+void PlatformTheme::resetCustomDisabledTextColor()
 {
     if (!d->customDisabledTextColor.isValid()) {
         return;
@@ -709,7 +709,7 @@ void PlatformTheme::resetDisabledTextColor()
     }
 }
 
-void PlatformTheme::resetBackgroundColor()
+void PlatformTheme::resetCustomBackgroundColor()
 {
     if (!d->customBackgroundColor.isValid()) {
         return;
@@ -722,7 +722,7 @@ void PlatformTheme::resetBackgroundColor()
     }
 }
 
-void PlatformTheme::resetHighlightColor()
+void PlatformTheme::resetCustomHighlightColor()
 {
     if (!d->customHighlightColor.isValid()) {
         return;
@@ -735,7 +735,7 @@ void PlatformTheme::resetHighlightColor()
     }
 }
 
-void PlatformTheme::resetHighlightedTextColor()
+void PlatformTheme::resetCustomHighlightedTextColor()
 {
     if (!d->customHighlightedTextColor.isValid()) {
         return;
@@ -748,7 +748,7 @@ void PlatformTheme::resetHighlightedTextColor()
     }
 }
 
-void PlatformTheme::resetActiveTextColor()
+void PlatformTheme::resetCustomActiveTextColor()
 {
     if (!d->customActiveTextColor.isValid()) {
         return;
@@ -761,7 +761,7 @@ void PlatformTheme::resetActiveTextColor()
     }
 }
 
-void PlatformTheme::resetLinkColor()
+void PlatformTheme::resetCustomLinkColor()
 {
     if (!d->customLinkColor.isValid()) {
         return;
@@ -774,7 +774,7 @@ void PlatformTheme::resetLinkColor()
     }
 }
 
-void PlatformTheme::resetVisitedLinkColor()
+void PlatformTheme::resetCustomVisitedLinkColor()
 {
     if (!d->customVisitedLinkColor.isValid()) {
         return;
@@ -787,7 +787,7 @@ void PlatformTheme::resetVisitedLinkColor()
     }
 }
 
-void PlatformTheme::resetNegativeTextColor()
+void PlatformTheme::resetCustomNegativeTextColor()
 {
     if (!d->customNegativeTextColor.isValid()) {
         return;
@@ -800,7 +800,7 @@ void PlatformTheme::resetNegativeTextColor()
     }
 }
 
-void PlatformTheme::resetNeutralTextColor()
+void PlatformTheme::resetCustomNeutralTextColor()
 {
     if (!d->customNeutralTextColor.isValid()) {
         return;
@@ -813,7 +813,7 @@ void PlatformTheme::resetNeutralTextColor()
     }
 }
 
-void PlatformTheme::resetPositiveTextColor()
+void PlatformTheme::resetCustomPositiveTextColor()
 {
     if (!d->customPositiveTextColor.isValid()) {
         return;
@@ -826,7 +826,7 @@ void PlatformTheme::resetPositiveTextColor()
     }
 }
 
-void PlatformTheme::resetHoverColor()
+void PlatformTheme::resetCustomHoverColor()
 {
     if (!d->customHoverColor.isValid()) {
         return;
@@ -839,7 +839,7 @@ void PlatformTheme::resetHoverColor()
     }
 }
 
-void PlatformTheme::resetFocusColor()
+void PlatformTheme::resetCustomFocusColor()
 {
     if (!d->customFocusColor.isValid()) {
         return;
