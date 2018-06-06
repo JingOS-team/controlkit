@@ -682,6 +682,175 @@ void PlatformTheme::setCustomFocusColor(const QColor &color)
     }
 }
 
+//resetters
+void PlatformTheme::resetTextColor()
+{
+    if (!d->customTextColor.isValid()) {
+        return;
+    }
+
+    d->customTextColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomTextColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetDisabledTextColor()
+{
+    if (!d->customDisabledTextColor.isValid()) {
+        return;
+    }
+
+    d->customDisabledTextColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomDisabledTextColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetBackgroundColor()
+{
+    if (!d->customBackgroundColor.isValid()) {
+        return;
+    }
+
+    d->customBackgroundColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomBackgroundColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetHighlightColor()
+{
+    if (!d->customHighlightColor.isValid()) {
+        return;
+    }
+
+    d->customHighlightColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomHighlightColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetHighlightedTextColor()
+{
+    if (!d->customHighlightedTextColor.isValid()) {
+        return;
+    }
+
+    d->customHighlightedTextColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomHighlightedTextColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetActiveTextColor()
+{
+    if (!d->customActiveTextColor.isValid()) {
+        return;
+    }
+
+    d->customActiveTextColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomActiveTextColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetLinkColor()
+{
+    if (!d->customLinkColor.isValid()) {
+        return;
+    }
+
+    d->customLinkColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomLinkColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetVisitedLinkColor()
+{
+    if (!d->customVisitedLinkColor.isValid()) {
+        return;
+    }
+
+    d->customVisitedLinkColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomVisitedLinkColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetNegativeTextColor()
+{
+    if (!d->customNegativeTextColor.isValid()) {
+        return;
+    }
+
+    d->customNegativeTextColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomNegativeTextColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetNeutralTextColor()
+{
+    if (!d->customNeutralTextColor.isValid()) {
+        return;
+    }
+
+    d->customNeutralTextColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomNeutralTextColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetPositiveTextColor()
+{
+    if (!d->customPositiveTextColor.isValid()) {
+        return;
+    }
+
+    d->customPositiveTextColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomPositiveTextColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetHoverColor()
+{
+    if (!d->customHoverColor.isValid()) {
+        return;
+    }
+
+    d->customHoverColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomHoverColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
+
+void PlatformTheme::resetFocusColor()
+{
+    if (!d->customFocusColor.isValid()) {
+        return;
+    }
+
+    d->customFocusColor = QColor();
+    PROPAGATECUSTOMCOLOR(CustomFocusColor, QColor())
+    if (d->m_colorSet == Custom) {
+        d->setColorCompressTimer->start();
+    }
+}
 
 QPalette PlatformTheme::palette() const
 {
