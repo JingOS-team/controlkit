@@ -28,6 +28,10 @@ Controls.ToolButton {
     implicitWidth: showText && ( kirigamiAction ? kirigamiAction.text.length > 0 : text.length > 0) ? Math.max(background.implicitWidth, control.background.contentWidth) : implicitHeight
     implicitHeight: background.implicitHeight
 
+    Theme.colorSet: kirigamiAction.icon.color.a ? Theme.Custom : Theme.Button
+    Theme.inherit: kirigamiAction.icon.color.a ? false : true
+    Theme.backgroundColor: Theme.colorSet == Theme.Custom ? kirigamiAction.icon.color : undefined
+
     hoverEnabled: true
     //TODO: replace with upstream action when we depend on Qt 5.10
     property Action kirigamiAction
@@ -59,15 +63,10 @@ Controls.ToolButton {
         }
     }
 
-    Component.onCompleted: {
-        //NOTE: Make it a proper property when we depend on Qt 5.10
-        if (palette)
-            palette.button = Qt.binding(function() { return control.kirigamiAction && control.kirigamiAction.icon.color.a ? control.kirigamiAction.icon.color : undefined});
-    }
     contentItem: MouseArea {
         hoverEnabled: true
         onPressed: mouse.accepted = false
-        Theme.colorSet: checked ? Theme.Selection : Theme.Window
+        Theme.colorSet: checked || (!control.flat && control.Theme.colorSet == Theme.Custom) ? Theme.Selection : Theme.Button
         Theme.inherit: false
         RowLayout {
             id: layout
@@ -89,7 +88,6 @@ Controls.ToolButton {
 
                 text: MnemonicData.richTextLabel
                 visible: control.showText && text.length > 0
-                color: control.flat || !control.palette || control.palette.button === Theme.backgroundColor ? Theme.textColor : Theme.highlightedTextColor
             }
             Icon {
                 Layout.minimumWidth: Units.iconSizes.small
