@@ -91,7 +91,11 @@ public:
     QFont font;
     bool m_inherit = true;
     bool m_init = true;
+
+    static KirigamiPluginFactory *s_pluginFactory;
 };
+
+KirigamiPluginFactory *PlatformThemePrivate::s_pluginFactory = nullptr;
 
 PlatformThemePrivate::PlatformThemePrivate(PlatformTheme *q)
     : q(q)
@@ -686,18 +690,27 @@ QIcon PlatformTheme::iconFromTheme(const QString &name, const QColor &customColo
 
 PlatformTheme *PlatformTheme::qmlAttachedProperties(QObject *object)
 {
-    for (const QString &path : QCoreApplication::libraryPaths()) {
-        QDir dir(path + "/kf5/kirigami");
-        for (const QString &fileName : dir.entryList(QDir::Files)) {
-            //TODO: env variable?
-            if (fileName.startsWith(QQuickStyle::name())) {
-                QPluginLoader loader(dir.absoluteFilePath(fileName));
-                QObject *plugin = loader.instance();
-                //TODO: load actually a factory as plugin
+    static bool s_factoryChecked = false;
 
-                KirigamiPluginFactory *factory = qobject_cast<KirigamiPluginFactory *>(plugin);
-                if (factory) {
-                    return factory->createPlatformTheme(object);
+    //check for the plugin only once: it's an heavy operation
+    if (PlatformThemePrivate::s_pluginFactory) {
+        return PlatformThemePrivate::s_pluginFactory->createPlatformTheme(object);
+    } else if (!s_factoryChecked) {
+        s_factoryChecked = true;
+        for (const QString &path : QCoreApplication::libraryPaths()) {
+            QDir dir(path + "/kf5/kirigami");
+            for (const QString &fileName : dir.entryList(QDir::Files)) {
+                //TODO: env variable?
+                if (fileName.startsWith(QQuickStyle::name())) {
+                    QPluginLoader loader(dir.absoluteFilePath(fileName));
+                    QObject *plugin = loader.instance();
+                    //TODO: load actually a factory as plugin
+
+                    KirigamiPluginFactory *factory = qobject_cast<KirigamiPluginFactory *>(plugin);
+                    if (factory) {
+                        PlatformThemePrivate::s_pluginFactory = factory;
+                        return factory->createPlatformTheme(object);
+                    }
                 }
             }
         }
