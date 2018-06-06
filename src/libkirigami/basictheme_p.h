@@ -82,6 +82,7 @@ Q_SIGNALS:
     void colorsChanged();
 
 private:
+    inline void syncCustomColorsToQML();
     //legacy colors
     QColor m_buttonTextColor;
     QColor m_buttonBackgroundColor;

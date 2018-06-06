@@ -90,4 +90,16 @@ QtObject {
             object.Material.theme = Material.Light;
         }
     }
+    function __propagateTextColor(object, color) {
+        object.Material.foreground = color;
+    }
+    function __propagateBackgroundColor(object, color) {
+        object.Material.background = color;
+    }
+    function __propagatePrimaryColor(object, color) {
+        object.Material.primary = color;
+    }
+    function __propagateAccentColor(object, color) {
+        object.Material.accent = color;
+    }
 }

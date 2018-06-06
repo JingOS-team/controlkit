@@ -29,6 +29,7 @@ Kirigami.ScrollablePage {
     background: Rectangle {
         color: Kirigami.Theme.backgroundColor
     }
+
     ColumnLayout {
         GridLayout {
             columns: 2
@@ -161,6 +162,43 @@ Kirigami.ScrollablePage {
             }
         }
 
+        Controls.Frame {
+            Kirigami.Theme.inherit: false
+            Kirigami.Theme.colorSet: Kirigami.Theme.Custom
+            Kirigami.Theme.backgroundColor: "#b9d795"
+            Kirigami.Theme.textColor: "#465c2b"
+            Kirigami.Theme.highlightColor: "#89e51c"
+            Layout.minimumHeight: childrenRect.height
+            Layout.fillWidth: true
+            height: childrenRect.height
+            width: parent.width
+            background: Rectangle {
+                color: Kirigami.Theme.backgroundColor
+            }
+            contentItem: ColumnLayout {
+                Controls.Label {
+                    text: "Custom Set"
+                }
+                Kirigami.BasicListItem {
+                    width: parent.width
+                    icon: "view-right-close"
+                    label: "Delegate1"
+                    Controls.Button {
+                        Kirigami.Theme.inherit: true
+                        text: "Dynamic Color Button"
+                    }
+                }
+                Kirigami.BasicListItem {
+                    width: parent.width
+                    label: "Delegate2"
+                    Controls.TextField {
+                        Kirigami.Theme.inherit: true
+                        text: "Dynamic Color Text field"
+                    }
+                }
+            }
+        }
+
         Controls.Button {
             Kirigami.Theme.colorSet: Kirigami.Theme.Button
             Kirigami.Theme.inherit: false
@@ -177,7 +215,8 @@ Kirigami.ScrollablePage {
             Layout.minimumWidth: 32
             Layout.minimumHeight: 32
         }
-        RowLayout {
+        Flow {
+            Layout.fillWidth: true
             Controls.Label {
                 text: "RGB color for icon:"
             }

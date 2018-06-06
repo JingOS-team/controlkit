@@ -76,69 +76,69 @@ class KIRIGAMI2_EXPORT PlatformTheme : public QObject
      * Color for normal foregrounds, usually text, but not limited to it,
      * anything that should be painted with a clear contrast should use this color
      */
-    Q_PROPERTY(QColor textColor READ textColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor textColor READ textColor WRITE setCustomTextColor NOTIFY colorsChanged)
 
     /**
      * Foreground color for disabled areas, usually a mid-gray
      */
-    Q_PROPERTY(QColor disabledTextColor READ disabledTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor disabledTextColor READ disabledTextColor WRITE setCustomDisabledTextColor NOTIFY colorsChanged)
 
     /**
      * Color for text that has been highlighted, often is a light color while normal text is dark
      */
-    Q_PROPERTY(QColor highlightedTextColor READ highlightedTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor highlightedTextColor READ highlightedTextColor WRITE setCustomHighlightedTextColor NOTIFY colorsChanged)
 
     /**
      * Foreground for areas that are active or requesting attention
      */
-    Q_PROPERTY(QColor activeTextColor READ activeTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor activeTextColor READ activeTextColor WRITE setCustomActiveTextColor NOTIFY colorsChanged)
 
     /**
      * Color for links
      */
-    Q_PROPERTY(QColor linkColor READ linkColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor linkColor READ linkColor WRITE setCustomLinkColor NOTIFY colorsChanged)
 
     /**
      * Color for visited links, usually a bit darker than linkColor
      */
-    Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor WRITE setCustomVisitedLinkColor NOTIFY colorsChanged)
 
     /**
      * Foreground color for negative areas, such as critical error text
      */
-    Q_PROPERTY(QColor negativeTextColor READ negativeTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor negativeTextColor READ negativeTextColor WRITE setCustomNegativeTextColor NOTIFY colorsChanged)
 
     /**
      * Foreground color for neutral areas, such as warning texts (but not critical)
      */
-    Q_PROPERTY(QColor neutralTextColor READ neutralTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor neutralTextColor READ neutralTextColor WRITE setCustomNegativeTextColor NOTIFY colorsChanged)
 
     /**
      * Success messages, trusted content
      */
-    Q_PROPERTY(QColor positiveTextColor READ positiveTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor positiveTextColor READ positiveTextColor WRITE setCustomPositiveTextColor NOTIFY colorsChanged)
 
     //background colors
     /**
      * The generic background color
      */
-    Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setCustomBackgroundColor NOTIFY colorsChanged)
 
     /**
      * The background color for selected areas
      */
-    Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setCustomHighlightColor NOTIFY colorsChanged)
 
     //decoration colors
     /**
      * A decoration color that indicates active focus
      */
-    Q_PROPERTY(QColor focusColor READ focusColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor focusColor READ focusColor WRITE setCustomFocusColor NOTIFY colorsChanged)
 
     /**
      * A decoration color that indicates mouse hovering
      */
-    Q_PROPERTY(QColor hoverColor READ hoverColor NOTIFY colorsChanged)
+    Q_PROPERTY(QColor hoverColor READ hoverColor WRITE setCustomHoverColor NOTIFY colorsChanged)
 
     // font and palette
     Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
@@ -153,7 +153,8 @@ public:
         Button, /** Color set used by buttons */
         Selection, /** Color set used by selectged areas */
         Tooltip, /** Color set used by tooltips */
-        Complementary /** Color set meant to be complementary to Window: usually is a dark theme for light themes */
+        Complementary, /** Color set meant to be complementary to Window: usually is a dark theme for light themes */
+        Custom /**  Custom color set: the user sets the colors himself from QML @since 5.46*/
     };
     Q_ENUM(ColorSet)
 
@@ -204,6 +205,23 @@ public:
 
     //this will be used by desktopicon to fetch icons with KIconLoader
     virtual Q_INVOKABLE QIcon iconFromTheme(const QString &name, const QColor &customColor = Qt::transparent);
+
+    //foreground colors
+    void setCustomTextColor(const QColor &color);
+    void setCustomDisabledTextColor(const QColor &color);
+    void setCustomHighlightedTextColor(const QColor &color);
+    void setCustomActiveTextColor(const QColor &color);
+    void setCustomLinkColor(const QColor &color);
+    void setCustomVisitedLinkColor(const QColor &color);
+    void setCustomNegativeTextColor(const QColor &color);
+    void setCustomNeutralTextColor(const QColor &color);
+    void setCustomPositiveTextColor(const QColor &color);
+    //background colors
+    void setCustomBackgroundColor(const QColor &color);
+    void setCustomHighlightColor(const QColor &color);
+    //decoration colors
+    void setCustomFocusColor(const QColor &color);
+    void setCustomHoverColor(const QColor &color);
 
     //QML attached property
     static PlatformTheme *qmlAttachedProperties(QObject *object);

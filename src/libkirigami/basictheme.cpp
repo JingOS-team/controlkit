@@ -75,7 +75,6 @@ QObject *BasicThemeDeclarative::instance(const BasicTheme *theme)
 }
 
 
-
 BasicTheme::BasicTheme(QObject *parent)
     : PlatformTheme(parent)
 {
@@ -129,14 +128,14 @@ BasicTheme::BasicTheme(QObject *parent)
     connect(basicThemeDeclarative()->m_colorSyncTimer, &QTimer::timeout,
             this, &BasicTheme::syncColors);
     connect(this, &BasicTheme::colorSetChanged,
-            this, [this]() {
-                syncColors();
-                if (basicThemeDeclarative()->instance(this)) {
-                    QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagateColorSet", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, colorSet()));
-                }
-            });
+            this, &BasicTheme::syncColors);
     connect(this, &BasicTheme::colorGroupChanged,
             this, &BasicTheme::syncColors);
+
+    connect(this, &PlatformTheme::colorSetChanged,
+            this, &BasicTheme::syncCustomColorsToQML);
+    connect(this, &PlatformTheme::colorsChanged,
+            this, &BasicTheme::syncCustomColorsToQML);
     syncColors();
 }
 
@@ -232,8 +231,25 @@ void BasicTheme::syncColors()
         m_viewHoverColor = PROXYCOLOR(viewHoverColor, ViewHoverColor);
         m_viewFocusColor = PROXYCOLOR(viewFocusColor, ViewFocusColor);
     }
-    //TODO: build the qpalette
+
+    setPalette(QPalette(textColor(), m_buttonBackgroundColor, m_buttonBackgroundColor.lighter(120), m_buttonBackgroundColor.darker(120), m_buttonBackgroundColor.darker(110), m_viewTextColor, highlightedTextColor(), m_viewTextColor, backgroundColor()));
+
+    if (basicThemeDeclarative()->instance(this)) {
+        QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagateColorSet", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, colorSet()));
+    }
+
     emit colorsChanged();
+}
+
+
+void BasicTheme::syncCustomColorsToQML()
+{
+    if (basicThemeDeclarative()->instance(this) && colorSet() == Custom) {
+        QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagateTextColor", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, textColor()));
+        QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagateBackgroundColor", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, backgroundColor()));
+        QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagatePrimaryColor", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, highlightColor()));
+        QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagateAccentColor", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, highlightColor()));
+    }
 }
 
 QColor BasicTheme::buttonTextColor() const
