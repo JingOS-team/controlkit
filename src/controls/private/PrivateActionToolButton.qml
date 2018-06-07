@@ -30,8 +30,8 @@ Controls.ToolButton {
 
     Theme.colorSet: Theme.Button
     Theme.inherit: false
-    Theme.backgroundColor: kirigamiAction.icon.color.a ? kirigamiAction.icon.color : undefined
-    Theme.textColor: kirigamiAction.icon.color.a ? Theme.highlightedTextColor : undefined
+    Theme.backgroundColor: kirigamiAction && kirigamiAction.icon.color.a ? kirigamiAction.icon.color : undefined
+    Theme.textColor: kirigamiAction && kirigamiAction.icon.color.a ? Theme.highlightedTextColor : undefined
 
     hoverEnabled: true
     //TODO: replace with upstream action when we depend on Qt 5.10
@@ -67,7 +67,7 @@ Controls.ToolButton {
     contentItem: MouseArea {
         hoverEnabled: true
         onPressed: mouse.accepted = false
-        Theme.colorSet: checked || (!control.flat && control.kirigamiAction.icon.color.a) ? Theme.Selection : Theme.Button
+        Theme.colorSet: checked || (!control.flat && control.kirigamiAction && control.kirigamiAction.icon.color.a) ? Theme.Selection : Theme.Button
         Theme.inherit: false
         RowLayout {
             id: layout
