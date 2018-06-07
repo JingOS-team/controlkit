@@ -149,8 +149,8 @@ Control {
             implicitWidth: item.implicitWidth
             Layout.preferredWidth: item.Layout.preferredWidth > 0 ? item.Layout.preferredWidth : item.implicitWidth
             Layout.preferredHeight: item.Layout.preferredHeight > 0 ? item.Layout.preferredHeight : item.implicitHeight
-
-            Layout.alignment: (root.wideMode ? Qt.AlignLeft | Qt.AlignVCenter : Qt.AlignHCenter | Qt.AlignTop)
+            Layout.leftMargin: root.wideMode ? 0 : Kirigami.Units.largeSpacing
+            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
             Layout.fillWidth: item.Kirigami.FormData.isSection
             Layout.columnSpan: item.Kirigami.FormData.isSection ? lay.columns : 1
             onItemChanged: {
