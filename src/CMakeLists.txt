@@ -37,7 +37,7 @@ add_library(kirigamiplugin ${kirigami_SRCS} ${RESOURCES})
 if(STATIC_LIBRARY)
     SET_TARGET_PROPERTIES(kirigamiplugin PROPERTIES
         AUTOMOC_MOC_OPTIONS -Muri=org.kde.kirigami)
-    if (UNIX AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND NOT(APPLE))
+    if (UNIX AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND NOT(APPLE) AND NOT(DISABLE_DBUS))
         set(Kirigami_EXTRA_LIBS Qt5::DBus)
     else()
         set(Kirigami_EXTRA_LIBS "")
