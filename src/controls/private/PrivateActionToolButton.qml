@@ -50,8 +50,13 @@ Controls.ToolButton {
         if (kirigamiAction) {
             kirigamiAction.trigger();
         }
-        if (menu.count>0 && !menu.visible) {
-            menu.popup(control, 0, control.height)
+        //fallbacks needed for Qt 5.9
+        if ((!menu.hasOwnProperty("count") || menu.count>0) && !menu.visible) {
+            if (menu.hasOwnProperty("popup")) {
+                menu.popup(control, 0, control.height)
+            } else {
+                menu.visible = true;
+            }
         }
     }
 
