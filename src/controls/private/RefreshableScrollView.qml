@@ -25,42 +25,6 @@ import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4
 import "../templates/private" as P
 
-/**
- * RefreshableScrollView is a scroll view for any Flickable that supports the
- * "scroll down to refresh" behavior, and also allows the contents of the
- * flickable to have more top margins in order to make possible to scroll down the list
- * to reach it with the thumb while using the phone with a single hand.
- *
- * Example usage:
- *
- * @code
- * import org.kde.kirigami 2.4 as Kirigami
- * [...]
- * 
- * Kirigami.RefreshableScrollView {
- *     id: view
- *     supportsRefreshing: true
- *     onRefreshingChanged: {
- *         if (refreshing) {
- *             myModel.refresh();
- *         }
- *     }
- *     ListView {
- *         //NOTE: MyModel doesn't come from the components,
- *         //it's purely an example on how it can be used together
- *         //some application logic that can update the list model
- *         //and signals when it's done.
- *         model: MyModel {
- *             onRefreshDone: view.refreshing = false;
- *         }
- *         delegate: BasicListItem {}
- *     }
- * }
- * [...]
- *
- * @endcode
- * 
- */
 P.ScrollView {
     id: root
 

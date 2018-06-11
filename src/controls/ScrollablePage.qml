@@ -42,19 +42,34 @@ import "private"
  * }
  * @endcode
  *
+ * Another behavior added by this class is a "scroll down to refresh" behavior
+ * It also can give the contents of the flickable to have more top margins in order
+ * to make possible to scroll down the list to reach it with the thumb while using the
+ * phone with a single hand.
+ *
+ * Implementations should handle the refresh themselves as follows
+ *
  * @code
- * ScrollablePage {
- *     id: root
- *
- *     //support for the popular "pull down to refresh" behavior in mobile apps
+ * Kirigami.ScrollablePage {
+ *     id: view
  *     supportsRefreshing: true
- *
- *     //The ListView will automatically receive proper scroll indicators
+ *     onRefreshingChanged: {
+ *         if (refreshing) {
+ *             myModel.refresh();
+ *         }
+ *     }
  *     ListView {
- *         model: myModel
- *         delegate: BasicListItem { ... }
+ *         //NOTE: MyModel doesn't come from the components,
+ *         //it's purely an example on how it can be used together
+ *         //some application logic that can update the list model
+ *         //and signals when it's done.
+ *         model: MyModel {
+ *             onRefreshDone: view.refreshing = false;
+ *         }
+ *         delegate: BasicListItem {}
  *     }
  * }
+ * [...]
  * @endcode
  *
  */
