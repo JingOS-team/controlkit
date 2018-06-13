@@ -39,7 +39,6 @@ It is a Tier-1 KDE Framework starting with KDE Frameworks 5.37.
 - \link org::kde::kirigami::Theme Theme  \endlink
 - \link org::kde::kirigami::Units  Units \endlink
 - \link org::kde::kirigami::Icon Icon  \endlink
-- \link org::kde::kirigami::BasicListItem BasicListItem  \endlink
 - \link org::kde::kirigami::AbstractApplicationHeader AbstractApplicationHeader  \endlink
 - \link org::kde::kirigami::AbstractApplicationWindow AbstractApplicationWindow  \endlink
 - \link org::kde::kirigami::AbstractListItem AbstractListItem  \endlink
