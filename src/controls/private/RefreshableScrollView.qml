@@ -74,6 +74,7 @@ P.ScrollView {
 
     property Item _swipeFilter
 
+    onRefreshingChanged: flickableItem.topMargin = topPadding + (refreshing ? busyIndicatorFrame.height : 0);
     children: [
         Item {
             id: busyIndicatorFrame
@@ -97,14 +98,14 @@ P.ScrollView {
                 id: spinnerProgress
                 anchors {
                     fill: busyIndicator
-                    margins: Math.ceil(Units.smallSpacing/2)
+                    margins: Math.ceil(Units.smallSpacing)
                 }
                 radius: width
                 visible: supportsRefreshing && !refreshing && progress > 0
                 color: "transparent"
                 opacity: 0.8
                 border.color: Theme.backgroundColor
-                border.width: Math.ceil(Units.smallSpacing/4)
+                border.width: Math.ceil(Units.smallSpacing)
                 //also take into account the listview header height if present
                 property real progress: supportsRefreshing && !refreshing ? ((parent.y - busyIndicatorFrame.headerItemHeight)/busyIndicatorFrame.height) : 0
             }
