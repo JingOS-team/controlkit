@@ -23,7 +23,7 @@ import QtQuick 2.7
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0 as Controls
-import org.kde.kirigami 2.4 as Kirigami
+import org.kde.kirigami 2.5 as Kirigami
 import "private"
 
 import "templates" as T
@@ -246,13 +246,14 @@ T.InlineMessage {
             }
         }
 
-        RowLayout {
+        Kirigami.ActionToolBar {
             id: actionsLayout
 
+            flat: false
+            actions: root.actions
             visible: root.actions.length
 
             Layout.alignment: Qt.AlignRight
-            Layout.fillWidth: true
 
             Layout.row: {
                 if (messageTextMetrics.width + Kirigami.Units.smallSpacing >
@@ -266,124 +267,11 @@ T.InlineMessage {
             Layout.column: Layout.row ? 0 : 2
             Layout.columnSpan: Layout.row ? (closeButton.visible ? 3 : 2) : 1
 
-            property var overflowSet: []
-
-            spacing: Kirigami.Units.smallSpacing
-
-            // TODO Use Array.findIndex once we depend on Qt 5.9+.
-            function findIndex(array, cb) {
-                for (var i = 0, length = array.length; i < length; ++i) {
-                    if (cb(array[i])) {
-                        return i;
-                    }
-                }
-                return -1;
-            }
-
             TextMetrics {
                 id: messageTextMetrics
 
                 font: text.font
                 text: text.text
-            }
-
-            Repeater {
-                model: root.actions
-
-                //TODO: use a normal button when we can depend from Qt 5.10
-                delegate: PrivateActionToolButton {
-                    id: actionButton
-
-                    flat: false
-                    kirigamiAction: modelData
-                    visible: modelData.visible && fits
-
-                    Layout.alignment: Qt.AlignVCenter
-                    Layout.minimumWidth: implicitWidth
-
-                    readonly property bool fits: {
-                        var minX = 0;
-
-                        for (var i = 0; i < index; ++i) {
-                            if (actionsLayout.children[i].visible) {
-                                minX += actionsLayout.children[i].implicitWidth + actionsLayout.spacing;
-                            }
-                        }
-
-                        return minX + implicitWidth < contentLayout.width - moreButton.width;
-                    }
-
-                    onFitsChanged: updateOverflowSet()
-
-                    function updateOverflowSet() {
-                        var index = actionsLayout.findIndex(actionsLayout.overflowSet, function(act){
-                            return act == modelData});
-
-                        if ((fits || !modelData.visible) && index > -1) {
-                            actionsLayout.overflowSet.splice(index, 1);
-                        } else if (!fits && modelData.visible && index == -1) {
-                            actionsLayout.overflowSet.push(modelData);
-                        }
-
-                        actionsLayout.overflowSetChanged();
-                    }
-
-                    Connections {
-                        target: modelData
-
-                        onVisibleChanged: actionButton.updateOverflowSet();
-                    }
-
-                    Component.onCompleted: updateOverflowSet();
-                }
-            }
-
-            Controls.ToolButton {
-                id: moreButton
-
-                visible: actionsLayout.overflowSet.length > 0
-
-                checked: menu.visible
-
-                onClicked: menu.visible ? menu.close() : menu.open()
-
-                Kirigami.Icon {
-                    anchors.fill: parent
-                    source: "overflow-menu"
-                    anchors.margins: 4
-                }
-
-                Controls.Menu {
-                    id: menu
-                    y: -height
-                    x: -width + moreButton.width
-
-                    Repeater {
-                        model: root.actions
-
-                        delegate: BasicListItem {
-                            enabled: modelData.enabled
-
-                            checkable: modelData.checkable
-                            checked: modelData.checked
-
-                            text: modelData ? modelData.text : ""
-                            icon: modelData.icon
-
-                            onClicked: {
-                                modelData.trigger();
-                                menu.visible = false;
-                            }
-
-                            separatorVisible: false
-
-                            backgroundColor: "transparent"
-
-                            visible: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {
-                                return act == modelData}) > -1 && modelData.visible
-                        }
-                    }
-                }
             }
         }
 

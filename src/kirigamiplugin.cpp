@@ -170,6 +170,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //2.5
     qmlRegisterType(componentUrl(QStringLiteral("ListItemDragHandle.qml")), uri, 2, 5, "ListItemDragHandle");
+    qmlRegisterType(componentUrl(QStringLiteral("ActionToolBar.qml")), uri, 2, 5, "ActionToolBar");
 
     qmlProtectModule(uri, 2);
 }

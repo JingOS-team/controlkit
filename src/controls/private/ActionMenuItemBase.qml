@@ -33,6 +33,4 @@ Controls.MenuItem {
     onTriggered: {
         ourAction.trigger()
     }
-
-    readonly property var ourMenu: theMenu.submenuComponent ? theMenu.submenuComponent.createObject(menuItem, { actions: ourAction.children }) : null
 }

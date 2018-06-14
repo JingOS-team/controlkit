@@ -25,11 +25,9 @@ Controls.Menu
     id: theMenu
     property alias actions: actionsInstantiator.model
     property Component submenuComponent
+    //renamed to work on both Qt 5.9 and 5.10
+    property Component itemDelegate: Component {ActionMenuItem {}}
 
-    Component {
-        id: menuItemComponent
-        ActionMenuItem {}
-    }
     Instantiator {
         id: actionsInstantiator
 
@@ -41,7 +39,7 @@ Controls.Menu
 
             function create() {
                 if (!action.children || action.children.length === 0) {
-                    item = menuItemComponent.createObject(null, { ourAction: action });
+                    item = theMenu.itemDelegate.createObject(null, { ourAction: action });
                     theMenu.addItem(item)
                 } else if (theMenu.submenuComponent) {
                     item = theMenu.submenuComponent.createObject(null, { title: action.text, actions: action.children });

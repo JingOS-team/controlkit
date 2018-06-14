@@ -20,7 +20,7 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.0 as Controls
-import org.kde.kirigami 2.4 as Kirigami
+import org.kde.kirigami 2.5 as Kirigami
 import "private"
 
 /**
@@ -96,98 +96,9 @@ Kirigami.AbstractCard {
         header.anchors.bottomMargin = Qt.binding(function() {return root.headerOrientation == Qt.Horizontal ? -root.bottomPadding : 0});
     }
 
-    footer: RowLayout {
-        id: actionsLayout
-        spacing: Kirigami.Units.smallSpacing
-        property var overflowSet: []
-        visible: root.footer == actionsLayout
-
-        // TODO use Array.findIndex once we depend on Qt 5.9
-        function findIndex(array, cb) {
-            for (var i = 0, length = array.length; i < length; ++i) {
-                if (cb(array[i])) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        Repeater {
-            model: root.actions
-            delegate: PrivateActionToolButton {
-                id: actionDelegate
-                readonly property bool fits: {
-                    var minX = 0;
-                    for (var i = 0; i < index; ++i) {
-                        if (actionsLayout.children[i].visible) {
-                            minX += actionsLayout.children[i].implicitWidth + actionsLayout.spacing;
-                        }
-                    }
-                    return minX + implicitWidth < root.width - root.leftPadding - root.rightPadding - moreButton.width;
-                }
-                visible: modelData.visible && fits
-                Layout.fillWidth: true
-                Layout.minimumWidth: implicitWidth
-                kirigamiAction: modelData
-                onFitsChanged: updateOverflowSet()
-                function updateOverflowSet() {
-                    var index = actionsLayout.findIndex(actionsLayout.overflowSet, function(act){
-                        return act == modelData});
-
-                    if ((fits || !modelData.visible) && index > -1) {
-                        actionsLayout.overflowSet.splice(index, 1);
-                    } else if (!fits && modelData.visible && index == -1) {
-                        actionsLayout.overflowSet.push(modelData);
-                    }
-                    actionsLayout.overflowSetChanged();
-                }
-                Connections {
-                    target: modelData
-                    onVisibleChanged: actionDelegate.updateOverflowSet();
-                }
-                Component.onCompleted: {
-                    actionDelegate.updateOverflowSet();
-                }
-            }
-        }
-        Controls.ToolButton {
-            id: moreButton
-
-            Kirigami.Icon {
-                anchors.fill: parent
-                source: "overflow-menu"
-                anchors.margins: 4
-            }
-            Layout.alignment: Qt.AlignRight
-            //checkable: true
-            checked: menu.visible
-            visible: actionsLayout.overflowSet.length > 0;
-            onClicked: menu.visible ? menu.close() : menu.open()
-
-            Controls.Menu {
-                id: menu
-                y: -height
-                x: -width + moreButton.width
-
-                Repeater {
-                    model: root.actions
-                    delegate: BasicListItem {
-                        text: modelData ? modelData.text : ""
-                        icon: modelData.icon
-                        checkable:  modelData.checkable
-                        checked: modelData.checked
-                        onClicked: {
-                            modelData.trigger();
-                            menu.visible = false;
-                        }
-                        separatorVisible: false
-                        backgroundColor: "transparent"
-                        visible: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {
-                                return act == modelData}) > -1 && modelData.visible
-                        enabled: modelData.enabled
-                    }
-                }
-            }
-        }
+    footer: Kirigami.ActionToolBar {
+        id: actionsToolBar
+        actions: root.actions
+        visible: root.footer == actionsToolBar
     }
 }

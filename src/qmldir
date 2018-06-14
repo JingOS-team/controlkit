@@ -43,4 +43,5 @@ CardsListView 2.4 CardsListView.qml
 CardsGridView 2.4 CardsGridView.qml
 InlineMessage 2.4 InlineMessage.qml
 ListItemDragHandle 2.5 ListItemDragHandle.qml
+ActionToolBar 2.5 ActionToolBar.qml
 
