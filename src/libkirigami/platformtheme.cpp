@@ -697,6 +697,7 @@ PlatformTheme *PlatformTheme::qmlAttachedProperties(QObject *object)
         return PlatformThemePrivate::s_pluginFactory->createPlatformTheme(object);
     } else if (!s_factoryChecked) {
         s_factoryChecked = true;
+#if QT_CONFIG(library)
         for (const QString &path : QCoreApplication::libraryPaths()) {
             QDir dir(path + "/kf5/kirigami");
             for (const QString &fileName : dir.entryList(QDir::Files)) {
@@ -714,6 +715,7 @@ PlatformTheme *PlatformTheme::qmlAttachedProperties(QObject *object)
                 }
             }
         }
+#endif
     }
 
     return new BasicTheme(object);
