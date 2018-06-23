@@ -364,7 +364,7 @@ OverlayDrawer {
 
                                 separatorVisible: false
                                 visible: model ? model.visible || model.visible===undefined : modelData.visible
-                                enabled: model ? model.enabled : modelData.enabled
+                                enabled: (model && model.enabled != undefined) ? model.enabled : modelData.enabled
                                 opacity: enabled ? 1.0 : 0.3
                                 Icon {
                                     Shortcut {
@@ -383,7 +383,6 @@ OverlayDrawer {
 
                                 onClicked: {
                                     modelData.trigger();
-
                                     if (modelData.children!==undefined && modelData.children.length > 0) {
                                         stackView.push(menuComponent, {model: modelData.children, level: level + 1, current: modelData });
                                     } else if (root.resetMenuOnTriggered) {
