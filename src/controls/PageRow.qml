@@ -23,6 +23,8 @@ import QtQml.Models 2.2
 import QtQuick.Templates 2.0 as T
 import QtQuick.Controls 2.0 as QQC2
 import org.kde.kirigami 2.4
+import "private" as Private
+import "templates" as KT
 
 /**
  * PageRow implements a row-based navigation model, which can be used
@@ -98,6 +100,29 @@ T.Control {
      * @since 5.38
      */
     property bool separatorVisible: true
+
+    /**
+     * globalToolBar: grouped property
+     * Controls the appearance of an optional global toolbar for the whole PageRow.
+     * It's a grouped property comprised of the following properties:
+     * * style: (Kirigami.ApplicationHeaderStyle) can have the following values:
+     *   ** Auto: depending on application formfactor, it can behave automatically like other values, such as a Breadcrumb on mobile and ToolBar on desktop
+     *   ** Breadcrumb: it will show a breadcrumb of all the page titles in the stack, for easy navigation
+     *   ** Titles: each page will only have its own tile on top 
+     *   ** TabBar: the global toolbar will look like a TabBar to select the pages
+     *   ** ToolBar: each page will have the title on top together buttons and menus to represent all of the page actions: not available on Mobile systems.
+     *   ** None: no global toolbar will be shown
+     *
+     * * actualStyle: this will represent the actual style of the toolbar: it can be different from style in the case style is Auto
+     * * showNavigationButtons: if true, forward and backward navigation buttons will be shown on the left of the toolbar
+     * * minimumHeight: (int) minimum height of the header, which will be resized when scrolling, only in Mobile mode (default: preferredHeight, sliding but no scaling)
+    property int preferredHeight: (int) the height the toolbar will usually have (default: 42)
+    property int maximumHeight: (int) The height the toolbar will have in mobile mode when the app is in reachable mode (default: preferredHeight * 1.5)
+     * * leftReservedSpace: (int, readonly) how many pixels are reserved at the left of the page toolBar (for navigation buttons or drawer handle)
+    property int rightReservedSpace: (int, readonly) how many pixels are reserved at the right of the page toolbar (drawer handle)
+     * @since 5.48
+     */
+    readonly property alias globalToolBar: globalToolBar
 //END PROPERTIES
 
 //BEGIN FUNCTIONS
@@ -348,10 +373,23 @@ T.Control {
             script: mainView.flick(100, 0)
         }
     }
+
+    Private.PageRowGlobalToolBarStyleGroup {
+        id: globalToolBar
+        readonly property int leftReservedSpace: globalToolBarUI.item ? globalToolBarUI.item.leftReservedSpace : 0
+        readonly property int rightReservedSpace: globalToolBarUI.item ? globalToolBarUI.item.rightReservedSpace : 0
+        readonly property int height: globalToolBarUI.height
+        readonly property Item leftHandleAnchor: globalToolBarUI.item ? globalToolBarUI.item.leftHandleAnchor : null
+        readonly property Item rightHandleAnchor: globalToolBarUI.item ? globalToolBarUI.item.rightHandleAnchor : null
+    }
+
     QQC2.StackView {
         id: layersStack
         z: 99
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            topMargin: depth > 1 && globalToolBarUI.visible ? globalToolBarUI.height: 0
+        }
         initialItem: mainView
         function clear () {
             //don't let it kill the main page row
@@ -415,6 +453,20 @@ T.Control {
         }
     }
 
+    Loader {
+        id: globalToolBarUI
+        anchors {
+            left: parent.left
+            top: parent.top
+            right: parent.right
+        }
+        z: 100
+        active: globalToolBar.actualStyle != ApplicationHeaderStyle.None
+        visible: active
+        height: active ? implicitHeight : 0
+        source: Qt.resolvedUrl("private/PageRowGlobalToolBarUI.qml");
+    }
+
     ListView {
         id: mainView
         boundsBehavior: Flickable.StopAtBounds
@@ -435,6 +487,7 @@ T.Control {
                 currentItem.page.forceActiveFocus();
             }
         }
+
         model: ObjectModel {
             id: pagesLogic
             readonly property var componentCache: new Array()
@@ -569,16 +622,23 @@ T.Control {
 
             readonly property int hint: page && page.implicitWidth ? page.implicitWidth : root.defaultColumnWidth
             readonly property int roundedHint: Math.floor(root.width/hint) > 0 ? root.width/Math.floor(root.width/hint) : root.width
+            property T.Control __pageRow: root
+
+            property Item footer
 
             property Item page
-            property Item owner
             onPageChanged: {
                 if (page) {
                     owner = page.parent;
                     page.parent = container;
-                    page.anchors.fill = container;
+                    page.anchors.left = container.left;
+                    page.anchors.top = container.top;
+                    page.anchors.right = container.right;
+                    page.anchors.bottom = container.bottom;
+                    page.anchors.topMargin = Qt.binding(function() {return globalToolBarUI.height});
                 }
             }
+            property Item owner
             drag.filterChildren: true
             onClicked: {
                 switch (mouse.button) {
@@ -602,11 +662,13 @@ T.Control {
             Separator {
                 z: 999
                 anchors {
-                    top: parent.top
+                    top: page ? page.top : parent.top
                     bottom: parent.bottom
                     left: parent.left
+                    //ensure a sharp angle
+                    topMargin: -width
                 }
-                visible: root.separatorVisible && container.level > 0
+                visible: root.separatorVisible && mainView.contentX < container.x
             }
             states: [
                 State {

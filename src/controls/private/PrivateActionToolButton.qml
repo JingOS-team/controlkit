@@ -25,15 +25,16 @@ import org.kde.kirigami 2.4
 Controls.ToolButton {
     id: control
 
-    implicitWidth: showText && ( kirigamiAction ? kirigamiAction.text.length > 0 : text.length > 0) ? Math.max(background.implicitWidth, control.background.contentWidth) : implicitHeight
+    implicitWidth: showText && ( kirigamiAction ? kirigamiAction.text.length > 0 : text.length > 0) ? Math.max(layout.implicitWidth + Units.largeSpacing*2, background.implicitWidth) : implicitHeight
     implicitHeight: background.implicitHeight
 
     Theme.colorSet: Theme.Button
-    Theme.inherit: false
+    Theme.inherit: kirigamiAction && kirigamiAction.icon.color.a === 0
     Theme.backgroundColor: kirigamiAction && kirigamiAction.icon.color.a ? kirigamiAction.icon.color : undefined
-    Theme.textColor: kirigamiAction && kirigamiAction.icon.color.a ? Theme.highlightedTextColor : undefined
+    Theme.textColor: kirigamiAction && !flat && kirigamiAction.icon.color.a ? Theme.highlightedTextColor : undefined
 
     hoverEnabled: true
+    flat: true
     //TODO: replace with upstream action when we depend on Qt 5.10
     property Action kirigamiAction
     property bool showText: true
@@ -72,11 +73,11 @@ Controls.ToolButton {
     contentItem: MouseArea {
         hoverEnabled: true
         onPressed: mouse.accepted = false
-        Theme.colorSet: checked || (!control.flat && control.kirigamiAction && control.kirigamiAction.icon.color.a) ? Theme.Selection : Theme.Button
-        Theme.inherit: false
+        Theme.colorSet: checked && (!control.flat && control.kirigamiAction && control.kirigamiAction.icon.color.a) ? Theme.Selection : Theme.Button
+        Theme.inherit: control.kirigamiAction && Theme.colorSet != Theme.Selection && control.kirigamiAction.icon.color.a == 0
         RowLayout {
             id: layout
-            onImplicitWidthChanged: control.background.contentWidth = implicitWidth + 16
+
             anchors.centerIn: parent
             Icon {
                 id: mainIcon

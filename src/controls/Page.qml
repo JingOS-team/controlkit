@@ -207,11 +207,11 @@ T2.Page {
      *
      * @since 2.1
      */
-    readonly property bool isCurrentPage: typeof applicationWindow === "undefined" || !applicationWindow().pageStack
+    readonly property bool isCurrentPage: typeof applicationWindow === "undefined" || !globalToolBar.row
                 ? true
-                : (applicationWindow().pageStack.layers.depth > 1
-                    ? applicationWindow().pageStack.layers.currentItem == root
-                    : applicationWindow().pageStack.currentItem == root)
+                : (globalToolBar.row.layers.depth > 1
+                    ? globalToolBar.row.layers.currentItem == root
+                    : globalToolBar.row.currentItem == root)
 
     PageActionPropertyGroup {
         id: actionsGroup
@@ -246,8 +246,68 @@ T2.Page {
         }
     }
 
-    //on material the shadow would bleed over
-    clip: header !== undefined
+    //FIXME: on material the shadow would bleed over
+    clip: root.header != null;
+    
+    Component.onCompleted: {
+        parentChanged(root.parent);
+    }
+    onParentChanged: {
+        if (!parent) {
+            return;
+        }
+        globalToolBar.stack = null;
+        globalToolBar.row = null;
+
+        if (root.parent.hasOwnProperty("__pageRow")) {
+            globalToolBar.row = root.parent.__pageRow;
+        }
+        if (root.T2.StackView.view) {
+            globalToolBar.stack = root.T2.StackView.view;
+            globalToolBar.row = root.T2.StackView.view.parent;
+        }
+        if (globalToolBar.row) {
+            globalToolBar.row.globalToolBar.actualStyleChanged.connect(globalToolBar.syncSource);
+            globalToolBar.syncSource();
+        }
+    }
+
+    //global top toolbar if we are in a PageRow (in the row or as a layer)
+    Loader {
+        id: globalToolBar
+        z: 9999
+        parent: root.clip ? root.parent : root
+        height: item ? item.implicitHeight : 0
+        anchors {
+            left:  parent ? root.left : undefined
+            right: parent ? root.right : undefined
+            bottom: parent ? root.top : undefined
+        }
+        property Kirigami.PageRow row
+        property T2.StackView stack
+
+        active: row && (row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar || globalToolBar.row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Titles)
+
+        function syncSource() {
+            if (row && active) {
+                setSource(Qt.resolvedUrl(row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar ? "private/ToolBarPageHeader.qml" : "private/TitlesPageHeader.qml"),
+                //TODO: find container reliably, remove assumption
+                {"pageRow": Qt.binding(function() {return row}),
+                 "page": root,
+                 "current": Qt.binding(function() {return stack || !root.parent ? true : row.currentIndex == root.parent.level})});
+            }
+        }
+
+        Separator {
+            z: 999
+            anchors.verticalCenter: globalToolBar.verticalCenter
+            height: globalToolBar.height * 0.6
+            visible: globalToolBar.row && root.parent && globalToolBar.row.contentItem.contentX < root.parent.x - globalToolBar.row.globalToolBar.leftReservedSpace
+            Kirigami.Theme.textColor: globalToolBar.item ? globalToolBar.item.Kirigami.Theme.textColor : undefined
+        }
+    }
+
+    //bottom action buttons
     Loader {
         id: actionButtons
         z: 9999
@@ -260,9 +320,12 @@ T2.Page {
         //It should be T2.Page, Qt 5.7 doesn't like it
         property Item page: root
         height: item ? item.height : 0
-        source: typeof applicationWindow !== "undefined" && ((applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0) ||
-                (applicationWindow().footer && applicationWindow().footer.visible && applicationWindow().footer.toString().indexOf("ToolBarApplicationHeader") === 0))
-                ? "" : Qt.resolvedUrl("./private/ActionButton.qml")
+        active: typeof applicationWindow !== "undefined" && (!globalToolBar.row || globalToolBar.row.globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.ToolBar) &&
+               //Legacy
+                (typeof applicationWindow === "undefined" ||
+                 (!applicationWindow().header || applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === -1) &&
+                 (!applicationWindow().footer || applicationWindow().footer.toString().indexOf("ToolBarApplicationHeader") === -1))
+        source: Qt.resolvedUrl("./private/ActionButton.qml")
     }
 
     Layout.fillWidth: true

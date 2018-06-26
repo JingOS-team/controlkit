@@ -26,8 +26,8 @@ import org.kde.kirigami 2.4
 Controls.ToolButton {
     id: button
 
-    enabled: !Settings.isMobile && (__appWindow.pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0)
-    visible: applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
+    enabled: applicationWindow().pageStack.layers.depth > 1 ||applicationWindow().pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0
+    visible: applicationWindow().pageStack.layers.depth > 1 || applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
     width: height
     height: parent.height
 
@@ -43,7 +43,6 @@ Controls.ToolButton {
         width: Math.min(parent.width, Units.iconSizes.smallMedium)
         height: width
         opacity: parent.enabled ? 1 : 0.6
-        selected: header.background && header.background.color && header.background.color == Theme.highlightColor
         source: (LayoutMirroring.enabled ? "go-previous-symbolic-rtl" : "go-previous-symbolic")
     }
     Controls.ToolTip {

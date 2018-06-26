@@ -66,7 +66,15 @@ T.OverlayDrawer {
                     width: height
                     height: Units.iconSizes.smallMedium
                     source: {
-                        switch(root.edge) {
+                        var edge = root.edge;
+                        if (Qt.application.layoutDirection == Qt.RightToLeft) {
+                            if (edge == Qt.LeftEdge) {
+                                edge = Qt.RightEdge;
+                            } else {
+                                edge = Qt.LeftEdge;
+                            }
+                        }
+                        switch(edge) {
                         case Qt.LeftEdge:
                             return Qt.resolvedUrl("templates/private/MenuIcon.qml");
                         case Qt.RightEdge: {

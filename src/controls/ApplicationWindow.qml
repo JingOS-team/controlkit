@@ -114,6 +114,7 @@ AbstractApplicationWindow {
 
     PageRow {
         id: __pageStack
+        globalToolBar.style: Kirigami.ApplicationHeaderStyle.Auto
         anchors {
             fill: parent
             //HACK: workaround a bug in android iOS keyboard management

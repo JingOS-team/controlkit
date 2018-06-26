@@ -95,7 +95,8 @@ AbstractApplicationHeader {
                 color: header.background && header.background.color && header.background.color == Theme.highlightColor ? Theme.highlightedTextColor : Theme.textColor
                 elide: Text.ElideRight
                 text: page ? page.title : ""
-                font.pointSize: Math.max(1, titleList.height / (1.6 * Units.devicePixelRatio))
+                font.pointSize: -1
+                font.pixelSize: Math.max(1, titleList.height * 0.7)
                 verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.NoWrap
                 Rectangle {
@@ -206,10 +207,10 @@ AbstractApplicationHeader {
         }
     }
     Repeater {
-        model: __appWindow.pageStack.layers.depth -1
+        model: pageRow.layers.depth -1
         delegate: Loader {
             sourceComponent: header.pageDelegate
-            readonly property Page page: __appWindow.pageStack.layers.get(modelData+1)
+            readonly property Page page: pageRow.layers.get(modelData+1)
             readonly property bool current: true;
             Component.onCompleted: stack.push(this)
             Component.onDestruction: stack.pop()
@@ -233,7 +234,7 @@ AbstractApplicationHeader {
 
     Flickable {
         id: titleList
-        readonly property bool wideMode: typeof __appWindow.pageStack.wideMode !== "undefined" ?  __appWindow.pageStack.wideMode : __appWindow.wideMode
+        readonly property bool wideMode: header.headerStyle != ApplicationHeaderStyle.Breadcrumb && typeof pageRow.wideMode !== "undefined" ?  pageRow.wideMode : __appWindow.wideMode
         property int internalHeaderStyle: header.headerStyle == ApplicationHeaderStyle.Auto ? (titleList.wideMode ? ApplicationHeaderStyle.Titles : ApplicationHeaderStyle.Breadcrumb) : header.headerStyle
         //if scrolling the titlebar should scroll also the pages and vice versa
         property bool scrollingLocked: (header.headerStyle == ApplicationHeaderStyle.Titles || titleList.wideMode)
@@ -251,7 +252,7 @@ AbstractApplicationHeader {
         contentWidth: contentItem.width
         contentHeight: height
 
-        readonly property int currentIndex: __appWindow.pageStack && __appWindow.pageStack.currentIndex !== undefined ? __appWindow.pageStack.currentIndex : 0
+        readonly property int currentIndex: pageRow && pageRow.currentIndex !== undefined ? pageRow.currentIndex : 0
         readonly property int count: mainRepeater.count
 
         function gotoIndex(idx) {
@@ -280,7 +281,7 @@ AbstractApplicationHeader {
             id: contentXSyncTimer
             interval: 0
             onTriggered: {
-                titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
+                titleList.contentX = pageRow.contentItem.contentX - pageRow.contentItem.originX + titleList.originX;
             }
         }
         onCountChanged: contentXSyncTimer.restart();
@@ -289,9 +290,9 @@ AbstractApplicationHeader {
         onContentWidthChanged: gotoIndex(currentIndex);
 
         onContentXChanged: {
-            if (movingHorizontally && !titleList.scrollMutex && titleList.scrollingLocked && !__appWindow.pageStack.contentItem.moving) {
+            if (movingHorizontally && !titleList.scrollMutex && titleList.scrollingLocked && !pageRow.contentItem.moving) {
                 titleList.scrollMutex = true;
-                __appWindow.pageStack.contentItem.contentX = titleList.contentX - titleList.originX + __appWindow.pageStack.contentItem.originX;
+                pageRow.contentItem.contentX = titleList.contentX - titleList.originX + pageRow.contentItem.originX;
                 titleList.scrollMutex = false;
             }
         }
@@ -301,14 +302,14 @@ AbstractApplicationHeader {
         onMovementEnded: {
             if (titleList.scrollingLocked) {
                 //this will trigger snap as well
-                __appWindow.pageStack.contentItem.flick(0,0);
+                pageRow.contentItem.flick(0,0);
             }
         }
         onFlickEnded: movementEnded();
 
         NumberAnimation {
             id: scrollTopAnimation
-            target: __appWindow.pageStack.currentItem && __appWindow.pageStack.currentItem.flickable ? __appWindow.pageStack.currentItem.flickable : null
+            target: pageRow.currentItem && pageRow.currentItem.flickable ? pageRow.currentItem.flickable : null
             property: "contentY"
             to: 0
             duration: Units.longDuration
@@ -320,7 +321,7 @@ AbstractApplicationHeader {
             spacing: 0
             Repeater {
                 id: mainRepeater
-                model: __appWindow.pageStack.depth
+                model: pageRow.depth
                 delegate: MouseArea {
                     id: delegate
                     readonly property int currentIndex: index
@@ -330,7 +331,7 @@ AbstractApplicationHeader {
                     width: {
                         //more columns shown?
                         if (titleList.scrollingLocked && delegateLoader.page) {
-                            return delegateLoader.page.width - (index == 0 ? navButtons.width : 0) - (index == __appWindow.pageStack.depth-1  ? stack.anchors.rightMargin : 0);
+                            return delegateLoader.page.width - (index == 0 ? navButtons.width : 0) - (index == pageRow.depth-1  ? stack.anchors.rightMargin : 0);
                         } else {
                             return Math.min(titleList.width, delegateLoader.implicitWidth + Units.smallSpacing);
                         }
@@ -338,18 +339,18 @@ AbstractApplicationHeader {
 
                     height: titleList.height
                     onClicked: {
-                        if (__appWindow.pageStack.currentIndex == modelData) {
+                        if (pageRow.currentIndex == modelData) {
                             //scroll up if current otherwise make current
-                            if (!__appWindow.pageStack.currentItem.flickable) {
+                            if (!pageRow.currentItem.flickable) {
                                 return;
                             }
-                            if (__appWindow.pageStack.currentItem.flickable.contentY > -__appWindow.header.height) {
-                                scrollTopAnimation.to = -__appWindow.pageStack.currentItem.flickable.topMargin;
+                            if (pageRow.currentItem.flickable.contentY > -__appWindow.header.height) {
+                                scrollTopAnimation.to = -pageRow.currentItem.flickable.topMargin;
                                 scrollTopAnimation.running = true;
                             }
 
                         } else {
-                            __appWindow.pageStack.currentIndex = modelData;
+                            pageRow.currentIndex = modelData;
                         }
                     }
 
@@ -366,11 +367,11 @@ AbstractApplicationHeader {
 
                         sourceComponent: header.pageDelegate
 
-                        readonly property Page page: __appWindow.pageStack.get(modelData)
+                        readonly property Page page: pageRow.get(modelData)
                         //NOTE: why not use ListViewCurrentIndex? because listview itself resets
                         //currentIndex in some situations (since here we are using an int as a model,
                         //even more often) so the property binding gets broken
-                        readonly property bool current: __appWindow.pageStack.currentIndex == index
+                        readonly property bool current: pageRow.currentIndex == index
                         readonly property int index: parent.currentIndex
                         readonly property var modelData: parent.currentModelData
                     }
@@ -378,10 +379,10 @@ AbstractApplicationHeader {
             }
         }
         Connections {
-            target: titleList.scrollingLocked ? __appWindow.pageStack.contentItem : null
+            target: titleList.scrollingLocked ? pageRow.contentItem : null
             onContentXChanged: {
                 if (!titleList.dragging && !titleList.movingHorizontally && !titleList.scrollMutex) {
-                    titleList.contentX = __appWindow.pageStack.contentItem.contentX - __appWindow.pageStack.contentItem.originX + titleList.originX;
+                    titleList.contentX = pageRow.contentItem.contentX - pageRow.contentItem.originX + titleList.originX;
                 }
             }
         }

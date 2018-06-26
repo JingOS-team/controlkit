@@ -105,14 +105,22 @@ T2.Drawer {
         id: drawerHandle
         z: root.modal ? applicationWindow().overlay.z + (root.position > 0 ? +1 : -1) : root.background.parent.z + 1
         preventStealing: true
-        hoverEnabled: desktopMode
+        hoverEnabled: handleAnchor
         parent: applicationWindow().overlay.parent
 
+        property Item handleAnchor: (!Settings.isMobile && applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar && applicationWindow().pageStack.globalToolBar.actualStyle != ApplicationHeaderStyle.None)
+                ? (root.edge == Qt.LeftEdge
+                   ? applicationWindow().pageStack.globalToolBar.leftHandleAnchor
+                   : applicationWindow().pageStack.globalToolBar.rightHandleAnchor)
+                : (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") !== -1 ? applicationWindow().header : null)
+        //FIXME: temporary solution, we need a scenepostracker item
+        onHandleAnchorChanged: {
+            handleAnchor.parent.yChanged.connect(handleAnchor.yChanged);
+        }
         property int startX
         property int mappedStartX
 
-        property bool desktopMode: applicationWindow() && applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") !== -1
-        enabled: root.handleVisible && root.modal
+        enabled: root.handleVisible
 
         onPressed: {
             root.peeking = true;
@@ -150,19 +158,17 @@ T2.Drawer {
         x: {
             switch(root.edge) {
             case Qt.LeftEdge:
-                return root.background.width * root.position;
+                return root.background.width * root.position + Units.smallSpacing;
             case Qt.RightEdge:
-                return drawerHandle.parent.width - (root.background.width * root.position) - width;
+                return drawerHandle.parent.width - (root.background.width * root.position) - width - Units.smallSpacing;
             default:
                 return 0;
             }
         }
+        y: handleAnchor && anchors.bottom ? handleAnchor.parent.mapToItem(root.contentItem, 0, handleAnchor.y).y : 0
 
         anchors {
-            top: drawerHandle.desktopMode ? parent.top : undefined
-
-            bottom: drawerHandle.desktopMode ? undefined : parent.bottom
-
+            bottom: drawerHandle.handleAnchor ? undefined : parent.bottom
             bottomMargin: {
                 if (!applicationWindow()) {
                     return;
@@ -207,8 +213,8 @@ T2.Drawer {
         }
 
         visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
-        width: Units.iconSizes.medium + Units.smallSpacing*2
-        height: width
+        width: handleAnchor ? handleAnchor.width : Units.iconSizes.medium + Units.smallSpacing*2
+        height: handleAnchor ? handleAnchor.height : width
         opacity: root.handleVisible ? 1 : 0
         Behavior on opacity {
             NumberAnimation {

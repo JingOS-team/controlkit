@@ -39,6 +39,7 @@ ApplicationHeader {
     //FIXME: needs a property difinition to have its own type in qml
     property string _internal: ""
 
+    Component.onCompleted: print("Warning: ToolbarApplicationHeader is deprecated, remove and use the automatic internal toolbar instead.")
     pageDelegate: Item {
         id: delegateItem
         readonly property bool current: __appWindow.pageStack.currentIndex == index

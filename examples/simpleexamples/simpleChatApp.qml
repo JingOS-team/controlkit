@@ -25,7 +25,7 @@ import org.kde.kirigami 2.4 as Kirigami
 Kirigami.ApplicationWindow {
     id: root
 
-    header: Kirigami.ToolBarApplicationHeader {}
+    //header: Kirigami.ToolBarApplicationHeader {}
     //FIXME: perhaps the default logic for going widescreen should be refined upstream
     wideScreen: width > columnWidth * 3
     property int columnWidth: Kirigami.Units.gridUnit * 13
@@ -56,7 +56,7 @@ Kirigami.ApplicationWindow {
     contextDrawer: Kirigami.OverlayDrawer {
         id: contextDrawer
         //they can depend on the page like that or be defined directly here
-        edge: Qt.RightEdge
+        edge: Qt.application.layoutDirection == Qt.RightToLeft ? Qt.LeftEdge : Qt.RightEdge
         modal: !root.wideScreen
         onModalChanged: drawerOpen = !modal
         handleVisible: applicationWindow == undefined ? false : applicationWindow().controlsVisible

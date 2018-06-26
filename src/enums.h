@@ -32,7 +32,9 @@ public:
         Auto = 0,
         Breadcrumb,
         Titles,
-        TabBar
+        TabBar,
+        ToolBar, ///@since 5.48
+        None ///@since 5.48
     };
 };
 
