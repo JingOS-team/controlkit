@@ -210,6 +210,7 @@ PlatformTheme::~PlatformTheme()
     if (d->m_parentTheme) {
         d->m_parentTheme->d->m_childThemes.remove(this);
     }
+    delete d;
 }
 
 void PlatformTheme::setColorSet(PlatformTheme::ColorSet colorSet)
