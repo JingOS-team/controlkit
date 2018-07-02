@@ -31,7 +31,7 @@ Rectangle {
         anchors.fill: parent
         visible: !Settings.tabletMode && listItem.supportsMouseEvents
         color: listItem.activeBackgroundColor
-        opacity: (listItem.hovered || listItem.highlighted) && !listItem.pressed ? (indicateActiveFocus ? 0.2 : 0.1 ) : 0
+        opacity: (listItem.hovered || listItem.highlighted) && !listItem.pressed ? 0.5 : 0
         Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
     }
     Behavior on color {
