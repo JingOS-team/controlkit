@@ -238,7 +238,7 @@ T2.ItemDelegate {
                 delegate: Icon {
                     height: actionsLayout.height
                     width: height
-                    source: modelData.iconName
+                    source: modelData.iconName != "" ? modelData.iconName : modelData.iconSource
                     enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
                     visible: (modelData && modelData.visible !== undefined) ? modelData.visible : true;
                     MouseArea {

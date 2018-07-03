@@ -435,6 +435,12 @@ QImage DesktopIcon::findIcon(const QSize &size)
         QUrl iconUrl(iconSource);
         QString iconProviderId = iconUrl.host();
         QString iconId = iconUrl.path();
+
+        // QRC paths are not correctly handled by .path()
+        if (iconId.size() >=2 && iconId.startWith(QLatin1String("/:"))) {
+            iconId = iconId.remove(0, 1);
+        }
+
         QSize actualSize;
         QQuickImageProvider* imageProvider = dynamic_cast<QQuickImageProvider*>(
                     qmlEngine(this)->imageProvider(iconProviderId));
