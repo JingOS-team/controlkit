@@ -63,7 +63,15 @@ AbstractListItem {
         property bool indicateActiveFocus: listItem.pressed || Settings.tabletMode || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
         Icon {
             id: iconItem
-            source: listItem.icon && listItem.icon.hasOwnProperty && listItem.icon.hasOwnProperty("name") ? listItem.icon.name : listItem.icon
+            source: {
+                if (listItem.icon && listItem.icon.hasOwnProperty) {
+                    if (listItem.icon.hasOwnProperty("name") && listItem.icon.name != "")
+                        return listItem.icon.name;
+                    if (listItem.icon.hasOwnProperty("source"))
+                        return listItem.icon.source;
+                }
+                return listItem.icon;
+            }
             Layout.minimumHeight: Units.iconSizes.smallMedium
             Layout.maximumHeight: Layout.minimumHeight
             Layout.minimumWidth: height
