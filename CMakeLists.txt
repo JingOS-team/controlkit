@@ -32,7 +32,9 @@ include(CPack)
 include(FeatureSummary)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Gui Svg QuickControls2)
-find_package(Qt5Test ${REQUIRED_QT_VERSION} CONFIG QUIET)
+if (BUILD_TESTING)
+    find_package(Qt5Test ${REQUIRED_QT_VERSION} CONFIG QUIET)
+endif()
 
 set(CMAKE_AUTOMOC ON)
 set(AUTOMOC_MOC_OPTIONS -Muri=org.kde.kirigami)
@@ -43,7 +45,9 @@ if(STATIC_LIBRARY)
     add_definitions(-DQT_PLUGIN)
     add_definitions(-DQT_STATICPLUGIN=1)
 else(STATIC_LIBRARY)
-    add_subdirectory(autotests)
+    if (BUILD_TESTING)
+        add_subdirectory(autotests)
+    endif()
 endif(STATIC_LIBRARY)
 
 ################# set KDE specific information #################
