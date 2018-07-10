@@ -55,7 +55,7 @@ T.OverlayDrawer {
             }
             Rectangle {
                 id: handleGraphics
-                anchors.centerIn: parent
+                anchors.fill:parent
                 color: root.handle.pressed ? Theme.highlightColor : Theme.backgroundColor
                 width: Units.iconSizes.medium
                 height: width
