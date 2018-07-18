@@ -19,6 +19,7 @@
 
 import QtQuick 2.6
 import QtQuick.Templates 2.0 as T2
+import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.4
@@ -176,6 +177,28 @@ OverlayDrawer {
     property alias topContent: topContent.data
 
     /**
+     * showContentWhenCollapsed: bool
+     * If true, when the drawer is collapsed as a sidebar, the content items
+     * at the bottom will be hidden (default true).
+     * If you want to keep some items visible and some invisible, set this to 
+     * false and control the visibility/opacity of individual items,
+     * binded to the collapsed property
+     * @since 2.5
+     */
+    property bool hideContentWhenCollapsed: true
+
+    /**
+     * showContentWhenCollapsed: bool
+     * If true, when the drawer is collapsed as a sidebar, the top content items
+     * at the top will be hidden (default true).
+     * If you want to keep some items visible and some invisible, set this to 
+     * false and control the visibility/opacity of individual items,
+     * binded to the collapsed property
+     * @since 2.5
+     */
+    property bool hideTopContentWhenCollapsed: true
+
+    /**
      * resetMenuOnTriggered: bool
      *
      * On the actions menu, whenever a leaf action is triggered, the menu
@@ -214,6 +237,7 @@ OverlayDrawer {
         anchors.fill: parent
         implicitWidth: Math.min (Units.gridUnit * 20, root.parent.width * 0.8)
         horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
+
         Flickable {
             id: mainFlickable
             contentWidth: width
@@ -224,23 +248,76 @@ OverlayDrawer {
                 spacing: 0
                 height: Math.max(root.height, Layout.minimumHeight)
 
-                BannerImage {
-                    id: bannerImage
+                //TODO: cable visible of bannerimage
+                Item {
+                    implicitHeight: root.collapsible ? Math.max(collapseButton.height + Units.smallSpacing, bannerImage.Layout.preferredHeight) : bannerImage.Layout.preferredHeight
 
                     Layout.fillWidth: true
 
-                    fillMode: Image.PreserveAspectCrop
-                    MouseArea {
+                    BannerImage {
+                        id: bannerImage
                         anchors.fill: parent
-                        onClicked: root.bannerClicked()
+                        opacity: !root.collapsed
+                        fillMode: Image.PreserveAspectCrop
+
+                        Behavior on opacity {
+                            OpacityAnimator {
+                                duration: Units.longDuration
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+                        leftPadding: root.collapsible ? collapseButton.width + Units.smallSpacing*2 : topPadding
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: root.bannerClicked()
+                        }
+                        EdgeShadow {
+                            edge: Qt.BottomEdge
+                            visible: bannerImageSource != ""
+                            anchors {
+                                left: parent.left
+                                right: parent.right
+                                bottom: parent.top
+                            }
+                        }
                     }
-                    EdgeShadow {
-                        edge: Qt.BottomEdge
-                        visible: bannerImageSource != ""
+                    PrivateActionToolButton {
+                        id: collapseButton
                         anchors {
+                            top: parent.top
                             left: parent.left
-                            right: parent.right
-                            bottom: parent.top
+                            topMargin: root.collapsed || (root.title.length == 0 && root.titleIcon.length == 0) ? 0 : Units.smallSpacing + Units.iconSizes.large/2 - height/2
+                            leftMargin: root.collapsed || (root.title.length == 0 && root.titleIcon.length == 0) ? 0 : Units.smallSpacing
+                            Behavior on leftMargin {
+                                NumberAnimation {
+                                    duration: Units.longDuration
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
+                            Behavior on topMargin {
+                                NumberAnimation {
+                                    duration: Units.longDuration
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
+                        }
+
+                        width: Units.iconSizes.smallMedium + Units.largeSpacing * 2
+                        height: width
+
+                        Behavior on y {
+                            YAnimator {
+                                duration: Units.longDuration
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+
+                        visible: root.collapsible
+                        kirigamiAction: Action {
+                            icon.name: "application-menu"
+                            checkable: true
+                            checked: !root.collapsed
+                            onCheckedChanged: root.collapsed = !checked
                         }
                     }
                 }
@@ -255,10 +332,19 @@ OverlayDrawer {
                     Layout.topMargin: root.topPadding
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    Layout.preferredHeight: implicitHeight * opacity
                     //NOTE: why this? just Layout.fillWidth: true doesn't seem sufficient
                     //as items are added only after this column creation
                     Layout.minimumWidth: parent.width - root.leftPadding - root.rightPadding
-                    visible: children.length > 0 && childrenRect.height > 0
+                    visible: children.length > 0 && childrenRect.height > 0 && opacity > 0
+                    opacity: !root.collapsed || !hideTopContentWhenCollapsed
+                    Behavior on opacity {
+                        //not an animator as is binded
+                        NumberAnimation {
+                            duration: Units.longDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
                 }
 
                 T2.StackView {
@@ -266,6 +352,7 @@ OverlayDrawer {
                     Layout.fillWidth: true
                     Layout.minimumHeight: currentItem ? currentItem.implicitHeight : 0
                     Layout.maximumHeight: Layout.minimumHeight
+                    property ActionsMenu openSubMenu
                     initialItem: menuComponent
                     //NOTE: it's important those are NumberAnimation and not XAnimators
                     // as while the animation is running the drawer may close, and
@@ -310,7 +397,15 @@ OverlayDrawer {
                     //NOTE: why this? just Layout.fillWidth: true doesn't seem sufficient
                     //as items are added only after this column creation
                     Layout.minimumWidth: parent.width - root.leftPadding - root.rightPadding
-                    visible: children.length > 0
+                    visible: children.length > 0 && (opacity > 0 || mainContentAnimator.running)
+                    opacity: !root.collapsed || !hideContentWhenCollapsed
+                    Behavior on opacity {
+                        OpacityAnimator {
+                            id: mainContentAnimator
+                            duration: Units.longDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
                 }
                 Item {
                     Layout.minimumWidth: Units.smallSpacing
@@ -319,7 +414,8 @@ OverlayDrawer {
 
                 Component {
                     id: menuComponent
-                    ColumnLayout {
+
+                    Column {
                         spacing: 0
                         property alias model: actionsRepeater.model
                         property Action current
@@ -327,6 +423,12 @@ OverlayDrawer {
                         property int level: 0
                         Layout.maximumHeight: Layout.minimumHeight
 
+                        move: Transition {
+                            YAnimator {
+                                duration: Units.longDuration/2
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
 
                         BasicListItem {
                             id: backItem
@@ -350,20 +452,45 @@ OverlayDrawer {
                         Repeater {
                             id: actionsRepeater
                             model: actions
-                            delegate: BasicListItem {
+                            delegate:
+                            BasicListItem {
                                 id: listItem
                                 supportsMouseEvents: true
-                                checked: modelData.checked
+                                readonly property bool wideMode: width > height * 2
+                                checked: modelData.checked || (actionsMenu && actionsMenu.visible)
+                                width: parent.width
 
                                 icon: modelData.iconName
 
-                                label: MnemonicData.richTextLabel
+                                label: width > height * 2 ? MnemonicData.richTextLabel : ""
                                 MnemonicData.enabled: listItem.enabled && listItem.visible
                                 MnemonicData.controlType: MnemonicData.MenuItem
                                 MnemonicData.label: modelData.text
+                                property ActionsMenu actionsMenu: ActionsMenu {
+                                    x: Qt.application.layoutDirection == Qt.RightToLeft ? -width : listItem.width
+                                    actions: modelData.children
+                                    submenuComponent: Component {
+                                        ActionsMenu {}
+                                    }
+                                    onVisibleChanged: {
+                                        if (visible) {
+                                            stackView.openSubMenu = listItem.actionsMenu;
+                                        } else if (stackView.openSubMenu == listItem.actionsMenu) {
+                                            stackView.openSubMenu = null;
+                                        }
+                                    }
+                                }
 
                                 separatorVisible: false
-                                visible: model ? model.visible || model.visible===undefined : modelData.visible
+                                //TODO: animate the hide by collapse
+                                visible: (model ? model.visible || model.visible===undefined : modelData.visible) && opacity > 0
+                                opacity: (!root.collapsed || icon.length > 0)
+                                Behavior on opacity {
+                                    OpacityAnimator {
+                                        duration: Units.longDuration/2
+                                        easing.type: Easing.InOutQuad
+                                    }
+                                }
                                 enabled: (model && model.enabled != undefined) ? model.enabled : modelData.enabled
                                 opacity: enabled ? 1.0 : 0.3
                                 Icon {
@@ -374,21 +501,60 @@ OverlayDrawer {
                                     isMask: true
                                     Layout.alignment: Qt.AlignVCenter
                                     Layout.rightMargin: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : 0
-                                    height: Units.iconSizes.smallMedium
+                                    Layout.leftMargin: !root.collapsed ? 0 : parent.width - listItem.width
+                                    Layout.preferredHeight: !root.collapsed ? Units.iconSizes.smallMedium : Units.iconSizes.small/2
                                     selected: listItem.checked || listItem.pressed
-                                    width: height
+                                    Layout.preferredWidth: Layout.preferredHeight
                                     source: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
                                     visible: modelData.children!==undefined && modelData.children.length > 0
                                 }
+                                data: [
+                                    QQC2.ToolTip {
+                                        visible: (modelData.tooltip.length || root.collapsed) && (!actionsMenu || !actionsMenu.visible) &&  listItem.hovered && text.length > 0
+                                        text: modelData.tooltip.length ? modelData.tooltip : modelData.text
+                                        delay: 1000
+                                        timeout: 5000
+                                        y: listItem.height/2 - height/2
+                                        x: Qt.application.layoutDirection == Qt.RightToLeft ? -width : listItem.width
+                                    }
+                                ]
 
+                                onHoveredChanged: {
+                                    if (!hovered) {
+                                        return;
+                                    }
+                                    if (stackView.openSubMenu) {
+                                        stackView.openSubMenu.visible = false;
+
+                                        if (!listItem.actionsMenu.hasOwnProperty("count") || listItem.actionsMenu.count>0) {
+                                            if (listItem.actionsMenu.hasOwnProperty("popup")) {
+                                                listItem.actionsMenu.popup(listItem, listItem.width, 0)
+                                            } else {
+                                                listItem.actionsMenu.visible = true;
+                                            }
+                                        }
+                                    }
+                                }
                                 onClicked: {
                                     modelData.trigger();
                                     if (modelData.children!==undefined && modelData.children.length > 0) {
-                                        stackView.push(menuComponent, {model: modelData.children, level: level + 1, current: modelData });
+                                        if (root.collapsed) {
+                                            //fallbacks needed for Qt 5.9
+                                            if ((!listItem.actionsMenu.hasOwnProperty("count") || listItem.actionsMenu.count>0) && !listItem.actionsMenu.visible) {
+                                                stackView.openSubMenu = listItem.actionsMenu;
+                                                if (listItem.actionsMenu.hasOwnProperty("popup")) {
+                                                    listItem.actionsMenu.popup(listItem, listItem.width, 0)
+                                                } else {
+                                                    listItem.actionsMenu.visible = true;
+                                                }
+                                            }
+                                        } else {
+                                            stackView.push(menuComponent, {model: modelData.children, level: level + 1, current: modelData });
+                                        }
                                     } else if (root.resetMenuOnTriggered) {
                                         root.resetMenu();
                                     }
-                                    checked = Qt.binding(function() { return modelData.checked });
+                                    checked = Qt.binding(function() { return modelData.checked || (actionsMenu && actionsMenu.visible) });
                                 }
                             }
                         }

@@ -55,12 +55,12 @@ QtObject {
      * * desktop
      */
     property QtObject iconSizes: QtObject {
-        property int small: fontMetrics.roundedIconSize(16 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1)
-        property int smallMedium: fontMetrics.roundedIconSize(22 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1)
-        property int medium: fontMetrics.roundedIconSize(32 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1)
-        property int large: fontMetrics.roundedIconSize(48 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1)
-        property int huge: fontMetrics.roundedIconSize(64 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1)
-        property int enormous: 128 * devicePixelRatio * (Settings.isMobile ? 1.5 : 1)
+        property int small: fontMetrics.roundedIconSize(16 * devicePixelRatio) 
+        property int smallMedium: fontMetrics.roundedIconSize(22 * devicePixelRatio) 
+        property int medium: fontMetrics.roundedIconSize(32 * devicePixelRatio) 
+        property int large: fontMetrics.roundedIconSize(48 * devicePixelRatio) 
+        property int huge: fontMetrics.roundedIconSize(64 * devicePixelRatio) 
+        property int enormous: 128 * devicePixelRatio 
     }
 
     /**

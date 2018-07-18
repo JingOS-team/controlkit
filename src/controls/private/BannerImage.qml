@@ -43,6 +43,11 @@ Image {
      */
     property int titleAlignment: Qt.AlignTop | Qt.AlignLeft
 
+    property int leftPadding: headingIcon.valid ? Kirigami.Units.smallSpacing * 2 : Kirigami.Units.largeSpacing
+    property int topPadding: headingIcon.valid ? Kirigami.Units.smallSpacing * 2 : Kirigami.Units.largeSpacing
+    property int rightPadding: headingIcon.valid ? Kirigami.Units.smallSpacing * 2 : Kirigami.Units.largeSpacing
+    property int bottomPadding: headingIcon.valid ? Kirigami.Units.smallSpacing * 2 : Kirigami.Units.largeSpacing
+
     Layout.fillWidth: true
 
     Layout.preferredWidth: title.implicitWidth
@@ -85,7 +90,10 @@ Image {
             horizontalCenter: root.titleAlignment & Qt.AlignHCenter ? parent.horizontalCenter : undefined
             verticalCenter: root.titleAlignment & Qt.AlignVCenter ? parent.verticalCenter : undefined
 
-            margins: headingIcon.valid ? Kirigami.Units.smallSpacing * 2 : Kirigami.Units.largeSpacing
+            leftMargin: root.leftPadding
+            topMargin: root.topPadding
+            rightMargin: root.rightPadding
+            bottomMargin: root.bottomPadding
         }
         width: Math.min(implicitWidth, parent.width)
         Kirigami.Icon {

@@ -73,7 +73,7 @@ Controls.ToolButton {
     contentItem: MouseArea {
         hoverEnabled: true
         onPressed: mouse.accepted = false
-        Theme.colorSet: checked && (!control.flat && control.kirigamiAction && control.kirigamiAction.icon.color.a) ? Theme.Selection : Theme.Button
+        Theme.colorSet: checked && (!control.flat && control.kirigamiAction && control.kirigamiAction.icon.color.a) ? Theme.Selection : control.Theme.colorSet
         Theme.inherit: control.kirigamiAction && Theme.colorSet != Theme.Selection && control.kirigamiAction.icon.color.a == 0
         RowLayout {
             id: layout
