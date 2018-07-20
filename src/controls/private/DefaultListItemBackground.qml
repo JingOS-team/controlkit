@@ -34,9 +34,6 @@ Rectangle {
         opacity: (listItem.hovered || listItem.highlighted || listItem.activeFocus) && !listItem.pressed ? 0.5 : 0
         Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
     }
-    Behavior on color {
-        ColorAnimation { duration: Units.longDuration }
-    }
 
     readonly property bool __separatorVisible: listItem.separatorVisible
 
