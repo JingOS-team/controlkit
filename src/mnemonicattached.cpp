@@ -226,7 +226,7 @@ void MnemonicAttached::updateSequence()
         emit sequenceChanged();
     } else {
         m_actualRichTextLabel = text;
-        m_actualRichTextLabel.replace(QRegularExpression("\\&[^\\&]"), QStringLiteral("\\1"));
+        m_actualRichTextLabel.replace(QRegularExpression("\\&([^\\&])"), QStringLiteral("\\1"));
         m_mnemonicLabel = m_actualRichTextLabel;
     }
 
