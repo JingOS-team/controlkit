@@ -363,9 +363,4 @@ Item {
         id: internal
         property Item __passiveNotification
     }
-
-    Shortcut {
-        sequence: StandardKey.Quit
-        onActivated: root.close()
-    }
 }
