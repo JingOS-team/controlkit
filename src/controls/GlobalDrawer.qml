@@ -185,7 +185,7 @@ OverlayDrawer {
      * binded to the collapsed property
      * @since 2.5
      */
-    property bool hideContentWhenCollapsed: true
+    property bool showContentWhenCollapsed: true
 
     /**
      * showContentWhenCollapsed: bool
@@ -196,7 +196,7 @@ OverlayDrawer {
      * binded to the collapsed property
      * @since 2.5
      */
-    property bool hideTopContentWhenCollapsed: true
+    property bool showTopContentWhenCollapsed: true
 
     /**
      * resetMenuOnTriggered: bool
@@ -337,7 +337,7 @@ OverlayDrawer {
                     //as items are added only after this column creation
                     Layout.minimumWidth: parent.width - root.leftPadding - root.rightPadding
                     visible: children.length > 0 && childrenRect.height > 0 && opacity > 0
-                    opacity: !root.collapsed || !hideTopContentWhenCollapsed
+                    opacity: !root.collapsed || showTopContentWhenCollapsed
                     Behavior on opacity {
                         //not an animator as is binded
                         NumberAnimation {
@@ -398,7 +398,7 @@ OverlayDrawer {
                     //as items are added only after this column creation
                     Layout.minimumWidth: parent.width - root.leftPadding - root.rightPadding
                     visible: children.length > 0 && (opacity > 0 || mainContentAnimator.running)
-                    opacity: !root.collapsed || !hideContentWhenCollapsed
+                    opacity: !root.collapsed || hideContentWhenCollapsed
                     Behavior on opacity {
                         OpacityAnimator {
                             id: mainContentAnimator
