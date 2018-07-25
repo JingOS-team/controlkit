@@ -131,8 +131,8 @@ void PlatformThemePrivate::syncCustomPalette()
         customPalette.setBrush(state, QPalette::AlternateBase, backgroundColor().darker(120));*/
         customPalette.setBrush(state, QPalette::Link, q->linkColor());
         customPalette.setBrush(state, QPalette::LinkVisited, q->visitedLinkColor());
-        emit q->paletteChanged(customPalette);
     }
+    emit q->paletteChanged(customPalette);
 }
 
 void PlatformThemePrivate::findParentStyle()
