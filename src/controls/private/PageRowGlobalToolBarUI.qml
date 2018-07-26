@@ -47,7 +47,7 @@ Kirigami.AbstractApplicationHeader {
             Item {
                 id: leftHandleAnchor
                 visible: typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer.handleVisible &&
-                (applicationWindow().globalDrawer.handle.handleAnchor == Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor)
+                (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))
                 Layout.preferredWidth: backButton.background.implicitHeight
                 Layout.preferredHeight: backButton.background.implicitHeight
             }
@@ -87,7 +87,7 @@ Kirigami.AbstractApplicationHeader {
         }
         Item {
             id: rightHandleAnchor
-            visible: typeof applicationWindow() !== "undefined" && applicationWindow().contextDrawer && applicationWindow().contextDrawer.handleVisible && applicationWindow().contextDrawer.handle.handleAnchor == Qt.application.layoutDirection == Qt.LeftToRight ? rightHandleAnchor : leftHandleAnchor
+            visible: typeof applicationWindow() !== "undefined" && applicationWindow().contextDrawer && applicationWindow().contextDrawer.handleVisible && applicationWindow().contextDrawer.handle.handleAnchor == Qt.application.layoutDirection == (Qt.LeftToRight ? rightHandleAnchor : leftHandleAnchor)
             Layout.preferredWidth: backButton.background.implicitHeight
             Layout.preferredHeight: backButton.background.implicitHeight
         }
