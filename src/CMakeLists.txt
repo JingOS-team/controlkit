@@ -18,6 +18,7 @@ set(kirigami_SRCS
     desktopicon.cpp
     settings.cpp
     formlayoutattached.cpp
+    scenepositionattached.cpp
     mnemonicattached.cpp
     ${kirigami_QM_LOADER}
     ${KIRIGAMI_STATIC_FILES}

@@ -26,6 +26,7 @@
 #include "formlayoutattached.h"
 #include "mnemonicattached.h"
 #include "delegaterecycler.h"
+#include "scenepositionattached.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -171,6 +172,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     //2.5
     qmlRegisterType(componentUrl(QStringLiteral("ListItemDragHandle.qml")), uri, 2, 5, "ListItemDragHandle");
     qmlRegisterType(componentUrl(QStringLiteral("ActionToolBar.qml")), uri, 2, 5, "ActionToolBar");
+    qmlRegisterUncreatableType<ScenePositionAttached>(uri, 2, 5, "ScenePosition", "Cannot create objects of type ScenePosition, use it as an attached poperty");
 
     qmlProtectModule(uri, 2);
 }

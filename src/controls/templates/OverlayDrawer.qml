@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Templates 2.0 as T2
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.5
 import "private"
 
 /**
@@ -139,10 +139,7 @@ T2.Drawer {
                    ? applicationWindow().pageStack.globalToolBar.leftHandleAnchor
                    : applicationWindow().pageStack.globalToolBar.rightHandleAnchor)
                 : (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") !== -1 ? applicationWindow().header : null)
-        //FIXME: temporary solution, we need a scenepostracker item
-        onHandleAnchorChanged: {
-            handleAnchor.parent.yChanged.connect(handleAnchor.yChanged);
-        }
+
         property int startX
         property int mappedStartX
 
@@ -191,7 +188,7 @@ T2.Drawer {
                 return 0;
             }
         }
-        y: handleAnchor && anchors.bottom ? handleAnchor.parent.mapToItem(root.contentItem, 0, handleAnchor.y).y : 0
+        y: handleAnchor && anchors.bottom ? handleAnchor.ScenePosition.y : 0
 
         anchors {
             bottom: drawerHandle.handleAnchor ? undefined : parent.bottom

@@ -20,9 +20,10 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.5
 
 AbstractApplicationHeader {
+    id: root
     anchors.fill: parent
     property Item container
     property bool current
@@ -32,11 +33,12 @@ AbstractApplicationHeader {
     preferredHeight: pageRow.globalToolBar.preferredHeight
     implicitHeight: page.y
 
-    leftPadding: Qt.application.layoutDirection == Qt.LeftToRight
-            ? Math.max(0, pageRow.contentItem.contentX - mapToItem(pageRow.contentItem.contentItem, 0, 0).x + pageRow.globalToolBar.leftReservedSpace)
-            : Math.max(0, mapToItem(pageRow.contentItem.contentItem, width, 0).x - (pageRow.contentItem.contentX + pageRow.width) + pageRow.globalToolBar.leftReservedSpace)
+    leftPadding: Math.min(Qt.application.layoutDirection == Qt.LeftToRight
+                        ? Math.max(0, pageRow.ScenePosition.x - page.ScenePosition.x + pageRow.globalToolBar.leftReservedSpace)
+                        : Math.max(0, -pageRow.width + pageRow.ScenePosition.x + page.ScenePosition.x + page.width + pageRow.globalToolBar.leftReservedSpace),
+                    root.width/2)
 
     rightPadding: Qt.application.layoutDirection == Qt.LeftToRight
-            ? Math.min(pageRow.globalToolBar.rightReservedSpace, Math.max(0, mapToItem(pageRow.contentItem.contentItem, width, 0).x - (pageRow.contentItem.contentX + pageRow.width) + pageRow.globalToolBar.rightReservedSpace))
-            : Math.max(0, pageRow.contentItem.contentX - mapToItem(pageRow.contentItem.contentItem, 0, 0).x + pageRow.globalToolBar.rightReservedSpace)
+            ? Math.min(-pageRow.width + pageRow.ScenePosition.x + page.ScenePosition.x + page.width + pageRow.globalToolBar.rightReservedSpace)
+            : Math.max(0, pageRow.ScenePosition.x - page.ScenePosition.x + pageRow.globalToolBar.rightReservedSpace)
 }
