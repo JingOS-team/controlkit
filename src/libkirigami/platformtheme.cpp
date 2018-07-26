@@ -108,19 +108,26 @@ PlatformThemePrivate::PlatformThemePrivate(PlatformTheme *q)
 PlatformThemePrivate::~PlatformThemePrivate()
 {}
 
+void setPaletteColor(QPalette& customPalette, QPalette::ColorGroup cg, QPalette::ColorRole cr, const QColor &color)
+{
+    if (customPalette.color(cg, cr) != color) {
+        customPalette.setColor(cg, cr, color);
+    }
+}
+
 void PlatformThemePrivate::syncCustomPalette()
 {
     for (auto state : { QPalette::Active, QPalette::Inactive, QPalette::Disabled }) {
-        customPalette.setBrush(state, QPalette::WindowText, q->textColor());
-        customPalette.setBrush(state, QPalette::Window, q->backgroundColor());
-        customPalette.setBrush(state, QPalette::Base, q->backgroundColor());
-        customPalette.setBrush(state, QPalette::Text, q->textColor());
-        customPalette.setBrush(state, QPalette::Button, q->backgroundColor());
-        customPalette.setBrush(state, QPalette::ButtonText, q->textColor());
-        customPalette.setBrush(state, QPalette::Highlight, q->highlightColor());
-        customPalette.setBrush(state, QPalette::HighlightedText, q->highlightedTextColor());
-        customPalette.setBrush(state, QPalette::ToolTipBase, q->backgroundColor());
-        customPalette.setBrush(state, QPalette::ToolTipText, q->textColor());
+        setPaletteColor(customPalette, state, QPalette::WindowText, q->textColor());
+        setPaletteColor(customPalette, state, QPalette::Window, q->backgroundColor());
+        setPaletteColor(customPalette, state, QPalette::Base, q->backgroundColor());
+        setPaletteColor(customPalette, state, QPalette::Text, q->textColor());
+        setPaletteColor(customPalette, state, QPalette::Button, q->backgroundColor());
+        setPaletteColor(customPalette, state, QPalette::ButtonText, q->textColor());
+        setPaletteColor(customPalette, state, QPalette::Highlight, q->highlightColor());
+        setPaletteColor(customPalette, state, QPalette::HighlightedText, q->highlightedTextColor());
+        setPaletteColor(customPalette, state, QPalette::ToolTipBase, q->backgroundColor());
+        setPaletteColor(customPalette, state, QPalette::ToolTipText, q->textColor());
 /*Those shouldn't be needed
         customPalette.setColor(state, QPalette::Light, KColorScheme::shade(backgroundColor(), KColorScheme::LightShade));
         customPalette.setColor(state, QPalette::Midlight, KColorScheme::shade(backgroundColor(), KColorScheme::MidlightShade));
@@ -128,9 +135,9 @@ void PlatformThemePrivate::syncCustomPalette()
         customPalette.setColor(state, QPalette::Dark, KColorScheme::shade(backgroundColor(), KColorScheme::DarkShade));
         customPalette.setColor(state, QPalette::Shadow, KColorScheme::shade(backgroundColor(), KColorScheme::ShadowShade));
 
-        customPalette.setBrush(state, QPalette::AlternateBase, backgroundColor().darker(120));*/
-        customPalette.setBrush(state, QPalette::Link, q->linkColor());
-        customPalette.setBrush(state, QPalette::LinkVisited, q->visitedLinkColor());
+        setPaletteColor(customPalette, state, QPalette::AlternateBase, backgroundColor().darker(120));*/
+        setPaletteColor(customPalette, state, QPalette::Link, q->linkColor());
+        setPaletteColor(customPalette, state, QPalette::LinkVisited, q->visitedLinkColor());
     }
     emit q->paletteChanged(customPalette);
 }
