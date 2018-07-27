@@ -355,8 +355,8 @@ Item {
     }
     onPageStackChanged: pageStack.parent = contentItem;
 
-    width: Units.gridUnit * 30
-    height: Units.gridUnit * 45
+    implicitWidth: Units.gridUnit * 30
+    implicitHeight: Units.gridUnit * 45
     visible: true
 
     QtObject {
