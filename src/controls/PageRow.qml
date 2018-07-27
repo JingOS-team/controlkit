@@ -198,6 +198,7 @@ T.Control {
         container.visible = container.page.visible = true;
 
         mainView.currentIndex = container.level;
+        pagePushed(container.page);
         return container.page
     }
 
@@ -233,6 +234,21 @@ T.Control {
 
         popScrollAnim.running = true;
     }
+
+    /**
+     * Emitted when a page has been pushed
+     * @param page the new page
+     * @since 2.5
+     */
+    signal pagePushed(Item page)
+
+    /**
+     * Emitted when a page has been removed from the row.
+     * @param page the page that has been removed: at this point it's still valid,
+     *           but may be auto deleted soon.
+     * @since 2.5
+     */
+    signal pageRemoved(Item page)
 
     SequentialAnimation {
         id: popScrollAnim
@@ -508,6 +524,7 @@ T.Control {
                 //is destroy just an async deleteLater() that isn't executed immediately or it actually leaks?
                 pagesLogic.remove(id);
                 item.parent = root;
+                root.pageRemoved(item.page);
                 if (item.page.parent==item) {
                     item.page.destroy(1)
                 }
