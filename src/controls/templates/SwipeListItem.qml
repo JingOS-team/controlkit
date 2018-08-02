@@ -87,6 +87,15 @@ T2.ItemDelegate {
     property bool separatorVisible: true
 
     /**
+     * actionsVisible: bool
+     * True if it's possible to see and access the item actions.
+     * Actions should go completely out of the way for instance during
+     * the editing of an item.
+     * @since 2.5
+     */
+    property alias actionsVisible: behindItem.visible
+
+    /**
      * actions: list<Action>
      * Defines the actions for the list item: at most 4 buttons will
      * contain the actions for the item, that can be revealed by
@@ -196,6 +205,7 @@ T2.ItemDelegate {
         Row {
             id: actionsLayout
             z: 1
+            visible: listItem.actionsVisible
             parent: Settings.tabletMode ? behindItem : listItem
             opacity: Settings.tabletMode ? 1 : (listItem.hovered ? 1 : 0)
             Behavior on opacity {
@@ -261,7 +271,7 @@ T2.ItemDelegate {
     MouseArea {
         id: handleMouse
         parent: listItem.background
-        visible: Settings.tabletMode && actions.length > 0
+        visible: Settings.tabletMode && listItem.actionsVisible && actions.length > 0
         z: 99
         anchors {
             right: parent.right
@@ -378,6 +388,9 @@ T2.ItemDelegate {
 
         target: internal.edgeEnabled ? internal.swipeFilterItem : null
         onPeekChanged: {
+            if (!listItem.actionsVisible) {
+                return;
+            }
             if (listItem.LayoutMirroring.enabled) {
                 listItem.background.x = (listItem.background.width - listItem.background.height) * (1 - internal.swipeFilterItem.peek);
             } else {
