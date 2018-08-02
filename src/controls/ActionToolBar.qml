@@ -60,6 +60,9 @@ Item {
         return width;
     }
 
+    Layout.maximumWidth: implicitWidth
+    Layout.fillWidth: true
+
     RowLayout {
         id: actionsLayout
         anchors.fill: parent

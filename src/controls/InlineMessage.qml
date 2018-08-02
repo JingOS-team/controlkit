@@ -84,6 +84,11 @@ T.InlineMessage {
 
     property bool _animating: false
 
+    leftPadding: background.border.width + Kirigami.Units.smallSpacing
+    topPadding: background.border.width + Kirigami.Units.smallSpacing
+    rightPadding: background.border.width + Kirigami.Units.smallSpacing
+    bottomPadding: background.border.width + Kirigami.Units.smallSpacing
+
     Behavior on implicitHeight {
         enabled: !root.visible
 
@@ -167,12 +172,8 @@ T.InlineMessage {
         }
     }
 
-    GridLayout {
+    contentItem: GridLayout {
         id: contentLayout
-
-        x: background.border.width + Kirigami.Units.smallSpacing
-        y: background.border.width + Kirigami.Units.smallSpacing
-        width: parent.width - (2 * (background.border.width + Kirigami.Units.smallSpacing))
 
         // Used to defer opacity animation until we know if InlineMessage was
         // initialized visible.
@@ -244,6 +245,13 @@ T.InlineMessage {
                 onLinkHovered: root.linkHovered(link)
                 onLinkActivated: root.linkActivated(link)
             }
+            //this must be child of an item which doesn't try to resize it
+            TextMetrics {
+                id: messageTextMetrics
+
+                font: text.font
+                text: text.text
+            }
         }
 
         Kirigami.ActionToolBar {
@@ -261,18 +269,10 @@ T.InlineMessage {
                     - closeButton.width - (3 * contentLayout.columnSpacing))) {
                     return 1;
                 }
-
                 return 0;
             }
             Layout.column: Layout.row ? 0 : 2
             Layout.columnSpan: Layout.row ? (closeButton.visible ? 3 : 2) : 1
-
-            TextMetrics {
-                id: messageTextMetrics
-
-                font: text.font
-                text: text.text
-            }
         }
 
         Controls.ToolButton {
