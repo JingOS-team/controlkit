@@ -100,9 +100,10 @@ T2.ItemDelegate {
 
     Theme.colorGroup: internal.indicateActiveFocus ? Theme.Active : Theme.Inactive
 
-    leftPadding: LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical ? internal.view.T2.ScrollBar.vertical.width : Units.largeSpacing
+    leftPadding: LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical && internal.view.T2.ScrollBar.vertical.visible ? internal.view.T2.ScrollBar.vertical.width : Units.largeSpacing
     topPadding: Units.largeSpacing
-    rightPadding: !LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical ? internal.view.T2.ScrollBar.vertical.width : Units.largeSpacing
+
+    rightPadding: !LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical && internal.view.T2.ScrollBar.vertical.visible ? internal.view.T2.ScrollBar.vertical.width : Units.largeSpacing
     bottomPadding: Units.largeSpacing
 
     implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12

@@ -57,7 +57,7 @@ AbstractListItem {
 
     default property alias _basicDefault: layout.children
 
-    RowLayout {
+    contentItem: RowLayout {
         id: layout
         spacing: Units.smallSpacing*2
         property bool indicateActiveFocus: listItem.pressed || Settings.tabletMode || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)

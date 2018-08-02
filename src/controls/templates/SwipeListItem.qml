@@ -266,7 +266,7 @@ T2.ItemDelegate {
         anchors {
             right: parent.right
             verticalCenter: parent.verticalCenter
-            rightMargin: behindItem.view && behindItem.view.T2.ScrollBar && behindItem.view.T2.ScrollBar.vertical  ? behindItem.view.T2.ScrollBar.vertical.width : Units.smallSpacing
+            rightMargin: !Settings.isMobile && behindItem.view && behindItem.view.T2.ScrollBar && behindItem.view.T2.ScrollBar.vertical && behindItem.view.T2.ScrollBar.vertical.visible ? behindItem.view.T2.ScrollBar.vertical.width : Units.smallSpacing
         }
 
         preventStealing: true
