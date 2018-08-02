@@ -188,7 +188,7 @@ OverlayDrawer {
     property bool showContentWhenCollapsed: true
 
     /**
-     * showContentWhenCollapsed: bool
+     * showTopContentWhenCollapsed: bool
      * If true, when the drawer is collapsed as a sidebar, the top content items
      * at the top will be hidden (default true).
      * If you want to keep some items visible and some invisible, set this to 
