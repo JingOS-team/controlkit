@@ -250,9 +250,12 @@ OverlayDrawer {
 
                 //TODO: cable visible of bannerimage
                 Item {
-                    implicitHeight: root.collapsible ? Math.max(collapseButton.height + Units.smallSpacing, bannerImage.Layout.preferredHeight) : bannerImage.Layout.preferredHeight
+                    implicitHeight: root.collapsible 
+                            ? Math.max(collapseButton.height + Units.smallSpacing, bannerImage.Layout.preferredHeight)
+                            : bannerImage.Layout.preferredHeight
 
                     Layout.fillWidth: true
+                    visible: bannerImage.title.length > 0 || bannerImage.titleIcon.length > 0 || bannerImage.source.length > 0
 
                     BannerImage {
                         id: bannerImage

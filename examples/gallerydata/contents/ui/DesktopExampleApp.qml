@@ -129,6 +129,40 @@ Kirigami.ApplicationWindow {
                 }
             },
             Kirigami.Action {
+                text: "Title style..."
+                iconName: "format-border-set-top"
+                Kirigami.Action {
+                    text: "Title And Image"
+                    checked: root.globalDrawer.title.length > 0 && 
+                        root.globalDrawer.bannerImageSource.toString().length > 0
+                    onTriggered: {
+                        root.globalDrawer.title = "Widget gallery"
+                        root.globalDrawer.titleIcon = "applications-graphics"
+                        root.globalDrawer.bannerImageSource = "banner.jpg"
+                    }
+                }
+                Kirigami.Action {
+                    text: "Title Only"
+                    checked: root.globalDrawer.title.length > 0 && 
+                        root.globalDrawer.bannerImageSource.toString().length == 0
+                    onTriggered: {
+                        root.globalDrawer.title = "Widget gallery"
+                        root.globalDrawer.titleIcon = "applications-graphics"
+                        root.globalDrawer.bannerImageSource = ""
+                    }
+                }
+                Kirigami.Action {
+                    text: "None"
+                    checked: root.globalDrawer.title.length == 0 && 
+                        root.globalDrawer.bannerImageSource.toString().length == 0
+                    onTriggered: {
+                        root.globalDrawer.title = ""
+                        root.globalDrawer.titleIcon = "";
+                        root.globalDrawer.bannerImageSource = ""
+                    }
+                }
+            },
+            Kirigami.Action {
                 text: "Open A Page"
                 checkable: true
                 //Need to do this, otherwise it breaks the bindings
