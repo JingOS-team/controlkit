@@ -437,7 +437,7 @@ QImage DesktopIcon::findIcon(const QSize &size)
         QString iconId = iconUrl.path();
 
         // QRC paths are not correctly handled by .path()
-        if (iconId.size() >=2 && iconId.startWith(QLatin1String("/:"))) {
+        if (iconId.size() >=2 && iconId.startsWith(QLatin1String("/:"))) {
             iconId = iconId.remove(0, 1);
         }
 
