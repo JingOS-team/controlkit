@@ -213,7 +213,7 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
         if (!m_item) {
             obj->deleteLater();
         } else {
-            connect(m_item, &QObject::destroyed, ctx, &QObject::deleteLater);
+            connect(m_item.data(), &QObject::destroyed, ctx, &QObject::deleteLater);
         }
     } else {
         QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
