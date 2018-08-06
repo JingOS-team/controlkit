@@ -167,7 +167,6 @@ T2.Drawer {
         }
         onReleased: {
             root.peeking = false;
-            
             if (Math.abs(mapToItem(parent, mouse.x, 0).x - mappedStartX) < Qt.styleHints.startDragDistance) {
                 if (!root.drawerOpen) {
                     root.close();
@@ -399,12 +398,21 @@ T2.Drawer {
     property QtObject __internal: QtObject {
         //here in order to not be accessible from outside
         property bool completed: false
-        property NumberAnimation positionResetAnim: NumberAnimation {
+        property SequentialAnimation positionResetAnim: SequentialAnimation {
             id: positionResetAnim
-            target: root
-            to: 0
-            property: "position"
-            duration: (root.position)*Units.longDuration
+            property alias to: internalAnim.to
+            NumberAnimation {
+                id: internalAnim
+                target: root
+                to: 0
+                property: "position"
+                duration: (root.position)*Units.longDuration
+            }
+            ScriptAction {
+                script: {
+                    root.drawerOpen = internalAnim.to != 0;
+                }
+            }
         }
         readonly property Item statesItem: Item {
             states: [
