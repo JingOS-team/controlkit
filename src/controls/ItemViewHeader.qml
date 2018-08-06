@@ -71,7 +71,7 @@ Kirigami.AbstractItemViewHeader {
         }
         Rectangle {
             id: rect
-            color: backgroundItem.page.isCurrentPage ? Kirigami.Theme.highlightColor : Kirigami.Theme.disabledTextColor
+            color: backgroundItem.page && backgroundItem.page.isCurrentPage ? Kirigami.Theme.highlightColor : Kirigami.Theme.disabledTextColor
             height: root.bottomPadding
             anchors {
                 left: parent.left
