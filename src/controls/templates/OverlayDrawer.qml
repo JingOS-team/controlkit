@@ -362,7 +362,7 @@ T2.Drawer {
             root.enter.enabled = false;
             root.exit.enabled = false;
         } else {
-            positionResetAnim.to = position > 0.5 ? 1 : 0;
+            drawerOpen = position > 0.5 ? 1 : 0;
             positionResetAnim.running = true
             root.enter.enabled = true;
             root.exit.enabled = true;
