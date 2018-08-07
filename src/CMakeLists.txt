@@ -6,6 +6,7 @@ else()
     set(KIRIGAMI_STATIC_FILES
         libkirigami/basictheme.cpp
         libkirigami/platformtheme.cpp
+        libkirigami/tabletmodewatcher.cpp
         libkirigami/kirigamipluginfactory.cpp)
 endif()
 
