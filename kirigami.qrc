@@ -34,6 +34,9 @@
         <file alias="private/PrivateActionToolButton.qml">src/controls/private/PrivateActionToolButton.qml</file>
         <file alias="private/TitlesPageHeader.qml">src/controls/private/TitlesPageHeader.qml</file>
         <file alias="private/ToolBarPageHeader.qml">src/controls/private/ToolBarPageHeader.qml</file>
+        <file alias="private/ActionsMenu.qml">src/controls/private/ActionsMenu.qml</file>
+        <file alias="private/ActionMenuItem.qml">src/controls/private/ActionMenuItemQt59.qml</file>
+        <file alias="private/ActionMenuItemBase.qml">src/controls/private/ActionMenuItemBase.qml</file>
         <file alias="Separator.qml">src/controls/Separator.qml</file>
         <file alias="OverlayDrawer.qml">src/controls/OverlayDrawer.qml</file>
         <file alias="OverlaySheet.qml">src/controls/OverlaySheet.qml</file>

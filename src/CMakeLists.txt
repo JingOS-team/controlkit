@@ -28,9 +28,30 @@ set(kirigami_SRCS
 add_subdirectory(libkirigami)
 
 if(STATIC_LIBRARY)
+    # Set some variables to insert the right files in the QRC
+    if(Qt5Qml_VERSION VERSION_LESS 5.10)
+        set(kirigami_ActionMenuItem ActionMenuItemQt59.qml)
+    else()
+        set(kirigami_ActionMenuItem ActionMenuItemQt510.qml)
+    endif()
+
+    # `rcc` is a bit dumb and isn't designed to use auto generated files, to
+    # avoid poluting the source directory, use absolute paths
+    set(kirigami_QML_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../)
+
+    # First, pre-process the QRC to add the files associated with the right Qt
+    # version.
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/../kirigami.qrc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/../kirigami.qrc
+        @ONLY
+    )
+
     # When using the static library, all QML files need to be shipped within the
     # .a file.
-    qt5_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../kirigami.qrc)
+    qt5_add_resources(
+        RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/../kirigami.qrc
+    )
 endif(STATIC_LIBRARY)
 
 
