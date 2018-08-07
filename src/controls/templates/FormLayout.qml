@@ -47,10 +47,10 @@ import org.kde.kirigami 2.4 as Kirigami
  *    }
  * }
  * @endcode
- * @inherits QtQuick.Controls.Control
+ * @inherits QtQuick.Item
  * @since 2.3
  */
-Control {
+Item {
     id: root
 
     /**
