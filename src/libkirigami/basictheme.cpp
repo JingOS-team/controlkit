@@ -232,7 +232,17 @@ void BasicTheme::syncColors()
         m_viewFocusColor = PROXYCOLOR(viewFocusColor, ViewFocusColor);
     }
 
-    setPalette(QPalette(textColor(), m_buttonBackgroundColor, m_buttonBackgroundColor.lighter(120), m_buttonBackgroundColor.darker(120), m_buttonBackgroundColor.darker(110), m_viewTextColor, highlightedTextColor(), m_viewTextColor, backgroundColor()));
+    QPalette pal = qApp->palette();
+    pal.setColor(QPalette::WindowText, textColor());
+    pal.setColor(QPalette::Button, m_buttonBackgroundColor);
+    pal.setColor(QPalette::Light, m_buttonBackgroundColor.lighter(120));
+    pal.setColor(QPalette::Dark, m_buttonBackgroundColor.darker(120));
+    pal.setColor(QPalette::Mid, m_buttonBackgroundColor.darker(110));
+    pal.setColor(QPalette::Base, m_viewBackgroundColor);
+    pal.setColor(QPalette::HighlightedText, highlightedTextColor());
+    pal.setColor(QPalette::Text, m_viewTextColor);
+    pal.setColor(QPalette::Window, backgroundColor());
+    setPalette(pal);
 
     if (basicThemeDeclarative()->instance(this)) {
         QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagateColorSet", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, colorSet()));
