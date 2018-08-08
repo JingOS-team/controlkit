@@ -32,6 +32,7 @@ AbstractApplicationHeader {
     maximumHeight: pageRow.globalToolBar.maximumHeight
     preferredHeight: pageRow.globalToolBar.preferredHeight
     implicitHeight: page.y
+    separatorVisible: pageRow.globalToolBar.separatorVisible
 
     leftPadding: Math.min(Qt.application.layoutDirection == Qt.LeftToRight
                         ? Math.max(0, pageRow.ScenePosition.x - page.ScenePosition.x + pageRow.globalToolBar.leftReservedSpace)

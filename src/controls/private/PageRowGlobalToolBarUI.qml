@@ -35,7 +35,8 @@ Kirigami.AbstractApplicationHeader {
     minimumHeight: globalToolBar.minimumHeight
     preferredHeight: globalToolBar.preferredHeight
     maximumHeight: globalToolBar.maximumHeight
-    
+    separatorVisible: globalToolBar.separatorVisible
+
     RowLayout {
         anchors.fill: parent
         spacing: 0

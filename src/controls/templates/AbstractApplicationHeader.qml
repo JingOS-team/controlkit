@@ -51,6 +51,7 @@ Item {
     property int topPadding: 0
     property int rightPadding: 0
     property int bottomPadding: 0
+    property bool separatorVisible: true
 
     //FIXME: remove
     property QtObject __appWindow: applicationWindow();

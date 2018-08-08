@@ -41,6 +41,7 @@ QtObject {
     }
 
     property bool showNavigationButtons: style != Kirigami.ApplicationHeaderStyle.TabBar && (!Kirigami.Settings.isMobile || Qt.platform.os == "ios")
+    property bool separatorVisible: true
 
     property int minimumHeight: 0
     property int preferredHeight: Kirigami.Units.iconSizes.medium + Kirigami.Units.smallSpacing*2

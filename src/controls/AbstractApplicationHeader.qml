@@ -47,6 +47,7 @@ T.AbstractApplicationHeader {
         color: Theme.backgroundColor
         EdgeShadow {
             id: shadow
+            visible: root.separatorVisible
             anchors {
                 right: parent.right
                 left: parent.left
