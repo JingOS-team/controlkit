@@ -110,7 +110,7 @@ T2.ItemDelegate {
 
     implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5
 
-    width: parent ? parent.width : implicitWidth
+    width: parent && parent.width > 0 ? parent.width : implicitWidth
     Layout.fillWidth: true
 
     opacity: enabled ? 1 : 0.6
