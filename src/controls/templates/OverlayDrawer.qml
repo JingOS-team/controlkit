@@ -438,7 +438,7 @@ T2.Drawer {
             transitions: Transition {
                 reversible: true
                 NumberAnimation {
-                    properties: "implicitWidth,implicitHeight"
+                    properties: root.edge == Qt.TopEdge || root.edge == Qt.BottomEdge ? "implicitHeight" : "implicitWidth"
                     duration: Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
