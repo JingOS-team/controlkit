@@ -76,7 +76,7 @@ AbstractListItem {
             Layout.maximumHeight: Layout.minimumHeight
             Layout.minimumWidth: height
             selected: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || listItem.pressed)
-            color: listItem.icon && listItem.icon.color && listItem.icon.color.a > 0 ? listItem.icon.color : Qt.rgba(0, 0, 0, 0)  
+            color: listItem.icon && listItem.icon.color && listItem.icon.color.a > 0 ? listItem.icon.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
         }
         QQC2.Label {
             id: labelItem

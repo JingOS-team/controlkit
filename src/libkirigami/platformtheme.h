@@ -251,14 +251,13 @@ protected:
     //background colors
     void setBackgroundColor(const QColor &color);
     void setHighlightColor(const QColor &color);
-    
+
     //decoration colors
     void setFocusColor(const QColor &color);
     void setHoverColor(const QColor &color);
 
     void setDefaultFont(const QFont &defaultFont);
     void setPalette(const QPalette &palette);
-
 private:
     PlatformThemePrivate *d;
     friend class PlatformThemePrivate;

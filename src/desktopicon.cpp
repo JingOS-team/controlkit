@@ -492,7 +492,7 @@ QImage DesktopIcon::findIcon(const QSize &size)
                         icon = QIcon(localIconSource);
                     }
                     //heuristic to set every icon as mask, maybe only android?
-                    if (!icon.isNull()) {
+                    if (!icon.isNull() && (iconSource.endsWith("-symbolic") || m_color != Qt::transparent)) {
                         icon.setIsMask(true);
                     }
                 }
@@ -510,8 +510,7 @@ QImage DesktopIcon::findIcon(const QSize &size)
             if (m_isMask ||
                 //this is an heuristic to decide when to tint and when to just draw
                 //(fullcolor icons) in reality on basic styles the only colored icons should be -symbolic, this heuristic is the most compatible middle ground
-                //48 is the usual value for "big" icons (enum we can't access from here) which we need to take dpis into account
-                (icon.isMask() && (iconSource.endsWith("-symbolic") || size.width() < 48.0 * ratio)) ||
+                icon.isMask() || iconSource.endsWith("-symbolic") ||
                 (isPath && tintColor != Qt::transparent)) {
                 QPainter p(&img);
                 p.setCompositionMode(QPainter::CompositionMode_SourceIn);
