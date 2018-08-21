@@ -86,7 +86,7 @@ bool MnemonicAttached::eventFilter(QObject *watched, QEvent *e)
     } else if (e->type() == QEvent::KeyRelease) {
         QKeyEvent *ke = static_cast<QKeyEvent *>(e);
         if (ke->key() == Qt::Key_Alt) {
-            m_actualRichTextLabel = m_label;qWarning()<<"000"<<m_actualRichTextLabel;
+            m_actualRichTextLabel = m_label;
             m_actualRichTextLabel.replace(QRegularExpression("\\&([^\\&])"), QStringLiteral("\\1"));
             emit richTextLabelChanged();
         }
