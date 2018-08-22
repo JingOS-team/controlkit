@@ -79,6 +79,5 @@
         <file alias="styles/org.kde.desktop/SwipeListItem.qml">src/styles/org.kde.desktop/SwipeListItem.qml</file>
         <file alias="styles/org.kde.desktop/ApplicationWindow.qml">src/styles/org.kde.desktop/ApplicationWindow.qml</file>
         <file alias="styles/org.kde.desktop/AbstractApplicationHeader.qml">src/styles/org.kde.desktop/AbstractApplicationHeader.qml</file>
-        <file alias="templates/FormLayout.qml">src/controls/templates/FormLayout.qml</file>
     </qresource>
 </RCC>
