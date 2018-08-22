@@ -91,7 +91,6 @@ Item {
             }
         }
         onImplicitWidthChanged: hintCompression.restart();
-        Component.onCompleted:  wideImplicitWidth = lay.implicitWidth;
     }
 
     Item {
@@ -133,12 +132,12 @@ Item {
                 
                 itemContainer.parent = lay;
             }
+            hintCompression.triggered();
         }
     }
 
     onChildrenChanged: relayoutTimer.restart();
 
-    Component.onCompleted: relayoutTimer.triggered();
     Component {
         id: itemComponent
         Item {
