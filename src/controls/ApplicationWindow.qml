@@ -163,11 +163,6 @@ AbstractApplicationWindow {
             onActivated: __pageStack.goBack();
         }
 
-        Rectangle {
-            z: -1
-            anchors.fill: parent
-            color: Kirigami.Theme.backgroundColor
-        }
         focus: true
     }
 }

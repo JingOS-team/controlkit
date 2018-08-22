@@ -232,6 +232,8 @@ QQC2.ApplicationWindow {
      */
     property bool reachableModeEnabled: true
 
+    color: Theme.backgroundColor
+
     MouseArea {
         parent: contentItem.parent
         z: -1
@@ -273,7 +275,6 @@ QQC2.ApplicationWindow {
             root.reachableMode = false;
         }
     }
-
     Binding {
         when: globalDrawer !== undefined && root.visible
         target: globalDrawer
