@@ -141,6 +141,7 @@ OverlayDrawer {
                 visible: model ? model.visible : modelData.visible
                 opacity: enabled ? 1.0 : 0.6
                 onClicked: {
+                    root.drawerOpen = false;
                     if (modelData && modelData.trigger !== undefined) {
                         modelData.trigger();
                     // assume the model is a list of QAction or Action
@@ -149,7 +150,6 @@ OverlayDrawer {
                     } else {
                         console.warning("Don't know how to trigger the action")
                     }
-                    root.drawerOpen = false;
                 }
             }
         }
