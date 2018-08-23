@@ -179,24 +179,24 @@ OverlayDrawer {
     /**
      * showContentWhenCollapsed: bool
      * If true, when the drawer is collapsed as a sidebar, the content items
-     * at the bottom will be hidden (default true).
+     * at the bottom will be hidden (default false).
      * If you want to keep some items visible and some invisible, set this to 
      * false and control the visibility/opacity of individual items,
      * binded to the collapsed property
      * @since 2.5
      */
-    property bool showContentWhenCollapsed: true
+    property bool showContentWhenCollapsed: false
 
     /**
      * showTopContentWhenCollapsed: bool
      * If true, when the drawer is collapsed as a sidebar, the top content items
-     * at the top will be hidden (default true).
+     * at the top will be hidden (default false).
      * If you want to keep some items visible and some invisible, set this to 
      * false and control the visibility/opacity of individual items,
      * binded to the collapsed property
      * @since 2.5
      */
-    property bool showTopContentWhenCollapsed: true
+    property bool showTopContentWhenCollapsed: false
 
     /**
      * resetMenuOnTriggered: bool
@@ -401,7 +401,7 @@ OverlayDrawer {
                     //as items are added only after this column creation
                     Layout.minimumWidth: parent.width - root.leftPadding - root.rightPadding
                     visible: children.length > 0 && (opacity > 0 || mainContentAnimator.running)
-                    opacity: !root.collapsed || hideContentWhenCollapsed
+                    opacity: !root.collapsed || showContentWhenCollapsed
                     Behavior on opacity {
                         OpacityAnimator {
                             id: mainContentAnimator
