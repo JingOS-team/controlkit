@@ -255,7 +255,7 @@ OverlayDrawer {
                             : bannerImage.Layout.preferredHeight
 
                     Layout.fillWidth: true
-                    visible: bannerImage.title.length > 0 || bannerImage.titleIcon.length > 0 || bannerImage.source.length > 0
+                    visible: bannerImage.title.length > 0 || bannerImage.titleIcon.length > 0 || bannerImage.source.length > 0 || root.collapsible
 
                     BannerImage {
                         id: bannerImage
