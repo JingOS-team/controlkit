@@ -474,26 +474,13 @@ Item {
                 contextMenu.visible = !contextMenu.visible;
             }
         }
-        Controls.Menu {
+        ActionsMenu {
             id: contextMenu
             x: parent.width - width
             y: -height
-            Repeater {
-                model: root.page.actions.contextualActions
-                delegate: BasicListItem {
-                    text: model.text
-                    icon: model.iconName
-                    backgroundColor: "transparent"
-                    visible: model.visible
-                    enabled: modelData.enabled
-                    checkable:  modelData.checkable
-                    checked: modelData.checked
-                    separatorVisible: false
-                    onClicked: {
-                        modelData.trigger();
-                        contextMenu.visible = false;
-                    }
-                }
+            actions: root.page.actions.contextualActions
+            submenuComponent: Component {
+                ActionsMenu {}
             }
         }
     }
