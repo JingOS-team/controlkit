@@ -182,6 +182,24 @@ Item {
                     if (actionUnderMouse && actionUnderMouse.trigger) {
                         actionUnderMouse.trigger();
                     }
+                    
+                    if (actionUnderMouse.children.length > 0) {
+                        var subMenuUnderMouse;
+                        switch (actionUnderMouse) {
+                        case leftAction:
+                            subMenuUnderMouse = leftActionSubMenu;
+                            break;
+                        case mainAction:
+                            subMenuUnderMouse = mainActionSubMenu;
+                            break
+                        case rightAction:
+                            subMenuUnderMouse = rightActionSubMenu;
+                            break;
+                        }
+                        if (subMenuUnderMouse && !subMenuUnderMouse.visible) {
+                            subMenuUnderMouse.visible = true;
+                        }
+                    }
                 }
             }
 
@@ -234,6 +252,15 @@ Item {
                     property color baseColor: root.action && root.action.icon && root.action.icon.color && root.action.icon.color != undefined && root.action.icon.color.a > 0 ? root.action.icon.color : Theme.highlightColor
                     color: pressed ? Qt.darker(baseColor, 1.3) : baseColor
 
+                    ActionsMenu {
+                        id: mainActionSubMenu
+                        y: -height
+                        x: -width/2 + parent.width/2
+                        actions: root.action ? root.action.children : ""
+                        submenuComponent: Component {
+                            ActionsMenu {}
+                        }
+                    }
                     Icon {
                         id: icon
                         anchors.centerIn: parent
@@ -280,6 +307,15 @@ Item {
                             easing.type: Easing.InOutQuad
                         }
                     }
+                    ActionsMenu {
+                        id: leftActionSubMenu
+                        y: -height
+                        x: -width/2 + parent.width/2
+                        actions: root.leftAction ? root.leftAction.children : ""
+                        submenuComponent: Component {
+                            ActionsMenu {}
+                        }
+                    }
                     Icon {
                         source: root.leftAction && root.leftAction.iconName ? root.leftAction.iconName : ""
                         width: Units.iconSizes.smallMedium
@@ -314,6 +350,15 @@ Item {
                         ColorAnimation {
                             duration: Units.longDuration
                             easing.type: Easing.InOutQuad
+                        }
+                    }
+                    ActionsMenu {
+                        id: rightActionSubMenu
+                        y: -height
+                        x: -width/2 + parent.width/2
+                        actions: root.rightAction ? root.rightAction.children : ""
+                        submenuComponent: Component {
+                            ActionsMenu {}
                         }
                     }
                     Icon {
