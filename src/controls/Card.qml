@@ -50,6 +50,14 @@ Kirigami.AbstractCard {
     property list<QtObject> actions
 
     /**
+    * actions: hiddenActions<Action>
+    * This list of actions is for those you always want in the menu, even if there
+    * is enough space.
+    * @since 2.6
+    */
+    property list<QtObject> hiddenActions
+
+    /**
      * banner: grouped
      * Gropuped property to control the banner image present in the header, it
      * has the following sub properties:
@@ -99,6 +107,7 @@ Kirigami.AbstractCard {
     footer: Kirigami.ActionToolBar {
         id: actionsToolBar
         actions: root.actions
+        hiddenActions: root.hiddenActions
         visible: root.footer == actionsToolBar
     }
 }

@@ -42,6 +42,14 @@ Item {
     property list<QtObject> actions
 
     /**
+    * actions: hiddenActions<Action>
+    * This list of actions is for those you always want in the menu, even if there
+    * is enough space.
+    * @since 2.6
+    */
+    property list<QtObject> hiddenActions
+
+    /**
      * flat: bool
      * Wether we want our buttons to have a flat appearance. Default: true
      */
@@ -134,7 +142,7 @@ Item {
 
             //checkable: true
             checked: menu.visible
-            visible: actionsLayout.overflowSet.length > 0;
+            visible: hiddenActions.length > 0 || actionsLayout.overflowSet.length > 0;
             onClicked: menu.visible ? menu.close() : menu.open()
 
             ActionsMenu {
@@ -147,6 +155,38 @@ Item {
                 }
                 itemDelegate: ActionMenuItem {
                     visible: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {return act == ourAction}) > -1 && (ourAction.visible == undefined || ourAction.visible)
+                }
+                Instantiator {
+
+                    model: root.hiddenActions
+                    delegate: QtObject {
+                        readonly property QtObject action: modelData
+                        property QtObject item: null
+
+                        Component.onDestruction: if (item) item.destroy()
+
+                        function create() {
+                            if (!action.children || action.children.length === 0) {
+                                item = menu.itemDelegate.createObject(null, { ourAction: action });
+                                menu.addItem(item)
+                            } else if (menu.submenuComponent) {
+                                item = menu.submenuComponent.createObject(null, { title: action.text, actions: action.children });
+                                menu.addMenu(item)
+                            }
+                            //break the binding
+                            item.visible = true;
+                        }
+                        function remove() {
+                            if (!action.children || action.children.length === 0) {
+                                menu.removeItem(item)
+                            } else if (menu.submenuComponent) {
+                                menu.removeMenu(item)
+                            }
+                        }
+                    }
+
+                    onObjectAdded: object.create()
+                    onObjectRemoved: object.remove()
                 }
             }
         }
