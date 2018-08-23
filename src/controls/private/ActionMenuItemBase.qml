@@ -30,6 +30,7 @@ Controls.MenuItem {
     enabled: ourAction.enabled
     checkable: ourAction.checkable
     checked: ourAction.checked
+    height: visible ? implicitHeight : 0
     onTriggered: {
         ourAction.trigger()
     }

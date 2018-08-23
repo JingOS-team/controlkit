@@ -28,6 +28,10 @@ Controls.Menu
     //renamed to work on both Qt 5.9 and 5.10
     property Component itemDelegate: Component {ActionMenuItem {}}
 
+    Item {
+        id: invisibleItems
+        visible: false
+    }
     Instantiator {
         id: actionsInstantiator
 
@@ -45,6 +49,10 @@ Controls.Menu
                     item = theMenu.submenuComponent.createObject(null, { title: action.text, actions: action.children });
                     theMenu.addMenu(item)
                 }
+                /*item.onVisibleChanged.connect(function() {
+                    print("baaah"+item.visible+item)
+                    item.height = item.visible ? item.implicitHeight : 0
+                })*/
             }
             function remove() {
                 if (!action.children || action.children.length === 0) {

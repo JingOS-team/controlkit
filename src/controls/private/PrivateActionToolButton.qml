@@ -100,7 +100,7 @@ Controls.ToolButton {
                 Layout.minimumWidth: Units.iconSizes.small
                 Layout.minimumHeight: Units.iconSizes.small
                 source: "arrow-down"
-                visible: showMenuArrow && menu.count > 0
+                visible: showMenuArrow && menu.actions && menu.actions.length > 0
             }
         }
     }
