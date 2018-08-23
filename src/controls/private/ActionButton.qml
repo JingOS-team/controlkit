@@ -42,7 +42,7 @@ Item {
     readonly property Page page: root.parent.page
     //either Action or QAction should work here
 
-    function isActionAvailable(action) { return action && action.enabled && (action.visible === undefined || action.visible); }
+    function isActionAvailable(action) { return action && (action.visible === undefined || action.visible); }
 
     readonly property QtObject action: root.page && isActionAvailable(root.page.mainAction) ? root.page.mainAction : null
     readonly property QtObject leftAction: root.page && isActionAvailable(root.page.leftAction) ? root.page.leftAction : null
@@ -228,8 +228,9 @@ Item {
                     anchors.centerIn: parent
                     height: parent.height - Units.smallSpacing*2
                     width: height
+                    enabled: root.action && root.action.enabled
                     visible: root.action
-                    readonly property bool pressed: root.action && ((root.action == mouseArea.actionUnderMouse && mouseArea.pressed) || root.action.checked)
+                    readonly property bool pressed: root.action && root.action.enabled && ((root.action == mouseArea.actionUnderMouse && mouseArea.pressed) || root.action.checked)
                     property color baseColor: root.action && root.action.icon && root.action.icon.color && root.action.icon.color != undefined && root.action.icon.color.a > 0 ? root.action.icon.color : Theme.highlightColor
                     color: pressed ? Qt.darker(baseColor, 1.3) : baseColor
 
@@ -264,12 +265,13 @@ Item {
                         bottom: parent.bottom
                         bottomMargin: Units.smallSpacing
                     }
+                    enabled: root.leftAction && root.leftAction.enabled
                     radius: Units.devicePixelRatio*2
                     height: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                     width: height + (root.action ? Units.gridUnit*2 : 0)
                     visible: root.leftAction
 
-                    readonly property bool pressed: root.leftAction && ((mouseArea.actionUnderMouse == root.leftAction && mouseArea.pressed) || root.leftAction.checked)
+                    readonly property bool pressed: root.leftAction && root.leftAction.enabled && ((mouseArea.actionUnderMouse == root.leftAction && mouseArea.pressed) || root.leftAction.checked)
                     property color baseColor: root.leftAction && root.leftAction.icon && root.leftAction.icon.color && root.leftAction.icon.color != undefined && root.leftAction.icon.color.a > 0 ? root.leftAction.icon.color : Theme.highlightColor
                     color: pressed ? baseColor : Theme.backgroundColor
                     Behavior on color {
@@ -300,11 +302,12 @@ Item {
                         bottom: parent.bottom
                         bottomMargin: Units.smallSpacing
                     }
+                    enabled: root.rightAction && root.rightAction.enabled
                     radius: Units.devicePixelRatio*2
                     height: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                     width: height + (root.action ? Units.gridUnit*2 : 0)
                     visible: root.rightAction
-                    readonly property bool pressed: root.rightAction && ((mouseArea.actionUnderMouse == root.rightAction && mouseArea.pressed) || root.rightAction.checked)
+                    readonly property bool pressed: root.rightAction && root.rightAction.enabled && ((mouseArea.actionUnderMouse == root.rightAction && mouseArea.pressed) || root.rightAction.checked)
                     property color baseColor: root.rightAction && root.rightAction.icon && root.rightAction.icon.color && root.rightAction.icon.color != undefined && root.rightAction.icon.color.a > 0 ? root.rightAction.icon.color : Theme.highlightColor
                     color: pressed ? baseColor : Theme.backgroundColor
                     Behavior on color {
