@@ -653,6 +653,8 @@ T.Control {
                     page.anchors.right = container.right;
                     page.anchors.bottom = container.bottom;
                     page.anchors.topMargin = Qt.binding(function() {return globalToolBarUI.height});
+                } else {
+                    pagesLogic.remove(level);
                 }
             }
             property Item owner
