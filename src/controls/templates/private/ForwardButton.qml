@@ -27,7 +27,7 @@ Controls.ToolButton {
     id: button
 
     property Flickable headerFlickable
-    enabled: applicationWindow().pageStack.currentIndex < applicationWindow().pageStack.depth-1 || !applicationWindow().pageStack.contentItem.atXEnd
+    enabled: applicationWindow().pageStack.depth > 1 && ( applicationWindow().pageStack.currentIndex < applicationWindow().pageStack.depth-1 || !applicationWindow().pageStack.contentItem.atXEnd)
     visible: applicationWindow().pageStack.layers.depth == 1 && applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
     width: height
     height: parent.height

@@ -26,7 +26,7 @@ import org.kde.kirigami 2.4
 Controls.ToolButton {
     id: button
 
-    enabled: applicationWindow().pageStack.layers.depth > 1 ||applicationWindow().pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0
+    enabled: applicationWindow().pageStack.layers.depth > 1 || (applicationWindow().pageStack.depth > 1 && (applicationWindow().pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0))
     visible: applicationWindow().pageStack.layers.depth > 1 || applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
     width: height
     height: parent.height

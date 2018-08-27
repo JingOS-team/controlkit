@@ -488,7 +488,7 @@ T.Control {
         boundsBehavior: Flickable.StopAtBounds
         orientation: Qt.Horizontal
         snapMode: ListView.SnapToItem
-        currentIndex: root.currentIndex
+        currentIndex: 0
         property int marginForLast: count > 1 ? pagesLogic.get(count-1).page.width - pagesLogic.get(count-1).width : 0
         leftMargin: LayoutMirroring.enabled ? marginForLast : 0
         rightMargin: LayoutMirroring.enabled ? 0 : marginForLast
