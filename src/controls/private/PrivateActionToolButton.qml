@@ -25,7 +25,9 @@ import org.kde.kirigami 2.4
 Controls.ToolButton {
     id: control
 
-    implicitWidth: showText && ( kirigamiAction ? kirigamiAction.text.length > 0 : text.length > 0) ? Math.max(layout.implicitWidth + Units.largeSpacing*2, background.implicitWidth) : implicitHeight
+    implicitWidth: menuArrow.visible || (showText && ( kirigamiAction ? kirigamiAction.text.length > 0 : text.length > 0))
+            ? Math.max(layout.implicitWidth + Units.largeSpacing*2, background.implicitWidth)
+            : implicitHeight
     implicitHeight: background.implicitHeight
 
     Theme.colorSet: Theme.Button
@@ -97,6 +99,7 @@ Controls.ToolButton {
                 visible: control.showText && text.length > 0
             }
             Icon {
+                id: menuArrow
                 Layout.minimumWidth: Units.iconSizes.small
                 Layout.minimumHeight: Units.iconSizes.small
                 source: "arrow-down"
