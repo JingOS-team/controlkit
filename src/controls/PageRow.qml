@@ -416,55 +416,95 @@ T.Control {
         }
 
         popEnter: Transition {
-            YAnimator {
-                from: -height
-                to: 0
-                duration: Units.longDuration
-                easing.type: Easing.OutCubic
+            ParallelAnimation {
+                OpacityAnimator {
+                    from: 0
+                    to: 1
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
+                YAnimator {
+                    from: -height/2
+                    to: 0
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
             }
         }
         popExit: Transition {
-            YAnimator {
-                from: 0
-                to: height
-                duration: Units.longDuration
-                easing.type: Easing.OutCubic
+            ParallelAnimation {
+                OpacityAnimator {
+                    from: 1
+                    to: 0
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
+                YAnimator {
+                    from: 0
+                    to: height/2
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
             }
         }
 
         pushEnter: Transition {
-            YAnimator {
-                from: height
-                to: 0
-                duration: Units.longDuration
-                easing.type: Easing.OutCubic 
+            ParallelAnimation {
+                OpacityAnimator {
+                    from: 0
+                    to: 1
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
+                YAnimator {
+                    from: height/2
+                    to: 0
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic 
+                }
             }
         }
 
         pushExit: Transition {
-            YAnimator {
-                from: 0
-                to: -height
-                duration: Units.longDuration
-                easing.type: Easing.OutCubic 
+            ParallelAnimation {
+                OpacityAnimator {
+                    from: 1
+                    to: 0
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
+                YAnimator {
+                    from: 0
+                    to: -height
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic 
+                }
             }
         }
 
         replaceEnter: Transition {
-            YAnimator {
-                from: height
-                to: 0
-                duration: Units.longDuration
-                easing.type: Easing.OutCubic
+            ParallelAnimation {
+                OpacityAnimator {
+                    from: 0
+                    to: 1
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
+                YAnimator {
+                    from: height/2
+                    to: 0
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
             }
         }
 
         replaceExit: Transition {
             YAnimator {
                 from: 0
-                to: -height
+                to: -height/2
                 duration: Units.longDuration
-                easing.type: Easing.OutCubic
+                easing.type: Easing.InOutCubic
             }
         }
     }
