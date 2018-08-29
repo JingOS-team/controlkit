@@ -475,7 +475,7 @@ T.Control {
                 }
                 YAnimator {
                     from: 0
-                    to: -height
+                    to: -height/2
                     duration: Units.longDuration
                     easing.type: Easing.InOutCubic 
                 }
@@ -500,11 +500,19 @@ T.Control {
         }
 
         replaceExit: Transition {
-            YAnimator {
-                from: 0
-                to: -height/2
-                duration: Units.longDuration
-                easing.type: Easing.InOutCubic
+            ParallelAnimation {
+                OpacityAnimator {
+                    from: 1
+                    to: 0
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
+                YAnimator {
+                    from: 0
+                    to: -height/2
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
             }
         }
     }
