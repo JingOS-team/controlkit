@@ -63,37 +63,36 @@ void DelegateCache::ref(QQmlComponent *component)
 
 void DelegateCache::deref(QQmlComponent *component)
 {
-    if (!m_refs.contains(component)) {
+    auto itRef = m_refs.find(component);
+    if (itRef == m_refs.end()) {
         return;
     }
 
-    m_refs[component]--;
-    if (m_refs[component] <= 0) {
-        m_refs.remove(component);
-        if (m_unusedItems.contains(component)) {
-            qDeleteAll(m_unusedItems[component]);
-            m_unusedItems.remove(component);
-        }
+    (*itRef)--;
+    if (*itRef <= 0) {
+        m_refs.erase(itRef);
+
+        qDeleteAll(m_unusedItems.take(component));
     }
 }
 
 void DelegateCache::insert(QQmlComponent *component, QQuickItem *item)
 {
-    if (m_unusedItems.contains(component) && m_unusedItems[component].length() >= s_cacheSize) {
+    auto& items = m_unusedItems[component];
+    if (items.length() >= s_cacheSize) {
         item->deleteLater();
         return;
     }
 
     item->setParentItem(nullptr);
-    m_unusedItems[component].append(item);
+    items.append(item);
 }
 
 QQuickItem *DelegateCache::take(QQmlComponent *component)
 {
-    if (m_unusedItems.contains(component) && !m_unusedItems[component].isEmpty()) {
-        QQuickItem *item = m_unusedItems[component].first();
-        m_unusedItems[component].pop_front();
-        return item;
+    auto it = m_unusedItems.find(component);
+    if (it != m_unusedItems.end() && !it->isEmpty()) {
+        return it->takeFirst();
     }
     return nullptr;
 }
