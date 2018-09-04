@@ -280,6 +280,12 @@ T2.Drawer {
 
     contentWidth: contentItem.implicitWidth || (contentChildren.length === 1 ? contentChildren[0].implicitWidth : 0)
     contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
+    
+    //this is a workaround for the height not being propagated automatically only sometimes
+    // see https://bugs.kde.org/show_bug.cgi?id=398163
+    height: (edge == Qt.LeftEdge || edge == Qt.RightEdge) ? parent.height : undefined
+    width: (edge == Qt.LeftEdge || edge == Qt.RightEdge) ? undefined : parent.width
+
 
     enter: Transition {
         SequentialAnimation {
