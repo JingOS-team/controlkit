@@ -185,12 +185,12 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
     m_item = s_delegateCache->take(component);
 
     if (!m_item) {
-        QQuickItem *candidate = parentItem();
+        QQuickItem *candidate = this;
         QQmlContext *ctx = nullptr;
         while (candidate) {
             QQmlContext *parentCtx = QQmlEngine::contextForObject(candidate);
             if (parentCtx) {
-                ctx = new QQmlContext(QQmlEngine::contextForObject(candidate), candidate);
+                ctx = new QQmlContext(parentCtx, candidate);
                 break;
             } else {
                 candidate = candidate->parentItem();
