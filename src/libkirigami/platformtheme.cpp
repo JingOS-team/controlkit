@@ -702,7 +702,7 @@ PlatformTheme *PlatformTheme::qmlAttachedProperties(QObject *object)
             QDir dir(path + "/kf5/kirigami");
             for (const QString &fileName : dir.entryList(QDir::Files)) {
                 //TODO: env variable?
-                if (fileName.startsWith(QQuickStyle::name())) {
+                if (!QQuickStyle::name().isEmpty() && fileName.startsWith(QQuickStyle::name())) {
                     QPluginLoader loader(dir.absoluteFilePath(fileName));
                     QObject *plugin = loader.instance();
                     //TODO: load actually a factory as plugin

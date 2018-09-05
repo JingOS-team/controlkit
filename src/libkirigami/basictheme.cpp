@@ -244,8 +244,12 @@ void BasicTheme::syncColors()
     pal.setColor(QPalette::Window, backgroundColor());
     setPalette(pal);
 
-    if (basicThemeDeclarative()->instance(this)) {
-        QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagateColorSet", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, colorSet()));
+    if (this->parent()) {
+        //this will work on Qt 5.10+ but is a safe noop on older releases
+        this->parent()->setProperty("palette", QVariant::fromValue(pal));
+        if (basicThemeDeclarative()->instance(this)) {
+            QMetaObject::invokeMethod(basicThemeDeclarative()->instance(this), "__propagateColorSet", Q_ARG(QVariant, QVariant::fromValue(this->parent())), Q_ARG(QVariant, colorSet()));
+        }
     }
 
     emit colorsChanged();
