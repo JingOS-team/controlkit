@@ -477,7 +477,10 @@ QImage DesktopIcon::findIcon(const QSize &size)
     } else {
         if (iconSource.startsWith("qrc:/")){
             iconSource = iconSource.mid(3);
+        } else if (iconSource.startsWith("file:/")) {
+            iconSource = QUrl(iconSource).path();
         }
+
         QIcon icon;
         const QColor tintColor = m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
         const bool isPath = iconSource.contains("/");
