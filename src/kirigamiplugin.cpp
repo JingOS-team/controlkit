@@ -127,13 +127,8 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("Separator.qml")), uri, 2, 0, "Separator");
     qmlRegisterType(componentUrl(QStringLiteral("PageRow.qml")), uri, 2, 0, "PageRow");
 
-    //we want a different implementation with Plasma style
-    if (s_selectedStyle == QStringLiteral("Plasma")) {
-        qmlRegisterType(componentUrl(QStringLiteral("Icon.qml")), uri, 2, 0, "Icon");
-    } else {
-        DesktopIcon::s_internalIconPath = resolveFilePath(QStringLiteral("icons"));
-        qmlRegisterType<DesktopIcon>(uri, 2, 0, "Icon");
-    }
+    DesktopIcon::s_internalIconPath = resolveFilePath(QStringLiteral("icons"));
+    qmlRegisterType<DesktopIcon>(uri, 2, 0, "Icon");
 
     qmlRegisterType(componentUrl(QStringLiteral("Label.qml")), uri, 2, 0, "Label");
     //TODO: uncomment for 2.3 release
