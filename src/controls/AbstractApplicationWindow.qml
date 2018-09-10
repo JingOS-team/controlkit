@@ -26,9 +26,9 @@ import QtGraphicalEffects 1.0
 /**
  * A window that provides some basic features needed for all apps
  * Use this class only if you need a custom content for your application,
- * different from the Page Row behavior recomended by the HIG and provided
+ * different from the Page Row behavior recommended by the HIG and provided
  * by ApplicationWindow.
- * It is recomended to use ApplicationWindow instead
+ * It is recommended to use ApplicationWindow instead
  * @see ApplicationWindow
  *
  * It's usually used as a root QML component for the application.
@@ -133,7 +133,7 @@ QQC2.ApplicationWindow {
     * header: ApplicationHeader
     * An item that can be used as a title for the application.
     * Scrolling the main page will make it taller or shorter (trough the point of going away)
-    * It's a behavior similar to the typical mobile web browser adressbar
+    * It's a behavior similar to the typical mobile web browser addressbar
     * the minimum, preferred and maximum heights of the item can be controlled with
     * * Layout.minimumHeight: default is 0, i.e. hidden
     * * Layout.preferredHeight: default is Units.gridUnit * 1.6
@@ -146,7 +146,7 @@ QQC2.ApplicationWindow {
 
     /**
      * controlsVisible: bool
-     * This property controls wether the standard chrome of the app, such
+     * This property controls whether the standard chrome of the app, such
      * as the Action button, the drawer handles and the application
      * header should be visible or not.
      */
@@ -169,7 +169,7 @@ QQC2.ApplicationWindow {
 
     /**
      * contextDrawer: OverlayDrawer
-     * The drawer for context-dependednt actions, that will be opened by sliding from the
+     * The drawer for context-dependent actions, that will be opened by sliding from the
      * right screen edge or by dragging the ActionButton to the left.
      * It is recommended to use the ContextDrawer class here.
      * The contents of the context drawer should depend from what page is

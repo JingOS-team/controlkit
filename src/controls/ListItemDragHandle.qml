@@ -28,7 +28,7 @@ import org.kde.kirigami 2.4 as Kirigami
  * In order for ListItemDragHandle to work correctly, the listItem that is being dragged
  * should not directly be the delegate of the ListView, but a child of it.
  *
- * It is recomended to use DelagateRecycler as base delegate like the following code:
+ * It is recommended to use DelagateRecycler as base delegate like the following code:
  * @code
  *   ...
  *   Component {
@@ -109,7 +109,7 @@ Item {
 
     /**
      * Emitted when the drag operation is complete and the item has been
-     * droppped in the new final position
+     * dropped in the new final position
      */
     signal dropped()
 

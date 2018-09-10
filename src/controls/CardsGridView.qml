@@ -25,7 +25,7 @@ import "private"
 
 /**
  * CardsGridView is used to display a grid of Cards generated from any model.
- * The behavior is same as CardsLayout, and it allowes cards to be put in one or two
+ * The behavior is same as CardsLayout, and it allows cards to be put in one or two
  * columns depending from the available width.
  * GridView has the limitation that every Card must have the same exact height,
  * so cellHeight must be manually set to a value in which the content fits

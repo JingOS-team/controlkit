@@ -19,7 +19,7 @@ function(kirigami_package_breeze_icons)
         SET(path "")
         file(GLOB_RECURSE path ${_BREEZEICONS_DIR}/icons/*/48/${icon}.svg )
 
-        #seach in other sizes as well
+        #search in other sizes as well
         if (path STREQUAL "")
              file(GLOB_RECURSE path ${_BREEZEICONS_DIR}/icons/*/32/${icon}.svg )
             if (path STREQUAL "")

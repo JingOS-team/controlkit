@@ -27,7 +27,7 @@ import org.kde.kirigami 2.4
 /**
  * An item that can be used as a title for the application.
  * Scrolling the main page will make it taller or shorter (trough the point of going away)
- * It's a behavior similar to the typical mobile web browser adressbar
+ * It's a behavior similar to the typical mobile web browser addressbar
  * the minimum, preferred and maximum heights of the item can be controlled with
  * * minimumHeight: default is 0, i.e. hidden
  * * preferredHeight: default is Units.gridUnit * 1.6
@@ -42,11 +42,11 @@ AbstractApplicationHeader {
      * headerStyle: int
      * The way the separator between pages should be drawn in the header.
      * Allowed values are:
-     * * Breadcrumb: the pages are hyerarchical and the separator will look like a >
+     * * Breadcrumb: the pages are hierarchical and the separator will look like a >
      * * TabBar: the pages are intended to behave like tabbar pages
      *    and the separator will look limke a dot.
      *
-     * When the heaer is in wide screen mode, no separator will be drawn.
+     * When the header is in wide screen mode, no separator will be drawn.
      */
     property int headerStyle: ApplicationHeaderStyle.Auto
 

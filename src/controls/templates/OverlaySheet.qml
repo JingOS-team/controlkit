@@ -48,7 +48,7 @@ QtObject {
      * Note: The content item is automatically resized inside the
      * padding of the control.
      * Conversely, the Sheet will be sized based on the size hints
-     * of the contentItem, so if you need a cusom size sheet,
+     * of the contentItem, so if you need a custom size sheet,
      * redefine contentWidth and contentHeight of your contentItem
      */
     default property Item contentItem
@@ -216,7 +216,7 @@ QtObject {
             }
 
             //NOTE: there is no function to know if an item is descended from another,
-            //so we have to walk the parent hyerarchy by hand
+            //so we have to walk the parent hierarchy by hand
             var isDescendent = false;
             var candidate = focusItem.parent;
             while (candidate) {
@@ -237,7 +237,7 @@ QtObject {
 
             
             var pos = focusItem.mapToItem(flickableContents, 0, cursorY - Units.gridUnit*3);
-            //focused item alreqady visible? add some margin for the space of the action buttons
+            //focused item already visible? add some margin for the space of the action buttons
             if (pos.y >= scrollView.flickableItem.contentY && pos.y <= scrollView.flickableItem.contentY + scrollView.flickableItem.height - Units.gridUnit * 8) {
                 return;
             }
@@ -380,7 +380,7 @@ QtObject {
             //Show an extra margin when:
             //* the application is in mobile mode (no toolbarapplicationheader)
             //* the bottom screen controls are visible
-            //* the sheet is disaplayed *under* the controls
+            //* the sheet is displayed *under* the controls
             property int extraMargin: (!root.parent ||
                 typeof applicationWindow === "undefined" ||
                 (root.parent === applicationWindow().overlay) ||

@@ -84,7 +84,7 @@ T2.Drawer {
      * When collapsed, the drawer will be resized to this size
      * (which may be width for vertical drawers or height for
      * horizontal drawers).
-     * By default it's just enough to accomodate medium sized icons
+     * By default it's just enough to accommodate medium sized icons
      */
     property int collapsedSize: Units.iconSizes.medium + Units.smallSpacing * 2
 

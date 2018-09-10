@@ -25,13 +25,13 @@ import "private"
 
 /**
  * This is the standard layout of a Card.
- * It is recomended to use this class when the concept of Cards is needed
+ * It is recommended to use this class when the concept of Cards is needed
  * in the application.
  * This Card has default items as header and footer. The header is an
  * image that can contain an optional title and icon, accessible via the
  * banner grouped property.
  * The footer will show a series of toolbuttons (and eventual overflow menu)
- * represewnting the actions list accessible with the list property actions.
+ * representing the actions list accessible with the list property actions.
  * It is possible even tough is discouraged to override the footer:
  * in this case the actions property shouldn't be used.
  *

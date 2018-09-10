@@ -147,12 +147,12 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //2.2
     //Theme changed from a singleton to an attached property
-    qmlRegisterUncreatableType<Kirigami::PlatformTheme>(uri, 2, 2, "Theme", "Cannot create objects of type Theme, use it as an attached poperty");
+    qmlRegisterUncreatableType<Kirigami::PlatformTheme>(uri, 2, 2, "Theme", "Cannot create objects of type Theme, use it as an attached property");
 
     //2.3
     qmlRegisterType(componentUrl(QStringLiteral("FormLayout.qml")), uri, 2, 3, "FormLayout");
-    qmlRegisterUncreatableType<FormLayoutAttached>(uri, 2, 3, "FormData", "Cannot create objects of type FormData, use it as an attached poperty");
-    qmlRegisterUncreatableType<MnemonicAttached>(uri, 2, 3, "MnemonicData", "Cannot create objects of type MnemonicData, use it as an attached poperty");
+    qmlRegisterUncreatableType<FormLayoutAttached>(uri, 2, 3, "FormData", "Cannot create objects of type FormData, use it as an attached property");
+    qmlRegisterUncreatableType<MnemonicAttached>(uri, 2, 3, "MnemonicData", "Cannot create objects of type MnemonicData, use it as an attached property");
 
     //2.4
     qmlRegisterType(componentUrl(QStringLiteral("AbstractCard.qml")), uri, 2, 4, "AbstractCard");
@@ -167,7 +167,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     //2.5
     qmlRegisterType(componentUrl(QStringLiteral("ListItemDragHandle.qml")), uri, 2, 5, "ListItemDragHandle");
     qmlRegisterType(componentUrl(QStringLiteral("ActionToolBar.qml")), uri, 2, 5, "ActionToolBar");
-    qmlRegisterUncreatableType<ScenePositionAttached>(uri, 2, 5, "ScenePosition", "Cannot create objects of type ScenePosition, use it as an attached poperty");
+    qmlRegisterUncreatableType<ScenePositionAttached>(uri, 2, 5, "ScenePosition", "Cannot create objects of type ScenePosition, use it as an attached property");
 
     qmlProtectModule(uri, 2);
 }

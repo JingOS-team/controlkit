@@ -59,9 +59,9 @@ Item {
      * a desktop machine (the labels will be on a left column,
      * the fields on a right column beside it), if false (such as on a phone)
      * everything is laid out in a single column.
-     * by default this will be based on wether the application is
+     * by default this will be based on whether the application is
      * wide enough for the layout of being in such mode.
-     * It can be overridden by reasigning the property
+     * It can be overridden by reassigning the property
      */
     property bool wideMode: width >= lay.wideImplicitWidth
 

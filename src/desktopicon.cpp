@@ -27,8 +27,6 @@
 #include <QBitmap>
 #include <QSGTexture>
 #include <QDebug>
-#include <QSGSimpleTextureNode>
-#include <QSGTexture>
 #include <QSharedPointer>
 #include <QtQml>
 #include <QQuickImageProvider>

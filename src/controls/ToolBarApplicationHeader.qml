@@ -36,7 +36,7 @@ ApplicationHeader {
     maximumHeight: preferredHeight
     headerStyle: ApplicationHeaderStyle.Titles
 
-    //FIXME: needs a property difinition to have its own type in qml
+    //FIXME: needs a property definition to have its own type in qml
     property string _internal: ""
 
     Component.onCompleted: print("Warning: ToolbarApplicationHeader is deprecated, remove and use the automatic internal toolbar instead.")

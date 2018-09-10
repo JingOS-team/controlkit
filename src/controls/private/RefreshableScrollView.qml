@@ -203,7 +203,7 @@ P.ScrollView {
         }
 
         //NOTE: there is no function to know if an item is descended from another,
-        //so we have to walk the parent hyerarchy by hand
+        //so we have to walk the parent hierarchy by hand
         var isDescendent = false;
         var candidate = focusItem.parent;
         while (candidate) {
@@ -224,7 +224,7 @@ P.ScrollView {
 
         var pos = focusItem.mapToItem(root.contentItem, 0, cursorY);
 
-        //focused item alreqady visible? add some margin for the space of the action buttons
+        //focused item already visible? add some margin for the space of the action buttons
         if (pos.y >= root.flickableItem.contentY && pos.y <= root.flickableItem.contentY + root.flickableItem.height - Units.gridUnit * 8) {
             return;
         }

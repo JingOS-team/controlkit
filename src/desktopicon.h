@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef QICONITEM_H
-#define QICONITEM_H
+#ifndef DESKTOPICON_H
+#define DESKTOPICON_H
 
 #include <QIcon>
 #include <QQuickItem>

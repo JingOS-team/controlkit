@@ -30,7 +30,7 @@ class DelegateCache;
 /**
  * This class may be used as a delegate of a ListView or a GridView in the case
  * the intended delegate is a bit heavy, with many objects inside.
- * This will ensure the delegate instances will be put back in a commoin pool after
+ * This will ensure the delegate instances will be put back in a common pool after
  * destruction, so when scrolling a big list, the delegates from old delete items will
  * be taken from the pool and reused, minimizing the need of instantiating new objects
  * and deleting old ones. It ensures scrolling of lists with heavy delegates is

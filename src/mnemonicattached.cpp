@@ -137,7 +137,7 @@ void MnemonicAttached::calculateWeights()
             weight += (50 - pos);
         }
 
-        // try to preserve the wanted accelarators
+        // try to preserve the wanted accelerators
         if (c == QLatin1Char('&') && (pos == m_label.length() - 1 || m_label[pos+1] != QLatin1Char('&'))) {
             wanted_character = true;
             ++pos;
