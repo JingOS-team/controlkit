@@ -165,7 +165,7 @@ public:
     };
     Q_ENUM(ColorGroup)
 
-    explicit PlatformTheme(QObject *parent = 0);
+    explicit PlatformTheme(QObject *parent = nullptr);
     ~PlatformTheme();
 
     void setColorSet(PlatformTheme::ColorSet);

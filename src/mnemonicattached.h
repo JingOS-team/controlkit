@@ -89,7 +89,7 @@ public:
     };
     Q_ENUM(ControlType)
 
-    explicit MnemonicAttached(QObject *parent = 0);
+    explicit MnemonicAttached(QObject *parent = nullptr);
     ~MnemonicAttached();
 
     void setLabel(const QString &text);

@@ -55,7 +55,7 @@ class DelegateRecycler : public QQuickItem
     Q_PROPERTY(QQmlComponent *sourceComponent READ sourceComponent WRITE setSourceComponent RESET resetSourceComponent NOTIFY sourceComponentChanged)
 
 public:
-    DelegateRecycler(QQuickItem *parent=0);
+    DelegateRecycler(QQuickItem *parent = nullptr);
     ~DelegateRecycler();
 
 

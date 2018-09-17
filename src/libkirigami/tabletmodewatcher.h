@@ -79,7 +79,7 @@ Q_SIGNALS:
     void tabletModeChanged(bool tabletMode);
 
 private:
-    TabletModeWatcher(QObject *parent = 0);
+    TabletModeWatcher(QObject *parent = nullptr);
     TabletModeWatcherPrivate *d;
     friend class TabletModeWatcherSingleton;
 };

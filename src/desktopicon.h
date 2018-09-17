@@ -49,7 +49,7 @@ class DesktopIcon : public QQuickItem
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
 public:
-    DesktopIcon(QQuickItem *parent=0);
+    DesktopIcon(QQuickItem *parent = nullptr);
     ~DesktopIcon();
 
     void setSource(const QVariant &source);

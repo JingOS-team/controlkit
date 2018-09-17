@@ -61,7 +61,7 @@ class BasicTheme : public PlatformTheme
     Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY colorsChanged)
 
 public:
-    explicit BasicTheme(QObject *parent = 0);
+    explicit BasicTheme(QObject *parent = nullptr);
     ~BasicTheme();
 
     void syncColors();

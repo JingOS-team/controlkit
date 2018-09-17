@@ -64,7 +64,7 @@ class Settings : public QObject
     Q_PROPERTY(int mouseWheelScrollLines READ mouseWheelScrollLines CONSTANT)
 
 public:
-    Settings(QObject *parent=0);
+    Settings(QObject *parent = nullptr);
     ~Settings();
 
     void setTabletModeAvailable(bool mobile);
