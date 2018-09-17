@@ -51,7 +51,7 @@ DelegateCache::DelegateCache()
 
 DelegateCache::~DelegateCache()
 {
-    for (auto item : m_unusedItems) {
+    for (auto& item : qAsConst(m_unusedItems)) {
         qDeleteAll(item);
     }
 }

@@ -220,7 +220,7 @@ void PlatformTheme::setColorSet(PlatformTheme::ColorSet colorSet)
 
     d->m_colorSet = colorSet;
 
-    for (PlatformTheme *t : d->m_childThemes) {
+    for (PlatformTheme *t : qAsConst(d->m_childThemes)) {
         if (t->inherit()) {
             t->setColorSet(colorSet);
            /* if (colorSet == Custom) {
@@ -260,7 +260,7 @@ void PlatformTheme::setColorGroup(PlatformTheme::ColorGroup colorGroup)
 
     d->m_colorGroup = colorGroup;
 
-    for (PlatformTheme *t : d->m_childThemes) {
+    for (PlatformTheme *t : qAsConst(d->m_childThemes)) {
         if (t->inherit()) {
             t->setColorGroup(colorGroup);
         }
@@ -508,7 +508,7 @@ void PlatformTheme::setDefaultFont(const QFont &font)
 
 
 #define PROPAGATECUSTOMCOLOR(colorName, color)\
-            for (PlatformTheme *t : d->m_childThemes) {\
+            for (PlatformTheme *t : qAsConst(d->m_childThemes)) {\
                 if (t->inherit()) {\
                     t->set##colorName(color);\
                 }\
@@ -698,9 +698,11 @@ PlatformTheme *PlatformTheme::qmlAttachedProperties(QObject *object)
     } else if (!s_factoryChecked) {
         s_factoryChecked = true;
 #if QT_CONFIG(library)
-        for (const QString &path : QCoreApplication::libraryPaths()) {
+        const auto libraryPaths = QCoreApplication::libraryPaths();
+        for (const QString &path : libraryPaths) {
             QDir dir(path + QStringLiteral("/kf5/kirigami"));
-            for (const QString &fileName : dir.entryList(QDir::Files)) {
+            const auto fileNames = dir.entryList(QDir::Files);
+            for (const QString &fileName : fileNames) {
                 //TODO: env variable?
                 if (!QQuickStyle::name().isEmpty() && fileName.startsWith(QQuickStyle::name())) {
                     QPluginLoader loader(dir.absoluteFilePath(fileName));
