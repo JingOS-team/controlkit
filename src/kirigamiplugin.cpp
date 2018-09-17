@@ -65,7 +65,7 @@ QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
 
 void KirigamiPlugin::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.kirigami"));
+    Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.kirigami"));
     const QString style = QQuickStyle::name();
 
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
@@ -87,7 +87,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
         m_stylesFallbackChain.prepend(style);
         //if we have plasma deps installed, use them for extra integration
         if (style == QStringLiteral("org.kde.desktop") && QFile::exists(resolveFilePath(QStringLiteral("/styles/org.kde.desktop.plasma")))) {
-            m_stylesFallbackChain.prepend("org.kde.desktop.plasma");
+            m_stylesFallbackChain.prepend(QStringLiteral("org.kde.desktop.plasma"));
         }
     } else {
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
@@ -105,7 +105,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
          }
      );
 
-    qmlRegisterUncreatableType<ApplicationHeaderStyle>(uri, 2, 0, "ApplicationHeaderStyle", "Cannot create objects of type ApplicationHeaderStyle");
+    qmlRegisterUncreatableType<ApplicationHeaderStyle>(uri, 2, 0, "ApplicationHeaderStyle", QStringLiteral("Cannot create objects of type ApplicationHeaderStyle"));
 
     //old legacy retrocompatible Theme
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Theme.qml")), uri, 2, 0, "Theme");
@@ -147,12 +147,12 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //2.2
     //Theme changed from a singleton to an attached property
-    qmlRegisterUncreatableType<Kirigami::PlatformTheme>(uri, 2, 2, "Theme", "Cannot create objects of type Theme, use it as an attached property");
+    qmlRegisterUncreatableType<Kirigami::PlatformTheme>(uri, 2, 2, "Theme", QStringLiteral("Cannot create objects of type Theme, use it as an attached property"));
 
     //2.3
     qmlRegisterType(componentUrl(QStringLiteral("FormLayout.qml")), uri, 2, 3, "FormLayout");
-    qmlRegisterUncreatableType<FormLayoutAttached>(uri, 2, 3, "FormData", "Cannot create objects of type FormData, use it as an attached property");
-    qmlRegisterUncreatableType<MnemonicAttached>(uri, 2, 3, "MnemonicData", "Cannot create objects of type MnemonicData, use it as an attached property");
+    qmlRegisterUncreatableType<FormLayoutAttached>(uri, 2, 3, "FormData", QStringLiteral("Cannot create objects of type FormData, use it as an attached property"));
+    qmlRegisterUncreatableType<MnemonicAttached>(uri, 2, 3, "MnemonicData", QStringLiteral("Cannot create objects of type MnemonicData, use it as an attached property"));
 
     //2.4
     qmlRegisterType(componentUrl(QStringLiteral("AbstractCard.qml")), uri, 2, 4, "AbstractCard");
@@ -161,13 +161,13 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("CardsGridView.qml")), uri, 2, 4, "CardsGridView");
     qmlRegisterType(componentUrl(QStringLiteral("CardsLayout.qml")), uri, 2, 4, "CardsLayout");
     qmlRegisterType(componentUrl(QStringLiteral("InlineMessage.qml")), uri, 2, 4, "InlineMessage");
-    qmlRegisterUncreatableType<MessageType>(uri, 2, 4, "MessageType", "Cannot create objects of type MessageType");
+    qmlRegisterUncreatableType<MessageType>(uri, 2, 4, "MessageType", QStringLiteral("Cannot create objects of type MessageType"));
     qmlRegisterType<DelegateRecycler>(uri, 2, 4, "DelegateRecycler");
 
     //2.5
     qmlRegisterType(componentUrl(QStringLiteral("ListItemDragHandle.qml")), uri, 2, 5, "ListItemDragHandle");
     qmlRegisterType(componentUrl(QStringLiteral("ActionToolBar.qml")), uri, 2, 5, "ActionToolBar");
-    qmlRegisterUncreatableType<ScenePositionAttached>(uri, 2, 5, "ScenePosition", "Cannot create objects of type ScenePosition, use it as an attached property");
+    qmlRegisterUncreatableType<ScenePositionAttached>(uri, 2, 5, "ScenePosition", QStringLiteral("Cannot create objects of type ScenePosition, use it as an attached property"));
 
     qmlProtectModule(uri, 2);
 }

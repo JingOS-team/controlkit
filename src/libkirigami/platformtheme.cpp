@@ -680,7 +680,7 @@ void PlatformTheme::setPalette(const QPalette &palette)
 QIcon PlatformTheme::iconFromTheme(const QString &name, const QColor &customColor)
 {
     QIcon icon = QIcon::fromTheme(name);
-    if (!icon.isNull() && (name.endsWith("-symbolic") || customColor != Qt::transparent)) {
+    if (!icon.isNull() && (name.endsWith(QLatin1String("-symbolic")) || customColor != Qt::transparent)) {
         icon.setIsMask(true);
     }
     return icon;
@@ -699,7 +699,7 @@ PlatformTheme *PlatformTheme::qmlAttachedProperties(QObject *object)
         s_factoryChecked = true;
 #if QT_CONFIG(library)
         for (const QString &path : QCoreApplication::libraryPaths()) {
-            QDir dir(path + "/kf5/kirigami");
+            QDir dir(path + QStringLiteral("/kf5/kirigami"));
             for (const QString &fileName : dir.entryList(QDir::Files)) {
                 //TODO: env variable?
                 if (!QQuickStyle::name().isEmpty() && fileName.startsWith(QQuickStyle::name())) {

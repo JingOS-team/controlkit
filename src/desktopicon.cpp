@@ -417,7 +417,7 @@ void DesktopIcon::handleReadyRead(QNetworkReply* reply)
         if (m_loadedImage.isNull()) {
             // broken image from data, inform the user of this with some useful broken-image thing...
             const QSize size = QSize(width(), height()) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
-            m_loadedImage = QIcon::fromTheme("unknown").pixmap(size, iconMode(), QIcon::On).toImage();
+            m_loadedImage = QIcon::fromTheme(QStringLiteral("unknown")).pixmap(size, iconMode(), QIcon::On).toImage();
         }
         m_changed = true;
         update();
@@ -429,7 +429,7 @@ QImage DesktopIcon::findIcon(const QSize &size)
     QImage img;
     QString iconSource = m_source.toString();
 
-    if (iconSource.startsWith("image://")){
+    if (iconSource.startsWith(QLatin1String("image://"))) {
         QUrl iconUrl(iconSource);
         QString iconProviderId = iconUrl.host();
         QString iconId = iconUrl.path();
@@ -457,7 +457,7 @@ QImage DesktopIcon::findIcon(const QSize &size)
             //will have to investigate this more
             break;
         }
-    } else if(iconSource.startsWith("http://") || iconSource.startsWith("https://")) {
+    } else if(iconSource.startsWith(QLatin1String("http://")) || iconSource.startsWith(QLatin1String("https://"))) {
         if(!m_loadedImage.isNull()) {
             return m_loadedImage.scaled(size, Qt::KeepAspectRatio, m_smooth ? Qt::SmoothTransformation : Qt::FastTransformation );
         }
@@ -471,29 +471,29 @@ QImage DesktopIcon::findIcon(const QSize &size)
             connect(m_networkReply.data(), &QNetworkReply::finished, this, [this, qnam](){ handleFinished(qnam, m_networkReply); });
         }
         // Temporary icon while we wait for the real image to load...
-        img = QIcon::fromTheme("image-x-icon").pixmap(size, iconMode(), QIcon::On).toImage();
+        img = QIcon::fromTheme(QStringLiteral("image-x-icon")).pixmap(size, iconMode(), QIcon::On).toImage();
     } else {
-        if (iconSource.startsWith("qrc:/")){
+        if (iconSource.startsWith(QLatin1String("qrc:/"))) {
             iconSource = iconSource.mid(3);
-        } else if (iconSource.startsWith("file:/")) {
+        } else if (iconSource.startsWith(QLatin1String("file:/"))) {
             iconSource = QUrl(iconSource).path();
         }
 
         QIcon icon;
         const QColor tintColor = m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
-        const bool isPath = iconSource.contains("/");
+        const bool isPath = iconSource.contains(QLatin1String("/"));
         if (isPath) {
             icon = QIcon(iconSource);
         } else {
             if (icon.isNull()) {
                 QQmlContext *ctx = QQmlEngine::contextForObject(this);
                 if (ctx) {
-                    const QString localIconSource = s_internalIconPath % "/" % iconSource % ".svg";
+                    const QString localIconSource = s_internalIconPath % QStringLiteral("/") % iconSource % QStringLiteral(".svg");
                     if (QFile::exists(localIconSource)) {
                         icon = QIcon(localIconSource);
                     }
                     //heuristic to set every icon as mask, maybe only android?
-                    if (!icon.isNull() && (iconSource.endsWith("-symbolic") || m_color != Qt::transparent)) {
+                    if (!icon.isNull() && (iconSource.endsWith(QLatin1String("-symbolic")) || m_color != Qt::transparent)) {
                         icon.setIsMask(true);
                     }
                 }
@@ -511,7 +511,7 @@ QImage DesktopIcon::findIcon(const QSize &size)
             if (m_isMask ||
                 //this is an heuristic to decide when to tint and when to just draw
                 //(fullcolor icons) in reality on basic styles the only colored icons should be -symbolic, this heuristic is the most compatible middle ground
-                icon.isMask() || iconSource.endsWith("-symbolic") ||
+                icon.isMask() || iconSource.endsWith(QLatin1String("-symbolic")) ||
                 (isPath && tintColor != Qt::transparent)) {
                 QPainter p(&img);
                 p.setCompositionMode(QPainter::CompositionMode_SourceIn);
