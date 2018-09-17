@@ -125,7 +125,7 @@ QSharedPointer<QSGTexture> ImageTexturesCache::loadTexture(QQuickWindow *window,
 
 QSharedPointer<QSGTexture> ImageTexturesCache::loadTexture(QQuickWindow *window, const QImage &image)
 {
-    return loadTexture(window, image, 0);
+    return loadTexture(window, image, nullptr);
 }
 
 Q_GLOBAL_STATIC(ImageTexturesCache, s_iconImageCache)
@@ -300,7 +300,7 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
         return Q_NULLPTR;
     }
 
-    if (m_changed || node == 0) {
+    if (m_changed || node == nullptr) {
         QImage img;
         const QSize itemSize(width(), height());
         QRect nodeRect(QPoint(0,0), itemSize);
