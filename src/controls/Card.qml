@@ -76,9 +76,6 @@ Kirigami.AbstractCard {
      *
      * It also has the full set of properties a QML Image has, such as sourceSize and fillMode
      */
-    property alias titleWrapMode: heading.wrapMode
-     * * Image.FillMode fillMode: see the fillMode property of the Image component (default: Image.PreserveAspectCrop)
-     */
     readonly property alias banner: bannerImage
 
     header: BannerImage {
@@ -88,6 +85,7 @@ Kirigami.AbstractCard {
         anchors.rightMargin: root.headerOrientation == Qt.Vertical ? -root.rightPadding : 0
         anchors.bottomMargin: root.headerOrientation == Qt.Horizontal ? -root.bottomPadding : 0
         height: Layout.preferredHeight
+        implicitWidth: root.headerOrientation == Qt.Horizontal ? sourceSize.width : Layout.preferredWidth
     }
 
     onHeaderChanged: {
