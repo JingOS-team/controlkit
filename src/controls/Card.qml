@@ -58,19 +58,25 @@ Kirigami.AbstractCard {
     property list<QtObject> hiddenActions
 
     /**
-     * banner: grouped
+     * banner: Image
      * Gropuped property to control the banner image present in the header, it
      * has the following sub properties:
-     * * url imageSource: the source for the image, it understands any url
+     * * url source: the source for the image, it understands any url
      *                    valid for an Image component
      * * string title: the title for the banner, shown as contrasting
      *                 text over the image
      * * Qt.Alignment titleAlignment: the alignment of the title inside the image,
      *                           a combination of flags is supported
      *                           (default: Qt.AlignTop | Qt.AlignLeft)
-     * * string iconSource: the optional icon to put in the banner:
+     * * string titleIcon: the optional icon to put in the banner:
      *                      it can be either a freedesktop-compatible icon name (recommended)
      *                      or any url supported by Image
+     * * titleLevel: The Kirigami Heading level for the title, it controls the font size, default 1
+     * * wrapMode: if the header should be able to do wrapping
+     *
+     * It also has the full set of properties a QML Image has, such as sourceSize and fillMode
+     */
+    property alias titleWrapMode: heading.wrapMode
      * * Image.FillMode fillMode: see the fillMode property of the Image component (default: Image.PreserveAspectCrop)
      */
     readonly property alias banner: bannerImage
