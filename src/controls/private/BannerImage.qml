@@ -22,9 +22,20 @@ import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.4 as Kirigami
 
+/**
+ * This Component is used as the header of GlobalDrawer and as the header
+ * of Card, It can be accessed there as a grouped property but can never
+ * be instantiated directly
+ */
 Image {
     id: root
 
+    /**
+     * FIXME: compatibility
+     */
+    property alias imageSource: root.source
+    property alias iconSource: root.titleIcon
+    
     /**
      * title: string
      * A title to be displayed on top of the image
@@ -43,6 +54,16 @@ Image {
      */
     property int titleAlignment: Qt.AlignTop | Qt.AlignLeft
 
+    /**
+     * titleLevel: a Kirigami Heading level, default 1
+     */
+    property alias titleLevel: heading.level
+
+    /**
+     * wrapMode: if the header should be able to do wrapping
+     */
+    property alias titleWrapMode: heading.wrapMode
+
     property int leftPadding: headingIcon.valid ? Kirigami.Units.smallSpacing * 2 : Kirigami.Units.largeSpacing
     property int topPadding: headingIcon.valid ? Kirigami.Units.smallSpacing * 2 : Kirigami.Units.largeSpacing
     property int rightPadding: headingIcon.valid ? Kirigami.Units.smallSpacing * 2 : Kirigami.Units.largeSpacing
@@ -50,11 +71,12 @@ Image {
 
     Layout.fillWidth: true
 
-    Layout.preferredWidth: title.implicitWidth
+    Layout.preferredWidth: title.implicitWidth || sourceSize.width
     Layout.preferredHeight: source != "" ? width/(sourceSize.width / sourceSize.height) : Layout.minimumHeight
     Layout.minimumHeight: title.height > 0 ? title.height + Kirigami.Units.smallSpacing * 2 : 0
+    property int implicitWidth: Layout.preferredWidth
 
-    fillMode: Image.PreserveAspectFit
+    fillMode: Image.PreserveAspectCrop
     asynchronous: true
 
     LinearGradient {
@@ -65,7 +87,7 @@ Image {
             bottom: (root.titleAlignment & Qt.AlignBottom) ? parent.bottom : undefined
         }
         visible: root.source != "" && root.title != "" && ((root.titleAlignment & Qt.AlignTop) || (root.titleAlignment & Qt.AlignBottom))
-        height: title.height * 2
+        height: Math.min(parent.height, title.height * 2)
         start: Qt.point(0, 0)
         end: Qt.point(0, height)
         gradient: Gradient {
@@ -96,6 +118,7 @@ Image {
             bottomMargin: root.bottomPadding
         }
         width: Math.min(implicitWidth, parent.width)
+        height: Math.min(implicitHeight, parent.height)
         Kirigami.Icon {
             id: headingIcon
             Layout.minimumWidth: Kirigami.Units.iconSizes.large
@@ -106,6 +129,7 @@ Image {
         Kirigami.Heading {
             id: heading
             Layout.fillWidth: true
+            Layout.fillHeight: true
             visible: text.length > 0
             level: 1
             color: source != "" ? "white" : Kirigami.Theme.textColor

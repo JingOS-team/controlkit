@@ -73,24 +73,15 @@ Kirigami.AbstractCard {
      *                      or any url supported by Image
      * * Image.FillMode fillMode: see the fillMode property of the Image component (default: Image.PreserveAspectCrop)
      */
-    readonly property alias banner: bannerGroup
+    readonly property alias banner: bannerImage
 
     header: BannerImage {
         id: bannerImage
-        BannerGroup {
-            id: bannerGroup
-        }
         anchors.leftMargin: -root.leftPadding
         anchors.topMargin: -root.topPadding
         anchors.rightMargin: root.headerOrientation == Qt.Vertical ? -root.rightPadding : 0
         anchors.bottomMargin: root.headerOrientation == Qt.Horizontal ? -root.bottomPadding : 0
-        title: bannerGroup.title
-        source: bannerGroup.imageSource
-        titleAlignment: bannerGroup.titleAlignment
-        titleIcon: bannerGroup.iconSource
-        fillMode: bannerGroup.fillMode
         height: Layout.preferredHeight
-        
     }
 
     onHeaderChanged: {

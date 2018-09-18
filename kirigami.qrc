@@ -26,7 +26,6 @@
         <file alias="private/ActionButton.qml">src/controls/private/ActionButton.qml</file>
         <file alias="private/DefaultListItemBackground.qml">src/controls/private/DefaultListItemBackground.qml</file>
         <file alias="private/BannerImage.qml">src/controls/private/BannerImage.qml</file>
-        <file alias="private/BannerGroup.qml">src/controls/private/BannerGroup.qml</file>
         <file alias="private/EdgeShadow.qml">src/controls/private/EdgeShadow.qml</file>
         <file alias="private/AbstractPageHeader.qml">src/controls/private/AbstractPageHeader.qml</file>
         <file alias="private/PageRowGlobalToolBarStyleGroup.qml">src/controls/private/PageRowGlobalToolBarStyleGroup.qml</file>
