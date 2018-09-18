@@ -117,8 +117,8 @@ Image {
             rightMargin: root.rightPadding
             bottomMargin: root.bottomPadding
         }
-        width: Math.min(implicitWidth, parent.width)
-        height: Math.min(implicitHeight, parent.height)
+        width: Math.min(implicitWidth, parent.width -root.leftPadding - root.rightPadding)
+        height: Math.min(implicitHeight, parent.height - root.topPadding - root.bottomPadding)
         Kirigami.Icon {
             id: headingIcon
             Layout.minimumWidth: Kirigami.Units.iconSizes.large
