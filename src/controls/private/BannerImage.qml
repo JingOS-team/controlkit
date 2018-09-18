@@ -30,7 +30,7 @@ import org.kde.kirigami 2.4 as Kirigami
 Image {
     id: root
 
-    /**
+    /*
      * FIXME: compatibility
      */
     property alias imageSource: root.source
