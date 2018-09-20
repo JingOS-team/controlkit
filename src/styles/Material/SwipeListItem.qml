@@ -19,6 +19,8 @@
 
 import QtQuick 2.5
 import org.kde.kirigami 2.4
+import QtQuick.Controls.Material 2.1 as Mat
+import QtQuick.Controls.Material.impl 2.1 as MatImp
 import "../../private"
 import "../../templates" as T
 
@@ -60,31 +62,14 @@ T.SwipeListItem {
         }
     }
     background: DefaultListItemBackground {
-        //TODO: this will have to reuse QQC2.1 Ripple
-        Rectangle {
-            id: ripple
-            anchors.centerIn: parent
-            width: parent.width
-            height: parent.width
-            radius: width
-            color: Qt.rgba(1,1,1,0.3)
-            scale: 0
-            opacity: 1
-            ParallelAnimation {
-                id: clickAnim
-                ScaleAnimator {
-                    target: ripple
-                    from: 0
-                    to: 1
-                    duration: Units.longDuration
-                }
-                OpacityAnimator {
-                    target: ripple
-                    from: 0
-                    to: 1
-                    duration: Units.longDuration
-                }
-            }
+
+        MatImp.Ripple {
+            anchors.fill: parent
+            clip: visible
+            pressed: listItem.pressed
+            anchor: listItem
+            active: listItem.down || listItem.visualFocus 
+            color: Qt.rgba(0,0,0,0.2)
         }
     }
     implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 6
