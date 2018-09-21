@@ -190,7 +190,7 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
         while (candidate) {
             QQmlContext *parentCtx = QQmlEngine::contextForObject(candidate);
             if (parentCtx) {
-                ctx = new QQmlContext(QQmlEngine::contextForObject(candidate), candidate);
+                ctx = new QQmlContext(parentCtx, candidate);
                 break;
             } else {
                 candidate = candidate->parentItem();
