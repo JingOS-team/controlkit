@@ -480,7 +480,6 @@ QImage DesktopIcon::findIcon(const QSize &size)
         }
 
         QIcon icon;
-        const QColor tintColor = m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
         const bool isPath = iconSource.contains(QLatin1String("/"));
         if (isPath) {
             icon = QIcon(iconSource);
@@ -492,14 +491,10 @@ QImage DesktopIcon::findIcon(const QSize &size)
                     if (QFile::exists(localIconSource)) {
                         icon = QIcon(localIconSource);
                     }
-                    //heuristic to set every icon as mask, maybe only android?
-                    if (!icon.isNull() && (iconSource.endsWith(QLatin1String("-symbolic")) || m_color != Qt::transparent)) {
-                        icon.setIsMask(true);
-                    }
                 }
             }
             if (icon.isNull()) {
-                icon = m_theme->iconFromTheme(iconSource, tintColor);
+                icon = m_theme->iconFromTheme(iconSource, m_color);
             }
         }
         if (!icon.isNull()) {
@@ -512,10 +507,10 @@ QImage DesktopIcon::findIcon(const QSize &size)
                 //this is an heuristic to decide when to tint and when to just draw
                 //(fullcolor icons) in reality on basic styles the only colored icons should be -symbolic, this heuristic is the most compatible middle ground
                 icon.isMask() || iconSource.endsWith(QLatin1String("-symbolic")) ||
-                (isPath && tintColor != Qt::transparent)) {
+                (isPath && m_color.isValid() && m_color != Qt::transparent)) {
                 QPainter p(&img);
                 p.setCompositionMode(QPainter::CompositionMode_SourceIn);
-                p.fillRect(img.rect(), tintColor);
+                p.fillRect(img.rect(), m_color);
                 p.end();
             }
         }
