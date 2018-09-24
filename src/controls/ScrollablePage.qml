@@ -136,6 +136,7 @@ Page {
         //child of root as it shouldn't have margins
         parent: root
         page: root
+        clip: root.clip
         topPadding: contentItem == flickableItem ? 0 : root.topPadding
         leftPadding: root.leftPadding
         rightPadding: root.rightPadding

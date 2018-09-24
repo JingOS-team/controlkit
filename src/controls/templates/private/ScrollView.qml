@@ -24,6 +24,7 @@ MouseArea {
     id: root
     default property Item contentItem
     property Flickable flickableItem
+    clip: true
 
     //TODO: horizontalScrollBarPolicy is completely noop just for compatibility right now
     property int horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
@@ -144,7 +145,7 @@ MouseArea {
         anchors {
             fill: parent
         }
-        clip: true
+        //clip: true
         mouseEnabled: false
         maximumTouchPoints: 1
         property bool touchPressed: false
