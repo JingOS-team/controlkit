@@ -503,14 +503,17 @@ QImage DesktopIcon::findIcon(const QSize &size)
             if (window() && window()->screen()) {
                 ratio = window()->screen()->devicePixelRatio();
             }
+
+            const QColor tintColor = m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
+
             if (m_isMask ||
                 //this is an heuristic to decide when to tint and when to just draw
                 //(fullcolor icons) in reality on basic styles the only colored icons should be -symbolic, this heuristic is the most compatible middle ground
                 icon.isMask() || iconSource.endsWith(QLatin1String("-symbolic")) ||
-                (isPath && m_color.isValid() && m_color != Qt::transparent)) {
+                (isPath && tintColor.isValid() && tintColor != Qt::transparent)) {
                 QPainter p(&img);
                 p.setCompositionMode(QPainter::CompositionMode_SourceIn);
-                p.fillRect(img.rect(), m_color);
+                p.fillRect(img.rect(), tintColor);
                 p.end();
             }
         }
