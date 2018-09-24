@@ -39,8 +39,6 @@ Controls.Menu
             readonly property QtObject action: modelData
             property QtObject item: null
 
-            Component.onDestruction: if (item) item.destroy()
-
             function create() {
                 if (!action.children || action.children.length === 0) {
                     item = theMenu.itemDelegate.createObject(null, { ourAction: action });
