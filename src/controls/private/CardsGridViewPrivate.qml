@@ -32,11 +32,7 @@ GridView {
 
         //in grid views align the cells in the middle
         anchors.left: parent.left
-        anchors.leftMargin: root.width <= root.maximumColumnWidth
-            ? 0
-            : root.cellWidth * (index % root.columns + 1) - root.cellWidth/2 - width/2/*(index % root.columns === 0
-                ? Math.max(0, root.cellWidth - root.maximumColumnWidth)
-                : root.cellWidth)*/
+        anchors.leftMargin: (width + Kirigami.Units.largeSpacing*2) * (index % root.columns ) + root.width/2 - (root.columns*(width + Kirigami.Units.largeSpacing*2))/2
 
         sourceComponent: root._delegateComponent
     }
