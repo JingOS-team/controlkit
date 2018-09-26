@@ -42,6 +42,7 @@ CardsGridViewPrivate {
     /**
      * columns: int
      * how many columns the gridview has
+     * @since 2.5
      */
     readonly property int columns: {
 
@@ -55,6 +56,7 @@ CardsGridViewPrivate {
     /**
      * maximumColumns: int
      * Maximum value for columns if the user wants to limit it
+     * @since 2.5
      */
     property int maximumColumns: Infinity
 
@@ -72,11 +74,11 @@ CardsGridViewPrivate {
     /**
      * minimumColumnWidth: int
      * The minimum width the columns may have. the cards will never
-     * get smaller than this size, when the GridView is wider than
-     * minimumColumnWidth, it will switch from one to two columns.
+     * get smaller than this size.
      * If the default needs to be overridden for some reason,
      * it is advised to express this unit as a multiple
      * of Kirigami.Units.gridUnit
+     * @since 2.5
      */
     property int minimumColumnWidth: Kirigami.Units.gridUnit * 12
 
