@@ -32,7 +32,11 @@ GridView {
 
         //in grid views align the cells in the middle
         anchors.left: parent.left
-        anchors.leftMargin: root.width <= root.maximumColumnWidth ? 0 : (index % 2 === 0 ? Math.max(0, root.cellWidth - root.maximumColumnWidth) : root.cellWidth)
+        anchors.leftMargin: root.width <= root.maximumColumnWidth
+            ? 0
+            : root.cellWidth * (index % root.columns + 1) - root.cellWidth/2 - width/2/*(index % root.columns === 0
+                ? Math.max(0, root.cellWidth - root.maximumColumnWidth)
+                : root.cellWidth)*/
 
         sourceComponent: root._delegateComponent
     }

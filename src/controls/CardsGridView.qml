@@ -40,6 +40,25 @@ CardsGridViewPrivate {
     id: root
 
     /**
+     * columns: int
+     * how many columns the gridview has
+     */
+    readonly property int columns: {
+
+        return Math.max(1,
+                        Math.min(maximumColumns > 0 ? maximumColumns : Infinity,
+                                 Math.floor(width/minimumColumnWidth),
+                                 Math.ceil(width/maximumColumnWidth))
+                       );
+    }
+
+    /**
+     * maximumColumns: int
+     * Maximum value for columns if the user wants to limit it
+     */
+    property int maximumColumns: Infinity
+
+    /**
      * maximumColumnWidth: int
      * The maximum width the columns may have. the cards will never
      * get wider than this size, when the GridView is wider than
@@ -49,7 +68,19 @@ CardsGridViewPrivate {
      * of Kirigami.Units.gridUnit
      */
     property int maximumColumnWidth: Kirigami.Units.gridUnit * 20
-    cellWidth: width > maximumColumnWidth ? width/2 : width
+
+    /**
+     * minimumColumnWidth: int
+     * The minimum width the columns may have. the cards will never
+     * get smaller than this size, when the GridView is wider than
+     * minimumColumnWidth, it will switch from one to two columns.
+     * If the default needs to be overridden for some reason,
+     * it is advised to express this unit as a multiple
+     * of Kirigami.Units.gridUnit
+     */
+    property int minimumColumnWidth: Kirigami.Units.gridUnit * 12
+
+    cellWidth: Math.floor(width/columns)
     cellHeight: Math.max(Kirigami.Units.gridUnit * 15, Math.min(cellWidth, maximumColumnWidth) / 1.2)
 
     default property alias delegate: root._delegateComponent
