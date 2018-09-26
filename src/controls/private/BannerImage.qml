@@ -71,9 +71,9 @@ Image {
 
     Layout.fillWidth: true
 
-    Layout.preferredWidth: title.implicitWidth || sourceSize.width
+    Layout.preferredWidth: titleLayout.implicitWidth || sourceSize.width
     Layout.preferredHeight: source != "" ? width/(sourceSize.width / sourceSize.height) : Layout.minimumHeight
-    Layout.minimumHeight: title.height > 0 ? title.height + Kirigami.Units.smallSpacing * 2 : 0
+    Layout.minimumHeight: titleLayout.implicitHeight > 0 ? titleLayout.implicitHeight + Kirigami.Units.smallSpacing * 2 : 0
     property int implicitWidth: Layout.preferredWidth
 
     fillMode: Image.PreserveAspectCrop
@@ -87,7 +87,7 @@ Image {
             bottom: (root.titleAlignment & Qt.AlignBottom) ? parent.bottom : undefined
         }
         visible: root.source != "" && root.title != "" && ((root.titleAlignment & Qt.AlignTop) || (root.titleAlignment & Qt.AlignBottom))
-        height: Math.min(parent.height, title.height * 2)
+        height: Math.min(parent.height, titleLayout.height * 2)
         start: Qt.point(0, 0)
         end: Qt.point(0, height)
         gradient: Gradient {
@@ -103,7 +103,7 @@ Image {
     }
 
     RowLayout {
-        id: title
+        id: titleLayout
         anchors {
             left: root.titleAlignment & Qt.AlignLeft ? parent.left : undefined
             top: root.titleAlignment & Qt.AlignTop ? parent.top : undefined
