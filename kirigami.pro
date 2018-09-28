@@ -9,6 +9,7 @@ HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/settings.h \
                $$PWD/src/formlayoutattached.h \
                $$PWD/src/mnemonicattached.h \
+               $$PWD/src/scenepositionattached.h \
                $$PWD/src/libkirigami/basictheme_p.h \
                $$PWD/src/libkirigami/platformtheme.h \
                $$PWD/src/libkirigami/kirigamipluginfactory.h \
@@ -20,6 +21,7 @@ SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/settings.cpp \
                $$PWD/src/formlayoutattached.cpp \
                $$PWD/src/mnemonicattached.cpp \
+               $$PWD/src/scenepositionattached.cpp \
                $$PWD/src/libkirigami/basictheme.cpp \
                $$PWD/src/libkirigami/platformtheme.cpp \
                $$PWD/src/libkirigami/kirigamipluginfactory.cpp \
