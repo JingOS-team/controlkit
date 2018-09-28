@@ -44,14 +44,11 @@ CardsGridViewPrivate {
      * how many columns the gridview has
      * @since 2.5
      */
-    readonly property int columns: {
-
-        return Math.max(1,
+    readonly property int columns: Math.max(1,
                         Math.min(maximumColumns > 0 ? maximumColumns : Infinity,
                                  Math.floor(width/minimumColumnWidth),
                                  Math.ceil(width/maximumColumnWidth))
                        );
-    }
 
     /**
      * maximumColumns: int

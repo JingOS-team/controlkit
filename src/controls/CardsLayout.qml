@@ -38,6 +38,14 @@ import org.kde.kirigami 2.4 as Kirigami
  */
 GridLayout {
     /**
+     * maximumColumns: int
+     * The layout will never lay out the items in more columns than maximumColumns
+     * Default: 2
+     * @since 2.5
+     */
+    property int maximumColumns: 2
+
+    /**
      * maximumColumnWidth: int
      * The maximum width the columns may have. the cards will never
      * get wider than this size, when the GridLayout is wider than
@@ -48,11 +56,29 @@ GridLayout {
      */
     property int maximumColumnWidth: Kirigami.Units.gridUnit * 20
 
-    columns: width > maximumColumnWidth ? 2 : 1
-    rowSpacing: Kirigami.Units.largeSpacing * 2
-    columnSpacing: Kirigami.Units.largeSpacing * 2
+    /**
+     * minimumColumnWidth: int
+     * The minimumWidth the columns may have. The layout will try to dispose items
+     * in a number of columns that will respect this size constraint.
+     * @since 2.5
+     */
+    property int minimumColumnWidth: Kirigami.Units.gridUnit * 12
 
-    Layout.preferredWidth: maximumColumnWidth * 2 + (columns > 1 ? Kirigami.Units.largeSpacing * 2 : 0)
+    columns: Math.max(1, Math.min(maximumColumns > 0 ? maximumColumns : Infinity,
+                                  Math.floor(width/minimumColumnWidth),
+                                  Math.ceil(width/maximumColumnWidth)));
+
+    rowSpacing: Kirigami.Units.largeSpacing * columns
+    columnSpacing: Kirigami.Units.largeSpacing * columns
+
+
+    //NOTE: this default width which defaults to 2 columns is just to remove a binding loop on columns
+    width: maximumColumnWidth*2 + Kirigami.Units.largeSpacing
+    //same computation of columns, but on the parent size
+    Layout.preferredWidth: maximumColumnWidth * Math.max(1, Math.min(maximumColumns > 0 ? maximumColumns : Infinity,
+                                  Math.floor(parent.width/minimumColumnWidth),
+                                  Math.ceil(parent.width/maximumColumnWidth))) + Kirigami.Units.largeSpacing * (columns - 1)
+
     Layout.maximumWidth: Layout.preferredWidth
     Layout.alignment: Qt.AlignHCenter
 
