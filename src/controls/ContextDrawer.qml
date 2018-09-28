@@ -132,14 +132,29 @@ OverlayDrawer {
                 }
             }
             delegate: BasicListItem {
+                id: listItem
+
+                readonly property bool isSeparator: modelData.hasOwnProperty("separator") && modelData.separator
+
                 checked: modelData.checked
                 icon: modelData.icon
                 supportsMouseEvents: true
                 separatorVisible: false
+                reserveSpaceForIcon: !isSeparator
+                reserveSpaceForLabel: !isSeparator
+
                 label: model ? (model.tooltip ? model.tooltip : model.text) : (modelData.tooltip ? modelData.tooltip : modelData.text)
-                enabled: model ? model.enabled : modelData.enabled
+                enabled: !isSeparator && (model ? model.enabled : modelData.enabled)
                 visible: model ? model.visible : modelData.visible
                 opacity: enabled ? 1.0 : 0.6
+
+                Separator {
+                    id: separatorAction
+
+                    visible: listItem.isSeparator
+                    Layout.fillWidth: true
+                }
+
                 onClicked: {
                     root.drawerOpen = false;
                     if (modelData && modelData.trigger !== undefined) {

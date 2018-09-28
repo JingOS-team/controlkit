@@ -55,6 +55,13 @@ AbstractListItem {
      */
     property alias reserveSpaceForIcon: iconItem.visible
 
+    /**
+     * reserveSpaceForLabel: bool
+     * If false, the label will not try to be as wide as possible
+     * It's useful in layouts containing entries without text
+     */
+    property alias reserveSpaceForLabel: labelItem.visible
+
     default property alias _basicDefault: layout.children
 
     contentItem: RowLayout {

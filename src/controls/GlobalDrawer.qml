@@ -460,12 +460,16 @@ OverlayDrawer {
                                 id: listItem
                                 supportsMouseEvents: true
                                 readonly property bool wideMode: width > height * 2
+                                readonly property bool isSeparator: modelData.hasOwnProperty("separator") && modelData.separator
+                                reserveSpaceForIcon: !isSeparator
+                                reserveSpaceForLabel: !isSeparator
                                 checked: modelData.checked || (actionsMenu && actionsMenu.visible)
                                 width: parent.width
 
                                 icon: modelData.iconName
 
                                 label: width > height * 2 ? MnemonicData.richTextLabel : ""
+
                                 MnemonicData.enabled: listItem.enabled && listItem.visible
                                 MnemonicData.controlType: MnemonicData.MenuItem
                                 MnemonicData.label: modelData.text
@@ -494,8 +498,16 @@ OverlayDrawer {
                                         easing.type: Easing.InOutQuad
                                     }
                                 }
-                                enabled: (model && model.enabled != undefined) ? model.enabled : modelData.enabled
+                                enabled: !isSeparator && ( (model && model.enabled != undefined) ? model.enabled : modelData.enabled)
                                 opacity: enabled ? 1.0 : 0.3
+
+                                Separator {
+                                    id: separatorAction
+
+                                    visible: listItem.isSeparator
+                                    Layout.fillWidth: true
+                                }
+
                                 Icon {
                                     Shortcut {
                                         sequence: listItem.MnemonicData.sequence
@@ -509,11 +521,11 @@ OverlayDrawer {
                                     selected: listItem.checked || listItem.pressed
                                     Layout.preferredWidth: Layout.preferredHeight
                                     source: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
-                                    visible: modelData.children!==undefined && modelData.children.length > 0
+                                    visible: !listItem.isSeparator && modelData.children!==undefined && modelData.children.length > 0
                                 }
                                 data: [
                                     QQC2.ToolTip {
-                                        visible: (modelData.tooltip.length || root.collapsed) && (!actionsMenu || !actionsMenu.visible) &&  listItem.hovered && text.length > 0
+                                        visible: !listItem.isSeparator && (modelData.tooltip.length || root.collapsed) && (!actionsMenu || !actionsMenu.visible) &&  listItem.hovered && text.length > 0
                                         text: modelData.tooltip.length ? modelData.tooltip : modelData.text
                                         delay: 1000
                                         timeout: 5000

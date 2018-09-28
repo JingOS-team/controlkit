@@ -19,6 +19,7 @@
 
 import QtQuick 2.3
 import QtQuick.Controls 2.1 as Controls
+import org.kde.kirigami 2.4 as Kirigami
 
 Controls.Menu
 {
@@ -27,6 +28,14 @@ Controls.Menu
     property Component submenuComponent
     //renamed to work on both Qt 5.9 and 5.10
     property Component itemDelegate: Component {ActionMenuItem {}}
+    property Component separatorDelegate: Component {
+        Controls.MenuSeparator {
+            contentItem: Rectangle {
+                implicitHeight: Math.floor(Kirigami.Units.devicePixelRatio)
+                color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+            }
+        }
+    }
 
     Item {
         id: invisibleItems
@@ -41,7 +50,12 @@ Controls.Menu
 
             function create() {
                 if (!action.children || action.children.length === 0) {
-                    item = theMenu.itemDelegate.createObject(null, { ourAction: action });
+                    if (action.hasOwnProperty("separator") && action.separator) {
+                        item = theMenu.separatorDelegate.createObject(null, {});
+                    }
+                    else {
+                        item = theMenu.itemDelegate.createObject(null, { ourAction: action });
+                    }
                     theMenu.addItem(item)
                 } else if (theMenu.submenuComponent) {
                     item = theMenu.submenuComponent.createObject(null, { title: action.text, actions: action.children });

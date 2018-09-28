@@ -140,6 +140,13 @@ QtObject {
      * }
      * @endcode
      */
+
+    /**
+     * separator: bool
+     * Whether the action is is a separator action; defaults to false.
+     */
+    property bool separator: false
+
     default property alias children: root.__children
     property list<QtObject> __children
     property Shortcut __shortcut: Shortcut {
