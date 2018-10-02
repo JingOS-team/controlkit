@@ -387,8 +387,8 @@ QtObject {
                 typeof applicationWindow === "undefined" ||
                 (root.parent === applicationWindow().overlay) ||
                 !applicationWindow().controlsVisible ||
-                !applicationWindow().header ||
-                applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0)
+                (applicationWindow().pageStack && applicationWindow().pageStack.globalToolbar && applicationWindow().pageStack.globalToolbar.style == Kirigami.ApplicationHeaderStyle.ToolBar) ||
+                (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0))
                     ? 0 : Units.gridUnit * 3
             Connections {
                 target: scrollView.flickableItem
