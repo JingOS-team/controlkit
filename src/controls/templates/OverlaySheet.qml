@@ -379,6 +379,7 @@ QtObject {
             height: footerParent.implicitHeight + Units.smallSpacing * 2 + extraMargin
             color: Theme.backgroundColor
             y: mainItem.mapFromItem(flickableContents, 0, flickableContents.height).y - height
+            onHeightChanged: y = Math.min(mainItem.height, mainItem.mapFromItem(flickableContents, 0, flickableContents.height).y) - footerItem.height;
             //Show an extra margin when:
             //* the application is in mobile mode (no toolbarapplicationheader)
             //* the bottom screen controls are visible
@@ -387,7 +388,7 @@ QtObject {
                 typeof applicationWindow === "undefined" ||
                 (root.parent === applicationWindow().overlay) ||
                 !applicationWindow().controlsVisible ||
-                (applicationWindow().pageStack && applicationWindow().pageStack.globalToolbar && applicationWindow().pageStack.globalToolbar.style == Kirigami.ApplicationHeaderStyle.ToolBar) ||
+                (applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar && applicationWindow().pageStack.globalToolBar.actualStyle == ApplicationHeaderStyle.ToolBar) ||
                 (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0))
                     ? 0 : Units.gridUnit * 3
             Connections {
