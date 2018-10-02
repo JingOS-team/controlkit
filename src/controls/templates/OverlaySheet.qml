@@ -198,11 +198,13 @@ QtObject {
             }
         }
 
+        readonly property int contentItemPreferredWidth: root.contentItem.Layout.preferredWidth > 0 ? root.contentItem.Layout.preferredWidth : root.contentItem.implicitWidth
+
         onWidthChanged: {
             if (!contentItem.contentItem)
                 return
 
-            var width = Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth));
+            var width = Math.max(mainItem.width/2, Math.min(mainItem.width, mainItem.contentItemPreferredWidth));
             contentItem.contentItem.x = (mainItem.width - width)/2
             contentItem.contentItem.width = width;
         }
@@ -259,9 +261,9 @@ QtObject {
                 duration: Units.longDuration
                 easing.type: Easing.OutQuad
                 onRunningChanged: {
-                    //hack to center listviews
+                    //HACK to center listviews
                     if (!running && contentItem.contentItem) {
-                        var width = Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth));
+                        var width = Math.max(mainItem.width/2, Math.min(mainItem.width, mainItem.contentItemPreferredWidth));
                         contentItem.contentItem.x = (mainItem.width - width)/2
                         contentItem.contentItem.width = width;
                     }
@@ -435,7 +437,7 @@ QtObject {
 
             y: (scrollView.contentItem != flickableContents ? -scrollView.flickableItem.contentY - listHeaderHeight  - (headerItem.visible ? headerItem.height : 0): 0)
 
-            width: root.contentItem.implicitWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.width, root.contentItem.implicitWidth))
+            width: mainItem.contentItemPreferredWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.width, mainItem.contentItemPreferredWidth))
 
             height: (scrollView.contentItem != flickableContents ? scrollView.flickableItem.contentHeight + listHeaderHeight : (root.contentItem.height + topPadding + bottomPadding)) + (headerItem.visible ? headerItem.height : 0) + (footerItem.visible ? footerItem.height : 0)
 
