@@ -20,7 +20,7 @@
 import QtQuick 2.1
 import QtGraphicalEffects 1.0
 import QtQuick.Templates 2.0 as T2
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.5
 
 import "private"
 import "templates" as T
@@ -36,6 +36,18 @@ T.OverlayDrawer {
     id: root
 
 //BEGIN Properties
+    focus: false
+    modal: true
+    drawerOpen: !modal
+    closePolicy: modal ? T2.Popup.CloseOnEscape | T2.Popup.CloseOnReleaseOutside : T2.Popup.NoAutoClose
+    handleVisible: (modal || !drawerOpen) && (typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true)
+
+    onPositionChanged: {
+        if (!modal && !root.peeking && !root.animating) {
+            position = 1;
+        }
+    }
+
     background: Rectangle {
         color: Theme.backgroundColor
 
@@ -45,6 +57,7 @@ T.OverlayDrawer {
 
             DropShadow {
                 anchors.fill: handleGraphics
+                visible: !parent.parent.handleAnchor || root.handle.pressed || (root.modal && root.position > 0)
                 horizontalOffset: 0
                 verticalOffset: Units.devicePixelRatio
                 radius: Units.gridUnit /2
@@ -55,9 +68,13 @@ T.OverlayDrawer {
             Rectangle {
                 id: handleGraphics
                 anchors.centerIn: parent
-                Theme.colorSet: Theme.Button
+                Theme.colorSet: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.colorSet : Theme.Button
+                Theme.backgroundColor: parent.parent.handleAnchor.Theme.backgroundColor 
+                Theme.textColor: parent.parent.handleAnchor.Theme.textColor 
                 Theme.inherit: false
-                color: root.handle.pressed ? Theme.highlightColor : Theme.backgroundColor
+                color: parent.parent.handleAnchor && !root.visible
+                        ? "transparent"
+                        : (root.handle.pressed ? Theme.highlightColor : Theme.backgroundColor)
                 width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                 height: width
                 radius: Units.devicePixelRatio * 2
@@ -105,8 +122,18 @@ T.OverlayDrawer {
         }
 
 
+        Separator {
+            anchors {
+                right: root.edge == Qt.RightEdge ? parent.left : (root.edge == Qt.LeftEdge ? undefined : parent.right)
+                left: root.edge == Qt.LeftEdge ? parent.right : (root.edge == Qt.RightEdge ? undefined : parent.left)
+                top: root.edge == Qt.TopEdge ? parent.bottom : (root.edge == Qt.BottomEdge ? undefined : parent.top)
+                bottom: root.edge == Qt.BottomEdge ? parent.top : (root.edge == Qt.TopEdge ? undefined : parent.bottom)
+            }
+            visible: !root.modal
+        }
         EdgeShadow {
             z: -2
+            visible: root.modal
             edge: root.edge
             anchors {
                 right: root.edge == Qt.RightEdge ? parent.left : (root.edge == Qt.LeftEdge ? undefined : parent.right)

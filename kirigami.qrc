@@ -73,7 +73,6 @@
         <file alias="styles/Material/Label.qml">src/styles/Material/Label.qml</file>
         <file alias="styles/org.kde.desktop/AbstractListItem.qml">src/styles/org.kde.desktop/AbstractListItem.qml</file>
         <file alias="styles/org.kde.desktop/Theme.qml">src/styles/org.kde.desktop/Theme.qml</file>
-        <file alias="styles/org.kde.desktop/OverlayDrawer.qml">src/styles/org.kde.desktop/OverlayDrawer.qml</file>
         <file alias="styles/org.kde.desktop/Units.qml">src/styles/org.kde.desktop/Units.qml</file>
         <file alias="styles/org.kde.desktop/SwipeListItem.qml">src/styles/org.kde.desktop/SwipeListItem.qml</file>
         <file alias="styles/org.kde.desktop/ApplicationWindow.qml">src/styles/org.kde.desktop/ApplicationWindow.qml</file>
