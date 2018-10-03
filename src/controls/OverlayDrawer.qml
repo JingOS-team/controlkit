@@ -69,8 +69,8 @@ T.OverlayDrawer {
                 id: handleGraphics
                 anchors.centerIn: parent
                 Theme.colorSet: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.colorSet : Theme.Button
-                Theme.backgroundColor: parent.parent.handleAnchor.Theme.backgroundColor 
-                Theme.textColor: parent.parent.handleAnchor.Theme.textColor 
+                Theme.backgroundColor: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.backgroundColor : undefined
+                Theme.textColor: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.textColor : undefined
                 Theme.inherit: false
                 color: parent.parent.handleAnchor && !root.visible
                         ? "transparent"
