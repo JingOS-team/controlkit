@@ -228,7 +228,7 @@ AbstractApplicationHeader {
         }
         Item {
             height: parent.height
-            width: __appWindow.globalDrawer && __appWindow.globalDrawer.handleVisible && __appWindow.globalDrawer.handle && __appWindow.globalDrawer.handle.y == 0 ? __appWindow.globalDrawer.handle.width : 0
+            width: (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0) && __appWindow.globalDrawer && __appWindow.globalDrawer.handleVisible && __appWindow.globalDrawer.handle && __appWindow.globalDrawer.handle.y == 0 ? __appWindow.globalDrawer.handle.width : 0
         }
     }
 

@@ -42,6 +42,7 @@ Kirigami.AbstractApplicationHeader {
         spacing: 0
         RowLayout {
             id: buttonsLayout
+            Layout.fillHeight: true
 
             visible: globalToolBar.showNavigationButtons && globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.None
 
@@ -49,18 +50,18 @@ Kirigami.AbstractApplicationHeader {
                 id: leftHandleAnchor
                 visible: typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.handleVisible &&
                 (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))
-                Layout.preferredWidth: backButton.background.implicitHeight
-                Layout.preferredHeight: backButton.background.implicitHeight
+                Layout.fillHeight: true
+                Layout.preferredWidth: height
             }
             TemplatesPrivate.BackButton {
                 id: backButton
                 Layout.leftMargin: leftHandleAnchor.visible ? 0 : Kirigami.Units.smallSpacing
-                Layout.preferredWidth: background.implicitHeight
-                Layout.preferredHeight: background.implicitHeight
+                Layout.fillHeight: true
+                Layout.preferredWidth: height
             }
             TemplatesPrivate.ForwardButton {
-                Layout.preferredWidth: background.implicitHeight
-                Layout.preferredHeight: background.implicitHeight
+                Layout.fillHeight: true
+                Layout.preferredWidth: height
             }
             Kirigami.Separator {
                 Layout.preferredHeight: parent.parent.height * 0.6
@@ -72,6 +73,8 @@ Kirigami.AbstractApplicationHeader {
             id: breadcrumbLoader
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.minimumHeight: -1
+            Layout.preferredHeight: -1
 
             active: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb
 
@@ -83,14 +86,14 @@ Kirigami.AbstractApplicationHeader {
                 backButtonEnabled: false
                 anchors.fill:parent
                 background.visible: false
-                headerStyle: globalToolBar.style
+                headerStyle: globalToolBar.actualStyle
             }
         }
         Item {
             id: rightHandleAnchor
             visible: typeof applicationWindow() !== "undefined" && applicationWindow().contextDrawer && applicationWindow().contextDrawer.handleVisible && applicationWindow().contextDrawer.handle.handleAnchor == Qt.application.layoutDirection == (Qt.LeftToRight ? rightHandleAnchor : leftHandleAnchor)
-            Layout.preferredWidth: backButton.background.implicitHeight
-            Layout.preferredHeight: backButton.background.implicitHeight
+            Layout.fillHeight: true
+            Layout.preferredWidth: height
         }
     }
     background.visible: breadcrumbLoader.active
