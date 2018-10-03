@@ -86,7 +86,7 @@ T2.Drawer {
      * horizontal drawers).
      * By default it's just enough to accommodate medium sized icons
      */
-    property int collapsedSize: Units.iconSizes.medium + Units.smallSpacing * 2
+    property int collapsedSize: Units.iconSizes.medium
 
     /**
      * A grouped property describing an optional icon.
@@ -286,9 +286,20 @@ T2.Drawer {
 
     //this is a workaround for the height not being propagated automatically only sometimes
     // see https://bugs.kde.org/show_bug.cgi?id=398163
-    height: (edge == Qt.LeftEdge || edge == Qt.RightEdge) ? parent.height : undefined
-    width: (edge == Qt.LeftEdge || edge == Qt.RightEdge) ? undefined : parent.width
-
+    //NOTE: this is NOT a binding, otherwise it causes a binding loop in implicitHeight
+    Connections {
+        target: parent
+        onWidthChanged: {
+            if (edge == Qt.TopEdge || edge == Qt.BottomEdge) {
+                width = parent.width;
+            }
+        }
+        onHeightChanged: {
+            if (edge == Qt.LeftEdge || edge == Qt.RightEdge) {
+                height = parent.height;
+            }
+        }
+    }
 
     enter: Transition {
         SequentialAnimation {
@@ -429,9 +440,9 @@ T2.Drawer {
                     when: root.collapsed
                     PropertyChanges {
                         target: root
-                        implicitWidth: edge == Qt.TopEdge || edge == Qt.BottomEdge ? applicationWindow().width : Math.min(collapsedSize, Math.round(applicationWindow().width*0.8))
+                        implicitWidth: edge == Qt.TopEdge || edge == Qt.BottomEdge ? applicationWindow().width : Math.min(collapsedSize + leftPadding + rightPadding, Math.round(applicationWindow().width*0.8))
 
-                        implicitHeight: edge == Qt.LeftEdge || edge == Qt.RightEdge ? applicationWindow().height : Math.min(collapsedSize, Math.round(applicationWindow().height*0.8))
+                        implicitHeight: edge == Qt.LeftEdge || edge == Qt.RightEdge ? applicationWindow().height : Math.min(collapsedSize + topPadding + bottomPadding, Math.round(applicationWindow().height*0.8))
                     }
                 },
                 State {
@@ -440,7 +451,10 @@ T2.Drawer {
                         target: root
                         implicitWidth: edge == Qt.TopEdge || edge == Qt.BottomEdge ? applicationWindow().width : Math.min(contentItem.implicitWidth, Math.round(applicationWindow().width*0.8))
 
-                        implicitHeight: edge == Qt.LeftEdge || edge == Qt.RightEdge ? applicationWindow().height : Math.min(contentItem.implicitHeight, Math.round(applicationWindow().height*0.8))
+                        implicitHeight: edge == Qt.LeftEdge || edge == Qt.RightEdge ? applicationWindow().height : Math.min(contentHeight + topPadding + bottomPadding, Math.round(applicationWindow().height*0.4))
+
+                        contentWidth: contentItem.implicitWidth || (contentChildren.length === 1 ? contentChildren[0].implicitWidth : 0)
+                        contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
                     }
                 }
             ]
