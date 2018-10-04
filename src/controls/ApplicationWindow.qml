@@ -131,7 +131,13 @@ AbstractApplicationWindow {
         function goBack() {
             //NOTE: drawers are handling the back button by themselves
             var backEvent = {accepted: false}
-            if (root.pageStack.currentIndex >= 1) {
+            if (root.pageStack.layers.depth > 1) {
+                root.pageStack.layers.currentItem.backRequested(backEvent);
+                if (!backEvent.accepted) {
+                    root.pageStack.layers.pop();
+                    backEvent.accepted = true;
+                }
+            } else if (root.pageStack.currentIndex >= 1) {
                 root.pageStack.currentItem.backRequested(backEvent);
                 if (!backEvent.accepted) {
                     root.pageStack.flickBack();
