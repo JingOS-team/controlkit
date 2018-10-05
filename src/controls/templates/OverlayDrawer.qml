@@ -424,7 +424,7 @@ T2.Drawer {
             NumberAnimation {
                 id: internalAnim
                 target: root
-                to: 0
+                to: drawerOpen ? 1 : 0
                 property: "position"
                 duration: (root.position)*Units.longDuration
             }
