@@ -226,7 +226,7 @@ Item {
                 }
             }
             Connections {
-                target: root.hasContextDrawer ? globalDrawer : null
+                target: root.hasContextDrawer ? contextDrawer : null
                 onPositionChanged: {
                     if (contextDrawer && contextDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
                         button.x = root.width/2 - button.width/2 - contextDrawer.contentItem.width * contextDrawer.position;
