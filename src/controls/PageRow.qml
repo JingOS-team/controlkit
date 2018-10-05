@@ -23,7 +23,7 @@ import QtQml.Models 2.2
 import QtQuick.Templates 2.0 as T
 import QtQuick.Controls 2.0 as QQC2
 import org.kde.kirigami 2.4
-import "private" as Private
+import "private/globaltoolbar" as GlobalToolBar
 import "templates" as KT
 
 /**
@@ -390,7 +390,7 @@ T.Control {
         }
     }
 
-    Private.PageRowGlobalToolBarStyleGroup {
+    GlobalToolBar.PageRowGlobalToolBarStyleGroup {
         id: globalToolBar
         readonly property int leftReservedSpace: globalToolBarUI.item ? globalToolBarUI.item.leftReservedSpace : 0
         readonly property int rightReservedSpace: globalToolBarUI.item ? globalToolBarUI.item.rightReservedSpace : 0
@@ -528,7 +528,7 @@ T.Control {
         active: globalToolBar.actualStyle != ApplicationHeaderStyle.None
         visible: active
         height: active ? implicitHeight : 0
-        source: Qt.resolvedUrl("private/PageRowGlobalToolBarUI.qml");
+        source: Qt.resolvedUrl("private/globaltoolbar/PageRowGlobalToolBarUI.qml");
     }
 
     ListView {

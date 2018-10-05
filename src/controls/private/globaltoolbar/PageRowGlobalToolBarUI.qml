@@ -20,7 +20,7 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4 as Kirigami
-import "../templates/private" as TemplatesPrivate
+import "../../templates/private" as TemplatesPrivate
 
  
 Kirigami.AbstractApplicationHeader {

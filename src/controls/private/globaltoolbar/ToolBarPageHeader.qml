@@ -21,7 +21,7 @@ import QtQuick 2.5
 import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4
-
+import "../" as Private
 
 
 AbstractPageHeader {
@@ -78,26 +78,26 @@ AbstractPageHeader {
 
         readonly property bool toobig: root.width - root.leftPadding - root.rightPadding - titleTextMetrics.width - Units.gridUnit < buttonTextMetrics.requiredWidth
 
-        PrivateActionToolButton {
+        Private.PrivateActionToolButton {
             Layout.alignment: Qt.AlignVCenter
             kirigamiAction: page && page.actions ? page.actions.left : null
             showText: !parent.toobig
         }
-        PrivateActionToolButton {
+        Private.PrivateActionToolButton {
             Layout.alignment: Qt.AlignVCenter
             Layout.rightMargin: Units.smallSpacing
             kirigamiAction: page && page.actions ? page.actions.main : null
             showText: !parent.toobig
             flat: false
         }
-        PrivateActionToolButton {
+        Private.PrivateActionToolButton {
             Layout.alignment: Qt.AlignVCenter
             kirigamiAction: page && page.actions ? page.actions.right : null
             showText: !parent.toobig
         }
     }
 
-    PrivateActionToolButton {
+    Private.PrivateActionToolButton {
         id: ctxActionsButton
         showMenuArrow: page.actions.contextualActions.length == 1
         anchors {

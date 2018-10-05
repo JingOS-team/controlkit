@@ -305,7 +305,7 @@ T2.Page {
 
         function syncSource() {
             if (row && active) {
-                setSource(Qt.resolvedUrl(row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar ? "private/ToolBarPageHeader.qml" : "private/TitlesPageHeader.qml"),
+                setSource(Qt.resolvedUrl(row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar ? "private/globaltoolbar/ToolBarPageHeader.qml" : "private/globaltoolbar/TitlesPageHeader.qml"),
                 //TODO: find container reliably, remove assumption
                 {"pageRow": Qt.binding(function() {return row}),
                  "page": root,

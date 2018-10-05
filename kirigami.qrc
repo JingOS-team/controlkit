@@ -27,12 +27,12 @@
         <file alias="private/DefaultListItemBackground.qml">src/controls/private/DefaultListItemBackground.qml</file>
         <file alias="private/BannerImage.qml">src/controls/private/BannerImage.qml</file>
         <file alias="private/EdgeShadow.qml">src/controls/private/EdgeShadow.qml</file>
-        <file alias="private/AbstractPageHeader.qml">src/controls/private/AbstractPageHeader.qml</file>
-        <file alias="private/PageRowGlobalToolBarStyleGroup.qml">src/controls/private/PageRowGlobalToolBarStyleGroup.qml</file>
-        <file alias="private/PageRowGlobalToolBarUI.qml">src/controls/private/PageRowGlobalToolBarUI.qml</file>
+        <file alias="private/globaltoolbar/AbstractPageHeader.qml">src/controls/private/globaltoolbar/AbstractPageHeader.qml</file>
+        <file alias="private/globaltoolbar/PageRowGlobalToolBarStyleGroup.qml">src/controls/private/globaltoolbar/PageRowGlobalToolBarStyleGroup.qml</file>
+        <file alias="private/globaltoolbar/PageRowGlobalToolBarUI.qml">src/controls/private/globaltoolbar/PageRowGlobalToolBarUI.qml</file>
         <file alias="private/PrivateActionToolButton.qml">src/controls/private/PrivateActionToolButton.qml</file>
-        <file alias="private/TitlesPageHeader.qml">src/controls/private/TitlesPageHeader.qml</file>
-        <file alias="private/ToolBarPageHeader.qml">src/controls/private/ToolBarPageHeader.qml</file>
+        <file alias="private/globaltoolbar/TitlesPageHeader.qml">src/controls/private/globaltoolbar/TitlesPageHeader.qml</file>
+        <file alias="private/globaltoolbar/ToolBarPageHeader.qml">src/controls/private/globaltoolbar/ToolBarPageHeader.qml</file>
         <file alias="private/ActionsMenu.qml">src/controls/private/ActionsMenu.qml</file>
         <file alias="private/ActionMenuItem.qml">src/controls/private/ActionMenuItemQt59.qml</file>
         <file alias="private/ActionMenuItemBase.qml">src/controls/private/ActionMenuItemBase.qml</file>
