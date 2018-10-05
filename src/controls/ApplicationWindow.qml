@@ -137,11 +137,13 @@ AbstractApplicationWindow {
                     root.pageStack.layers.pop();
                     backEvent.accepted = true;
                 }
-            } else if (root.pageStack.currentIndex >= 1) {
+            } else {
                 root.pageStack.currentItem.backRequested(backEvent);
-                if (!backEvent.accepted) {
-                    root.pageStack.flickBack();
-                    backEvent.accepted = true;
+                if (root.pageStack.currentIndex >= 1) {
+                    if (!backEvent.accepted) {
+                        root.pageStack.flickBack();
+                        backEvent.accepted = true;
+                    }
                 }
             }
 

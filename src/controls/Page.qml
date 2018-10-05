@@ -218,6 +218,16 @@ T2.Page {
     }
 
     /**
+     * overlay: Item
+     * an item which stays on top of every other item in the page,
+     * if you want to make sure some elements are completely in a
+     * layer on top of the whole content, parent items to this one.
+     * It's a "local" version of ApplicationWindow's overlay
+     * @since 2.5
+     */
+    readonly property alias overlay: overlayItem
+
+    /**
      * emitted When the application requests a Back action
      * For instance a global "back" shortcut or the Android
      * Back button has been pressed.
@@ -227,23 +237,21 @@ T2.Page {
      */
     signal backRequested(var event);
 
-    //NOTE: This exists just because control instances require it
-    contentItem: Item {
-        onChildrenChanged: {
-            //NOTE: make sure OverlaySheets are directly under the root
-            //so they are over all the contents and don't have margins
-            //search for an OverlaySheet, unfortunately have to blind test properties
-            //as there is no way to get the classname from qml objects
-            //TODO: OverlaySheets should be Popup instead?
-            for (var i = children.length -1; i >= 0; --i) {
-                var child = children[i];
-                if (child.toString().indexOf("OverlaySheet") === 0 ||
-                    (child.sheetOpen !== undefined && child.open !== undefined && child.close !== undefined)) {
-                    child.parent = root;
-                    child.z = 9997
-                }
+    // Look for sheets and cose them
+    //FIXME: port Sheets to Popup?
+    onBackRequested: {
+        for(var i in root.resources) {
+            var item = root.resources[i];
+            if (item.hasOwnProperty("close") && item.hasOwnProperty("sheetOpen") && item.sheetOpen) {
+                item.close()
+                event.accepted = true;
+                return;
             }
         }
+    }
+
+    //NOTE: This exists just because control instances require it
+    contentItem: Item {
     }
 
     //FIXME: on material the shadow would bleed over
@@ -270,6 +278,13 @@ T2.Page {
             globalToolBar.row.globalToolBar.actualStyleChanged.connect(globalToolBar.syncSource);
             globalToolBar.syncSource();
         }
+    }
+
+    Item {
+        id: overlayItem
+        parent: root
+        z: 9998
+        anchors.fill: parent
     }
 
     //global top toolbar if we are in a PageRow (in the row or as a layer)

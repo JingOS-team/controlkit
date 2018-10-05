@@ -132,6 +132,8 @@ Page {
 
     RefreshableScrollView {
         id: scrollView
+        //NOTE: here to not expose it to public api
+        property QtObject oldMainItem
         z: 0
         //child of root as it shouldn't have margins
         parent: root
@@ -147,7 +149,6 @@ Page {
             bottomMargin: root.footer ? root.footer.height : 0
         }
     }
-    
 
     anchors.topMargin: 0
 
@@ -155,13 +156,6 @@ Page {
                         ? (("currentItem" in root.flickable) && root.flickable.currentItem ?  
                            [ root.flickable.currentItem, root.flickable ] : [ root.flickable ])
                         : []
-    Item {
-        id: overlay
-        parent: root
-        z: 9998
-        anchors.fill: parent
-        property QtObject oldMainItem
-    }
 
     //HACK to get the mainItem as the last one, all the other eventual items as an overlay
     //no idea if is the way the user expects
@@ -171,10 +165,16 @@ Page {
          //don't try to reparent drawers
          } else if (mainItem.hasOwnProperty("dragMargin")) {
              return;
+        //reparent sheets
+        } else if (mainItem.hasOwnProperty("sheetOpen")) {
+             mainItem.parent = root;
+             root.data.push(mainItem);
+             return;
+        }
+
+        if (scrollView.oldMainItem && scrollView.oldMainItem.hasOwnProperty("parent") && scrollView.oldMainItem.parent != applicationWindow().overlay) {
+             scrollView.oldMainItem.parent = overlay
          }
-         if (overlay.oldMainItem && overlay.oldMainItem.hasOwnProperty("parent") && overlay.oldMainItem.parent != applicationWindow().overlay) {
-             overlay.oldMainItem.parent = overlay
-         }
-         overlay.oldMainItem = mainItem
+         scrollView.oldMainItem = mainItem
     }
 }
