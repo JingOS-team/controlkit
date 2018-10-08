@@ -33,6 +33,8 @@
         <file alias="private/PrivateActionToolButton.qml">src/controls/private/PrivateActionToolButton.qml</file>
         <file alias="private/globaltoolbar/TitlesPageHeader.qml">src/controls/private/globaltoolbar/TitlesPageHeader.qml</file>
         <file alias="private/globaltoolbar/ToolBarPageHeader.qml">src/controls/private/globaltoolbar/ToolBarPageHeader.qml</file>
+        <file alias="private/globaltoolbar/BreadcrumbControl.qml">src/controls/private/globaltoolbar/BreadcrumbControl.qml</file>
+        <file alias="private/globaltoolbar/TabBarControl.qml">src/controls/private/globaltoolbar/TabBarControl.qml</file>
         <file alias="private/ActionsMenu.qml">src/controls/private/ActionsMenu.qml</file>
         <file alias="private/ActionMenuItem.qml">src/controls/private/ActionMenuItemQt59.qml</file>
         <file alias="private/ActionMenuItemBase.qml">src/controls/private/ActionMenuItemBase.qml</file>
