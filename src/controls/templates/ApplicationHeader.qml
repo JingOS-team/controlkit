@@ -114,6 +114,8 @@ AbstractApplicationHeader {
         }
     }
 
+    Component.onCompleted: print("Warning: ApplicationHeader is deprecated, remove and use the automatic internal toolbar instead.")
+
     Rectangle {
         anchors {
             right: titleList.left

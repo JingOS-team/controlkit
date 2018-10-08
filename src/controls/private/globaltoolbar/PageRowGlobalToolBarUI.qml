@@ -75,19 +75,12 @@ Kirigami.AbstractApplicationHeader {
             Layout.fillHeight: true
             Layout.minimumHeight: -1
             Layout.preferredHeight: -1
+            property Kirigami.PageRow pageRow: root
 
             active: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb
 
             //TODO: different implementation?
-            sourceComponent: Kirigami.ApplicationHeader {
-                minimumHeight: height
-                preferredHeight: height
-                maximumHeight: height
-                backButtonEnabled: false
-                anchors.fill:parent
-                background.visible: false
-                headerStyle: globalToolBar.actualStyle
-            }
+            source: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar ? Qt.resolvedUrl("TabBarControl.qml") : Qt.resolvedUrl("BreadcrumbControl.qml")
         }
         Item {
             id: rightHandleAnchor
