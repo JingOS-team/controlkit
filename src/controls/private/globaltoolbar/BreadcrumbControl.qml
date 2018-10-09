@@ -73,6 +73,10 @@ Flickable {
                     }
                     Kirigami.Heading {
                         Layout.leftMargin: Kirigami.Units.largeSpacing
+                        font.pointSize: -1
+                        font.pixelSize: Math.max(1, mainLayout.height * 0.7)
+                        verticalAlignment: Text.AlignVCenter
+                        wrapMode: Text.NoWrap
                         text: delegateLayout.page ? delegateLayout.page.title : ""
                         opacity: modelData == pageRow.currentIndex ? 1 : 0.4
                     }
