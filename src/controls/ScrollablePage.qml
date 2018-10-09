@@ -167,7 +167,9 @@ Page {
              return;
         //reparent sheets
         } else if (mainItem.hasOwnProperty("sheetOpen")) {
-             mainItem.parent = root;
+            if (mainItem.parent == root || mainItem.parent == null) {
+                mainItem.parent = root;
+            }
              root.data.push(mainItem);
              return;
         }

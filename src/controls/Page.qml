@@ -283,7 +283,7 @@ T2.Page {
     Item {
         id: overlayItem
         parent: root
-        z: 9998
+        z: 9997
         anchors.fill: parent
     }
 
