@@ -62,6 +62,12 @@ T.AbstractApplicationHeader {
                 }
             }
         }
+        Behavior on opacity {
+            OpacityAnimator {
+                duration: Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 }
 

@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.1
+import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4 as Kirigami
 import "../../templates/private" as TemplatesPrivate
@@ -77,10 +77,18 @@ Kirigami.AbstractApplicationHeader {
             Layout.preferredHeight: -1
             property Kirigami.PageRow pageRow: root
 
+            opacity: pageRow.layers.depth < 2
             active: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb
 
             //TODO: different implementation?
             source: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar ? Qt.resolvedUrl("TabBarControl.qml") : Qt.resolvedUrl("BreadcrumbControl.qml")
+
+            Behavior on opacity {
+                OpacityAnimator {
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
         }
         Item {
             id: rightHandleAnchor
@@ -89,6 +97,6 @@ Kirigami.AbstractApplicationHeader {
             Layout.preferredWidth: height
         }
     }
-    background.visible: breadcrumbLoader.active
+    background.opacity: pageRow.layers.depth < 2 && breadcrumbLoader.active
 }
-        
+
