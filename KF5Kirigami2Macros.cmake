@@ -84,7 +84,10 @@ function(kirigami_package_breeze_icons)
         if (EXISTS ${_iconPath})
             install(FILES ${_iconPath} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/icons/ RENAME ${_iconName}.svg)
         endif()
-
     endforeach()
+
+    #generate an index.theme that qiconloader can understand
+    file(WRITE ${CMAKE_BINARY_DIR}/index.theme "[Icon Theme]\nName=Breeze\nDirectories=icons\n[icons]\nSize=32\nType=Scalable")
+    install(FILES ${CMAKE_BINARY_DIR}/index.theme DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/)
 endfunction()
 

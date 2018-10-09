@@ -35,8 +35,6 @@
 #include <QPainter>
 #include <QScreen>
 
-QString DesktopIcon::s_internalIconPath = QString();
-
 class ManagedTextureNode : public QSGSimpleTextureNode
 {
 Q_DISABLE_COPY(ManagedTextureNode)
@@ -484,15 +482,6 @@ QImage DesktopIcon::findIcon(const QSize &size)
         if (isPath) {
             icon = QIcon(iconSource);
         } else {
-            if (icon.isNull()) {
-                QQmlContext *ctx = QQmlEngine::contextForObject(this);
-                if (ctx) {
-                    const QString localIconSource = s_internalIconPath % QStringLiteral("/") % iconSource % QStringLiteral(".svg");
-                    if (QFile::exists(localIconSource)) {
-                        icon = QIcon(localIconSource);
-                    }
-                }
-            }
             if (icon.isNull()) {
                 icon = m_theme->iconFromTheme(iconSource, m_color);
             }

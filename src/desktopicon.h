@@ -79,9 +79,6 @@ public:
 
     QSGNode* updatePaintNode(QSGNode* node, UpdatePaintNodeData* data) override;
 
-    //HACKY but we need the base path for internal icons registered by kirigamiplugin itself
-    static QString s_internalIconPath;
-
 Q_SIGNALS:
     void sourceChanged();
     void smoothChanged();

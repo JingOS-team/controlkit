@@ -68,6 +68,12 @@ void KirigamiPlugin::registerTypes(const char *uri)
     Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.kirigami"));
     const QString style = QQuickStyle::name();
 
+    //FIXME: How to decide when to do this? (when we are on a platform that needs its own icon set shipped
+    if (QIcon::themeName().isEmpty()) {
+        QIcon::setThemeSearchPaths({resolveFilePath(QStringLiteral(".")), QStringLiteral(":/icons")});
+        QIcon::setThemeName(QStringLiteral("breeze-internal"));
+    }
+
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     //org.kde.desktop.plasma is a couple of files that fall back to desktop by purpose
     if ((style.isEmpty() || style == QStringLiteral("org.kde.desktop.plasma")) && QFile::exists(resolveFilePath(QStringLiteral("/styles/org.kde.desktop")))) {
@@ -127,7 +133,6 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("Separator.qml")), uri, 2, 0, "Separator");
     qmlRegisterType(componentUrl(QStringLiteral("PageRow.qml")), uri, 2, 0, "PageRow");
 
-    DesktopIcon::s_internalIconPath = resolveFilePath(QStringLiteral("icons"));
     qmlRegisterType<DesktopIcon>(uri, 2, 0, "Icon");
 
     qmlRegisterType(componentUrl(QStringLiteral("Label.qml")), uri, 2, 0, "Label");
