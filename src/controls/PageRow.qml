@@ -404,7 +404,7 @@ T.Control {
         z: 99
         anchors {
             fill: parent
-            topMargin: depth > 1 && globalToolBarUI.visible ? globalToolBarUI.height: 0
+            topMargin: globalToolBarUI.visible ? globalToolBarUI.height: 0
         }
         initialItem: mainView
         function clear () {
@@ -416,19 +416,11 @@ T.Control {
         }
 
         popEnter: Transition {
-            ParallelAnimation {
-                OpacityAnimator {
-                    from: 0
-                    to: 1
-                    duration: Units.longDuration
-                    easing.type: Easing.InOutCubic
-                }
-                YAnimator {
-                    from: -height/2
-                    to: 0
-                    duration: Units.longDuration
-                    easing.type: Easing.InOutCubic
-                }
+            OpacityAnimator {
+                from: 0
+                to: 1
+                duration: Units.longDuration
+                easing.type: Easing.InOutCubic
             }
         }
         popExit: Transition {
@@ -450,7 +442,9 @@ T.Control {
 
         pushEnter: Transition {
             ParallelAnimation {
-                OpacityAnimator {
+                //NOTE: It's a PropertyAnimation instead of an Animator because with an animator the item will be visible for an instant before starting to fade
+                PropertyAnimation {
+                    property: "opacity"
                     from: 0
                     to: 1
                     duration: Units.longDuration
@@ -466,19 +460,11 @@ T.Control {
         }
 
         pushExit: Transition {
-            ParallelAnimation {
-                OpacityAnimator {
-                    from: 1
-                    to: 0
-                    duration: Units.longDuration
-                    easing.type: Easing.InOutCubic
-                }
-                YAnimator {
-                    from: 0
-                    to: -height/2
-                    duration: Units.longDuration
-                    easing.type: Easing.InOutCubic 
-                }
+            OpacityAnimator {
+                from: 1
+                to: 0
+                duration: Units.longDuration
+                easing.type: Easing.InOutCubic
             }
         }
 
@@ -537,6 +523,7 @@ T.Control {
         orientation: Qt.Horizontal
         snapMode: ListView.SnapToItem
         currentIndex: 0
+        anchors.fill: parent
         property int marginForLast: count > 1 ? pagesLogic.get(count-1).page.width - pagesLogic.get(count-1).width : 0
         leftMargin: LayoutMirroring.enabled ? marginForLast : 0
         rightMargin: LayoutMirroring.enabled ? 0 : marginForLast
@@ -700,7 +687,7 @@ T.Control {
                     page.anchors.top = container.top;
                     page.anchors.right = container.right;
                     page.anchors.bottom = container.bottom;
-                    page.anchors.topMargin = Qt.binding(function() {return globalToolBarUI.height});
+                    //page.anchors.topMargin = Qt.binding(function() {return globalToolBarUI.height});
                 } else {
                     pagesLogic.remove(level);
                 }

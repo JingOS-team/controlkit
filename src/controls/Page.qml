@@ -301,7 +301,7 @@ T2.Page {
         property Kirigami.PageRow row
         property T2.StackView stack
 
-        active: row && (row.layers.depth > 1 || row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar || globalToolBar.row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Titles)
+        active: row && (stack != null || row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar || globalToolBar.row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Titles)
 
         function syncSource() {
             if (row && active) {
