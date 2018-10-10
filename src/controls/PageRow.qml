@@ -405,8 +405,17 @@ T.Control {
         anchors {
             fill: parent
             topMargin: globalToolBarUI.visible ? globalToolBarUI.height: 0
+
+            Behavior on topMargin {
+                PropertyAnimation {
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
+            }
         }
-        initialItem: mainView
+        //placeholder as initial item
+        initialItem: Item {}
+
         function clear () {
             //don't let it kill the main page row
             var d = root.depth;
@@ -523,7 +532,6 @@ T.Control {
         orientation: Qt.Horizontal
         snapMode: ListView.SnapToItem
         currentIndex: 0
-        anchors.fill: parent
         property int marginForLast: count > 1 ? pagesLogic.get(count-1).page.width - pagesLogic.get(count-1).width : 0
         leftMargin: LayoutMirroring.enabled ? marginForLast : 0
         rightMargin: LayoutMirroring.enabled ? 0 : marginForLast
@@ -538,6 +546,14 @@ T.Control {
                 currentItem.page.forceActiveFocus();
             }
         }
+        opacity: layersStack.depth < 2
+        Behavior on opacity {
+            OpacityAnimator {
+                duration: Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+        
 
         model: ObjectModel {
             id: pagesLogic
@@ -687,7 +703,7 @@ T.Control {
                     page.anchors.top = container.top;
                     page.anchors.right = container.right;
                     page.anchors.bottom = container.bottom;
-                    //page.anchors.topMargin = Qt.binding(function() {return globalToolBarUI.height});
+                    page.anchors.topMargin = Qt.binding(function() {return globalToolBarUI.height});
                 } else {
                     pagesLogic.remove(level);
                 }
