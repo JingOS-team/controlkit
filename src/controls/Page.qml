@@ -291,7 +291,7 @@ T2.Page {
     Loader {
         id: globalToolBar
         z: 9999
-        parent: root.clip ? root.parent : root
+        parent: active && root.clip ? root.parent : root
         height: item ? item.implicitHeight : 0
         anchors {
             left:  parent ? root.left : undefined
