@@ -55,7 +55,7 @@ Item {
 
     //FIXME: remove
     property QtObject __appWindow: applicationWindow();
-
+onImplicitHeightChanged: print("WWW"+implicitHeight)
     anchors {
         left: parent.left
         right: parent.right
@@ -108,8 +108,9 @@ Item {
             id: headerSlideConnection
             target: root.page ? root.page.flickable : null
             property int oldContentY
+            property bool updatingContentY: false
             onContentYChanged: {
-                if (!Settings.isMobile ||
+                if (updatingContentY || !Settings.isMobile ||
                     !__appWindow.controlsVisible ||
                     !root.page ||
                     root.page.flickable.atYBeginning ||
@@ -124,15 +125,18 @@ Item {
                 if (__appWindow.wideScreen || !Settings.isMobile) {
                     root.implicitHeight = root.preferredHeight;
                 } else {
-                    var oldHeight = root.height;
+                    var oldHeight = root.implicitHeight;
 
                     root.implicitHeight = Math.max(root.minimumHeight,
                                             Math.min(root.preferredHeight,
-                                                 root.height + oldContentY - root.page.flickable.contentY));
+                                                 root.implicitHeight + oldContentY - root.page.flickable.contentY));
 
-                    //if the height is changed, use that to simulate scroll
-                    if (oldHeight != height) {
-                        root.page.flickable.contentY = oldContentY;
+                    //if the implicitHeight is changed, use that to simulate scroll
+                    if (oldHeight != implicitHeight) {
+                        print((root.page.flickable.contentY - oldContentY)+" "+(oldHeight - root.implicitHeight))
+                        updatingContentY = true;
+                        root.page.flickable.contentY -= (oldHeight - root.implicitHeight);
+                        updatingContentY = false;
                     } else {
                         oldContentY = root.page.flickable.contentY;
                     }
@@ -160,6 +164,7 @@ Item {
                 } else {
                     headerSlideConnection.oldContentY = 0;
                 }
+
                 root.implicitHeight = root.preferredHeight;
             }
         }

@@ -131,14 +131,13 @@ Page {
     Theme.colorSet: flickable && flickable.hasOwnProperty("model") ? Theme.View : Theme.Window
 
     clip: true
-
-    RefreshableScrollView {
+    contentItem: RefreshableScrollView {
         id: scrollView
         //NOTE: here to not expose it to public api
         property QtObject oldMainItem
         z: 0
         //child of root as it shouldn't have margins
-        parent: root
+        //parent: root
         page: root
         clip: false
         topPadding: contentItem == flickableItem ? 0 : root.topPadding
@@ -146,9 +145,12 @@ Page {
         rightPadding: root.rightPadding
         bottomPadding: contentItem == flickableItem ? 0 : root.bottomPadding
         anchors {
-            fill: parent
-            topMargin: root.header ? root.header.height : 0
-            bottomMargin: root.footer ? root.footer.height : 0
+            top: root.header
+                    ? root.header.bottom
+                    : (globalToolBar.visible ? globalToolBar.bottom : parent.top)
+            bottom: root.footer ? root.footer.top : parent.bottom
+            left: parent.left
+            right: parent.right
         }
     }
 

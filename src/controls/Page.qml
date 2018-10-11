@@ -213,10 +213,6 @@ T2.Page {
                     ? globalToolBar.row.layers.currentItem == root
                     : globalToolBar.row.currentItem == root)
 
-    PageActionPropertyGroup {
-        id: actionsGroup
-    }
-
     /**
      * overlay: Item
      * an item which stays on top of every other item in the page,
@@ -249,15 +245,31 @@ T2.Page {
             }
         }
     }
-
-    //NOTE: This exists just because control instances require it
+property Item globalToolBar: globalToolBar
+    //NOTE: contentItem will be created if not existing (and contentChildren of Page would become its children) This with anchors enforces the geometry we want, where globalToolBar is a super-header, on top of header
     contentItem: Item {
+        anchors {
+            top: root.header
+                    ? root.header.bottom
+                    : (globalToolBar.visible ? globalToolBar.bottom : parent.top)
+            topMargin: root.topPadding + root.spacing
+            bottom: root.footer ? root.footer.top : parent.bottom
+            bottomMargin: root.bottomPadding + root.spacing
+        }
     }
+
 
     //FIXME: on material the shadow would bleed over
     clip: root.header != null;
     
+    onHeaderChanged: {
+        if (header) {
+            header.anchors.top = Qt.binding(function() {return globalToolBar.visible ? globalToolBar.bottom : root.top});
+        }
+    }
+
     Component.onCompleted: {
+        headerChanged();
         parentChanged(root.parent);
     }
     onParentChanged: {
@@ -280,68 +292,75 @@ T2.Page {
         }
     }
 
-    Item {
-        id: overlayItem
-        parent: root
-        z: 9997
-        anchors.fill: parent
-    }
+    //in data in order for them to not be considered for contentItem, contentChildren, contentData
+    data: [
+        PageActionPropertyGroup {
+            id: actionsGroup
+        },
 
-    //global top toolbar if we are in a PageRow (in the row or as a layer)
-    Loader {
-        id: globalToolBar
-        z: 9999
-        parent: active && root.clip ? root.parent : root
-        height: item ? item.implicitHeight : 0
-        anchors {
-            left:  parent ? root.left : undefined
-            right: parent ? root.right : undefined
-            bottom: parent ? root.top : undefined
-        }
-        property Kirigami.PageRow row
-        property T2.StackView stack
+        Item {
+            id: overlayItem
+            parent: root
+            z: 9997
+            anchors.fill: parent
+        },
 
-        active: row && (stack != null || row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar || globalToolBar.row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Titles)
-
-        function syncSource() {
-            if (row && active) {
-                setSource(Qt.resolvedUrl(row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar ? "private/globaltoolbar/ToolBarPageHeader.qml" : "private/globaltoolbar/TitlesPageHeader.qml"),
-                //TODO: find container reliably, remove assumption
-                {"pageRow": Qt.binding(function() {return row}),
-                 "page": root,
-                 "current": Qt.binding(function() {return stack || !root.parent ? true : row.currentIndex == root.parent.level})});
+        //global top toolbar if we are in a PageRow (in the row or as a layer)
+        Loader {
+            id: globalToolBar
+            z: 9999
+            height: item ? item.implicitHeight : 0
+            anchors {
+                left:  parent.left
+                right: parent.right
+                top: parent.top
             }
-        }
+            property Kirigami.PageRow row
+            property T2.StackView stack
 
-        Separator {
-            z: 999
-            anchors.verticalCenter: globalToolBar.verticalCenter
-            height: globalToolBar.height * 0.6
-            visible: globalToolBar.row && root.parent && globalToolBar.row.contentItem.contentX < root.parent.x - globalToolBar.row.globalToolBar.leftReservedSpace
-            Kirigami.Theme.textColor: globalToolBar.item ? globalToolBar.item.Kirigami.Theme.textColor : undefined
-        }
-    }
+            visible: active
+            active: row && (stack != null || row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar || globalToolBar.row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Titles)
 
-    //bottom action buttons
-    Loader {
-        id: actionButtons
-        z: 9999
-        parent: root
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
+            function syncSource() {
+                if (row && active) {
+                    setSource(Qt.resolvedUrl(row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar ? "private/globaltoolbar/ToolBarPageHeader.qml" : "private/globaltoolbar/TitlesPageHeader.qml"),
+                    //TODO: find container reliably, remove assumption
+                    {"pageRow": Qt.binding(function() {return row}),
+                    "page": root,
+                    "current": Qt.binding(function() {return stack || !root.parent ? true : row.currentIndex == root.parent.level})});
+                }
+            }
+
+            Separator {
+                z: 999
+                anchors.verticalCenter: globalToolBar.verticalCenter
+                height: globalToolBar.height * 0.6
+                visible: globalToolBar.row && root.parent && globalToolBar.row.contentItem.contentX < root.parent.x - globalToolBar.row.globalToolBar.leftReservedSpace
+                Kirigami.Theme.textColor: globalToolBar.item ? globalToolBar.item.Kirigami.Theme.textColor : undefined
+            }
+        },
+
+        //bottom action buttons
+        Loader {
+            id: actionButtons
+            z: 9999
+            parent: root
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+            //It should be T2.Page, Qt 5.7 doesn't like it
+            property Item page: root
+            height: item ? item.height : 0
+            active: typeof applicationWindow !== "undefined" && (!globalToolBar.row || globalToolBar.row.globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.ToolBar) &&
+                //Legacy
+                    (typeof applicationWindow === "undefined" ||
+                    (!applicationWindow().header || applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === -1) &&
+                    (!applicationWindow().footer || applicationWindow().footer.toString().indexOf("ToolBarApplicationHeader") === -1))
+            source: Qt.resolvedUrl("./private/ActionButton.qml")
         }
-        //It should be T2.Page, Qt 5.7 doesn't like it
-        property Item page: root
-        height: item ? item.height : 0
-        active: typeof applicationWindow !== "undefined" && (!globalToolBar.row || globalToolBar.row.globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.ToolBar) &&
-               //Legacy
-                (typeof applicationWindow === "undefined" ||
-                 (!applicationWindow().header || applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === -1) &&
-                 (!applicationWindow().footer || applicationWindow().footer.toString().indexOf("ToolBarApplicationHeader") === -1))
-        source: Qt.resolvedUrl("./private/ActionButton.qml")
-    }
+    ]
 
     Layout.fillWidth: true
 }

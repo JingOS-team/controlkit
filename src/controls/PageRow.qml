@@ -402,17 +402,9 @@ T.Control {
     QQC2.StackView {
         id: layersStack
         z: 99
-        visible: depth > 1
+        visible: depth > 1 || busy
         anchors {
             fill: parent
-            topMargin: globalToolBarUI.visible ? globalToolBarUI.height: 0
-
-            Behavior on topMargin {
-                PropertyAnimation {
-                    duration: Units.longDuration
-                    easing.type: Easing.InOutCubic
-                }
-            }
         }
         //placeholder as initial item
         initialItem: Item {}
@@ -607,12 +599,12 @@ T.Control {
                     }
                 }
                 if (pageComp) {
+                    // instantiate page from component
+                    page = pageComp.createObject(container.pageParent, properties || {});
+
                     if (pageComp.status == Component.Error) {
                         throw new Error("Error while loading page: " + pageComp.errorString());
-                    } else {
-                        // instantiate page from component
-                        page = pageComp.createObject(container.pageParent, properties || {});
-                    }
+                    } 
                 } else {
                     // copy properties to the page
                     for (var prop in properties) {
@@ -620,6 +612,10 @@ T.Control {
                             page[prop] = properties[prop];
                         }
                     }
+                }
+
+                if (pageComp.status == Component.Error) {
+                    print(pageComp.errorString())
                 }
 
                 container.page = page;
@@ -704,7 +700,7 @@ T.Control {
                     page.anchors.top = container.top;
                     page.anchors.right = container.right;
                     page.anchors.bottom = container.bottom;
-                    page.anchors.topMargin = Qt.binding(function() {return globalToolBarUI.height});
+                    page.anchors.topMargin = Qt.binding(function() {return globalToolBar.actualStyle == ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == ApplicationHeaderStyle.Breadcrumb ? globalToolBarUI.height : 0});
                 } else {
                     pagesLogic.remove(level);
                 }
