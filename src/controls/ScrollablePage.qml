@@ -130,6 +130,8 @@ Page {
 
     Theme.colorSet: flickable && flickable.hasOwnProperty("model") ? Theme.View : Theme.Window
 
+    clip: true
+
     RefreshableScrollView {
         id: scrollView
         //NOTE: here to not expose it to public api
@@ -138,7 +140,7 @@ Page {
         //child of root as it shouldn't have margins
         parent: root
         page: root
-        clip: root.clip
+        clip: false
         topPadding: contentItem == flickableItem ? 0 : root.topPadding
         leftPadding: root.leftPadding
         rightPadding: root.rightPadding
