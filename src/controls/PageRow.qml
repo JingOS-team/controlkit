@@ -402,6 +402,7 @@ T.Control {
     QQC2.StackView {
         id: layersStack
         z: 99
+        visible: depth > 1
         anchors {
             fill: parent
             topMargin: globalToolBarUI.visible ? globalToolBarUI.height: 0
