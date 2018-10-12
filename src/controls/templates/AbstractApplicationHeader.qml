@@ -106,6 +106,7 @@ Item {
 
         Connections {
             id: headerSlideConnection
+            enabled: root.followsFlickable
             target: root.page ? root.page.flickable : null
             property int oldContentY
             property bool updatingContentY: false
@@ -133,12 +134,12 @@ Item {
                     root.implicitHeight = Math.max(root.minimumHeight,
                                             Math.min(root.preferredHeight,
                                                  root.implicitHeight + Math.floor(oldContentY - root.page.flickable.contentY)));
-
+print("AAAA "+oldHeight+" "+root.implicitHeight)
                     //if the implicitHeight is changed, use that to simulate scroll
-                    if (oldHeight != implicitHeight) {
+                    if (oldHeight != implicitHeight && root.toString().indexOf("PageRowGlobal") ==-1) {//FIXME
                         updatingContentY = true;
-                       // root.page.flickable.contentY -= (oldHeight - root.implicitHeight);
-                        root.page.flickable.contentY -= (oldContentItemY - root.page.contentItem.y)
+                        root.page.flickable.contentY -= (oldHeight - root.implicitHeight);
+                        //root.page.flickable.contentY -= (oldContentItemY - root.page.contentItem.y)
                         updatingContentY = false;
                     } //else {
                         oldContentY = root.page.flickable.contentY;
