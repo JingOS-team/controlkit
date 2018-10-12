@@ -55,7 +55,7 @@ Item {
 
     //FIXME: remove
     property QtObject __appWindow: applicationWindow();
-onImplicitHeightChanged: print("WWW"+implicitHeight)
+
     anchors {
         left: parent.left
         right: parent.right
@@ -115,7 +115,9 @@ onImplicitHeightChanged: print("WWW"+implicitHeight)
                     !root.page ||
                     root.page.flickable.atYBeginning ||
                     root.page.flickable.atYEnd) {
+                    oldContentY = root.page.flickable.contentY;
                     return;
+                //TODO: merge
                 //if moves but not dragging, just update oldContentY
                 } else if (!root.page.flickable.dragging) {
                     oldContentY = root.page.flickable.contentY;
@@ -126,20 +128,22 @@ onImplicitHeightChanged: print("WWW"+implicitHeight)
                     root.implicitHeight = root.preferredHeight;
                 } else {
                     var oldHeight = root.implicitHeight;
+                    var oldContentItemY = root.page.contentItem.y;
 
                     root.implicitHeight = Math.max(root.minimumHeight,
                                             Math.min(root.preferredHeight,
-                                                 root.implicitHeight + oldContentY - root.page.flickable.contentY));
+                                                 root.implicitHeight + Math.floor(oldContentY - root.page.flickable.contentY)));
 
                     //if the implicitHeight is changed, use that to simulate scroll
                     if (oldHeight != implicitHeight) {
-                        print((root.page.flickable.contentY - oldContentY)+" "+(oldHeight - root.implicitHeight))
                         updatingContentY = true;
-                        root.page.flickable.contentY -= (oldHeight - root.implicitHeight);
+                       // root.page.flickable.contentY -= (oldHeight - root.implicitHeight);
+                        root.page.flickable.contentY -= (oldContentItemY - root.page.contentItem.y)
                         updatingContentY = false;
-                    } else {
+                    } //else {
                         oldContentY = root.page.flickable.contentY;
-                    }
+                    //}
+
                 }
             }
             onMovementEnded: {

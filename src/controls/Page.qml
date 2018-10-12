@@ -318,6 +318,8 @@ property Item globalToolBar: globalToolBar
             property Kirigami.PageRow row
             property T2.StackView stack
 
+           // property Component toolbarComponent: Qt.createComponent(Qt.resolvedUrl(row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar ? "private/globaltoolbar/ToolBarPageHeader.qml" : "private/globaltoolbar/TitlesPageHeader.qml"))
+
             visible: active
             active: row && (stack != null || row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar || globalToolBar.row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Titles)
 

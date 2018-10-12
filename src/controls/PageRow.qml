@@ -614,10 +614,6 @@ T.Control {
                     }
                 }
 
-                if (pageComp.status == Component.Error) {
-                    print(pageComp.errorString())
-                }
-
                 container.page = page;
                 if (page.parent == null || page.parent == container.pageParent) {
                     container.owner = null;

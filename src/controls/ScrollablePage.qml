@@ -135,9 +135,6 @@ Page {
         id: scrollView
         //NOTE: here to not expose it to public api
         property QtObject oldMainItem
-        z: 0
-        //child of root as it shouldn't have margins
-        //parent: root
         page: root
         clip: false
         topPadding: contentItem == flickableItem ? 0 : root.topPadding
