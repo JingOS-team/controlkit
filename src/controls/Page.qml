@@ -246,7 +246,14 @@ T2.Page {
         }
     }
 
-    property Item globalToolBarItem: globalToolBar.item
+    /**
+     * globalToolBarItem: Item
+     * The item used as global toolbar for the page
+     * present only if we are in a PageRow as a page or as a layer,
+     * and the style is either Titles or ToolBar
+     * @since 2.5
+     */
+    readonly property Item globalToolBarItem: globalToolBar.item
 
     //NOTE: contentItem will be created if not existing (and contentChildren of Page would become its children) This with anchors enforces the geometry we want, where globalToolBar is a super-header, on top of header
     contentItem: Item {
