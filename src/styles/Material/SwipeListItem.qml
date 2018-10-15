@@ -56,13 +56,7 @@ import "../../templates" as T
 T.SwipeListItem {
     id: root
 
-    onPressedChanged: {
-        if (pressed) {
-            clickAnim.running = true
-        }
-    }
     background: DefaultListItemBackground {
-
         MatImp.Ripple {
             anchors.fill: parent
             clip: visible
