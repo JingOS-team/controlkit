@@ -40,6 +40,6 @@ AbstractApplicationHeader {
                     root.width/2)
 
     rightPadding: Qt.application.layoutDirection == Qt.LeftToRight
-            ? Math.min(-pageRow.width - pageRow.ScenePosition.x + page.ScenePosition.x + page.width + pageRow.globalToolBar.rightReservedSpace)
+            ? Math.max(0, -pageRow.width - pageRow.ScenePosition.x + page.ScenePosition.x + page.width + pageRow.globalToolBar.rightReservedSpace)
             : Math.max(0, pageRow.ScenePosition.x - page.ScenePosition.x + pageRow.globalToolBar.rightReservedSpace)
 }

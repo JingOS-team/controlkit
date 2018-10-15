@@ -313,7 +313,6 @@ T2.Page {
             z: 9997
             anchors.fill: parent
         },
-
         //global top toolbar if we are in a PageRow (in the row or as a layer)
         Loader {
             id: globalToolBar
