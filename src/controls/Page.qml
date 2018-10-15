@@ -245,7 +245,9 @@ T2.Page {
             }
         }
     }
-property Item globalToolBar: globalToolBar
+
+    property Item globalToolBarItem: globalToolBar.item
+
     //NOTE: contentItem will be created if not existing (and contentChildren of Page would become its children) This with anchors enforces the geometry we want, where globalToolBar is a super-header, on top of header
     contentItem: Item {
         anchors {
@@ -261,7 +263,7 @@ property Item globalToolBar: globalToolBar
 
     //FIXME: on material the shadow would bleed over
     clip: root.header != null;
-    
+
     onHeaderChanged: {
         if (header) {
             header.anchors.top = Qt.binding(function() {return globalToolBar.visible ? globalToolBar.bottom : root.top});

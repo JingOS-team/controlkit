@@ -44,6 +44,8 @@ QtObject {
     property bool separatorVisible: true
 
     property int minimumHeight: 0
-    property int preferredHeight: Kirigami.Units.iconSizes.medium + Kirigami.Units.smallSpacing*2
+    property int preferredHeight: (actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar
+                    ? Kirigami.Units.iconSizes.medium
+                    : Kirigami.Units.gridUnit * 2) + Kirigami.Units.smallSpacing * 2
     property int maximumHeight: preferredHeight
 }

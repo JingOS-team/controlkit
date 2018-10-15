@@ -41,17 +41,21 @@ Item {
     property int minimumHeight: 0
     property int preferredHeight: Units.gridUnit * 2
     property int maximumHeight: Units.gridUnit * 3
+
     property PageRow pageRow: __appWindow.pageStack
     property Page page: pageRow.currentItem
+
     default property alias contentItem: mainItem.data
     readonly property int paintedHeight: headerItem.y + headerItem.height - 1
-    LayoutMirroring.enabled: Qt.application.layoutDirection == Qt.RightToLeft 
-    LayoutMirroring.childrenInherit: true
+
     property int leftPadding: 0
     property int topPadding: 0
     property int rightPadding: 0
     property int bottomPadding: 0
     property bool separatorVisible: true
+
+    LayoutMirroring.enabled: Qt.application.layoutDirection == Qt.RightToLeft 
+    LayoutMirroring.childrenInherit: true
 
     //FIXME: remove
     property QtObject __appWindow: applicationWindow();
@@ -104,11 +108,24 @@ Item {
 
         height: __appWindow.reachableMode && __appWindow.reachableModeEnabled ? root.maximumHeight : (root.minimumHeight > 0 ? Math.max(root.height, root.minimumHeight) : root.preferredHeight)
 
+        //FIXME: see FIXME below
+        Connections {
+            target: root.page.globalToolBarItem
+            enabled: headerSlideConnection.passive && page.globalToolBarItem
+            onImplicitHeightChanged: root.implicitHeight = root.page.globalToolBarItem.implicitHeight
+        }
+
         Connections {
             id: headerSlideConnection
             target: root.page ? root.page.flickable : null
+            enabled: !passive
             property int oldContentY
             property bool updatingContentY: false
+
+            //FIXME HACK: if we are in global mode, meaning if we are the toolbar showing the global breadcrumb (but the pages are showing their own toolbar), not to try to mess with page contentY.
+            //A better solution is needed
+            readonly property bool passive: root.pageRow && parent.parent == root.pageRow && root.pageRow.globalToolBar.actualStyle != ApplicationHeaderStyle.TabBar && root.pageRow.globalToolBar.actualStyle != ApplicationHeaderStyle.Breadcrumb
+
             onContentYChanged: {
                 if (updatingContentY || !Settings.isMobile ||
                     !__appWindow.controlsVisible ||
@@ -128,21 +145,19 @@ Item {
                     root.implicitHeight = root.preferredHeight;
                 } else {
                     var oldHeight = root.implicitHeight;
-                    var oldContentItemY = root.page.contentItem.y;
 
                     root.implicitHeight = Math.max(root.minimumHeight,
                                             Math.min(root.preferredHeight,
-                                                 root.implicitHeight + Math.floor(oldContentY - root.page.flickable.contentY)));
+                                                 root.implicitHeight + oldContentY - root.page.flickable.contentY));
 
                     //if the implicitHeight is changed, use that to simulate scroll
                     if (oldHeight != implicitHeight) {
                         updatingContentY = true;
-                       // root.page.flickable.contentY -= (oldHeight - root.implicitHeight);
-                        root.page.flickable.contentY -= (oldContentItemY - root.page.contentItem.y)
+                        root.page.flickable.contentY -= (oldHeight - root.implicitHeight);
                         updatingContentY = false;
-                    } //else {
+                    } else {
                         oldContentY = root.page.flickable.contentY;
-                    //}
+                    }
 
                 }
             }

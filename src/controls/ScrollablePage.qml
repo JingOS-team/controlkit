@@ -144,7 +144,9 @@ Page {
         anchors {
             top: root.header
                     ? root.header.bottom
-                    : (globalToolBar.visible ? globalToolBar.bottom : parent.top)
+                    //FIXME: for nowassuming globalToolBarItem is in a Loader, which needs to be got rid of
+                    : (root.globalToolBarItem && globalToolBarItem.visible ?
+                    globalToolBarItem.parent.bottom : parent.top)
             bottom: root.footer ? root.footer.top : parent.bottom
             left: parent.left
             right: parent.right
