@@ -676,7 +676,9 @@ T.Control {
             id: container
             height: mainView.height
             width: root.width
-            state: page ? (!root.wideMode ? "vertical" : (container.level >= pagesLogic.count - 1 ? "last" : "middle")) : "";
+            state: page
+                    ? (page.visible ? (!root.wideMode ? "vertical" : (container.level >= pagesLogic.count - 1 ? "last" : "middle")) : "hidden")
+                    : "";
             acceptedButtons: Qt.LeftButton | Qt.BackButton | Qt.ForwardButton
 
             property int level
@@ -767,6 +769,13 @@ T.Control {
                     PropertyChanges {
                         target: container.page.anchors
                         rightMargin: 0
+                    }
+                },
+                State {
+                    name: "hidden"
+                    PropertyChanges {
+                        target: container
+                        width: 0
                     }
                 }
             ]
