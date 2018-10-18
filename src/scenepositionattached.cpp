@@ -59,7 +59,7 @@ void ScenePositionAttached::connectAncestors(QQuickItem *item)
                 do {
                     disconnect(ancestor, nullptr, this, nullptr);
                     m_ancestors.pop_back();
-                } while (m_ancestors.last() != ancestor);
+                } while (!m_ancestors.isEmpty() && m_ancestors.last() != ancestor);
 
                 connectAncestors(ancestor);
                 emit xChanged();
