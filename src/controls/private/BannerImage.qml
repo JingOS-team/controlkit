@@ -83,8 +83,10 @@ Image {
         anchors {
             left: parent.left
             right: parent.right
-            top: (root.titleAlignment & Qt.AlignTop) ? parent.top : undefined
-            bottom: (root.titleAlignment & Qt.AlignBottom) ? parent.bottom : undefined
+            top: root.status != 
+Image.Ready || (root.titleAlignment & Qt.AlignTop) ? parent.top : undefined
+            bottom: root.status != 
+Image.Ready || (root.titleAlignment & Qt.AlignBottom) ? parent.bottom : undefined
         }
         visible: root.source != "" && root.title != "" && ((root.titleAlignment & Qt.AlignTop) || (root.titleAlignment & Qt.AlignBottom))
         height: Math.min(parent.height, titleLayout.height * 2)
@@ -97,7 +99,8 @@ Image {
             }
             GradientStop {
                 position: (root.titleAlignment & Qt.AlignTop) ? 1.0 : 0.0
-                color: "transparent"
+                color: Qt.rgba(0, 0, 0, root.status == 
+Image.Ready ? 0 : 0.3)
             }
         }
     }
