@@ -141,7 +141,7 @@ Item {
                     return;
                 }
 
-                if (__appWindow.wideScreen || !Settings.isMobile) {
+                if ((root.pageRow ? root.pageRow.wideMode : __appWindow.wideScreen) || !Settings.isMobile) {
                     root.implicitHeight = root.preferredHeight;
                 } else {
                     var oldHeight = root.implicitHeight;
@@ -162,7 +162,7 @@ Item {
                 }
             }
             onMovementEnded: {
-                if (__appWindow.wideScreen || !Settings.isMobile) {
+                if ((root.pageRow ? root.pageRow.wideMode : __appWindow.wideScreen) || !Settings.isMobile) {
                     return;
                 }
                 if (root.height > root.minimumHeight + (root.preferredHeight - root.minimumHeight)/2 ) {
