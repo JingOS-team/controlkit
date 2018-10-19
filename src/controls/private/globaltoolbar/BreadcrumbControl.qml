@@ -75,6 +75,7 @@ Flickable {
                         Layout.leftMargin: Kirigami.Units.largeSpacing
                         font.pointSize: -1
                         font.pixelSize: Math.max(1, mainLayout.height * 0.7)
+                        color: Kirigami.Theme.textColor
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.NoWrap
                         text: delegateLayout.page ? delegateLayout.page.title : ""
