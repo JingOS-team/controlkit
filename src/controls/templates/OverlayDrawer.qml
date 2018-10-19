@@ -192,13 +192,13 @@ T2.Drawer {
         anchors {
             bottom: drawerHandle.handleAnchor ? undefined : parent.bottom
             bottomMargin: {
-                if (!applicationWindow()) {
+                if (typeof applicationWindow === "undefined") {
                     return;
                 }
 
-                var margin = 0;
+                var margin = Units.smallSpacing;
                 if (applicationWindow().footer) {
-                    margin = applicationWindow().footer.height;
+                    margin = applicationWindow().footer.height + Units.smallSpacing;
                 }
 
                 if (!applicationWindow() || !applicationWindow().pageStack ||
@@ -235,7 +235,7 @@ T2.Drawer {
         }
 
         visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
-        width: handleAnchor ? handleAnchor.width : Units.iconSizes.medium + Units.smallSpacing*2
+        width: handleAnchor ? handleAnchor.width : Units.iconSizes.smallMedium + Units.smallSpacing*2
         height: handleAnchor ? handleAnchor.height : width
         opacity: root.handleVisible ? 1 : 0
         Behavior on opacity {

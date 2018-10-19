@@ -68,10 +68,8 @@ Item {
         id: button
         x: root.width/2 - button.width/2
 
-        anchors {
-            bottom: parent.bottom
-            bottomMargin: Units.smallSpacing
-        }
+        anchors.bottom: edgeMouseArea.bottom
+
         implicitWidth: implicitHeight + Units.iconSizes.smallMedium*2 + Units.gridUnit
         implicitHeight: Units.iconSizes.medium + Units.largeSpacing * 2
 
@@ -289,7 +287,6 @@ Item {
                     z: -1
                     anchors {
                         left: parent.left
-                        //verticalCenter: parent.verticalCenter
                         bottom: parent.bottom
                         bottomMargin: Units.smallSpacing
                     }
@@ -394,7 +391,8 @@ Item {
         id: fakeContextMenuButton
         anchors {
             right: edgeMouseArea.right
-            bottom: edgeMouseArea.bottom
+            bottom: parent.bottom
+            margins: Units.smallSpacing
         }
         drag {
             target: button
@@ -406,43 +404,35 @@ Item {
             //using internal pagerow api
             && (root.page && root.page.parent ? root.page.parent.level < applicationWindow().pageStack.depth-1 : false)
 
-        width: Units.iconSizes.medium + Units.smallSpacing*2
+        width: Units.iconSizes.smallMedium + Units.smallSpacing*2
         height: width
 
-        Item {
-            anchors {
-                fill:parent
-                margins: -Units.gridUnit
-            }
 
-            DropShadow {
-                anchors.fill: handleGraphics
-                horizontalOffset: 0
-                verticalOffset: Units.devicePixelRatio
-                radius: Units.gridUnit /2
-                samples: 16
-                color: Qt.rgba(0, 0, 0, fakeContextMenuButton.pressed ? 0.6 : 0.4)
-                source: handleGraphics
-            }
-            Rectangle {
-                id: handleGraphics
+        DropShadow {
+            anchors.fill: handleGraphics
+            horizontalOffset: 0
+            verticalOffset: Units.devicePixelRatio
+            radius: Units.gridUnit /2
+            samples: 16
+            color: Qt.rgba(0, 0, 0, fakeContextMenuButton.pressed ? 0.6 : 0.4)
+            source: handleGraphics
+        }
+        Rectangle {
+            id: handleGraphics
+            anchors.fill: parent
+            color: fakeContextMenuButton.pressed ? Theme.highlightColor : Theme.backgroundColor
+            radius: Units.devicePixelRatio
+            Icon {
                 anchors.centerIn: parent
-                color: fakeContextMenuButton.pressed ? Theme.highlightColor : Theme.backgroundColor
-                width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
+                width: Units.iconSizes.smallMedium
+                selected: fakeContextMenuButton.pressed
                 height: width
-                radius: Units.devicePixelRatio
-                Icon {
-                    anchors.centerIn: parent
-                    width: Units.iconSizes.smallMedium
-                    selected: fakeContextMenuButton.pressed
-                    height: width
-                    source: "overflow-menu"
-                }
-                Behavior on color {
-                    ColorAnimation {
-                        duration: Units.longDuration
-                        easing.type: Easing.InOutQuad
-                    }
+                source: "overflow-menu"
+            }
+            Behavior on color {
+                ColorAnimation {
+                    duration: Units.longDuration
+                    easing.type: Easing.InOutQuad
                 }
             }
         }
