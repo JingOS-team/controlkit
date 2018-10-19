@@ -217,7 +217,7 @@ T2.ItemDelegate {
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
-                rightMargin: handleMouse.anchors.rightMargin
+                rightMargin: Units.gridUnit
             }
             height: Math.min( parent.height / 1.5, Units.iconSizes.medium)
             width: childrenRect.width
@@ -293,7 +293,7 @@ T2.ItemDelegate {
             } else {
                 positionAnimation.to = 0;
             }
-            positionAnimation.running = true;
+            positionAnimation.restart();
         }
         onPressed: {
             downTimestamp = (new Date()).getTime();
@@ -309,14 +309,16 @@ T2.ItemDelegate {
         }
         onReleased: {
             var speed = ((startX - listItem.background.x) / ((new Date()).getTime() - downTimestamp) * 1000);
+            var absoluteDelta = startX - listItem.background.x;
             if (LayoutMirroring.enabled) {
                 speed = -speed;
+                absoluteDelta = -absoluteDelta;
             }
 
             if (Math.abs(speed) < Units.gridUnit) {
                 return;
             }
-            if (speed > listItem.width/2) {
+            if (speed > listItem.width/2 || absoluteDelta > listItem.width/2) {
                 positionAnimation.to = (LayoutMirroring.enabled ? -1 : +1) * (-listItem.width + height + handleMouse.anchors.rightMargin);
             } else {
                 positionAnimation.to = 0;
@@ -395,6 +397,21 @@ T2.ItemDelegate {
                 listItem.background.x = (listItem.background.width - listItem.background.height) * (1 - internal.swipeFilterItem.peek);
             } else {
                 listItem.background.x = -(listItem.background.width - listItem.background.height) * internal.swipeFilterItem.peek;
+            }
+        }
+        onPressed: {
+            if (internal.edgeEnabled) {
+                handleMouse.onPressed(mouse);
+            }
+        }
+        onClicked: {
+            if (Math.abs(listItem.background.x) < Units.gridUnit && internal.edgeEnabled) {
+                handleMouse.clicked(mouse);
+            }
+        }
+        onReleased: {
+            if (internal.edgeEnabled) {
+                handleMouse.released(mouse);
             }
         }
         onCurrentItemChanged: {
