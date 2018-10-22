@@ -459,10 +459,11 @@ QImage DesktopIcon::findIcon(const QSize &size)
         if(!m_loadedImage.isNull()) {
             return m_loadedImage.scaled(size, Qt::KeepAspectRatio, m_smooth ? Qt::SmoothTransformation : Qt::FastTransformation );
         }
+        const auto url = m_source.toUrl();
         QQmlEngine* engine = qmlEngine(this);
         QNetworkAccessManager* qnam;
-        if (engine && (qnam = qmlEngine(this)->networkAccessManager())) {
-            QNetworkRequest request(m_source.toUrl());
+        if (engine && (qnam = engine->networkAccessManager()) && (!m_networkReply || m_networkReply->url() != url)) {
+            QNetworkRequest request(url);
             request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
             m_networkReply = qnam->get(request);
             connect(m_networkReply.data(), &QNetworkReply::readyRead, this, [this](){ handleReadyRead(m_networkReply); });
