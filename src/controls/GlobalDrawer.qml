@@ -255,7 +255,7 @@ OverlayDrawer {
                             : bannerImage.Layout.preferredHeight
 
                     Layout.fillWidth: true
-                    visible: bannerImage.title.length > 0 || bannerImage.titleIcon.length > 0 || bannerImage.source.length > 0 || root.collapsible
+                    visible: !bannerImage.empty || root.collapsible
 
                     BannerImage {
                         id: bannerImage
@@ -286,11 +286,12 @@ OverlayDrawer {
                     }
                     PrivateActionToolButton {
                         id: collapseButton
+                        readonly property bool noTitle: (!root.title || root.title.length===0) && (!root.titleIcon || root.title.length===0)
                         anchors {
                             top: parent.top
                             left: parent.left
-                            topMargin: root.collapsed || (root.title.length == 0 && root.titleIcon.length == 0) ? 0 : Units.smallSpacing + Units.iconSizes.large/2 - height/2
-                            leftMargin: root.collapsed || (root.title.length == 0 && root.titleIcon.length == 0) ? 0 : Units.smallSpacing
+                            topMargin: root.collapsed || noTitle ? 0 : Units.smallSpacing + Units.iconSizes.large/2 - height/2
+                            leftMargin: root.collapsed || noTitle ? 0 : Units.smallSpacing
                             Behavior on leftMargin {
                                 NumberAnimation {
                                     duration: Units.longDuration

@@ -76,6 +76,12 @@ Image {
     Layout.minimumHeight: titleLayout.implicitHeight > 0 ? titleLayout.implicitHeight + Kirigami.Units.smallSpacing * 2 : 0
     property int implicitWidth: Layout.preferredWidth
 
+    readonly property bool empty: bannerImage.title !== undefined && bannerImage.title.length === 0 &&
+                                  bannerImage.source !== undefined && bannerImage.source.length === 0 &&
+                                  bannerImage.titleIcon !== undefined &&bannerImage.titleIcon.length === 0
+
+
+
     fillMode: Image.PreserveAspectCrop
     asynchronous: true
 
