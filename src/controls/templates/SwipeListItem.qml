@@ -219,7 +219,7 @@ T2.ItemDelegate {
                 verticalCenter: parent.verticalCenter
                 rightMargin: Units.gridUnit
             }
-            height: Math.min( parent.height / 1.5, Units.iconSizes.medium)
+            height: Math.min( parent.height / 1.5, Units.iconSizes.smallMedium)
             width: childrenRect.width
             property bool exclusive: false
             property Item checkedButton
