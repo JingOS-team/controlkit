@@ -201,6 +201,8 @@ QtObject {
 
         readonly property int contentItemPreferredWidth: root.contentItem.Layout.preferredWidth > 0 ? root.contentItem.Layout.preferredWidth : root.contentItem.implicitWidth
 
+        readonly property int contentItemMaximumWidth: width > Units.gridUnit * 30 ? mainItem.width * 0.95 : width
+
         onWidthChanged: {
             if (!contentItem.contentItem)
                 return
@@ -264,7 +266,7 @@ QtObject {
                 onRunningChanged: {
                     //HACK to center listviews
                     if (!running && contentItem.contentItem) {
-                        var width = Math.max(mainItem.width/2, Math.min(mainItem.width, mainItem.contentItemPreferredWidth));
+                        var width = Math.max(mainItem.width/2, Math.min(mainItem.contentItemMaximumWidth, mainItem.contentItemPreferredWidth));
                         contentItem.contentItem.x = (mainItem.width - width)/2
                         contentItem.contentItem.width = width;
                     }
@@ -439,7 +441,7 @@ QtObject {
 
             y: (scrollView.contentItem != flickableContents ? -scrollView.flickableItem.contentY - listHeaderHeight  - (headerItem.visible ? headerItem.height : 0): 0)
 
-            width: mainItem.contentItemPreferredWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.width, mainItem.contentItemPreferredWidth))
+            width: mainItem.contentItemPreferredWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.contentItemMaximumWidth, mainItem.contentItemPreferredWidth))
 
             height: (scrollView.contentItem != flickableContents ? scrollView.flickableItem.contentHeight + listHeaderHeight : (root.contentItem.height + topPadding + bottomPadding)) + (headerItem.visible ? headerItem.height : 0) + (footerItem.visible ? footerItem.height : 0)
 
