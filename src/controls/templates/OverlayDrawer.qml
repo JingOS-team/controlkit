@@ -271,6 +271,10 @@ T2.Drawer {
     rightPadding: Units.smallSpacing
     bottomPadding: Units.smallSpacing
 
+    y: modal ? 0 : ((T2.ApplicationWindow.menuBar ? T2.ApplicationWindow.menuBar.height : 0) + (T2.ApplicationWindow.header ? T2.ApplicationWindow.header.height : 0))
+
+    height: modal ? parent.height : (parent.height - y - (T2.ApplicationWindow.footer ? T2.ApplicationWindow.footer.height : 0))
+
     parent: modal || edge === Qt.LeftEdge || edge === Qt.RightEdge ? T2.ApplicationWindow.overlay : T2.ApplicationWindow.contentItem
 
     edge: Qt.LeftEdge
