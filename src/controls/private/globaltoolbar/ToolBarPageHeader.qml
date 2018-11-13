@@ -44,6 +44,7 @@ AbstractPageHeader {
 
         Heading {
             id: title
+            level: 1
             Layout.fillWidth: true
 
             Layout.preferredWidth: implicitWidth
