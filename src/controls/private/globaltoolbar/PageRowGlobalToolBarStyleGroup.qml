@@ -46,6 +46,6 @@ QtObject {
     property int minimumHeight: 0
     property int preferredHeight: (actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar
                     ? Kirigami.Units.iconSizes.medium
-                    : Kirigami.Units.gridUnit * 2) + Kirigami.Units.smallSpacing * 2
+                    : Kirigami.Units.gridUnit * 1.8) + Kirigami.Units.smallSpacing * 2
     property int maximumHeight: preferredHeight
 }

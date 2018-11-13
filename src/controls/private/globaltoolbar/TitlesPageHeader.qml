@@ -33,10 +33,11 @@ AbstractPageHeader {
         leftPadding: Units.largeSpacing
         opacity: root.current ? 1 : 0.4
         maximumLineCount: 1
+        verticalAlignment: Text.AlignVCenter
         color: Theme.textColor
         elide: Text.ElideRight
         font.pointSize: -1
-        font.pixelSize: Math.max(1, height*0.7)
+        font.pixelSize: Math.max(1, height*0.6)
         text: page ? page.title : ""
         MouseArea {
             anchors.fill: parent
