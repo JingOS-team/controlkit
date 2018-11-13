@@ -724,6 +724,7 @@ T.Control {
                 }
             }
 
+            //TODO: move in Page itself?
             Separator {
                 z: 999
                 anchors {
@@ -731,7 +732,7 @@ T.Control {
                     bottom: parent.bottom
                     left: parent.left
                     //ensure a sharp angle
-                    topMargin: -width
+                    topMargin: -width + (globalToolBar.actualStyle == ApplicationHeaderStyle.ToolBar || globalToolBar.actualStyle == ApplicationHeaderStyle.Titles ? globalToolBarUI.height : 0)
                 }
                 visible: root.separatorVisible && mainView.contentX < container.x
             }
