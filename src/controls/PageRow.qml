@@ -717,7 +717,7 @@ T.Control {
                     root.currentIndex = level;
                     break;
                 }
-                event.accepted = false;
+                mouse.accepted = false;
             }
             onFocusChanged: {
                 if (focus) {
