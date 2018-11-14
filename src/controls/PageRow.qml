@@ -705,7 +705,7 @@ T.Control {
             }
             property Item owner
             drag.filterChildren: true
-            onClicked: {
+            onPressed: {
                 switch (mouse.button) {
                 case Qt.BackButton:
                     root.flickBack();
@@ -717,6 +717,7 @@ T.Control {
                     root.currentIndex = level;
                     break;
                 }
+                event.accepted = false;
             }
             onFocusChanged: {
                 if (focus) {
