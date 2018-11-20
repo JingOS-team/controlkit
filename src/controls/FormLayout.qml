@@ -146,9 +146,13 @@ Item {
             property var item
             enabled: item.enabled
             visible: item.visible
-            implicitWidth: item.implicitWidth
-            Layout.preferredWidth: item.Layout.preferredWidth > 0 ? item.Layout.preferredWidth : item.implicitWidth
-            Layout.preferredHeight: item.Layout.preferredHeight > 0 ? item.Layout.preferredHeight : item.implicitHeight
+
+            //NOTE: work around a  GridLayout quirk which doesn't lay out items with null size hints causing things to be laid out incorrectly in some cases
+            implicitWidth: Math.max(item.implicitWidth, 1)
+            implicitHeight: Math.max(item.implicitHeight, 1)
+            Layout.preferredWidth: Math.max(1, item.Layout.preferredWidth > 0 ? item.Layout.preferredWidth : item.implicitWidth)
+            Layout.preferredHeight: Math.max(1, item.Layout.preferredHeight > 0 ? item.Layout.preferredHeight : item.implicitHeight)
+
             Layout.leftMargin: root.wideMode ? 0 : Kirigami.Units.largeSpacing
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
             Layout.fillWidth: item.Layout.fillWidth || item.Kirigami.FormData.isSection
