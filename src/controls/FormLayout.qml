@@ -77,11 +77,12 @@ Item {
         columnSpacing: Kirigami.Units.smallSpacing
         property var knownItems: []
         anchors {
-            left: parent.left
+            left: root.wideMode ? undefined : parent.left
             top: parent.top
-            right: parent.right
+           // right: parent.right
+           horizontalCenter: root.wideMode ? parent.horizontalCenter : undefined
         }
-
+        width: Math.min(implicitWidth, parent.width)
         Timer {
             id: hintCompression
             onTriggered: {
@@ -157,9 +158,14 @@ Item {
                     container.destroy();
                 }
             }
-            onXChanged: item.x = x;
+            onXChanged: item.x = x + lay.x;
+            //Assume lay.y is always 0
             onYChanged: item.y = y;
             onWidthChanged: item.width = width;
+            Connections {
+                target: lay
+                onXChanged: item.x = x + lay.x;
+            }
         }
     }
     Component {
