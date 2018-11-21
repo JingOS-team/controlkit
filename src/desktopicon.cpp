@@ -415,7 +415,7 @@ void DesktopIcon::handleReadyRead(QNetworkReply* reply)
         if (m_loadedImage.isNull()) {
             // broken image from data, inform the user of this with some useful broken-image thing...
             const QSize size = QSize(width(), height()) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
-            m_loadedImage = QIcon::fromTheme(QStringLiteral("unknown")).pixmap(size, iconMode(), QIcon::On).toImage();
+            m_loadedImage = QIcon::fromTheme(m_fallback).pixmap(size, iconMode(), QIcon::On).toImage();
         }
         m_changed = true;
         update();
@@ -524,4 +524,17 @@ QIcon::Mode DesktopIcon::iconMode() const
         return QIcon::Active;
     }
     return QIcon::Normal;
+}
+
+QString DesktopIcon::fallback() const
+{
+    return m_fallback;
+}
+
+void DesktopIcon::setFallback(const QString& fallback)
+{
+    if (m_fallback != fallback) {
+        m_fallback = fallback;
+        Q_EMIT fallbackChanged(fallback);
+    }
 }

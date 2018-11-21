@@ -47,6 +47,7 @@ class DesktopIcon : public QQuickItem
     Q_PROPERTY(bool selected READ selected WRITE setSelected NOTIFY selectedChanged)
     Q_PROPERTY(bool isMask READ isMask WRITE setIsMask NOTIFY isMaskChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
+    Q_PROPERTY(QString fallback READ fallback WRITE setFallback NOTIFY fallbackChanged)
 
 public:
     DesktopIcon(QQuickItem *parent = nullptr);
@@ -77,6 +78,9 @@ public:
     void setColor(const QColor &color);
     QColor color() const;
 
+    QString fallback() const;
+    void setFallback(const QString &fallback);
+
     QSGNode* updatePaintNode(QSGNode* node, UpdatePaintNodeData* data) override;
 
 Q_SIGNALS:
@@ -88,6 +92,7 @@ Q_SIGNALS:
     void selectedChanged();
     void isMaskChanged();
     void colorChanged();
+    void fallbackChanged(const QString &fallback);
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
@@ -107,6 +112,7 @@ private:
     bool m_isMask;
     QImage m_loadedImage;
     QColor m_color = Qt::transparent;
+    QString m_fallback = QStringLiteral("unknown");
 };
 
 #endif
