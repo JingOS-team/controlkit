@@ -45,7 +45,7 @@ Item {
                 top: parent.top
                 topMargin: -iconRoot.thickness/2 * drawer.position
             }
-            antialiasing: true
+            antialiasing: drawer.position != 0
             transformOrigin: Item.Right
             width: (1 - drawer.position) * parent.width + drawer.position * (Math.sqrt(2*(parent.width*parent.width)))
             height: iconRoot.thickness
@@ -66,7 +66,7 @@ Item {
                 bottom: parent.bottom
                 bottomMargin: -iconRoot.thickness/2 * drawer.position
             }
-            antialiasing: true
+            antialiasing: drawer.position != 0
             transformOrigin: Item.Right
             width: (1 - drawer.position) * parent.width + drawer.position * (Math.sqrt(2*(parent.width*parent.width)))
             height: iconRoot.thickness
