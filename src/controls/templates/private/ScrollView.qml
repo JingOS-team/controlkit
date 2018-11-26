@@ -113,6 +113,7 @@ MouseArea {
         //TODO: find a way to make flicking work on laptops with touch screen
         flickableItem.interactive = Settings.tabletMode;
         flickableItem.anchors.fill = flickableParent;
+        flickableItem.pixelAligned = true;
 
         scrollBarCreationTimer.restart();
     }
@@ -162,6 +163,7 @@ MouseArea {
             anchors {
                 fill: parent
             }
+            pixelAligned: true
             contentWidth: root.contentItem ? root.contentItem.width : 0
             contentHeight: root.contentItem ? root.contentItem.height : 0
         }
