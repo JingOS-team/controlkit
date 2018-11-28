@@ -63,6 +63,14 @@ class Settings : public QObject
      */
     Q_PROPERTY(int mouseWheelScrollLines READ mouseWheelScrollLines CONSTANT)
 
+    /**
+     * @returns runtime information about the libraries in use
+     *
+     * @since 5.52
+     * @since org.kde.kirigami 2.6
+     */
+    Q_PROPERTY(QStringList information READ information CONSTANT)
+
 public:
     Settings(QObject *parent = nullptr);
     ~Settings();
@@ -80,6 +88,8 @@ public:
     void setStyle(const QString &style);
 
     int mouseWheelScrollLines() const;
+
+    QStringList information() const;
 
 Q_SIGNALS:
     void tabletModeAvailableChanged();

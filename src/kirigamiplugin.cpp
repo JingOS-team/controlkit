@@ -174,6 +174,11 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("ActionToolBar.qml")), uri, 2, 5, "ActionToolBar");
     qmlRegisterUncreatableType<ScenePositionAttached>(uri, 2, 5, "ScenePosition", QStringLiteral("Cannot create objects of type ScenePosition, use it as an attached property"));
 
+    //2.6
+    qmlRegisterType(componentUrl(QStringLiteral("AboutPage.qml")), uri, 2, 6, "AboutPage");
+    qmlRegisterType(componentUrl(QStringLiteral("LinkButton.qml")), uri, 2, 6, "LinkButton");
+    qmlRegisterType(componentUrl(QStringLiteral("UrlButton.qml")), uri, 2, 6, "UrlButton");
+
     qmlProtectModule(uri, 2);
 }
 

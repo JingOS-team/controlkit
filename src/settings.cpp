@@ -23,8 +23,10 @@
 #include <QStandardPaths>
 #include <QSettings>
 #include <QFile>
+#include <QGuiApplication>
 
 #include "libkirigami/tabletmodewatcher.h"
+#include "../kirigami_version.h"
 
 Settings::Settings(QObject *parent)
     : QObject(parent)
@@ -129,5 +131,11 @@ int Settings::mouseWheelScrollLines() const
     return m_scrollLines;
 }
 
-#include "moc_settings.cpp"
-
+QStringList Settings::information() const
+{
+    return {
+        tr("KDE Frameworks %1").arg(QStringLiteral(KIRIGAMI2_VERSION_STRING)),
+        tr("The %1 windowing system").arg(QGuiApplication::platformName()),
+        tr("Qt %2 (built against %3)").arg(QString::fromLocal8Bit(qVersion()), QStringLiteral(QT_VERSION_STR))
+    };
+}
