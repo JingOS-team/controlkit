@@ -162,8 +162,8 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
     if (!m_propertiesTracker) {
         static QMap<QQmlEngine*, QQmlComponent*> propertiesTrackerComponent;
         auto engine = qmlEngine(this);
-        auto it = propertiesTrackerComponent.constFind(engine);
-        if (it == propertiesTrackerComponent.constEnd()) {
+        auto it = propertiesTrackerComponent.find(engine);
+        if (it == propertiesTrackerComponent.end()) {
             connect(engine, &QObject::destroyed, nullptr, [engine] { propertiesTrackerComponent.remove(engine); });
             it = propertiesTrackerComponent.insert(engine, new QQmlComponent(engine, engine));
 
