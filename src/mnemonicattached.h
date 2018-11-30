@@ -110,7 +110,7 @@ public:
     static MnemonicAttached *qmlAttachedProperties(QObject *object);
 
 protected:
-    bool eventFilter(QObject *watched, QEvent *e);
+    bool eventFilter(QObject *watched, QEvent *e) override;
     void updateSequence();
 
 Q_SIGNALS:
