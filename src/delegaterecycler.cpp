@@ -160,10 +160,16 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
     }
 
     if (!m_propertiesTracker) {
-        QQmlComponent *propertiesTrackerComponent = new QQmlComponent(qmlEngine(this), this);
+        static QMap<QQmlEngine*, QQmlComponent*> propertiesTrackerComponent;
+        auto engine = qmlEngine(this);
+        auto it = propertiesTrackerComponent.constFind(engine);
+        if (it == propertiesTrackerComponent.constEnd()) {
+            connect(engine, &QObject::destroyed, nullptr, [engine] { propertiesTrackerComponent.remove(engine); });
+            it = propertiesTrackerComponent.insert(engine, new QQmlComponent(engine, engine));
 
-        propertiesTrackerComponent->setData(QByteArrayLiteral("import QtQuick 2.3\nQtObject{property int trackedIndex: index; property var trackedModel: typeof model != 'undefined' ? model : null; property var trackedModelData: typeof modelData != 'undefined' ? modelData : null}"), QUrl());
-        m_propertiesTracker = propertiesTrackerComponent->create(QQmlEngine::contextForObject(this));
+            (*it)->setData(QByteArrayLiteral("import QtQuick 2.3\nQtObject{property int trackedIndex: index; property var trackedModel: typeof model != 'undefined' ? model : null; property var trackedModelData: typeof modelData != 'undefined' ? modelData : null}"), QUrl());
+        }
+        m_propertiesTracker = (*it)->create(QQmlEngine::contextForObject(this));
 
         connect(m_propertiesTracker, SIGNAL(trackedIndexChanged()), this, SLOT(syncIndex()));
         connect(m_propertiesTracker, SIGNAL(trackedModelChanged()), this, SLOT(syncModel()));
