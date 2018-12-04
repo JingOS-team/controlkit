@@ -69,6 +69,18 @@ Item {
     implicitHeight: lay.implicitHeight
     Layout.preferredHeight: lay.implicitHeight
 
+    /**
+     * twinFormLayouts: list<FormLayout>
+     * If for some implementation reason multiple FormLayouts has to appear
+     * on the same page, they can have each other in twinFormLayouts,
+     * so they will vertically align each other perfectly
+     * @since 5.53
+     */
+    //should be list<FormLayout> but we can't have a recursive declaration
+    property list<Item> twinFormLayouts
+
+    Layout.fillWidth: true
+
     GridLayout {
         id: lay
         property int wideImplicitWidth
@@ -76,9 +88,28 @@ Item {
         rowSpacing: Kirigami.Units.smallSpacing
         columnSpacing: Kirigami.Units.smallSpacing
         property var knownItems: []
+        property var buddies: []
+        property int knownItemsImplicitWidth: {
+            var hint = 0;
+            for (var i in knownItems) {
+                hint = Math.max(hint, knownItems[i].Layout.preferredWidth > 0 ? knownItems[i].Layout.preferredWidth : knownItems[i].implicitWidth);
+            }
+            return hint;
+        }
+        property int buddiesImplicitWidth: {
+            var hint = 0;
+            for (var i in buddies) {
+                if (buddies[i].visible) {
+                    hint = Math.max(hint, buddies[i].implicitWidth);
+                }
+            }
+            return hint;
+        }
         anchors {
             left: root.wideMode ? undefined : parent.left
             top: parent.top
+            //to make room for the invisible spacer elements
+            topMargin: -lay.columnSpacing
            // right: parent.right
            horizontalCenter: root.wideMode ? parent.horizontalCenter : undefined
         }
@@ -92,6 +123,25 @@ Item {
             }
         }
         onImplicitWidthChanged: hintCompression.restart();
+        //This invisible row is used to sync alignment between multiple layouts
+        Item {
+            Layout.preferredWidth: {
+                var hint = 1;
+                for (var i in root.twinFormLayouts) {
+                    hint = Math.max(hint, root.twinFormLayouts[i].children[0].buddiesImplicitWidth);
+                }
+                return hint;
+            }
+        }
+        Item {
+            Layout.preferredWidth: {
+                var hint = 1;
+                for (var i in root.twinFormLayouts) {
+                    hint = Math.max(hint, root.twinFormLayouts[i].children[0].knownItemsImplicitWidth);
+                }
+                return hint;
+            }
+        }
     }
 
     Item {
@@ -125,14 +175,18 @@ Item {
                     itemContainer.parent = lay;
                 }
 
+                var buddy;
                 if (item.Kirigami.FormData.checkable) {
-                    var buddy = checkableBuddyComponent.createObject(lay, {"item": item})
+                    buddy = checkableBuddyComponent.createObject(lay, {"item": item})
                 } else {
-                    var buddy = buddyComponent.createObject(lay, {"item": item})
+                    buddy = buddyComponent.createObject(lay, {"item": item})
                 }
 
                 itemContainer.parent = lay;
+                lay.buddies.push(buddy);
             }
+            lay.knownItemsChanged();
+            lay.buddiesChanged();
             hintCompression.triggered();
         }
     }
@@ -249,7 +303,7 @@ Item {
                                 ? (Qt.AlignRight | (item.Kirigami.FormData.buddyFor.height > height * 2 ? Qt.AlignTop : Qt.AlignVCenter))
                                 : (Qt.AlignLeft | Qt.AlignBottom))
             Layout.topMargin: item.Kirigami.FormData.buddyFor.height > implicitHeight * 2 ? Kirigami.Units.smallSpacing/2 : 0
-            
+
             activeFocusOnTab: indicator.visible && indicator.enabled
             text: labelItem.Kirigami.MnemonicData.richTextLabel
             enabled: labelItem.item.Kirigami.FormData.enabled
