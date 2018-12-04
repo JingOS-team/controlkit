@@ -130,7 +130,7 @@ Item {
                 } else {
                     var buddy = buddyComponent.createObject(lay, {"item": item})
                 }
-                
+
                 itemContainer.parent = lay;
             }
             hintCompression.triggered();
@@ -152,6 +152,12 @@ Item {
             implicitHeight: Math.max(item.implicitHeight, 1)
             Layout.preferredWidth: Math.max(1, item.Layout.preferredWidth > 0 ? item.Layout.preferredWidth : item.implicitWidth)
             Layout.preferredHeight: Math.max(1, item.Layout.preferredHeight > 0 ? item.Layout.preferredHeight : item.implicitHeight)
+
+            Layout.minimumWidth: item.Layout.minimumWidth
+            Layout.minimumHeight: item.Layout.minimumHeight
+
+            Layout.maximumWidth: item.Layout.maximumWidth
+            Layout.maximumHeight: item.Layout.maximumHeight
 
             Layout.leftMargin: root.wideMode ? 0 : Kirigami.Units.largeSpacing
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
