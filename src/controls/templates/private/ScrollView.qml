@@ -94,8 +94,14 @@ MouseArea {
     Connections {
         target: flickableItem
         enabled: !Settings.tabletMode
-        onFlickEnded: flickableItem.interactive = false;
-        onMovementEnded: flickableItem.interactive = false;
+        onFlickEnded: {
+            flickableItem.interactive = false;
+            flickableItem.contentY = Math.round(flickableItem.contentY);
+        }
+        onMovementEnded: {
+            flickableItem.interactive = false;
+            flickableItem.contentY = Math.round(flickableItem.contentY);
+        }
     }
 
     onContentItemChanged: {
@@ -113,7 +119,6 @@ MouseArea {
         //TODO: find a way to make flicking work on laptops with touch screen
         flickableItem.interactive = Settings.tabletMode;
         flickableItem.anchors.fill = flickableParent;
-        flickableItem.pixelAligned = true;
 
         scrollBarCreationTimer.restart();
     }
