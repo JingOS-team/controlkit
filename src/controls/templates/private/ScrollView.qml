@@ -168,7 +168,6 @@ MouseArea {
             anchors {
                 fill: parent
             }
-            pixelAligned: true
             contentWidth: root.contentItem ? root.contentItem.width : 0
             contentHeight: root.contentItem ? root.contentItem.height : 0
         }
