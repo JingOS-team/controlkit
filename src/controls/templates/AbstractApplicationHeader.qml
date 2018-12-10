@@ -110,8 +110,8 @@ Item {
 
         //FIXME: see FIXME below
         Connections {
-            target: root.page.globalToolBarItem
-            enabled: headerSlideConnection.passive && page.globalToolBarItem
+            target: root.page ? root.page.globalToolBarItem : null
+            enabled: headerSlideConnection.passive && target
             onImplicitHeightChanged: root.implicitHeight = root.page.globalToolBarItem.implicitHeight
         }
 
