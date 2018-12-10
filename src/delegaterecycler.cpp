@@ -164,7 +164,7 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
         auto engine = qmlEngine(this);
         auto it = propertiesTrackerComponent.find(engine);
         if (it == propertiesTrackerComponent.end()) {
-            connect(engine, &QObject::destroyed, nullptr, [engine] { propertiesTrackerComponent.remove(engine); });
+            connect(engine, &QObject::destroyed, engine, [engine] { propertiesTrackerComponent.remove(engine); });
             it = propertiesTrackerComponent.insert(engine, new QQmlComponent(engine, engine));
 
             (*it)->setData(QByteArrayLiteral("import QtQuick 2.3\nQtObject{property int trackedIndex: index; property var trackedModel: typeof model != 'undefined' ? model : null; property var trackedModelData: typeof modelData != 'undefined' ? modelData : null}"), QUrl());
