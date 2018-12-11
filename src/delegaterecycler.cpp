@@ -132,6 +132,15 @@ void DelegateRecycler::syncModel()
     }
     QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
     ctx->setContextProperty(QStringLiteral("model"), newModel);
+
+    //try to bind all properties
+    QObject *modelObj = newModel.value<QObject *>();
+    if (modelObj) {
+        const QMetaObject *metaObj = modelObj->metaObject();
+        for (int i = metaObj->propertyOffset(); i < metaObj->propertyCount(); ++i) {
+            ctx->setContextProperty(QString::fromUtf8(metaObj->property(i).name()), metaObj->property(i).read(modelObj));
+        }
+    }
 }
 
 void DelegateRecycler::syncModelData()
@@ -209,6 +218,14 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
             //share context object in order to never lose track of global i18n()
             ctx->setContextObject(eng->rootContext()->contextObject());
         }
+
+        QObject *modelObj = m_propertiesTracker->property("trackedModel").value<QObject *>();
+        if (modelObj) {
+            const QMetaObject *metaObj = modelObj->metaObject();
+            for (int i = metaObj->propertyOffset(); i < metaObj->propertyCount(); ++i) {
+                ctx->setContextProperty(QString::fromUtf8(metaObj->property(i).name()), metaObj->property(i).read(modelObj));
+            }
+        }
         ctx->setContextProperty(QStringLiteral("model"), m_propertiesTracker->property("trackedModel"));
         ctx->setContextProperty(QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData"));
         ctx->setContextProperty(QStringLiteral("index"), m_propertiesTracker->property("trackedIndex"));
@@ -221,11 +238,9 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
             connect(m_item.data(), &QObject::destroyed, ctx, &QObject::deleteLater);
         }
     } else {
-        QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
-
-        ctx->setContextProperty(QStringLiteral("model"), m_propertiesTracker->property("trackedModel"));
-        ctx->setContextProperty(QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData"));
-        ctx->setContextProperty(QStringLiteral("index"), m_propertiesTracker->property("trackedIndex"));
+        syncModel();
+        syncModelData();
+        syncIndex();
     }
 
     if (m_item) {
