@@ -82,6 +82,8 @@ private:
     QPointer<QQuickItem> m_item;
     QObject *m_propertiesTracker = nullptr;
     bool m_updatingSize = false;
+    bool m_widthFromItem = false;
+    bool m_heightFromItem = false;
 };
 
 #endif

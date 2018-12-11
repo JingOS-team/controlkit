@@ -236,6 +236,15 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
             obj->deleteLater();
         } else {
             connect(m_item.data(), &QObject::destroyed, ctx, &QObject::deleteLater);
+            //if the user binded an explicit width, consider it, otherwise base upon implicit
+            m_widthFromItem = m_item->width() > 0 && m_item->width() != m_item->implicitWidth();
+            m_heightFromItem = m_item->height() > 0 && m_item->height() != m_item->implicitHeight();
+
+            if (m_widthFromItem && m_heightFromItem) {
+                connect(m_item.data(), &QQuickItem::heightChanged, this, [this]() {
+                    updateSize(false);
+                });
+            }
         }
     } else {
         syncModel();
@@ -247,6 +256,7 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
         m_item->setParentItem(this);
         connect(m_item.data(), &QQuickItem::implicitWidthChanged, this, &DelegateRecycler::updateHints);
         connect(m_item.data(), &QQuickItem::implicitHeightChanged, this, &DelegateRecycler::updateHints);
+
         updateSize(true);
     }
 
@@ -278,8 +288,8 @@ void DelegateRecycler::updateSize(bool parentResized)
         return;
     }
 
-    const bool needToUpdateWidth = parentResized && widthValid();
-    const bool needToUpdateHeight = parentResized && heightValid();
+    const bool needToUpdateWidth = !m_heightFromItem && parentResized && widthValid();
+    const bool needToUpdateHeight = !m_heightFromItem && parentResized && heightValid();
 
     if (parentResized) {
         m_item->setPosition(QPoint(0,0));
@@ -298,8 +308,16 @@ void DelegateRecycler::updateSize(bool parentResized)
 
     m_updatingSize = true;
 
+    if (m_heightFromItem) {
+        setHeight(m_item->height());
+    }
+    if (m_widthFromItem) {
+        setWidth(m_item->width());
+    }
+
     setImplicitSize(m_item->implicitWidth() >= 0 ? m_item->implicitWidth() : m_item->width(),
-                    m_item->implicitHeight() >= 0 ? m_item->implicitHeight() : m_item->height());
+                m_item->implicitHeight() >= 0 ? m_item->implicitHeight() : m_item->height());
+
 
     m_updatingSize = false;
 }
