@@ -224,7 +224,7 @@ Item {
             }
             onXChanged: item.x = x + lay.x;
             //Assume lay.y is always 0
-            onYChanged: item.y = y;
+            onYChanged: item.y = y + lay.y;
             onWidthChanged: item.width = width;
             Connections {
                 target: lay
