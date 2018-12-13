@@ -288,7 +288,7 @@ void DelegateRecycler::updateSize(bool parentResized)
         return;
     }
 
-    const bool needToUpdateWidth = !m_heightFromItem && parentResized && widthValid();
+    const bool needToUpdateWidth = !m_widthFromItem && parentResized && widthValid();
     const bool needToUpdateHeight = !m_heightFromItem && parentResized && heightValid();
 
     if (parentResized) {
