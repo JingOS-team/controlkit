@@ -145,7 +145,7 @@ Page {
             top: root.header
                     ? root.header.bottom
                     //FIXME: for nowassuming globalToolBarItem is in a Loader, which needs to be got rid of
-                    : (root.globalToolBarItem && globalToolBarItem.visible ?
+                    : (globalToolBarItem && globalToolBarItem.parent && globalToolBarItem.visible ?
                     globalToolBarItem.parent.bottom : parent.top)
             bottom: root.footer ? root.footer.top : parent.bottom
             left: parent.left

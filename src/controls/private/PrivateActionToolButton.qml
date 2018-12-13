@@ -66,7 +66,7 @@ Controls.ToolButton {
     ActionsMenu {
         id: menu
         y: control.height
-        actions: control.kirigamiAction ? control.kirigamiAction.children : ""
+        actions: control.kirigamiAction ? control.kirigamiAction.children : null
         submenuComponent: Component {
             ActionsMenu {}
         }
