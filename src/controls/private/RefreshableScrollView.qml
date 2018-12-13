@@ -193,7 +193,7 @@ P.ScrollView {
     ]
 
     onHeightChanged: {
-        if (!Window.window) {
+        if (!Window.window || height < 0) {
             return;
         }
         var focusItem = Window.window.activeFocusItem;
