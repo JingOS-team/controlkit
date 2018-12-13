@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.1
+import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4
 import "private"
@@ -139,7 +140,7 @@ Page {
         clip: false
         topPadding: contentItem == flickableItem ? 0 : root.topPadding
         leftPadding: root.leftPadding
-        rightPadding: root.rightPadding
+        rightPadding: root.rightPadding + (root.flickable.ScrollBar.vertical ? root.flickable.ScrollBar.vertical.width : 0)
         bottomPadding: contentItem == flickableItem ? 0 : root.bottomPadding
         anchors {
             top: root.header
