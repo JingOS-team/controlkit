@@ -207,7 +207,7 @@ T2.ItemDelegate {
             z: 1
             visible: listItem.actionsVisible
             parent: Settings.tabletMode ? behindItem : listItem
-            opacity: Settings.tabletMode ? 1 : (listItem.hovered ? 1 : 0)
+            opacity: Settings.tabletMode || listItem.hovered || !listItem.supportsMouseEvents ? 1 : 0
             Behavior on opacity {
                 OpacityAnimator {
                     duration: Units.longDuration
