@@ -140,7 +140,7 @@ Page {
         clip: false
         topPadding: contentItem == flickableItem ? 0 : root.topPadding
         leftPadding: root.leftPadding
-        rightPadding: root.rightPadding + (root.flickable.ScrollBar.vertical ? root.flickable.ScrollBar.vertical.width : 0)
+        rightPadding: root.rightPadding + (root.flickable.ScrollBar.vertical && root.flickable.ScrollBar.vertical.visible ? root.flickable.ScrollBar.vertical.width : 0)
         bottomPadding: contentItem == flickableItem ? 0 : root.bottomPadding
         anchors {
             top: root.header

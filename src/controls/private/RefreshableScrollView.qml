@@ -231,6 +231,8 @@ P.ScrollView {
         root.flickableItem.contentY = pos.y;
     }
 
+    Component.onCompleted: leftPaddingChanged()
+    onRightPaddingChanged: leftPaddingChanged()
     onLeftPaddingChanged: {
         //for gridviews do apply margins
         if (root.contentItem == root.flickableItem) {
@@ -241,7 +243,7 @@ P.ScrollView {
                 flickableItem.anchors.leftMargin = 0;
                 flickableItem.anchors.rightMargin = 0;
             }
-            flickableItem.anchors.rightMargin = 0;
+            flickableItem.anchors.topMargin = 0;
             flickableItem.anchors.bottomMargin = 0;
         } else {
             flickableItem.anchors.leftMargin = leftPadding;
