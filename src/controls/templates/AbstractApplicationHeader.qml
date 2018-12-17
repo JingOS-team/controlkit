@@ -85,7 +85,7 @@ Item {
     opacity: height > 0 ? 1 : 0
 
     Behavior on implicitHeight {
-        enabled: root.page && root.page.flickable && !root.page.flickable.moving
+        enabled: root.page && (!root.page.flickable || !root.page.flickable.moving)
         NumberAnimation {
             duration: Units.longDuration
             easing.type: Easing.InOutQuad
