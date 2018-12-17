@@ -229,6 +229,7 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
         ctx->setContextProperty(QStringLiteral("model"), m_propertiesTracker->property("trackedModel"));
         ctx->setContextProperty(QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData"));
         ctx->setContextProperty(QStringLiteral("index"), m_propertiesTracker->property("trackedIndex"));
+        ctx->setContextProperty(QStringLiteral("delegateRecycler"), this);
 
         QObject * obj = component->create(ctx);
         m_item = qobject_cast<QQuickItem *>(obj);
@@ -248,8 +249,12 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
         }
     } else {
         syncModel();
-        syncModelData();
-        syncIndex();
+
+        QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
+        ctx->setContextProperties({ QQmlContext::PropertyPair{ QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData") },
+                                    QQmlContext::PropertyPair{ QStringLiteral("index"), m_propertiesTracker->property("trackedIndex")},
+                                    QQmlContext::PropertyPair{ QStringLiteral("delegateRecycler"), QVariant::fromValue<QObject*>(this) }
+                                 });
     }
 
     if (m_item) {
@@ -321,6 +326,3 @@ void DelegateRecycler::updateSize(bool parentResized)
 
     m_updatingSize = false;
 }
-
-
-#include <moc_delegaterecycler.cpp>
