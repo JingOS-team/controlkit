@@ -48,7 +48,7 @@ Kirigami.AbstractApplicationHeader {
 
             Item {
                 id: leftHandleAnchor
-                visible: typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.handleVisible &&
+                visible: typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.enabled && applicationWindow().globalDrawer.handleVisible &&
                 (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))
                 Layout.fillHeight: true
                 Layout.preferredWidth: height
