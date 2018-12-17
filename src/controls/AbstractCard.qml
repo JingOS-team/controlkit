@@ -44,8 +44,8 @@ T.AbstractCard {
             anchors.fill: parent
             color: Kirigami.Theme.highlightColor
             opacity: {
-                if (root.showClickFeedback) {
-                    return root.down ? 0.3 : (root.hovered ? 0.1 : 0);
+                if (root.showClickFeedback || highlighted) {
+                    return (root.highlighted || root.down) ? 0.3 : (root.hovered ? 0.1 : 0);
                 } else {
                     return 0;
                 }
