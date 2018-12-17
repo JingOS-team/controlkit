@@ -84,17 +84,20 @@ Item {
 
     opacity: height > 0 ? 1 : 0
 
-    Behavior on implicitHeight {
-        enabled: root.page && (!root.page.flickable || !root.page.flickable.moving)
-        NumberAnimation {
-            duration: Units.longDuration
-            easing.type: Easing.InOutQuad
-        }
+    NumberAnimation {
+        id: heightAnim
+        target: root
+        property: "implicitHeight"
+        duration: Units.longDuration
+        easing.type: Easing.InOutQuad
     }
-
     Connections {
         target: __appWindow
-        onControlsVisibleChanged: root.implicitHeight = __appWindow.controlsVisible ? root.preferredHeight : 0;
+        onControlsVisibleChanged: {
+            heightAnim.from = root.implicitHeight
+            heightAnim.to = __appWindow.controlsVisible ? root.preferredHeight : 0;
+            heightAnim.restart();
+        }
     }
 
     Item {
