@@ -154,6 +154,7 @@ private:
     QString m_actualRichTextLabel;
     QString m_richTextLabel;
     QString m_mnemonicLabel;
+    QKeySequence m_sequence;
     bool m_enabled = true;
 
     QPointer<QQuickWindow> m_window;
@@ -161,7 +162,6 @@ private:
     //global mapping of mnemonics
     //TODO: map by QWindow
     static QHash<QKeySequence, MnemonicAttached *> s_sequenceToObject;
-    static QHash<MnemonicAttached *, QKeySequence> s_objectToSequence;
 };
 
 QML_DECLARE_TYPEINFO(MnemonicAttached, QML_HAS_ATTACHED_PROPERTIES)

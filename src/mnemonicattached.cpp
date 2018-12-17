@@ -24,7 +24,6 @@
 #include <QDebug>
 
 QHash<QKeySequence, MnemonicAttached *> MnemonicAttached::s_sequenceToObject = QHash<QKeySequence, MnemonicAttached *>();
-QHash<MnemonicAttached *, QKeySequence> MnemonicAttached::s_objectToSequence = QHash<MnemonicAttached *, QKeySequence>();
 
 MnemonicAttached::MnemonicAttached(QObject *parent)
     : QObject(parent)
@@ -61,11 +60,7 @@ MnemonicAttached::MnemonicAttached(QObject *parent)
 
 MnemonicAttached::~MnemonicAttached()
 {
-    QHash<MnemonicAttached *, QKeySequence>::iterator i = s_objectToSequence.find(this);
-    if (i != s_objectToSequence.end()) {
-        s_sequenceToObject.remove(i.value());
-        s_objectToSequence.erase(i);
-    }
+    s_sequenceToObject.remove(m_sequence);
 }
 
 bool MnemonicAttached::eventFilter(QObject *watched, QEvent *e)
@@ -163,11 +158,9 @@ void MnemonicAttached::calculateWeights()
 
 void MnemonicAttached::updateSequence()
 {
-    //forget about old association
-    QHash<MnemonicAttached *, QKeySequence>::iterator objIt = s_objectToSequence.find(this);
-    if (objIt != s_objectToSequence.end()) {
-        s_sequenceToObject.remove(objIt.value());
-        s_objectToSequence.erase(objIt);
+    if (!m_sequence.isEmpty()) {
+        s_sequenceToObject.remove(m_sequence);
+        m_sequence = {};
     }
 
     calculateWeights();
@@ -201,11 +194,11 @@ void MnemonicAttached::updateSequence()
             //the old shortcut is less valuable than the current: remove it
             if (otherMa) {
                 s_sequenceToObject.remove(otherMa->sequence());
-                s_objectToSequence.remove(otherMa);
+                otherMa->m_sequence = {};
             }
 
             s_sequenceToObject[ks] = this;
-            s_objectToSequence[this] = ks;
+            m_sequence = ks;
             m_richTextLabel = text;
             m_richTextLabel.replace(QRegularExpression(QLatin1String("\\&([^\\&])")), QStringLiteral("\\1"));
             m_actualRichTextLabel = m_richTextLabel;
@@ -222,7 +215,7 @@ void MnemonicAttached::updateSequence()
         }
     } while (i != m_weights.constBegin());
 
-    if (s_objectToSequence.contains(this)) {
+    if (!m_sequence.isEmpty()) {
         emit sequenceChanged();
     } else {
         m_actualRichTextLabel = text;
@@ -317,7 +310,7 @@ MnemonicAttached::ControlType MnemonicAttached::controlType() const
 
 QKeySequence MnemonicAttached::sequence()
 {
-    return s_objectToSequence.value(this);
+    return m_sequence;
 }
 
 MnemonicAttached *MnemonicAttached::qmlAttachedProperties(QObject *object)
