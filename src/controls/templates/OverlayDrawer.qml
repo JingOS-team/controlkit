@@ -351,11 +351,17 @@ T2.Drawer {
 
 //BEGIN signal handlers
     onCollapsedChanged: {
+        if (!__internal.completed) {
+            return;
+        }
         if ((!collapsible || modal) && collapsed) {
             collapsed = true;
         }
     }
     onCollapsibleChanged: {
+        if (!__internal.completed) {
+            return;
+        }
         if (!collapsible) {
             collapsed = false;
         } else if (modal) {
@@ -363,6 +369,9 @@ T2.Drawer {
         }
     }
     onModalChanged: {
+        if (!__internal.completed) {
+            return;
+        }
         if (modal) {
             collapsible = false;
         }
