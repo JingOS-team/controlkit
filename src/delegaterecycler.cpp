@@ -251,10 +251,16 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
         syncModel();
 
         QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+        ctx->setContextProperty(QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData"));
+        ctx->setContextProperty(QStringLiteral("index"), m_propertiesTracker->property("trackedIndex"));
+        ctx->setContextProperty(QStringLiteral("delegateRecycler"), QVariant::fromValue<QObject*>(this));
+#else
         ctx->setContextProperties({ QQmlContext::PropertyPair{ QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData") },
                                     QQmlContext::PropertyPair{ QStringLiteral("index"), m_propertiesTracker->property("trackedIndex")},
                                     QQmlContext::PropertyPair{ QStringLiteral("delegateRecycler"), QVariant::fromValue<QObject*>(this) }
                                  });
+#endif
     }
 
     if (m_item) {
