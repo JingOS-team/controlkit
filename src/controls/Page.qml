@@ -210,8 +210,8 @@ T2.Page {
     readonly property bool isCurrentPage: typeof applicationWindow === "undefined" || !globalToolBar.row
                 ? true
                 : (globalToolBar.row.layers.depth > 1
-                    ? globalToolBar.row.layers.currentItem == root
-                    : globalToolBar.row.currentItem == root)
+                    ? globalToolBar.row.layers.currentItem === root
+                    : globalToolBar.row.currentItem === root)
 
     /**
      * overlay: Item
@@ -329,15 +329,15 @@ T2.Page {
            // property Component toolbarComponent: Qt.createComponent(Qt.resolvedUrl(row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar ? "private/globaltoolbar/ToolBarPageHeader.qml" : "private/globaltoolbar/TitlesPageHeader.qml"))
 
             visible: active
-            active: row && (stack != null || row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar || globalToolBar.row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Titles)
+            active: row && (stack != null || row.globalToolBar.actualStyle === Kirigami.ApplicationHeaderStyle.ToolBar || globalToolBar.row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Titles)
 
             function syncSource() {
                 if (row && active) {
-                    setSource(Qt.resolvedUrl(row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar ? "private/globaltoolbar/ToolBarPageHeader.qml" : "private/globaltoolbar/TitlesPageHeader.qml"),
+                    setSource(Qt.resolvedUrl(row.globalToolBar.actualStyle === Kirigami.ApplicationHeaderStyle.ToolBar ? "private/globaltoolbar/ToolBarPageHeader.qml" : "private/globaltoolbar/TitlesPageHeader.qml"),
                     //TODO: find container reliably, remove assumption
                     {"pageRow": Qt.binding(function() {return row}),
                     "page": root,
-                    "current": Qt.binding(function() {return stack || !root.parent ? true : row.currentIndex == root.parent.level})});
+                    "current": Qt.binding(function() {return stack || !root.parent ? true : row.currentIndex === root.parent.level})});
                 }
             }
 
@@ -363,7 +363,7 @@ T2.Page {
             //It should be T2.Page, Qt 5.7 doesn't like it
             property Item page: root
             height: item ? item.height : 0
-            active: typeof applicationWindow !== "undefined" && (!globalToolBar.row || globalToolBar.row.globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.ToolBar) &&
+            active: typeof applicationWindow !== "undefined" && (!globalToolBar.row || globalToolBar.row.globalToolBar.actualStyle !== Kirigami.ApplicationHeaderStyle.ToolBar) &&
                 //Legacy
                     (typeof applicationWindow === "undefined" ||
                     (!applicationWindow().header || applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === -1) &&

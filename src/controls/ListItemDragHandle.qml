@@ -137,7 +137,7 @@ Item {
             function arrangeItem() {
                 var newIndex = listView.indexAt(1, listView.contentItem.mapFromItem(listItem, 0, 0).y + internal.mouseDownY);
 
-                if (Math.abs(listItem.y - internal.startY) > height && newIndex > -1 && newIndex != index) {
+                if (Math.abs(listItem.y - internal.startY) > height && newIndex > -1 && newIndex !== index) {
                     root.moveRequested(index, newIndex);
                 }
             }

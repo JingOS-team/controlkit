@@ -72,7 +72,7 @@ AbstractListItem {
             id: iconItem
             source: {
                 if (listItem.icon && listItem.icon.hasOwnProperty) {
-                    if (listItem.icon.hasOwnProperty("name") && listItem.icon.name != "")
+                    if (listItem.icon.hasOwnProperty("name") && listItem.icon.name !== "")
                         return listItem.icon.name;
                     if (listItem.icon.hasOwnProperty("source"))
                         return listItem.icon.source;

@@ -42,7 +42,7 @@ ApplicationHeader {
     Component.onCompleted: print("Warning: ToolbarApplicationHeader is deprecated, remove and use the automatic internal toolbar instead.")
     pageDelegate: Item {
         id: delegateItem
-        readonly property bool current: __appWindow.pageStack.currentIndex == index
+        readonly property bool current: __appWindow.pageStack.currentIndex === index
         implicitWidth: titleTextMetrics.width/2 + buttonTextMetrics.collapsedButtonsWidth
 
         RowLayout {
@@ -114,7 +114,7 @@ ApplicationHeader {
 
         PrivateActionToolButton {
             id: ctxActionsButton
-            showMenuArrow: page.actions.contextualActions.length == 1
+            showMenuArrow: page.actions.contextualActions.length === 1
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter

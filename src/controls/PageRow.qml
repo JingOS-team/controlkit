@@ -267,7 +267,7 @@ T.Control {
             var oldPage = pagesLogic.get(pagesLogic.count-1).page;
             if (page !== undefined) {
                 // an unwind target has been specified - pop until we find it
-                while (page != oldPage && pagesLogic.count > 1) {
+                while (page !== oldPage && pagesLogic.count > 1) {
                     pagesLogic.removePage(oldPage.parent.level);
 
                     oldPage = pagesLogic.get(pagesLogic.count-1).page;
@@ -569,7 +569,7 @@ T.Control {
                 pagesLogic.remove(id);
                 item.parent = root;
                 root.pageRemoved(item.page);
-                if (item.page.parent==item) {
+                if (item.page.parent===item) {
                     item.page.destroy(1)
                 }
                 item.destroy();
@@ -602,7 +602,7 @@ T.Control {
                     // instantiate page from component
                     page = pageComp.createObject(container.pageParent, properties || {});
 
-                    if (pageComp.status == Component.Error) {
+                    if (pageComp.status === Component.Error) {
                         throw new Error("Error while loading page: " + pageComp.errorString());
                     } 
                 } else {
@@ -615,12 +615,12 @@ T.Control {
                 }
 
                 container.page = page;
-                if (page.parent == null || page.parent == container.pageParent) {
+                if (page.parent === null || page.parent === container.pageParent) {
                     container.owner = null;
                 }
 
                 // the page has to be reparented
-                if (page.parent != container) {
+                if (page.parent !== container) {
                     page.parent = container;
                 }
 
@@ -629,7 +629,7 @@ T.Control {
             function containsPage(page) {
                 for (var i = 0; i < pagesLogic.count; ++i) {
                     var candidate = pagesLogic.get(i);
-                    if (candidate.page == page) {
+                    if (candidate.page === page) {
                         print("The item " + page + " is already in the PageRow");
                         return;
                     }

@@ -187,7 +187,7 @@ QtObject {
         parent: root.parent
 
         anchors.fill: parent
-        z: typeof applicationWindow !== "undefined" && root.parent == applicationWindow().overlay ? 0 : 9998
+        z: typeof applicationWindow !== "undefined" && root.parent === applicationWindow().overlay ? 0 : 9998
         visible: false
         drag.filterChildren: true
         hoverEnabled: true
@@ -225,7 +225,7 @@ QtObject {
             var isDescendent = false;
             var candidate = focusItem.parent;
             while (candidate) {
-                if (candidate == root) {
+                if (candidate === root) {
                     isDescendent = true;
                     break;
                 }
@@ -391,7 +391,7 @@ QtObject {
                 typeof applicationWindow === "undefined" ||
                 (root.parent === applicationWindow().overlay) ||
                 !applicationWindow().controlsVisible ||
-                (applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar && applicationWindow().pageStack.globalToolBar.actualStyle == ApplicationHeaderStyle.ToolBar) ||
+                (applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar && applicationWindow().pageStack.globalToolBar.actualStyle === ApplicationHeaderStyle.ToolBar) ||
                 (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0))
                     ? 0 : Units.gridUnit * 3
             Connections {

@@ -81,7 +81,7 @@ AbstractApplicationHeader {
                 anchors.verticalCenter: parent.verticalCenter
                 height: Units.iconSizes.small
                 width: height
-                selected: header.background && header.background.color && header.background.color == Theme.highlightColor
+                selected: header.background && header.background.color && header.background.color === Theme.highlightColor
                 source: titleList.isTabBar ? "" : (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
             }
 
@@ -92,7 +92,7 @@ AbstractApplicationHeader {
                 opacity: current ? 1 : 0.4
                 //Scaling animate NativeRendering is too slow
                 renderType: Text.QtRendering
-                color: header.background && header.background.color && header.background.color == Theme.highlightColor ? Theme.highlightedTextColor : Theme.textColor
+                color: header.background && header.background.color && header.background.color === Theme.highlightColor ? Theme.highlightedTextColor : Theme.textColor
                 elide: Text.ElideRight
                 text: page ? page.title : ""
                 font.pointSize: -1
@@ -230,7 +230,7 @@ AbstractApplicationHeader {
         }
         Item {
             height: parent.height
-            width: (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0) && __appWindow.globalDrawer && __appWindow.globalDrawer.handleVisible && __appWindow.globalDrawer.handle && __appWindow.globalDrawer.handle.y == 0 ? __appWindow.globalDrawer.handle.width : 0
+            width: (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0) && __appWindow.globalDrawer && __appWindow.globalDrawer.handleVisible && __appWindow.globalDrawer.handle && __appWindow.globalDrawer.handle.y === 0 ? __appWindow.globalDrawer.handle.width : 0
         }
     }
 
@@ -341,7 +341,7 @@ AbstractApplicationHeader {
 
                     height: titleList.height
                     onClicked: {
-                        if (pageRow.currentIndex == modelData) {
+                        if (pageRow.currentIndex === modelData) {
                             //scroll up if current otherwise make current
                             if (!pageRow.currentItem.flickable) {
                                 return;
@@ -373,7 +373,7 @@ AbstractApplicationHeader {
                         //NOTE: why not use ListViewCurrentIndex? because listview itself resets
                         //currentIndex in some situations (since here we are using an int as a model,
                         //even more often) so the property binding gets broken
-                        readonly property bool current: pageRow.currentIndex == index
+                        readonly property bool current: pageRow.currentIndex === index
                         readonly property int index: parent.currentIndex
                         readonly property var modelData: parent.currentModelData
                     }

@@ -86,7 +86,7 @@ OverlayDrawer {
         : (pageStack.currentItem ? pageStack.currentItem.contextualActions : null)
     // Disable for empty menus or when we have a global toolbar
     enabled: menu.count > 0 &&
-            (typeof applicationWindow() === "undefined" || !applicationWindow().pageStack.globalToolBar || applicationWindow().pageStack.globalToolBar.actualStyle != ApplicationHeaderStyle.ToolBar)
+            (typeof applicationWindow() === "undefined" || !applicationWindow().pageStack.globalToolBar || applicationWindow().pageStack.globalToolBar.actualStyle !== ApplicationHeaderStyle.ToolBar)
     edge: Qt.application.layoutDirection == Qt.RightToLeft ? Qt.LeftEdge : Qt.RightEdge
     drawerOpen: false
 
@@ -108,7 +108,7 @@ OverlayDrawer {
                 if (typeof root.actions == "undefined") {
                     return null;
                 }
-                if (root.actions.length == 0) {
+                if (root.actions.length === 0) {
                     return null;
                 } else {
                     return root.actions[0].text !== undefined &&

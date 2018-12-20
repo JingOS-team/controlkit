@@ -38,8 +38,8 @@ LinearGradient {
     implicitWidth: Units.gridUnit/2
     implicitHeight: Units.gridUnit/2
 
-    start: Qt.point((edge != Qt.RightEdge ? 0 : width), (edge != Qt.BottomEdge ? 0 : height))
-    end: Qt.point((edge != Qt.LeftEdge ? 0 : width), (edge != Qt.TopEdge ? 0 : height))
+    start: Qt.point((edge !== Qt.RightEdge ? 0 : width), (edge !== Qt.BottomEdge ? 0 : height))
+    end: Qt.point((edge !== Qt.LeftEdge ? 0 : width), (edge !== Qt.TopEdge ? 0 : height))
     gradient: Gradient {
         GradientStop {
             position: 0.0

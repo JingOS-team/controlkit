@@ -100,7 +100,7 @@ T2.Drawer {
      * For OverlayDrawer the default is view-right-close or view-left-close depending on the drawer location
      * @since 2.5
      */
-    readonly property QtObject handleOpenIcon: IconPropertiesGroup {source: root.edge == Qt.RightEdge ? "view-right-close" : "view-left-close"}
+    readonly property QtObject handleOpenIcon: IconPropertiesGroup {source: root.edge === Qt.RightEdge ? "view-right-close" : "view-left-close"}
 
     /**
      * A grouped property describing an optional icon.
@@ -113,7 +113,7 @@ T2.Drawer {
      * For OverlayDrawer the default is view-right-new or view-left-new depending on the drawer location
      * @since 2.5
      */
-    readonly property QtObject handleClosedIcon: IconPropertiesGroup {source: root.edge == Qt.RightEdge ? "view-right-new" : "view-left-new"}
+    readonly property QtObject handleClosedIcon: IconPropertiesGroup {source: root.edge === Qt.RightEdge ? "view-right-new" : "view-left-new"}
 
     /**
      * handleVisible: bool
@@ -134,8 +134,8 @@ T2.Drawer {
         hoverEnabled: handleAnchor
         parent: applicationWindow().overlay.parent
 
-        property Item handleAnchor: (!Settings.isMobile && applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar && applicationWindow().pageStack.globalToolBar.actualStyle != ApplicationHeaderStyle.None)
-                ? (root.edge == Qt.LeftEdge
+        property Item handleAnchor: (!Settings.isMobile && applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar && applicationWindow().pageStack.globalToolBar.actualStyle !== ApplicationHeaderStyle.None)
+                ? (root.edge === Qt.LeftEdge
                    ? applicationWindow().pageStack.globalToolBar.leftHandleAnchor
                    : applicationWindow().pageStack.globalToolBar.rightHandleAnchor)
                 : (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") !== -1 ? applicationWindow().header : null)
@@ -234,7 +234,7 @@ T2.Drawer {
             }
         }
 
-        visible: root.enabled && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge)
+        visible: root.enabled && (root.edge === Qt.LeftEdge || root.edge === Qt.RightEdge)
         width: handleAnchor ? handleAnchor.width : Units.iconSizes.smallMedium + Units.smallSpacing*2
         height: handleAnchor ? handleAnchor.height : width
         opacity: root.handleVisible ? 1 : 0
@@ -246,7 +246,7 @@ T2.Drawer {
         }
         transform: Translate {
             id: translateTransform
-            x: root.handleVisible ? 0 : (root.edge == Qt.LeftEdge ? -drawerHandle.width : drawerHandle.width)
+            x: root.handleVisible ? 0 : (root.edge === Qt.LeftEdge ? -drawerHandle.width : drawerHandle.width)
             Behavior on x {
                 NumberAnimation {
                     duration: Units.longDuration
@@ -280,7 +280,7 @@ T2.Drawer {
     edge: Qt.LeftEdge
     modal: true
 
-    dragMargin: enabled && (edge == Qt.LeftEdge || edge == Qt.RightEdge) ? Qt.styleHints.startDragDistance : 0
+    dragMargin: enabled && (edge === Qt.LeftEdge || edge === Qt.RightEdge) ? Qt.styleHints.startDragDistance : 0
 
     contentWidth: contentItem.implicitWidth || (contentChildren.length === 1 ? contentChildren[0].implicitWidth : 0)
     contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
@@ -294,12 +294,12 @@ T2.Drawer {
     Connections {
         target: parent
         onWidthChanged: {
-            if (edge == Qt.TopEdge || edge == Qt.BottomEdge) {
+            if (edge === Qt.TopEdge || edge === Qt.BottomEdge) {
                 width = parent.width;
             }
         }
         onHeightChanged: {
-            if (edge == Qt.LeftEdge || edge == Qt.RightEdge) {
+            if (edge === Qt.LeftEdge || edge === Qt.RightEdge) {
                 height = parent.height;
             }
         }
@@ -453,18 +453,18 @@ T2.Drawer {
                     when: root.collapsed
                     PropertyChanges {
                         target: root
-                        implicitWidth: edge == Qt.TopEdge || edge == Qt.BottomEdge ? applicationWindow().width : Math.min(collapsedSize + leftPadding + rightPadding, Math.round(applicationWindow().width*0.8))
+                        implicitWidth: edge === Qt.TopEdge || edge === Qt.BottomEdge ? applicationWindow().width : Math.min(collapsedSize + leftPadding + rightPadding, Math.round(applicationWindow().width*0.8))
 
-                        implicitHeight: edge == Qt.LeftEdge || edge == Qt.RightEdge ? applicationWindow().height : Math.min(collapsedSize + topPadding + bottomPadding, Math.round(applicationWindow().height*0.8))
+                        implicitHeight: edge === Qt.LeftEdge || edge === Qt.RightEdge ? applicationWindow().height : Math.min(collapsedSize + topPadding + bottomPadding, Math.round(applicationWindow().height*0.8))
                     }
                 },
                 State {
                     when: !root.collapsed
                     PropertyChanges {
                         target: root
-                        implicitWidth: edge == Qt.TopEdge || edge == Qt.BottomEdge ? applicationWindow().width : Math.min(contentItem.implicitWidth, Math.round(applicationWindow().width*0.8))
+                        implicitWidth: edge === Qt.TopEdge || edge === Qt.BottomEdge ? applicationWindow().width : Math.min(contentItem.implicitWidth, Math.round(applicationWindow().width*0.8))
 
-                        implicitHeight: edge == Qt.LeftEdge || edge == Qt.RightEdge ? applicationWindow().height : Math.min(contentHeight + topPadding + bottomPadding, Math.round(applicationWindow().height*0.4))
+                        implicitHeight: edge === Qt.LeftEdge || edge === Qt.RightEdge ? applicationWindow().height : Math.min(contentHeight + topPadding + bottomPadding, Math.round(applicationWindow().height*0.4))
 
                         contentWidth: contentItem.implicitWidth || (contentChildren.length === 1 ? contentChildren[0].implicitWidth : 0)
                         contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
@@ -474,7 +474,7 @@ T2.Drawer {
             transitions: Transition {
                 reversible: true
                 NumberAnimation {
-                    properties: root.edge == Qt.TopEdge || root.edge == Qt.BottomEdge ? "implicitHeight" : "implicitWidth"
+                    properties: root.edge === Qt.TopEdge || root.edge === Qt.BottomEdge ? "implicitHeight" : "implicitWidth"
                     duration: Units.longDuration
                     easing.type: Easing.InOutQuad
                 }

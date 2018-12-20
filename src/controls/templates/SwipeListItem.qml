@@ -226,7 +226,7 @@ T2.ItemDelegate {
             spacing: Units.largeSpacing
             Repeater {
                 model: {
-                    if (listItem.actions.length == 0) {
+                    if (listItem.actions.length === 0) {
                         return null;
                     } else {
                         return listItem.actions[0].text !== undefined &&
@@ -238,7 +238,7 @@ T2.ItemDelegate {
                 delegate: Icon {
                     height: actionsLayout.height
                     width: height
-                    source: modelData.iconName != "" ? modelData.iconName : modelData.iconSource
+                    source: modelData.iconName !== "" ? modelData.iconName : modelData.iconSource
                     enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
                     visible: (modelData && modelData.visible !== undefined) ? modelData.visible : true;
                     MouseArea {

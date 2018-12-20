@@ -499,7 +499,7 @@ OverlayDrawer {
                                         easing.type: Easing.InOutQuad
                                     }
                                 }
-                                enabled: !isSeparator && ( (model && model.enabled != undefined) ? model.enabled : modelData.enabled)
+                                enabled: !isSeparator && ( (model && model.enabled !== undefined) ? model.enabled : modelData.enabled)
                                 opacity: enabled ? 1.0 : 0.3
 
                                 Separator {

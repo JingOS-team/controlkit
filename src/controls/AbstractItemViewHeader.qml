@@ -37,7 +37,7 @@ T2.Control {
 
     width: view.width
 
-    implicitHeight: topPadding + bottomPadding + (view.headerPositioning == ListView.InlineHeader
+    implicitHeight: topPadding + bottomPadding + (view.headerPositioning === ListView.InlineHeader
                                                     ? maximumHeight
                                                     : Math.min(maximumHeight, Math.max(minimumHeight, maximumHeight - Math.max(0, view.contentY))))
 

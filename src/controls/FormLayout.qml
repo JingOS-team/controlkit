@@ -161,7 +161,7 @@ Item {
                 if (lay.knownItems.indexOf(item) != -1 ||
                     //exclude Repeaters
                     //NOTE: this is an heuristic but there are't better ways
-                    (item.hasOwnProperty("model") && item.model !== undefined && item.children.length == 0)) {
+                    (item.hasOwnProperty("model") && item.model !== undefined && item.children.length === 0)) {
                     continue;
                 }
                 lay.knownItems.push(item);

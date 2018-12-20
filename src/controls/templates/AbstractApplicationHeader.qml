@@ -127,7 +127,7 @@ Item {
 
             //FIXME HACK: if we are in global mode, meaning if we are the toolbar showing the global breadcrumb (but the pages are showing their own toolbar), not to try to mess with page contentY.
             //A better solution is needed
-            readonly property bool passive: root.pageRow && parent.parent == root.pageRow && root.pageRow.globalToolBar.actualStyle != ApplicationHeaderStyle.TabBar && root.pageRow.globalToolBar.actualStyle != ApplicationHeaderStyle.Breadcrumb
+            readonly property bool passive: root.pageRow && parent.parent == root.pageRow && root.pageRow.globalToolBar.actualStyle !== ApplicationHeaderStyle.TabBar && root.pageRow.globalToolBar.actualStyle != ApplicationHeaderStyle.Breadcrumb
 
             onContentYChanged: {
                 if (updatingContentY || !Settings.isMobile ||
@@ -154,7 +154,7 @@ Item {
                                                  root.implicitHeight + oldContentY - root.page.flickable.contentY));
 
                     //if the implicitHeight is changed, use that to simulate scroll
-                    if (oldHeight != implicitHeight) {
+                    if (oldHeight !== implicitHeight) {
                         updatingContentY = true;
                         root.page.flickable.contentY -= (oldHeight - root.implicitHeight);
                         updatingContentY = false;

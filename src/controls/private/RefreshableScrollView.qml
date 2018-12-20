@@ -207,7 +207,7 @@ P.ScrollView {
         var isDescendent = false;
         var candidate = focusItem.parent;
         while (candidate) {
-            if (candidate == root) {
+            if (candidate === root) {
                 isDescendent = true;
                 break;
             }

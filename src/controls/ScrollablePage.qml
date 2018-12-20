@@ -171,14 +171,14 @@ Page {
              return;
         //reparent sheets
         } else if (mainItem.hasOwnProperty("sheetOpen")) {
-            if (mainItem.parent == root || mainItem.parent == null) {
+            if (mainItem.parent === root || mainItem.parent === null) {
                 mainItem.parent = root;
             }
              root.data.push(mainItem);
              return;
         }
 
-        if (scrollView.oldMainItem && scrollView.oldMainItem.hasOwnProperty("parent") && scrollView.oldMainItem.parent != applicationWindow().overlay) {
+        if (scrollView.oldMainItem && scrollView.oldMainItem.hasOwnProperty("parent") && scrollView.oldMainItem.parent !== applicationWindow().overlay) {
              scrollView.oldMainItem.parent = overlay
          }
          scrollView.oldMainItem = mainItem

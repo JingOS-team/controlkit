@@ -85,7 +85,7 @@ T.OverlayDrawer {
                     source: {
                         var edge = root.edge;
                         if (Qt.application.layoutDirection == Qt.RightToLeft) {
-                            if (edge == Qt.LeftEdge) {
+                            if (edge === Qt.LeftEdge) {
                                 edge = Qt.RightEdge;
                             } else {
                                 edge = Qt.LeftEdge;

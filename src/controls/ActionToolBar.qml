@@ -112,11 +112,11 @@ Item {
                 onFitsChanged: updateOverflowSet()
                 function updateOverflowSet() {
                     var index = actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {
-                        return act == modelData});
+                        return act === modelData});
 
                     if ((fits || !modelData.visible) && index > -1) {
                         actionsLayout.overflowSet.splice(index, 1);
-                    } else if (!fits && modelData.visible && index == -1) {
+                    } else if (!fits && modelData.visible && index === -1) {
                         actionsLayout.overflowSet.push(modelData);
                     }
                     actionsLayout.overflowSetChanged();
@@ -154,7 +154,7 @@ Item {
                     ActionsMenu {}
                 }
                 itemDelegate: ActionMenuItem {
-                    visible: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {return act == ourAction}) > -1 && (ourAction.visible == undefined || ourAction.visible)
+                    visible: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {return act === ourAction}) > -1 && (ourAction.visible === undefined || ourAction.visible)
                 }
                 Instantiator {
 
