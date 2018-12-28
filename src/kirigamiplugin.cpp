@@ -62,14 +62,12 @@ QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
 #endif
 }
 
-
 void KirigamiPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.kirigami"));
     const QString style = QQuickStyle::name();
 
-    //FIXME: How to decide when to do this? (when we are on a platform that needs its own icon set shipped
-    if (QIcon::themeName().isEmpty()) {
+    if (!qEnvironmentVariableIsSet("XDG_CURRENT_DESKTOP")) {
         QIcon::setThemeSearchPaths({resolveFilePath(QStringLiteral(".")), QStringLiteral(":/icons")});
         QIcon::setThemeName(QStringLiteral("breeze-internal"));
     }
