@@ -64,6 +64,9 @@
         <file alias="ApplicationHeader.qml">@kirigami_QML_DIR@/src/controls/ApplicationHeader.qml</file>
         <file alias="Heading.qml">@kirigami_QML_DIR@/src/controls/Heading.qml</file>
         <file alias="ScrollablePage.qml">@kirigami_QML_DIR@/src/controls/ScrollablePage.qml</file>
+        <file alias="AboutPage.qml">@kirigami_QML_DIR@/src/controls/AboutPage.qml</file>
+        <file alias="UrlButton.qml">@kirigami_QML_DIR@/src/controls/UrlButton.qml</file>
+        <file alias="LinkButton.qml">@kirigami_QML_DIR@/src/controls/LinkButton.qml</file>
         <file alias="Label.qml">@kirigami_QML_DIR@/src/controls/Label.qml</file>
         <file alias="BasicListItem.qml">@kirigami_QML_DIR@/src/controls/BasicListItem.qml</file>
         <file alias="AbstractApplicationHeader.qml">@kirigami_QML_DIR@/src/controls/AbstractApplicationHeader.qml</file>

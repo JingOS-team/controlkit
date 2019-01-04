@@ -76,7 +76,7 @@ ScrollablePage
      */
     property var aboutData
 
-    title: i18n("About")
+    title: qsTr("About")
     Component {
         id: licencePage
         ScrollablePage {
@@ -104,7 +104,7 @@ ScrollablePage
                 }
                 QQC2.Label {
                     Layout.fillWidth: true
-                    text: i18n("%1 <%2>", modelData.name, modelData.emailAddress)
+                    text: qsTr("%1 <%2>").arg(modelData.name).arg(modelData.emailAddress);
                 }
             }
         }
@@ -139,7 +139,7 @@ ScrollablePage
         }
 
         Heading {
-            text: i18n("Copyright")
+            text: qsTr("Copyright")
         }
         QQC2.Label {
             Layout.leftMargin: Units.gridUnit
@@ -161,7 +161,7 @@ ScrollablePage
             model: aboutData.licenses
             delegate: RowLayout {
                 Layout.leftMargin: Units.gridUnit
-                QQC2.Label { text: i18n("License:" ) }
+                QQC2.Label { text: qsTr("License:" ) }
                 LinkButton {
                     text: modelData.name
                     onClicked: applicationWindow().pageStack.push(licencePage, { text: modelData.text, title: modelData.name } )
@@ -170,7 +170,7 @@ ScrollablePage
         }
 
         Heading {
-            text: i18n("Libraries in use")
+            text: qsTr("Libraries in use")
             visible: Settings.information
         }
         Repeater {
@@ -183,7 +183,7 @@ ScrollablePage
         }
         Heading {
             Layout.fillWidth: true
-            text: i18n("Authors")
+            text: qsTr("Authors")
         }
 
         Repeater {
@@ -191,7 +191,7 @@ ScrollablePage
             delegate: personDelegate
         }
         Heading {
-            text: i18n("Credits")
+            text: qsTr("Credits")
             visible: repCredits.count > 0
         }
         Repeater {
@@ -200,7 +200,7 @@ ScrollablePage
             delegate: personDelegate
         }
         Heading {
-            text: i18n("Translators")
+            text: qsTr("Translators")
             visible: repTranslators.count > 0
         }
         Repeater {

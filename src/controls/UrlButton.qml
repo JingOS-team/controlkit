@@ -48,7 +48,7 @@ LinkButton
     QQC2.Menu {
         id: menu
         QQC2.MenuItem {
-            text: i18n("Copy link address")
+            text: qsTr("Copy link address")
             onClicked: app.copyTextToClipboard(button.url)
         }
     }
