@@ -32,6 +32,7 @@ Flickable {
     contentHeight: height
     contentWidth: mainLayout.width
     clip: true
+    boundsBehavior: Flickable.StopAtBounds
 
     Connections {
         target: pageRow
