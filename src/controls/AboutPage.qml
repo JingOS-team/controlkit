@@ -114,12 +114,12 @@ ScrollablePage
         GridLayout {
             columns: 2
             Layout.fillWidth: true
-            Layout.preferredHeight: Units.iconSizes.huge
 
             Icon {
                 Layout.rowSpan: 2
-                Layout.fillHeight: true
-                Layout.minimumWidth: height
+                Layout.preferredHeight: Units.iconSizes.huge
+                Layout.preferredWidth: height
+                Layout.maximumWidth: page.width / 3;
                 Layout.rightMargin: Units.largeSpacing
                 source: page.aboutData.programLogo || page.aboutData.programIconName
             }
