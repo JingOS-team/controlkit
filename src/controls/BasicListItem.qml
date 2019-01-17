@@ -47,6 +47,7 @@ AbstractListItem {
      */
     property var icon
 
+    property alias iconSize: iconItem.size
     /**
      * reserveSpaceForIcon: bool
      * If true, even when there is no icon the space will be reserved for it
@@ -79,9 +80,10 @@ AbstractListItem {
                 }
                 return listItem.icon;
             }
-            Layout.minimumHeight: Units.iconSizes.smallMedium
-            Layout.maximumHeight: Layout.minimumHeight
-            Layout.minimumWidth: height
+            property int size: Units.iconSizes.smallMedium
+            Layout.minimumHeight: size
+            Layout.maximumHeight: size
+            Layout.minimumWidth: size
             selected: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || listItem.pressed)
             color: listItem.icon && listItem.icon.color && listItem.icon.color.a > 0 ? listItem.icon.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
         }

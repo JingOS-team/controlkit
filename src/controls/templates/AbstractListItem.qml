@@ -100,15 +100,17 @@ T2.ItemDelegate {
 
     Theme.colorGroup: internal.indicateActiveFocus ? Theme.Active : Theme.Inactive
 
-    leftPadding: LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical && internal.view.T2.ScrollBar.vertical.visible ? internal.view.T2.ScrollBar.vertical.width : Units.largeSpacing
-    topPadding: Units.largeSpacing
+    padding: Settings.tabletMode ? Units.largeSpacing : Units.smallSpacing
 
-    rightPadding: !LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical && internal.view.T2.ScrollBar.vertical.visible ? internal.view.T2.ScrollBar.vertical.width : Units.largeSpacing
-    bottomPadding: Units.largeSpacing
+    leftPadding: LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical && internal.view.T2.ScrollBar.vertical.visible ? internal.view.T2.ScrollBar.vertical.width : padding
+    topPadding: padding
+
+    rightPadding: !LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical && internal.view.T2.ScrollBar.vertical.visible ? internal.view.T2.ScrollBar.vertical.width : padding
+    bottomPadding: padding
 
     implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
 
-    implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5
+    implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
     width: parent && parent.width > 0 ? parent.width : implicitWidth
     Layout.fillWidth: true
