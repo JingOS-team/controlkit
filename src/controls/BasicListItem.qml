@@ -67,7 +67,7 @@ AbstractListItem {
 
     contentItem: RowLayout {
         id: layout
-        spacing: Units.smallSpacing*2
+        spacing: LayoutMirroring.enabled ? listItem.rightPadding : listItem.leftPadding
         property bool indicateActiveFocus: listItem.pressed || Settings.tabletMode || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
         Icon {
             id: iconItem
