@@ -43,7 +43,7 @@ BasicListItem {
     MnemonicData.controlType: MnemonicData.MenuItem
     MnemonicData.label: modelData.text
     property ActionsMenu actionsMenu: ActionsMenu {
-        x: Qt.application.layoutDirection == Qt.RightToLeft ? -width : listItem.width
+        x: Qt.application.layoutDirection === Qt.RightToLeft ? -width : listItem.width
         actions: modelData.children
         submenuComponent: Component {
             ActionsMenu {}
@@ -51,7 +51,7 @@ BasicListItem {
         onVisibleChanged: {
             if (visible) {
                 stackView.openSubMenu = listItem.actionsMenu;
-            } else if (stackView.openSubMenu == listItem.actionsMenu) {
+            } else if (stackView.openSubMenu === listItem.actionsMenu) {
                 stackView.openSubMenu = null;
             }
         }
@@ -67,7 +67,7 @@ BasicListItem {
             easing.type: Easing.InOutQuad
         }
     }
-    enabled: !isSeparator && ( (model && model.enabled != undefined) ? model.enabled : modelData.enabled)
+    enabled: !isSeparator && ( (model && model.enabled !== undefined) ? model.enabled : modelData.enabled)
 
     hoverEnabled: (!isExpandible || root.collapsed) && !Settings.tabletMode
     sectionDelegate: isExpandible
@@ -103,7 +103,7 @@ BasicListItem {
             delay: 1000
             timeout: 5000
             y: listItem.height/2 - height/2
-            x: Qt.application.layoutDirection == Qt.RightToLeft ? -width : listItem.width
+            x: Qt.application.layoutDirection === Qt.RightToLeft ? -width : listItem.width
         }
     ]
 

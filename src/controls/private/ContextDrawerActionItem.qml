@@ -78,7 +78,7 @@ BasicListItem {
         }
     }
     onClicked: {
-        if (modelData.children.length == 0) {
+        if (modelData.children.length === 0) {
             root.drawerOpen = false;
         }
 
