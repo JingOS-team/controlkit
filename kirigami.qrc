@@ -18,6 +18,8 @@
         <file alias="InlineMessage.qml">src/controls/InlineMessage.qml</file>
         <file alias="ToolBarApplicationHeader.qml">src/controls/ToolBarApplicationHeader.qml</file>
         <file alias="private/PrivateActionToolButton.qml">src/controls/private/PrivateActionToolButton.qml</file>
+        <file alias="private/GlobalDrawerActionItem.qml">src/controls/private/GlobalDrawerActionItem.qml</file>
+        <file alias="private/ContextDrawerActionItem.qml">src/controls/private/ContextDrawerActionItem.qml</file>
         <file alias="private/RefreshableScrollView.qml">src/controls/private/RefreshableScrollView.qml</file>
         <file alias="private/SwipeItemEventFilter.qml">src/controls/private/SwipeItemEventFilter.qml</file>
         <file alias="private/PageActionPropertyGroup.qml">src/controls/private/PageActionPropertyGroup.qml</file>

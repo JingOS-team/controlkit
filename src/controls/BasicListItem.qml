@@ -84,16 +84,18 @@ AbstractListItem {
             Layout.minimumHeight: size
             Layout.maximumHeight: size
             Layout.minimumWidth: size
-            selected: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || listItem.pressed)
+            selected: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents))
             color: listItem.icon && listItem.icon.color && listItem.icon.color.a > 0 ? listItem.icon.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
+            opacity: 1
         }
         QQC2.Label {
             id: labelItem
             text: listItem.text
             Layout.fillWidth: true
-            color: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || listItem.pressed) ? listItem.activeTextColor : listItem.textColor
+            color: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents)) ? listItem.activeTextColor : listItem.textColor
             elide: Text.ElideRight
             font: listItem.font
+            opacity: 1
         }
     }
 }

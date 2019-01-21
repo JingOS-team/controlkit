@@ -18,6 +18,8 @@
         <file alias="InlineMessage.qml">@kirigami_QML_DIR@/src/controls/InlineMessage.qml</file>
         <file alias="ToolBarApplicationHeader.qml">@kirigami_QML_DIR@/src/controls/ToolBarApplicationHeader.qml</file>
         <file alias="private/PrivateActionToolButton.qml">@kirigami_QML_DIR@/src/controls/private/PrivateActionToolButton.qml</file>
+        <file alias="private/GlobalDrawerActionItem.qml">@kirigami_QML_DIR@/src/controls/private/GlobalDrawerActionItem.qml</file>
+        <file alias="private/ContextDrawerActionItem.qml">@kirigami_QML_DIR@/src/controls/private/ContextDrawerActionItem.qml</file>
         <file alias="private/RefreshableScrollView.qml">@kirigami_QML_DIR@/src/controls/private/RefreshableScrollView.qml</file>
         <file alias="private/SwipeItemEventFilter.qml">@kirigami_QML_DIR@/src/controls/private/SwipeItemEventFilter.qml</file>
         <file alias="private/PageActionPropertyGroup.qml">@kirigami_QML_DIR@/src/controls/private/PageActionPropertyGroup.qml</file>

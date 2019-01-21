@@ -351,6 +351,9 @@ T2.Drawer {
 
 //BEGIN signal handlers
     onCollapsedChanged: {
+        if (Settings.isMobile) {
+            collapsed = false;
+        }
         if (!__internal.completed) {
             return;
         }
@@ -359,6 +362,9 @@ T2.Drawer {
         }
     }
     onCollapsibleChanged: {
+        if (Settings.isMobile) {
+            collapsible = false;
+        }
         if (!__internal.completed) {
             return;
         }

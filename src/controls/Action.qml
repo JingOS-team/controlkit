@@ -147,8 +147,22 @@ QtObject {
      */
     property bool separator: false
 
+    /**
+     * expandible: bool
+     * When true, actions in globalDrawers and contextDrawers will become titles displaying te child actions as sub items
+     * @since 2.6
+     */
+    property bool expandible: false
+
+    property QtObject parent
+
     default property alias children: root.__children
     property list<QtObject> __children
+    onChildrenChanged: {
+        for (var i in children) {
+            children[i].parent = root
+        }
+    }
     property Shortcut __shortcut: Shortcut {
         property bool checked: false
         id: shortcutItem

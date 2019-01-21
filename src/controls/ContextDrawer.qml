@@ -21,6 +21,7 @@ import QtQuick 2.1
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4
 
+import "private"
 import "templates/private"
 
 /**
@@ -133,39 +134,17 @@ OverlayDrawer {
                     text: root.title
                 }
             }
-            delegate: BasicListItem {
-                id: listItem
-
-                readonly property bool isSeparator: modelData.hasOwnProperty("separator") && modelData.separator
-
-                checked: modelData.checked
-                icon: modelData.icon
-                supportsMouseEvents: true
-                separatorVisible: false
-                reserveSpaceForIcon: !isSeparator
-                reserveSpaceForLabel: !isSeparator
-
-                label: model ? (model.tooltip ? model.tooltip : model.text) : (modelData.tooltip ? modelData.tooltip : modelData.text)
-                enabled: !isSeparator && (model ? model.enabled : modelData.enabled)
-                visible: model ? model.visible : modelData.visible
-                opacity: enabled ? 1.0 : 0.6
-
-                Separator {
-                    id: separatorAction
-
-                    visible: listItem.isSeparator
-                    Layout.fillWidth: true
+            delegate: Column {
+                width: parent.width
+                ContextDrawerActionItem {
+                    width: parent.width
                 }
-
-                onClicked: {
-                    root.drawerOpen = false;
-                    if (modelData && modelData.trigger !== undefined) {
-                        modelData.trigger();
-                    // assume the model is a list of QAction or Action
-                    } else if (menu.model.length > index) {
-                        menu.model[index].trigger();
-                    } else {
-                        console.warning("Don't know how to trigger the action")
+                Repeater {
+                    model: modelData.hasOwnProperty("expandible") && modelData.expandible ? modelData.children : null
+                    delegate: ContextDrawerActionItem {
+                        width: parent.width
+                        leftPadding: Units.largeSpacing * 2
+                        opacity: !root.collapsed
                     }
                 }
             }
