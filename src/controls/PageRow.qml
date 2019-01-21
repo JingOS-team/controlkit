@@ -366,8 +366,8 @@ T.Control {
 //END FUNCTIONS
 
     onInitialPageChanged: {
-        clear();
         if (initialPage) {
+            clear();
             push(initialPage, null)
         }
     }
