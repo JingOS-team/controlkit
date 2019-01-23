@@ -142,14 +142,16 @@ T2.ItemDelegate {
     hoverEnabled: true
     implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
     width: parent ? parent.width : implicitWidth
-    implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 5
+    implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
-    leftPadding: Units.smallSpacing * 2
+    padding: Settings.tabletMode ? Units.largeSpacing : Units.smallSpacing
 
-    rightPadding: Units.smallSpacing * 2 + (handleMouse.visible ? handleMouse.width : hovered * actionsLayout.width) + handleMouse.anchors.rightMargin
+    leftPadding: padding * 2
+
+    rightPadding: padding * 2 + (handleMouse.visible ? handleMouse.width : hovered * actionsLayout.width) + handleMouse.anchors.rightMargin
     
-    topPadding: Units.smallSpacing * 2
-    bottomPadding: Units.smallSpacing * 2
+    topPadding: padding
+    bottomPadding: padding
 
 //END properties
 
