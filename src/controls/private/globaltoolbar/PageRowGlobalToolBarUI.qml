@@ -50,17 +50,17 @@ Kirigami.AbstractApplicationHeader {
                 id: leftHandleAnchor
                 visible: typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.enabled && applicationWindow().globalDrawer.handleVisible &&
                 (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))
-                Layout.fillHeight: true
+                Layout.preferredHeight: Math.min(backButton.implicitHeight, parent.height)
                 Layout.preferredWidth: height
             }
             TemplatesPrivate.BackButton {
                 id: backButton
                 Layout.leftMargin: leftHandleAnchor.visible ? 0 : Kirigami.Units.smallSpacing
-                Layout.fillHeight: true
+                Layout.preferredHeight: Math.min(implicitHeight, parent.height)
                 Layout.preferredWidth: height
             }
             TemplatesPrivate.ForwardButton {
-                Layout.fillHeight: true
+                Layout.preferredHeight: Math.min(implicitHeight, parent.height)
                 Layout.preferredWidth: height
             }
             Kirigami.Separator {

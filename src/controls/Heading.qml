@@ -65,7 +65,6 @@ QQC2.Label {
     property int step: 0
 
     font.pointSize: headerPointSize(level)
-    wrapMode: Text.WordWrap
 
     function headerPointSize(l) {
         var n = Theme.defaultFont.pointSize;

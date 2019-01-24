@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.1
+import QtQuick 2.5
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4 as Kirigami
 import "private"
@@ -232,6 +232,24 @@ T2.Page {
      * application to manage the back event.
      */
     signal backRequested(var event);
+
+    property Component titleDelegate: Kirigami.Heading {
+            id: title
+            level: 1
+            Layout.fillWidth: true
+
+            Layout.preferredWidth: titleTextMetrics.width
+            Layout.minimumWidth: titleTextMetrics.width
+            opacity: root.isCurrentPage ? 1 : 0.4
+            maximumLineCount: 1
+            elide: Text.ElideRight
+            text: root.title
+            TextMetrics {
+                id: titleTextMetrics
+                text: root.title
+                font: title.font
+            }
+        }
 
     // Look for sheets and cose them
     //FIXME: port Sheets to Popup?
