@@ -26,5 +26,4 @@ T.SwipeListItem {
     id: listItem
 
     background: DefaultListItemBackground {}
-    implicitHeight: contentItem.implicitHeight + Units.smallSpacing * 4
 }
