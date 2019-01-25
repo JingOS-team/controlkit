@@ -30,6 +30,8 @@ AbstractPageHeader {
     implicitWidth: titleLoader.implicitWidth.width/2 + buttonTextMetrics.collapsedButtonsWidth
     Layout.minimumWidth: ctxActionsButton.width*4
 
+    Layout.preferredHeight: Math.max(titleLoader.implicitHeight, actionsLayout.implicitHeight) + Units.smallSpacing * 2
+
     MouseArea {
         anchors.fill: parent
         onClicked: page.forceActiveFocus()
@@ -44,9 +46,7 @@ AbstractPageHeader {
             right: actionsLayout.left
             leftMargin: Units.largeSpacing
         }
-        height: Math.min(root.height, item
-            ? (item.Layout.preferredHeight > 0 ? item.Layout.preferredHeight : item.implicitHeight)
-            : 0)
+
         visible: width > item.Layout.minimumWidth
 
         sourceComponent: page ? page.titleDelegate : null

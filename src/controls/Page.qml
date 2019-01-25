@@ -273,6 +273,14 @@ T2.Page {
      */
     readonly property Item globalToolBarItem: globalToolBar.item
 
+    /**
+     * The style for the automatically generated global toolbar: by default the Page toolbar is the one set globally in the PageRow in its globalToolBar.style property.
+     * A single page can override the application toolbar style for itself.
+     * It is discouraged to use this, except very specific exceptions, like a chat 
+     * application which can't have controls on the bottom except the text field.
+     */
+    property int globalToolBarStyle: globalToolBar.row.globalToolBar.actualStyle
+
     //NOTE: contentItem will be created if not existing (and contentChildren of Page would become its children) This with anchors enforces the geometry we want, where globalToolBar is a super-header, on top of header
     contentItem: Item {
         anchors {
@@ -314,7 +322,7 @@ T2.Page {
             globalToolBar.row = root.T2.StackView.view.parent;
         }
         if (globalToolBar.row) {
-            globalToolBar.row.globalToolBar.actualStyleChanged.connect(globalToolBar.syncSource);
+            root.globalToolBarStyleChanged.connect(globalToolBar.syncSource);
             globalToolBar.syncSource();
         }
     }
@@ -344,14 +352,12 @@ T2.Page {
             property Kirigami.PageRow row
             property T2.StackView stack
 
-           // property Component toolbarComponent: Qt.createComponent(Qt.resolvedUrl(row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar ? "private/globaltoolbar/ToolBarPageHeader.qml" : "private/globaltoolbar/TitlesPageHeader.qml"))
-
             visible: active
-            active: row && (stack != null || row.globalToolBar.actualStyle === Kirigami.ApplicationHeaderStyle.ToolBar || globalToolBar.row.globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Titles)
+            active: row && (stack != null || root.globalToolBarStyle === Kirigami.ApplicationHeaderStyle.ToolBar || root.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.Titles)
 
             function syncSource() {
                 if (row && active) {
-                    setSource(Qt.resolvedUrl(row.globalToolBar.actualStyle === Kirigami.ApplicationHeaderStyle.ToolBar ? "private/globaltoolbar/ToolBarPageHeader.qml" : "private/globaltoolbar/TitlesPageHeader.qml"),
+                    setSource(Qt.resolvedUrl(root.globalToolBarStyle === Kirigami.ApplicationHeaderStyle.ToolBar ? "private/globaltoolbar/ToolBarPageHeader.qml" : "private/globaltoolbar/TitlesPageHeader.qml"),
                     //TODO: find container reliably, remove assumption
                     {"pageRow": Qt.binding(function() {return row}),
                     "page": root,
@@ -381,7 +387,7 @@ T2.Page {
             //It should be T2.Page, Qt 5.7 doesn't like it
             property Item page: root
             height: item ? item.height : 0
-            active: typeof applicationWindow !== "undefined" && (!globalToolBar.row || globalToolBar.row.globalToolBar.actualStyle !== Kirigami.ApplicationHeaderStyle.ToolBar) &&
+            active: typeof applicationWindow !== "undefined" && (!globalToolBar.row || root.globalToolBarStyle !== Kirigami.ApplicationHeaderStyle.ToolBar) &&
                 //Legacy
                     (typeof applicationWindow === "undefined" ||
                     (!applicationWindow().header || applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === -1) &&

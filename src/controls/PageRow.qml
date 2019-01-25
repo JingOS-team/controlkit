@@ -69,6 +69,8 @@ T.Control {
      */
     contentItem: mainView
 
+    readonly property var pages: pagesLogic.pages;
+
     /**
      * The default width for a column
      * default is wide enough for 30 grid units.
@@ -189,16 +191,20 @@ T.Control {
 
                 var container = pagesLogic.initPage(tPage, tProps);
                 pagesLogic.append(container);
+                pagesLogic.pages.push(tPage);
+                root.pagesChanged();
             }
         }
 
         // initialize the page
         var container = pagesLogic.initPage(page, properties);
         pagesLogic.append(container);
+        pagesLogic.pages.push(page);
         container.visible = container.page.visible = true;
 
         mainView.currentIndex = container.level;
         pagePushed(container.page);
+        root.pagesChanged();
         return container.page
     }
 
@@ -552,6 +558,7 @@ T.Control {
             id: pagesLogic
             readonly property var componentCache: new Array()
             readonly property int roundedDefaultColumnWidth: root.width < root.defaultColumnWidth*2 ? root.width : root.defaultColumnWidth
+            property var pages: []
 
             function removePage(id) {
                 if (id < 0 || id >= count) {
@@ -573,6 +580,8 @@ T.Control {
                     item.page.destroy(1)
                 }
                 item.destroy();
+                pages.splice(id, 1);
+                root.pagesChanged();
             }
             function clearPages () {
                 popScrollAnim.running = false;
@@ -580,6 +589,8 @@ T.Control {
                 while (count > 0) {
                     removePage(count-1);
                 }
+                pages = [];
+                root.pagesChanged();
             }
             function initPage(page, properties) {
                 var container = containerComponent.createObject(mainView, {
