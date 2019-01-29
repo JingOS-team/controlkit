@@ -46,10 +46,13 @@ Kirigami.AbstractApplicationHeader {
 
             visible: globalToolBar.showNavigationButtons && globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.None
 
+
             Item {
                 id: leftHandleAnchor
                 visible: typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.enabled && applicationWindow().globalDrawer.handleVisible &&
                 (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))
+
+
                 Layout.preferredHeight: Math.min(backButton.implicitHeight, parent.height)
                 Layout.preferredWidth: height
             }
@@ -77,7 +80,11 @@ Kirigami.AbstractApplicationHeader {
             Layout.preferredHeight: -1
             property Kirigami.PageRow pageRow: root
 
-            opacity: pageRow.layers.depth < 2
+            readonly property bool currentPageHasToolBar : (pageRow.currentItem && (pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar || pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.Titles))
+
+            opacity: pageRow.layers.depth < 2 && !currentPageHasToolBar
+            visible: opacity > 0
+
             active: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb
 
             //TODO: different implementation?
@@ -99,6 +106,6 @@ Kirigami.AbstractApplicationHeader {
             Layout.preferredWidth: height
         }
     }
-    background.opacity: pageRow.layers.depth < 2 && breadcrumbLoader.active
+    background.opacity: pageRow.layers.depth < 2 && !breadcrumbLoader.currentPageHasToolBar && breadcrumbLoader.active
 }
 

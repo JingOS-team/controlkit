@@ -709,7 +709,12 @@ T.Control {
                     page.anchors.top = container.top;
                     page.anchors.right = container.right;
                     page.anchors.bottom = container.bottom;
-                    page.anchors.topMargin = Qt.binding(function() {return globalToolBar.actualStyle == ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == ApplicationHeaderStyle.Breadcrumb ? globalToolBarUI.height : 0});
+                    page.anchors.topMargin = Qt.binding(function() {
+                        if (page.globalToolBarStyle == ApplicationHeaderStyle.ToolBar || page.globalToolBarStyle == ApplicationHeaderStyle.Titles) {
+                            return 0;
+                        }
+                        return globalToolBar.actualStyle == ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == ApplicationHeaderStyle.Breadcrumb ? globalToolBarUI.height : 0;
+                    });
                 } else {
                     pagesLogic.remove(level);
                 }
