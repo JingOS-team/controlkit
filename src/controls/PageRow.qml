@@ -71,6 +71,8 @@ T.Control {
 
     readonly property var pages: pagesLogic.pages;
 
+    property var visiblePages: []
+
     /**
      * The default width for a column
      * default is wide enough for 30 grid units.
@@ -538,7 +540,25 @@ T.Control {
         preferredHighlightEnd: 0
         highlightMoveDuration: Units.longDuration
         highlightFollowsCurrentItem: true
-        onMovementEnded: currentIndex = Math.max(0, indexAt(contentX, 0))
+        onCountChanged: updateVisiblePages()
+        onWidthChanged: updateVisiblePages()
+
+        function updateVisiblePages() {
+            var visiblePages = [];
+            var cont;
+            for (var i = 0; i < pagesLogic.count; ++i) {
+                cont = pagesLogic.get(i);
+                if (cont.x - contentX < width && cont.x + cont.width - contentX > 0) {
+                    visiblePages.push(cont.page);
+                }
+                root.visiblePages = visiblePages;
+                root.visiblePagesChanged();
+            }
+        }
+        onMovementEnded: {
+            currentIndex = Math.max(0, indexAt(contentX, 0))
+            updateVisiblePages();
+        }
         onFlickEnded: onMovementEnded();
         onCurrentIndexChanged: {
             if (currentItem) {

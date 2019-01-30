@@ -57,7 +57,7 @@ T.OverlayDrawer {
 
             DropShadow {
                 anchors.fill: handleGraphics
-                visible: !parent.parent.handleAnchor || root.handle.pressed || (root.modal && root.position > 0)
+                visible: !parent.parent.handleAnchor || !parent.parent.handleAnchor.visible || root.handle.pressed || (root.modal && root.position > 0)
                 horizontalOffset: 0
                 verticalOffset: Units.devicePixelRatio
                 radius: Units.gridUnit /2
@@ -68,11 +68,11 @@ T.OverlayDrawer {
             Rectangle {
                 id: handleGraphics
                 anchors.centerIn: parent
-                Theme.colorSet: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.colorSet : Theme.Button
+                Theme.colorSet: parent.parent.handleAnchor && parent.parent.handleAnchor.visible ? parent.parent.handleAnchor.Theme.colorSet : Theme.Button
                 Theme.backgroundColor: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.backgroundColor : undefined
                 Theme.textColor: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.textColor : undefined
                 Theme.inherit: false
-                color: parent.parent.handleAnchor && !root.visible
+                color: parent.parent.handleAnchor && parent.parent.handleAnchor.visible && !root.visible
                         ? "transparent"
                         : (root.handle.pressed ? Theme.highlightColor : Theme.backgroundColor)
                 width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
