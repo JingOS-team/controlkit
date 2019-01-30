@@ -25,7 +25,7 @@ import "../../templates/private" as TemplatesPrivate
  
 Kirigami.AbstractApplicationHeader {
     id: header
-    readonly property int leftReservedSpace: buttonsLayout.visible && buttonsLayout.visibleChildren.length > 1 ? buttonsLayout.width : 0
+    readonly property int leftReservedSpace: (buttonsLayout.visible && buttonsLayout.visibleChildren.length > 1 ? buttonsLayout.width : 0) + (leftHandleAnchor.visible ? leftHandleAnchor.width : 0)
     readonly property int rightReservedSpace: rightHandleAnchor.visible ? backButton.background.implicitHeight : 0
 
     readonly property alias leftHandleAnchor: leftHandleAnchor
@@ -40,22 +40,23 @@ Kirigami.AbstractApplicationHeader {
     RowLayout {
         anchors.fill: parent
         spacing: 0
+
+        Item {
+            id: leftHandleAnchor
+            visible: (typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.enabled && applicationWindow().globalDrawer.handleVisible &&
+            (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))) && breadcrumbLoader.pageRow.visiblePages[0].globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar
+
+
+            Layout.preferredHeight: Math.min(backButton.implicitHeight, parent.height)
+            Layout.preferredWidth: height
+        }
+
         RowLayout {
             id: buttonsLayout
             Layout.fillHeight: true
 
             visible: globalToolBar.showNavigationButtons && globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.None
 
-
-            Item {
-                id: leftHandleAnchor
-                visible: typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.enabled && applicationWindow().globalDrawer.handleVisible &&
-                (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))
-
-
-                Layout.preferredHeight: Math.min(backButton.implicitHeight, parent.height)
-                Layout.preferredWidth: height
-            }
             TemplatesPrivate.BackButton {
                 id: backButton
                 Layout.leftMargin: leftHandleAnchor.visible ? 0 : Kirigami.Units.smallSpacing
@@ -84,7 +85,7 @@ Kirigami.AbstractApplicationHeader {
             readonly property bool currentPageHasToolBar: (pageRow.currentItem && pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar)
 
             opacity: pageRow.layers.depth < 2 && !currentPageHasOwnToolBar
-            visible: opacity > 0
+            enabled: opacity > 0
 
             active: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb
 

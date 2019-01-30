@@ -394,7 +394,9 @@ T.Control {
             to: mainViewScrollAnim.to
         }
         ScriptAction {
-            script: mainView.flick(100, 0)
+            script: {
+                mainView.flick(100, 0);
+            }
         }
     }
 
@@ -469,6 +471,7 @@ T.Control {
             }
         }
 
+
         pushExit: Transition {
             OpacityAnimator {
                 from: 1
@@ -540,25 +543,28 @@ T.Control {
         preferredHighlightEnd: 0
         highlightMoveDuration: Units.longDuration
         highlightFollowsCurrentItem: true
-        onCountChanged: updateVisiblePages()
-        onWidthChanged: updateVisiblePages()
 
-        function updateVisiblePages() {
+        onContentXChanged:  {
             var visiblePages = [];
             var cont;
+            var signalChange = false;
             for (var i = 0; i < pagesLogic.count; ++i) {
                 cont = pagesLogic.get(i);
                 if (cont.x - contentX < width && cont.x + cont.width - contentX > 0) {
                     visiblePages.push(cont.page);
+                    if (root.visiblePages.indexOf(cont.page) === -1) {
+                        signalChange = true;
+                    }
                 }
+            }
+            signalChange = signalChange || (visiblePages.length != root.visiblePages.length)
+            if (signalChange) {
                 root.visiblePages = visiblePages;
                 root.visiblePagesChanged();
             }
         }
-        onMovementEnded: {
-            currentIndex = Math.max(0, indexAt(contentX, 0))
-            updateVisiblePages();
-        }
+        onMovementEnded: currentIndex = Math.max(0, indexAt(contentX, 0))
+
         onFlickEnded: onMovementEnded();
         onCurrentIndexChanged: {
             if (currentItem) {

@@ -72,14 +72,22 @@ T.OverlayDrawer {
                 Theme.backgroundColor: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.backgroundColor : undefined
                 Theme.textColor: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.textColor : undefined
                 Theme.inherit: false
-                color: parent.parent.handleAnchor && parent.parent.handleAnchor.visible && !root.visible
-                        ? "transparent"
-                        : (root.handle.pressed ? Theme.highlightColor : Theme.backgroundColor)
+                color: root.handle.pressed ? Theme.highlightColor : Theme.backgroundColor
+
+                visible: !parent.parent.handleAnchor || !parent.parent.handleAnchor.visible
+
                 width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                 height: width
                 radius: Units.devicePixelRatio * 2
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Units.longDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
                 Loader {
-                    anchors.centerIn: parent
+                    anchors.centerIn: handleGraphics
                     width: height
                     height: Units.iconSizes.smallMedium
                     source: {
@@ -112,13 +120,6 @@ T.OverlayDrawer {
                         }
                     }
                 }
-                Behavior on color {
-                    ColorAnimation {
-                        duration: Units.longDuration
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-            }
         }
 
 
