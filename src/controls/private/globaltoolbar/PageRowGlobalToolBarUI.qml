@@ -44,7 +44,9 @@ Kirigami.AbstractApplicationHeader {
         Item {
             id: leftHandleAnchor
             visible: (typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.enabled && applicationWindow().globalDrawer.handleVisible &&
-            (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))) && breadcrumbLoader.pageRow.visiblePages[0].globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar
+            (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))) &&
+            breadcrumbLoader.pageRow.firstVisibleItem &&
+            breadcrumbLoader.pageRow.firstVisibleItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar
 
 
             Layout.preferredHeight: Math.min(backButton.implicitHeight, parent.height)
@@ -73,6 +75,7 @@ Kirigami.AbstractApplicationHeader {
                 opacity: buttonsLayout.visibleChildren.length > 1
             }
         }
+
         Loader {
             id: breadcrumbLoader
             Layout.fillWidth: true
@@ -81,10 +84,9 @@ Kirigami.AbstractApplicationHeader {
             Layout.preferredHeight: -1
             property Kirigami.PageRow pageRow: root
 
-            readonly property bool currentPageHasOwnToolBar: (pageRow.currentItem && (pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar || pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.Titles))
-            readonly property bool currentPageHasToolBar: (pageRow.currentItem && pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar)
+            readonly property bool makeSpaceForPageToolBar: !pageRow.wideMode && (pageRow.currentItem && (pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar || pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.Titles)) && !pageRow.contentItem.moving
 
-            opacity: pageRow.layers.depth < 2 && !currentPageHasOwnToolBar
+            opacity: pageRow.layers.depth < 2 && !makeSpaceForPageToolBar
             enabled: opacity > 0
 
             active: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb
@@ -104,11 +106,11 @@ Kirigami.AbstractApplicationHeader {
             id: rightHandleAnchor
             visible: (typeof applicationWindow() !== "undefined" && applicationWindow().contextDrawer &&
             applicationWindow().contextDrawer.enabled &&
-            applicationWindow().contextDrawer.handleVisible && (applicationWindow().contextDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? rightHandleAnchor : leftHandleAnchor))) && breadcrumbLoader.pageRow.visiblePages[breadcrumbLoader.pageRow.visiblePages.length - 1].globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar
+            applicationWindow().contextDrawer.handleVisible && (applicationWindow().contextDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? rightHandleAnchor : leftHandleAnchor))) && breadcrumbLoader.pageRow.lastVisibleItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar
             Layout.fillHeight: true
             Layout.preferredWidth: height
         }
     }
-    background.opacity: pageRow.layers.depth < 2 && !breadcrumbLoader.currentPageHasOwnToolBar && breadcrumbLoader.active
+    background.opacity: pageRow.layers.depth < 2 && !breadcrumbLoader.makeSpaceForPageToolBar && breadcrumbLoader.active
 }
 

@@ -68,9 +68,13 @@ T.OverlayDrawer {
             Rectangle {
                 id: handleGraphics
                 anchors.centerIn: parent
+
                 Theme.colorSet: parent.parent.handleAnchor && parent.parent.handleAnchor.visible ? parent.parent.handleAnchor.Theme.colorSet : Theme.Button
-                Theme.backgroundColor: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.backgroundColor : undefined
-                Theme.textColor: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.textColor : undefined
+    
+                Theme.backgroundColor: parent.parent.handleAnchor && parent.parent.handleAnchor.visible ? parent.parent.handleAnchor.Theme.backgroundColor : undefined
+
+                Theme.textColor: parent.parent.handleAnchor && parent.parent.handleAnchor.visible ? parent.parent.handleAnchor.Theme.textColor : undefined
+
                 Theme.inherit: false
                 color: root.handle.pressed ? Theme.highlightColor : Theme.backgroundColor
 
@@ -86,40 +90,45 @@ T.OverlayDrawer {
                     }
                 }
             }
-                Loader {
-                    anchors.centerIn: handleGraphics
-                    width: height
-                    height: Units.iconSizes.smallMedium
-                    source: {
-                        var edge = root.edge;
-                        if (Qt.application.layoutDirection == Qt.RightToLeft) {
-                            if (edge === Qt.LeftEdge) {
-                                edge = Qt.RightEdge;
-                            } else {
-                                edge = Qt.LeftEdge;
-                            }
-                        }
-                        switch(edge) {
-                        case Qt.LeftEdge:
-                            return Qt.resolvedUrl("templates/private/MenuIcon.qml");
-                        case Qt.RightEdge: {
-                            if (root.hasOwnProperty("actions")) {
-                                return Qt.resolvedUrl("templates/private/ContextIcon.qml");
-                            } else {
-                                return Qt.resolvedUrl("templates/private/GenericDrawerIcon.qml");
-                            }
-                        }
-                        default:
-                            return "";
+            Loader {
+                anchors.centerIn: handleGraphics
+                width: height
+                height: Units.iconSizes.smallMedium
+
+                Theme.colorSet: handleGraphics.Theme.colorSet
+                Theme.backgroundColor: handleGraphics.Theme.backgroundColor
+                Theme.textColor: handleGraphics.Theme.textColor
+
+                source: {
+                    var edge = root.edge;
+                    if (Qt.application.layoutDirection == Qt.RightToLeft) {
+                        if (edge === Qt.LeftEdge) {
+                            edge = Qt.RightEdge;
+                        } else {
+                            edge = Qt.LeftEdge;
                         }
                     }
-                    onItemChanged: {
-                        if(item) {
-                            item.drawer = Qt.binding(function(){return root});
-                            item.color = Qt.binding(function(){return root.handle.pressed ? Theme.highlightedTextColor : Theme.textColor});
+                    switch(edge) {
+                    case Qt.LeftEdge:
+                        return Qt.resolvedUrl("templates/private/MenuIcon.qml");
+                    case Qt.RightEdge: {
+                        if (root.hasOwnProperty("actions")) {
+                            return Qt.resolvedUrl("templates/private/ContextIcon.qml");
+                        } else {
+                            return Qt.resolvedUrl("templates/private/GenericDrawerIcon.qml");
                         }
+                    }
+                    default:
+                        return "";
                     }
                 }
+                onItemChanged: {
+                    if(item) {
+                        item.drawer = Qt.binding(function(){return root});
+                        item.color = Qt.binding(function(){return root.handle.pressed ? Theme.highlightedTextColor : Theme.textColor});
+                    }
+                }
+            }
         }
 
 

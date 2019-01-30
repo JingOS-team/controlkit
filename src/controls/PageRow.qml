@@ -69,9 +69,33 @@ T.Control {
      */
     contentItem: mainView
 
-    readonly property var pages: pagesLogic.pages;
+    /**
+     * items: list<Item>
+     * All the items that are present in the PageRow
+     * @since 2.6
+     */
+    readonly property var items: pagesLogic.pages;
 
-    property var visiblePages: []
+    /**
+     * visibleItems: list<Item>
+     * All pages which are visible in the PageRow, excluding those which are scrolled away
+     * @since 2.6
+     */
+    property var visibleItems: []
+
+    /**
+     * firstVisibleItem: Item
+     * The first at least partially visible page in the PageRow, pages before that one will be out of the viewport
+     * @since 2.6
+     */
+    readonly property Item firstVisibleItem: visibleItems.length > 0 ? visibleItems[0] : null
+
+    /**
+     * lastVisibleItem: Item
+     * The last at least partially visible page in the PageRow, pages after that one will be out of the viewport
+     * @since 2.6
+     */
+    readonly property Item lastVisibleItem: visibleItems.length > 0 ? visibleItems[visibleItems.length - 1] : null
 
     /**
      * The default width for a column
@@ -194,7 +218,7 @@ T.Control {
                 var container = pagesLogic.initPage(tPage, tProps);
                 pagesLogic.append(container);
                 pagesLogic.pages.push(tPage);
-                root.pagesChanged();
+                root.itemsChanged();
             }
         }
 
@@ -206,7 +230,7 @@ T.Control {
 
         mainView.currentIndex = container.level;
         pagePushed(container.page);
-        root.pagesChanged();
+        root.itemsChanged();
         return container.page
     }
 
@@ -543,24 +567,29 @@ T.Control {
         preferredHighlightEnd: 0
         highlightMoveDuration: Units.longDuration
         highlightFollowsCurrentItem: true
+        onWidthChanged: updatevisibleItems()
 
-        onContentXChanged:  {
-            var visiblePages = [];
+        onContentXChanged: updatevisibleItems()
+
+        function updatevisibleItems() {
+            var visibleItems = [];
             var cont;
             var signalChange = false;
             for (var i = 0; i < pagesLogic.count; ++i) {
                 cont = pagesLogic.get(i);
                 if (cont.x - contentX < width && cont.x + cont.width - contentX > 0) {
-                    visiblePages.push(cont.page);
-                    if (root.visiblePages.indexOf(cont.page) === -1) {
+                    visibleItems.push(cont.page);
+                    if (root.visibleItems.indexOf(cont.page) === -1) {
                         signalChange = true;
                     }
                 }
             }
-            signalChange = signalChange || (visiblePages.length != root.visiblePages.length)
+
+            signalChange = signalChange || (visibleItems.length != root.visibleItems.length)
+
             if (signalChange) {
-                root.visiblePages = visiblePages;
-                root.visiblePagesChanged();
+                root.visibleItems = visibleItems;
+                root.visibleItemsChanged();
             }
         }
         onMovementEnded: currentIndex = Math.max(0, indexAt(contentX, 0))
@@ -607,7 +636,7 @@ T.Control {
                 }
                 item.destroy();
                 pages.splice(id, 1);
-                root.pagesChanged();
+                root.itemsChanged();
             }
             function clearPages () {
                 popScrollAnim.running = false;
@@ -616,7 +645,7 @@ T.Control {
                     removePage(count-1);
                 }
                 pages = [];
-                root.pagesChanged();
+                root.itemsChanged();
             }
             function initPage(page, properties) {
                 var container = containerComponent.createObject(mainView, {
@@ -736,7 +765,7 @@ T.Control {
                     page.anchors.right = container.right;
                     page.anchors.bottom = container.bottom;
                     page.anchors.topMargin = Qt.binding(function() {
-                        if (page.globalToolBarStyle == ApplicationHeaderStyle.ToolBar || page.globalToolBarStyle == ApplicationHeaderStyle.Titles) {
+                        if (!wideMode && (page.globalToolBarStyle == ApplicationHeaderStyle.ToolBar || page.globalToolBarStyle == ApplicationHeaderStyle.Titles)) {
                             return 0;
                         }
                         return globalToolBar.actualStyle == ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == ApplicationHeaderStyle.Breadcrumb ? globalToolBarUI.height : 0;
