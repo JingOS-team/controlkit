@@ -89,7 +89,6 @@ AbstractPageHeader {
             Layout.rightMargin: Units.smallSpacing
             kirigamiAction: page && page.actions ? page.actions.main : null
             showText: !parent.toobig
-            flat: false
         }
         Private.PrivateActionToolButton {
             Layout.alignment: Qt.AlignVCenter
