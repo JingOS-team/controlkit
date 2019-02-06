@@ -44,26 +44,29 @@ Kirigami.AbstractApplicationHeader {
             id: buttonsLayout
             Layout.fillHeight: true
 
-            visible: globalToolBar.showNavigationButtons && globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.None
+            visible: (globalToolBar.showNavigationButtons || root.layers.depth > 1) && (globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.None)
 
             Item {
                 id: leftHandleAnchor
                 visible: typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.enabled && applicationWindow().globalDrawer.handleVisible &&
-                (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))
+                (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor)) && globalToolBar.showNavigationButtons
                 Layout.fillHeight: true
                 Layout.preferredWidth: height
             }
             TemplatesPrivate.BackButton {
                 id: backButton
+                visible: globalToolBar.showNavigationButtons || root.layers.depth > 1
                 Layout.leftMargin: leftHandleAnchor.visible ? 0 : Kirigami.Units.smallSpacing
                 Layout.fillHeight: true
                 Layout.preferredWidth: height
             }
             TemplatesPrivate.ForwardButton {
+                visible: globalToolBar.showNavigationButtons
                 Layout.fillHeight: true
                 Layout.preferredWidth: height
             }
             Kirigami.Separator {
+                visible: globalToolBar.showNavigationButtons || root.layers.depth > 1
                 Layout.preferredHeight: parent.parent.height * 0.6
                 //FIXME: hacky
                 opacity: buttonsLayout.visibleChildren.length > 1
