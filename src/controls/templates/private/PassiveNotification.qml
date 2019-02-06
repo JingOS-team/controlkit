@@ -20,6 +20,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0 as QQC2
 import QtQuick.Layouts 1.2
+import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.4
 
@@ -56,7 +57,14 @@ MouseArea {
         actionButton.text = actionText ? actionText : "";
         actionButton.callBack = callBack ? callBack : "";
 
-        timer.restart();
+        timer.stop(); // stop first to ensure it always starts anew
+
+        // Only start the timer when the window has focus, to ensure that
+        // messages don't get missed on the desktop where it's common to
+        //be working with multiple windows at once
+        timer.running = Qt.binding(function() {
+            return root.Window.active;
+        });
     }
 
     function hideNotification() {
