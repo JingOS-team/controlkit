@@ -47,7 +47,22 @@ AbstractListItem {
      */
     property var icon
 
+    /**
+     * iconSize: int
+     * The preferred size for the icon
+     * @since 2.5
+     */
     property alias iconSize: iconItem.size
+
+    /**
+     * iconColor: color
+     * The color the icon should be colorized to.
+     * By default it will be the text color.
+     * If the icon shouldn't be colorized in any way, set it to "transparent"
+     * @since 2.7
+     */
+    property alias iconColor: iconItem.color
+
     /**
      * reserveSpaceForIcon: bool
      * If true, even when there is no icon the space will be reserved for it
@@ -85,7 +100,7 @@ AbstractListItem {
             Layout.maximumHeight: size
             Layout.minimumWidth: size
             selected: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents))
-            color: listItem.icon && listItem.icon.color && listItem.icon.color.a > 0 ? listItem.icon.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
+            color: selected ? Theme.highlightedTextColor : Theme.textColor
             opacity: 1
         }
         QQC2.Label {
