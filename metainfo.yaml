@@ -1,13 +1,14 @@
 maintainer: mart
-description: QtQuick plugins to build user interfaces based on the KDE UX guidelines
+description: QtQuick plugins to build user interfaces based on the KDE human interface guidelines
 tier: 1
 type: functional
 platforms:
     - name: Linux
     - name: FreeBSD
     - name: Android
+    - name: iOS (maintainer needed)
     - name: Windows
-    - name: MacOSX
+    - name: macOS (maintainer needed)
 public_lib: true
 deprecated: false
 release: true
@@ -15,7 +16,7 @@ logo: logo.png
 libraries:
  - cmake: KF5::Kirigami2
 cmakename: KF5Kirigami2
-irc: plasma
+irc: kde-kirigami
 mailinglist: plasma-devel
 group: Frameworks
 subgroup: Tier 1
