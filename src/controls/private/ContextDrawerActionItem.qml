@@ -31,7 +31,6 @@ BasicListItem {
 
     checked: modelData.checked
     icon: modelData.icon
-    iconColor: modelData.iconColor
     separatorVisible: false
     reserveSpaceForIcon: !isSeparator
     reserveSpaceForLabel: !isSeparator
