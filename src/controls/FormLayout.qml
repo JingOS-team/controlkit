@@ -226,6 +226,7 @@ Item {
             //Assume lay.y is always 0
             onYChanged: item.y = y + lay.y;
             onWidthChanged: item.width = width;
+            Component.onCompleted: item.x = x + lay.x;
             Connections {
                 target: lay
                 onXChanged: item.x = x + lay.x;
