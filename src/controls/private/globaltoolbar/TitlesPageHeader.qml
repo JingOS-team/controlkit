@@ -27,22 +27,20 @@ import org.kde.kirigami 2.4
 AbstractPageHeader {
     id: root
 
-    Heading {
-        id: title
-        anchors.fill: parent
-        leftPadding: Units.largeSpacing
-        opacity: root.current ? 1 : 0.4
-        maximumLineCount: 1
-        verticalAlignment: Text.AlignVCenter
-        color: Theme.textColor
-        elide: Text.ElideRight
-        font.pointSize: -1
-        font.pixelSize: Math.max(1, height*0.6)
-        text: page ? page.title : ""
-        MouseArea {
-            anchors.fill: parent
-            onClicked: page.forceActiveFocus()
+    Loader {
+        id: titleLoader
+
+        anchors {
+            verticalCenter: parent.verticalCenter
+            left: parent.left
+            right: parent.right
+            leftMargin: Units.largeSpacing
         }
+        height: Math.min(root.height, item
+            ? (item.Layout.preferredHeight > 0 ? item.Layout.preferredHeight : item.implicitHeight)
+            : 0)
+
+        sourceComponent: page ? page.titleDelegate : null
     }
 }
 

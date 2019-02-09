@@ -57,7 +57,7 @@ T.OverlayDrawer {
 
             DropShadow {
                 anchors.fill: handleGraphics
-                visible: !parent.parent.handleAnchor || root.handle.pressed || (root.modal && root.position > 0)
+                visible: !parent.parent.handleAnchor || !parent.parent.handleAnchor.visible || root.handle.pressed || (root.modal && root.position > 0)
                 horizontalOffset: 0
                 verticalOffset: Units.devicePixelRatio
                 radius: Units.gridUnit /2
@@ -68,54 +68,64 @@ T.OverlayDrawer {
             Rectangle {
                 id: handleGraphics
                 anchors.centerIn: parent
-                Theme.colorSet: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.colorSet : Theme.Button
-                Theme.backgroundColor: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.backgroundColor : undefined
-                Theme.textColor: parent.parent.handleAnchor ? parent.parent.handleAnchor.Theme.textColor : undefined
+
+                Theme.colorSet: parent.parent.handleAnchor && parent.parent.handleAnchor.visible ? parent.parent.handleAnchor.Theme.colorSet : Theme.Button
+    
+                Theme.backgroundColor: parent.parent.handleAnchor && parent.parent.handleAnchor.visible ? parent.parent.handleAnchor.Theme.backgroundColor : undefined
+
+                Theme.textColor: parent.parent.handleAnchor && parent.parent.handleAnchor.visible ? parent.parent.handleAnchor.Theme.textColor : undefined
+
                 Theme.inherit: false
-                color: parent.parent.handleAnchor && !root.visible
-                        ? "transparent"
-                        : (root.handle.pressed ? Theme.highlightColor : Theme.backgroundColor)
+                color: root.handle.pressed ? Theme.highlightColor : Theme.backgroundColor
+
+                visible: !parent.parent.handleAnchor || !parent.parent.handleAnchor.visible
+
                 width: Units.iconSizes.smallMedium + Units.smallSpacing * 2
                 height: width
                 radius: Units.devicePixelRatio * 2
-                Loader {
-                    anchors.centerIn: parent
-                    width: height
-                    height: Units.iconSizes.smallMedium
-                    source: {
-                        var edge = root.edge;
-                        if (Qt.application.layoutDirection == Qt.RightToLeft) {
-                            if (edge === Qt.LeftEdge) {
-                                edge = Qt.RightEdge;
-                            } else {
-                                edge = Qt.LeftEdge;
-                            }
-                        }
-                        switch(edge) {
-                        case Qt.LeftEdge:
-                            return Qt.resolvedUrl("templates/private/MenuIcon.qml");
-                        case Qt.RightEdge: {
-                            if (root.hasOwnProperty("actions")) {
-                                return Qt.resolvedUrl("templates/private/ContextIcon.qml");
-                            } else {
-                                return Qt.resolvedUrl("templates/private/GenericDrawerIcon.qml");
-                            }
-                        }
-                        default:
-                            return "";
-                        }
-                    }
-                    onItemChanged: {
-                        if(item) {
-                            item.drawer = Qt.binding(function(){return root});
-                            item.color = Qt.binding(function(){return root.handle.pressed ? Theme.highlightedTextColor : Theme.textColor});
-                        }
-                    }
-                }
                 Behavior on color {
                     ColorAnimation {
                         duration: Units.longDuration
                         easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+            Loader {
+                anchors.centerIn: handleGraphics
+                width: height
+                height: Units.iconSizes.smallMedium
+
+                Theme.colorSet: handleGraphics.Theme.colorSet
+                Theme.backgroundColor: handleGraphics.Theme.backgroundColor
+                Theme.textColor: handleGraphics.Theme.textColor
+
+                source: {
+                    var edge = root.edge;
+                    if (Qt.application.layoutDirection == Qt.RightToLeft) {
+                        if (edge === Qt.LeftEdge) {
+                            edge = Qt.RightEdge;
+                        } else {
+                            edge = Qt.LeftEdge;
+                        }
+                    }
+                    switch(edge) {
+                    case Qt.LeftEdge:
+                        return Qt.resolvedUrl("templates/private/MenuIcon.qml");
+                    case Qt.RightEdge: {
+                        if (root.hasOwnProperty("actions")) {
+                            return Qt.resolvedUrl("templates/private/ContextIcon.qml");
+                        } else {
+                            return Qt.resolvedUrl("templates/private/GenericDrawerIcon.qml");
+                        }
+                    }
+                    default:
+                        return "";
+                    }
+                }
+                onItemChanged: {
+                    if(item) {
+                        item.drawer = Qt.binding(function(){return root});
+                        item.color = Qt.binding(function(){return root.handle.pressed ? Theme.highlightedTextColor : Theme.textColor});
                     }
                 }
             }

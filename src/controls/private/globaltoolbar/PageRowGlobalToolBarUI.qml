@@ -25,7 +25,7 @@ import "../../templates/private" as TemplatesPrivate
  
 Kirigami.AbstractApplicationHeader {
     id: header
-    readonly property int leftReservedSpace: buttonsLayout.visible && buttonsLayout.visibleChildren.length > 1 ? buttonsLayout.width : 0
+    readonly property int leftReservedSpace: (buttonsLayout.visible && buttonsLayout.visibleChildren.length > 1 ? buttonsLayout.width : 0) + (leftHandleAnchor.visible ? leftHandleAnchor.width + Kirigami.Units.largeSpacing : 0)
     readonly property int rightReservedSpace: rightHandleAnchor.visible ? backButton.background.implicitHeight : 0
 
     readonly property alias leftHandleAnchor: leftHandleAnchor
@@ -40,38 +40,45 @@ Kirigami.AbstractApplicationHeader {
     RowLayout {
         anchors.fill: parent
         spacing: 0
+
+        Item {
+            id: leftHandleAnchor
+            visible: (typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.enabled && applicationWindow().globalDrawer.handleVisible &&
+            (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))) &&
+            breadcrumbLoader.pageRow.firstVisibleItem &&
+            breadcrumbLoader.pageRow.firstVisibleItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar
+
+
+            Layout.preferredHeight: Math.min(backButton.implicitHeight, parent.height)
+            Layout.preferredWidth: height
+        }
+
         RowLayout {
             id: buttonsLayout
             Layout.fillHeight: true
 
+            Layout.leftMargin: Kirigami.Units.largeSpacing
+
             visible: (globalToolBar.showNavigationButtons || root.layers.depth > 1) && (globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.None)
 
-            Item {
-                id: leftHandleAnchor
-                visible: typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.enabled && applicationWindow().globalDrawer.handleVisible &&
-                (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor)) && globalToolBar.showNavigationButtons
-                Layout.fillHeight: true
-                Layout.preferredWidth: height
-            }
             TemplatesPrivate.BackButton {
                 id: backButton
-                visible: globalToolBar.showNavigationButtons || root.layers.depth > 1
                 Layout.leftMargin: leftHandleAnchor.visible ? 0 : Kirigami.Units.smallSpacing
-                Layout.fillHeight: true
+                Layout.preferredHeight: Math.min(implicitHeight, parent.height)
                 Layout.preferredWidth: height
             }
             TemplatesPrivate.ForwardButton {
-                visible: globalToolBar.showNavigationButtons
-                Layout.fillHeight: true
+                Layout.preferredHeight: Math.min(implicitHeight, parent.height)
                 Layout.preferredWidth: height
             }
             Kirigami.Separator {
                 visible: globalToolBar.showNavigationButtons || root.layers.depth > 1
                 Layout.preferredHeight: parent.parent.height * 0.6
                 //FIXME: hacky
-                opacity: buttonsLayout.visibleChildren.length > 1
+                opacity: buttonsLayout.visibleChildren.length > 1 || leftHandleAnchor.visible
             }
         }
+
         Loader {
             id: breadcrumbLoader
             Layout.fillWidth: true
@@ -80,7 +87,11 @@ Kirigami.AbstractApplicationHeader {
             Layout.preferredHeight: -1
             property Kirigami.PageRow pageRow: root
 
-            opacity: pageRow.layers.depth < 2
+            readonly property bool makeSpaceForPageToolBar: !pageRow.wideMode && (pageRow.currentItem && (pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar || pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.Titles)) && !pageRow.contentItem.moving
+
+            opacity: pageRow.layers.depth < 2 && !makeSpaceForPageToolBar
+            enabled: opacity > 0
+
             active: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb
 
             //TODO: different implementation?
@@ -93,15 +104,16 @@ Kirigami.AbstractApplicationHeader {
                 }
             }
         }
+
         Item {
             id: rightHandleAnchor
-            visible: typeof applicationWindow() !== "undefined" && applicationWindow().contextDrawer &&
+            visible: (typeof applicationWindow() !== "undefined" && applicationWindow().contextDrawer &&
             applicationWindow().contextDrawer.enabled &&
-            applicationWindow().contextDrawer.handleVisible && (applicationWindow().contextDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? rightHandleAnchor : leftHandleAnchor))
+            applicationWindow().contextDrawer.handleVisible && (applicationWindow().contextDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? rightHandleAnchor : leftHandleAnchor))) && breadcrumbLoader.pageRow.lastVisibleItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar
             Layout.fillHeight: true
             Layout.preferredWidth: height
         }
     }
-    background.opacity: pageRow.layers.depth < 2 && breadcrumbLoader.active
+    background.opacity: pageRow.layers.depth < 2 && !breadcrumbLoader.makeSpaceForPageToolBar && breadcrumbLoader.active
 }
 

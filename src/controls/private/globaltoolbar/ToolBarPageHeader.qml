@@ -27,42 +27,36 @@ import "../" as Private
 AbstractPageHeader {
     id: root
 
-    implicitWidth: titleTextMetrics.width/2 + buttonTextMetrics.collapsedButtonsWidth
+    implicitWidth: titleLoader.implicitWidth.width/2 + buttonTextMetrics.collapsedButtonsWidth
     Layout.minimumWidth: ctxActionsButton.width*4
+
+    Layout.preferredHeight: Math.max(titleLoader.implicitHeight, actionsLayout.implicitHeight) + Units.smallSpacing * 2
 
     MouseArea {
         anchors.fill: parent
         onClicked: page.forceActiveFocus()
     }
-    RowLayout {
-        id: titleLayout
+
+    Loader {
+        id: titleLoader
+
         anchors {
             verticalCenter: parent.verticalCenter
             left: parent.left
             right: actionsLayout.left
+            leftMargin: Units.largeSpacing
         }
 
-        Heading {
-            id: title
-            level: 1
-            Layout.fillWidth: true
+        visible: width > item.Layout.minimumWidth
 
-            Layout.preferredWidth: implicitWidth
-            Layout.minimumWidth: Math.min(titleTextMetrics.width, root.width - buttonTextMetrics.requiredWidth)
-            leftPadding: Units.largeSpacing
-            opacity: root.current ? 1 : 0.4
-            maximumLineCount: 1
-            color: Theme.textColor
-            elide: Text.ElideRight
-            text: page ? page.title : ""
-        }
+        sourceComponent: page ? page.titleDelegate : null
+
+        Layout.preferredWidth: item
+            ? (item.Layout.preferredWidth > 0 ? item.Layout.preferredWidth : item.implicitWidth)
+            : 0
     }
 
-    TextMetrics {
-        id: titleTextMetrics
-        text: page ? page.title : ""
-        font: title.font
-    }
+
     TextMetrics {
         id: buttonTextMetrics
         text: (page.actions.left ? page.actions.left.text : "") + (page.actions.main ? page.actions.main.text : "") + (page.actions.right ? page.actions.right.text : "")
@@ -77,7 +71,7 @@ AbstractPageHeader {
             right: ctxActionsButton.visible ? ctxActionsButton.left : parent.right
         }
 
-        readonly property bool toobig: root.width - root.leftPadding - root.rightPadding - titleTextMetrics.width - Units.gridUnit < buttonTextMetrics.requiredWidth
+        readonly property bool toobig: root.width - root.leftPadding - root.rightPadding - titleLoader.implicitWidth - Units.gridUnit < buttonTextMetrics.requiredWidth
 
         Private.PrivateActionToolButton {
             Layout.alignment: Qt.AlignVCenter

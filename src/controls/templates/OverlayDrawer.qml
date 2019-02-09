@@ -131,10 +131,10 @@ T2.Drawer {
         id: drawerHandle
         z: root.modal ? applicationWindow().overlay.z + (root.position > 0 ? +1 : -1) : root.background.parent.z + 1
         preventStealing: true
-        hoverEnabled: handleAnchor
+        hoverEnabled: handleAnchor && handleAnchor.visible
         parent: applicationWindow().overlay.parent
 
-        property Item handleAnchor: (!Settings.isMobile && applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar && applicationWindow().pageStack.globalToolBar.actualStyle !== ApplicationHeaderStyle.None)
+        property Item handleAnchor: (applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar && applicationWindow().pageStack.globalToolBar.actualStyle !== ApplicationHeaderStyle.None)
                 ? (root.edge === Qt.LeftEdge
                    ? applicationWindow().pageStack.globalToolBar.leftHandleAnchor
                    : applicationWindow().pageStack.globalToolBar.rightHandleAnchor)
@@ -190,7 +190,7 @@ T2.Drawer {
         y: handleAnchor && anchors.bottom ? handleAnchor.ScenePosition.y : 0
 
         anchors {
-            bottom: drawerHandle.handleAnchor ? undefined : parent.bottom
+            bottom: drawerHandle.handleAnchor && drawerHandle.handleAnchor.visible ? undefined : parent.bottom
             bottomMargin: {
                 if (typeof applicationWindow === "undefined") {
                     return;
@@ -235,8 +235,8 @@ T2.Drawer {
         }
 
         visible: root.enabled && (root.edge === Qt.LeftEdge || root.edge === Qt.RightEdge)
-        width: handleAnchor ? handleAnchor.width : Units.iconSizes.smallMedium + Units.smallSpacing*2
-        height: handleAnchor ? handleAnchor.height : width
+        width: handleAnchor && handleAnchor.visible ? handleAnchor.width : Units.iconSizes.smallMedium + Units.smallSpacing*2
+        height: handleAnchor && handleAnchor.visible ? handleAnchor.height : width
         opacity: root.handleVisible ? 1 : 0
         Behavior on opacity {
             NumberAnimation {

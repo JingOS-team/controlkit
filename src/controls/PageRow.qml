@@ -70,6 +70,34 @@ T.Control {
     contentItem: mainView
 
     /**
+     * items: list<Item>
+     * All the items that are present in the PageRow
+     * @since 2.6
+     */
+    readonly property var items: pagesLogic.pages;
+
+    /**
+     * visibleItems: list<Item>
+     * All pages which are visible in the PageRow, excluding those which are scrolled away
+     * @since 2.6
+     */
+    property var visibleItems: []
+
+    /**
+     * firstVisibleItem: Item
+     * The first at least partially visible page in the PageRow, pages before that one will be out of the viewport
+     * @since 2.6
+     */
+    readonly property Item firstVisibleItem: visibleItems.length > 0 ? visibleItems[0] : null
+
+    /**
+     * lastVisibleItem: Item
+     * The last at least partially visible page in the PageRow, pages after that one will be out of the viewport
+     * @since 2.6
+     */
+    readonly property Item lastVisibleItem: visibleItems.length > 0 ? visibleItems[visibleItems.length - 1] : null
+
+    /**
      * The default width for a column
      * default is wide enough for 30 grid units.
      * Pages can override it with their Layout.fillWidth,
@@ -189,16 +217,20 @@ T.Control {
 
                 var container = pagesLogic.initPage(tPage, tProps);
                 pagesLogic.append(container);
+                pagesLogic.pages.push(tPage);
+                root.itemsChanged();
             }
         }
 
         // initialize the page
         var container = pagesLogic.initPage(page, properties);
         pagesLogic.append(container);
+        pagesLogic.pages.push(page);
         container.visible = container.page.visible = true;
 
         mainView.currentIndex = container.level;
         pagePushed(container.page);
+        root.itemsChanged();
         return container.page
     }
 
@@ -386,7 +418,9 @@ T.Control {
             to: mainViewScrollAnim.to
         }
         ScriptAction {
-            script: mainView.flick(100, 0)
+            script: {
+                mainView.flick(100, 0);
+            }
         }
     }
 
@@ -461,6 +495,7 @@ T.Control {
             }
         }
 
+
         pushExit: Transition {
             OpacityAnimator {
                 from: 1
@@ -532,7 +567,33 @@ T.Control {
         preferredHighlightEnd: 0
         highlightMoveDuration: Units.longDuration
         highlightFollowsCurrentItem: true
+        onWidthChanged: updatevisibleItems()
+
+        onContentXChanged: updatevisibleItems()
+
+        function updatevisibleItems() {
+            var visibleItems = [];
+            var cont;
+            var signalChange = false;
+            for (var i = 0; i < pagesLogic.count; ++i) {
+                cont = pagesLogic.get(i);
+                if (cont.x - contentX < width && cont.x + cont.width - contentX > 0) {
+                    visibleItems.push(cont.page);
+                    if (root.visibleItems.indexOf(cont.page) === -1) {
+                        signalChange = true;
+                    }
+                }
+            }
+
+            signalChange = signalChange || (visibleItems.length != root.visibleItems.length)
+
+            if (signalChange) {
+                root.visibleItems = visibleItems;
+                root.visibleItemsChanged();
+            }
+        }
         onMovementEnded: currentIndex = Math.max(0, indexAt(contentX, 0))
+
         onFlickEnded: onMovementEnded();
         onCurrentIndexChanged: {
             if (currentItem) {
@@ -552,6 +613,7 @@ T.Control {
             id: pagesLogic
             readonly property var componentCache: new Array()
             readonly property int roundedDefaultColumnWidth: root.width < root.defaultColumnWidth*2 ? root.width : root.defaultColumnWidth
+            property var pages: []
 
             function removePage(id) {
                 if (id < 0 || id >= count) {
@@ -573,6 +635,8 @@ T.Control {
                     item.page.destroy(1)
                 }
                 item.destroy();
+                pages.splice(id, 1);
+                root.itemsChanged();
             }
             function clearPages () {
                 popScrollAnim.running = false;
@@ -580,6 +644,8 @@ T.Control {
                 while (count > 0) {
                     removePage(count-1);
                 }
+                pages = [];
+                root.itemsChanged();
             }
             function initPage(page, properties) {
                 var container = containerComponent.createObject(mainView, {
@@ -698,7 +764,12 @@ T.Control {
                     page.anchors.top = container.top;
                     page.anchors.right = container.right;
                     page.anchors.bottom = container.bottom;
-                    page.anchors.topMargin = Qt.binding(function() {return globalToolBar.actualStyle == ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == ApplicationHeaderStyle.Breadcrumb ? globalToolBarUI.height : 0});
+                    page.anchors.topMargin = Qt.binding(function() {
+                        if (!wideMode && (page.globalToolBarStyle == ApplicationHeaderStyle.ToolBar || page.globalToolBarStyle == ApplicationHeaderStyle.Titles)) {
+                            return 0;
+                        }
+                        return globalToolBar.actualStyle == ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == ApplicationHeaderStyle.Breadcrumb ? globalToolBarUI.height : 0;
+                    });
                 } else {
                     pagesLogic.remove(level);
                 }
