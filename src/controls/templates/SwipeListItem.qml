@@ -226,6 +226,7 @@ T2.ItemDelegate {
             property bool exclusive: false
             property Item checkedButton
             spacing: Units.largeSpacing
+            property int visibleActions: 0
             Repeater {
                 model: {
                     if (listItem.actions.length === 0) {
@@ -243,6 +244,23 @@ T2.ItemDelegate {
                     source: modelData.iconName !== "" ? modelData.iconName : modelData.iconSource
                     enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
                     visible: (modelData && modelData.visible !== undefined) ? modelData.visible : true;
+                    onVisibleChanged: {
+                        if (visible) {
+                            actionsLayout.visibleActions++;
+                        } else {
+                            actionsLayout.visibleActions--;
+                        }
+                    }
+                    Component.onCompleted: {
+                        if (visible) {
+                            actionsLayout.visibleActions++;
+                        }
+                    }
+                    Component.onDestruction: {
+                        if (visible) {
+                            actionsLayout.visibleActions--;
+                        }
+                    }
                     MouseArea {
                         id: actionMouse
                         anchors {
@@ -264,7 +282,6 @@ T2.ItemDelegate {
                         Controls.ToolTip.visible: listItem.visible && (Settings.tabletMode ? actionMouse.pressed : actionMouse.containsMouse) && Controls.ToolTip.text.length > 0
                         Controls.ToolTip.text: modelData.tooltip || modelData.text
                     }
-                    
                 }
             }
         }
@@ -273,7 +290,7 @@ T2.ItemDelegate {
     MouseArea {
         id: handleMouse
         parent: listItem.background
-        visible: Settings.tabletMode && listItem.actionsVisible && actions.length > 0
+        visible: Settings.tabletMode && listItem.actionsVisible && actionsLayout.visibleActions > 0
         z: 99
         anchors {
             right: parent.right
