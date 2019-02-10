@@ -255,10 +255,10 @@ T2.ItemDelegate {
                                 listItem.actions[0];
                     }
                 }
-                delegate: Icon {
-                    height: actionsLayout.height
-                    width: height
-                    source: modelData.iconName !== "" ? modelData.iconName : modelData.iconSource
+                delegate: Controls.ToolButton {
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon.name: modelData.iconName !== "" ? modelData.iconName : undefined
+                    icon.source: modelData.iconSource !== "" ? modelData.iconSource : undefined
                     enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
                     visible: (modelData && modelData.visible !== undefined) ? modelData.visible : true;
                     onVisibleChanged: {
@@ -278,26 +278,18 @@ T2.ItemDelegate {
                             actionsLayout.visibleActions--;
                         }
                     }
-                    MouseArea {
-                        id: actionMouse
-                        anchors {
-                            fill: parent;
-                            margins: Settings.tabletMode ? -Units.smallSpacing : 0;
+                    Controls.ToolTip.delay: 1000
+                    Controls.ToolTip.timeout: 5000
+                    Controls.ToolTip.visible: listItem.visible && (Settings.tabletMode ? pressed : hovered) && Controls.ToolTip.text.length > 0
+                    Controls.ToolTip.text: modelData.tooltip || modelData.text
+
+                    onClicked: {
+                        if (modelData && modelData.trigger !== undefined) {
+                            modelData.trigger();
                         }
-                        enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
-                        hoverEnabled: !Settings.tabletMode
-                        onClicked: {
-                            if (modelData && modelData.trigger !== undefined) {
-                                modelData.trigger();
-                            }
-                            positionAnimation.from = background.x;
-                            positionAnimation.to = 0;
-                            positionAnimation.running = true;
-                        }
-                        Controls.ToolTip.delay: 1000
-                        Controls.ToolTip.timeout: 5000
-                        Controls.ToolTip.visible: listItem.visible && (Settings.tabletMode ? actionMouse.pressed : actionMouse.containsMouse) && Controls.ToolTip.text.length > 0
-                        Controls.ToolTip.text: modelData.tooltip || modelData.text
+                        positionAnimation.from = background.x;
+                        positionAnimation.to = 0;
+                        positionAnimation.running = true;
                     }
                 }
             }
