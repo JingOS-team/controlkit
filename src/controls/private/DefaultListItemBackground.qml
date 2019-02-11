@@ -22,7 +22,9 @@ import org.kde.kirigami 2.4
 
 Rectangle {
     id: background
-    color: listItem.checked || listItem.highlighted || (listItem.supportsMouseEvents && listItem.pressed && !listItem.checked && !listItem.sectionDelegate) ? listItem.activeBackgroundColor : listItem.backgroundColor
+    color: listItem.checked || listItem.highlighted || (listItem.supportsMouseEvents && listItem.pressed && !listItem.checked && !listItem.sectionDelegate)
+        ? listItem.activeBackgroundColor
+        : (listItem.alternatingBackground && index%2 ? listItem.alternateBackgroundColor : listItem.backgroundColor)
 
     visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
     Rectangle {

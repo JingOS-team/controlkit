@@ -62,6 +62,7 @@ public:
     QColor positiveTextColor;
 
     QColor backgroundColor;
+    QColor alternateBackgroundColor;
     QColor highlightColor;
 
     QColor focusColor;
@@ -81,6 +82,7 @@ public:
     QColor customPositiveTextColor;
 
     QColor customBackgroundColor;
+    QColor customAlternateBackgroundColor;
     QColor customHighlightColor;
 
     QColor customFocusColor;
@@ -159,6 +161,7 @@ void PlatformThemePrivate::findParentStyle()
                 q->setCustomNeutralTextColor(t->d->customNeutralTextColor);
                 q->setCustomPositiveTextColor(t->d->customPositiveTextColor);
                 q->setCustomBackgroundColor(t->d->customBackgroundColor);
+                q->setCustomAlternateBackgroundColor(t->d->customAlternateBackgroundColor);
                 q->setCustomHighlightColor(t->d->customHighlightColor);
                 q->setCustomFocusColor(t->d->customFocusColor);
                 q->setCustomHoverColor(t->d->customHoverColor);
@@ -223,21 +226,6 @@ void PlatformTheme::setColorSet(PlatformTheme::ColorSet colorSet)
     for (PlatformTheme *t : qAsConst(d->m_childThemes)) {
         if (t->inherit()) {
             t->setColorSet(colorSet);
-           /* if (colorSet == Custom) {
-                t->setCustomTextColor(textColor());
-                t->setCustomDisabledTextColor(disabledTextColor());
-                t->setCustomHighlightedTextColor(highlightedTextColor());
-                t->setCustomActiveTextColor(activeTextColor());
-                t->setCustomLinkColor(linkColor());
-                t->setCustomVisitedLinkColor(visitedLinkColor());
-                t->setCustomNegativeTextColor(negativeTextColor());
-                t->setCustomNeutralTextColor(neutralTextColor());
-                t->setCustomPositiveTextColor(positiveTextColor());
-                t->setCustomBackgroundColor(backgroundColor());
-                t->setCustomHighlightColor(highlightColor());
-                t->setCustomFocusColor(focusColor());
-                t->setCustomHoverColor(hoverColor());
-            }*/
         }
     }
 
@@ -320,6 +308,11 @@ QColor PlatformTheme::backgroundColor() const
     return d->customBackgroundColor.isValid() ? d->customBackgroundColor : d->backgroundColor;
 }
 
+QColor PlatformTheme::alternateBackgroundColor() const
+{
+    return d->customAlternateBackgroundColor.isValid() ? d->customAlternateBackgroundColor : d->alternateBackgroundColor;
+}
+
 QColor PlatformTheme::activeTextColor() const
 {
     return d->customActiveTextColor.isValid() ? d->customActiveTextColor : d->activeTextColor;
@@ -388,6 +381,16 @@ void PlatformTheme::setBackgroundColor(const QColor &color)
     }
 
     d->backgroundColor = color;
+    d->setColorCompressTimer->start();
+}
+
+void PlatformTheme::setAlternateBackgroundColor(const QColor &color)
+{
+    if (d->alternateBackgroundColor == color) {
+        return;
+    }
+
+    d->alternateBackgroundColor = color;
     d->setColorCompressTimer->start();
 }
 
@@ -546,6 +549,17 @@ void PlatformTheme::setCustomBackgroundColor(const QColor &color)
 
     d->customBackgroundColor = color;
     PROPAGATECUSTOMCOLOR(CustomBackgroundColor, color)
+    d->setColorCompressTimer->start();
+}
+
+void PlatformTheme::setCustomAlternateBackgroundColor(const QColor &color)
+{
+    if (d->customAlternateBackgroundColor == color) {
+        return;
+    }
+
+    d->customAlternateBackgroundColor = color;
+    PROPAGATECUSTOMCOLOR(CustomAlternateBackgroundColor, color)
     d->setColorCompressTimer->start();
 }
 

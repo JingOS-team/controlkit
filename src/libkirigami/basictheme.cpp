@@ -92,6 +92,8 @@ BasicTheme::BasicTheme(QObject *parent)
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
     connect(basicThemeDeclarative()->instance(this), SIGNAL(backgroundColorChanged()),
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
+    connect(basicThemeDeclarative()->instance(this), SIGNAL(alternateBackgroundColorChanged()),
+            basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
     connect(basicThemeDeclarative()->instance(this), SIGNAL(linkColorChanged()),
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
     connect(basicThemeDeclarative()->instance(this), SIGNAL(visitedLinkColorChanged()),
@@ -100,6 +102,8 @@ BasicTheme::BasicTheme(QObject *parent)
     connect(basicThemeDeclarative()->instance(this), SIGNAL(buttonTextColorChanged()),
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
     connect(basicThemeDeclarative()->instance(this), SIGNAL(buttonBackgroundColorChanged()),
+            basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
+    connect(basicThemeDeclarative()->instance(this), SIGNAL(buttonAlternateBackgroundColorChanged()),
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
     connect(basicThemeDeclarative()->instance(this), SIGNAL(buttonHoverColorChanged()),
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
@@ -110,6 +114,8 @@ BasicTheme::BasicTheme(QObject *parent)
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
     connect(basicThemeDeclarative()->instance(this), SIGNAL(viewBackgroundColorChanged()), 
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
+    connect(basicThemeDeclarative()->instance(this), SIGNAL(viewAlternateBackgroundColorChanged()), 
+            basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
     connect(basicThemeDeclarative()->instance(this), SIGNAL(viewHoverColorChanged()),
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
     connect(basicThemeDeclarative()->instance(this), SIGNAL(viewFocusColorChanged()),
@@ -118,6 +124,8 @@ BasicTheme::BasicTheme(QObject *parent)
     connect(basicThemeDeclarative()->instance(this), SIGNAL(complementaryTextColorChanged()),
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
     connect(basicThemeDeclarative()->instance(this), SIGNAL(complementaryBackgroundColorChanged()),
+            basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
+    connect(basicThemeDeclarative()->instance(this), SIGNAL(complementaryAlternateBackgroundColorChanged()),
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
     connect(basicThemeDeclarative()->instance(this), SIGNAL(complementaryHoverColorChanged()),
             basicThemeDeclarative()->m_colorSyncTimer, SLOT(start()));
@@ -196,6 +204,9 @@ void BasicTheme::syncColors()
     }{
         RESOLVECOLOR(backgroundColor, BackgroundColor)
         setBackgroundColor(color);
+    }{
+        RESOLVECOLOR(alternateBackgroundColor, AlternateBackgroundColor)
+        setAlternateBackgroundColor(color);
     }{
         setHighlightColor(PROXYCOLOR(highlightColor, HighlightColor));
     }{

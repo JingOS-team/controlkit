@@ -49,6 +49,15 @@ T2.ItemDelegate {
     property alias containsMouse: listItem.hovered
 
     /**
+     * alternatingBackground: bool
+     * If true the background of the list items will be alternating between two
+     * colors, helping readability with multiple column views.
+     * Use it only when implementing a view which shows data visually in multiple columns
+     * @ since 2.7 
+     */
+    property bool alternatingBackground: false
+
+    /**
      * sectionDelegate: bool
      * If true the item will be a delegate for a section, so will look like a
      * "title" for the items under it.
@@ -80,6 +89,14 @@ T2.ItemDelegate {
     property color backgroundColor: "transparent"
 
     /**
+     * alternateBackgroundColor: color
+     * The background color to use if alternatingBackground is true.
+     * It is advised to leave the default.
+     * @since 2.7
+     */
+    property color alternateBackgroundColor: Theme.alternateBackgroundColor
+
+    /**
      * activeTextColor: color
      * Color for the text in the item when pressed or selected
      * It is advised to leave the default value (Theme.highlightedTextColor)
@@ -98,6 +115,8 @@ T2.ItemDelegate {
 
     default property alias _default: listItem.contentItem
 
+    Theme.inherit: false
+    Theme.colorSet: Theme.View
     Theme.colorGroup: internal.indicateActiveFocus ? Theme.Active : Theme.Inactive
 
     padding: Settings.tabletMode ? Units.largeSpacing : Units.smallSpacing

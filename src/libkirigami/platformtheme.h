@@ -125,6 +125,14 @@ class KIRIGAMI2_EXPORT PlatformTheme : public QObject
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setCustomBackgroundColor RESET setCustomBackgroundColor NOTIFY colorsChanged)
 
     /**
+     * The generic background color
+     * Alternate background; for example, for use in lists.
+     * This color may be the same as BackgroundNormal,
+     * especially in sets other than View and Window. 
+     */
+    Q_PROPERTY(QColor alternateBackgroundColor READ alternateBackgroundColor WRITE setCustomAlternateBackgroundColor RESET setCustomAlternateBackgroundColor NOTIFY colorsChanged)
+
+    /**
      * The background color for selected areas
      */
     Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setCustomHighlightColor RESET setCustomHighlightColor NOTIFY colorsChanged)
@@ -190,6 +198,7 @@ public:
 
     //background colors
     QColor backgroundColor() const;
+    QColor alternateBackgroundColor() const;
     QColor highlightColor() const;
     //TODO: add active/positive/neutral/negative backgrounds?
 
@@ -217,6 +226,7 @@ public:
     void setCustomPositiveTextColor(const QColor &color = QColor());
     //background colors
     void setCustomBackgroundColor(const QColor &color = QColor());
+    void setCustomAlternateBackgroundColor(const QColor &color = QColor());
     void setCustomHighlightColor(const QColor &color = QColor());
     //decoration colors
     void setCustomFocusColor(const QColor &color = QColor());
@@ -250,6 +260,7 @@ protected:
 
     //background colors
     void setBackgroundColor(const QColor &color);
+    void setAlternateBackgroundColor(const QColor &color);
     void setHighlightColor(const QColor &color);
 
     //decoration colors

@@ -34,6 +34,7 @@ QtObject {
     property color highlightColor: "#2196F3"
     property color highlightedTextColor: "#eff0fa"
     property color backgroundColor: "#eff0f1"
+    property color alternateBackgroundColor: "#bdc3c7"
     property color activeTextColor: "#0176D3"
     property color linkColor: "#2196F3"
     property color visitedLinkColor: "#2196F3"
@@ -44,26 +45,31 @@ QtObject {
 
     property color buttonTextColor: "#31363b"
     property color buttonBackgroundColor: "#eff0f1"
+    property color buttonAlternateBackgroundColor: "#bdc3c7"
     property color buttonHoverColor: "#2196F3"
     property color buttonFocusColor: "#2196F3"
 
     property color viewTextColor: "#31363b"
     property color viewBackgroundColor: "#fcfcfc"
+    property color viewAlternateBackgroundColor: "#eff0f1"
     property color viewHoverColor: "#2196F3"
     property color viewFocusColor: "#2196F3"
 
     property color selectionTextColor: "#eff0fa"
     property color selectionBackgroundColor: "#2196F3"
+    property color selectionAlternateBackgroundColor: "#1d99f3"
     property color selectionHoverColor: "#2196F3"
     property color selectionFocusColor: "#2196F3"
 
     property color tooltipTextColor: "#eff0f1"
     property color tooltipBackgroundColor: "#31363b"
+    property color tooltipAlternateBackgroundColor: "#4d4d4d"
     property color tooltipHoverColor: "#2196F3"
     property color tooltipFocusColor: "#2196F3"
 
     property color complementaryTextColor: "#eff0f1"
     property color complementaryBackgroundColor: "#31363b"
+    property color complementaryAlternateBackgroundColor: "#3b4045"
     property color complementaryHoverColor: "#2196F3"
     property color complementaryFocusColor: "#2196F3"
 

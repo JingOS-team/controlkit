@@ -31,6 +31,7 @@ QtObject {
     property color highlightColor: palette.highlight
     property color highlightedTextColor: palette.highlightedText
     property color backgroundColor: palette.window
+    property color alternateBackgroundColor: Qt.darker(palette.window, 1.05)
     property color activeTextColor: palette.highlight
     property color linkColor: "#2980B9"
     property color visitedLinkColor: "#7F8C8D"
@@ -42,26 +43,31 @@ QtObject {
 
     property color buttonTextColor: palette.buttonText
     property color buttonBackgroundColor: palette.button
+    property color buttonAlternateBackgroundColor: Qt.darker(palette.button, 1.05)
     property color buttonHoverColor: palette.highlight
     property color buttonFocusColor: palette.highlight
 
     property color viewTextColor: palette.text
     property color viewBackgroundColor: palette.base
+    property color viewAlternateBackgroundColor: palette.alternateBase
     property color viewHoverColor: palette.highlight
     property color viewFocusColor: palette.highlight
 
     property color selectionTextColor: palette.highlightedText
     property color selectionBackgroundColor: palette.highlight
+    property color selectionAlternateBackgroundColor: Qt.darker(palette.highlight, 1.05)
     property color selectionHoverColor: palette.highlight
     property color selectionFocusColor: palette.highlight
 
     property color tooltipTextColor: palette.base
     property color tooltipBackgroundColor: palette.text
+    property color tooltipAlternateBackgroundColor: Qt.darker(palette.text, 1.05)
     property color tooltipHoverColor: palette.highlight
     property color tooltipFocusColor: palette.highlight
 
     property color complementaryTextColor: palette.base
     property color complementaryBackgroundColor: palette.text
+    property color complementaryAlternateBackgroundColor: Qt.darker(palette.text, 1.05)
     property color complementaryHoverColor: palette.highlight
     property color complementaryFocusColor: palette.highlight
 
