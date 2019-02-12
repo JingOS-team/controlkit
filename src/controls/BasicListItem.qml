@@ -100,7 +100,7 @@ AbstractListItem {
             Layout.maximumHeight: size
             Layout.minimumWidth: size
             selected: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents))
-            color: selected ? Theme.highlightedTextColor : Theme.textColor
+            color: selected ? Theme.highlightedTextColor : listItem.Theme.textColor
             opacity: 1
         }
         QQC2.Label {

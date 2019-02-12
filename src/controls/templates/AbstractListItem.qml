@@ -115,8 +115,8 @@ T2.ItemDelegate {
 
     default property alias _default: listItem.contentItem
 
-    Theme.inherit: false
-    Theme.colorSet: Theme.View
+    //Theme.inherit: false
+   //Theme.colorSet: Theme.View
     Theme.colorGroup: internal.indicateActiveFocus ? Theme.Active : Theme.Inactive
 
     padding: Settings.tabletMode ? Units.largeSpacing : Units.smallSpacing

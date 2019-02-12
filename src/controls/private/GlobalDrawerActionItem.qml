@@ -36,6 +36,7 @@ BasicListItem {
     width: parent.width
 
     icon: modelData.iconName
+    iconColor: modelData.icon.color
 
     label: width > height * 2 ? MnemonicData.richTextLabel : ""
 
