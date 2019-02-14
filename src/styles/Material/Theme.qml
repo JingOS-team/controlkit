@@ -38,6 +38,7 @@ QtObject {
     //FIXME: something better?
     property color highlightedTextColor: theme.Material.background
     property color backgroundColor: theme.Material.background
+    property color alternateBackgroundColor: Qt.darker(theme.Material.background, 1.05)
     property color activeTextColor: theme.Material.primary
     property color linkColor: "#2980B9"
     property color visitedLinkColor: "#7F8C8D"
@@ -49,26 +50,31 @@ QtObject {
 
     property color buttonTextColor: theme.Material.foreground
     property color buttonBackgroundColor: theme.Material.buttonColor
+    property color buttonAlternateBackgroundColor: Qt.darker(theme.Material.buttonColor, 1.05)
     property color buttonHoverColor: theme.Material.highlightedButtonColor
     property color buttonFocusColor: theme.Material.highlightedButtonColor
 
     property color viewTextColor: theme.Material.foreground
     property color viewBackgroundColor: theme.Material.dialogColor
+    property color viewAlternateBackgroundColor: Qt.darker(theme.Material.dialogColor, 1.05)
     property color viewHoverColor: theme.Material.listHighlightColor
     property color viewFocusColor: theme.Material.listHighlightColor
 
     property color selectionTextColor: theme.Material.primaryHighlightedTextColor
     property color selectionBackgroundColor: theme.Material.textSelectionColor
+    property color selectionAlternateBackgroundColor: Qt.darker(theme.Material.textSelectionColor, 1.05)
     property color selectionHoverColor: theme.Material.highlightedButtonColor
     property color selectionFocusColor: theme.Material.highlightedButtonColor
 
     property color tooltipTextColor: fontMetrics.Material.foreground
     property color tooltipBackgroundColor: fontMetrics.Material.tooltipColor
+    property color tooltipAlternateBackgroundColor: Qt.darker(theme.Material.tooltipColor, 1.05)
     property color tooltipHoverColor: fontMetrics.Material.highlightedButtonColor
     property color tooltipFocusColor: fontMetrics.Material.highlightedButtonColor
 
     property color complementaryTextColor: fontMetrics.Material.foreground
     property color complementaryBackgroundColor: fontMetrics.Material.background
+    property color complementaryAlternateBackgroundColor: Qt.lighter(fontMetrics.Material.background, 1.05)
     property color complementaryHoverColor: theme.Material.highlightedButtonColor
     property color complementaryFocusColor: theme.Material.highlightedButtonColor
 
