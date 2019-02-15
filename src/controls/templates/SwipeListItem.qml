@@ -197,6 +197,7 @@ T2.ItemDelegate {
         }
         EdgeShadow {
             edge: Qt.TopEdge
+            visible: background.x != 0
             anchors {
                 right: parent.right
                 left: parent.left
@@ -206,6 +207,7 @@ T2.ItemDelegate {
         EdgeShadow {
             edge: LayoutMirroring.enabled ? Qt.RightEdge : Qt.LeftEdge
             x: LayoutMirroring.enabled ? listItem.background.x - width : (listItem.background.x + listItem.background.width)
+            visible: background.x != 0
             anchors {
                 top: parent.top
                 bottom: parent.bottom
