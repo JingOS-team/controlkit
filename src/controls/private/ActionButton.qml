@@ -266,7 +266,7 @@ Item {
                         height: width
                         source: root.action && root.action.iconName ? root.action.iconName : ""
                         selected: true
-                        color: root.action && root.action.color.a > 0 ? root.action.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
+                        color: root.action && root.action.color && root.action.color.a > 0 ? root.action.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
                     }
                     Behavior on color {
                         ColorAnimation {
@@ -319,7 +319,7 @@ Item {
                         width: Units.iconSizes.smallMedium
                         height: width
                         selected: leftButtonGraphics.pressed
-                        color: root.action && root.action.color.a > 0 ? root.action.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
+                        color: root.action && root.action.color && root.action.color.a > 0 ? root.action.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
                         anchors {
                             left: parent.left
                             verticalCenter: parent.verticalCenter
@@ -365,7 +365,7 @@ Item {
                         width: Units.iconSizes.smallMedium
                         height: width
                         selected: rightButtonGraphics.pressed
-                        color: root.action && root.action.color.a > 0 ? root.action.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
+                        color: root.action && root.action.color && root.action.color.a > 0 ? root.action.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
                         anchors {
                             right: parent.right
                             verticalCenter: parent.verticalCenter
