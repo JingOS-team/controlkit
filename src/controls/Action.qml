@@ -160,7 +160,9 @@ QtObject {
     property list<QtObject> __children
     onChildrenChanged: {
         for (var i in children) {
-            children[i].parent = root
+            if(children[i].hasOwnProperty("parent")) {
+                children[i].parent = root
+            }
         }
     }
     property Shortcut __shortcut: Shortcut {
