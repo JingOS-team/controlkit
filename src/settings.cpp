@@ -49,8 +49,7 @@ Settings::Settings(QObject *parent)
     //Mostly for debug purposes and for platforms which are always mobile,
     //such as Plasma Mobile
     if (qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE")) {
-        m_mobile = (QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_MOBILE")) == QStringLiteral("1") ||
-            QString::fromLatin1(qgetenv("QT_QUICK_CONTROLS_MOBILE")) == QStringLiteral("true"));
+        m_mobile = QByteArrayList{"1", "true"}.contains(qgetenv("QT_QUICK_CONTROLS_MOBILE"));
     } else {
         m_mobile = false;
     }
