@@ -214,9 +214,21 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
 
         Q_ASSERT(ctx);
 
-        if (QQmlEngine *eng = qmlEngine(this)) {
-            //share context object in order to never lose track of global i18n()
-            ctx->setContextObject(eng->rootContext()->contextObject());
+        QObject *contextObjectToSet = nullptr;
+        {
+            // Find the first parent that has a context object with a valid translationDomain property, i.e. is a KLocalizedContext
+            QQmlContext *auxCtx = ctx;
+            while (auxCtx != nullptr) {
+                QObject *auxCtxObj = auxCtx->contextObject();
+                if (auxCtxObj && auxCtxObj->property("translationDomain").isValid()) {
+                    contextObjectToSet = auxCtxObj;
+                    break;
+                }
+                auxCtx = auxCtx->parentContext();
+            }
+        }
+        if (contextObjectToSet) {
+            ctx->setContextObject(contextObjectToSet);
         }
 
         QObject *modelObj = m_propertiesTracker->property("trackedModel").value<QObject *>();
