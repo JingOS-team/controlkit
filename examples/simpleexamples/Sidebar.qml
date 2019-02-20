@@ -20,7 +20,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 2.3 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.5 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 
 Kirigami.ApplicationWindow {
     id: root
@@ -118,8 +118,50 @@ Kirigami.ApplicationWindow {
             Item {
                 Layout.fillWidth: true
             }
-            Controls.TextField {
-                
+            Kirigami.ActionTextField {
+                id: searchField
+
+                placeholderText: "Search..."
+
+                focusSequence: "Ctrl+F"
+                leftActions: [
+                    Kirigami.Action {
+                        iconName: "edit-clear"
+                        visible: searchField.text != ""
+                        onTriggered: {
+                            searchField.text = ""
+                            searchField.accepted()
+                        }
+                    },
+                    Kirigami.Action {
+                        iconName: "edit-clear"
+                        visible: searchField.text != ""
+                        onTriggered: {
+                            searchField.text = ""
+                            searchField.accepted()
+                        }
+                    }
+                ]
+                rightActions: [
+                    Kirigami.Action {
+                        iconName: "edit-clear"
+                        visible: searchField.text != ""
+                        onTriggered: {
+                            searchField.text = ""
+                            searchField.accepted()
+                        }
+                    },
+                    Kirigami.Action {
+                        iconName: "anchor"
+                        visible: searchField.text != ""
+                        onTriggered: {
+                            searchField.text = ""
+                            searchField.accepted()
+                        }
+                    }
+                ]
+
+                onAccepted: console.log("Search text is " + searchField.text)
             }
         }
     }

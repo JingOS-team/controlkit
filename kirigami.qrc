@@ -17,6 +17,7 @@
         <file alias="templates/InlineMessage.qml">src/controls/templates/InlineMessage.qml</file>
         <file alias="InlineMessage.qml">src/controls/InlineMessage.qml</file>
         <file alias="ToolBarApplicationHeader.qml">src/controls/ToolBarApplicationHeader.qml</file>
+        <file alias="ActionTextField.qml">src/controls/ActionTextField.qml</file>
         <file alias="private/PrivateActionToolButton.qml">src/controls/private/PrivateActionToolButton.qml</file>
         <file alias="private/GlobalDrawerActionItem.qml">src/controls/private/GlobalDrawerActionItem.qml</file>
         <file alias="private/ContextDrawerActionItem.qml">src/controls/private/ContextDrawerActionItem.qml</file>

@@ -46,3 +46,4 @@ BannerImage 2.5 private/BannerImage.qml
 AboutPage 2.6 AboutPage.qml
 UrlButton 2.6 UrlButton.qml
 LinkButton 2.6 LinkButton.qml
+ActionTextField 2.7 ActionTextField.qml
