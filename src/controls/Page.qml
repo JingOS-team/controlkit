@@ -293,6 +293,10 @@ T2.Page {
         }
     }
 
+    background: Rectangle {
+        color: Kirigami.Theme.backgroundColor
+    }
+
 
     //FIXME: on material the shadow would bleed over
     clip: root.header != null;
