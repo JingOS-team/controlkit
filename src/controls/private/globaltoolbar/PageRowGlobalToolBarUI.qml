@@ -57,7 +57,7 @@ Kirigami.AbstractApplicationHeader {
             id: buttonsLayout
             Layout.fillHeight: true
 
-            Layout.leftMargin: Kirigami.Units.largeSpacing
+            Layout.leftMargin: leftHandleAnchor.visible ? Kirigami.Units.largeSpacing : 0
 
             visible: (globalToolBar.showNavigationButtons || root.layers.depth > 1) && (globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.None)
 
