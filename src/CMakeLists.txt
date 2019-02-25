@@ -28,13 +28,6 @@ set(kirigami_SRCS
 add_subdirectory(libkirigami)
 
 if(STATIC_LIBRARY)
-    # Set some variables to insert the right files in the QRC
-    if(Qt5Qml_VERSION VERSION_LESS 5.10)
-        set(kirigami_ActionMenuItem ActionMenuItemQt59.qml)
-    else()
-        set(kirigami_ActionMenuItem ActionMenuItemQt510.qml)
-    endif()
-
     # `rcc` is a bit dumb and isn't designed to use auto generated files, to
     # avoid poluting the source directory, use absolute paths
     set(kirigami_QML_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../)
@@ -92,13 +85,6 @@ if (NOT STATIC_LIBRARY)
     add_dependencies(kirigamiplugin copy)
 
     install(DIRECTORY controls/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2)
-    if(Qt5Qml_VERSION VERSION_LESS 5.10)
-        install(FILES controls/private/ActionMenuItemQt59.qml DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/private
-                RENAME ActionMenuItem.qml)
-    else()
-        install(FILES controls/private/ActionMenuItemQt510.qml DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/private
-                RENAME ActionMenuItem.qml)
-    endif()
 
     if (PLASMA_ENABLED)
         install(DIRECTORY styles/Plasma DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles)

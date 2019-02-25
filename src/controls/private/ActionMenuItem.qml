@@ -31,6 +31,8 @@ Controls.MenuItem {
     checkable: ourAction.checkable
     checked: ourAction.checked
     height: visible ? implicitHeight : 0
+    icon: ourAction.icon
+    autoExclusive: ourAction.Controls.ActionGroup && ourAction.Controls.ActionGroup.group && ourAction.Controls.ActionGroup.group.exclusive
     onTriggered: {
         ourAction.trigger()
     }
