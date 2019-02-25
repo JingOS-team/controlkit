@@ -281,7 +281,7 @@ T2.Drawer {
 
     y: modal ? 0 : ((T2.ApplicationWindow.menuBar ? T2.ApplicationWindow.menuBar.height : 0) + (T2.ApplicationWindow.header ? T2.ApplicationWindow.header.height : 0))
 
-    height: modal ? parent.height : (parent.height - y - (T2.ApplicationWindow.footer ? T2.ApplicationWindow.footer.height : 0))
+    height: root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge ? (modal ? parent.height : (parent.height - y - (T2.ApplicationWindow.footer ? T2.ApplicationWindow.footer.height : 0))) : implicitHeight
 
     parent: modal || edge === Qt.LeftEdge || edge === Qt.RightEdge ? T2.ApplicationWindow.overlay : T2.ApplicationWindow.contentItem
 
