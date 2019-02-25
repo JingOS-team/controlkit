@@ -100,6 +100,7 @@ Controls.TextField
     Row {
         id: leftActionsRow
         padding: Kirigami.Units.smallSpacing
+        anchors.left: parent.left
         Repeater {
             model: root.leftActions
             Kirigami.Icon  {
