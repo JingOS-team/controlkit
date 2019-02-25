@@ -64,11 +64,9 @@ Kirigami.AbstractApplicationHeader {
             TemplatesPrivate.BackButton {
                 id: backButton
                 Layout.leftMargin: leftHandleAnchor.visible ? 0 : Kirigami.Units.smallSpacing
-                Layout.preferredHeight: Math.min(implicitHeight, parent.height)
                 Layout.preferredWidth: height
             }
             TemplatesPrivate.ForwardButton {
-                Layout.preferredHeight: Math.min(implicitHeight, parent.height)
                 Layout.preferredWidth: height
             }
             Kirigami.Separator {
