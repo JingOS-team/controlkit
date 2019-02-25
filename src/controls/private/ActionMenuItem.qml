@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.3
-import QtQuick.Controls 2.1 as Controls
+import QtQuick.Controls 2.5 as Controls
 
 Controls.MenuItem {
     id: menuItem
@@ -31,7 +31,7 @@ Controls.MenuItem {
     checkable: ourAction.checkable
     checked: ourAction.checked
     height: visible ? implicitHeight : 0
-    icon: ourAction.icon
+    icon.name: ourAction.icon.name
     autoExclusive: ourAction.Controls.ActionGroup && ourAction.Controls.ActionGroup.group && ourAction.Controls.ActionGroup.group.exclusive
     onTriggered: {
         ourAction.trigger()
