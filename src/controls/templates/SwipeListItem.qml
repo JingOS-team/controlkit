@@ -259,8 +259,8 @@ T2.ItemDelegate {
                 }
                 delegate: Controls.ToolButton {
                     anchors.verticalCenter: parent.verticalCenter
-                    icon.name: modelData.iconName !== "" ? modelData.iconName : undefined
-                    icon.source: modelData.iconSource !== "" ? modelData.iconSource : undefined
+                    icon.name: modelData.iconName !== "" ? modelData.iconName : ""
+                    icon.source: modelData.iconSource !== "" ? modelData.iconSource : ""
                     enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
                     visible: (modelData && modelData.visible !== undefined) ? modelData.visible : true;
                     onVisibleChanged: {
