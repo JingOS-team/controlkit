@@ -60,7 +60,7 @@ Controls.TextField
      * This property hold the a list of shortcut sequence that put the text
      * field into focus.
      */
-    property string focusSequence: null
+    property string focusSequence
 
     /**
      * leftActions: list<QtObject>
@@ -83,7 +83,7 @@ Controls.TextField
 
     Shortcut {
         id: focusShortcut
-        enabled: root.focusSequence != null
+        enabled: root.focusSequence
         sequence: root.focusSequence
         onActivated: {
             root.forceActiveFocus()
@@ -93,7 +93,7 @@ Controls.TextField
 
     Controls.ToolTip {
         delay: Kirigami.Units.longDuration
-        visible: root.focusSequence != null && root.text.length === 0 && !rightActionsRow.hovered && !leftActionsRow.hovered && hovered
+        visible: root.focusSequence && root.text.length === 0 && !rightActionsRow.hovered && !leftActionsRow.hovered && hovered
         text: root.focusSequence ? root.focusSequence : ""
     }
 
