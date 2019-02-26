@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.3
-import QtQuick.Controls 2.5 as Controls
+import QtQuick.Controls 2.3 as Controls
 
 Controls.MenuItem {
     id: menuItem
