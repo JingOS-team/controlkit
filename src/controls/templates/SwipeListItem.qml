@@ -165,7 +165,7 @@ T2.ItemDelegate {
 
     leftPadding: padding * 2
 
-    rightPadding: padding * 2 + (handleMouse.visible ? handleMouse.width : hovered * actionsLayout.width) + handleMouse.anchors.rightMargin
+    rightPadding: padding * 2 + (handleMouse.visible ? handleMouse.width : (hovered || !supportsMouseEvents) * actionsLayout.width) + handleMouse.anchors.rightMargin
     
     topPadding: padding
     bottomPadding: padding
