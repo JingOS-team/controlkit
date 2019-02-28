@@ -14,6 +14,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libkirigami ${CMAKE_CURRENT_BINA
 
 set(kirigami_SRCS
     kirigamiplugin.cpp
+    columnview.cpp
     enums.cpp
     delegaterecycler.cpp
     desktopicon.cpp

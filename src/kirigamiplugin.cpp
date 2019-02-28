@@ -20,6 +20,7 @@
  */
 
 #include "kirigamiplugin.h"
+#include "columnview.h"
 #include "enums.h"
 #include "desktopicon.h"
 #include "settings.h"
@@ -178,6 +179,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("UrlButton.qml")), uri, 2, 6, "UrlButton");
 
     //2.7
+    qmlRegisterType<ColumnView>(uri, 2, 7, "ColumnView");
     qmlRegisterType(componentUrl(QStringLiteral("ActionTextField.qml")), uri, 2, 7, "ActionTextField");
 
     qmlProtectModule(uri, 2);

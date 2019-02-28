@@ -19,7 +19,7 @@
 
 import QtQuick 2.5
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.4 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import "private"
 import QtQuick.Templates 2.0 as T2
 
@@ -318,8 +318,8 @@ T2.Page {
         globalToolBar.stack = null;
         globalToolBar.row = null;
 
-        if (root.parent.hasOwnProperty("__pageRow")) {
-            globalToolBar.row = root.parent.__pageRow;
+        if (root.Kirigami.ColumnView.view) {
+            globalToolBar.row = root.Kirigami.ColumnView.view.__pageRow;
         }
         if (root.T2.StackView.view) {
             globalToolBar.stack = root.T2.StackView.view;
@@ -365,16 +365,8 @@ T2.Page {
                     //TODO: find container reliably, remove assumption
                     {"pageRow": Qt.binding(function() {return row}),
                     "page": root,
-                    "current": Qt.binding(function() {return stack || !root.parent ? true : row.currentIndex === root.parent.level})});
+                    "current": Qt.binding(function() {return stack || row.currentIndex === root.Kirigami.ColumnView.level})});
                 }
-            }
-
-            Separator {
-                z: 999
-                anchors.verticalCenter: globalToolBar.verticalCenter
-                height: globalToolBar.height * 0.6
-                visible: !root.T2.StackView.view && globalToolBar.row && root.parent && globalToolBar.row.contentItem.contentX < root.parent.x - globalToolBar.row.globalToolBar.leftReservedSpace
-                Kirigami.Theme.textColor: globalToolBar.item ? globalToolBar.item.Kirigami.Theme.textColor : undefined
             }
         },
 

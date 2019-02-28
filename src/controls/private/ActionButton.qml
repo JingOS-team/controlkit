@@ -21,7 +21,7 @@ import QtQuick 2.1
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.0 as Controls
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.7
 
 import "../templates/private"
 
@@ -128,10 +128,10 @@ Item {
 
             onPressed: {
                 //search if we have a page to set to current
-                if (root.hasApplicationWindow && applicationWindow().pageStack.currentIndex !== undefined && root.page.parent.level !== undefined) {
+                if (root.hasApplicationWindow && applicationWindow().pageStack.currentIndex !== undefined && root.page.ColumnView.level !== undefined) {
                     //search the button parent's parent, that is the page parent
                     //this will make the context drawer open for the proper page
-                    applicationWindow().pageStack.currentIndex = root.page.parent.level;
+                    applicationWindow().pageStack.currentIndex = root.page.ColumnView.level;
                 }
                 downTimestamp = (new Date()).getTime();
                 startX = button.x + button.width/2;
@@ -402,7 +402,7 @@ Item {
         }
         visible: root.page.actions && root.page.actions.contextualActions.length > 0 && (applicationWindow === undefined || applicationWindow().wideScreen)
             //using internal pagerow api
-            && (root.page && root.page.parent ? root.page.parent.level < applicationWindow().pageStack.depth-1 : false)
+            && (root.page && root.page.parent ? root.page.ColumnView.level < applicationWindow().pageStack.depth-1 : false)
 
         width: Units.iconSizes.smallMedium + Units.smallSpacing*2
         height: width
