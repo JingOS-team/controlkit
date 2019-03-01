@@ -97,6 +97,7 @@ Controls.ToolButton {
                 id: menuArrow
                 Layout.minimumWidth: Units.iconSizes.small
                 Layout.minimumHeight: Units.iconSizes.small
+                color: mainIcon.color
                 source: "arrow-down"
                 visible: showMenuArrow && menu.actions && menu.actions.length > 0
             }
