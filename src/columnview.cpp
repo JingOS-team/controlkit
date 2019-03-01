@@ -246,8 +246,8 @@ ContentItem::ContentItem(ColumnView *parent)
         if (!m_view->currentItem()) {
             m_view->setCurrentIndex(m_items.indexOf(m_viewAnchorItem));
         } else {
-            QRectF mapped = m_view->currentItem()->mapRectToItem(this, QRectF(QPointF(0, 0), m_view->currentItem()->size()));
-            if (!QRectF(QPointF(0, 0), size()).intersects(mapped)) {
+            QRectF mapped = m_view->currentItem()->mapRectToItem(m_view, QRectF(QPointF(0, 0), m_view->currentItem()->size()));
+            if (!QRectF(QPointF(0, 0), m_view->size()).intersects(mapped)) {
                 m_view->setCurrentIndex(m_items.indexOf(m_viewAnchorItem));
             }
         }
