@@ -14,6 +14,7 @@ ApplicationItem 2.1 ApplicationItem.qml
 AbstractApplicationWindow 2.5 AbstractApplicationWindow.qml
 FormLayout 2.5 FormLayout.qml
 GlobalDrawer 2.5 GlobalDrawer.qml
+OverlayDrawer 2.5 OverlayDrawer.qml
 BasicListItem 2.5 BasicListItem.qml
 AbstractItemViewHeader 2.1 AbstractItemViewHeader.qml
 Heading 2.5 Heading.qml
