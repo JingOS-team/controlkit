@@ -570,7 +570,12 @@ T.Control {
 
     ColumnView {
         id: columnView
-        anchors.fill: parent
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+            top: globalToolBar.actualStyle === ApplicationHeaderStyle.Breadcrumb || globalToolBar.actualStyle === ApplicationHeaderStyle.TabBar ? globalToolBarUI.bottom : parent.top
+        }
         readonly property Item __pageRow: root
         columnResizeMode: root.wideMode ? ColumnView.FixedColumns : ColumnView.SingleColumn
         columnWidth: root.defaultColumnWidth
