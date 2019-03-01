@@ -132,9 +132,7 @@ Item {
             onContentYChanged: {
                 if (updatingContentY || !Settings.isMobile ||
                     !__appWindow.controlsVisible ||
-                    !root.page ||
-                    root.page.flickable.atYBeginning ||
-                    root.page.flickable.atYEnd) {
+                    !root.page) {
                     oldContentY = root.page.flickable.contentY;
                     return;
                 //TODO: merge

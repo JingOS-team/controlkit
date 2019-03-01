@@ -192,45 +192,6 @@ P.ScrollView {
         }
     ]
 
-    onHeightChanged: {
-        if (!Window.window || height < 0) {
-            return;
-        }
-        var focusItem = Window.window.activeFocusItem;
-
-        if (!focusItem) {
-            return;
-        }
-
-        //NOTE: there is no function to know if an item is descended from another,
-        //so we have to walk the parent hierarchy by hand
-        var isDescendent = false;
-        var candidate = focusItem.parent;
-        while (candidate) {
-            if (candidate === root) {
-                isDescendent = true;
-                break;
-            }
-            candidate = candidate.parent;
-        }
-        if (!isDescendent) {
-            return;
-        }
-
-        var cursorY = 0;
-        if (focusItem.cursorPosition !== undefined) {
-            cursorY = focusItem.positionToRectangle(focusItem.cursorPosition).y;
-        }
-
-        var pos = focusItem.mapToItem(root.contentItem, 0, cursorY);
-
-        //focused item already visible? add some margin for the space of the action buttons
-        if (pos.y >= root.flickableItem.contentY && pos.y <= root.flickableItem.contentY + root.flickableItem.height - Units.gridUnit * 8) {
-            return;
-        }
-        root.flickableItem.contentY = pos.y;
-    }
-
     Component.onCompleted: leftPaddingChanged()
     onRightPaddingChanged: leftPaddingChanged()
     onLeftPaddingChanged: {
