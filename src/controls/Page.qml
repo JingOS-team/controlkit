@@ -279,7 +279,7 @@ T2.Page {
      * It is discouraged to use this, except very specific exceptions, like a chat 
      * application which can't have controls on the bottom except the text field.
      */
-    property int globalToolBarStyle: globalToolBar.row.globalToolBar.actualStyle
+    property int globalToolBarStyle: globalToolBar.row ? globalToolBar.row.globalToolBar.actualStyle : Kirigami.ApplicationHeaderStyle.None
 
     //NOTE: contentItem will be created if not existing (and contentChildren of Page would become its children) This with anchors enforces the geometry we want, where globalToolBar is a super-header, on top of header
     contentItem: Item {
