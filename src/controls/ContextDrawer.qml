@@ -91,6 +91,20 @@ OverlayDrawer {
     edge: Qt.application.layoutDirection == Qt.RightToLeft ? Qt.LeftEdge : Qt.RightEdge
     drawerOpen: false
 
+    /**
+     * header: Component
+     * Arbitrary content that will go on top of the list (by default is the title)
+     * @since 2.7
+     */
+    property alias header: menu.header
+
+    /**
+     * footer: Component
+     * Arbitrary content that will go on top of the list (by default is empty)
+     * @since 2.7
+     */
+    property alias footer: menu.footer
+
     //list items go to edges, have their own padding
     leftPadding: 0
     rightPadding: 0
