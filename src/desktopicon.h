@@ -41,7 +41,6 @@ class DesktopIcon : public QQuickItem
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
     Q_PROPERTY(int implicitWidth READ implicitWidth CONSTANT)
     Q_PROPERTY(int implicitHeight READ implicitHeight CONSTANT)
-    Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
     Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool valid READ valid NOTIFY validChanged)
     Q_PROPERTY(bool selected READ selected WRITE setSelected NOTIFY selectedChanged)
@@ -61,8 +60,6 @@ public:
 
     void setSmooth(const bool smooth);
     bool smooth() const;
-
-    void setEnabled(bool enabled = true);
 
     void setActive(bool active = true);
     bool active() const;

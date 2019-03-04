@@ -26,8 +26,8 @@ import org.kde.kirigami 2.4
 Controls.ToolButton {
     id: button
 
-    property Flickable headerFlickable
-    enabled: applicationWindow().pageStack.depth > 1 && ( applicationWindow().pageStack.currentIndex < applicationWindow().pageStack.depth-1 || !applicationWindow().pageStack.contentItem.atXEnd)
+    enabled: applicationWindow().pageStack.currentIndex < applicationWindow().pageStack.depth-1
+
     visible: applicationWindow().pageStack.layers.depth == 1 && applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
     width: height
     height: parent.height
@@ -38,9 +38,11 @@ Controls.ToolButton {
         anchors.centerIn: parent
         width: Math.min(parent.width, Units.iconSizes.smallMedium)
         height: width
-        opacity: parent.enabled ? 1 : 0.6
+        enabled: button.enabled
+        opacity: button.enabled ? 1 : 0.6
         source: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
     }
+
     Controls.ToolTip {
         visible: button.hovered
         text: qsTr("Navigate Forward")

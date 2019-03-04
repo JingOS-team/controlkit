@@ -27,6 +27,7 @@ Controls.ToolButton {
     id: button
 
     enabled: applicationWindow().pageStack.layers.depth > 1 || (applicationWindow().pageStack.depth > 1 && (applicationWindow().pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0))
+
     visible: applicationWindow().pageStack.layers.depth > 1 || applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
     width: height
     height: parent.height
@@ -38,13 +39,15 @@ Controls.ToolButton {
             applicationWindow().pageStack.goBack();
         }
     }
+
     Icon {
         anchors.centerIn: parent
         width: Math.min(parent.width, Units.iconSizes.smallMedium)
         height: width
-        opacity: parent.enabled ? 1 : 0.6
+        opacity: button.enabled ? 1 : 0.6
         source: (LayoutMirroring.enabled ? "go-previous-symbolic-rtl" : "go-previous-symbolic")
     }
+
     Controls.ToolTip {
         visible: button.hovered
         text: qsTr("Navigate Back")

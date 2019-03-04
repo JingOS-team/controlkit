@@ -142,6 +142,10 @@ DesktopIcon::DesktopIcon(QQuickItem *parent)
         m_changed = true;
         update();
     });
+    connect(this, &QQuickItem::enabledChanged, this, [this]() {
+        m_changed = true;
+        update();
+    });
 }
 
 
@@ -180,18 +184,6 @@ QVariant DesktopIcon::source() const
 {
     return m_source;
 }
-
-void DesktopIcon::setEnabled(const bool enabled)
-{
-    if (enabled == QQuickItem::isEnabled()) {
-        return;
-    }
-    QQuickItem::setEnabled(enabled);
-    m_changed = true;
-    update();
-    emit enabledChanged();
-}
-
 
 void DesktopIcon::setActive(const bool active)
 {
