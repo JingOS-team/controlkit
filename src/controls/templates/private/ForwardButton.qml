@@ -39,7 +39,6 @@ Controls.ToolButton {
         width: Math.min(parent.width, Units.iconSizes.smallMedium)
         height: width
         enabled: button.enabled
-        opacity: button.enabled ? 1 : 0.6
         source: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
     }
 

@@ -44,7 +44,6 @@ Controls.ToolButton {
         anchors.centerIn: parent
         width: Math.min(parent.width, Units.iconSizes.smallMedium)
         height: width
-        opacity: button.enabled ? 1 : 0.6
         source: (LayoutMirroring.enabled ? "go-previous-symbolic-rtl" : "go-previous-symbolic")
     }
 
