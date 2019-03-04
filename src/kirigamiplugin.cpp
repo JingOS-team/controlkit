@@ -182,6 +182,10 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType<ColumnView>(uri, 2, 7, "ColumnView");
     qmlRegisterType(componentUrl(QStringLiteral("ActionTextField.qml")), uri, 2, 7, "ActionTextField");
 
+    //2.8
+    qmlRegisterType(componentUrl(QStringLiteral("SearchField.qml")), uri, 2, 8, "SearchField");
+    qmlRegisterType(componentUrl(QStringLiteral("PasswordField.qml")), uri, 2, 8, "PasswordField");
+
     qmlProtectModule(uri, 2);
 }
 

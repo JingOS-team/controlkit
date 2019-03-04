@@ -50,6 +50,9 @@ import org.kde.kirigami 2.7 as Kirigami
  *
  *     onAccepted: console.log("Search text is " + searchField.text)
  * }
+ * @endcode
+ *
+ * @inherit QtQuick.Controls.TextField
  */
 Controls.TextField
 {

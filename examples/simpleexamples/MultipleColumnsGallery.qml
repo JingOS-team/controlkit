@@ -20,7 +20,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.8
 
 ScrollablePage {
     id: page
@@ -82,7 +82,15 @@ ScrollablePage {
                 onClicked: page.title = edit.text;
             }
         }
+        SearchField {
+            anchors.horizontalCenter: parent.horizontalCenter
+            id: searchField
+            onAccepted: console.log("Search text is " + searchField.text);
+        }
+        PasswordField {
+            anchors.horizontalCenter: parent.horizontalCenter
+            id: passwordField
+            onAccepted: console.log("Password")
+        }
     }
- 
-    
 }

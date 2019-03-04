@@ -48,3 +48,5 @@ AboutPage 2.6 AboutPage.qml
 UrlButton 2.6 UrlButton.qml
 LinkButton 2.6 LinkButton.qml
 ActionTextField 2.7 ActionTextField.qml
+SearchField 2.8 SearchField.qml
+PasswordField 2.8 PasswordField.qml

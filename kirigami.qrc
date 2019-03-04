@@ -18,6 +18,8 @@
         <file alias="InlineMessage.qml">src/controls/InlineMessage.qml</file>
         <file alias="ToolBarApplicationHeader.qml">src/controls/ToolBarApplicationHeader.qml</file>
         <file alias="ActionTextField.qml">src/controls/ActionTextField.qml</file>
+        <file alias="SearchField.qml">src/controls/SearchField.qml</file>
+        <file alias="PasswordField.qml">src/controls/PasswordField.qml</file>
         <file alias="private/GlobalDrawerActionItem.qml">src/controls/private/GlobalDrawerActionItem.qml</file>
         <file alias="private/ContextDrawerActionItem.qml">src/controls/private/ContextDrawerActionItem.qml</file>
         <file alias="private/RefreshableScrollView.qml">src/controls/private/RefreshableScrollView.qml</file>
