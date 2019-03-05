@@ -574,7 +574,7 @@ T.Control {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
-            top: (wideMode || !currentItem.hasOwnProperty("globalToolBarStyle") || currentItem.globalToolBarStyle !== ApplicationHeaderStyle.None) && (globalToolBar.actualStyle === ApplicationHeaderStyle.Breadcrumb
+            top: (wideMode || !currentItem || !currentItem.hasOwnProperty("globalToolBarStyle") || currentItem.globalToolBarStyle !== ApplicationHeaderStyle.None) && (globalToolBar.actualStyle === ApplicationHeaderStyle.Breadcrumb
                  || globalToolBar.actualStyle === ApplicationHeaderStyle.TabBar)
                  ? globalToolBarUI.bottom : parent.top
         }

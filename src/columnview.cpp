@@ -544,6 +544,11 @@ ColumnView::ColumnView(QQuickItem *parent)
     });
     connect(m_contentItem, &ContentItem::widthChanged, this, &ColumnView::contentWidthChanged);
     connect(m_contentItem, &ContentItem::xChanged, this, &ColumnView::contentXChanged);
+
+    ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(this, true));
+    attached->setView(this);
+    attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(m_contentItem, true));
+    attached->setView(this);
 }
 
 ColumnView::~ColumnView()

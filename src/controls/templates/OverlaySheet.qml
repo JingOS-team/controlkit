@@ -20,7 +20,7 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.2
 import QtQuick.Window 2.2
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.7
 import QtGraphicalEffects 1.0
 import QtQuick.Templates 2.0 as T2
 import "private"
@@ -184,7 +184,7 @@ QtObject {
         Theme.colorSet: root.Theme.colorSet
         Theme.inherit: root.Theme.inherit
         //we want to be over any possible OverlayDrawers, including handles
-        parent: root.parent
+        parent: root.parent.ColumnView.view && (root.parent.ColumnView.view == root.parent || root.parent.ColumnView.view == root.parent.parent) ? root.parent.ColumnView.view.parent : root.parent
 
         anchors.fill: parent
         z: typeof applicationWindow !== "undefined" && root.parent === applicationWindow().overlay ? 0 : 9998
