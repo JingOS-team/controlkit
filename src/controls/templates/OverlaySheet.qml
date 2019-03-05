@@ -191,6 +191,7 @@ QtObject {
         visible: false
         drag.filterChildren: true
         hoverEnabled: true
+        clip: true
 
         onClicked: {
             var pos = mapToItem(flickableContents, mouse.x, mouse.y);
@@ -309,7 +310,7 @@ QtObject {
         }
         Rectangle {
             anchors.fill: parent
-            color: Theme.textColor
+            color: "black"
             opacity: 0.6 * Math.min(
                 (Math.min(scrollView.flickableItem.contentY + scrollView.flickableItem.height, scrollView.flickableItem.height) / scrollView.flickableItem.height),
                 (2 + (scrollView.flickableItem.contentHeight - scrollView.flickableItem.contentY - scrollView.flickableItem.topMargin - scrollView.flickableItem.bottomMargin)/scrollView.flickableItem.height))
