@@ -323,7 +323,7 @@ T2.Page {
         }
         if (root.T2.StackView.view) {
             globalToolBar.stack = root.T2.StackView.view;
-            globalToolBar.row = root.T2.StackView.view.parent;
+            globalToolBar.row = root.T2.StackView.view ? root.T2.StackView.view.parent : null;
         }
         if (globalToolBar.row) {
             root.globalToolBarStyleChanged.connect(globalToolBar.syncSource);
