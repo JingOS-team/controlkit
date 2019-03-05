@@ -574,7 +574,9 @@ T.Control {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
-            top: globalToolBar.actualStyle === ApplicationHeaderStyle.Breadcrumb || globalToolBar.actualStyle === ApplicationHeaderStyle.TabBar ? globalToolBarUI.bottom : parent.top
+            top: (wideMode || !currentItem.hasOwnProperty("globalToolBarStyle") || currentItem.globalToolBarStyle !== ApplicationHeaderStyle.None) && (globalToolBar.actualStyle === ApplicationHeaderStyle.Breadcrumb
+                 || globalToolBar.actualStyle === ApplicationHeaderStyle.TabBar)
+                 ? globalToolBarUI.bottom : parent.top
         }
         readonly property Item __pageRow: root
         columnResizeMode: root.wideMode ? ColumnView.FixedColumns : ColumnView.SingleColumn

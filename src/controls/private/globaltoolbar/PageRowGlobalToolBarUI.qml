@@ -85,7 +85,7 @@ Kirigami.AbstractApplicationHeader {
             Layout.preferredHeight: -1
             property Kirigami.PageRow pageRow: root
 
-            readonly property bool makeSpaceForPageToolBar: !pageRow.wideMode && (pageRow.currentItem && (pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar || pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.Titles)) && !pageRow.contentItem.moving
+            readonly property bool makeSpaceForPageToolBar: !pageRow.wideMode && (pageRow.currentItem && (pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar || pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.Titles || pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.None)) && !pageRow.contentItem.moving
 
             opacity: pageRow.layers.depth < 2 && !makeSpaceForPageToolBar
             enabled: opacity > 0
