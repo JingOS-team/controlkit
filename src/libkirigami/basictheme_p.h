@@ -42,7 +42,8 @@ public:
 
 private:
     QUrl m_qmlPath;
-    QObject *m_declarativeBasicTheme = nullptr;
+    //The instance can die when and if the engine dies
+    QPointer<QObject> m_declarativeBasicTheme;
 };
 
 class BasicTheme : public PlatformTheme
