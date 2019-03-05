@@ -96,7 +96,8 @@ Kirigami.AbstractItemViewHeader {
             font.pointSize: 30
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignBottom
-            color: root.backgroundImage.hasImage ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.highlightColor
+            //with an image it needs to be white regardless of system palette
+            color: root.backgroundImage.hasImage ? "white" : Kirigami.Theme.highlightColor
             opacity: 1
             elide: Text.ElideRight
 
