@@ -101,11 +101,13 @@ Controls.TextField
         id: leftActionsRow
         padding: Kirigami.Units.smallSpacing
         anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        height: root.implicitHeight - 2 * Kirigami.Units.smallSpacing
         Repeater {
             model: root.leftActions
-            Kirigami.Icon  {
-                height: root.implicitHeight - 2 * Kirigami.Units.smallSpacing
-                width: this.implicitHeight - 2 * Kirigami.Units.smallSpacing
+            Kirigami.Icon {
+                height: parent.height
+                width: parent.height
                 source: modelData.icon.name.length > 0 ? modelData.icon.name : modelData.icon.source
                 visible: modelData.visible
                 MouseArea {
@@ -122,11 +124,16 @@ Controls.TextField
         padding: Kirigami.Units.smallSpacing
         layoutDirection: Qt.RightToLeft
         anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        height: root.implicitHeight - 2 * Kirigami.Units.smallSpacing
         Repeater {
             model: root.rightActions
             Kirigami.Icon  {
-                height: root.implicitHeight - 2 * Kirigami.Units.smallSpacing
-                width: this.implicitHeight - 2 * Kirigami.Units.smallSpacing
+                height: parent.height
+                width: parent.height
+
+                anchors.verticalCenter: parent.verticalCenter
+
                 source: modelData.icon.name.length > 0 ? modelData.icon.name : modelData.icon.source
                 visible: modelData.visible
                 MouseArea {
