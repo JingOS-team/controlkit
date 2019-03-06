@@ -95,7 +95,7 @@ Item {
     property alias overlay: overlayRoot
     Item {
         anchors.fill: parent
-        parent: root.parent
+        parent: root.parent || root
         z: 999999
         Rectangle {
             z: -1
