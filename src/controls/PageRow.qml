@@ -410,12 +410,11 @@ T.Control {
     QQC2.StackView {
         id: layersStack
         z: 99
-        visible: depth > 1 || busy
         anchors {
             fill: parent
         }
         //placeholder as initial item
-        initialItem: Item {}
+        initialItem: columnView
 
         function clear () {
             //don't let it kill the main page row
@@ -570,28 +569,17 @@ T.Control {
 
     ColumnView {
         id: columnView
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-            top: (wideMode || !currentItem || !currentItem.hasOwnProperty("globalToolBarStyle") || currentItem.globalToolBarStyle !== ApplicationHeaderStyle.None) && (globalToolBar.actualStyle === ApplicationHeaderStyle.Breadcrumb
+
+        topPadding: (wideMode || !currentItem || !currentItem.hasOwnProperty("globalToolBarStyle") || currentItem.globalToolBarStyle !== ApplicationHeaderStyle.None) && (globalToolBar.actualStyle === ApplicationHeaderStyle.Breadcrumb
                  || globalToolBar.actualStyle === ApplicationHeaderStyle.TabBar)
-                 ? globalToolBarUI.bottom : parent.top
-        }
+                 ? globalToolBarUI.height : 0
+
         readonly property Item __pageRow: root
         columnResizeMode: root.wideMode ? ColumnView.FixedColumns : ColumnView.SingleColumn
         columnWidth: root.defaultColumnWidth
-        opacity: layersStack.depth < 2
 
         onItemInserted: root.pageInserted(position, item);
         onItemRemoved: root.pageRemoved(item);
-
-        Behavior on opacity {
-            OpacityAnimator {
-                duration: Units.longDuration
-                easing.type: Easing.InOutQuad
-            }
-        }
     }
 
     Rectangle {

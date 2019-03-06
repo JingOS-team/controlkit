@@ -166,6 +166,16 @@ class ColumnView : public QQuickItem
     Q_PROPERTY(qreal contentWidth READ contentWidth NOTIFY contentWidthChanged)
 
     /**
+     * The padding this will have at the top
+     */
+    Q_PROPERTY(qreal topPadding READ topPadding WRITE setTopPadding NOTIFY topPaddingChanged)
+
+    /**
+     * The padding this will have at the bottom
+     */
+    Q_PROPERTY(qreal bottomPadding READ bottomPadding WRITE setBottomPadding NOTIFY bottomPaddingChanged)
+
+    /**
      * The duration for scrolling animations
      */
     Q_PROPERTY(int scrollDuration READ scrollDuration WRITE setScrollDuration NOTIFY scrollDurationChanged)
@@ -245,6 +255,12 @@ public:
     void setSeparatorVisible(bool visible);
 
     int count() const;
+
+    qreal topPadding() const;
+    void setTopPadding(qreal padding);
+
+    qreal bottomPadding() const;
+    void setBottomPadding(qreal padding);
 
     QQuickItem *currentItem();
 
@@ -375,6 +391,8 @@ Q_SIGNALS:
     void separatorVisibleChanged();
     void firstVisibleItemChanged();
     void lastVisibleItemChanged();
+    void topPaddingChanged();
+    void bottomPaddingChanged();
 
 private:
     static void contentChildren_append(QQmlListProperty<QQuickItem> *prop, QQuickItem *object);
@@ -397,6 +415,8 @@ private:
     qreal m_oldMouseX = -1.0;
     qreal m_startMouseX = -1.0;
     int m_currentIndex = -1;
+    qreal m_topPadding = 0;
+    qreal m_bottomPadding = 0;
 
     bool m_interactive = true;
     bool m_dragging = false;

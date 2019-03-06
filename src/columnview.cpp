@@ -337,6 +337,9 @@ qreal ContentItem::childWidth(QQuickItem *child)
 
 void ContentItem::layoutItems()
 {
+    setY(m_view->topPadding());
+    setHeight(m_view->height() - m_view->topPadding() - m_view->bottomPadding());
+
     qreal partialWidth = 0;
     int i = 0;
     for (QQuickItem *child : m_items) {
@@ -356,7 +359,7 @@ void ContentItem::layoutItems()
     } else {
         setBoundedX(newContentX);
     }
-    setY(0);
+
     updateVisibleItems();
 }
 
@@ -676,6 +679,39 @@ int ColumnView::count() const
     return m_contentItem->m_items.count();
 }
 
+qreal ColumnView::topPadding() const
+{
+    return m_topPadding;
+}
+
+void ColumnView::setTopPadding(qreal padding)
+{
+    if (padding == m_topPadding) {
+        return;
+    }
+
+    m_topPadding = padding;
+    polish();
+    emit topPaddingChanged();
+}
+
+qreal ColumnView::bottomPadding() const
+{
+    return m_bottomPadding;
+}
+
+void ColumnView::setBottomPadding(qreal padding)
+{
+    if (padding == m_bottomPadding) {
+        return;
+    }
+
+    m_bottomPadding = padding;
+    polish();
+    emit bottomPaddingChanged();
+}
+
+
 QQuickItem *ColumnView::contentItem() const
 {
     return m_contentItem;
@@ -928,7 +964,8 @@ ColumnViewAttached *ColumnView::qmlAttachedProperties(QObject *object)
 
 void ColumnView::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    m_contentItem->setHeight(newGeometry.height());
+    m_contentItem->setY(m_topPadding);
+    m_contentItem->setHeight(newGeometry.height() - m_topPadding - m_bottomPadding);
     m_contentItem->m_shouldAnimate = false;
     polish();
 
