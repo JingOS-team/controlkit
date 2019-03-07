@@ -31,6 +31,8 @@ Kirigami.AbstractApplicationHeader {
     readonly property alias leftHandleAnchor: leftHandleAnchor
     readonly property alias rightHandleAnchor: rightHandleAnchor
 
+    readonly property bool breadcrumbVisible: breadcrumbLoader.opacity
+
     height: visible ? implicitHeight : 0
     minimumHeight: globalToolBar.minimumHeight
     preferredHeight: globalToolBar.preferredHeight
@@ -85,9 +87,7 @@ Kirigami.AbstractApplicationHeader {
             Layout.preferredHeight: -1
             property Kirigami.PageRow pageRow: root
 
-            readonly property bool makeSpaceForPageToolBar: !pageRow.wideMode && (pageRow.currentItem && (pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar || pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.Titles || pageRow.currentItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.None)) && !pageRow.contentItem.moving
-
-            opacity: pageRow.layers.depth < 2 && !makeSpaceForPageToolBar
+            opacity: pageRow.layers.depth < 2 && active
             enabled: opacity > 0
 
             active: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb
@@ -112,6 +112,6 @@ Kirigami.AbstractApplicationHeader {
             Layout.preferredWidth: height
         }
     }
-    background.opacity: pageRow.layers.depth < 2 && !breadcrumbLoader.makeSpaceForPageToolBar && breadcrumbLoader.active
+    background.opacity: breadcrumbLoader.opacity
 }
 

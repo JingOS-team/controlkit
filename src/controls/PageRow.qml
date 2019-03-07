@@ -570,9 +570,8 @@ T.Control {
     ColumnView {
         id: columnView
 
-        topPadding: (wideMode || !currentItem || !currentItem.hasOwnProperty("globalToolBarStyle") || currentItem.globalToolBarStyle !== ApplicationHeaderStyle.None) && (globalToolBar.actualStyle === ApplicationHeaderStyle.Breadcrumb
-                 || globalToolBar.actualStyle === ApplicationHeaderStyle.TabBar)
-                 ? globalToolBarUI.height : 0
+        topPadding: globalToolBarUI.item && globalToolBarUI.item.breadcrumbVisible
+                    ? globalToolBarUI.height : 0
 
         // Internal hidden api for Page
         readonly property Item __pageRow: root

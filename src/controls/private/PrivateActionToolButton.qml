@@ -43,6 +43,7 @@ Controls.ToolButton {
     property Action kirigamiAction
     property bool showText: true
     property bool showMenuArrow: true
+    property alias menu: menu
 
     //we need our own text delegate
     text: ""

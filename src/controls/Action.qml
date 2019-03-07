@@ -158,13 +158,33 @@ QtObject {
 
     default property alias children: root.__children
     property list<QtObject> __children
+
     onChildrenChanged: {
+        var child;
         for (var i in children) {
-            if(children[i].hasOwnProperty("parent")) {
-                children[i].parent = root
+            child = children[i];
+            if (child.hasOwnProperty("parent")) {
+                child.parent = root
             }
         }
     }
+
+    /**
+     * visibleChildren: list<Action>
+     * All child actions that are visible
+     */
+    readonly property var visibleChildren: {
+        var visible = [];
+        var child;
+        for (var i in children) {
+            child = children[i];
+            if (!child.hasOwnProperty("visible") || child.visible) {
+                visible.push(child)
+            }
+        }
+        return visible;
+    }
+
     property Shortcut __shortcut: Shortcut {
         property bool checked: false
         id: shortcutItem

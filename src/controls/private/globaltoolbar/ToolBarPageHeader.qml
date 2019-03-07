@@ -105,7 +105,7 @@ AbstractPageHeader {
             id: overflowAction
             icon.name: "overflow-menu"
             tooltip: qsTr("More Actions")
-            visible: children.length > 0
+            visible: visibleChildren.length > 0
             children: page && page.actions.contextualActions ? page.actions.contextualActions : null
         }
 
