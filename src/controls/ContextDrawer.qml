@@ -82,9 +82,16 @@ OverlayDrawer {
      * This can be any type of object that a ListView can accept as model. 
      * It expects items compatible with either QAction or Kirigami Action
      */
-    property var actions: pageStack.layers.depth > 1
-        ? pageStack.layers.currentItem.contextualActions
-        : (pageStack.lastVisibleItem ? pageStack.lastVisibleItem.contextualActions : [])
+    property var actions: page ? page.contextualActions : []
+
+    property Page page: {
+        if (pageStack.layers.currentItem.hasOwnProperty("contextualActions")) {
+            return pageStack.layers.currentItem;
+        } else {
+            return pageStack.lastVisibleItem 
+        }
+    }
+
     // Disable for empty menus or when we have a global toolbar
     enabled: menu.count > 0 &&
             (typeof applicationWindow() === "undefined" || !applicationWindow().pageStack.globalToolBar || applicationWindow().pageStack.lastVisibleItem.globalToolBarStyle !== ApplicationHeaderStyle.ToolBar)
@@ -112,6 +119,11 @@ OverlayDrawer {
 
     handleVisible: applicationWindow == undefined ? false : applicationWindow().controlsVisible
 
+    onPeekingChanged: {
+        if (page) {
+            page.contextualActionsAboutToShow();
+        }
+    }
     contentItem: ScrollView {
         //this just to create the attached property
         Theme.inherit: true

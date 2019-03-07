@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.3
-import QtQuick.Controls 2.1 as Controls
+import QtQuick.Controls 2.2 as Controls
 import org.kde.kirigami 2.4 as Kirigami
 
 Controls.Menu

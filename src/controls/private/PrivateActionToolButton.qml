@@ -25,6 +25,8 @@ import org.kde.kirigami 2.4
 Controls.ToolButton {
     id: control
 
+    signal menuAboutToShow
+
     implicitWidth: menuArrow.visible || (showText && ( kirigamiAction ? kirigamiAction.text.length > 0 : text.length > 0))
             ? Math.max(layout.implicitWidth + Units.largeSpacing*2, background.implicitWidth)
             : implicitHeight
@@ -54,6 +56,7 @@ Controls.ToolButton {
             kirigamiAction.trigger();
         }
         if (kirigamiAction.children.length > 0 && !menu.visible) {
+            control.menuAboutToShow();
             menu.popup(control, 0, control.height)
         }
     }

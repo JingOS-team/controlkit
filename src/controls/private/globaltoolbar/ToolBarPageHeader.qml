@@ -95,6 +95,7 @@ AbstractPageHeader {
     Private.PrivateActionToolButton {
         id: ctxActionsButton
         showMenuArrow: page.actions.contextualActions.length == 1
+        onMenuAboutToShow: page.contextualActionsAboutToshow();
         anchors {
             right: parent.right
             verticalCenter: parent.verticalCenter

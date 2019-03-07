@@ -201,6 +201,14 @@ T2.Page {
     readonly property alias actions: actionsGroup
 
     /**
+     * contextualActionsAboutToShow: signal
+     * Emitted when a visualization for the actions is about to be shown,
+     * such as the toolbar menu or the contextDrawer
+     * @since 2.7
+     */
+    signal contextualActionsAboutToShow
+
+    /**
      * isCurrentPage: bool
      *
      * Specifies if it's the currently selected page in the window's pages row.
