@@ -521,7 +521,7 @@ T.Control {
             right: parent.right
         }
         z: 100
-        active: globalToolBar.actualStyle != ApplicationHeaderStyle.None
+        active: globalToolBar.actualStyle != ApplicationHeaderStyle.None || firstVisibleItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar
         visible: active
         height: active ? implicitHeight : 0
         source: Qt.resolvedUrl("private/globaltoolbar/PageRowGlobalToolBarUI.qml");

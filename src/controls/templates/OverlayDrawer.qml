@@ -142,7 +142,7 @@ T2.Drawer {
         hoverEnabled: handleAnchor && handleAnchor.visible
         parent: applicationWindow().overlay.parent
 
-        property Item handleAnchor: (applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar && applicationWindow().pageStack.globalToolBar.actualStyle !== ApplicationHeaderStyle.None)
+        property Item handleAnchor: (applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar)
                 ? (root.edge === Qt.LeftEdge
                    ? applicationWindow().pageStack.globalToolBar.leftHandleAnchor
                    : applicationWindow().pageStack.globalToolBar.rightHandleAnchor)
