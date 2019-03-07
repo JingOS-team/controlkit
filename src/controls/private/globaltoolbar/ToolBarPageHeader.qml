@@ -45,6 +45,7 @@ AbstractPageHeader {
             left: parent.left
             right: actionsLayout.left
             leftMargin: Units.largeSpacing
+            rightMargin: Units.smallSpacing
         }
 
         visible: width > item.Layout.minimumWidth
