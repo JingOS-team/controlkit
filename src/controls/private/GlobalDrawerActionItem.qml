@@ -35,7 +35,7 @@ BasicListItem {
     checked: modelData.checked || (actionsMenu && actionsMenu.visible)
     width: parent.width
 
-    icon: modelData.icon
+    icon: modelData.icon.name || modelData.icon.source
     iconColor: modelData.icon.color
 
     label: width > height * 2 ? MnemonicData.richTextLabel : ""
