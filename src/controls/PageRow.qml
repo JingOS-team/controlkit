@@ -574,6 +574,7 @@ T.Control {
                  || globalToolBar.actualStyle === ApplicationHeaderStyle.TabBar)
                  ? globalToolBarUI.height : 0
 
+        // Internal hidden api for Page
         readonly property Item __pageRow: root
         columnResizeMode: root.wideMode ? ColumnView.FixedColumns : ColumnView.SingleColumn
         columnWidth: root.defaultColumnWidth
