@@ -474,6 +474,9 @@ void ContentItem::itemChange(QQuickItem::ItemChange change, const QQuickItem::It
     }
     case QQuickItem::ItemVisibleHasChanged:
         updateVisibleItems();
+        if (value.boolValue) {
+            m_view->polish();
+        }
         break;
     default:
         break;
