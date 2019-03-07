@@ -224,6 +224,29 @@ T2.Page {
     readonly property alias overlay: overlayItem
 
     /**
+     * titleDelegate: Component
+     * The delegate which will be used to draw the page title. It can be customized to put any kind of Item in there.
+     * @since 2.7
+     */
+    property Component titleDelegate: Kirigami.Heading {
+        id: title
+        level: 1
+        Layout.fillWidth: true
+
+        Layout.preferredWidth: titleTextMetrics.width
+        Layout.minimumWidth: titleTextMetrics.width
+        opacity: root.isCurrentPage ? 1 : 0.4
+        maximumLineCount: 1
+        elide: Text.ElideRight
+        text: root.title
+        TextMetrics {
+            id: titleTextMetrics
+            text: root.title
+            font: title.font
+        }
+    }
+
+    /**
      * emitted When the application requests a Back action
      * For instance a global "back" shortcut or the Android
      * Back button has been pressed.
@@ -233,23 +256,6 @@ T2.Page {
      */
     signal backRequested(var event);
 
-    property Component titleDelegate: Kirigami.Heading {
-            id: title
-            level: 1
-            Layout.fillWidth: true
-
-            Layout.preferredWidth: titleTextMetrics.width
-            Layout.minimumWidth: titleTextMetrics.width
-            opacity: root.isCurrentPage ? 1 : 0.4
-            maximumLineCount: 1
-            elide: Text.ElideRight
-            text: root.title
-            TextMetrics {
-                id: titleTextMetrics
-                text: root.title
-                font: title.font
-            }
-        }
 
     // Look for sheets and cose them
     //FIXME: port Sheets to Popup?
