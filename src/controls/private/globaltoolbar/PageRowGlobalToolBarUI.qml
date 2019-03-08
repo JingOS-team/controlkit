@@ -25,7 +25,7 @@ import "../../templates/private" as TemplatesPrivate
  
 Kirigami.AbstractApplicationHeader {
     id: header
-    readonly property int leftReservedSpace: (buttonsLayout.visible && buttonsLayout.visibleChildren.length > 1 ? buttonsLayout.width : 0) + (leftHandleAnchor.visible ? leftHandleAnchor.width + Kirigami.Units.largeSpacing : 0)
+    readonly property int leftReservedSpace: (buttonsLayout.visible && buttonsLayout.visibleChildren.length > 1 ? buttonsLayout.width : 0) + (leftHandleAnchor.visible ? leftHandleAnchor.width  : 0)
     readonly property int rightReservedSpace: rightHandleAnchor.visible ? backButton.background.implicitHeight : 0
 
     readonly property alias leftHandleAnchor: leftHandleAnchor
@@ -60,7 +60,7 @@ Kirigami.AbstractApplicationHeader {
             id: buttonsLayout
             Layout.fillHeight: true
 
-            Layout.leftMargin: leftHandleAnchor.visible ? Kirigami.Units.largeSpacing : 0
+            Layout.leftMargin: leftHandleAnchor.visible ? Kirigami.Units.smallSpacing : 0
 
             visible: (globalToolBar.showNavigationButtons || root.layers.depth > 1) && (globalToolBar.actualStyle != Kirigami.ApplicationHeaderStyle.None)
 
@@ -71,12 +71,6 @@ Kirigami.AbstractApplicationHeader {
             }
             TemplatesPrivate.ForwardButton {
                 Layout.preferredWidth: height
-            }
-            Kirigami.Separator {
-                visible: globalToolBar.showNavigationButtons || root.layers.depth > 1
-                Layout.preferredHeight: parent.parent.height * 0.6
-                //FIXME: hacky
-                opacity: buttonsLayout.visibleChildren.length > 1 || leftHandleAnchor.visible
             }
         }
 
