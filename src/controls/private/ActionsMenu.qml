@@ -44,6 +44,7 @@ Controls.Menu
     Instantiator {
         id: actionsInstantiator
 
+        active: theMenu.visible
         delegate: QtObject {
             readonly property QtObject action: modelData
             property QtObject item: null
