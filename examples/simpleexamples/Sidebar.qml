@@ -38,15 +38,15 @@ Kirigami.ApplicationWindow {
         contentItem: ColumnLayout {
             Layout.preferredWidth: Kirigami.Units.gridUnit * 20
 
-            Kirigami.Label {
-                anchors.horizontalCenter: parent.horizontalCenter
+            Controls.Label {
+                Layout.alignment: Qt.AlignHCenter
                 text: "This is a sidebar"
                 Layout.fillWidth: true
                 width: parent.width - Kirigami.Units.smallSpacing * 2
                 wrapMode: Text.WordWrap
             }
             Controls.Button {
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
                 text: "Modal"
                 checkable: true
                 Layout.fillWidth: true
@@ -68,15 +68,15 @@ Kirigami.ApplicationWindow {
         contentItem: ColumnLayout {
             Layout.preferredWidth: Kirigami.Units.gridUnit * 10
 
-            Kirigami.Label {
-                anchors.horizontalCenter: parent.horizontalCenter
+            Controls.Label {
+                Layout.alignment: Qt.AlignHCenter
                 text: "This is a sidebar"
                 Layout.fillWidth: true
                 width: parent.width - Kirigami.Units.smallSpacing * 2
                 wrapMode: Text.WordWrap
             }
             Controls.Button {
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
                 text: "Modal"
                 checkable: true
                 Layout.fillWidth: true
@@ -171,8 +171,10 @@ Kirigami.ApplicationWindow {
         MultipleColumnsGallery {}
     }
     footer: Controls.ToolBar {
-        position: ToolBar.Footer
-        contentItem: Controls.Label {
+        position: Controls.ToolBar.Footer
+        Controls.Label {
+            anchors.fill: parent
+            verticalAlignment: Qt.AlignVCenter
             text: "Global Footer"
         }
     }

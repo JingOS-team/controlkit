@@ -19,6 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
+import QtQuick.Controls 2.0 as Controls
 import org.kde.kirigami 2.4 as Kirigami
 
 Kirigami.AbstractApplicationWindow {
@@ -36,23 +37,23 @@ Kirigami.AbstractApplicationWindow {
                 text: "View"
                 iconName: "view-list-icons"
                 Kirigami.Action {
-                        text: "action 1"
+                    text: "action 1"
                 }
                 Kirigami.Action {
-                        text: "action 2"
+                    text: "action 2"
                 }
                 Kirigami.Action {
-                        text: "action 3"
+                    text: "action 3"
                 }
             },
             Kirigami.Action {
                 text: "Sync"
                 iconName: "folder-sync"
                 Kirigami.Action {
-                        text: "action 4"
+                    text: "action 4"
                 }
                 Kirigami.Action {
-                        text: "action 5"
+                    text: "action 5"
                 }
             },
             Kirigami.Action {

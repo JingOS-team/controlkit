@@ -20,6 +20,7 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4 as Kirigami
+import QtQuick.Controls 2.0 as Controls
 
 Kirigami.ApplicationWindow {
     id: root
@@ -34,7 +35,7 @@ Kirigami.ApplicationWindow {
         contentItem: Item {
             implicitWidth: Kirigami.Units.gridUnit * 10
 
-            Kirigami.Label {
+            Controls.Label {
                 text: "This is a sidebar"
                 width: parent.width - Kirigami.Units.smallSpacing * 2
                 wrapMode: Text.WordWrap

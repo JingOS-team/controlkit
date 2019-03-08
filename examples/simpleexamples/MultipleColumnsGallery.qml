@@ -58,21 +58,21 @@ ScrollablePage {
             Layout.minimumHeight: Layout.minimumWidth
         }
         Controls.Label {
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
             text: "Page implicitWidth: " + page.implicitWidth
         }
         Controls.Button {
             text: "Push Another Page"
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
             onClicked: pageStack.push(Qt.resolvedUrl("MultipleColumnsGallery.qml"));
         }
         Controls.Button {
             text: "Pop A Page"
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
             onClicked: pageStack.pop();
         }
         RowLayout {
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
             Controls.TextField {
                 id: edit
                 text: page.title

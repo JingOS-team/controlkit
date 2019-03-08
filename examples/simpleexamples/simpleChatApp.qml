@@ -66,9 +66,8 @@ Kirigami.ApplicationWindow {
         bottomPadding: 0
         leftPadding: 0
         rightPadding: 0
-        
+
         contentItem: ColumnLayout {
-            
             readonly property int implicitWidth: root.columnWidth
             spacing: 0
             QQC2.Control {
