@@ -32,6 +32,7 @@ Kirigami.AbstractApplicationHeader {
     readonly property alias rightHandleAnchor: rightHandleAnchor
 
     readonly property bool breadcrumbVisible: breadcrumbLoader.opacity
+    readonly property bool layerIsMainRow: root.layers.currentItem == root.contentItem
 
     height: visible ? implicitHeight : 0
     minimumHeight: globalToolBar.minimumHeight
@@ -87,7 +88,7 @@ Kirigami.AbstractApplicationHeader {
             Layout.preferredHeight: -1
             property Kirigami.PageRow pageRow: root
 
-            opacity: pageRow.layers.depth < 2 && active
+            opacity: layerIsMainRow && active
             enabled: opacity > 0
 
             active: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb
