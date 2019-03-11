@@ -21,9 +21,12 @@ function(kirigami_package_breeze_icons)
 
         #search in other sizes as well
         if (path STREQUAL "")
-             file(GLOB_RECURSE path ${_BREEZEICONS_DIR}/icons/*/32/${icon}.svg )
+            file(GLOB_RECURSE path ${_BREEZEICONS_DIR}/icons/*/32/${icon}.svg )
             if (path STREQUAL "")
                 file(GLOB_RECURSE path ${_BREEZEICONS_DIR}/icons/*/22/${icon}.svg )
+                if (path STREQUAL "")
+                    file(GLOB_RECURSE path ${_BREEZEICONS_DIR}/icons/*/16/${icon}.svg )
+                endif()
             endif()
         endif()
         if (path STREQUAL "")
