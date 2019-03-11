@@ -223,7 +223,7 @@ void ColumnViewAttached::setPreventStealing(bool prevent)
     if (prevent == m_preventStealing) {
         return;
     }
-
+qWarning()<<"BBBB"<<this<<prevent<<parent();
     m_preventStealing = prevent;
     emit preventStealingChanged();
 }
@@ -1017,7 +1017,7 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
             candidateItem = candidateItem->parentItem();
         }
         if (candidateItem->parentItem() == m_contentItem) {
-            ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(item, true));
+            ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(candidateItem, true));
             if (attached->preventStealing()) {
                 return false;
             }
