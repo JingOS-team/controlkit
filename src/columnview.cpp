@@ -223,7 +223,7 @@ void ColumnViewAttached::setPreventStealing(bool prevent)
     if (prevent == m_preventStealing) {
         return;
     }
-qWarning()<<"BBBB"<<this<<prevent<<parent();
+
     m_preventStealing = prevent;
     emit preventStealingChanged();
 }
@@ -541,7 +541,7 @@ ColumnView::ColumnView(QQuickItem *parent)
 {
     //NOTE: this is to *not* trigger itemChange
     m_contentItem = new ContentItem(this);
-    setAcceptedMouseButtons(Qt::LeftButton);
+    setAcceptedMouseButtons(Qt::LeftButton | Qt::BackButton | Qt::ForwardButton);
     setFiltersChildMouseEvents(true);
 
     connect(m_contentItem->m_slideAnim, &QPropertyAnimation::finished, this, [this] () {
@@ -798,7 +798,7 @@ bool ColumnView::interactive() const
 
 void ColumnView::setInteractive(bool interactive)
 {
-    if (m_interactive != interactive) {
+    if (m_interactive == interactive) {
         return;
     }
 
@@ -984,12 +984,17 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
 
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
+        QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
+        if (me->button() != Qt::LeftButton) {
+            return false;
+        }
+
         m_contentItem->m_slideAnim->stop();
         if (item->property("preventStealing").toBool()) {
             m_contentItem->snapToItem();
             return false;
         }
-        QMouseEvent *me = static_cast<QMouseEvent *>(event);
         m_oldMouseX = m_startMouseX = mapFromItem(item, me->localPos()).x();
 
         me->setAccepted(false);
@@ -1007,6 +1012,12 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
         break;
     }
     case QEvent::MouseMove: {
+        QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
+        if (!(me->buttons() & Qt::LeftButton)) {
+            return false;
+        }
+
         if ((!keepMouseGrab() && item->keepMouseGrab()) || item->property("preventStealing").toBool()) {
             m_contentItem->snapToItem();
             return false;
@@ -1023,7 +1034,6 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
             }
         }
 
-        QMouseEvent *me = static_cast<QMouseEvent *>(event);
         const QPointF pos = mapFromItem(item, me->localPos());
 
         const bool wasDragging = m_dragging;
@@ -1048,6 +1058,12 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
         break;
     }
     case QEvent::MouseButtonRelease: {
+        QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
+        if (me->button() != Qt::LeftButton) {
+            return false;
+        }
+
         m_contentItem->snapToItem();
         if (m_dragging) {
             m_dragging = false;
@@ -1057,7 +1073,7 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
         if (item->property("preventStealing").toBool()) {
             return false;
         }
-        QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
         event->accept();
 
         //if a drag happened, don't pass the event
@@ -1077,6 +1093,11 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
 
 void ColumnView::mousePressEvent(QMouseEvent *event)
 {
+    if (event->button() == Qt::BackButton || event->button() == Qt::ForwardButton) {
+        event->accept();
+        return;
+    }
+
     if (!m_interactive) {
         return;
     }
@@ -1090,6 +1111,11 @@ void ColumnView::mousePressEvent(QMouseEvent *event)
 
 void ColumnView::mouseMoveEvent(QMouseEvent *event)
 {
+    if (event->buttons() & Qt::BackButton || event->buttons() & Qt::ForwardButton) {
+        event->accept();
+        return;
+    }
+
     if (!m_interactive) {
         return;
     }
@@ -1115,6 +1141,16 @@ void ColumnView::mouseMoveEvent(QMouseEvent *event)
 
 void ColumnView::mouseReleaseEvent(QMouseEvent *event)
 {
+    if (event->button() == Qt::BackButton) {
+        setCurrentIndex(m_currentIndex - 1);
+        event->accept();
+        return;
+    } else if (event->button() == Qt::ForwardButton) {
+        setCurrentIndex(m_currentIndex + 1);
+        event->accept();
+        return;
+    }
+
     if (!m_interactive) {
         return;
     }
@@ -1136,7 +1172,9 @@ void ColumnView::mouseUngrabEvent()
         emit draggingChanged();
     }
 
-    m_contentItem->snapToItem();
+    if (m_contentItem->m_slideAnim->state() != QAbstractAnimation::Running) {
+        m_contentItem->snapToItem();
+    }
     setKeepMouseGrab(false);
 }
 
