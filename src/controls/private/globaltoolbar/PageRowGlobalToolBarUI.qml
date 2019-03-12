@@ -33,6 +33,7 @@ Kirigami.AbstractApplicationHeader {
 
     readonly property bool breadcrumbVisible: breadcrumbLoader.opacity
     readonly property bool layerIsMainRow: root.layers.currentItem == root.contentItem
+    readonly property Item currentItem: layerIsMainRow ? root.currentItem : root.layers.currentItem
 
     height: visible ? implicitHeight : 0
     minimumHeight: globalToolBar.minimumHeight
@@ -85,7 +86,7 @@ Kirigami.AbstractApplicationHeader {
             opacity: layerIsMainRow && active
             enabled: opacity > 0
 
-            active: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb
+            active: (globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb) && currentItem.globalToolBarStyle != Kirigami.ApplicationHeaderStyle.None
 
             //TODO: different implementation?
             source: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar ? Qt.resolvedUrl("TabBarControl.qml") : Qt.resolvedUrl("BreadcrumbControl.qml")
