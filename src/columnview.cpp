@@ -497,7 +497,8 @@ void ContentItem::syncItemsOrder()
     }
 
     m_items = childItems();
-    polish();
+    //NOTE: polish() here sometimes gets indefinitely delayed and items chaging order isn't seen
+    layoutItems();
 }
 
 void ContentItem::updateRepeaterModel()
