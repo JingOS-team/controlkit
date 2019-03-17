@@ -20,6 +20,7 @@
  */
 
 import QtQuick 2.7
+import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.5 as Kirigami
 import "private"
 
@@ -113,6 +114,15 @@ T.InlineMessage {
             opacity: 0.20
 
             radius: bgFillRect.radius
+        }
+
+        layer.enabled: true
+        layer.effect: DropShadow {
+            horizontalOffset: 0
+            verticalOffset: 1
+            radius: 12
+            samples: 32
+            color: Qt.rgba(0, 0, 0, 0.5)
         }
     }
 }
