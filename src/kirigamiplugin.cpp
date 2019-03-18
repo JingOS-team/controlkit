@@ -45,7 +45,7 @@ static QString s_selectedStyle;
 
 QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
 {
-    foreach (const QString &style, m_stylesFallbackChain) {
+    for (const QString &style : qAsConst(m_stylesFallbackChain)) {
         const QString candidate = QStringLiteral("styles/") + style + QLatin1Char('/') + fileName;
         if (QFile::exists(resolveFilePath(candidate))) {
 #ifdef KIRIGAMI_BUILD_TYPE_STATIC
