@@ -100,9 +100,7 @@ T2.Drawer {
      * For OverlayDrawer the default is view-right-close or view-left-close depending on the drawer location
      * @since 2.5
      */
-    property alias handleOpenIcon: handleOpenIconGroup
-    IconPropertiesGroup {
-        id: handleOpenIconGroup
+    readonly property IconPropertiesGroup handleOpenIcon: IconPropertiesGroup {
         source: root.edge === Qt.RightEdge ? "view-right-close" : "view-left-close"
     }
 
@@ -117,8 +115,7 @@ T2.Drawer {
      * For OverlayDrawer the default is view-right-new or view-left-new depending on the drawer location
      * @since 2.5
      */
-    property alias handleClosedIcon: handleClosedIconGroup
-    IconPropertiesGroup {
+    property IconPropertiesGroup handleClosedIcon: IconPropertiesGroup {
         id: handleClosedIconGroup
         source: root.edge === Qt.RightEdge ? "view-right-new" : "view-left-new"
     }
