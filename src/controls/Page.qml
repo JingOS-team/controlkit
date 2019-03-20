@@ -294,7 +294,7 @@ T2.Page {
      * application which can't have controls on the bottom except the text field.
      */
     property int globalToolBarStyle: {
-        if (globalToolBar.row) {
+        if (globalToolBar.row && !globalToolBar.stack) {
             return globalToolBar.row.globalToolBar.actualStyle;
         } else if (globalToolBar.stack) {
             return Kirigami.Settings.isMobile ? Kirigami.ApplicationHeaderStyle.Titles : Kirigami.ApplicationHeaderStyle.ToolBar;
@@ -379,7 +379,7 @@ T2.Page {
             property T2.StackView stack
 
             visible: active
-            active: row && (root.globalToolBarStyle === Kirigami.ApplicationHeaderStyle.ToolBar || root.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.Titles)
+            active: (row || stack) && (root.globalToolBarStyle === Kirigami.ApplicationHeaderStyle.ToolBar || root.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.Titles)
 
             function syncSource() {
                 if (row && active) {
@@ -391,7 +391,6 @@ T2.Page {
                 }
             }
         },
-
         //bottom action buttons
         Loader {
             id: actionButtons
