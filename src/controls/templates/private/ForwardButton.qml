@@ -26,6 +26,8 @@ import org.kde.kirigami 2.4
 Controls.ToolButton {
     id: button
 
+    icon.name: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
+
     enabled: applicationWindow().pageStack.currentIndex < applicationWindow().pageStack.depth-1
 
     visible: applicationWindow().pageStack.layers.depth == 1 && applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
@@ -34,13 +36,7 @@ Controls.ToolButton {
 
     onClicked: applicationWindow().pageStack.goForward();
 
-    Icon {
-        anchors.centerIn: parent
-        width: Math.min(parent.width, Units.iconSizes.smallMedium)
-        height: width
-        enabled: button.enabled
-        source: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
-    }
+
 
     Controls.ToolTip {
         visible: button.hovered

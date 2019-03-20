@@ -26,6 +26,8 @@ import org.kde.kirigami 2.4
 Controls.ToolButton {
     id: button
 
+    icon.name: (LayoutMirroring.enabled ? "go-previous-symbolic-rtl" : "go-previous-symbolic")
+
     enabled: applicationWindow().pageStack.layers.depth > 1 || (applicationWindow().pageStack.depth > 1 && (applicationWindow().pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0))
 
     visible: applicationWindow().pageStack.layers.depth > 1 || applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
@@ -38,13 +40,6 @@ Controls.ToolButton {
         } else {
             applicationWindow().pageStack.goBack();
         }
-    }
-
-    Icon {
-        anchors.centerIn: parent
-        width: Math.min(parent.width, Units.iconSizes.smallMedium)
-        height: width
-        source: (LayoutMirroring.enabled ? "go-previous-symbolic-rtl" : "go-previous-symbolic")
     }
 
     Controls.ToolTip {
