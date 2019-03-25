@@ -143,6 +143,24 @@ void DelegateRecycler::syncModel()
     }
 }
 
+void DelegateRecycler::syncModelProperties()
+{
+    const QVariant model = m_propertiesTracker->property("trackedModel");
+    if (!model.isValid()) {
+        return;
+    }
+    QQmlContext *ctx = QQmlEngine::contextForObject(m_item)->parentContext();
+
+    //try to bind all properties
+    QObject *modelObj = model.value<QObject *>();
+    if (modelObj) {
+        const QMetaObject *metaObj = modelObj->metaObject();
+        for (int i = metaObj->propertyOffset(); i < metaObj->propertyCount(); ++i) {
+            ctx->setContextProperty(QString::fromUtf8(metaObj->property(i).name()), metaObj->property(i).read(modelObj));
+        }
+    }
+}
+
 void DelegateRecycler::syncModelData()
 {
     const QVariant newModelData = m_propertiesTracker->property("trackedModelData");
@@ -235,9 +253,16 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
         if (modelObj) {
             const QMetaObject *metaObj = modelObj->metaObject();
             for (int i = metaObj->propertyOffset(); i < metaObj->propertyCount(); ++i) {
-                ctx->setContextProperty(QString::fromUtf8(metaObj->property(i).name()), metaObj->property(i).read(modelObj));
+                QMetaProperty prop = metaObj->property(i);
+                ctx->setContextProperty(QString::fromUtf8(prop.name()), prop.read(modelObj));
+                if (prop.hasNotifySignal()) {
+                    QMetaMethod updateSlot = metaObject()->method(
+                    metaObject()->indexOfSlot("syncModelProperties()"));
+                    connect(modelObj, prop.notifySignal(), this, updateSlot);
+                }
             }
         }
+
         ctx->setContextProperty(QStringLiteral("model"), m_propertiesTracker->property("trackedModel"));
         ctx->setContextProperty(QStringLiteral("modelData"), m_propertiesTracker->property("trackedModelData"));
         ctx->setContextProperty(QStringLiteral("index"), m_propertiesTracker->property("trackedIndex"));

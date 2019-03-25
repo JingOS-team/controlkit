@@ -75,6 +75,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void syncIndex();
     void syncModel();
+    void syncModelProperties();
     void syncModelData();
 
 private:
