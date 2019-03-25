@@ -203,8 +203,14 @@ void MnemonicAttached::updateSequence()
             m_richTextLabel.replace(QRegularExpression(QLatin1String("\\&([^\\&])")), QStringLiteral("\\1"));
             m_actualRichTextLabel = m_richTextLabel;
             m_mnemonicLabel = m_richTextLabel;
-            m_mnemonicLabel.replace(c, QLatin1String("&") % c);
-            m_richTextLabel.replace(QString(c), QLatin1String("<u>") % c % QLatin1String("</u>"));
+            const int mnemonicPos = m_mnemonicLabel.indexOf(c);
+            if (mnemonicPos > -1) {
+                m_mnemonicLabel.replace(mnemonicPos, 1, c);
+            }
+            const int richTextPos = m_richTextLabel.indexOf(c);
+            if (richTextPos > -1) {
+                m_richTextLabel.replace(richTextPos, 1, QLatin1String("<u>") % c % QLatin1String("</u>"));
+            }
 
             //remap the sequence of the previous shortcut
             if (otherMa) {
