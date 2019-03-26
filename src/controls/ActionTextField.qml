@@ -23,7 +23,7 @@ import org.kde.kirigami 2.7 as Kirigami
 
 /**
  * This is advanced textfield. It is recommanded to us this class when there
- * is a need to create a create a textfield with action boutons(e.g a clear
+ * is a need to create a create a textfield with action buttons(e.g a clear
  * action).
  *
  * Example usage for a search field:
