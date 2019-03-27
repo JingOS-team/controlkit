@@ -7,6 +7,7 @@ QMAKE_MOC_OPTIONS += -Muri=org.kde.kirigami
 HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/enums.h \
                $$PWD/src/settings.h \
+               $$PWD/src/columnview.h \
                $$PWD/src/formlayoutattached.h \
                $$PWD/src/mnemonicattached.h \
                $$PWD/src/scenepositionattached.h \
@@ -19,6 +20,7 @@ HEADERS     += $$PWD/src/kirigamiplugin.h \
 SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/enums.cpp \
                $$PWD/src/settings.cpp \
+               $$PWD/src/columnview.cpp \
                $$PWD/src/formlayoutattached.cpp \
                $$PWD/src/mnemonicattached.cpp \
                $$PWD/src/scenepositionattached.cpp \
