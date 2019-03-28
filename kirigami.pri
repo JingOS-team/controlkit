@@ -3,6 +3,7 @@ QT          += core qml quick gui svg network quickcontrols2
 HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/enums.h \
                $$PWD/src/settings.h \
+               $$PWD/src/columnview_p.h \
                $$PWD/src/columnview.h \
                $$PWD/src/formlayoutattached.h \
                $$PWD/src/mnemonicattached.h \

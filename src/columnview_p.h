@@ -27,7 +27,8 @@
 class QPropertyAnimation;
 class QQmlComponent;
 
-class QmlComponentsPool: public QObject {
+class QmlComponentsPool: public QObject
+{
     Q_OBJECT
 
 public:
@@ -47,7 +48,8 @@ private:
     QObject *m_instance = nullptr;
 };
 
-class ContentItem : public QQuickItem {
+class ContentItem : public QQuickItem
+{
     Q_OBJECT
 
 public:
