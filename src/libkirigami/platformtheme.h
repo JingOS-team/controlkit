@@ -214,6 +214,8 @@ public:
     //this will be used by desktopicon to fetch icons with KIconLoader
     virtual Q_INVOKABLE QIcon iconFromTheme(const QString &name, const QColor &customColor = Qt::transparent);
 
+    bool supportsIconColoring() const;
+
     //foreground colors
     void setCustomTextColor(const QColor &color = QColor());
     void setCustomDisabledTextColor(const QColor &color = QColor());
@@ -246,7 +248,8 @@ Q_SIGNALS:
 
 protected:
     //Setters, not accessible from QML but from implementations
-    
+    void setSupportsIconColoring(bool support);
+
     //foreground colors
     void setTextColor(const QColor &color);
     void setDisabledTextColor(const QColor &color);
