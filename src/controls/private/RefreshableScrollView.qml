@@ -124,7 +124,7 @@ P.ScrollView {
             onYChanged: {
                 //it's overshooting enough and not reachable: start countdown for reachability
 
-                if (y - busyIndicatorFrame.headerItemHeight > root.topPadding + Units.gridUnit && !applicationWindow().reachableMode) {
+                if (y - busyIndicatorFrame.headerItemHeight > root.topPadding + Units.gridUnit && (typeof(applicationWindow) == "undefined" || !applicationWindow().reachableMode)) {
                     overshootResetTimer.running = true;
                 //not reachable and not overshooting enough, stop reachability countdown
                 } else if (typeof(applicationWindow) == "undefined" || !applicationWindow().reachableMode) {
