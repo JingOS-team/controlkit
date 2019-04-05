@@ -127,7 +127,7 @@ T2.ItemDelegate {
     rightPadding: !LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical && internal.view.T2.ScrollBar.vertical.visible ? internal.view.T2.ScrollBar.vertical.width : padding*2
     bottomPadding: padding
 
-    implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
+    implicitWidth: contentItem ? contentItem.implicitWidth + leftPadding + rightPadding : Units.gridUnit * 12
 
     implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
