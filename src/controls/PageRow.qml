@@ -521,7 +521,7 @@ T.Control {
             right: parent.right
         }
         z: 100
-        active: globalToolBar.actualStyle != ApplicationHeaderStyle.None || firstVisibleItem.globalToolBarStyle == ApplicationHeaderStyle.ToolBar
+        active: globalToolBar.actualStyle != ApplicationHeaderStyle.None || (firstVisibleItem && firstVisibleItem.globalToolBarStyle == ApplicationHeaderStyle.ToolBar)
         visible: active
         height: active ? implicitHeight : 0
         source: Qt.resolvedUrl("private/globaltoolbar/PageRowGlobalToolBarUI.qml");
@@ -583,7 +583,7 @@ T.Control {
     }
 
     Rectangle {
-        anchors.bottom: columnView.bottom
+        anchors.bottom: parent.bottom
         height: Units.smallSpacing
         x: (columnView.width - width) * (columnView.contentX / (columnView.contentWidth - columnView.width))
         width: columnView.width * (columnView.width/columnView.contentWidth)

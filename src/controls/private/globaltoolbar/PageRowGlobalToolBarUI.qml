@@ -31,7 +31,7 @@ Kirigami.AbstractApplicationHeader {
     readonly property alias leftHandleAnchor: leftHandleAnchor
     readonly property alias rightHandleAnchor: rightHandleAnchor
 
-    readonly property bool breadcrumbVisible: breadcrumbLoader.opacity
+    readonly property bool breadcrumbVisible: layerIsMainRow && breadcrumbLoader.active
     readonly property bool layerIsMainRow: root.layers.currentItem == root.contentItem
     readonly property Item currentItem: layerIsMainRow ? root.currentItem : root.layers.currentItem
 
@@ -88,7 +88,7 @@ Kirigami.AbstractApplicationHeader {
             opacity: layerIsMainRow && active
             enabled: opacity > 0
 
-            active: (globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb) && currentItem.globalToolBarStyle != Kirigami.ApplicationHeaderStyle.None
+            active: (globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar || globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.Breadcrumb) && currentItem && currentItem.globalToolBarStyle != Kirigami.ApplicationHeaderStyle.None
 
             //TODO: different implementation?
             source: globalToolBar.actualStyle == Kirigami.ApplicationHeaderStyle.TabBar ? Qt.resolvedUrl("TabBarControl.qml") : Qt.resolvedUrl("BreadcrumbControl.qml")
