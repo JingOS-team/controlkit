@@ -1152,7 +1152,7 @@ void ColumnView::mouseMoveEvent(QMouseEvent *event)
 
 void ColumnView::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::BackButton) {
+    if (event->button() == Qt::BackButton && m_currentIndex > 0) {
         setCurrentIndex(m_currentIndex - 1);
         event->accept();
         return;
