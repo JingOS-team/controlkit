@@ -1061,7 +1061,7 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
     case QEvent::MouseButtonRelease: {
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
-        if (me->button() == Qt::BackButton) {
+        if (me->button() == Qt::BackButton && m_currentIndex > 0) {
             setCurrentIndex(m_currentIndex - 1);
             me->accept();
             return true;
