@@ -245,6 +245,7 @@ Item {
             visible: item.visible
             width: Kirigami.Units.smallSpacing
             height: Kirigami.Units.smallSpacing
+            Layout.topMargin: item.toString().indexOf("Separator")===0 ? Kirigami.Units.smallSpacing : 0 // FIXME: use item instanceof Kirigami.Separator when we can depend from Qt 5.11
             onItemChanged: {
                 if (!item) {
                     labelItem.destroy();
