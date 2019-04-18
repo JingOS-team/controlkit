@@ -354,10 +354,10 @@ void ContentItem::layoutItems()
         attached->setIndex(i++);
 
         implicitWidth += child->implicitWidth();
-    qWarning()<<"dfdfdf"<<child<<child->implicitWidth();
+
         implicitHeight = qMax(implicitHeight, child->implicitHeight());
     }
-qWarning()<<"RATTATTTATTAAA"<<implicitWidth<<implicitHeight;
+
     setWidth(partialWidth);
 
     setImplicitWidth(implicitWidth);
