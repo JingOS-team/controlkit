@@ -28,6 +28,7 @@
 #include "mnemonicattached.h"
 #include "delegaterecycler.h"
 #include "scenepositionattached.h"
+#include "wheelhandler.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -185,6 +186,10 @@ void KirigamiPlugin::registerTypes(const char *uri)
     //2.8
     qmlRegisterType(componentUrl(QStringLiteral("SearchField.qml")), uri, 2, 8, "SearchField");
     qmlRegisterType(componentUrl(QStringLiteral("PasswordField.qml")), uri, 2, 8, "PasswordField");
+
+    //2.9
+    qmlRegisterType<WheelHandler>(uri, 2, 9, "WheelHandler");
+    qmlRegisterUncreatableType<KirigamiWheelEvent>(uri, 2, 9, "WheelEvent", QStringLiteral("Cannot create objects of type WheelEvent."));
 
     qmlProtectModule(uri, 2);
 }
