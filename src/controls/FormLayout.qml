@@ -69,6 +69,10 @@ Item {
     implicitHeight: lay.implicitHeight
     Layout.preferredHeight: lay.implicitHeight
 
+    Component.onCompleted: {
+        relayoutTimer.triggered()
+    }
+
     /**
      * twinFormLayouts: list<FormLayout>
      * If for some implementation reason multiple FormLayouts has to appear
