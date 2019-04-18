@@ -340,6 +340,8 @@ void ContentItem::layoutItems()
     setY(m_view->topPadding());
     setHeight(m_view->height() - m_view->topPadding() - m_view->bottomPadding());
 
+    qreal implicitWidth = 0;
+    qreal implicitHeight = 0;
     qreal partialWidth = 0;
     int i = 0;
     for (QQuickItem *child : m_items) {
@@ -350,8 +352,19 @@ void ContentItem::layoutItems()
         }
         ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
         attached->setIndex(i++);
+
+        implicitWidth += child->implicitWidth();
+    qWarning()<<"dfdfdf"<<child<<child->implicitWidth();
+        implicitHeight = qMax(implicitHeight, child->implicitHeight());
     }
+qWarning()<<"RATTATTTATTAAA"<<implicitWidth<<implicitHeight;
     setWidth(partialWidth);
+
+    setImplicitWidth(implicitWidth);
+    setImplicitHeight(implicitHeight);
+
+    m_view->setImplicitWidth(implicitWidth);
+    m_view->setImplicitHeight(implicitHeight + m_view->topPadding() + m_view->bottomPadding());
 
     const qreal newContentX = m_viewAnchorItem ? -m_viewAnchorItem->x() : 0.0;
     if (m_shouldAnimate) {

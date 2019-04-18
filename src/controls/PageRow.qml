@@ -151,6 +151,9 @@ T.Control {
      * @since 5.48
      */
     readonly property alias globalToolBar: globalToolBar
+
+    implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
+    implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 //END PROPERTIES
 
 //BEGIN FUNCTIONS
