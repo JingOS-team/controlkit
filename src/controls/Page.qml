@@ -21,7 +21,7 @@ import QtQuick 2.5
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.7 as Kirigami
 import "private"
-import QtQuick.Templates 2.0 as T2
+import QtQuick.Templates 2.1 as T2
 
 /**
  * Page is a container for all the app pages: everything pushed to the
@@ -319,6 +319,8 @@ T2.Page {
         color: Kirigami.Theme.backgroundColor
     }
 
+    implicitHeight: (header ? header.implicitHeight : 0) + (footer ? footer.implicitHeight : 0) + contentItem.implicitHeight + topPadding + bottomPadding
+    implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
 
     //FIXME: on material the shadow would bleed over
     clip: root.header != null;
