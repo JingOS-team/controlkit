@@ -94,18 +94,6 @@ void KirigamiWheelEvent::setAccepted(bool accepted)
 WheelHandler::WheelHandler(QObject *parent)
     : QObject(parent)
 {
-    QQuickItem *item = qobject_cast<QQuickItem *>(parent);
-
-    if (item) {
-        //If it's a scrollview, track its Flickable
-        if (item->inherits("QQuickScrollView")) {
-            QQuickItem *flick = item->property("contentItem").value<QQuickItem *>();
-            if (isFlickable(flick)) {
-                item = flick;
-            }
-        }
-        setTarget(item);
-    }
 }
 
 WheelHandler::~WheelHandler()
@@ -147,45 +135,27 @@ void WheelHandler::setTarget(QQuickItem *target)
     } else {
         m_targetIsFlickable = false;
     }
+
+    emit targetChanged();
 }
 
 bool WheelHandler::eventFilter(QObject *watched, QEvent *event)
 {
-    if (!m_enabled) {
-        return QObject::eventFilter(watched, event);
-    }
-
     if (event->type() == QEvent::Wheel) {
         QWheelEvent *we = static_cast<QWheelEvent *>(event);
         m_wheelEvent.initializeFromEvent(we);
 
         emit wheel(&m_wheelEvent);
 
-        if (m_scrollFlickableParent && !m_wheelEvent.isAccepted()) {
+        if (m_scrollFlickableTarget && !m_wheelEvent.isAccepted()) {
             manageWheel(we);
         }
 
-        if (m_blockParentWheel) {
+        if (m_blockTargetWheel) {
             return true;
         }
     }
     return QObject::eventFilter(watched, event);
-}
-
-bool WheelHandler::isFlickable(QQuickItem *item)
-{
-    Q_ASSERT(item);
-    // Duck typing: accept everyhint that has all the properties we need
-    return item->metaObject()->indexOfProperty("contentX") > -1
-            && item->metaObject()->indexOfProperty("contentY") > -1
-            && item->metaObject()->indexOfProperty("contentWidth") > -1
-            && item->metaObject()->indexOfProperty("contentHeight") > -1
-            && item->metaObject()->indexOfProperty("topMargin") > -1
-            && item->metaObject()->indexOfProperty("bottomMargin") > -1
-            && item->metaObject()->indexOfProperty("leftMargin") > -1
-            && item->metaObject()->indexOfProperty("rightMargin") > -1
-            && item->metaObject()->indexOfProperty("originX") > -1
-            && item->metaObject()->indexOfProperty("originY") > -1;
 }
 
 void WheelHandler::manageWheel(QWheelEvent *event)
