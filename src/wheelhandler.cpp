@@ -23,7 +23,179 @@
 #include <QQuickItem>
 #include <QDebug>
 
+class GlobalWheelFilterSingleton
+{
+public:
+    GlobalWheelFilter self;
+};
 
+Q_GLOBAL_STATIC(GlobalWheelFilterSingleton, privateGlobalWheelFilterSelf)
+
+GlobalWheelFilter::GlobalWheelFilter(QObject *parent)
+    : QObject(parent)
+{
+}
+
+GlobalWheelFilter::~GlobalWheelFilter()
+{}
+
+GlobalWheelFilter *GlobalWheelFilter::self()
+{
+    return &privateGlobalWheelFilterSelf()->self;
+}
+
+void GlobalWheelFilter::setItemHandlerAssociation(QQuickItem *item, WheelHandler *handler)
+{
+    if (!m_handlersForItem.contains(handler->target())) {
+        handler->target()->installEventFilter(this);
+    }
+    m_handlersForItem.insert(item, handler);
+
+    connect(item, &QObject::destroyed, this, [this](QObject *obj) {
+        QQuickItem *item = static_cast<QQuickItem *>(obj);
+        m_handlersForItem.remove(item);
+    });
+
+    connect(handler, &QObject::destroyed, this, [this](QObject *obj) {
+        WheelHandler *handler = static_cast<WheelHandler *>(obj);
+        removeItemHandlerAssociation(handler->target(), handler);
+    });
+}
+
+void GlobalWheelFilter::removeItemHandlerAssociation(QQuickItem *item, WheelHandler *handler)
+{
+    if (!item || !handler) {
+        return;
+    }
+    m_handlersForItem.remove(item, handler);
+    if (!m_handlersForItem.contains(item)) {
+        item->removeEventFilter(this);
+    }
+}
+
+bool GlobalWheelFilter::eventFilter(QObject *watched, QEvent *event) 
+{
+    if (event->type() == QEvent::Wheel) {
+        QQuickItem *item = qobject_cast<QQuickItem *>(watched);
+        if (!item) {
+            return QObject::eventFilter(watched, event);
+        }
+        QWheelEvent *we = static_cast<QWheelEvent *>(event);
+        m_wheelEvent.initializeFromEvent(we);
+
+        bool shouldBlock = false;
+        bool shouldScrollFlickable = false;
+
+        for (auto *handler : m_handlersForItem.values(item)) {
+            if (handler->m_blockTargetWheel) {
+                shouldBlock = true;
+            }
+            if (handler->m_scrollFlickableTarget) {
+                shouldScrollFlickable = true;
+            }
+            emit handler->wheel(&m_wheelEvent);
+        }
+
+        if (shouldScrollFlickable && !m_wheelEvent.isAccepted()) {
+            manageWheel(item, we);
+        }
+
+        if (shouldBlock) {
+            return true;
+        }
+    }
+    return QObject::eventFilter(watched, event);
+}
+
+void GlobalWheelFilter::manageWheel(QQuickItem *target, QWheelEvent *event)
+{
+    // Duck typing: accept everyhint that has all the properties we need
+    if (target->metaObject()->indexOfProperty("contentX") == -1
+        || target->metaObject()->indexOfProperty("contentY") == -1
+        || target->metaObject()->indexOfProperty("contentWidth") == -1
+        || target->metaObject()->indexOfProperty("contentHeight") == -1
+        || target->metaObject()->indexOfProperty("topMargin") == -1
+        || target->metaObject()->indexOfProperty("bottomMargin") == -1
+        || target->metaObject()->indexOfProperty("leftMargin") == -1
+        || target->metaObject()->indexOfProperty("rightMargin") == -1
+        || target->metaObject()->indexOfProperty("originX") == -1
+        || target->metaObject()->indexOfProperty("originY") == -1) {
+        return;
+    }
+
+    qreal contentWidth = target->property("contentWidth").toReal();
+    qreal contentHeight = target->property("contentHeight").toReal();
+    qreal contentX = target->property("contentX").toReal();
+    qreal contentY = target->property("contentY").toReal();
+    qreal topMargin = target->property("topMargin").toReal();
+    qreal bottomMargin = target->property("bottomMargin").toReal();
+    qreal leftMargin = target->property("leftMaring").toReal();
+    qreal rightMargin = target->property("rightMargin").toReal();
+    qreal originX = target->property("originX").toReal();
+    qreal originY = target->property("originY").toReal();
+
+    // Scroll Y
+    if (contentHeight > target->height()) {
+
+        int y = event->pixelDelta().y() != 0 ? event->pixelDelta().y() : event->angleDelta().y() / 8;
+
+        //if we don't have a pixeldelta, apply the configured mouse wheel lines
+        if (!event->pixelDelta().y()) {
+            y *= Settings::self()->mouseWheelScrollLines();
+        }
+
+        // Scroll one page regardless of delta:
+        if ((event->modifiers() & Qt::ControlModifier) || (event->modifiers() & Qt::ShiftModifier)) {
+            if (y > 0) {
+                y = target->height();
+            } else if (y < 0) {
+                y = -target->height();
+            }
+        }
+
+        qreal minYExtent = topMargin - originY;
+        qreal maxYExtent = target->height() - (contentHeight + bottomMargin + originY);
+
+        target->setProperty("contentY", qMin(-maxYExtent, qMax(-minYExtent, contentY - y)));
+    }
+    
+    //Scroll X
+    if (contentWidth > target->width()) {
+
+        int x = event->pixelDelta().x() != 0 ? event->pixelDelta().x() : event->angleDelta().x() / 8;
+
+        // Special case: when can't scroll vertically, scroll horizontally with vertical wheel as well
+        if (x == 0 && contentHeight <= target->height()) {
+            x = event->pixelDelta().y() != 0 ? event->pixelDelta().y() : event->angleDelta().y() / 8;
+        }
+
+        //if we don't have a pixeldelta, apply the configured mouse wheel lines
+        if (!event->pixelDelta().x()) {
+            x *= Settings::self()->mouseWheelScrollLines();
+        }
+
+        // Scroll one page regardless of delta:
+        if ((event->modifiers() & Qt::ControlModifier) || (event->modifiers() & Qt::ShiftModifier)) {
+            if (x > 0) {
+                x = target->width();
+            } else if (x < 0) {
+                x = -target->width();
+            }
+        }
+
+        qreal minXExtent = leftMargin - originX;
+        qreal maxXExtent = target->width() - (contentWidth + rightMargin + originX);
+
+        target->setProperty("contentX", qMin(-maxXExtent, qMax(-minXExtent, contentX - x)));
+    }
+
+    //this is just for making the scrollbar 
+    target->metaObject()->invokeMethod(target, "flick", Q_ARG(double, 0), Q_ARG(double, 1));
+    target->metaObject()->invokeMethod(target, "cancelFlick");
+}
+
+
+////////////////////////////
 KirigamiWheelEvent::KirigamiWheelEvent(QObject *parent)
     : QObject(parent)
 {}
@@ -112,133 +284,15 @@ void WheelHandler::setTarget(QQuickItem *target)
     }
 
     if (m_target) {
-        m_target->removeEventFilter(this);
+        GlobalWheelFilter::self()->removeItemHandlerAssociation(m_target, this);
     }
 
     m_target = target;
 
-    if (m_target) {
-        m_target->installEventFilter(this);
-
-        // Duck typing: accept everyhint that has all the properties we need
-        m_targetIsFlickable = m_target->metaObject()->indexOfProperty("contentX") > -1
-            && m_target->metaObject()->indexOfProperty("contentY") > -1
-            && m_target->metaObject()->indexOfProperty("contentWidth") > -1
-            && m_target->metaObject()->indexOfProperty("contentHeight") > -1
-            && m_target->metaObject()->indexOfProperty("topMargin") > -1
-            && m_target->metaObject()->indexOfProperty("bottomMargin") > -1
-            && m_target->metaObject()->indexOfProperty("leftMargin") > -1
-            && m_target->metaObject()->indexOfProperty("rightMargin") > -1
-            && m_target->metaObject()->indexOfProperty("originX") > -1
-            && m_target->metaObject()->indexOfProperty("originY") > -1;
-
-    } else {
-        m_targetIsFlickable = false;
-    }
+    GlobalWheelFilter::self()->setItemHandlerAssociation(target, this);
 
     emit targetChanged();
 }
 
-bool WheelHandler::eventFilter(QObject *watched, QEvent *event)
-{
-    if (event->type() == QEvent::Wheel) {
-        QWheelEvent *we = static_cast<QWheelEvent *>(event);
-        m_wheelEvent.initializeFromEvent(we);
-
-        emit wheel(&m_wheelEvent);
-
-        if (m_scrollFlickableTarget && !m_wheelEvent.isAccepted()) {
-            manageWheel(we);
-        }
-
-        if (m_blockTargetWheel) {
-            return true;
-        }
-    }
-    return QObject::eventFilter(watched, event);
-}
-
-void WheelHandler::manageWheel(QWheelEvent *event)
-{
-    if (!m_targetIsFlickable) {
-        return;
-    }
-
-    qreal contentWidth = m_target->property("contentWidth").toReal();
-    qreal contentHeight = m_target->property("contentHeight").toReal();
-    qreal contentX = m_target->property("contentX").toReal();
-    qreal contentY = m_target->property("contentY").toReal();
-    qreal topMargin = m_target->property("topMargin").toReal();
-    qreal bottomMargin = m_target->property("bottomMargin").toReal();
-    qreal leftMargin = m_target->property("leftMaring").toReal();
-    qreal rightMargin = m_target->property("rightMargin").toReal();
-    qreal originX = m_target->property("originX").toReal();
-    qreal originY = m_target->property("originY").toReal();
-
-    // Scroll Y
-    if (contentHeight > m_target->height()) {
-
-        int y = event->pixelDelta().y() != 0 ? event->pixelDelta().y() : event->angleDelta().y() / 8;
-
-        //if we don't have a pixeldelta, apply the configured mouse wheel lines
-        if (!event->pixelDelta().y()) {
-            y *= Settings::self()->mouseWheelScrollLines();
-        }
-
-        // Scroll one page regardless of delta:
-        if ((event->modifiers() & Qt::ControlModifier) || (event->modifiers() & Qt::ShiftModifier)) {
-            if (y > 0) {
-                y = m_target->height();
-            } else if (y < 0) {
-                y = -m_target->height();
-            }
-        }
-
-        qreal minYExtent = topMargin - originY;
-        qreal maxYExtent = m_target->height() - (contentHeight + bottomMargin + originY);
-
-        m_target->setProperty("contentY", qMin(-maxYExtent, qMax(-minYExtent, contentY - y)));
-    }
-    
-    //Scroll X
-    if (contentWidth > m_target->width()) {
-
-        int x = event->pixelDelta().x() != 0 ? event->pixelDelta().x() : event->angleDelta().x() / 8;
-
-        // Special case: when can't scroll vertically, scroll horizontally with vertical wheel as well
-        if (x == 0 && contentHeight <= m_target->height()) {
-            x = event->pixelDelta().y() != 0 ? event->pixelDelta().y() : event->angleDelta().y() / 8;
-        }
-
-        //if we don't have a pixeldelta, apply the configured mouse wheel lines
-        if (!event->pixelDelta().x()) {
-            x *= Settings::self()->mouseWheelScrollLines();
-        }
-
-        // Scroll one page regardless of delta:
-        if ((event->modifiers() & Qt::ControlModifier) || (event->modifiers() & Qt::ShiftModifier)) {
-            if (x > 0) {
-                x = m_target->width();
-            } else if (x < 0) {
-                x = -m_target->width();
-            }
-        }
-
-        qreal minXExtent = leftMargin - originX;
-        qreal maxXExtent = m_target->width() - (contentWidth + rightMargin + originX);
-
-        m_target->setProperty("contentX", qMin(-maxXExtent, qMax(-minXExtent, contentX - x)));
-    }
-
-    //this is just for making the scrollbar 
-    m_target->metaObject()->invokeMethod(m_target, "flick", Q_ARG(double, 0), Q_ARG(double, 1));
-    m_target->metaObject()->invokeMethod(m_target, "cancelFlick");
-}
-
-
-WheelHandler *WheelHandler::qmlAttachedProperties(QObject *object)
-{
-    return new WheelHandler(object);
-}
 
 #include "moc_wheelhandler.cpp"

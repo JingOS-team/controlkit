@@ -26,6 +26,8 @@
 
 class QWheelEvent;
 
+class WheelHandler;
+
 /**
  * Describes the mouse wheel event
  */
@@ -143,6 +145,30 @@ private:
     bool m_accepted = false;
 };
 
+class GlobalWheelFilter : public QObject
+{
+    Q_OBJECT
+
+public:
+    GlobalWheelFilter(QObject *parent = nullptr);
+    ~GlobalWheelFilter();
+
+    static GlobalWheelFilter *self();
+
+    void setItemHandlerAssociation(QQuickItem *item, WheelHandler *handler);
+    void removeItemHandlerAssociation(QQuickItem *item, WheelHandler *handler);
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
+private:
+    void manageWheel(QQuickItem *target, QWheelEvent *wheel);
+
+    QMultiHash<QQuickItem *, WheelHandler *> m_handlersForItem;
+    KirigamiWheelEvent m_wheelEvent;
+};
+
+
 
 /**
  * This class intercepts the mouse wheel events of its target, and gives them to the user code as a signal, which can be used for custom mouse wheel management code.
@@ -182,12 +208,6 @@ public:
     QQuickItem *target() const;
     void setTarget(QQuickItem *target);
 
-    //QML attached property
-    static WheelHandler *qmlAttachedProperties(QObject *object);
-
-protected:
-    bool eventFilter(QObject *watched, QEvent *event) override;
-
 Q_SIGNALS:
     void targetChanged();
     void blockTargetWheelChanged();
@@ -195,14 +215,12 @@ Q_SIGNALS:
     void wheel(KirigamiWheelEvent *wheel);
 
 private:
-    void manageWheel(QWheelEvent *wheel);
-
     QPointer<QQuickItem> m_target;
     bool m_blockTargetWheel = true;
     bool m_scrollFlickableTarget = true;
-    bool m_targetIsFlickable = false;
     KirigamiWheelEvent m_wheelEvent;
+
+    friend class GlobalWheelFilter;
 };
 
-QML_DECLARE_TYPEINFO(WheelHandler, QML_HAS_ATTACHED_PROPERTIES)
 
