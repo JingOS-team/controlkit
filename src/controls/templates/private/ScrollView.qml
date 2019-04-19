@@ -20,7 +20,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import org.kde.kirigami 2.9 as Kirigami
 
-MouseArea {
+Item {
     id: root
     default property Item contentItem
     property Flickable flickableItem
@@ -59,6 +59,7 @@ MouseArea {
             contentItem.parent = flickableItem.contentItem;
         }
 
+        flickableItem.Kirigami.WheelHandler.enabled = true;
         flickableItem.interactive = true;
         flickableItem.anchors.fill = flickableParent;
 
@@ -88,10 +89,7 @@ MouseArea {
             }
         }
     }
-    Kirigami.WheelHandler {
-        id: wheelHandler
-        target: root.flickableItem
-    }
+
     Item {
         id: flickableParent
         anchors {

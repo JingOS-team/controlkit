@@ -100,16 +100,14 @@ class KirigamiWheelEvent : public QObject
      * // This handler handles automatically the scroll of
      * // flickableItem, unless Ctrl is pressed, in this case the 
      * // app has custom code to handle Ctrl+wheel zooming
-     * Kirigami.WheelHandler {
-     *   target: flickableItem
-     *   blockTargetWheel: true
-     *   scrollFlickableTarget: true
-     *   onWheel: {
-     *        if (wheel.modifiers & Qt.ControlModifier) {
-     *            wheel.accepted = true;
-     *            // Handle scaling of the view
-     *       }
-     *   }
+     * Flickable {
+     *     Kirigami.WheelHandler.enabled: true
+     *     Kirigami.WheelHandler.onWheel: {
+     *         if (wheel.modifiers & Qt.ControlModifier) {
+     *             wheel.accepted = true;
+     *             // Handle scaling of the view
+     *         }
+     *     }
      * }
      * @endcode
      * 
@@ -145,35 +143,32 @@ private:
 
 
 /**
- * This class intercepts the mouse wheel events of its target, and gives them to the user code as a signal, which can be used for custom mouse wheel management code.
- * The handler can block completely the wheel events from its target, and if it's a Flickable, it can automatically handle scrolling on it
+ * This class intercepts the mouse wheel events of its parent, and gives them to the user code as a signal, which can be used for custom mouse wheel management code.
+ * The handler can block completely the wheel events from its parent, and if the parent is a Flickable, it can automatically handle scrolling on it
  */
 class WheelHandler : public QObject
 {
     Q_OBJECT
 
     /**
-     * target: Item
-     *
-     * The target we want to manage wheel events.
-     * We will receive wheel() signals every time the user moves
-     * the mouse wheel (or scrolls with the touchpad) on top
-     * of that item.
+     * enabled: bool
+     * 
+     * If true it will fiter wheel events of its parent item
      */
-    Q_PROPERTY(QQuickItem *target READ target WRITE setTarget NOTIFY targetChanged)
+    Q_PROPERTY(bool enabled MEMBER m_enabled NOTIFY enabledChanged)
 
     /**
-     * blockTargetWheel: bool
+     * blockParentWheel: bool
      *
      * If true, the target won't receive any wheel event at all (default true)
      */
-    Q_PROPERTY(bool blockTargetWheel MEMBER m_blockTargetWheel NOTIFY blockTargetWheelChanged)
+    Q_PROPERTY(bool blockParentWheel MEMBER m_blockParentWheel NOTIFY blockParentWheelChanged)
 
     /**
-     * scrollFlickableTarget: bool
+     * scrollFlickableParent: bool
      * If this property is true and the target is a Flickable, wheel events will cause the Flickable to scroll (default true)
      */
-    Q_PROPERTY(bool scrollFlickableTarget MEMBER m_scrollFlickableTarget NOTIFY scrollFlickableTargetChanged)
+    Q_PROPERTY(bool scrollFlickableParent MEMBER m_scrollFlickableParent NOTIFY scrollFlickableParentChanged)
 
 public:
     explicit WheelHandler(QObject *parent = nullptr);
@@ -189,17 +184,19 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 Q_SIGNALS:
-    void targetChanged();
-    void blockTargetWheelChanged();
-    void scrollFlickableTargetChanged();
+    void enabledChanged();
+    void blockParentWheelChanged();
+    void scrollFlickableParentChanged();
     void wheel(KirigamiWheelEvent *wheel);
 
 private:
+    inline bool isFlickable(QQuickItem *item);
     void manageWheel(QWheelEvent *wheel);
 
     QPointer<QQuickItem> m_target;
-    bool m_blockTargetWheel = true;
-    bool m_scrollFlickableTarget = true;
+    bool m_enabled = false;
+    bool m_blockParentWheel = true;
+    bool m_scrollFlickableParent = true;
     bool m_targetIsFlickable = false;
     KirigamiWheelEvent m_wheelEvent;
 };
