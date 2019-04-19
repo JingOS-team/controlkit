@@ -31,6 +31,15 @@
 #include "../kirigami_version.h"
 #endif
 
+class SettingsSingleton
+{
+public:
+    Settings self;
+};
+
+Q_GLOBAL_STATIC(SettingsSingleton, privateSettingsSelf)
+
+
 Settings::Settings(QObject *parent)
     : QObject(parent)
 {
@@ -72,6 +81,12 @@ Settings::Settings(QObject *parent)
 Settings::~Settings()
 {
 }
+
+Settings *Settings::self()
+{
+    return &privateSettingsSelf()->self;
+}
+
 
 void Settings::setTabletModeAvailable(bool mobileAvailable)
 {

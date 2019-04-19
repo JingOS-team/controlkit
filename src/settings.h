@@ -91,6 +91,8 @@ public:
 
     QStringList information() const;
 
+    static Settings *self();
+
 Q_SIGNALS:
     void tabletModeAvailableChanged();
     void tabletModeChanged();

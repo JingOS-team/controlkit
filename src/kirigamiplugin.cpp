@@ -104,8 +104,10 @@ void KirigamiPlugin::registerTypes(const char *uri)
     s_selectedStyle = m_stylesFallbackChain.first();
 
     qmlRegisterSingletonType<Settings>(uri, 2, 0, "Settings",
-         [](QQmlEngine*, QJSEngine*) -> QObject* {
-             Settings *settings = new Settings;
+         [](QQmlEngine *e, QJSEngine*) -> QObject* {
+             Settings *settings = Settings::self();
+             //singleton managed internally, qml should never delete it
+             e->setObjectOwnership(settings, QQmlEngine::CppOwnership);
              settings->setStyle(s_selectedStyle);
              return settings;
          }
