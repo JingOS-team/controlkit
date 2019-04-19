@@ -125,12 +125,15 @@ void WheelHandler::setTarget(QQuickItem *target)
 
 bool WheelHandler::eventFilter(QObject *watched, QEvent *event)
 {
-    qWarning() <<watched <<event;
     if (event->type() == QEvent::Wheel) {
         QWheelEvent *we = static_cast<QWheelEvent *>(event);
         m_wheelEvent.initializeFromEvent(we);
+
         emit wheel(&m_wheelEvent);
-        return true;
+
+        if (m_blockTargetWheel) {
+            return true;
+        }
     }
     return QObject::eventFilter(watched, event);
 }

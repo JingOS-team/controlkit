@@ -90,36 +90,37 @@ MouseArea {
     }
     Kirigami.WheelHandler {
         target: root.flickableItem
+        blockTargetWheel: true
         onWheel: {
-        if (flickableItem.contentHeight<flickableItem.height) {
-            return;
-        }
-
-        var y = wheel.pixelDelta.y != 0 ? wheel.pixelDelta.y : wheel.angleDelta.y / 8;
-
-        //if we don't have a pixeldelta, apply the configured mouse wheel lines
-        if (!wheel.pixelDelta.y) {
-            y *= Kirigami.Settings.mouseWheelScrollLines;
-        }
-
-        // Scroll one page regardless of delta:
-        if ((wheel.modifiers & Qt.ControlModifier) || (wheel.modifiers & Qt.ShiftModifier)) {
-            if (y > 0) {
-                y = flickableItem.height;
-            } else if (y < 0) {
-                y = -flickableItem.height;
+            if (flickableItem.contentHeight<flickableItem.height) {
+                return;
             }
+
+            var y = wheel.pixelDelta.y != 0 ? wheel.pixelDelta.y : wheel.angleDelta.y / 8;
+
+            //if we don't have a pixeldelta, apply the configured mouse wheel lines
+            if (!wheel.pixelDelta.y) {
+                y *= Kirigami.Settings.mouseWheelScrollLines;
+            }
+
+            // Scroll one page regardless of delta:
+            if ((wheel.modifiers & Qt.ControlModifier) || (wheel.modifiers & Qt.ShiftModifier)) {
+                if (y > 0) {
+                    y = flickableItem.height;
+                } else if (y < 0) {
+                    y = -flickableItem.height;
+                }
+            }
+
+            var minYExtent = flickableItem.topMargin - flickableItem.originY;
+            var maxYExtent = flickableItem.height - (flickableItem.contentHeight + flickableItem.bottomMargin + flickableItem.originY);
+
+            flickableItem.contentY = Math.min(-maxYExtent, Math.max(-minYExtent, flickableItem.contentY - y));
+
+            //this is just for making the scrollbar appear
+            flickableItem.flick(0, 0);
+            flickableItem.cancelFlick();
         }
-
-        var minYExtent = flickableItem.topMargin - flickableItem.originY;
-        var maxYExtent = flickableItem.height - (flickableItem.contentHeight + flickableItem.bottomMargin + flickableItem.originY);
-
-        flickableItem.contentY = Math.min(-maxYExtent, Math.max(-minYExtent, flickableItem.contentY - y));
-
-        //this is just for making the scrollbar appear
-        flickableItem.flick(0, 0);
-        flickableItem.cancelFlick();
-    }
     }
     Item {
         id: flickableParent

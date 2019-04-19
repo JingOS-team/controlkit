@@ -71,6 +71,7 @@ class WheelHandler : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QQuickItem *target READ target WRITE setTarget NOTIFY targetChanged)
+    Q_PROPERTY(bool blockTargetWheel MEMBER m_blockTargetWheel NOTIFY blockTargetWheelChanged)
 
 public:
 
@@ -88,10 +89,12 @@ protected:
 
 Q_SIGNALS:
     void targetChanged();
+    void blockTargetWheelChanged();
     void wheel(KirigamiWheelEvent *wheel);
 
 private:
     QPointer<QQuickItem> m_target;
+    bool m_blockTargetWheel = false;
     bool m_targetIsFlickable = false;
     KirigamiWheelEvent m_wheelEvent;
 };
