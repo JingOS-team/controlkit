@@ -22,6 +22,7 @@ set(kirigami_SRCS
     formlayoutattached.cpp
     scenepositionattached.cpp
     mnemonicattached.cpp
+    wheelhandler.cpp
     ${kirigami_QM_LOADER}
     ${KIRIGAMI_STATIC_FILES}
     )

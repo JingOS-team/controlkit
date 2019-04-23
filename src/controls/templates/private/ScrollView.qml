@@ -18,7 +18,7 @@
  */
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.9 as Kirigami
 
 MouseArea {
     id: root
@@ -45,64 +45,6 @@ MouseArea {
         scrollBarCreationTimer.restart();
     }
 
-    drag.filterChildren: !Settings.tabletMode
-    onPressed: {
-        if (Settings.tabletMode) {
-            return;
-        }
-        mouse.accepted = false;
-        flickableItem.interactive = true;
-    }
-    onReleased:  {
-        if (Settings.tabletMode) {
-            return;
-        }
-        mouse.accepted = false;
-        flickableItem.interactive = false;
-    }
-    onWheel: {
-        if (Settings.tabletMode || flickableItem.contentHeight<flickableItem.height) {
-            return;
-        }
-
-        flickableItem.interactive = false;
-        var y = wheel.pixelDelta.y != 0 ? wheel.pixelDelta.y : wheel.angleDelta.y / 8;
-
-        //if we don't have a pixeldelta, apply the configured mouse wheel lines
-        if (!wheel.pixelDelta.y) {
-            y *= Settings.mouseWheelScrollLines;
-        }
-
-        // Scroll one page regardless of delta:
-        if ((wheel.modifiers & Qt.ControlModifier) || (wheel.modifiers & Qt.ShiftModifier)) {
-            if (y > 0) {
-                y = flickableItem.height;
-            } else if (y < 0) {
-                y = -flickableItem.height;
-            }
-        }
-
-        var minYExtent = flickableItem.topMargin - flickableItem.originY;
-        var maxYExtent = flickableItem.height - (flickableItem.contentHeight + flickableItem.bottomMargin + flickableItem.originY);
-
-        flickableItem.contentY = Math.min(-maxYExtent, Math.max(-minYExtent, flickableItem.contentY - y));
-
-        //this is just for making the scrollbar appear
-        flickableItem.flick(0, 0);
-        flickableItem.cancelFlick();
-    }
-    Connections {
-        target: flickableItem
-        enabled: !Settings.tabletMode
-        onFlickEnded: {
-            flickableItem.interactive = false;
-            flickableItem.contentY = Math.round(flickableItem.contentY);
-        }
-        onMovementEnded: {
-            flickableItem.interactive = false;
-            flickableItem.contentY = Math.round(flickableItem.contentY);
-        }
-    }
 
     onContentItemChanged: {
         if (contentItem.hasOwnProperty("contentY")) {
@@ -116,8 +58,8 @@ MouseArea {
             flickableItem = flickableComponent.createObject(flickableParent);
             contentItem.parent = flickableItem.contentItem;
         }
-        //TODO: find a way to make flicking work on laptops with touch screen
-        flickableItem.interactive = Settings.tabletMode;
+
+        flickableItem.interactive = true;
         flickableItem.anchors.fill = flickableParent;
 
         scrollBarCreationTimer.restart();
@@ -146,21 +88,15 @@ MouseArea {
             }
         }
     }
-    MultiPointTouchArea {
+    Kirigami.WheelHandler {
+        id: wheelHandler
+        target: root.flickableItem
+    }
+    Item {
         id: flickableParent
         anchors {
             fill: parent
         }
-        //clip: true
-        mouseEnabled: false
-        maximumTouchPoints: 1
-        property bool touchPressed: false
-        onPressed: {
-            touchPressed = true;
-            flickableItem.interactive = true;
-        }
-        onReleased: touchPressed = false;
-        onCanceled: touchPressed = false;
     }
     Component {
         id: flickableComponent
@@ -177,7 +113,7 @@ MouseArea {
         ScrollBar {
             z: flickableParent.z + 1
             visible: root.contentItem.visible && size < 1
-            interactive: !Settings.tabletMode
+            interactive: !Kirigami.Settings.tabletMode
 
             //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
             height: parent.height - anchors.topMargin
@@ -193,7 +129,7 @@ MouseArea {
         ScrollBar {
             z: flickableParent.z + 1
             visible: root.contentItem.visible && size < 1
-            interactive: !Settings.tabletMode
+            interactive: !Kirigami.Settings.tabletMode
 
             //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
             height: parent.height - anchors.topMargin
