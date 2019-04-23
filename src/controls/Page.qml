@@ -405,7 +405,7 @@ T2.Page {
             }
             //It should be T2.Page, Qt 5.7 doesn't like it
             property Item page: root
-            height: item ? item.height : 0
+            height: item ? item.implicitHeight : 0
             active: typeof applicationWindow !== "undefined" && (!globalToolBar.row || root.globalToolBarStyle !== Kirigami.ApplicationHeaderStyle.ToolBar) &&
                 //Legacy
                     (typeof applicationWindow === "undefined" ||

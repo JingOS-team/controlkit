@@ -36,7 +36,7 @@ Item {
         bottomMargin: root.page.footer ? root.page.footer.height : 0
     }
     //smallSpacing for the shadow
-    height: button.height + Units.smallSpacing
+    implicitHeight: button.height + Units.smallSpacing
     clip: true
 
     readonly property Page page: root.parent.page
