@@ -22,9 +22,9 @@
 import QtQuick 2.7
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.5 as Kirigami
-import "private"
 
-import "templates" as T
+import "../../private"
+import "../../templates" as T
 
 /**
  * An inline message item with support for informational, positive,
