@@ -18,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "desktopicon.h"
+#include "icon.h"
 #include "libkirigami/platformtheme.h"
 
 #include <QSGSimpleTextureNode>
@@ -128,7 +128,7 @@ QSharedPointer<QSGTexture> ImageTexturesCache::loadTexture(QQuickWindow *window,
 
 Q_GLOBAL_STATIC(ImageTexturesCache, s_iconImageCache)
 
-DesktopIcon::DesktopIcon(QQuickItem *parent)
+Icon::Icon(QQuickItem *parent)
     : QQuickItem(parent),
       m_smooth(false),
       m_changed(false),
@@ -149,11 +149,11 @@ DesktopIcon::DesktopIcon(QQuickItem *parent)
 }
 
 
-DesktopIcon::~DesktopIcon()
+Icon::~Icon()
 {
 }
 
-void DesktopIcon::setSource(const QVariant &icon)
+void Icon::setSource(const QVariant &icon)
 {
     if (m_source == icon) {
         return;
@@ -189,12 +189,12 @@ void DesktopIcon::setSource(const QVariant &icon)
     emit sourceChanged();
 }
 
-QVariant DesktopIcon::source() const
+QVariant Icon::source() const
 {
     return m_source;
 }
 
-void DesktopIcon::setActive(const bool active)
+void Icon::setActive(const bool active)
 {
     if (active == m_active) {
         return;
@@ -205,17 +205,17 @@ void DesktopIcon::setActive(const bool active)
     emit activeChanged();
 }
 
-bool DesktopIcon::active() const
+bool Icon::active() const
 {
     return m_active;
 }
 
-bool DesktopIcon::valid() const
+bool Icon::valid() const
 {
     return !m_source.isNull();
 }
 
-void DesktopIcon::setSelected(const bool selected)
+void Icon::setSelected(const bool selected)
 {
     if (selected == m_selected) {
         return;
@@ -226,12 +226,12 @@ void DesktopIcon::setSelected(const bool selected)
     emit selectedChanged();
 }
 
-bool DesktopIcon::selected() const
+bool Icon::selected() const
 {
     return m_selected;
 }
 
-void DesktopIcon::setIsMask(bool mask)
+void Icon::setIsMask(bool mask)
 {
     if (m_isMask == mask) {
         return;
@@ -244,12 +244,12 @@ void DesktopIcon::setIsMask(bool mask)
     emit isMaskChanged();
 }
 
-bool DesktopIcon::isMask() const
+bool Icon::isMask() const
 {
     return m_isMask || m_isMaskHeuristic;
 }
 
-void DesktopIcon::setColor(const QColor &color)
+void Icon::setColor(const QColor &color)
 {
     if (m_color == color) {
         return;
@@ -261,23 +261,23 @@ void DesktopIcon::setColor(const QColor &color)
     emit colorChanged();
 }
 
-QColor DesktopIcon::color() const
+QColor Icon::color() const
 {
     return m_color;
 }
 
 
-int DesktopIcon::implicitWidth() const
+int Icon::implicitWidth() const
 {
     return 32;
 }
 
-int DesktopIcon::implicitHeight() const
+int Icon::implicitHeight() const
 {
     return 32;
 }
 
-void DesktopIcon::setSmooth(const bool smooth)
+void Icon::setSmooth(const bool smooth)
 {
     if (smooth == m_smooth) {
         return;
@@ -288,12 +288,12 @@ void DesktopIcon::setSmooth(const bool smooth)
     emit smoothChanged();
 }
 
-bool DesktopIcon::smooth() const
+bool Icon::smooth() const
 {
     return m_smooth;
 }
 
-QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* /*data*/)
+QSGNode* Icon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* /*data*/)
 {
     if (m_source.isNull()) {
         delete node;
@@ -376,7 +376,7 @@ QSGNode* DesktopIcon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNode
     return node;
 }
 
-void DesktopIcon::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void Icon::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     if (newGeometry.size() != oldGeometry.size()) {
         m_changed = true;
@@ -385,7 +385,7 @@ void DesktopIcon::geometryChanged(const QRectF &newGeometry, const QRectF &oldGe
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
-void DesktopIcon::handleFinished(QNetworkAccessManager* qnam, QNetworkReply* reply) {
+void Icon::handleFinished(QNetworkAccessManager* qnam, QNetworkReply* reply) {
     if (reply && reply->error() == QNetworkReply::NoError) {
         const QUrl possibleRedirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
         if (!possibleRedirectUrl.isEmpty()) {
@@ -406,13 +406,13 @@ void DesktopIcon::handleFinished(QNetworkAccessManager* qnam, QNetworkReply* rep
     }
 }
 
-void DesktopIcon::handleReadyRead(QNetworkReply* reply)
+void Icon::handleReadyRead(QNetworkReply* reply)
 {
     if (reply && reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isNull()) {
         // We're handing the event loop back while doing network work, and it turns out
         // this fairly regularly results in things being deleted under us. So, just
         // handle that and crash less :)
-        QPointer<DesktopIcon> me(this);
+        QPointer<Icon> me(this);
         QPointer<QNetworkReply> guardedReply(reply);
         QByteArray data;
         do {
@@ -434,7 +434,7 @@ void DesktopIcon::handleReadyRead(QNetworkReply* reply)
     }
 }
 
-QImage DesktopIcon::findIcon(const QSize &size)
+QImage Icon::findIcon(const QSize &size)
 {
     QImage img;
     QString iconSource = m_source.toString();
@@ -515,7 +515,7 @@ QImage DesktopIcon::findIcon(const QSize &size)
     return img;
 }
 
-QIcon::Mode DesktopIcon::iconMode() const
+QIcon::Mode Icon::iconMode() const
 {
     if (!isEnabled()) {
         return QIcon::Disabled;
@@ -527,7 +527,7 @@ QIcon::Mode DesktopIcon::iconMode() const
     return QIcon::Normal;
 }
 
-bool DesktopIcon::guessMonochrome(const QImage &img)
+bool Icon::guessMonochrome(const QImage &img)
 {
     //don't try for too big images
     if (img.width() >= 256 || m_theme->supportsIconColoring()) {
@@ -588,15 +588,17 @@ bool DesktopIcon::guessMonochrome(const QImage &img)
     return m_monochromeHeuristics[stdSize];
 }
 
-QString DesktopIcon::fallback() const
+QString Icon::fallback() const
 {
     return m_fallback;
 }
 
-void DesktopIcon::setFallback(const QString& fallback)
+void Icon::setFallback(const QString& fallback)
 {
     if (m_fallback != fallback) {
         m_fallback = fallback;
         Q_EMIT fallbackChanged(fallback);
     }
 }
+
+#include "moc_icon.cpp"

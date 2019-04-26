@@ -17,7 +17,7 @@ set(kirigami_SRCS
     columnview.cpp
     enums.cpp
     delegaterecycler.cpp
-    desktopicon.cpp
+    icon.cpp
     settings.cpp
     formlayoutattached.cpp
     scenepositionattached.cpp

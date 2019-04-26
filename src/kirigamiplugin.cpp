@@ -22,7 +22,7 @@
 #include "kirigamiplugin.h"
 #include "columnview.h"
 #include "enums.h"
-#include "desktopicon.h"
+#include "icon.h"
 #include "settings.h"
 #include "formlayoutattached.h"
 #include "mnemonicattached.h"
@@ -135,7 +135,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("Separator.qml")), uri, 2, 0, "Separator");
     qmlRegisterType(componentUrl(QStringLiteral("PageRow.qml")), uri, 2, 0, "PageRow");
 
-    qmlRegisterType<DesktopIcon>(uri, 2, 0, "Icon");
+    qmlRegisterType<Icon>(uri, 2, 0, "Icon");
 
     qmlRegisterType(componentUrl(QStringLiteral("Label.qml")), uri, 2, 0, "Label");
     //TODO: uncomment for 2.3 release

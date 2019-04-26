@@ -18,8 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef DESKTOPICON_H
-#define DESKTOPICON_H
+#pragma once
 
 #include <QIcon>
 #include <QQuickItem>
@@ -33,7 +32,7 @@ namespace Kirigami {
     class PlatformTheme;
 }
 
-class DesktopIcon : public QQuickItem
+class Icon : public QQuickItem
 {
     Q_OBJECT
 
@@ -49,8 +48,8 @@ class DesktopIcon : public QQuickItem
     Q_PROPERTY(QString fallback READ fallback WRITE setFallback NOTIFY fallbackChanged)
 
 public:
-    DesktopIcon(QQuickItem *parent = nullptr);
-    ~DesktopIcon();
+    Icon(QQuickItem *parent = nullptr);
+    ~Icon();
 
     void setSource(const QVariant &source);
     QVariant source() const;
@@ -115,4 +114,3 @@ private:
     QString m_fallback = QStringLiteral("unknown");
 };
 
-#endif
