@@ -184,6 +184,7 @@ ScrollablePage
         Heading {
             Layout.fillWidth: true
             text: qsTr("Authors")
+            visible: aboutData.authors.length > 0
         }
 
         Repeater {
