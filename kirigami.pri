@@ -12,8 +12,9 @@ HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/libkirigami/platformtheme.h \
                $$PWD/src/libkirigami/kirigamipluginfactory.h \
                $$PWD/src/libkirigami/tabletmodewatcher.h \
-               $$PWD/src/desktopicon.h \
-               $$PWD/src/delegaterecycler.h
+               $$PWD/src/icon.h \
+               $$PWD/src/delegaterecycler.h \
+               $$PWD/src/wheelhandler.h
 SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/enums.cpp \
                $$PWD/src/settings.cpp \
@@ -25,9 +26,9 @@ SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/libkirigami/platformtheme.cpp \
                $$PWD/src/libkirigami/kirigamipluginfactory.cpp \
                $$PWD/src/libkirigami/tabletmodewatcher.cpp \
-               $$PWD/src/desktopicon.h \
-               $$PWD/src/desktopicon.cpp \
-               $$PWD/src/delegaterecycler.cpp
+               $$PWD/src/icon.cpp \
+               $$PWD/src/delegaterecycler.cpp \
+               $$PWD/src/wheelhandler.cpp
 INCLUDEPATH += $$PWD/src $$PWD/src/libkirigami
 DEFINES     += KIRIGAMI_BUILD_TYPE_STATIC
 
