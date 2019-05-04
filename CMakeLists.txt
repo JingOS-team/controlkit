@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 set(KF5_VERSION "5.58.0") # handled by release scripts
-set(KF5_DEP_VERSION "5.57.0") # handled by release scripts
+set(KF5_DEP_VERSION "5.58.0") # handled by release scripts
 
 project(kirigami2 VERSION ${KF5_VERSION})
 
@@ -52,7 +52,7 @@ endif(STATIC_LIBRARY)
 
 ################# set KDE specific information #################
 
-find_package(ECM 5.57.0 NO_MODULE)
+find_package(ECM 5.58.0 NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://projects.kde.org/projects/kdesupport/extra-cmake-modules")
 
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
