@@ -132,6 +132,7 @@ void ColumnViewAttached::setFillWidth(bool fill)
 
     m_fillWidth = fill;
     emit fillWidthChanged();
+    m_view->polish();
 }
 
 bool ColumnViewAttached::fillWidth() const
@@ -157,6 +158,7 @@ void ColumnViewAttached::setReservedSpace(qreal space)
 
     m_reservedSpace = space;
     emit reservedSpaceChanged();
+    m_view->polish();
 }
 
 ColumnView *ColumnViewAttached::view()
@@ -228,6 +230,23 @@ void ColumnViewAttached::setPreventStealing(bool prevent)
     emit preventStealingChanged();
 }
 
+bool ColumnViewAttached::isPinned() const
+{
+    return m_pinned;
+}
+
+void ColumnViewAttached::setPinned(bool pinned)
+{
+    if (pinned == m_pinned) {
+        return;
+    }
+
+    m_pinned = pinned;
+
+    emit pinnedChanged();
+    m_view->polish();
+}
+
 
 
 /////////
@@ -252,6 +271,8 @@ ContentItem::ContentItem(ColumnView *parent)
             }
         }
     });
+
+    connect(this, &QQuickItem::xChanged, this, &ContentItem::layoutPinnedItems);
 }
 
 ContentItem::~ContentItem()
@@ -345,12 +366,20 @@ void ContentItem::layoutItems()
     qreal partialWidth = 0;
     int i = 0;
     for (QQuickItem *child : m_items) {
+        ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
+    
         if (child->isVisible()) {
             child->setSize(QSizeF(childWidth(child), height()));
-            child->setPosition(QPointF(partialWidth, 0.0));
+            if (attached->isPinned()) {
+                child->setPosition(QPointF(qMin(qMax(-x(), partialWidth), -x() + m_view->width() - child->width()), 0.0));
+                child->setZ(1);
+            } else {
+                child->setPosition(QPointF(partialWidth, 0.0));
+                child->setZ(0);
+            }
             partialWidth += child->width();
         }
-        ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
+
         attached->setIndex(i++);
 
         implicitWidth += child->implicitWidth();
@@ -374,6 +403,30 @@ void ContentItem::layoutItems()
     }
 
     updateVisibleItems();
+}
+
+void ContentItem::layoutPinnedItems()
+{
+    qreal implicitWidth = 0;
+    qreal implicitHeight = 0;
+    qreal partialWidth = 0;
+    int i = 0;
+    for (QQuickItem *child : m_items) {
+        ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
+    
+        if (child->isVisible()) {
+            child->setSize(QSizeF(childWidth(child), height()));
+            if (attached->isPinned()) {
+                child->setPosition(QPointF(qMin(qMax(-x(), partialWidth), -x() + m_view->width() - child->width()), 0.0));
+                child->setZ(1);
+            }
+            partialWidth += child->width();
+        }
+
+        implicitWidth += child->implicitWidth();
+
+        implicitHeight = qMax(implicitHeight, child->implicitHeight());
+    }
 }
 
 void ContentItem::updateVisibleItems()

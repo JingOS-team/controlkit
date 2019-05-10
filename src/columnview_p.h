@@ -57,6 +57,7 @@ public:
     ~ContentItem();
 
     void layoutItems();
+    void layoutPinnedItems();
     qreal childWidth(QQuickItem *child);
     void updateVisibleItems();
     void forgetItem(QQuickItem *item);
