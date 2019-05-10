@@ -370,7 +370,7 @@ void ContentItem::layoutItems()
     
         if (child->isVisible()) {
             child->setSize(QSizeF(childWidth(child), height()));
-            if (attached->isPinned()) {
+            if (attached->isPinned() && m_view->columnResizeMode() != ColumnView::SingleColumn) {
                 child->setPosition(QPointF(qMin(qMax(-x(), partialWidth), -x() + m_view->width() - child->width()), 0.0));
                 child->setZ(1);
             } else {
@@ -407,10 +407,13 @@ void ContentItem::layoutItems()
 
 void ContentItem::layoutPinnedItems()
 {
+    if (m_view->columnResizeMode() == ColumnView::SingleColumn) {
+        return;
+    }
     qreal implicitWidth = 0;
     qreal implicitHeight = 0;
     qreal partialWidth = 0;
-    int i = 0;
+
     for (QQuickItem *child : m_items) {
         ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
     
