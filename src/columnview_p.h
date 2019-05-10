@@ -38,6 +38,7 @@ public:
     void initialize(QQmlEngine *engine);
 
     QQmlComponent *m_separatorComponent = nullptr;
+    QQmlComponent *m_rightSeparatorComponent = nullptr;
     QObject *m_units = nullptr;
 
 Q_SIGNALS:
@@ -62,6 +63,7 @@ public:
     void updateVisibleItems();
     void forgetItem(QQuickItem *item);
     QQuickItem *ensureSeparator(QQuickItem *item);
+    QQuickItem *ensureRightSeparator(QQuickItem *item);
 
     void setBoundedX(qreal x);
     void animateX(qreal x);
@@ -82,6 +84,7 @@ private:
     QList<QObject *> m_visibleItems;
     QPointer<QQuickItem> m_viewAnchorItem;
     QHash<QQuickItem *, QQuickItem *> m_separators;
+    QHash<QQuickItem *, QQuickItem *> m_rightSeparators;
     QHash<QObject *, QObject*> m_models;
 
     qreal m_columnWidth = 0;
