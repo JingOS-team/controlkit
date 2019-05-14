@@ -65,6 +65,7 @@ public:
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void focusInEvent(QFocusEvent *event) override;
 
     void updateHints();
     void updateSize(bool parentResized);

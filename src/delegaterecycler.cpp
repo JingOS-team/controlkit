@@ -104,6 +104,7 @@ QQuickItem *DelegateCache::take(QQmlComponent *component)
 DelegateRecycler::DelegateRecycler(QQuickItem *parent)
     : QQuickItem(parent)
 {
+    setFlags(QQuickItem::ItemIsFocusScope);
 }
 
 DelegateRecycler::~DelegateRecycler()
@@ -323,6 +324,16 @@ void DelegateRecycler::geometryChanged(const QRectF &newGeometry, const QRectF &
         updateSize(true);
     }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+}
+
+void DelegateRecycler::focusInEvent(QFocusEvent *event)
+{
+    QQuickItem::focusInEvent(event);
+    if (!m_item) {
+        return;
+    }
+
+    m_item->setFocus(event->reason());
 }
 
 void DelegateRecycler::updateHints()
