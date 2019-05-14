@@ -96,6 +96,11 @@ Controls.ToolButton {
 
                 text: MnemonicData.richTextLabel
                 visible: control.showText && text.length > 0
+
+                Shortcut {
+                    sequence: label.MnemonicData.sequence
+                    onActivated: control.clicked()
+                }
             }
             Icon {
                 id: menuArrow
