@@ -170,6 +170,7 @@ Page {
     onMainItemChanged: {
          if (mainItem.hasOwnProperty("anchors")) {
              scrollView.contentItem = mainItem
+             mainItem.focus = true
          //don't try to reparent drawers
          } else if (mainItem.hasOwnProperty("dragMargin")) {
              return;
