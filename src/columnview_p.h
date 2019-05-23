@@ -69,6 +69,9 @@ public:
     void animateX(qreal x);
     void snapToItem();
 
+    inline qreal viewportLeft() const;
+    inline qreal viewportRight() const;
+
 protected:
     void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value) override;
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
@@ -86,6 +89,9 @@ private:
     QHash<QQuickItem *, QQuickItem *> m_separators;
     QHash<QQuickItem *, QQuickItem *> m_rightSeparators;
     QHash<QObject *, QObject*> m_models;
+
+    qreal m_leftPinnedSpace = 361;
+    qreal m_rightPinnedSpace = 0;
 
     qreal m_columnWidth = 0;
     ColumnView::ColumnResizeMode m_columnResizeMode = ColumnView::FixedColumns;

@@ -321,27 +321,37 @@ void ContentItem::animateX(qreal newX)
 
 void ContentItem::snapToItem()
 {
-    QQuickItem *firstItem = childAt(-x(), 0);
+    QQuickItem *firstItem = childAt(viewportLeft(), 0);
     if (!firstItem) {
         return;
     }
     QQuickItem *nextItem = childAt(firstItem->x() + firstItem->width() + 1, 0);
 
     //need to make the last item visible?
-    if (nextItem && width() - (-x() + m_view->width()) < -x() - firstItem->x()) {
+    if (nextItem && width() - (viewportRight()) < viewportLeft() - firstItem->x()) {
         m_viewAnchorItem = nextItem;
-        animateX(-nextItem->x());
+        animateX(-nextItem->x() + m_leftPinnedSpace);
 
     //The first one found?
-    } else if (-x() <= firstItem->x() + firstItem->width()/2 || !nextItem) {
+    } else if (viewportLeft() <= firstItem->x() + firstItem->width()/2 || !nextItem) {
         m_viewAnchorItem = firstItem;
-        animateX(-firstItem->x());
+        animateX(-firstItem->x() + m_leftPinnedSpace);
 
     //the second?
     } else {
         m_viewAnchorItem = nextItem;
-        animateX(-nextItem->x());
+        animateX(-nextItem->x() + m_leftPinnedSpace);
     }
+}
+
+qreal ContentItem::viewportLeft() const
+{
+    return -x() + m_leftPinnedSpace;
+}
+
+qreal ContentItem::viewportRight() const
+{
+    return -x() /*- m_leftPinnedSpace*/ + m_view->width() - m_rightPinnedSpace;
 }
 
 qreal ContentItem::childWidth(QQuickItem *child)
@@ -383,6 +393,8 @@ void ContentItem::layoutItems()
     qreal implicitHeight = 0;
     qreal partialWidth = 0;
     int i = 0;
+    m_leftPinnedSpace = 0;
+    m_rightPinnedSpace = 0;
     for (QQuickItem *child : m_items) {
         ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
     
@@ -399,6 +411,12 @@ void ContentItem::layoutItems()
 
                 child->setPosition(QPointF(qMin(qMax(-x(), partialWidth), -x() + m_view->width() - child->width() + sepWidth), 0.0));
                 child->setZ(1);
+
+                if (partialWidth < -x()) {
+                    m_leftPinnedSpace = qMax(m_leftPinnedSpace, child->width());
+                } else if (partialWidth > -x() + m_view->width() - child->width() + sepWidth) {
+                    m_rightPinnedSpace = qMax(m_rightPinnedSpace, child->width());
+                }
 
                 partialWidth += width;
 
@@ -449,6 +467,8 @@ void ContentItem::layoutPinnedItems()
     }
 
     qreal partialWidth = 0;
+    m_leftPinnedSpace = 0;
+    m_rightPinnedSpace = 0;
 
     for (QQuickItem *child : m_items) {
         ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
@@ -463,7 +483,14 @@ void ContentItem::layoutPinnedItems()
                 }
 
                 child->setPosition(QPointF(qMin(qMax(-x(), partialWidth), -x() + m_view->width() - child->width() + sepWidth), 0.0));
+
+                if (partialWidth < -x()) {
+                    m_leftPinnedSpace = qMax(m_leftPinnedSpace, child->width());
+                } else if (partialWidth > -x() + m_view->width() - child->width() + sepWidth) {
+                    m_rightPinnedSpace = qMax(m_rightPinnedSpace, child->width());
+                }
             }
+
             partialWidth += child->width();
         }
     }
@@ -762,13 +789,13 @@ void ColumnView::setCurrentIndex(int index)
 
         //m_contentItem->m_slideAnim->stop();
 
-        QRectF contentsRect(QPointF(0, 0), size());
+        QRectF contentsRect(m_contentItem->m_leftPinnedSpace, 0, width() - m_contentItem->m_rightPinnedSpace, height());
 
         m_contentItem->m_shouldAnimate = true;
 
         if (!contentsRect.contains(mappedCurrent)) {
             m_contentItem->m_viewAnchorItem = m_currentItem;
-            m_contentItem->animateX(-m_currentItem->x());
+            m_contentItem->animateX(-m_currentItem->x() + m_contentItem->m_leftPinnedSpace);
         } else {
             m_contentItem->snapToItem();
         }
@@ -1149,7 +1176,6 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
         if (candidateItem->parentItem() == m_contentItem) {
             setCurrentIndex(m_contentItem->m_items.indexOf(candidateItem));
         }
-        
         break;
     }
     case QEvent::MouseMove: {
