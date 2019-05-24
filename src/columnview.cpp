@@ -351,7 +351,7 @@ qreal ContentItem::viewportLeft() const
 
 qreal ContentItem::viewportRight() const
 {
-    return -x() /*- m_leftPinnedSpace*/ + m_view->width() - m_rightPinnedSpace;
+    return -x() + m_view->width() - m_rightPinnedSpace;
 }
 
 qreal ContentItem::childWidth(QQuickItem *child)
@@ -406,14 +406,14 @@ void ContentItem::layoutItems()
                     sep = ensureRightSeparator(child);
                     sepWidth = (sep ? sep->width() : 0);
                 }
-                const int width = childWidth(child);
+                const qreal width = childWidth(child);
                 child->setSize(QSizeF(width + sepWidth, height()));
 
                 child->setPosition(QPointF(qMin(qMax(-x(), partialWidth), -x() + m_view->width() - child->width() + sepWidth), 0.0));
                 child->setZ(1);
 
-                if (partialWidth < -x()) {
-                    m_leftPinnedSpace = qMax(m_leftPinnedSpace, child->width());
+                if (partialWidth <= -x()) {
+                    m_leftPinnedSpace = qMax(m_leftPinnedSpace, width);
                 } else if (partialWidth > -x() + m_view->width() - child->width() + sepWidth) {
                     m_rightPinnedSpace = qMax(m_rightPinnedSpace, child->width());
                 }
@@ -484,8 +484,8 @@ void ContentItem::layoutPinnedItems()
 
                 child->setPosition(QPointF(qMin(qMax(-x(), partialWidth), -x() + m_view->width() - child->width() + sepWidth), 0.0));
 
-                if (partialWidth < -x()) {
-                    m_leftPinnedSpace = qMax(m_leftPinnedSpace, child->width());
+                if (partialWidth <= -x()) {
+                    m_leftPinnedSpace = qMax(m_leftPinnedSpace, child->width() - sepWidth);
                 } else if (partialWidth > -x() + m_view->width() - child->width() + sepWidth) {
                     m_rightPinnedSpace = qMax(m_rightPinnedSpace, child->width());
                 }
@@ -789,15 +789,20 @@ void ColumnView::setCurrentIndex(int index)
 
         //m_contentItem->m_slideAnim->stop();
 
-        QRectF contentsRect(m_contentItem->m_leftPinnedSpace, 0, width() - m_contentItem->m_rightPinnedSpace, height());
+        QRectF contentsRect(m_contentItem->m_leftPinnedSpace,
+                            0,
+                            width() - m_contentItem->m_rightPinnedSpace - m_contentItem->m_leftPinnedSpace,
+                            height());
 
         m_contentItem->m_shouldAnimate = true;
 
-        if (!contentsRect.contains(mappedCurrent)) {
-            m_contentItem->m_viewAnchorItem = m_currentItem;
-            m_contentItem->animateX(-m_currentItem->x() + m_contentItem->m_leftPinnedSpace);
-        } else {
-            m_contentItem->snapToItem();
+        if (!m_mouseDown) {
+            if (!contentsRect.contains(mappedCurrent)) {
+                m_contentItem->m_viewAnchorItem = m_currentItem;
+                m_contentItem->animateX(-m_currentItem->x() + m_contentItem->m_leftPinnedSpace);
+            } else {
+                m_contentItem->snapToItem();
+            }
         }
     }
 
@@ -1165,6 +1170,7 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
         }
         m_oldMouseX = m_startMouseX = mapFromItem(item, me->localPos()).x();
 
+        m_mouseDown = true;
         me->setAccepted(false);
         setKeepMouseGrab(false);
 
@@ -1241,6 +1247,8 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
             return false;
         }
 
+        m_mouseDown = false;
+
         m_contentItem->snapToItem();
         if (m_dragging) {
             m_dragging = false;
@@ -1282,6 +1290,7 @@ void ColumnView::mousePressEvent(QMouseEvent *event)
     m_contentItem->snapToItem();
     m_oldMouseX = event->localPos().x();
     m_startMouseX = event->localPos().x();
+    m_mouseDown = true;
     setKeepMouseGrab(false);
     event->accept();
 }
@@ -1328,6 +1337,8 @@ void ColumnView::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
 
+    m_mouseDown = false;
+
     if (!m_interactive) {
         return;
     }
@@ -1348,6 +1359,8 @@ void ColumnView::mouseUngrabEvent()
         m_dragging = false;
         emit draggingChanged();
     }
+
+    m_mouseDown = false;
 
     if (m_contentItem->m_slideAnim->state() != QAbstractAnimation::Running) {
         m_contentItem->snapToItem();

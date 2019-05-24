@@ -429,6 +429,7 @@ private:
     qreal m_topPadding = 0;
     qreal m_bottomPadding = 0;
 
+    bool m_mouseDown = false;
     bool m_interactive = true;
     bool m_dragging = false;
     bool m_moving = false;
