@@ -95,7 +95,6 @@ Controls.TextField
     }
 
     Controls.ToolTip {
-        delay: Kirigami.Units.longDuration
         visible: root.focusSequence && root.text.length === 0 && !rightActionsRow.hovered && !leftActionsRow.hovered && hovered
         text: root.focusSequence ? root.focusSequence : ""
     }
