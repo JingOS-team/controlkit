@@ -58,6 +58,12 @@ class ColumnViewAttached : public QObject
     Q_PROPERTY(bool preventStealing READ preventStealing WRITE setPreventStealing NOTIFY preventStealingChanged)
 
     /**
+     * If true the page will never go out of view, but will stay either
+     * at the right or left side of the Columnview
+     */
+    Q_PROPERTY(bool pinned READ isPinned WRITE setPinned NOTIFY pinnedChanged)
+
+    /**
      * The view this column belongs to
      */
     Q_PROPERTY(ColumnView *view READ view NOTIFY viewChanged)
@@ -88,12 +94,16 @@ public:
     bool preventStealing() const;
     void setPreventStealing(bool prevent);
 
+    bool isPinned() const;
+    void setPinned(bool pinned);
+
 Q_SIGNALS:
     void indexChanged();
     void fillWidthChanged();
     void reservedSpaceChanged();
     void viewChanged();
     void preventStealingChanged();
+    void pinnedChanged();
 
 private:
     int m_index = -1;
@@ -105,6 +115,7 @@ private:
     bool m_customReservedSpace = false;
     bool m_shouldDeleteOnRemove = true;
     bool m_preventStealing = false;
+    bool m_pinned = false;
 };
 
 
@@ -418,6 +429,7 @@ private:
     qreal m_topPadding = 0;
     qreal m_bottomPadding = 0;
 
+    bool m_mouseDown = false;
     bool m_interactive = true;
     bool m_dragging = false;
     bool m_moving = false;

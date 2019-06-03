@@ -38,6 +38,7 @@ public:
     void initialize(QQmlEngine *engine);
 
     QQmlComponent *m_separatorComponent = nullptr;
+    QQmlComponent *m_rightSeparatorComponent = nullptr;
     QObject *m_units = nullptr;
 
 Q_SIGNALS:
@@ -57,14 +58,19 @@ public:
     ~ContentItem();
 
     void layoutItems();
+    void layoutPinnedItems();
     qreal childWidth(QQuickItem *child);
     void updateVisibleItems();
     void forgetItem(QQuickItem *item);
     QQuickItem *ensureSeparator(QQuickItem *item);
+    QQuickItem *ensureRightSeparator(QQuickItem *item);
 
     void setBoundedX(qreal x);
     void animateX(qreal x);
     void snapToItem();
+
+    inline qreal viewportLeft() const;
+    inline qreal viewportRight() const;
 
 protected:
     void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value) override;
@@ -81,7 +87,11 @@ private:
     QList<QObject *> m_visibleItems;
     QPointer<QQuickItem> m_viewAnchorItem;
     QHash<QQuickItem *, QQuickItem *> m_separators;
+    QHash<QQuickItem *, QQuickItem *> m_rightSeparators;
     QHash<QObject *, QObject*> m_models;
+
+    qreal m_leftPinnedSpace = 361;
+    qreal m_rightPinnedSpace = 0;
 
     qreal m_columnWidth = 0;
     ColumnView::ColumnResizeMode m_columnResizeMode = ColumnView::FixedColumns;
