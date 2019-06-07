@@ -1133,6 +1133,11 @@ bool ColumnView::containsItem(QQuickItem *item)
     return m_contentItem->m_items.contains(item);
 }
 
+QQuickItem *ColumnView::itemAt(qreal x, qreal y)
+{
+    return m_contentItem->childAt(x, y);
+}
+
 ColumnViewAttached *ColumnView::qmlAttachedProperties(QObject *object)
 {
     return new ColumnViewAttached(object);

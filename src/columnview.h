@@ -359,6 +359,12 @@ public Q_SLOTS:
      */
     bool containsItem(QQuickItem *item);
 
+    /**
+     * Returns the visible item containing the point x, y in content coordinates.
+     * If there is no item at the point specified, or the item is not visible null is returned.
+     */
+    QQuickItem *itemAt(qreal x, qreal y);
+
 protected:
     void classBegin() override;
     void componentComplete() override;
