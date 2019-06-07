@@ -69,7 +69,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.kirigami"));
     const QString style = QQuickStyle::name();
 
-    if (!qEnvironmentVariableIsSet("XDG_CURRENT_DESKTOP")) {
+    if (QIcon::themeName().isEmpty() && !qEnvironmentVariableIsSet("XDG_CURRENT_DESKTOP")) {
         QIcon::setThemeSearchPaths({resolveFilePath(QStringLiteral(".")), QStringLiteral(":/icons")});
         QIcon::setThemeName(QStringLiteral("breeze-internal"));
     }
