@@ -159,7 +159,7 @@ T2.ItemDelegate {
     hoverEnabled: true
     implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
     width: parent ? parent.width : implicitWidth
-    implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
+    implicitHeight: Math.max(contentItem.implicitHeight, actionsLayout.implicitHeight) + topPadding + bottomPadding
 
     padding: Settings.tabletMode ? Units.largeSpacing : Units.smallSpacing
 
