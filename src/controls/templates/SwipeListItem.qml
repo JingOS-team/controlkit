@@ -20,7 +20,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.0 as Controls
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.7
 import "../private"
 import QtQuick.Templates 2.0 as T2
 
@@ -159,7 +159,7 @@ T2.ItemDelegate {
     hoverEnabled: true
     implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
     width: parent ? parent.width : implicitWidth
-    implicitHeight: Math.max(contentItem.implicitHeight, actionsLayout.implicitHeight) + topPadding + bottomPadding
+    implicitHeight: Math.max(Units.gridUnit * 2, contentItem.implicitHeight, actionsLayout.implicitHeight) + topPadding + bottomPadding
 
     padding: Settings.tabletMode ? Units.largeSpacing : Units.smallSpacing
 
