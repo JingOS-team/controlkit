@@ -35,5 +35,5 @@ Rectangle {
     width: Math.floor(Units.devicePixelRatio)
     Layout.preferredWidth: Math.floor(Units.devicePixelRatio)
     Layout.preferredHeight: Math.floor(Units.devicePixelRatio)
-    color: Qt.tint(Theme.textColor, Qt.rgba(Theme.backgroundColor.r, Theme.backgroundColor.g, Theme.backgroundColor.b, 0.7))
+    color: Qt.tint(Theme.textColor, Qt.rgba(Theme.backgroundColor.r, Theme.backgroundColor.g, Theme.backgroundColor.b, 0.8))
 }
