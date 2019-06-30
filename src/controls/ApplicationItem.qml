@@ -31,8 +31,8 @@ import QtGraphicalEffects 1.0
  * It's based around the PageRow component, the application will be
  * about pages adding and removal.
  * For most of the usages, this class should be used instead
- * of AbstractApplicationWidnow
- * @see AbstractApplicationWidnow
+ * of AbstractApplicationWindow
+ * @see AbstractApplicationWindow
  *
  * Example usage:
  * @code
