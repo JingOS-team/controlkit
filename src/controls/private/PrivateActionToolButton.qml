@@ -19,7 +19,7 @@
 
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
-import QtQuick.Controls 2.0 as Controls
+import QtQuick.Controls 2.2 as Controls
 import org.kde.kirigami 2.4
 
 Controls.ToolButton {
@@ -76,16 +76,19 @@ Controls.ToolButton {
         onPressed: mouse.accepted = false
         Theme.colorSet: checked && (control.kirigamiAction && control.kirigamiAction.icon.color.a) ? Theme.Selection : control.Theme.colorSet
         Theme.inherit: control.kirigamiAction && Theme.colorSet != Theme.Selection && control.kirigamiAction.icon.color.a === 0
-        RowLayout {
+        GridLayout {
             id: layout
+            columns: control.display == Controls.ToolButton.TextUnderIcon ? 1 : 2 + (menuArrow.visible ? 1 : 0)
+            rows: control.display == Controls.ToolButton.TextUnderIcon ? 2 : 1
 
             anchors.centerIn: parent
             Icon {
                 id: mainIcon
+                Layout.alignment: Qt.AlignCenter
                 Layout.minimumWidth: Units.iconSizes.smallMedium
                 Layout.minimumHeight: Units.iconSizes.smallMedium
                 source: control.kirigamiAction ? (control.kirigamiAction.icon ? control.kirigamiAction.icon.name : control.kirigamiAction.iconName) : ""
-                visible: control.kirigamiAction && control.kirigamiAction.iconName != ""
+                visible: control.kirigamiAction && control.kirigamiAction.iconName != "" && control.display != Controls.ToolButton.TextOnly
                 color: control.flat && control.kirigamiAction && control.kirigamiAction.icon && control.kirigamiAction.icon.color.a > 0 ? control.kirigamiAction.icon.color : label.color
             }
             Controls.Label {
@@ -95,7 +98,7 @@ Controls.ToolButton {
                 MnemonicData.label: control.kirigamiAction ? control.kirigamiAction.text : ""
 
                 text: MnemonicData.richTextLabel
-                visible: control.showText && text.length > 0
+                visible: control.showText && text.length > 0 && control.display != Controls.ToolButton.IconOnly
 
                 Shortcut {
                     sequence: label.MnemonicData.sequence

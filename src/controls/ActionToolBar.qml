@@ -19,7 +19,7 @@
 
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
-import QtQuick.Controls 2.0 as Controls
+import QtQuick.Controls 2.2 as Controls
 import org.kde.kirigami 2.5 as Kirigami
 import "private"
 
@@ -54,6 +54,30 @@ Item {
      * Wether we want our buttons to have a flat appearance. Default: true
      */
     property bool flat: true
+
+    /**
+     * display: enum
+     * This controls the label position regarding the icon, is the same value to control individual Button components,
+     * permitted values are:
+     * * Button.IconOnly
+     * * Button.TextOnly
+     * * Button.TextBesideIcon
+     * * Button.TextUnderIcon
+     */
+    property int display: Controls.Button.TextBesideIcon
+
+    /**
+     * position enum
+     * This property holds the position of the toolbar.
+     * if this ActionToolBar is the contentItem of a QQC2 Toolbar, the position is binded to the ToolBar's position
+     * 
+     * permitted values are:
+     * *ToolBar.Header: The toolbar is at the top, as a window or page header.
+     * *ToolBar.Footer: The toolbar is at the bottom, as a window or page footer.
+     */
+    property int position: parent && parent.hasOwnProperty("position")
+            ? parent.position
+            : Controls.ToolBar.Footer
 
     implicitHeight: actionsLayout.implicitHeight
 
@@ -104,8 +128,9 @@ Item {
                     return minX + implicitWidth < actionsLayout.width - moreButton.width
                 }
 
+                display: root.display
                 visible: modelData.visible && fits
-                Layout.fillWidth: true
+                Layout.fillWidth: false
                 Layout.alignment: Qt.AlignVCenter
                 Layout.minimumWidth: implicitWidth
                 kirigamiAction: modelData
@@ -130,14 +155,20 @@ Item {
                 }
             }
         }
+
+        Item {
+            Layout.fillWidth: true
+        }
+
         Controls.ToolButton {
             id: moreButton
 
             Layout.alignment: Qt.AlignRight
             Kirigami.Icon {
-                anchors.fill: parent
+                anchors.centerIn: parent
                 source: "overflow-menu"
-                anchors.margins: 4
+                width: Kirigami.Units.iconSizes.smallMedium
+                height: width
             }
 
             //checkable: true
@@ -147,7 +178,7 @@ Item {
 
             ActionsMenu {
                 id: menu
-                y: -height
+                y: root.position == Controls.ToolBar.Footer ? -height : moreButton.height
                 x: -width + moreButton.width
                 actions: root.actions
                 submenuComponent: Component {
