@@ -57,6 +57,13 @@ Flickable {
                 Layout.preferredWidth: delegateLayout.implicitWidth
                 Layout.fillHeight: true
                 onClicked: pageRow.currentIndex = modelData;
+                hoverEnabled: !Kirigami.Settings.tabletMode
+                Rectangle {
+                    color: Kirigami.Theme.highlightColor
+                    anchors.fill: parent
+                    radius: 3
+                    opacity: parent.containsMouse ? 0.1 : 0
+                }
                 RowLayout {
                     id: delegateLayout
                     anchors.fill: parent
