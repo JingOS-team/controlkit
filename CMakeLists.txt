@@ -5,7 +5,7 @@ set(KF5_DEP_VERSION "5.59.0") # handled by release scripts
 
 project(kirigami2 VERSION ${KF5_VERSION})
 
-set(REQUIRED_QT_VERSION 5.10.0)
+set(REQUIRED_QT_VERSION 5.11.0)
 
 SET(CMAKE_CXX_STANDARD 11)
 
