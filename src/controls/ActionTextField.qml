@@ -137,8 +137,10 @@ Controls.TextField
                 anchors.verticalCenter: parent.verticalCenter
 
                 source: modelData.icon.name.length > 0 ? modelData.icon.name : modelData.icon.source
+                active: actionArea.containsPress
                 visible: modelData.visible
                 MouseArea {
+                    id: actionArea
                     anchors.fill: parent
                     onClicked: modelData.trigger()
                     cursorShape: Qt.PointingHandCursor
