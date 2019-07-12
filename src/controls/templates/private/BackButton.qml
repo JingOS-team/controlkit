@@ -30,7 +30,7 @@ Controls.ToolButton {
 
     enabled: applicationWindow().pageStack.layers.depth > 1 || (applicationWindow().pageStack.depth > 1 && (applicationWindow().pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0))
 
-    visible: applicationWindow().pageStack.layers.depth > 1 || applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width
+    visible: (applicationWindow().pageStack.layers.depth > 1 || applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width) && (globalToolBar.showNavigationButtons & ApplicationHeaderStyle.ShowBackButton)
     width: height
     height: parent.height
 

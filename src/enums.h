@@ -25,7 +25,6 @@
 class ApplicationHeaderStyle : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Status)
 
 public:
     enum Status {
@@ -36,6 +35,15 @@ public:
         ToolBar, ///@since 5.48
         None ///@since 5.48
     };
+    Q_ENUM(Status)
+
+    enum NavigationButton {
+        NoNavigationButtons = 0,
+        ShowBackButton = 0x1,
+        ShowForwardButton = 0x2
+    };
+    Q_ENUM(NavigationButton)
+    Q_DECLARE_FLAGS(NavigationButtons, NavigationButton)
 };
 
 class MessageType : public QObject
