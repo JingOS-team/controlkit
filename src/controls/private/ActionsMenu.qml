@@ -37,6 +37,8 @@ Controls.Menu
             }
         }
     }
+    property QtObject parentAction
+    property Controls.MenuItem parentItem
 
     Item {
         id: invisibleItems
@@ -60,8 +62,10 @@ Controls.Menu
                     }
                     theMenu.addItem(item)
                 } else if (theMenu.submenuComponent) {
-                    item = theMenu.submenuComponent.createObject(null, { title: action.text, actions: action.children });
-                    theMenu.addMenu(item)
+                    item = theMenu.submenuComponent.createObject(null, { parentAction: action, title: action.text, actions: action.children });
+
+                    theMenu.insertMenu(theMenu.count, item)
+                    item.parentItem = theMenu.contentData[theMenu.contentData.length-1]
                 }
             }
             function remove() {

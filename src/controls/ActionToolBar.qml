@@ -113,6 +113,7 @@ Item {
                     id: actionDelegate
                     flat: root.flat
                     opacity: x + width <= parent.width
+                    enabled: opacity
 
                     display: root.display
                     visible: modelData.visible
@@ -170,7 +171,13 @@ Item {
                 x: -width + moreButton.width
                 actions: root.actions
                 submenuComponent: Component {
-                    ActionsMenu {}
+                    ActionsMenu {
+                       Binding {
+                           target: parentItem
+                           property: "visible"
+                           value: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {return act === parentAction}) > -1 && (parentAction.visible === undefined || parentAction.visible)
+                       }
+                    }
                 }
                 itemDelegate: ActionMenuItem {
                     visible: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {return act === ourAction}) > -1 && (ourAction.visible === undefined || ourAction.visible)
