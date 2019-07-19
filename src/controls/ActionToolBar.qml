@@ -77,7 +77,7 @@ Item {
      */
     property int position: parent && parent.hasOwnProperty("position")
             ? parent.position
-            : Controls.ToolBar.Footer
+            : Controls.ToolBar.Header
 
     implicitHeight: actionsLayout.implicitHeight
 

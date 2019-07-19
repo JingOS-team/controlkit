@@ -102,6 +102,7 @@ Kirigami.AbstractCard {
     footer: Kirigami.ActionToolBar {
         id: actionsToolBar
         actions: root.actions
+        position: Controls.ToolBar.Footer
         hiddenActions: root.hiddenActions
         visible: root.footer == actionsToolBar
     }
