@@ -158,6 +158,7 @@ Item {
 
         Item {
             Layout.fillWidth: true
+            visible: root.Layout.fillWidth
         }
 
         Controls.ToolButton {
