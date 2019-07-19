@@ -81,18 +81,10 @@ Item {
 
     implicitHeight: actionsLayout.implicitHeight
 
-    implicitWidth: {
-        var width = 0;
-        for (var i = 0; i < actionsLayout.children.length; ++i) {
-            if (actionsLayout.children[i].kirigamiAction && actionsLayout.children[i].kirigamiAction.visible) {
-                width += actionsLayout.children[i].implicitWidth + actionsLayout.spacing;
-            }
-        }
-        width += moreButton.width;
-        return width;
-    }
+    implicitWidth: actionsLayout.implicitWidth
 
-    Layout.maximumWidth: implicitWidth
+    Layout.minimumWidth: moreButton.implicitWidth
+
     Layout.fillWidth: true
 
     RowLayout {
@@ -112,46 +104,41 @@ Item {
             }
             return -1;
         }
+        RowLayout {
+            Layout.minimumWidth: 0
+            Layout.fillHeight: true
+            Repeater {
+                model: root.actions
+                delegate: PrivateActionToolButton {
+                    id: actionDelegate
+                    flat: root.flat
+                    opacity: x + width <= parent.width
 
-        Repeater {
-            model: root.actions
-            delegate: PrivateActionToolButton {
-                id: actionDelegate
-                flat: root.flat
-                readonly property bool fits: {
-                    var minX = 0;
-                    for (var i = 0; i < index; ++i) {
-                        if (actionsLayout.children[i].visible) {
-                            minX += actionsLayout.children[i].implicitWidth + actionsLayout.spacing;
+                    display: root.display
+                    visible: modelData.visible
+                    Layout.fillWidth: false
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.minimumWidth: implicitWidth
+                    kirigamiAction: modelData
+                    onOpacityChanged: updateOverflowSet()
+                    function updateOverflowSet() {
+                        var index = actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {
+                            return act === modelData});
+
+                        if ((opacity > 0 || !modelData.visible) && index > -1) {
+                            actionsLayout.overflowSet.splice(index, 1);
+                        } else if (opacity === 0 && modelData.visible && index === -1) {
+                            actionsLayout.overflowSet.push(modelData);
                         }
+                        actionsLayout.overflowSetChanged();
                     }
-                    return minX + implicitWidth < actionsLayout.width - moreButton.width
-                }
-
-                display: root.display
-                visible: modelData.visible && fits
-                Layout.fillWidth: false
-                Layout.alignment: Qt.AlignVCenter
-                Layout.minimumWidth: implicitWidth
-                kirigamiAction: modelData
-                onFitsChanged: updateOverflowSet()
-                function updateOverflowSet() {
-                    var index = actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {
-                        return act === modelData});
-
-                    if ((fits || !modelData.visible) && index > -1) {
-                        actionsLayout.overflowSet.splice(index, 1);
-                    } else if (!fits && modelData.visible && index === -1) {
-                        actionsLayout.overflowSet.push(modelData);
+                    Connections {
+                        target: modelData
+                        onVisibleChanged: actionDelegate.updateOverflowSet();
                     }
-                    actionsLayout.overflowSetChanged();
-                }
-                Connections {
-                    target: modelData
-                    onVisibleChanged: actionDelegate.updateOverflowSet();
-                }
-                Component.onCompleted: {
-                    actionDelegate.updateOverflowSet();
+                    Component.onCompleted: {
+                        actionDelegate.updateOverflowSet();
+                    }
                 }
             }
         }
