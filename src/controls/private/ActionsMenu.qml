@@ -24,6 +24,7 @@ import org.kde.kirigami 2.4 as Kirigami
 Controls.Menu
 {
     id: theMenu
+    z: 999999999
     property alias actions: actionsInstantiator.model
     property Component submenuComponent
     //renamed to work on both Qt 5.9 and 5.10
