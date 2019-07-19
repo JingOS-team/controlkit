@@ -19,7 +19,7 @@
 
 import QtQuick 2.7
 import QtQuick.Layouts 1.2
-import QtQuick.Controls 2.0 as Controls
+import QtQuick.Controls 2.7 as Controls
 import org.kde.kirigami 2.7
 import "../private"
 import QtQuick.Templates 2.0 as T2
@@ -180,11 +180,25 @@ T2.ItemDelegate {
         enabled: background.x !== 0
         property bool indicateActiveFocus: listItem.pressed || Settings.tabletMode || listItem.activeFocus || (view ? view.activeFocus : false)
         property Flickable view: listItem.ListView.view || (listItem.parent ? (listItem.parent.ListView.view || listItem.parent) : null)
+        property T2.ScrollBar flickableVerticalScrollbar: view ? (view.T2.ScrollBar.vertical ? view.T2.ScrollBar.vertical : null) : null
+        property T2.ScrollBar scrollviewVerticalScrollbar: view ? (view.parent.T2.ScrollBar.vertical ? view.parent.T2.ScrollBar.vertical : null) : null
         onViewChanged: {
             if (view && Settings.tabletMode && !behindItem.view.parent.parent._swipeFilter) {
                 var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
                 behindItem.view.parent.parent._swipeFilter = component.createObject(behindItem.view.parent.parent);
             }
+        }
+
+        // Some of the views use flickables, and some use scrollviews, so we
+        // need to handle both when we determine whether or not to move items
+        // over to the right so the scrollbar doesn't overlap them
+        function calculateMargin() {
+            if (scrollviewVerticalScrollbar && scrollviewVerticalScrollbar.visible) {
+                return scrollviewVerticalScrollbar.width
+            } else if (flickableVerticalScrollbar && flickableVerticalScrollbar.visible) {
+                return flickableVerticalScrollbar.width
+            }
+            return Units.smallSpacing
         }
 
         anchors {
@@ -238,13 +252,14 @@ T2.ItemDelegate {
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
-                rightMargin: Units.gridUnit
+                rightMargin: LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
+                leftLargin:  LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
             }
             height: Math.min( parent.height / 1.5, Units.iconSizes.smallMedium)
             width: childrenRect.width
             property bool exclusive: false
             property Item checkedButton
-            spacing: Units.largeSpacing
+            spacing: Settings.tabletMode ? Units.largeSpacing : 0
             property int visibleActions: 0
             Repeater {
                 model: {
@@ -306,7 +321,8 @@ T2.ItemDelegate {
         anchors {
             right: parent.right
             verticalCenter: parent.verticalCenter
-            rightMargin: !Settings.isMobile && behindItem.view && behindItem.view.T2.ScrollBar && behindItem.view.T2.ScrollBar.vertical && behindItem.view.T2.ScrollBar.vertical.visible ? behindItem.view.T2.ScrollBar.vertical.width : Units.smallSpacing
+            rightMargin: LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
+            leftLargin:  LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
         }
 
         preventStealing: true
