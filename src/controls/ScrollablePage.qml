@@ -25,7 +25,7 @@ import "private"
 
 /**
  * ScrollablePage is a container for all the app pages: everything pushed to the
- * ApplicationWindow stackView should be a Page or ScrollablePage instabnce.
+ * ApplicationWindow stackView should be a Page or ScrollablePage instance.
  * This Page subclass is for content that has to be scrolled around, such as
  * bigger content than the screen that would normally go in a Flickable
  * or a ListView.

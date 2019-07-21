@@ -25,7 +25,7 @@ import QtQuick.Templates 2.1 as T2
 
 /**
  * Page is a container for all the app pages: everything pushed to the
- * ApplicationWindow stackView should be a Page instabnce (or a subclass,
+ * ApplicationWindow stackView should be a Page instance (or a subclass,
  * such as ScrollablePage)
  * @see ScrollablePage
  * @inherit QtQuick.Templates.Page
