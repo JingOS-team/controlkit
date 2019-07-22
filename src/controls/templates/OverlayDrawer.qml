@@ -205,6 +205,10 @@ T2.Drawer {
                 if (applicationWindow().footer) {
                     margin = applicationWindow().footer.height + Units.smallSpacing;
                 }
+                
+                if(root.height < root.parent.height) {
+                    margin = root.parent.height - root.height - root.y + Units.smallSpacing;
+                }
 
                 if (!applicationWindow() || !applicationWindow().pageStack ||
                     !applicationWindow().pageStack.contentItem ||
@@ -226,7 +230,7 @@ T2.Drawer {
 
                 var pageFooter = item && item.page ? item.page.footer : (item ? item.footer : undefined);
                 if (pageFooter) {
-                    margin += pageFooter.height;
+                    margin = root.height < root.parent.height ? margin : margin + pageFooter.height
                 }
 
                 return margin;
