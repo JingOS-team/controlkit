@@ -253,7 +253,7 @@ T2.ItemDelegate {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
                 rightMargin: LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
-                leftLargin:  LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
+                leftMargin:  LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
             }
             height: Math.min( parent.height / 1.5, Units.iconSizes.smallMedium)
             width: childrenRect.width
@@ -322,7 +322,7 @@ T2.ItemDelegate {
             right: parent.right
             verticalCenter: parent.verticalCenter
             rightMargin: LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
-            leftLargin:  LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
+            leftMargin:  LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
         }
 
         preventStealing: true
