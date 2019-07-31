@@ -41,7 +41,7 @@ Controls.ToolButton {
     Controls.ToolTip {
         visible: button.hovered
         text: qsTr("Navigate Forward")
-        delay: 1000
+        delay: Units.toolTipDelay
         timeout: 5000
         y: button.height
     }

@@ -295,7 +295,7 @@ T2.ItemDelegate {
                             actionsLayout.visibleActions--;
                         }
                     }
-                    Controls.ToolTip.delay: 1000
+                    Controls.ToolTip.delay: Units.toolTipDelay
                     Controls.ToolTip.timeout: 5000
                     Controls.ToolTip.visible: listItem.visible && (Settings.tabletMode ? pressed : hovered) && Controls.ToolTip.text.length > 0
                     Controls.ToolTip.text: modelData.tooltip || modelData.text

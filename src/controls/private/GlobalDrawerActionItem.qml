@@ -101,7 +101,7 @@ BasicListItem {
         QQC2.ToolTip {
             visible: !listItem.isSeparator && (modelData.tooltip.length || root.collapsed) && (!actionsMenu || !actionsMenu.visible) &&  listItem.hovered && text.length > 0
             text: modelData.tooltip.length ? modelData.tooltip : modelData.text
-            delay: 1000
+            delay: Units.toolTipDelay
             timeout: 5000
             y: listItem.height/2 - height/2
             x: Qt.application.layoutDirection === Qt.RightToLeft ? -width : listItem.width

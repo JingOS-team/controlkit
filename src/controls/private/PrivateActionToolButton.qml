@@ -118,7 +118,7 @@ Controls.ToolButton {
     Controls.ToolTip {
         visible: control.hovered && text.length > 0 && !menu.visible && !control.pressed
         text: kirigamiAction ? (kirigamiAction.tooltip.length ? kirigamiAction.tooltip : kirigamiAction.text) : ""
-        delay: 1000
+        delay: Units.toolTipDelay
         timeout: 5000
         y: control.height
     }
