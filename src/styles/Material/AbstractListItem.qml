@@ -32,6 +32,7 @@ T.AbstractListItem {
         MatImp.Ripple {
             anchors.fill: parent
             clip: visible
+            visible: listItem.supportsMouseEvents
             pressed: listItem.pressed
             anchor: listItem
             active: listItem.down || listItem.visualFocus 
