@@ -84,7 +84,7 @@ Kirigami.AbstractCard {
         anchors.topMargin: -root.topPadding
         anchors.rightMargin: root.headerOrientation == Qt.Vertical ? -root.rightPadding : 0
         anchors.bottomMargin: root.headerOrientation == Qt.Horizontal ? -root.bottomPadding : 0
-        height: Layout.preferredHeight
+        //height: Layout.preferredHeight
         implicitWidth: root.headerOrientation == Qt.Horizontal ? sourceSize.width : Layout.preferredWidth
     }
 

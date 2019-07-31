@@ -95,7 +95,8 @@ T.ItemDelegate {
             leftMargin: root.leftPadding
             topMargin: root.topPadding
             rightMargin: root.rightPadding
-            //never anchor bottom, to not have binding loops
+            bottom:parent.bottom
+            bottomMargin: root.bottomPadding
         }
         columns: headerOrientation == Qt.Vertical ? 1 : 2
         function preferredHeight(item) {
@@ -118,6 +119,7 @@ T.ItemDelegate {
         Item {
             id: contentItemParent
             Layout.fillWidth: true
+            Layout.fillHeight: true
             Layout.preferredWidth: contentItem ? contentItem.implicitWidth : 0
             Layout.preferredHeight: mainLayout.preferredHeight(contentItem)
         }

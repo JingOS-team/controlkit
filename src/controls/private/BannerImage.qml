@@ -72,7 +72,7 @@ Image {
     Layout.fillWidth: true
 
     Layout.preferredWidth: titleLayout.implicitWidth || sourceSize.width
-    Layout.preferredHeight: source != "" ? width/(sourceSize.width / sourceSize.height) : Layout.minimumHeight
+    Layout.preferredHeight: titleLayout.completed && source != "" ? width/(sourceSize.width / sourceSize.height) : Layout.minimumHeight
     Layout.minimumHeight: titleLayout.implicitHeight > 0 ? titleLayout.implicitHeight + Kirigami.Units.smallSpacing * 2 : 0
     property int implicitWidth: Layout.preferredWidth
 
@@ -80,10 +80,12 @@ Image {
                                   bannerImage.source !== undefined && bannerImage.source.length === 0 &&
                                   bannerImage.titleIcon !== undefined &&bannerImage.titleIcon.length === 0
 
-
-
     fillMode: Image.PreserveAspectCrop
     asynchronous: true
+
+    Component.onCompleted: {
+        titleLayout.completed = true;
+    }
 
     LinearGradient {
         anchors {
@@ -113,6 +115,7 @@ Image.Ready ? 0 : 0.3)
 
     RowLayout {
         id: titleLayout
+        property bool completed: false
         anchors {
             left: root.titleAlignment & Qt.AlignLeft ? parent.left : undefined
             top: root.titleAlignment & Qt.AlignTop ? parent.top : undefined
