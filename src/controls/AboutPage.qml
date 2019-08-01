@@ -77,6 +77,7 @@ ScrollablePage
     property var aboutData
 
     title: qsTr("About")
+
     Component {
         id: licencePage
         ScrollablePage {
@@ -90,27 +91,25 @@ ScrollablePage
 
     Component {
         id: personDelegate
-        AbstractCard {
-            Layout.fillWidth: true
-            contentItem: RowLayout {
-                Layout.preferredHeight: Units.iconSizes.medium
-                Icon {
-                    Layout.fillHeight: true
-                    Layout.alignment: Qt.AlignVCenter
-                    Layout.minimumWidth: Units.iconSizes.medium
-                    Layout.maximumWidth: Units.iconSizes.medium
-                    source: "user" //TODO: use ocs once we don't need to depend on attica, was using gravatar but it didn't feel right
-                    fallback: "user"
-                }
-                QQC2.Label {
-                    Layout.fillWidth: true
-                    text: qsTr("%1 <%2>").arg(modelData.name).arg(modelData.emailAddress);
-                }
+
+        RowLayout {
+            height: implicitHeight + (Units.smallSpacing * 2)
+
+            spacing: Units.smallSpacing * 2
+            Icon {
+                width: Units.iconSizes.smallMedium
+                height: width
+                source: "user"
+            }
+            Label {
+                text: modelData.emailAddress ? qsTr("%1 <%2>").arg(modelData.name).arg(modelData.emailAddress) : modelData.name
             }
         }
     }
 
-    ColumnLayout {
+    FormLayout {
+        id: form
+
         GridLayout {
             columns: 2
             Layout.fillWidth: true
@@ -121,7 +120,7 @@ ScrollablePage
                 Layout.preferredWidth: height
                 Layout.maximumWidth: page.width / 3;
                 Layout.rightMargin: Units.largeSpacing
-                source: page.aboutData.programLogo || page.aboutData.programIconName
+                source: page.aboutData.programLogo || page.aboutData.programIconName || page.aboutData.componentName
             }
             Heading {
                 Layout.fillWidth: true
@@ -130,6 +129,7 @@ ScrollablePage
             Heading {
                 Layout.fillWidth: true
                 level: 2
+                wrapMode: Text.WordWrap
                 text: page.aboutData.shortDescription
             }
         }
@@ -139,6 +139,7 @@ ScrollablePage
         }
 
         Heading {
+            FormData.isSection: true
             text: qsTr("Copyright")
         }
         QQC2.Label {
@@ -157,11 +158,12 @@ ScrollablePage
             visible: url.length > 0
         }
 
-        Repeater {
-            model: aboutData.licenses
-            delegate: RowLayout {
-                Layout.leftMargin: Units.gridUnit
-                QQC2.Label { text: qsTr("License:" ) }
+        Component {
+            id: licenseLinkButton
+
+            RowLayout {
+                Layout.leftMargin: Units.smallSpacing
+                QQC2.Label { text: qsTr("License:") }
                 LinkButton {
                     text: modelData.name
                     onClicked: applicationWindow().pageStack.push(licencePage, { text: modelData.text, title: modelData.name } )
@@ -169,7 +171,22 @@ ScrollablePage
             }
         }
 
+        Component {
+            id: licenseTextItem
+
+            RowLayout {
+                Layout.leftMargin: Units.smallSpacing
+                QQC2.Label { text: qsTr("License: %1").arg(modelData.name) }
+            }
+        }
+
+        Repeater {
+            model: aboutData.licenses
+            delegate: applicationWindow().pageStack ? licenseLinkButton : licenseTextItem
+        }
+
         Heading {
+            FormData.isSection: visible
             text: qsTr("Libraries in use")
             visible: Settings.information
         }
@@ -183,15 +200,17 @@ ScrollablePage
         }
         Heading {
             Layout.fillWidth: true
+            FormData.isSection: visible
             text: qsTr("Authors")
             visible: aboutData.authors.length > 0
         }
-
         Repeater {
             model: aboutData.authors
             delegate: personDelegate
         }
         Heading {
+            height: visible ? implicitHeight : 0
+            FormData.isSection: visible
             text: qsTr("Credits")
             visible: repCredits.count > 0
         }
@@ -201,6 +220,8 @@ ScrollablePage
             delegate: personDelegate
         }
         Heading {
+            height: visible ? implicitHeight : 0
+            FormData.isSection: visible
             text: qsTr("Translators")
             visible: repTranslators.count > 0
         }
