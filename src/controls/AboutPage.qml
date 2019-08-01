@@ -101,7 +101,7 @@ ScrollablePage
                 height: width
                 source: "user"
             }
-            Label {
+            QQC2.Label {
                 text: modelData.emailAddress ? qsTr("%1 <%2>").arg(modelData.name).arg(modelData.emailAddress) : modelData.name
             }
         }
