@@ -407,6 +407,7 @@ T2.Page {
             property Item page: root
             height: item ? item.implicitHeight : 0
             active: typeof applicationWindow !== "undefined" && (!globalToolBar.row || root.globalToolBarStyle !== Kirigami.ApplicationHeaderStyle.ToolBar) &&
+                    root.actions && (root.actions.main || root.actions.left || root.actions.right || root.actions.contextualActions.length) &&
                 //Legacy
                     (typeof applicationWindow === "undefined" ||
                     (!applicationWindow().header || applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === -1) &&
