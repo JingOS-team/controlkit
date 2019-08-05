@@ -385,53 +385,48 @@ void Icon::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
-void Icon::handleFinished(QNetworkAccessManager* qnam, QNetworkReply* reply) {
-    if (reply && reply->error() == QNetworkReply::NoError) {
-        const QUrl possibleRedirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-        if (!possibleRedirectUrl.isEmpty()) {
-            const QUrl redirectUrl = reply->url().resolved(possibleRedirectUrl);
-            if (redirectUrl == reply->url()) {
-                // no infinite redirections thank you very much
-                reply->deleteLater();
-                return;
-            }
+void Icon::handleRedirect(QNetworkReply* reply)
+{
+    QNetworkAccessManager* qnam = reply->manager();
+    if (reply->error() != QNetworkReply::NoError) {
+        return;
+    }
+    const QUrl possibleRedirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+    if (!possibleRedirectUrl.isEmpty()) {
+        const QUrl redirectUrl = reply->url().resolved(possibleRedirectUrl);
+        if (redirectUrl == reply->url()) {
+            // no infinite redirections thank you very much
             reply->deleteLater();
-            QNetworkRequest request(possibleRedirectUrl);
-            request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
-            m_networkReply = qnam->get(request);
-            connect(m_networkReply.data(), &QNetworkReply::readyRead, this, [this](){handleReadyRead(m_networkReply); });
-            connect(m_networkReply.data(), &QNetworkReply::finished, this, [this, qnam](){handleFinished(qnam, m_networkReply); });
             return;
         }
+        reply->deleteLater();
+        QNetworkRequest request(possibleRedirectUrl);
+        request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
+        m_networkReply = qnam->get(request);
+        connect(m_networkReply.data(), &QNetworkReply::finished, this, [this](){handleFinished(m_networkReply); });
     }
 }
 
-void Icon::handleReadyRead(QNetworkReply* reply)
+void Icon::handleFinished(QNetworkReply* reply)
 {
-    if (reply && reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isNull()) {
-        // We're handing the event loop back while doing network work, and it turns out
-        // this fairly regularly results in things being deleted under us. So, just
-        // handle that and crash less :)
-        QPointer<Icon> me(this);
-        QPointer<QNetworkReply> guardedReply(reply);
-        QByteArray data;
-        do {
-            data.append(guardedReply->read(32768));
-            // Because we are in the main thread, this could be potentially very expensive, so let's not block
-            qApp->processEvents();
-            if(!me || !guardedReply) {
-                return;
-            }
-        } while(!guardedReply->atEnd());
-        m_loadedImage = QImage::fromData(data);
-        if (m_loadedImage.isNull()) {
-            // broken image from data, inform the user of this with some useful broken-image thing...
-            const QSize size = QSize(width(), height()) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
-            m_loadedImage = QIcon::fromTheme(m_fallback).pixmap(size, iconMode(), QIcon::On).toImage();
-        }
-        m_changed = true;
-        update();
+    reply->deleteLater();
+    if (!reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isNull()) {
+        handleRedirect(reply);
+        return;
     }
+
+    m_loadedImage = QImage();
+
+    const QString filename = reply->url().fileName();
+    if (!m_loadedImage.load(reply, filename.mid(filename.indexOf(QLatin1Char('.'))).toLatin1().constData())) {
+        qWarning() << "received broken image" << reply->url();
+
+        // broken image from data, inform the user of this with some useful broken-image thing...
+        const QSize size = QSize(width(), height()) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
+        m_loadedImage = QIcon::fromTheme(m_fallback).pixmap(size, iconMode(), QIcon::On).toImage();
+    }
+    m_changed = true;
+    update();
 }
 
 QImage Icon::findIcon(const QSize &size)
@@ -478,8 +473,7 @@ QImage Icon::findIcon(const QSize &size)
             QNetworkRequest request(url);
             request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
             m_networkReply = qnam->get(request);
-            connect(m_networkReply.data(), &QNetworkReply::readyRead, this, [this](){ handleReadyRead(m_networkReply); });
-            connect(m_networkReply.data(), &QNetworkReply::finished, this, [this, qnam](){ handleFinished(qnam, m_networkReply); });
+            connect(m_networkReply.data(), &QNetworkReply::finished, this, [this](){ handleFinished(m_networkReply); });
         }
         // Temporary icon while we wait for the real image to load...
         img = QIcon::fromTheme(QStringLiteral("image-x-icon")).pixmap(size, iconMode(), QIcon::On).toImage();

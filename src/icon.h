@@ -93,8 +93,8 @@ Q_SIGNALS:
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
     QImage findIcon(const QSize& size);
-    void handleFinished(QNetworkAccessManager* qnam, QNetworkReply* reply);
-    void handleReadyRead(QNetworkReply* reply);
+    void handleFinished(QNetworkReply* reply);
+    void handleRedirect(QNetworkReply* reply);
     QIcon::Mode iconMode() const;
     bool guessMonochrome(const QImage &img);
 
