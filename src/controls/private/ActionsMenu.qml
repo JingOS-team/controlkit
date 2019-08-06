@@ -53,7 +53,7 @@ Controls.Menu
             property QtObject item: null
 
             function create() {
-                if (!action.children || action.children.length === 0) {
+                if (!action.hasOwnProperty("children") && !action.children || action.children.length === 0) {
                     if (action.hasOwnProperty("separator") && action.separator) {
                         item = theMenu.separatorDelegate.createObject(null, {});
                     }
@@ -69,7 +69,7 @@ Controls.Menu
                 }
             }
             function remove() {
-                if (!action.children || action.children.length === 0) {
+				if (!action.hasOwnProperty("children") && !action.children || action.children.length === 0) {
                     theMenu.removeItem(item)
                 } else if (theMenu.submenuComponent) {
                     theMenu.removeMenu(item)

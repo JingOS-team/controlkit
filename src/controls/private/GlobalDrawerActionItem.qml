@@ -45,7 +45,7 @@ BasicListItem {
     MnemonicData.label: modelData.text
     property ActionsMenu actionsMenu: ActionsMenu {
         x: Qt.application.layoutDirection === Qt.RightToLeft ? -width : listItem.width
-        actions: modelData.children
+        actions: modelData.hasOwnProperty("children") ? modelData.children : null
         submenuComponent: Component {
             ActionsMenu {}
         }
@@ -95,12 +95,12 @@ BasicListItem {
         selected: listItem.checked || listItem.pressed
         Layout.preferredWidth: Layout.preferredHeight
         source: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
-        visible: (!isExpandible || root.collapsed) && !listItem.isSeparator && modelData.children!==undefined && modelData.children.length > 0
+		visible: (!isExpandible || root.collapsed) && !listItem.isSeparator && modelData.hasOwnProperty("children") && modelData.children!==undefined && modelData.children.length > 0
     }
     data: [
         QQC2.ToolTip {
-            visible: !listItem.isSeparator && (modelData.tooltip.length || root.collapsed) && (!actionsMenu || !actionsMenu.visible) &&  listItem.hovered && text.length > 0
-            text: modelData.tooltip.length ? modelData.tooltip : modelData.text
+			visible: !listItem.isSeparator && (modelData.hasOwnProperty("tooltip") && modelData.tooltip.length || root.collapsed) && (!actionsMenu || !actionsMenu.visible) &&  listItem.hovered && text.length > 0
+            text: modelData.hasOwnProperty("tooltip") && modelData.tooltip.length ? modelData.tooltip : modelData.text
             delay: Units.toolTipDelay
             timeout: 5000
             y: listItem.height/2 - height/2
@@ -128,8 +128,8 @@ BasicListItem {
         if (!supportsMouseEvents) {
             return;
         }
-        modelData.trigger();
-        if (modelData.children!==undefined && modelData.children.length > 0) {
+        modelData.trigger();		
+        if (modelData.hasOwnProperty("children") && modelData.children!==undefined && modelData.children.length > 0) {
             if (root.collapsed) {
                 //fallbacks needed for Qt 5.9
                 if ((!listItem.actionsMenu.hasOwnProperty("count") || listItem.actionsMenu.count>0) && !listItem.actionsMenu.visible) {

@@ -17,9 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.6
+import QtQuick 2.7
 import QtQuick.Layouts 1.2
-import QtQuick.Controls 2.2 as Controls
+import QtQuick.Controls 2.5 as Controls
 import org.kde.kirigami 2.5 as Kirigami
 import "private"
 
@@ -116,7 +116,7 @@ Item {
                     enabled: opacity
 
                     display: root.display
-                    visible: modelData.visible
+                    visible: !modelData.hasOwnProperty("visible") || modelData.visible
                     Layout.fillWidth: false
                     Layout.alignment: Qt.AlignVCenter
                     Layout.minimumWidth: implicitWidth
@@ -126,15 +126,16 @@ Item {
                         var index = actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {
                             return act === modelData});
 
-                        if ((opacity > 0 || !modelData.visible) && index > -1) {
+						if ((opacity > 0 || (modelData.hasOwnProperty("visible") || !modelData.visible)) && index > -1) {
                             actionsLayout.overflowSet.splice(index, 1);
-                        } else if (opacity === 0 && modelData.visible && index === -1) {
+						} else if (opacity === 0 && (!modelData.hasOwnProperty("visible") || modelData.visible) && index === -1) {
                             actionsLayout.overflowSet.push(modelData);
                         }
                         actionsLayout.overflowSetChanged();
                     }
                     Connections {
                         target: modelData
+                        ignoreUnknownSignals: !modelData.hasOwnProperty("visible")
                         onVisibleChanged: actionDelegate.updateOverflowSet();
                     }
                     Component.onCompleted: {
@@ -175,12 +176,12 @@ Item {
                        Binding {
                            target: parentItem
                            property: "visible"
-                           value: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {return act === parentAction}) > -1 && (parentAction.visible === undefined || parentAction.visible)
+						   value: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {return act === parentAction}) > -1 &&  (parentAction.hasOwnProperty("visible") ? parentAction.visible === undefined || parentAction.visible : !parentAction.hasOwnProperty("visible"))
                        }
                     }
                 }
                 itemDelegate: ActionMenuItem {
-                    visible: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {return act === ourAction}) > -1 && (ourAction.visible === undefined || ourAction.visible)
+					visible: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {return act === ourAction}) > -1 &&  ( ourAction.hasOwnProperty("visible") ? ourAction.visible === undefined || ourAction.visible : !ourAction.hasOwnProperty("visible"))
                 }
                 Instantiator {
 

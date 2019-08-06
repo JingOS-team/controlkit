@@ -42,7 +42,7 @@ Item {
     readonly property Page page: root.parent.page
     //either Action or QAction should work here
 
-    function isActionAvailable(action) { return action && (action.visible === undefined || action.visible); }
+    function isActionAvailable(action) { return action && (action.hasOwnProperty("visible") ? action.visible === undefined || action.visible : !action.hasOwnProperty("visible")); }
 
     readonly property QtObject action: root.page && isActionAvailable(root.page.mainAction) ? root.page.mainAction : null
     readonly property QtObject leftAction: root.page && isActionAvailable(root.page.leftAction) ? root.page.leftAction : null
@@ -181,7 +181,7 @@ Item {
                         actionUnderMouse.trigger();
                     }
                     
-                    if (actionUnderMouse.children.length > 0) {
+                    if (actionUnderMouse.hasOwnProperty("children") && actionUnderMouse.children.length > 0) {
                         var subMenuUnderMouse;
                         switch (actionUnderMouse) {
                         case leftAction:
@@ -254,7 +254,7 @@ Item {
                         id: mainActionSubMenu
                         y: -height
                         x: -width/2 + parent.width/2
-                        actions: root.action ? root.action.children : ""
+                        actions: root.action && root.action.hasOwnProperty("children") ? root.action.children : ""
                         submenuComponent: Component {
                             ActionsMenu {}
                         }
@@ -264,7 +264,7 @@ Item {
                         anchors.centerIn: parent
                         width: Units.iconSizes.smallMedium
                         height: width
-                        source: root.action && root.action.iconName ? root.action.iconName : ""
+                        source: root.action && root.action.icon.name ? root.action.icon.name : ""
                         selected: true
                         color: root.action && root.action.color && root.action.color.a > 0 ? root.action.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
                     }
@@ -309,13 +309,13 @@ Item {
                         id: leftActionSubMenu
                         y: -height
                         x: -width/2 + parent.width/2
-                        actions: root.leftAction ? root.leftAction.children : ""
+                        actions: root.leftAction && root.leftAction.hasOwnProperty("children") ? root.leftAction.children : ""
                         submenuComponent: Component {
                             ActionsMenu {}
                         }
                     }
                     Icon {
-                        source: root.leftAction && root.leftAction.iconName ? root.leftAction.iconName : ""
+                        source: root.leftAction && root.leftAction.icon.name ? root.leftAction.icon.name : ""
                         width: Units.iconSizes.smallMedium
                         height: width
                         selected: leftButtonGraphics.pressed
@@ -355,13 +355,13 @@ Item {
                         id: rightActionSubMenu
                         y: -height
                         x: -width/2 + parent.width/2
-                        actions: root.rightAction ? root.rightAction.children : ""
+                        actions: root.rightAction && root.rightAction.hasOwnProperty("children") ? root.rightAction.children : ""
                         submenuComponent: Component {
                             ActionsMenu {}
                         }
                     }
                     Icon {
-                        source: root.rightAction && root.rightAction.iconName ? root.rightAction.iconName : ""
+                        source: root.rightAction && root.rightAction.icon.name ? root.rightAction.icon.name : ""
                         width: Units.iconSizes.smallMedium
                         height: width
                         selected: rightButtonGraphics.pressed
