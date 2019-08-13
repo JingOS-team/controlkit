@@ -260,7 +260,22 @@ T2.ItemDelegate {
             property bool exclusive: false
             property Item checkedButton
             spacing: Settings.tabletMode ? Units.largeSpacing : 0
-            property int visibleActions: 0
+            property bool hasVisibleActions: false
+            function updateVisibleActions(definitelyVisible = false) {
+                if (definitelyVisible) {
+                    hasVisibleActions = true;
+                } else {
+                    var actionCount = listItem.actions.length;
+                    for (var i = 0; i < actionCount; i++) {
+                        // Assuming that visible is only false if it is explicitly false, and not just falsy
+                        if (listItem.actions[i].visible === false) {
+                            continue;
+                        }
+                        hasVisibleActions = true;
+                        break;
+                    }
+                }
+            }
             Repeater {
                 model: {
                     if (listItem.actions.length === 0) {
@@ -278,23 +293,9 @@ T2.ItemDelegate {
                     icon.source: modelData.iconSource !== "" ? modelData.iconSource : ""
                     enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
                     visible: (modelData && modelData.visible !== undefined) ? modelData.visible : true;
-                    onVisibleChanged: {
-                        if (visible) {
-                            actionsLayout.visibleActions++;
-                        } else {
-                            actionsLayout.visibleActions--;
-                        }
-                    }
-                    Component.onCompleted: {
-                        if (visible) {
-                            actionsLayout.visibleActions++;
-                        }
-                    }
-                    Component.onDestruction: {
-                        if (visible) {
-                            actionsLayout.visibleActions--;
-                        }
-                    }
+                    onVisibleChanged: actionsLayout.updateVisibleActions(visible);
+                    Component.onCompleted: actionsLayout.updateVisibleActions(visible);
+                    Component.onDestruction: actionsLayout.updateVisibleActions(visible);
                     Controls.ToolTip.delay: Units.toolTipDelay
                     Controls.ToolTip.timeout: 5000
                     Controls.ToolTip.visible: listItem.visible && (Settings.tabletMode ? pressed : hovered) && Controls.ToolTip.text.length > 0
@@ -316,7 +317,7 @@ T2.ItemDelegate {
     MouseArea {
         id: handleMouse
         parent: listItem.background
-        visible: Settings.tabletMode && listItem.actionsVisible && actionsLayout.visibleActions > 0
+        visible: Settings.tabletMode && listItem.actionsVisible && actionsLayout.hasVisibleActions
         z: 99
         anchors {
             right: parent.right
