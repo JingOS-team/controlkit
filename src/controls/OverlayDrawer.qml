@@ -108,19 +108,16 @@ T.OverlayDrawer {
                             edge = Qt.LeftEdge;
                         }
                     }
-                    switch(edge) {
-                    case Qt.LeftEdge:
-                        return Qt.resolvedUrl("templates/private/MenuIcon.qml");
-                    case Qt.RightEdge: {
-                        if (root.hasOwnProperty("actions")) {
-                            return Qt.resolvedUrl("templates/private/ContextIcon.qml");
-                        } else {
-                            return Qt.resolvedUrl("templates/private/GenericDrawerIcon.qml");
-                        }
-                    }
-                    default:
-                        return "";
-                    }
+                    
+                    if (root.handleClosedIcon.source && root.handleOpenIcon.source) {					
+						return Qt.resolvedUrl("templates/private/GenericDrawerIcon.qml");				
+					} else if (edge == Qt.LeftEdge ) {						
+						return Qt.resolvedUrl("templates/private/MenuIcon.qml");						
+					} else if(edge == Qt.RightEdge && root.hasOwnProperty("actions")) {					
+						return Qt.resolvedUrl("templates/private/ContextIcon.qml");						
+					}else {						
+						return "";
+					}
                 }
                 onItemChanged: {
                     if(item) {

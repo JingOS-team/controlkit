@@ -70,7 +70,8 @@ import "templates/private"
  */
 OverlayDrawer {
     id: root
-
+    handleClosedIcon.source: null
+    handleOpenIcon.source: null
     /**
      * title: string
      * A title for the action list that will be shown to the user when opens the drawer

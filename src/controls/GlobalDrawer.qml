@@ -67,7 +67,9 @@ import "templates/private"
 OverlayDrawer {
     id: root
     edge: Qt.application.layoutDirection == Qt.RightToLeft ? Qt.RightEdge : Qt.LeftEdge
-
+    handleClosedIcon.source: null
+    handleOpenIcon.source: null
+    
     /**
      * title: string
      * A title to be displayed on top of the drawer
