@@ -6,9 +6,11 @@ platforms:
     - name: Linux
     - name: FreeBSD
     - name: Android
-    - name: iOS (maintainer needed)
+    - name: iOS
+      note: maintainer needed
     - name: Windows
-    - name: macOS (maintainer needed)
+    - name: MacOSX
+      note: maintainer needed
 public_lib: true
 deprecated: false
 release: true
