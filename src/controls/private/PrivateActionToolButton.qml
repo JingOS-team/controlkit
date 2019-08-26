@@ -48,8 +48,8 @@ Controls.ToolButton {
 	
 	//we need our own text delegate
 	text: ""
-	checkable: kirigamiAction && kirigamiAction.checkable
-	checked: (kirigamiAction && kirigamiAction.checked) || menu.visible
+	checkable: (kirigamiAction && kirigamiAction.checkable) || (menu.actions && menu.actions.length > 0)
+	checked: (kirigamiAction && kirigamiAction.checked)
 	enabled: kirigamiAction && kirigamiAction.enabled
 	opacity: enabled ? 1 : 0.4
 	visible: kirigamiAction && kirigamiAction.visible
@@ -57,9 +57,16 @@ Controls.ToolButton {
 		if (kirigamiAction) {
 			kirigamiAction.trigger();
 		}
-		if (kirigamiAction.hasOwnProperty("children") && kirigamiAction.children.length > 0 && !menu.visible) {
-			control.menuAboutToShow();
-			menu.popup(control, 0, control.height)
+	}
+
+	onToggled: {
+		if (menu.actions.length > 0) {
+			if (checked) {
+				control.menuAboutToShow();
+				menu.popup(control, 0, control.height)
+			} else {
+				menu.dismiss()
+			}
 		}
 	}
 	
@@ -67,8 +74,16 @@ Controls.ToolButton {
 		id: menu
 		y: control.height
 		actions: control.kirigamiAction && kirigamiAction.hasOwnProperty("children") ? control.kirigamiAction.children : null
+
+		// Important: We handle the press on parent in the parent, so ignore it here.
+		closePolicy: Controls.Popup.CloseOnEscape | Controls.Popup.CloseOnPressOutsideParent
+
 		submenuComponent: Component {
 			ActionsMenu {}
+		}
+
+		onClosed: {
+			control.checked = false
 		}
 	}
 	
