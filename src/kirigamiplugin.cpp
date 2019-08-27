@@ -80,11 +80,11 @@ void KirigamiPlugin::registerTypes(const char *uri)
         m_stylesFallbackChain.prepend(QStringLiteral("org.kde.desktop"));
     }
 #elif defined(Q_OS_ANDROID)
-    if (!m_stylesFallbackChain.contains(QStringLiteral("Material"))) {
+    if (!m_stylesFallbackChain.contains(QLatin1String("Material"))) {
         m_stylesFallbackChain.prepend(QStringLiteral("Material"));
     }
 #else // do we have an iOS specific style?
-    if (!m_stylesFallbackChain.contains(QStringLiteral("Material"))) {
+    if (!m_stylesFallbackChain.contains(QLatin1String("Material"))) {
         m_stylesFallbackChain.prepend(QStringLiteral("Material"));
     }
 #endif

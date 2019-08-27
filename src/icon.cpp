@@ -174,9 +174,9 @@ void Icon::setSource(const QVariant &icon)
 
     if (icon.type() == QVariant::String) {
         const QString iconSource = icon.toString();
-        m_isMaskHeuristic = (iconSource.endsWith(QStringLiteral("-symbolic"))
-                            || iconSource.endsWith(QStringLiteral("-symbolic-rtl"))
-                            || iconSource.endsWith(QStringLiteral("-symbolic-ltr")));
+        m_isMaskHeuristic = (iconSource.endsWith(QLatin1String("-symbolic"))
+                            || iconSource.endsWith(QLatin1String("-symbolic-rtl"))
+                            || iconSource.endsWith(QLatin1String("-symbolic-ltr")));
         emit isMaskChanged();
     }
 
@@ -441,7 +441,7 @@ QImage Icon::findIcon(const QSize &size)
 
         // QRC paths are not correctly handled by .path()
         if (iconId.size() >=2 && iconId.startsWith(QLatin1String("/:"))) {
-            iconId = iconId.remove(0, 1);
+            iconId.remove(0, 1);
         }
 
         QSize actualSize;
@@ -498,7 +498,7 @@ QImage Icon::findIcon(const QSize &size)
 
             /*const QColor tintColor = !m_color.isValid() || m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
 
-            if (m_isMask || icon.isMask() || iconSource.endsWith(QStringLiteral("-symbolic")) || iconSource.endsWith(QStringLiteral("-symbolic-rtl")) || iconSource.endsWith(QStringLiteral("-symbolic-ltr")) || guessMonochrome(img)) {
+            if (m_isMask || icon.isMask() || iconSource.endsWith(QLatin1String("-symbolic")) || iconSource.endsWith(QLatin1String("-symbolic-rtl")) || iconSource.endsWith(QLatin1String("-symbolic-ltr")) || guessMonochrome(img)) {
                 QPainter p(&img);
                 p.setCompositionMode(QPainter::CompositionMode_SourceIn);
                 p.fillRect(img.rect(), tintColor);
