@@ -109,7 +109,7 @@ AbstractPageHeader {
             children: page && page.actions.contextualActions ? page.actions.contextualActions : null
         }
 
-        action: page && page.actions.contextualActions.length === 1 ? page.actions.contextualActions[0] : overflowAction
+        kirigamiAction: page && page.actions.contextualActions.length === 1 ? page.actions.contextualActions[0] : overflowAction
     }
 }
 
