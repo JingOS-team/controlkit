@@ -66,6 +66,7 @@ Controls.Menu
 
                     theMenu.insertMenu(theMenu.count, item)
                     item.parentItem = theMenu.contentData[theMenu.contentData.length-1]
+                    item.parentItem.icon = action.icon
                 }
             }
             function remove() {
