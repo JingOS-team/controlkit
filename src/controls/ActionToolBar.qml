@@ -104,6 +104,18 @@ Item {
             }
             return -1;
         }
+
+        function isActionVisible(action) {
+            var index = actionsLayout.findIndex(actionsLayout.overflowSet, function(act){return act === action});
+            if (index === -1) {
+                index = actionsLayout.findIndex(root.hiddenActions, function(act){return act === action});
+                if (index === -1) {
+                    return true
+                }
+            }
+            return false
+        }
+
         RowLayout {
             Layout.minimumWidth: 0
             Layout.fillHeight: true
@@ -150,71 +162,29 @@ Item {
             visible: root.Layout.fillWidth
         }
 
-        Controls.ToolButton {
+        PrivateActionToolButton {
             id: moreButton
 
             Layout.alignment: Qt.AlignRight
-            Kirigami.Icon {
-                anchors.centerIn: parent
-                source: "overflow-menu"
-                width: Kirigami.Units.iconSizes.smallMedium
-                height: width
+
+            visible: hiddenActions.length > 0 || actionsLayout.overflowSet.length > 0
+            showMenuArrow: false
+
+            kirigamiAction: Kirigami.Action {
+                icon.name: "overflow-menu"
+                children: Array.prototype.map.call(root.actions, i => i).concat(Array.prototype.map.call(hiddenActions, i => i))
             }
 
-            //checkable: true
-            checked: menu.visible
-            visible: hiddenActions.length > 0 || actionsLayout.overflowSet.length > 0;
-            onClicked: menu.visible ? menu.close() : menu.open()
-
-            ActionsMenu {
-                id: menu
-                y: root.position == Controls.ToolBar.Footer ? -height : moreButton.height
-                x: -width + moreButton.width
-                actions: root.actions
-                submenuComponent: Component {
-                    ActionsMenu {
-                       Binding {
-                           target: parentItem
-                           property: "visible"
-						   value: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {return act === parentAction}) > -1 &&  (parentAction.hasOwnProperty("visible") ? parentAction.visible === undefined || parentAction.visible : !parentAction.hasOwnProperty("visible"))
-                       }
-                    }
+            menu.submenuComponent: ActionsMenu {
+                Binding {
+                    target: parentItem
+                    property: "visible"
+                    value: !actionsLayout.isActionVisible(parentAction) && (parentAction.visible === undefined || parentAction.visible)
                 }
-                itemDelegate: ActionMenuItem {
-					visible: actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {return act === ourAction}) > -1 &&  ( ourAction.hasOwnProperty("visible") ? ourAction.visible === undefined || ourAction.visible : !ourAction.hasOwnProperty("visible"))
-                }
-                Instantiator {
+            }
 
-                    model: root.hiddenActions
-                    delegate: QtObject {
-                        readonly property QtObject action: modelData
-                        property QtObject item: null
-
-                        Component.onDestruction: if (item) item.destroy()
-
-                        function create() {
-                            if (!action.children || action.children.length === 0) {
-                                item = menu.itemDelegate.createObject(null, { ourAction: action });
-                                menu.addItem(item)
-                            } else if (menu.submenuComponent) {
-                                item = menu.submenuComponent.createObject(null, { title: action.text, actions: action.children });
-                                menu.addMenu(item)
-                            }
-                            //break the binding
-                            item.visible = true;
-                        }
-                        function remove() {
-                            if (!action.children || action.children.length === 0) {
-                                menu.removeItem(item)
-                            } else if (menu.submenuComponent) {
-                                menu.removeMenu(item)
-                            }
-                        }
-                    }
-
-                    onObjectAdded: object.create()
-                    onObjectRemoved: object.remove()
-                }
+            menu.itemDelegate: ActionMenuItem {
+                visible: !actionsLayout.isActionVisible(ourAction) && (ourAction.visible === undefined || ourAction.visible)
             }
         }
     }
