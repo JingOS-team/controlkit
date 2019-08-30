@@ -73,6 +73,7 @@
         <file alias="LinkButton.qml">@kirigami_QML_DIR@/src/controls/LinkButton.qml</file>
         <file alias="Label.qml">@kirigami_QML_DIR@/src/controls/Label.qml</file>
         <file alias="BasicListItem.qml">@kirigami_QML_DIR@/src/controls/BasicListItem.qml</file>
+        <file alias="ListSectionHeader.qml">@kirigami_QML_DIR@/src/controls/ListSectionHeader.qml</file>
         <file alias="AbstractApplicationHeader.qml">@kirigami_QML_DIR@/src/controls/AbstractApplicationHeader.qml</file>
         <file alias="FormLayout.qml">@kirigami_QML_DIR@/src/controls/FormLayout.qml</file>
         <file alias="ListItemDragHandle.qml">@kirigami_QML_DIR@/src/controls/ListItemDragHandle.qml</file>

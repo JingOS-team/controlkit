@@ -193,6 +193,9 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType<WheelHandler>(uri, 2, 9, "WheelHandler");
     qmlRegisterUncreatableType<KirigamiWheelEvent>(uri, 2, 9, "WheelEvent", QStringLiteral("Cannot create objects of type WheelEvent."));
 
+    //2.10
+    qmlRegisterType(componentUrl(QStringLiteral("ListSectionHeader.qml")), uri, 2, 10, "ListSectionHeader");
+
     qmlProtectModule(uri, 2);
 }
 

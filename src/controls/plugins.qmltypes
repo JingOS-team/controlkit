@@ -525,6 +525,25 @@ Module {
         Property { name: "_default"; type: "QQuickItem"; isPointer: true }
     }
     Component {
+        prototype: "QQuickItemDelegate"
+        name: "org.kde.kirigami/ListSectionHeader 2.10"
+        exports: ["org.kde.kirigami/ListSectionHeader 2.10"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "_contents"
+        Property { name: "label"; type: "string" }
+        Property { name: "_contents"; type: "QQuickItem"; isList: true; isReadonly: true }
+        Property { name: "supportsMouseEvents"; type: "bool" }
+        Property { name: "sectionDelegate"; type: "bool" }
+        Property { name: "separatorVisible"; type: "bool" }
+        Property { name: "textColor"; type: "QColor" }
+        Property { name: "backgroundColor"; type: "QColor" }
+        Property { name: "activeTextColor"; type: "QColor" }
+        Property { name: "activeBackgroundColor"; type: "QColor" }
+        Property { name: "containsMouse"; type: "bool"; isReadonly: true }
+        Property { name: "_default"; type: "QQuickItem"; isPointer: true }
+    }
+    Component {
         prototype: "QQuickItem"
         name: "QtQuick.Controls.Material.impl/BoxShadow 2.0"
         exports: ["QtQuick.Controls.Material.impl/BoxShadow 2.0"]

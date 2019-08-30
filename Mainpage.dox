@@ -44,6 +44,7 @@ It is a Tier-1 KDE Framework starting with KDE Frameworks 5.37.
 - \link org::kde::kirigami::AbstractListItem AbstractListItem  \endlink
 - \link org::kde::kirigami::ApplicationHeader ApplicationHeader  \endlink
 - \link org::kde::kirigami::BasicListItem BasicListItem  \endlink
+- \link org::kde::kirigami::ListSectionHeader ListSectionHeader  \endlink
 - \link org::kde::kirigami::SwipeListItem  SwipeListItem \endlink
 - \link org::kde::kirigami::Heading Heading  \endlink
 - \link org::kde::kirigami::Label Label  \endlink

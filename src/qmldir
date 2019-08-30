@@ -50,3 +50,4 @@ LinkButton 2.6 LinkButton.qml
 ActionTextField 2.7 ActionTextField.qml
 SearchField 2.8 SearchField.qml
 PasswordField 2.8 PasswordField.qml
+ListSectionHeader 2.10 ListSectionHeader.qml
