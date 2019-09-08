@@ -28,15 +28,8 @@ Controls.Menu
     property alias actions: actionsInstantiator.model
     property Component submenuComponent
     //renamed to work on both Qt 5.9 and 5.10
-    property Component itemDelegate: Component {ActionMenuItem {}}
-    property Component separatorDelegate: Component {
-        Controls.MenuSeparator {
-            contentItem: Rectangle {
-                implicitHeight: Math.floor(Kirigami.Units.devicePixelRatio)
-                color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-            }
-        }
-    }
+    property Component itemDelegate: ActionMenuItem {}
+    property Component separatorDelegate: Controls.MenuSeparator { }
     property QtObject parentAction
     property Controls.MenuItem parentItem
 
