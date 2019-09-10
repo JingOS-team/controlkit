@@ -42,6 +42,7 @@ QtObject {
 
     property var showNavigationButtons: (style != Kirigami.ApplicationHeaderStyle.TabBar && (!Kirigami.Settings.isMobile || Qt.platform.os == "ios")) ? (Kirigami.ApplicationHeaderStyle.ShowBackButton | Kirigami.ApplicationHeaderStyle.ShowForwardButton) : Kirigami.ApplicationHeaderStyle.NoNavigationButtons
     property bool separatorVisible: true
+    property int toolbarActionAlignment: Qt.AlignRight
 
     property int minimumHeight: 0
     property int preferredHeight: (actualStyle == Kirigami.ApplicationHeaderStyle.ToolBar

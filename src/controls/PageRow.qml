@@ -143,6 +143,7 @@ T.Control {
      *
      * * actualStyle: this will represent the actual style of the toolbar: it can be different from style in the case style is Auto
      * * showNavigationButtons: OR flags combination of ApplicationHeaderStyle.ShowBackButton and ApplicationHeaderStyle.ShowForwardButton
+     * * toolbarActionAlignment: How to horizontally align the actions when using the ToolBar style. Note that anything but Qt.AlignRight will cause the title to be hidden (default: Qt.AlignRight)
      * * minimumHeight: (int) minimum height of the header, which will be resized when scrolling, only in Mobile mode (default: preferredHeight, sliding but no scaling)
     property int preferredHeight: (int) the height the toolbar will usually have
     property int maximumHeight: (int) The height the toolbar will have in mobile mode when the app is in reachable mode (default: preferredHeight * 1.5)

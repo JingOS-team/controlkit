@@ -43,12 +43,12 @@ AbstractPageHeader {
         anchors {
             verticalCenter: parent.verticalCenter
             left: parent.left
-            right: actionsLayout.left
+            right: parent.right
             leftMargin: Units.largeSpacing
             rightMargin: Units.smallSpacing
         }
 
-        visible: width > item.Layout.minimumWidth
+        visible: pageRow.globalToolBar.toolbarActionAlignment == Qt.AlignRight && width > item.Layout.minimumWidth
 
         sourceComponent: page ? page.titleDelegate : null
 
@@ -69,11 +69,16 @@ AbstractPageHeader {
         id: actionsLayout
         anchors {
             verticalCenter: parent.verticalCenter
+            left: parent.left
             right: ctxActionsButton.visible ? ctxActionsButton.left : parent.right
         }
 
         readonly property bool toobig: root.width - root.leftPadding - root.rightPadding - titleLoader.implicitWidth - Units.gridUnit < buttonTextMetrics.requiredWidth
 
+        Item {
+            Layout.fillWidth: true
+            visible: pageRow.globalToolBar.toolbarActionAlignment != Qt.AlignLeft
+        }
         Private.PrivateActionToolButton {
             Layout.alignment: Qt.AlignVCenter
             kirigamiAction: page && page.actions ? page.actions.left : null
@@ -89,6 +94,10 @@ AbstractPageHeader {
             Layout.alignment: Qt.AlignVCenter
             kirigamiAction: page && page.actions ? page.actions.right : null
             showText: !parent.toobig
+        }
+        Item {
+            Layout.fillWidth: true
+            visible: pageRow.globalToolBar.toolbarActionAlignment != Qt.AlignRight
         }
     }
 
