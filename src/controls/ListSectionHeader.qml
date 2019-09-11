@@ -62,7 +62,10 @@ AbstractListItem {
 
     default property alias _contents: rowLayout.data
 
-    backgroundColor: Theme.alternateBackgroundColor
+    backgroundColor: Theme.backgroundColor
+    Theme.inherit: false
+    Theme.colorSet: Theme.Window
+
     separatorVisible: false
     sectionDelegate: true
     hoverEnabled: false
