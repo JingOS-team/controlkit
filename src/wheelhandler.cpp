@@ -205,8 +205,8 @@ KirigamiWheelEvent::~KirigamiWheelEvent()
 
 void KirigamiWheelEvent::initializeFromEvent(QWheelEvent *event)
 {
-    m_x = event->x();
-    m_y = event->y();
+    m_x = event->position().x();
+    m_y = event->position().y();
     m_angleDelta = event->angleDelta();
     m_pixelDelta = event->pixelDelta();
     m_buttons = event->buttons();
