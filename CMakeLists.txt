@@ -69,6 +69,7 @@ include(KDECMakeSettings)
 include(ECMQtDeclareLoggingCategory)
 include(ECMAddQch)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
+include(KDEPackageAppTemplates)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5Kirigami2")
 
@@ -119,6 +120,7 @@ ecm_find_qmlmodule(QtGraphicalEffects 1.0)
 
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050d00)
 add_subdirectory(src)
+add_subdirectory(templates)
 
 if (BUILD_EXAMPLES AND NOT STATIC_LIBRARY)
     add_subdirectory(examples)

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=%{APPNAME}
+Comment=%{APPNAME} Kirigami Application
+Version=1.0
+Exec=%{APPNAMELC}
+MimeType=application/x-%{APPNAMELC};
+Icon=applications-development
+Type=Application
+Terminal=false
+Categories=Qt;KDE;

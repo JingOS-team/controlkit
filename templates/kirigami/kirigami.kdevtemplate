@@ -1,0 +1,8 @@
+# KDE Config File
+[General]
+Name=Kirigami Application
+Comment=Touch friendly application using Qt Quick Controls 2 and Kirigami
+
+Category=Qt/Graphical
+Icon=kirigami-app.png
+ShowFilesAfterGeneration=src/main.cpp
