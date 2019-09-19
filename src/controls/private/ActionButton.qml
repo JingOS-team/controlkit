@@ -262,7 +262,7 @@ Item {
                     Icon {
                         id: icon
                         anchors.centerIn: parent
-                        width: Units.iconSizes.smallMedium * (Settings.isMobile ? 1.5 : 1)
+                        width: Units.iconSizes.smallMedium
                         height: width
                         source: root.action && root.action.icon.name ? root.action.icon.name : ""
                         selected: true
