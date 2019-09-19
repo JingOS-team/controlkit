@@ -85,8 +85,6 @@ Item {
 
     Layout.minimumWidth: moreButton.implicitWidth
 
-    Layout.fillWidth: true
-
     RowLayout {
         id: actionsLayout
         anchors.fill: parent
