@@ -117,7 +117,6 @@ T2.ItemDelegate {
 
     //Theme.inherit: false
    //Theme.colorSet: Theme.View
-    Theme.colorGroup: internal.indicateActiveFocus ? Theme.Active : Theme.Inactive
 
     padding: Settings.tabletMode ? Units.largeSpacing : Units.smallSpacing
 

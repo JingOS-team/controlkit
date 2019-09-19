@@ -154,8 +154,6 @@ T2.ItemDelegate {
 
     default property alias _default: listItem.contentItem
 
-    Theme.colorGroup: behindItem.indicateActiveFocus ? Theme.Active : Theme.Inactive
-
     hoverEnabled: true
     implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
     width: parent ? parent.width : implicitWidth
