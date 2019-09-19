@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.2
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami.private 2.6 as KirigamiPrivate
 import QtQuick.Controls 2.1 as QQC2
 
 /**
@@ -27,7 +27,7 @@ import QtQuick.Controls 2.1 as QQC2
  * It will open the url by default, allow to copy it if triggered with the
  * secondary mouse button.
  *
- * @since 5.52
+ * @since 5.63
  * @since org.kde.kirigami 2.6
  */
 LinkButton
@@ -49,7 +49,7 @@ LinkButton
         id: menu
         QQC2.MenuItem {
             text: qsTr("Copy link address")
-            onClicked: app.copyTextToClipboard(button.url)
+            onClicked: KirigamiPrivate.CopyHelperPrivate.copyTextToClipboard(button.url)
         }
     }
 }

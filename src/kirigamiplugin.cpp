@@ -35,6 +35,8 @@
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQuickStyle>
+#include <QGuiApplication>
+#include <QClipboard>
 
 #include "libkirigami/platformtheme.h"
 
@@ -44,6 +46,16 @@ static QString s_selectedStyle;
 #ifdef KIRIGAMI_BUILD_TYPE_STATIC
 #include <qrc_kirigami.cpp>
 #endif
+
+class CopyHelperPrivate : public QObject
+{
+    Q_OBJECT
+    public:
+        Q_INVOKABLE static void copyTextToClipboard(const QString& text)
+        {
+            qGuiApp->clipboard()->setText(text);
+        }
+};
 
 QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
 {
@@ -181,6 +193,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("AboutPage.qml")), uri, 2, 6, "AboutPage");
     qmlRegisterType(componentUrl(QStringLiteral("LinkButton.qml")), uri, 2, 6, "LinkButton");
     qmlRegisterType(componentUrl(QStringLiteral("UrlButton.qml")), uri, 2, 6, "UrlButton");
+    qmlRegisterSingletonType<CopyHelperPrivate>("org.kde.kirigami.private", 2, 6, "CopyHelperPrivate", [] (QQmlEngine*, QJSEngine*) -> QObject* { return new CopyHelperPrivate; });
 
     //2.7
     qmlRegisterType<ColumnView>(uri, 2, 7, "ColumnView");
@@ -203,5 +216,4 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlProtectModule(uri, 2);
 }
 
-#include "moc_kirigamiplugin.cpp"
-
+#include "kirigamiplugin.moc"
