@@ -24,7 +24,4 @@ import org.kde.kirigami 2.4 as Kirigami
 
 NotesGeneral {
     id: root
-
-    header: Kirigami.ToolBarApplicationHeader {
-    }
 }

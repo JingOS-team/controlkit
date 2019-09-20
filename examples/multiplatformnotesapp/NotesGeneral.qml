@@ -27,9 +27,6 @@ Kirigami.ApplicationWindow {
     property string currentFile
 
 
-    header: Kirigami.ToolBarApplicationHeader {
-    }
-
     pageStack.initialPage: iconView
 
     Kirigami.ScrollablePage {

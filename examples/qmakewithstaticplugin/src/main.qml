@@ -27,7 +27,6 @@ Kirigami.ApplicationWindow {
     visible: true
     title: qsTr("Hello World")
 
-    header: Kirigami.ApplicationHeader {}
     pageStack.initialPage: Page1 {}
 
     globalDrawer: Kirigami.GlobalDrawer {
