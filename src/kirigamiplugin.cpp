@@ -27,6 +27,7 @@
 #include "formlayoutattached.h"
 #include "mnemonicattached.h"
 #include "delegaterecycler.h"
+#include "pagepool.h"
 #include "scenepositionattached.h"
 #include "wheelhandler.h"
 
@@ -195,6 +196,8 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //2.10
     qmlRegisterType(componentUrl(QStringLiteral("ListSectionHeader.qml")), uri, 2, 10, "ListSectionHeader");
+    qmlRegisterType<PagePool>(uri, 2, 10, "PagePool");
+
 
     qmlProtectModule(uri, 2);
 }

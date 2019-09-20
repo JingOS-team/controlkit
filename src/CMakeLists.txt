@@ -20,6 +20,7 @@ set(kirigami_SRCS
     icon.cpp
     settings.cpp
     formlayoutattached.cpp
+    pagepool.cpp
     scenepositionattached.cpp
     mnemonicattached.cpp
     wheelhandler.cpp
