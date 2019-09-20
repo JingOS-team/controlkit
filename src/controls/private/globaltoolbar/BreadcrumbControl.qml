@@ -50,6 +50,7 @@ Flickable {
     RowLayout {
         id: mainLayout
         height: parent.height
+        spacing: 0
         Repeater {
             id: mainRepeater
             model: pageRow.depth
@@ -88,6 +89,7 @@ Flickable {
                         wrapMode: Text.NoWrap
                         text: delegateLayout.page ? delegateLayout.page.title : ""
                         opacity: modelData == pageRow.currentIndex ? 1 : 0.4
+                        rightPadding: Kirigami.Units.largeSpacing
                     }
                 }
             }
