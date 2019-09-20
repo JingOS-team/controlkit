@@ -99,8 +99,6 @@ Kirigami.AbstractApplicationWindow {
         id: contextDrawer
     }
 
-    header: Kirigami.ApplicationHeader {}
-
     pageStack: Controls.StackView {
         anchors.fill: parent
         property int currentIndex: 0
