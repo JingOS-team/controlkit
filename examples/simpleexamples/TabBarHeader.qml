@@ -28,13 +28,8 @@ Kirigami.ApplicationWindow {
     visible: true
 
 
-    header: Kirigami.ApplicationHeader {
-        headerStyle: Kirigami.ApplicationHeaderStyle.TabBar
-    }
-
-
-
     pageStack.initialPage: mainPageComponent
+    pageStack.globalToolBar.style: Kirigami.ApplicationHeaderStyle.TabBar
 
 
     Component.onCompleted: {
