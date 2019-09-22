@@ -19,7 +19,7 @@
 
 import QtQuick 2.7
 import QtQuick.Layouts 1.2
-import QtQuick.Controls 2.5 as Controls
+import QtQuick.Controls 2.4 as Controls
 import org.kde.kirigami 2.5 as Kirigami
 import "private"
 
@@ -170,7 +170,7 @@ Item {
 
             kirigamiAction: Kirigami.Action {
                 icon.name: "overflow-menu"
-                children: Array.prototype.map.call(root.actions, i => i).concat(Array.prototype.map.call(hiddenActions, i => i))
+                children: Array.prototype.map.call(root.actions, function (i) { return i }).concat(Array.prototype.map.call(hiddenActions, function (i) { return i }))
             }
 
             menu.submenuComponent: ActionsMenu {
