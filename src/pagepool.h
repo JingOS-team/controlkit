@@ -66,6 +66,7 @@ public:
     Q_INVOKABLE void deletePage(const QVariant &page);
 
 private:
+    QUrl resolvedUrl(const QString &stringUrl) const;
     QQuickItem *createFromComponent(QQmlComponent *component);
 
     QHash<QUrl, QQuickItem *> m_itemForUrl;

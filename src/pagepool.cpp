@@ -55,10 +55,7 @@ QQuickItem *PagePool::pageForUrl(const QString &url, QJSValue callback)
     QQmlContext *ctx = QQmlEngine::contextForObject(this);
     Q_ASSERT(ctx);
 
-    QUrl actualUrl(url);
-    if (actualUrl.scheme().isEmpty()) {
-        actualUrl = ctx->resolvedUrl(actualUrl);
-    }
+    const QUrl actualUrl = resolvedUrl(url);
 
     if (m_itemForUrl.contains(actualUrl)) {
         return m_itemForUrl[actualUrl];
@@ -120,6 +117,19 @@ QQuickItem *PagePool::createFromComponent(QQmlComponent *component)
     return item;
 }
 
+QUrl PagePool::resolvedUrl(const QString &stringUrl) const
+{
+    Q_ASSERT(qmlEngine(this));
+    QQmlContext *ctx = QQmlEngine::contextForObject(this);
+    Q_ASSERT(ctx);
+
+    QUrl actualUrl(stringUrl);
+    if (actualUrl.scheme().isEmpty()) {
+        actualUrl = ctx->resolvedUrl(actualUrl);
+    }
+    return actualUrl;
+}
+
 QString PagePool::urlForPage(QQuickItem *item) const
 {
     return m_urlForItem.value(item).toString();
@@ -130,12 +140,7 @@ bool PagePool::contains(const QVariant &page) const
     if (page.canConvert<QQuickItem *>()) {
         return m_urlForItem.contains(page.value<QQuickItem *>());
     } else if (page.canConvert<QString>()) {
-        QUrl actualUrl(page.value<QString>());
-        QQmlContext *ctx = QQmlEngine::contextForObject(this);
-        Q_ASSERT(ctx);
-        if (actualUrl.scheme().isEmpty()) {
-            actualUrl = ctx->resolvedUrl(actualUrl);
-        }
+        const QUrl actualUrl = resolvedUrl(page.value<QString>());
         return m_itemForUrl.contains(actualUrl);
     } else {
         return false;
@@ -156,13 +161,7 @@ void PagePool::deletePage(const QVariant &page)
         if (url.isEmpty()) {
             return;
         }
-        //TODO: function
-        QUrl actualUrl(page.value<QString>());
-        QQmlContext *ctx = QQmlEngine::contextForObject(this);
-        Q_ASSERT(ctx);
-        if (actualUrl.scheme().isEmpty()) {
-            actualUrl = ctx->resolvedUrl(actualUrl);
-        }
+        const QUrl actualUrl = resolvedUrl(page.value<QString>());
 
         item = m_itemForUrl.value(actualUrl);
     } else {
