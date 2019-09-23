@@ -24,6 +24,7 @@
 /**
  * A Pool of Page items, pages will be unique per url and the items
  * will be kept around unless explicitly deleted.
+ * Instaces are C++ owned and can be deleted only manually using deletePage()
  * Instance are unique per url: if you need 2 different instance for a page
  * url, you should instantiate them in the traditional way
  * or use a different PagePool instance.
@@ -40,11 +41,12 @@ public:
 
     /**
      * Returns the instance of the item defined in the QML file identified
-     * by url, only one instance will be done per url
+     * by url, only one instance will be done per url. If the url is remote (i.e. http) don't rely on the return value but us the async callback instead
      * @param url full url of the item
+     * @param callback If we are loading a remote url, we can't have the item immediately but will be passed as a parameter to the provided callback
      * @returns the page instance that will have been created if necessary
      */
-    Q_INVOKABLE QQuickItem *pageForUrl(const QString &url);
+    Q_INVOKABLE QQuickItem *pageForUrl(const QString &url, QJSValue callback = QJSValue());
 
     /**
      * @returns The url of the page for the given instance, empty if there is no correspondence
@@ -64,7 +66,9 @@ public:
     Q_INVOKABLE void deletePage(const QVariant &page);
 
 private:
-    QHash<QString, QQuickItem *> m_itemForUrl;
-    QHash<QQuickItem *, QString> m_urlForItem;
+    QQuickItem *createFromComponent(QQmlComponent *component);
+
+    QHash<QUrl, QQuickItem *> m_itemForUrl;
+    QHash<QQuickItem *, QUrl> m_urlForItem;
 };
 

@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QQmlEngine>
 #include <QQmlComponent>
+#include <QQmlContext>
 
 class PagePoolSingleton
 {
@@ -48,18 +49,62 @@ PagePool *PagePool::self()
 
 
 
-QQuickItem *PagePool::pageForUrl(const QString &url)
+QQuickItem *PagePool::pageForUrl(const QString &url, QJSValue callback)
 {
-    if (m_itemForUrl.contains(url)) {
-        return m_itemForUrl[url];
-    }
-
     Q_ASSERT(qmlEngine(this));
     QQmlContext *ctx = QQmlEngine::contextForObject(this);
     Q_ASSERT(ctx);
-    QQmlComponent component(qmlEngine(this), url);
 
-    QObject *obj = component.create(ctx);
+    QUrl actualUrl(url);
+    if (actualUrl.scheme().isEmpty()) {
+        actualUrl = ctx->resolvedUrl(actualUrl);
+    }
+
+    if (m_itemForUrl.contains(actualUrl)) {
+        return m_itemForUrl[actualUrl];
+    }
+
+    QQmlComponent *component = new QQmlComponent(qmlEngine(this), actualUrl, QQmlComponent::PreferSynchronous);
+
+    if (component->status() == QQmlComponent::Loading) {
+        if (!callback.isCallable()) {
+            component->deleteLater();
+            return nullptr;
+        }
+
+        connect(component, &QQmlComponent::statusChanged, this,
+                [this, component, callback] (QQmlComponent::Status status) mutable {
+            if (status != QQmlComponent::Ready) {
+                qWarning() << component->errors();
+                component->deleteLater();
+                return;
+            }
+            QQuickItem *item = createFromComponent(component);
+            if (item) {
+                QJSValueList args = {qmlEngine(this)->newQObject(item)};
+                callback.call(args);
+            }
+            component->deleteLater();
+        });
+
+        return nullptr;
+
+    } else if (component->status() != QQmlComponent::Ready) {
+        qWarning() << component->errors();
+        return nullptr;
+    }
+
+    QQuickItem *item = createFromComponent(component);
+    component->deleteLater();
+    return item;
+}
+
+QQuickItem *PagePool::createFromComponent(QQmlComponent *component)
+{
+    QQmlContext *ctx = QQmlEngine::contextForObject(this);
+    Q_ASSERT(ctx);
+
+    QObject *obj = component->create(ctx);
     // Error?
     if (!obj) {
         return nullptr;
@@ -71,13 +116,13 @@ QQuickItem *PagePool::pageForUrl(const QString &url)
         return nullptr;
     }
 
-    m_itemForUrl[url] = item;
+    m_itemForUrl[component->url()] = item;
     return item;
 }
 
 QString PagePool::urlForPage(QQuickItem *item) const
 {
-    return m_urlForItem.value(item);
+    return m_urlForItem.value(item).toString();
 }
 
 bool PagePool::contains(const QVariant &page) const
@@ -85,7 +130,13 @@ bool PagePool::contains(const QVariant &page) const
     if (page.canConvert<QQuickItem *>()) {
         return m_urlForItem.contains(page.value<QQuickItem *>());
     } else if (page.canConvert<QString>()) {
-        return m_itemForUrl.contains(page.value<QString>());
+        QUrl actualUrl(page.value<QString>());
+        QQmlContext *ctx = QQmlEngine::contextForObject(this);
+        Q_ASSERT(ctx);
+        if (actualUrl.scheme().isEmpty()) {
+            actualUrl = ctx->resolvedUrl(actualUrl);
+        }
+        return m_itemForUrl.contains(actualUrl);
     } else {
         return false;
     }
@@ -105,8 +156,15 @@ void PagePool::deletePage(const QVariant &page)
         if (url.isEmpty()) {
             return;
         }
+        //TODO: function
+        QUrl actualUrl(page.value<QString>());
+        QQmlContext *ctx = QQmlEngine::contextForObject(this);
+        Q_ASSERT(ctx);
+        if (actualUrl.scheme().isEmpty()) {
+            actualUrl = ctx->resolvedUrl(actualUrl);
+        }
 
-        item = m_itemForUrl.value(url);
+        item = m_itemForUrl.value(actualUrl);
     } else {
         return;
     }
@@ -115,7 +173,7 @@ void PagePool::deletePage(const QVariant &page)
         return;
     }
 
-    QString url = m_urlForItem.value(item);
+    const QUrl url = m_urlForItem.value(item);
 
     if (url.isEmpty()) {
         return;
