@@ -24,15 +24,6 @@
 #include <QQmlComponent>
 #include <QQmlContext>
 
-class PagePoolSingleton
-{
-public:
-    PagePool self;
-};
-
-Q_GLOBAL_STATIC(PagePoolSingleton, privatePagePoolSelf)
-
-
 PagePool::PagePool(QObject *parent)
     : QObject(parent)
 {
@@ -42,14 +33,13 @@ PagePool::~PagePool()
 {
 }
 
-PagePool *PagePool::self()
+QUrl PagePool::lastLoadedUrl() const
 {
-    return &privatePagePoolSelf()->self;
+    return m_lastLoadedUrl;
 }
 
 
-
-QQuickItem *PagePool::pageForUrl(const QString &url, QJSValue callback)
+QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
 {
     Q_ASSERT(qmlEngine(this));
     QQmlContext *ctx = QQmlEngine::contextForObject(this);
@@ -61,9 +51,13 @@ QQuickItem *PagePool::pageForUrl(const QString &url, QJSValue callback)
         if (callback.isCallable()) {
             QJSValueList args = {qmlEngine(this)->newQObject(m_itemForUrl[actualUrl])};
             callback.call(args);
+            m_lastLoadedUrl = actualUrl;
+            emit lastLoadedUrlChanged();
             // We could return the item, but for api coherence return null
             return nullptr;
         } else {
+            m_lastLoadedUrl = actualUrl;
+            emit lastLoadedUrlChanged();
             return m_itemForUrl[actualUrl];
         }
     }
@@ -103,9 +97,13 @@ QQuickItem *PagePool::pageForUrl(const QString &url, QJSValue callback)
     if (callback.isCallable()) {
         QJSValueList args = {qmlEngine(this)->newQObject(item)};
         callback.call(args);
+        m_lastLoadedUrl = actualUrl;
+        emit lastLoadedUrlChanged();
         // We could return the item, but for api coherence return null
         return nullptr;
     } else {
+        m_lastLoadedUrl = actualUrl;
+        emit lastLoadedUrlChanged();
         return item;
     }
 }
@@ -144,9 +142,14 @@ QUrl PagePool::resolvedUrl(const QString &stringUrl) const
     return actualUrl;
 }
 
-QString PagePool::urlForPage(QQuickItem *item) const
+bool PagePool::isLocalUrl(const QUrl &url)
 {
-    return m_urlForItem.value(item).toString();
+    return url.isLocalFile() || url.scheme().isEmpty() || url.scheme() == QStringLiteral("qrc");
+}
+
+QUrl PagePool::urlForPage(QQuickItem *item) const
+{
+    return m_urlForItem.value(item);
 }
 
 bool PagePool::contains(const QVariant &page) const

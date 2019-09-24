@@ -32,16 +32,22 @@
 class PagePool : public QObject
 {
     Q_OBJECT
+    /**
+     * The last url that was loaded with @loadPage. Useful if you need
+     * to have a "checked" state to buttons or list items that
+     * load the page when clicked.
+     */
+    Q_PROPERTY(QUrl lastLoadedUrl READ lastLoadedUrl NOTIFY lastLoadedUrlChanged)
 
 public:
     PagePool(QObject *parent = nullptr);
     ~PagePool();
 
-    static PagePool *self();
+    QUrl lastLoadedUrl() const;
 
     /**
      * Returns the instance of the item defined in the QML file identified
-     * by url, only one instance will be done per url. If the url is remote (i.e. http) don't rely on the return value but us the async callback instead
+     * by url, only one instance will be made per url. If the url is remote (i.e. http) don't rely on the return value but us the async callback instead
      * @param url full url of the item: it can be a well formed Url,
      *       an absolute path
      *       or a relative one to the path of the qml file the PagePool is instantiated from
@@ -51,12 +57,12 @@ public:
      *          If the url is remote it will return null,
      *          as well will return null if the callback has been provided
      */
-    Q_INVOKABLE QQuickItem *pageForUrl(const QString &url, QJSValue callback = QJSValue());
+    Q_INVOKABLE QQuickItem *loadPage(const QString &url, QJSValue callback = QJSValue());
 
     /**
      * @returns The url of the page for the given instance, empty if there is no correspondence
      */
-    Q_INVOKABLE QString urlForPage(QQuickItem *item) const;
+    Q_INVOKABLE QUrl urlForPage(QQuickItem *item) const;
 
     /**
      * @returns true if the is managed by the PagePool
@@ -70,10 +76,24 @@ public:
      */
     Q_INVOKABLE void deletePage(const QVariant &page);
 
+    /**
+     * @returns full url from an absolute or relative path
+     */
+    Q_INVOKABLE QUrl resolvedUrl(const QString &file) const;
+
+    /**
+     * @returns true if the url identifies a local resource (local file or a file inside Qt's resource system).
+     * False if the url points to a network location
+     */
+    Q_INVOKABLE bool isLocalUrl(const QUrl &url);
+
+Q_SIGNALS:
+    void lastLoadedUrlChanged();
+
 private:
-    QUrl resolvedUrl(const QString &stringUrl) const;
     QQuickItem *createFromComponent(QQmlComponent *component);
 
+    QUrl m_lastLoadedUrl;
     QHash<QUrl, QQuickItem *> m_itemForUrl;
     QHash<QQuickItem *, QUrl> m_urlForItem;
 };
