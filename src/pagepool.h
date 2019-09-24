@@ -39,15 +39,24 @@ class PagePool : public QObject
      */
     Q_PROPERTY(QUrl lastLoadedUrl READ lastLoadedUrl NOTIFY lastLoadedUrlChanged)
 
+    /**
+     * If true (default) the pages will be kept around, will have C++ ownership and only one instance per page will be created.
+     * If false the pages will have Javascript ownership (thus deleted on pop by the page stacks) and each call to loadPage will create a new page instance. When cachePages is false, Components gets cached never the less
+     */
+    Q_PROPERTY(bool cachePages READ cachePages WRITE setCachePages NOTIFY cachePagesChanged)
+
 public:
     PagePool(QObject *parent = nullptr);
     ~PagePool();
 
     QUrl lastLoadedUrl() const;
 
+    void setCachePages(bool cache);
+    bool cachePages() const;
+
     /**
      * Returns the instance of the item defined in the QML file identified
-     * by url, only one instance will be made per url. If the url is remote (i.e. http) don't rely on the return value but us the async callback instead
+     * by url, only one instance will be made per url if cachePAges is true. If the url is remote (i.e. http) don't rely on the return value but us the async callback instead
      * @param url full url of the item: it can be a well formed Url,
      *       an absolute path
      *       or a relative one to the path of the qml file the PagePool is instantiated from
@@ -89,12 +98,16 @@ public:
 
 Q_SIGNALS:
     void lastLoadedUrlChanged();
+    void cachePagesChanged();
 
 private:
     QQuickItem *createFromComponent(QQmlComponent *component);
 
     QUrl m_lastLoadedUrl;
     QHash<QUrl, QQuickItem *> m_itemForUrl;
+    QHash<QUrl, QQmlComponent *> m_componentForUrl;
     QHash<QQuickItem *, QUrl> m_urlForItem;
+
+    bool m_cachePages = true;
 };
 

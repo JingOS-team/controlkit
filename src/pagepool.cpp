@@ -38,6 +38,36 @@ QUrl PagePool::lastLoadedUrl() const
     return m_lastLoadedUrl;
 }
 
+void PagePool::setCachePages(bool cache)
+{
+    if (cache == m_cachePages) {
+        return;
+    }
+
+    if (cache) {
+        for (auto *c : m_componentForUrl.values()) {
+            c->deleteLater();
+        }
+        m_componentForUrl.clear();
+
+        for (auto *i : m_itemForUrl.values()) {
+            // items that had been deparented are safe to delete
+            if (!i->parentItem()) {
+                i->deleteLater();
+            }
+            QQmlEngine::setObjectOwnership(i, QQmlEngine::JavaScriptOwnership);
+        }
+        m_itemForUrl.clear();
+    }
+
+    m_cachePages = cache;
+    emit cachePagesChanged();
+}
+
+bool PagePool::cachePages() const
+{
+    return m_cachePages;
+}
 
 QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
 {
@@ -62,11 +92,16 @@ QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
         }
     }
 
-    QQmlComponent *component = new QQmlComponent(qmlEngine(this), actualUrl, QQmlComponent::PreferSynchronous);
+    QQmlComponent *component = m_componentForUrl.value(actualUrl);
+
+    if (!component) {
+        component = new QQmlComponent(qmlEngine(this), actualUrl, QQmlComponent::PreferSynchronous);
+    }
 
     if (component->status() == QQmlComponent::Loading) {
         if (!callback.isCallable()) {
             component->deleteLater();
+            m_componentForUrl.remove(actualUrl);
             return nullptr;
         }
 
@@ -74,6 +109,7 @@ QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
                 [this, component, callback] (QQmlComponent::Status status) mutable {
             if (status != QQmlComponent::Ready) {
                 qWarning() << component->errors();
+                m_componentForUrl.remove(component->url());
                 component->deleteLater();
                 return;
             }
@@ -82,7 +118,12 @@ QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
                 QJSValueList args = {qmlEngine(this)->newQObject(item)};
                 callback.call(args);
             }
-            component->deleteLater();
+
+            if (m_cachePages) {
+                component->deleteLater();
+            } else {
+                m_componentForUrl[component->url()] = component;
+            }
         });
 
         return nullptr;
@@ -93,7 +134,12 @@ QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
     }
 
     QQuickItem *item = createFromComponent(component);
-    component->deleteLater();
+    if (m_cachePages) {
+        component->deleteLater();
+    } else {
+        m_componentForUrl[component->url()] = component;
+    }
+
     if (callback.isCallable()) {
         QJSValueList args = {qmlEngine(this)->newQObject(item)};
         callback.call(args);
@@ -125,7 +171,13 @@ QQuickItem *PagePool::createFromComponent(QQmlComponent *component)
         return nullptr;
     }
 
-    m_itemForUrl[component->url()] = item;
+    if (m_cachePages) {
+        QQmlEngine::setObjectOwnership(item, QQmlEngine::CppOwnership);
+        m_itemForUrl[component->url()] = item;
+    } else {
+        QQmlEngine::setObjectOwnership(item, QQmlEngine::JavaScriptOwnership);
+    }
+
     return item;
 }
 
