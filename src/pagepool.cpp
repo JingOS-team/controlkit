@@ -58,7 +58,14 @@ QQuickItem *PagePool::pageForUrl(const QString &url, QJSValue callback)
     const QUrl actualUrl = resolvedUrl(url);
 
     if (m_itemForUrl.contains(actualUrl)) {
-        return m_itemForUrl[actualUrl];
+        if (callback.isCallable()) {
+            QJSValueList args = {qmlEngine(this)->newQObject(m_itemForUrl[actualUrl])};
+            callback.call(args);
+            // We could return the item, but for api coherence return null
+            return nullptr;
+        } else {
+            return m_itemForUrl[actualUrl];
+        }
     }
 
     QQmlComponent *component = new QQmlComponent(qmlEngine(this), actualUrl, QQmlComponent::PreferSynchronous);
@@ -93,7 +100,14 @@ QQuickItem *PagePool::pageForUrl(const QString &url, QJSValue callback)
 
     QQuickItem *item = createFromComponent(component);
     component->deleteLater();
-    return item;
+    if (callback.isCallable()) {
+        QJSValueList args = {qmlEngine(this)->newQObject(item)};
+        callback.call(args);
+        // We could return the item, but for api coherence return null
+        return nullptr;
+    } else {
+        return item;
+    }
 }
 
 QQuickItem *PagePool::createFromComponent(QQmlComponent *component)

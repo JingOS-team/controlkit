@@ -44,7 +44,8 @@ public:
      * by url, only one instance will be done per url. If the url is remote (i.e. http) don't rely on the return value but us the async callback instead
      * @param url full url of the item
      * @param callback If we are loading a remote url, we can't have the item immediately but will be passed as a parameter to the provided callback
-     * @returns the page instance that will have been created if necessary
+     * @returns the page instance that will have been created if necessary. 
+     *          If the url is remote it will return null
      */
     Q_INVOKABLE QQuickItem *pageForUrl(const QString &url, QJSValue callback = QJSValue());
 
