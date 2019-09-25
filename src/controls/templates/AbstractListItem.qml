@@ -121,7 +121,7 @@ T2.ItemDelegate {
     property QQC2.Action action
 
     text: action ? action.text : undefined
-    checked: action ? action.checked : undefined
+    checked: action ? action.checked : false
     checkable: action ? action.checkable : false
     onClicked: {
         if (ListView.view && typeof index !== "undefined") {
