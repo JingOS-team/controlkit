@@ -122,7 +122,7 @@ T2.ItemDelegate {
 
     text: action ? action.text : undefined
     checked: action ? action.checked : undefined
-    checkable: action ? action.checkable : undefined
+    checkable: action ? action.checkable : false
     onClicked: {
         if (ListView.view && typeof index !== "undefined") {
             ListView.view.currentIndex = index;
