@@ -63,7 +63,7 @@ BasicListItem {
     visible: (model ? model.visible || model.visible===undefined : modelData.visible) && opacity > 0
     opacity: !root.collapsed || icon.length > 0
     Behavior on opacity {
-        OpacityAnimator {
+        NumberAnimation {
             duration: Units.longDuration/2
             easing.type: Easing.InOutQuad
         }
@@ -73,6 +73,8 @@ BasicListItem {
     hoverEnabled: (!isExpandible || root.collapsed) && !Settings.tabletMode
     sectionDelegate: isExpandible
     font.pointSize: isExpandible ? Theme.defaultFont.pointSize * 1.30 : Theme.defaultFont.pointSize
+    opacity: !root.collapsed
+    height: implicitHeight * opacity
 
 
     Separator {

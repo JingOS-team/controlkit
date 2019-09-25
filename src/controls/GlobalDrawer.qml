@@ -429,13 +429,6 @@ OverlayDrawer {
                         property int level: 0
                         Layout.maximumHeight: Layout.minimumHeight
 
-                        move: Transition {
-                            YAnimator {
-                                duration: Units.longDuration/2
-                                easing.type: Easing.InOutQuad
-                            }
-                        }
-
                         BasicListItem {
                             id: backItem
                             visible: level > 0
