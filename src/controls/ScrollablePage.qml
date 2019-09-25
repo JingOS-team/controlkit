@@ -168,7 +168,8 @@ Page {
     //HACK to get the mainItem as the last one, all the other eventual items as an overlay
     //no idea if is the way the user expects
     onMainItemChanged: {
-         if (mainItem.hasOwnProperty("anchors")) {
+        //Duck type for Item
+         if (mainItem.hasOwnProperty("anchors") && mainItem.hasOwnProperty("antialiasing")) {
              scrollView.contentItem = mainItem
              mainItem.focus = true
          //don't try to reparent drawers
