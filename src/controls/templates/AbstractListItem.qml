@@ -20,7 +20,9 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.0
 import org.kde.kirigami 2.4
+//NOTE: This must stay at 2.0 until KF6 due to retrocompatibility of the "icon" property
 import QtQuick.Templates 2.0 as T2
+import QtQuick.Templates 2.4 as QQC2
 
 /**
  * An item delegate for the primitive ListView component.
@@ -115,6 +117,23 @@ T2.ItemDelegate {
 
     default property alias _default: listItem.contentItem
 
+    // Overrides action property of newer import versions which we can't use
+    property QQC2.Action action
+
+    text: action ? action.text : undefined
+    checked: action ? action.checked : undefined
+    checkable: action ? action.checkable : undefined
+    onClicked: {
+        if (ListView.view && typeof index !== "undefined") {
+            ListView.view.currentIndex = index;
+        }
+        if (!action) {
+            return;
+        }
+
+        action.trigger();
+        checked = Qt.binding(function() { return action.checked });
+    }
     //Theme.inherit: false
    //Theme.colorSet: Theme.View
 
@@ -146,4 +165,5 @@ T2.ItemDelegate {
     }
 
     Accessible.role: Accessible.ListItem
+    highlighted: focus && ListView.isCurrentItem && ListView.view && ListView.view.keyNavigationEnabled
 }

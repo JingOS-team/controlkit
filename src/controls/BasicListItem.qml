@@ -78,12 +78,12 @@ AbstractListItem {
      */
     property alias reserveSpaceForLabel: labelItem.visible
 
-    default property alias _basicDefault: layout.children
+    default property alias _basicDefault: layout.data
 
+    icon: action ? action.icon.name || action.icon.source : undefined
     contentItem: RowLayout {
         id: layout
         spacing: LayoutMirroring.enabled ? listItem.rightPadding : listItem.leftPadding
-        property bool indicateActiveFocus: listItem.pressed || Settings.tabletMode || listItem.activeFocus || (listItem.ListView.view ? listItem.ListView.view.activeFocus : false)
         Icon {
             id: iconItem
             source: {
@@ -99,14 +99,14 @@ AbstractListItem {
             Layout.minimumHeight: size
             Layout.maximumHeight: size
             Layout.minimumWidth: size
-            selected: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents))
+            selected: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents))
             opacity: 1
         }
         QQC2.Label {
             id: labelItem
             text: listItem.text
             Layout.fillWidth: true
-            color: layout.indicateActiveFocus && (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents)) ? listItem.activeTextColor : listItem.textColor
+            color: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents)) ? listItem.activeTextColor : listItem.textColor
             elide: Text.ElideRight
             font: listItem.font
             opacity: 1

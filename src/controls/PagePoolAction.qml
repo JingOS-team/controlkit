@@ -77,11 +77,19 @@ Kirigami.Action {
         }
 
         if (pagePool.isLocalUrl(page)) {
-            pageStack.pop(basePage);
+            if (basePage) {
+                pageStack.pop(basePage);
+            } else {
+                pageStack.clear();
+            }
             pageStack.push(pagePool.loadPage(page));
         } else {
             pagePool.loadPage(page, function(item) {
-                pageStack.pop(basePage);
+                if (basePage) {
+                    pageStack.pop(basePage);
+                } else {
+                    pageStack.clear();
+                }
                 pageStack.push(item);
             });
         }
