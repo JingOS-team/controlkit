@@ -27,6 +27,7 @@
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QDebug>
+#include <QTimer>
 #include <QPropertyAnimation>
 
 
@@ -321,19 +322,24 @@ void ContentItem::animateX(qreal newX)
 
 void ContentItem::snapToItem()
 {
+    const qreal moveProjection = m_velocity / 1000.0 * 250;
+
     QQuickItem *firstItem = childAt(viewportLeft(), 0);
+
+    m_velocity = 0;
+
     if (!firstItem) {
         return;
     }
-    QQuickItem *nextItem = childAt(firstItem->x() + firstItem->width() + 1, 0);
+    QQuickItem *nextItem = childItems()[qMin(childItems().length() - 1, childItems().indexOf(firstItem) + 1)];
 
     //need to make the last item visible?
-    if (nextItem && width() - (viewportRight()) < viewportLeft() - firstItem->x()) {
+    if (nextItem && width() - (viewportRight()) < viewportLeft() + moveProjection - firstItem->x()) {
         m_viewAnchorItem = nextItem;
         animateX(-nextItem->x() + m_leftPinnedSpace);
 
     //The first one found?
-    } else if (viewportLeft() <= firstItem->x() + firstItem->width()/2 || !nextItem) {
+    } else if (viewportLeft() + moveProjection <= firstItem->x() + firstItem->width()/2 || !nextItem) {
         m_viewAnchorItem = firstItem;
         animateX(-firstItem->x() + m_leftPinnedSpace);
 
@@ -699,6 +705,16 @@ ColumnView::ColumnView(QQuickItem *parent)
     m_contentItem = new ContentItem(this);
     setAcceptedMouseButtons(Qt::LeftButton | Qt::BackButton | Qt::ForwardButton);
     setFiltersChildMouseEvents(true);
+
+    m_speedSampler = new QTimer(this);
+    m_speedSampler->setInterval(100);
+    m_speedSampler->setSingleShot(false);
+    connect(m_speedSampler, &QTimer::timeout,
+        this, [this] () {
+            m_contentItem->m_velocity = - (m_contentItem->x() - m_sampledContentX) * 10;
+            m_sampledContentX = m_contentItem->x();
+        }
+    );
 
     connect(m_contentItem->m_slideAnim, &QPropertyAnimation::finished, this, [this] () {
         m_moving = false;
@@ -1187,6 +1203,11 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
         if (candidateItem->parentItem() == m_contentItem) {
             setCurrentIndex(m_contentItem->m_items.indexOf(candidateItem));
         }
+
+        // Start the speed sampler
+        m_contentItem->m_velocity = 0;
+        m_sampledContentX = m_contentItem->x();
+        m_speedSampler->start();
         break;
     }
     case QEvent::MouseMove: {
@@ -1271,6 +1292,11 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
         setKeepMouseGrab(false);
 
         me->setAccepted(block);
+
+        // Stop the speed sampler
+        m_sampledContentX = m_contentItem->x();
+        m_speedSampler->stop();
+
         return block;
         break;
     }
@@ -1297,6 +1323,9 @@ void ColumnView::mousePressEvent(QMouseEvent *event)
     m_startMouseX = event->localPos().x();
     m_mouseDown = true;
     setKeepMouseGrab(false);
+    m_contentItem->m_velocity = 0;
+    m_sampledContentX = m_contentItem->x();
+    m_speedSampler->start();
     event->accept();
 }
 
@@ -1353,6 +1382,9 @@ void ColumnView::mouseReleaseEvent(QMouseEvent *event)
         emit draggingChanged();
     }
 
+    m_sampledContentX = m_contentItem->x();
+    m_speedSampler->stop();
+
     m_contentItem->snapToItem();
     setKeepMouseGrab(false);
     event->accept();
@@ -1371,6 +1403,8 @@ void ColumnView::mouseUngrabEvent()
         m_contentItem->snapToItem();
     }
     setKeepMouseGrab(false);
+    m_sampledContentX = m_contentItem->x();
+    m_speedSampler->stop();
 }
 
 void ColumnView::classBegin()

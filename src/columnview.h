@@ -423,12 +423,14 @@ private:
     static void contentData_clear(QQmlListProperty<QObject> *prop);
 
 
+    QTimer *m_speedSampler = nullptr;
     QList<QObject *> m_contentData;
 
     ContentItem *m_contentItem;
     QPointer<QQuickItem> m_currentItem;
 
     static QHash<QObject *, ColumnViewAttached *> m_attachedObjects;
+    qreal m_sampledContentX = 0;
     qreal m_oldMouseX = -1.0;
     qreal m_startMouseX = -1.0;
     int m_currentIndex = -1;
