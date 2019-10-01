@@ -209,8 +209,10 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //2.10
     qmlRegisterType(componentUrl(QStringLiteral("ListSectionHeader.qml")), uri, 2, 10, "ListSectionHeader");
-    qmlRegisterType<PagePool>(uri, 2, 10, "PagePool");
-    qmlRegisterType(componentUrl(QStringLiteral("PagePoolAction.qml")), uri, 2, 10, "PagePoolAction");
+
+    // 2.11
+    qmlRegisterType<PagePool>(uri, 2, 11, "PagePool");
+    qmlRegisterType(componentUrl(QStringLiteral("PagePoolAction.qml")), uri, 2, 11, "PagePoolAction");
 
 
     qmlProtectModule(uri, 2);

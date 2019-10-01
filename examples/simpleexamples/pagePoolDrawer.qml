@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.1
-import org.kde.kirigami 2.10 as Kirigami
+import org.kde.kirigami 2.11 as Kirigami
 
 Kirigami.ApplicationWindow {
     id: root
