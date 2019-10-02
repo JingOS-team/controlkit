@@ -19,7 +19,7 @@
 
 import QtQuick 2.7
 import QtQuick.Controls 2.5 as Controls
-import org.kde.kirigami 2.10 as Kirigami
+import org.kde.kirigami 2.11 as Kirigami
 
 /**
  * An action used to load Pages coming from a common PagePool
