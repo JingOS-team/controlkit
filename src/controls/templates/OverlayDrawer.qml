@@ -33,7 +33,7 @@ import "private"
 T2.Drawer {
     id: root
 
-    z: modal ? (Math.round((position * 100) / 10) ): 1000000
+    z: modal ? (Math.round((position * 10000000)) ): 1000000
 
 //BEGIN Properties
     /**
