@@ -77,9 +77,16 @@ QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
 
     const QUrl actualUrl = resolvedUrl(url);
 
-    if (m_itemForUrl.contains(actualUrl)) {
+    QQuickItem *foundItem = nullptr;
+    if (actualUrl == m_lastLoadedUrl && m_lastLoadedItem) {
+        foundItem = m_lastLoadedItem;
+    } else if (m_itemForUrl.contains(actualUrl)) {
+        foundItem = m_itemForUrl[actualUrl];
+    }
+
+    if (foundItem) {
         if (callback.isCallable()) {
-            QJSValueList args = {qmlEngine(this)->newQObject(m_itemForUrl[actualUrl])};
+            QJSValueList args = {qmlEngine(this)->newQObject(foundItem)};
             callback.call(args);
             m_lastLoadedUrl = actualUrl;
             emit lastLoadedUrlChanged();
@@ -88,7 +95,7 @@ QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
         } else {
             m_lastLoadedUrl = actualUrl;
             emit lastLoadedUrlChanged();
-            return m_itemForUrl[actualUrl];
+            return foundItem;
         }
     }
 
@@ -170,6 +177,9 @@ QQuickItem *PagePool::createFromComponent(QQmlComponent *component)
         obj->deleteLater();
         return nullptr;
     }
+
+    // Always cache just the last one
+    m_lastLoadedItem = item;
 
     if (m_cachePages) {
         QQmlEngine::setObjectOwnership(item, QQmlEngine::CppOwnership);

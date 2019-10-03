@@ -20,6 +20,7 @@
 
 #include <QObject>
 #include <QQuickItem>
+#include <QPointer>
 
 /**
  * A Pool of Page items, pages will be unique per url and the items
@@ -104,6 +105,7 @@ private:
     QQuickItem *createFromComponent(QQmlComponent *component);
 
     QUrl m_lastLoadedUrl;
+    QPointer <QQuickItem> m_lastLoadedItem;
     QHash<QUrl, QQuickItem *> m_itemForUrl;
     QHash<QUrl, QQmlComponent *> m_componentForUrl;
     QHash<QQuickItem *, QUrl> m_urlForItem;
