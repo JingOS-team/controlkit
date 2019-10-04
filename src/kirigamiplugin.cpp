@@ -214,6 +214,8 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType<PagePool>(uri, 2, 11, "PagePool");
     qmlRegisterType(componentUrl(QStringLiteral("PagePoolAction.qml")), uri, 2, 11, "PagePoolAction");
 
+    //TODO: remove
+    qmlRegisterType(componentUrl(QStringLiteral("SwipeListItem2.qml")), uri, 2, 11, "SwipeListItem2");
 
     qmlProtectModule(uri, 2);
 }
