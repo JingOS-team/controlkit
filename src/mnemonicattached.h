@@ -131,7 +131,7 @@ private:
         // Additional weight for the beginning of a word
         WORD_BEGINNING_EXTRA_WEIGHT = 50,
         // Additional weight for a 'wanted' accelerator ie string with '&'
-        WANTED_ACCEL_EXTRA_WEIGHT = 450,
+        WANTED_ACCEL_EXTRA_WEIGHT = 150,
         // Default weight for an 'action' widget (ie, pushbuttons)
         ACTION_ELEMENT_WEIGHT = 50,
         // Additional weight for the dialog buttons (large, we basically never want these reassigned)

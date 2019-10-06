@@ -54,7 +54,6 @@ MnemonicAttached::MnemonicAttached(QObject *parent)
                     m_window->installEventFilter(this);
                 }
             }
-            updateSequence();
         });
     }
 }
@@ -102,13 +101,6 @@ void MnemonicAttached::calculateWeights()
     while (pos < m_label.length()) {
         QChar c = m_label[pos];
 
-        // try to preserve the wanted accelerators
-        if (c == QLatin1Char('&') && (pos == m_label.length() - 1 || m_label[pos+1] != QLatin1Char('&'))) {
-            wanted_character = true;
-            ++pos;
-            continue;
-        }
-
         // skip non typeable characters
         if (!c.isLetterOrNumber()) {
             start_character = true;
@@ -117,13 +109,6 @@ void MnemonicAttached::calculateWeights()
         }
 
         int weight = 1;
-        // see if we are rendering to an offscreen widget
-        // in this case means our qml scene is inside qwidgets: we can't check
-        // our automatic shortcuts aren't conflicting with the ones from qwidgets
-        QWindow *renderWindow = QQuickRenderControl::renderWindowFor(m_window);
-        if (!m_window || (renderWindow && m_window != renderWindow)) {
-            weight = -150;
-        }
 
         // add special weight to first character
         if (pos == 0) {
@@ -147,13 +132,18 @@ void MnemonicAttached::calculateWeights()
             weight += (50 - pos);
         }
 
+        // try to preserve the wanted accelerators
+        if (c == QLatin1Char('&') && (pos == m_label.length() - 1 || m_label[pos+1] != QLatin1Char('&'))) {
+            wanted_character = true;
+            ++pos;
+            continue;
+        }
+
         while (m_weights.contains(weight)) {
             ++weight;
         }
 
-        if (weight > 0) {
-            m_weights[weight] = c;
-        }
+        m_weights[weight] = c;
 
         ++pos;
     }
