@@ -70,7 +70,7 @@ Item {
      * position enum
      * This property holds the position of the toolbar.
      * if this ActionToolBar is the contentItem of a QQC2 Toolbar, the position is binded to the ToolBar's position
-     * 
+     *
      * permitted values are:
      * *ToolBar.Header: The toolbar is at the top, as a window or page header.
      * *ToolBar.Footer: The toolbar is at the bottom, as a window or page footer.
@@ -89,7 +89,7 @@ Item {
         id: actionsLayout
         anchors.fill: parent
         //anchors.rightMargin: moreButton.width
-        
+
         spacing: Kirigami.Units.smallSpacing
         property var overflowSet: []
 
@@ -136,9 +136,9 @@ Item {
                         var index = actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {
                             return act === modelData});
 
-						if ((opacity > 0 || (modelData.hasOwnProperty("visible") || !modelData.visible)) && index > -1) {
+                        if ((opacity > 0 || (modelData.hasOwnProperty("visible") || !modelData.visible)) && index > -1) {
                             actionsLayout.overflowSet.splice(index, 1);
-						} else if (opacity === 0 && (!modelData.hasOwnProperty("visible") || modelData.visible) && index === -1) {
+                        } else if (opacity === 0 && (!modelData.hasOwnProperty("visible") || modelData.visible) && index === -1) {
                             actionsLayout.overflowSet.push(modelData);
                         }
                         actionsLayout.overflowSetChanged();

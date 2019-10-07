@@ -30,13 +30,13 @@ Controls.Action {
     id: root
 
     /**
-	 * visible: bool
-	 * True (default) when the graphic representation of the action
-	 * is supposed to be visible.
-	 * It's up to the action representation to honor this property.
-	 */
-	property bool visible: true
-	
+     * visible: bool
+     * True (default) when the graphic representation of the action
+     * is supposed to be visible.
+     * It's up to the action representation to honor this property.
+     */
+    property bool visible: true
+
     /**
      * iconName: string
      * Sets the icon name for the action. This will pick the icon with the given name from the current theme.
@@ -47,7 +47,7 @@ Controls.Action {
      * iconSource: string
      * Sets the icon file or resource url for the action. Defaults to the empty URL. Use this if you want a specific file rather than an icon from the theme
      */
-    property alias iconSource: root.icon.source  
+    property alias iconSource: root.icon.source
 
      /**
      * A tooltip text to be shown when hovering the control bound to this action. Not all controls support tooltips on all platforms

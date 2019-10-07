@@ -97,11 +97,11 @@ BasicListItem {
         selected: listItem.checked || listItem.pressed
         Layout.preferredWidth: Layout.preferredHeight
         source: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
-		visible: (!isExpandible || root.collapsed) && !listItem.isSeparator && modelData.hasOwnProperty("children") && modelData.children!==undefined && modelData.children.length > 0
+        visible: (!isExpandible || root.collapsed) && !listItem.isSeparator && modelData.hasOwnProperty("children") && modelData.children!==undefined && modelData.children.length > 0
     }
     data: [
         QQC2.ToolTip {
-			visible: !listItem.isSeparator && (modelData.hasOwnProperty("tooltip") && modelData.tooltip.length || root.collapsed) && (!actionsMenu || !actionsMenu.visible) &&  listItem.hovered && text.length > 0
+            visible: !listItem.isSeparator && (modelData.hasOwnProperty("tooltip") && modelData.tooltip.length || root.collapsed) && (!actionsMenu || !actionsMenu.visible) &&  listItem.hovered && text.length > 0
             text: modelData.hasOwnProperty("tooltip") && modelData.tooltip.length ? modelData.tooltip : modelData.text
             delay: Units.toolTipDelay
             timeout: 5000
@@ -130,7 +130,7 @@ BasicListItem {
         if (!supportsMouseEvents) {
             return;
         }
-        modelData.trigger();		
+        modelData.trigger();
         if (modelData.hasOwnProperty("children") && modelData.children!==undefined && modelData.children.length > 0) {
             if (root.collapsed) {
                 //fallbacks needed for Qt 5.9

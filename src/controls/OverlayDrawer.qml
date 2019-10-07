@@ -70,7 +70,7 @@ T.OverlayDrawer {
                 anchors.centerIn: parent
 
                 Theme.colorSet: parent.parent.handleAnchor && parent.parent.handleAnchor.visible ? parent.parent.handleAnchor.Theme.colorSet : Theme.Button
-    
+
                 Theme.backgroundColor: parent.parent.handleAnchor && parent.parent.handleAnchor.visible ? parent.parent.handleAnchor.Theme.backgroundColor : undefined
 
                 Theme.textColor: parent.parent.handleAnchor && parent.parent.handleAnchor.visible ? parent.parent.handleAnchor.Theme.textColor : undefined
@@ -108,16 +108,16 @@ T.OverlayDrawer {
                             edge = Qt.LeftEdge;
                         }
                     }
-                    
-                    if (root.handleClosedIcon.source && root.handleOpenIcon.source) {					
-						return Qt.resolvedUrl("templates/private/GenericDrawerIcon.qml");				
-					} else if (edge == Qt.LeftEdge ) {						
-						return Qt.resolvedUrl("templates/private/MenuIcon.qml");						
-					} else if(edge == Qt.RightEdge && root.hasOwnProperty("actions")) {					
-						return Qt.resolvedUrl("templates/private/ContextIcon.qml");						
-					}else {						
-						return "";
-					}
+
+                    if (root.handleClosedIcon.source && root.handleOpenIcon.source) {
+                        return Qt.resolvedUrl("templates/private/GenericDrawerIcon.qml");
+                    } else if (edge == Qt.LeftEdge ) {
+                        return Qt.resolvedUrl("templates/private/MenuIcon.qml");
+                    } else if(edge == Qt.RightEdge && root.hasOwnProperty("actions")) {
+                        return Qt.resolvedUrl("templates/private/ContextIcon.qml");
+                    }else {
+                        return "";
+                    }
                 }
                 onItemChanged: {
                     if(item) {
