@@ -84,7 +84,7 @@ Controls.Action {
      */
     property bool expandible: false
 
-    property QtObject parent
+    property Controls.Action parent
 
     default property alias children: root.__children
     property list<QtObject> __children

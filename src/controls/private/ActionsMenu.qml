@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.3
-import QtQuick.Controls 2.2 as Controls
+import QtQuick.Controls 2.4 as Controls
 import org.kde.kirigami 2.4 as Kirigami
 
 Controls.Menu
@@ -30,7 +30,7 @@ Controls.Menu
     //renamed to work on both Qt 5.9 and 5.10
     property Component itemDelegate: ActionMenuItem {}
     property Component separatorDelegate: Controls.MenuSeparator { }
-    property QtObject parentAction
+    property Controls.Action parentAction
     property Controls.MenuItem parentItem
 
     Item {
@@ -42,7 +42,7 @@ Controls.Menu
 
         active: theMenu.visible
         delegate: QtObject {
-            readonly property QtObject action: modelData
+            readonly property Controls.Action action: modelData
             property QtObject item: null
 
             function create() {
