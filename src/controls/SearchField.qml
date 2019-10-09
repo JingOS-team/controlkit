@@ -45,7 +45,7 @@ Kirigami.ActionTextField
     focusSequence: "Ctrl+F"
     rightActions: [
         Kirigami.Action {
-            iconName: LayoutMirroring.enabled ? "edit-clear-rtl" : "edit-clear"
+            icon.name: root.LayoutMirroring.enabled ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl"
             visible: root.text.length > 0
             onTriggered: {
                 root.text = ""
