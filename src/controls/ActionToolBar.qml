@@ -123,7 +123,7 @@ Item {
                     id: actionDelegate
                     flat: root.flat
                     opacity: x + width <= parent.width
-                    enabled: opacity
+                    enabled: opacity > 0 && modelData.enabled
 
                     display: root.display
                     visible: !modelData.hasOwnProperty("visible") || modelData.visible
