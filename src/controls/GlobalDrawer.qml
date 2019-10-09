@@ -70,6 +70,7 @@ OverlayDrawer {
     handleClosedIcon.source: null
     handleOpenIcon.source: null
     handleVisible: (typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true) && (!isMenu || Settings.isMobile)
+    enabled: !isMenu || Settings.isMobile
 
     /**
      * title: string
