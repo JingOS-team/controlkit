@@ -69,7 +69,8 @@ OverlayDrawer {
     edge: Qt.application.layoutDirection == Qt.RightToLeft ? Qt.RightEdge : Qt.LeftEdge
     handleClosedIcon.source: null
     handleOpenIcon.source: null
-    
+    handleVisible: (typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true) && (!isMenu || Settings.isMobile)
+
     /**
      * title: string
      * A title to be displayed on top of the drawer
@@ -213,6 +214,13 @@ OverlayDrawer {
      * Points to the action acting as a submenu
      */
     readonly property Action currentSubMenu: stackView.currentItem ? stackView.currentItem.current: null
+
+    /**
+     * isMenu: bool
+     * When true the global drawer becomes a menu on the desktop. Defauls to false.
+     * @since 2.11
+     */
+    property bool isMenu: false
 
     /**
      * Notifies that the banner has been clicked

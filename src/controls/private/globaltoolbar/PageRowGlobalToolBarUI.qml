@@ -21,11 +21,11 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4 as Kirigami
 import "../../templates/private" as TemplatesPrivate
-
+import "../" as Private
  
 Kirigami.AbstractApplicationHeader {
     id: header
-    readonly property int leftReservedSpace: (buttonsLayout.visible && buttonsLayout.visibleChildren.length > 0 ? buttonsLayout.width : 0) + (leftHandleAnchor.visible ? leftHandleAnchor.width  : 0)
+    readonly property int leftReservedSpace: (buttonsLayout.visible && buttonsLayout.visibleChildren.length > 0 ? buttonsLayout.width : 0) + (leftHandleAnchor.visible ? leftHandleAnchor.width  : 0) + (menuButton.visible ? menuButton.width  : 0)
     readonly property int rightReservedSpace: rightHandleAnchor.visible ? backButton.background.implicitHeight : 0
 
     readonly property alias leftHandleAnchor: leftHandleAnchor
@@ -55,6 +55,21 @@ Kirigami.AbstractApplicationHeader {
 
             Layout.preferredHeight: Math.min(backButton.implicitHeight, parent.height)
             Layout.preferredWidth: height
+        }
+
+        Private.PrivateActionToolButton {
+            id: menuButton
+            visible: !Kirigami.Settings.isMobile && applicationWindow().globalDrawer.isMenu
+            icon.name: "application-menu"
+            showMenuArrow: false
+
+            Layout.preferredHeight: Math.min(backButton.implicitHeight, parent.height)
+            Layout.preferredWidth: height
+            Layout.leftMargin: Kirigami.Units.smallSpacing
+
+            kirigamiAction: Kirigami.Action {
+                children: applicationWindow().globalDrawer.actions
+            }
         }
 
         RowLayout {
