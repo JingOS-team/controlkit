@@ -23,17 +23,7 @@ import QtQuick.Controls 2.3 as Controls
 Controls.MenuItem {
     id: menuItem
 
-    property QtObject ourAction
-
-    text: ourAction.text
-    visible: ourAction.visible !== undefined ? ourAction.visible : true
-    enabled: ourAction.enabled
-    checkable: ourAction.checkable
-    checked: ourAction.checked
+    visible: action.visible === undefined || action.visible
     height: visible ? implicitHeight : 0
-    icon.name: ourAction.icon.name
-    autoExclusive: ourAction.Controls.ActionGroup && ourAction.Controls.ActionGroup.group && ourAction.Controls.ActionGroup.group.exclusive
-    onTriggered: {
-        ourAction.trigger()
-    }
+    autoExclusive: action.Controls.ActionGroup && action.Controls.ActionGroup.group && action.Controls.ActionGroup.group.exclusive
 }

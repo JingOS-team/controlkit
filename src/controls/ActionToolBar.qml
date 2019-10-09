@@ -182,7 +182,7 @@ Item {
             }
 
             menu.itemDelegate: ActionMenuItem {
-                visible: !actionsLayout.isActionVisible(ourAction) && (ourAction.visible === undefined || ourAction.visible)
+                visible: !actionsLayout.isActionVisible(action) && (action.visible === undefined || action.visible)
             }
         }
     }

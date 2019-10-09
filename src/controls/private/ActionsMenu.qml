@@ -51,7 +51,7 @@ Controls.Menu
                         item = theMenu.separatorDelegate.createObject(null, {});
                     }
                     else {
-                        item = theMenu.itemDelegate.createObject(null, { ourAction: action });
+                        item = theMenu.itemDelegate.createObject(null, { action: action });
                     }
                     theMenu.addItem(item)
                 } else if (theMenu.submenuComponent) {
