@@ -699,6 +699,7 @@ void PlatformTheme::setPalette(const QPalette &palette)
 
 QIcon PlatformTheme::iconFromTheme(const QString &name, const QColor &customColor)
 {
+    Q_UNUSED(customColor);
     QIcon icon = QIcon::fromTheme(name);
     return icon;
 }
