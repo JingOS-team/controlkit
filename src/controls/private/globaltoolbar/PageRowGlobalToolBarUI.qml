@@ -59,7 +59,7 @@ Kirigami.AbstractApplicationHeader {
 
         Private.PrivateActionToolButton {
             id: menuButton
-            visible: !Kirigami.Settings.isMobile && applicationWindow().globalDrawer.isMenu
+            visible: !Kirigami.Settings.isMobile && applicationWindow().globalDrawer && applicationWindow().globalDrawer.isMenu !== "undefined" && applicationWindow().globalDrawer.isMenu
             icon.name: "application-menu"
             showMenuArrow: false
 
