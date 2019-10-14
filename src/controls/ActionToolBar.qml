@@ -66,6 +66,8 @@ Item {
      */
     property int display: Controls.Button.TextBesideIcon
 
+    property int alignment: Qt.AlignLeft
+
     /**
      * position enum
      * This property holds the position of the toolbar.
@@ -84,80 +86,39 @@ Item {
     implicitWidth: actionsLayout.implicitWidth
 
     Layout.minimumWidth: moreButton.implicitWidth
+    Layout.maximumWidth: placeholderLayout.implicitWidth + moreButton.width
 
     RowLayout {
         id: actionsLayout
         anchors.fill: parent
-        //anchors.rightMargin: moreButton.width
+        spacing: 0
 
-        spacing: Kirigami.Units.smallSpacing
-        property var overflowSet: []
-
-        // TODO use Array.findIndex once we depend on Qt 5.9
-        function findIndex(array, cb) {
-            for (var i = 0, length = array.length; i < length; ++i) {
-                if (cb(array[i])) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        function isActionVisible(action) {
-            var index = actionsLayout.findIndex(actionsLayout.overflowSet, function(act){return act === action});
-            if (index === -1) {
-                index = actionsLayout.findIndex(root.hiddenActions, function(act){return act === action});
-                if (index === -1) {
-                    return true
-                }
-            }
-            return false
-        }
-
-        RowLayout {
-            Layout.minimumWidth: 0
+        Item {
+            Layout.fillWidth: root.alignment == Qt.AlignRight || root.alignment == Qt.AlignHCenter || root.alignment == Qt.AlignCenter;
             Layout.fillHeight: true
-            Repeater {
-                model: root.actions
-                delegate: PrivateActionToolButton {
-                    id: actionDelegate
-                    flat: root.flat
-                    opacity: x + width <= parent.width
-                    enabled: opacity > 0 && modelData.enabled
+        }
 
-                    display: root.display
-                    visible: !modelData.hasOwnProperty("visible") || modelData.visible
-                    Layout.fillWidth: false
-                    Layout.alignment: Qt.AlignVCenter
-                    Layout.minimumWidth: implicitWidth
-                    kirigamiAction: modelData
-                    onOpacityChanged: updateOverflowSet()
-                    function updateOverflowSet() {
-                        var index = actionsLayout.findIndex(actionsLayout.overflowSet, function(act) {
-                            return act === modelData});
+        Repeater {
+            model: placeholderLayout.visibleActions
 
-                        if ((opacity > 0 || (modelData.hasOwnProperty("visible") || !modelData.visible)) && index > -1) {
-                            actionsLayout.overflowSet.splice(index, 1);
-                        } else if (opacity === 0 && (!modelData.hasOwnProperty("visible") || modelData.visible) && index === -1) {
-                            actionsLayout.overflowSet.push(modelData);
-                        }
-                        actionsLayout.overflowSetChanged();
-                    }
-                    Connections {
-                        target: modelData
-                        ignoreUnknownSignals: !modelData.hasOwnProperty("visible")
-                        onVisibleChanged: actionDelegate.updateOverflowSet();
-                    }
-                    Component.onCompleted: {
-                        actionDelegate.updateOverflowSet();
-                    }
-                }
+            delegate: PrivateActionToolButton {
+                id: actionDelegate
+
+                Layout.alignment: Qt.AlignVCenter
+                Layout.minimumWidth: implicitWidth
+                // Use rightMargin instead of spacing on the layout to prevent spacer items
+                // from creating useless spacing
+                Layout.rightMargin: Kirigami.Units.smallSpacing
+
+                flat: root.flat && !modelData.icon.color.a
+                display: root.display
+                kirigamiAction: modelData
             }
         }
 
         Item {
-            Layout.fillWidth: true
-            visible: root.Layout.fillWidth
+            Layout.fillWidth: root.alignment == Qt.AlignLeft || root.alignment == Qt.AlignHCenter || root.alignment == Qt.AlignCenter;
+            Layout.fillHeight: true
         }
 
         PrivateActionToolButton {
@@ -165,7 +126,7 @@ Item {
 
             Layout.alignment: Qt.AlignRight
 
-            visible: hiddenActions.length > 0 || actionsLayout.overflowSet.length > 0
+            visible: hiddenActions.length > 0 || placeholderLayout.hiddenActions.length > 0
             showMenuArrow: false
 
             kirigamiAction: Kirigami.Action {
@@ -177,13 +138,69 @@ Item {
                 Binding {
                     target: parentItem
                     property: "visible"
-                    value: !actionsLayout.isActionVisible(parentAction) && (parentAction.visible === undefined || parentAction.visible)
+                    value: placeholderLayout.visibleActions.indexOf(parentAction) == -1 &&
+                                (parentAction.visible === undefined || parentAction.visible)
                 }
             }
 
             menu.itemDelegate: ActionMenuItem {
-                visible: !actionsLayout.isActionVisible(action) && (action.visible === undefined || action.visible)
+                visible: placeholderLayout.visibleActions.indexOf(action) == -1 &&
+                                    (action.visible === undefined || action.visible)
             }
         }
     }
+
+    RowLayout {
+        id: placeholderLayout
+        enabled: false
+        opacity: 0 // Cannot use visible: false because then relayout doesn't happen correctly
+        spacing: Kirigami.Units.smallSpacing
+
+        property var visibleActions: []
+        property var hiddenActions: []
+        property real layoutWidth: root.width - moreButton.width - Kirigami.Units.smallSpacing
+
+        Repeater {
+            id: placeholderRepeater
+            model: root.actions
+
+            PrivateActionToolButton {
+                flat: root.flat && !modelData.icon.color.a
+                display: root.display
+                visible: modelData.visible === undefined || modelData.visible
+                kirigamiAction: modelData
+
+                property bool actionVisible: x + width < placeholderLayout.layoutWidth
+            }
+        }
+
+        Component.onCompleted: Qt.callLater(updateVisibleActions)
+        onWidthChanged: Qt.callLater(updateVisibleActions)
+
+        function updateVisibleActions() {
+            var visible = []
+            var hidden = []
+
+            if (root.width >= placeholderLayout.width + moreButton.width + Kirigami.Units.smallSpacing) {
+                visibleActions = Array.prototype.map.call(root.actions, function(item) { return item })
+                hiddenActions = []
+                return
+            }
+
+            for (var i = 0; i < root.actions.length; ++i) {
+                var item = placeholderRepeater.itemAt(i)
+                if (item.actionVisible) {
+                    visible.push(item.kirigamiAction)
+                } else {
+                    hidden.push(item.kirigamiAction)
+
+                }
+            }
+
+            visibleActions = visible
+            hiddenActions = hidden
+        }
+    }
+
+    onWidthChanged: Qt.callLater(placeholderLayout.updateVisibleActions)
 }

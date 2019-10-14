@@ -20,17 +20,16 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.5
 import "../" as Private
 
 
 AbstractPageHeader {
     id: root
 
-    implicitWidth: titleLoader.implicitWidth.width/2 + buttonTextMetrics.collapsedButtonsWidth
-    Layout.minimumWidth: ctxActionsButton.width*4
+    implicitWidth: titleLoader.implcitWidth + toolBar.implicitWidth + Units.smallSpacing * 3
 
-    Layout.preferredHeight: Math.max(titleLoader.implicitHeight, actionsLayout.implicitHeight) + Units.smallSpacing * 2
+    Layout.preferredHeight: Math.max(titleLoader.implicitHeight, toolBar.implicitHeight) + Units.smallSpacing * 2
 
     MouseArea {
         anchors.fill: parent
@@ -43,82 +42,60 @@ AbstractPageHeader {
         anchors {
             verticalCenter: parent.verticalCenter
             left: parent.left
-            right: parent.right
-            leftMargin: Units.largeSpacing
+            leftMargin: Units.smallSpacing
             rightMargin: Units.smallSpacing
         }
 
         visible: pageRow.globalToolBar.toolbarActionAlignment == Qt.AlignRight && width > item.Layout.minimumWidth
 
         sourceComponent: page ? page.titleDelegate : null
+    }
 
-        Layout.preferredWidth: item
-            ? (item.Layout.preferredWidth > 0 ? item.Layout.preferredWidth : item.implicitWidth)
-            : 0
+    ActionToolBar {
+        id: toolBar
+
+        anchors {
+            left: titleLoader.right
+            leftMargin: Units.smallSpacing
+            right: parent.right
+            rightMargin: Units.smallSpacing
+            verticalCenter: parent.verticalCenter
+        }
+
+        alignment: pageRow.globalToolBar.toolbarActionAlignment
+        display: buttonTextMetrics.toobig ? Controls.Button.IconOnly : Controls.Button.TextBesideIcon
+
+        actions: {
+            var result = []
+
+            if (page) {
+                if (page.actions.main) {
+                    result.push(page.actions.main)
+                }
+                if (page.actions.left) {
+                    result.push(page.actions.left)
+                }
+                if (page.actions.right) {
+                    result.push(page.actions.right)
+                }
+                if (page.actions.contextualActions.length > 0 && !buttonTextMetrics.toobig) {
+                    result = result.concat(Array.prototype.map.call(page.actions.contextualActions, function(item) { return item }))
+                }
+            }
+
+            return result
+        }
+
+        hiddenActions: page && buttonTextMetrics.toobig ? page.actions.contextualActions : []
     }
 
 
     TextMetrics {
         id: buttonTextMetrics
         text: (page.actions.left ? page.actions.left.text : "") + (page.actions.main ? page.actions.main.text : "") + (page.actions.right ? page.actions.right.text : "")
-        readonly property int collapsedButtonsWidth: ctxActionsButton.width + (page.actions.left ? ctxActionsButton.width + Units.gridUnit : 0) + (page.actions.main ? ctxActionsButton.width + Units.gridUnit : 0) + (page.actions.right ? ctxActionsButton.width + Units.gridUnit : 0)
+        readonly property int collapsedButtonsWidth: toolBar.Layout.minimumWidth + (page.actions.left ? toolBar.Layout.minimumWidth + Units.gridUnit : 0) + (page.actions.main ? toolBar.Layout.minimumWidth + Units.gridUnit : 0) + (page.actions.right ? toolBar.Layout.minimumWidth + Units.gridUnit : 0)
         readonly property int requiredWidth: width + collapsedButtonsWidth
-    }
-
-    RowLayout {
-        id: actionsLayout
-        anchors {
-            verticalCenter: parent.verticalCenter
-            left: parent.left
-            right: ctxActionsButton.visible ? ctxActionsButton.left : parent.right
-        }
-
         readonly property bool toobig: root.width - root.leftPadding - root.rightPadding - titleLoader.implicitWidth - Units.gridUnit < buttonTextMetrics.requiredWidth
-
-        Item {
-            Layout.fillWidth: true
-            visible: pageRow.globalToolBar.toolbarActionAlignment != Qt.AlignLeft
-        }
-        Private.PrivateActionToolButton {
-            Layout.alignment: Qt.AlignVCenter
-            kirigamiAction: page && page.actions ? page.actions.left : null
-            showText: !parent.toobig
-        }
-        Private.PrivateActionToolButton {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.rightMargin: Units.smallSpacing
-            kirigamiAction: page && page.actions ? page.actions.main : null
-            showText: !parent.toobig
-        }
-        Private.PrivateActionToolButton {
-            Layout.alignment: Qt.AlignVCenter
-            kirigamiAction: page && page.actions ? page.actions.right : null
-            showText: !parent.toobig
-        }
-        Item {
-            Layout.fillWidth: true
-            visible: pageRow.globalToolBar.toolbarActionAlignment != Qt.AlignRight
-        }
-    }
-
-    Private.PrivateActionToolButton {
-        id: ctxActionsButton
-        showMenuArrow: page.actions.contextualActions.length == 1
-        onMenuAboutToShow: page.contextualActionsAboutToShow();
-        anchors {
-            right: parent.right
-            verticalCenter: parent.verticalCenter
-            rightMargin: Units.smallSpacing
-        }
-        Action {
-            id: overflowAction
-            icon.name: "overflow-menu"
-            tooltip: qsTr("More Actions")
-            visible: visibleChildren.length > 0
-            children: page && page.actions.contextualActions ? page.actions.contextualActions : null
-        }
-
-        kirigamiAction: page && page.actions.contextualActions.length === 1 ? page.actions.contextualActions[0] : overflowAction
     }
 }
 
