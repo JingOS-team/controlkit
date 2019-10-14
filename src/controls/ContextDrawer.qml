@@ -143,6 +143,20 @@ OverlayDrawer {
                 if (root.actions.length === 0) {
                     return null;
                 } else {
+
+                    // Check if at least one action is visible
+                    var somethingVisible = false;
+                    for (var i=0; i<root.actions.length; i++) {
+                        if (root.actions[i].visible) {
+                            somethingVisible = true;
+                            break;
+                        }
+                    }
+
+                    if (!somethingVisible) {
+                        return null;
+                    }
+
                     return root.actions[0].text !== undefined &&
                         root.actions[0].trigger !== undefined ?
                             root.actions :
