@@ -19,7 +19,7 @@
 
 import QtQuick 2.1
 import QtQuick.Templates 2.0 as T2
-import org.kde.kirigami 2.5
+import org.kde.kirigami 2.11
 import "private"
 
 /**
@@ -289,7 +289,7 @@ T2.Drawer {
     edge: Qt.LeftEdge
     modal: true
 
-    dragMargin: enabled && (edge === Qt.LeftEdge || edge === Qt.RightEdge) ? Qt.styleHints.startDragDistance : 0
+    dragMargin: enabled && (edge === Qt.LeftEdge || edge === Qt.RightEdge) ? Math.min(Units.gridUnit, Qt.styleHints.startDragDistance) : 0
 
     contentWidth: contentItem.implicitWidth || (contentChildren.length === 1 ? contentChildren[0].implicitWidth : 0)
     contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
