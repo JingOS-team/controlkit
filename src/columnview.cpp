@@ -1144,15 +1144,8 @@ QQuickItem *ColumnView::pop(QQuickItem *item)
 
 void ColumnView::clear()
 {
-    ColumnViewAttached *attached = nullptr;
-
     for (QQuickItem *item : m_contentItem->m_items) {
-        attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(item, false));
-        if (attached && attached->shouldDeleteOnRemove()) {
-            item->deleteLater();
-        } else {
-            item->setParentItem(attached ? attached->originalParent() : nullptr);
-        }
+        removeItem(item);
     }
     m_contentItem->m_items.clear();
     emit contentChildrenChanged();
