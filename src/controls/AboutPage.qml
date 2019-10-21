@@ -216,7 +216,7 @@ ScrollablePage
         }
         Repeater {
             id: repCredits
-            model: aboutData.translators
+            model: aboutData.credits
             delegate: personDelegate
         }
         Heading {
