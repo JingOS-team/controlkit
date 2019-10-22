@@ -118,9 +118,12 @@ Kirigami.AbstractApplicationHeader {
 
         Item {
             id: rightHandleAnchor
-            visible: (typeof applicationWindow() !== "undefined" && applicationWindow().contextDrawer &&
-            applicationWindow().contextDrawer.enabled &&
-            applicationWindow().contextDrawer.handleVisible && (applicationWindow().contextDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? rightHandleAnchor : leftHandleAnchor))) && breadcrumbLoader.pageRow.lastVisibleItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar
+            visible: (typeof applicationWindow() !== "undefined" &&
+                    applicationWindow().contextDrawer &&
+                    applicationWindow().contextDrawer.enabled &&
+                    applicationWindow().contextDrawer.handleVisible &&
+                    applicationWindow().contextDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? rightHandleAnchor : leftHandleAnchor) &&
+                    breadcrumbLoader.pageRow && breadcrumbLoader.pageRow.lastVisibleItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar)
             Layout.fillHeight: true
             Layout.preferredWidth: height
         }
