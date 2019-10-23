@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.1
-import QtQuick.Templates 2.0 as T2
+import QtQuick.Templates 2.2 as T2
 import org.kde.kirigami 2.11
 import "private"
 
@@ -265,6 +265,7 @@ T2.Drawer {
         }
     }
 
+    interactive: modal
     Theme.colorSet: modal ? Theme.View : Theme.Window
     Theme.onColorSetChanged: {
         contentItem.Theme.colorSet = Theme.colorSet

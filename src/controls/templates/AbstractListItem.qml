@@ -120,6 +120,8 @@ T2.ItemDelegate {
     // Overrides action property of newer import versions which we can't use
     property QQC2.Action action
 
+    activeFocusOnTab: ListView.view ? false : true
+
     text: action ? action.text : undefined
     checked: action ? action.checked : false
     checkable: action ? action.checkable : false
