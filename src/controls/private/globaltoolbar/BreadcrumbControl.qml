@@ -63,7 +63,7 @@ Flickable {
                     color: Kirigami.Theme.highlightColor
                     anchors.fill: parent
                     radius: 3
-                    opacity: parent.containsMouse ? 0.1 : 0
+                    opacity: mainRepeater.count > 1 && parent.containsMouse ? 0.1 : 0
                 }
                 RowLayout {
                     id: delegateLayout
