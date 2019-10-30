@@ -163,13 +163,56 @@ T2.SwipeDelegate {
 
     leftPadding: padding * 2
 
-    rightPadding: padding * 2 + (overlayLoader.visible ? overlayLoader.width : (hovered || !supportsMouseEvents) * actionsLayout.width) + overlayLoader.anchors.rightMargin
+    //rightPadding: padding * 2 + (overlayLoader.visible ? overlayLoader.width : (hovered || !supportsMouseEvents) * actionsLayout.width) + overlayLoader.anchors.rightMargin
+
+    rightPadding: padding * 2 +  (overlayLoader.visible ? overlayLoader.width : 0) + internal.calculateMargin()
     
     topPadding: padding
     bottomPadding: padding
 
+    QtObject {
+        id: internal
+
+        property Flickable view: listItem.ListView.view || (listItem.parent ? (listItem.parent.ListView.view || listItem.parent) : null)
+
+        readonly property QtObject swipeFilterItem: (view && view.parent && view.parent.parent && view.parent.parent._swipeFilter) ? view.parent.parent._swipeFilter : null
+
+        readonly property bool edgeEnabled: swipeFilterItem ? swipeFilterItem.currentItem === listItem || swipeFilterItem.currentItem === listItem.parent : false
+
+        property bool indicateActiveFocus: listItem.pressed || Kirigami.Settings.tabletMode || listItem.activeFocus || (view ? view.activeFocus : false)
+
+        // Search for scrollbar of the view or of the ScrollView
+        property T2.ScrollBar verticalScrollBar: {
+            if (!view) {
+                return null;
+            }
+            return view.T2.ScrollBar.vertical || view.parent.T2.ScrollBar.vertical;
+        }
+
+        //install the SwipeItemEventFilter
+        onViewChanged: {
+            if (!Kirigami.Settings.tabletMode) {
+                return;
+            }
+            if (internal.view && Kirigami.Settings.tabletMode && !internal.view.parent.parent._swipeFilter) {
+                var component = Qt.createComponent(Qt.resolvedUrl("./private/SwipeItemEventFilter.qml"));
+                internal.view.parent.parent._swipeFilter = component.createObject(internal.view.parent.parent);
+            }
+        }
+
+        function calculateMargin() {
+            if (verticalScrollBar && verticalScrollBar.visible) {
+                return verticalScrollBar.width
+            } else {
+                return Kirigami.Units.smallSpacing
+            }
+        }
+    }
+
+//BEGIN Items
     Loader {
         id: overlayLoader
+
         parent: listItem
         z: contentItem ? contentItem.z + 1 : 0
         visible: active
@@ -179,9 +222,10 @@ T2.SwipeDelegate {
             right: contentItem ? contentItem.right : undefined
             top: parent.top
             bottom: parent.bottom
-            rightMargin: -listItem.leftPadding
+            rightMargin: -listItem.rightPadding + internal.calculateMargin()
         }
     }
+
     Component {
         id: handleComponent
 
@@ -195,7 +239,7 @@ T2.SwipeDelegate {
             preventStealing: true
             readonly property real openPosition: (listItem.width - width - listItem.leftPadding - listItem.rightPadding)/listItem.width
             property real startX: 0
-            property real lastX: 0
+            property real lastPosition: 0
             property bool openIntention
 
             onPressed: startX = mapToItem(listItem, 0, 0).x;
@@ -219,17 +263,16 @@ T2.SwipeDelegate {
                 slideAnim.restart();
             }
             onPositionChanged: {
-                var currentX = mapToItem(listItem, 0, 0).x;
                 var pos = mapToItem(listItem, mouse.x, mouse.y);
                 
                 if (listItem.LayoutMirroring.enabled) {
                     listItem.swipe.position = Math.max(0, Math.min(openPosition, (pos.x / listItem.width)));
-                    openIntention = currentX > lastX;
+                    openIntention = listItem.swipe.position > lastPosition;
                 } else {
                     listItem.swipe.position = Math.min(0, Math.max(-openPosition, (pos.x / (listItem.width -listItem.rightPadding) - 1)));
-                    openIntention = currentX < lastX;
+                    openIntention = listItem.swipe.position < lastPosition;
                 }
-                lastX = currentX;
+                lastPosition = listItem.swipe.position;
             }
             onReleased: {
                 if (listItem.LayoutMirroring.enabled) {
@@ -253,6 +296,49 @@ T2.SwipeDelegate {
                 anchors.fill: parent
                 selected: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate)
                 source: (LayoutMirroring.enabled ? (listItem.background.x < listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left") : (listItem.background.x < -listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left"))
+            }
+
+            Connections {
+                id: swipeFilterConnection
+
+                target: internal.edgeEnabled ? internal.swipeFilterItem : null
+                onPeekChanged: {
+                    /*if (!listItem.actionsVisible) {
+                        return;
+                    }*/
+
+                    if (listItem.LayoutMirroring.enabled) {
+                        listItem.swipe.position = Math.max(0, Math.min(dragButton.openPosition, internal.swipeFilterItem.peek));
+                        dragButton.openIntention = listItem.swipe.position > dragButton.lastPosition;
+
+                    } else {
+                        listItem.swipe.position = Math.min(0, Math.max(-dragButton.openPosition, -internal.swipeFilterItem.peek));
+                        dragButton.openIntention = listItem.swipe.position < dragButton.lastPosition;
+                    }
+
+                    dragButton.lastPosition = listItem.swipe.position;
+                }
+                onPressed: {
+                    if (internal.edgeEnabled) {
+                        dragButton.onPressed(mouse);
+                    }
+                }
+                onClicked: {
+                    if (Math.abs(listItem.background.x) < Units.gridUnit && internal.edgeEnabled) {
+                        dragButton.clicked(mouse);
+                    }
+                }
+                onReleased: {
+                    if (internal.edgeEnabled) {
+                        dragButton.released(mouse);
+                    }
+                }
+                onCurrentItemChanged: {
+                    if (!internal.edgeEnabled) {
+                        slideAnim.to = 0;
+                        slideAnim.restart();
+                    }
+                }
             }
         }
     }
@@ -292,6 +378,7 @@ T2.SwipeDelegate {
                 right: parent.right
                 top: parent.top
                 bottom: parent.bottom
+                rightMargin: internal.calculateMargin()
             }
 
             property bool hasVisibleActions: false
@@ -352,7 +439,7 @@ T2.SwipeDelegate {
     swipe {
         enabled: false
         right: listItem.LayoutMirroring.enabled || !Kirigami.Settings.tabletMode ? null : listItem.actionsDelegate
-        left: listItem.LayoutMirroring.enabled && Kirigami.Settings.tabletMod ? listItem.actionsDelegate : null
+        left: listItem.LayoutMirroring.enabled && Kirigami.Settings.tabletMode ? listItem.actionsDelegate : null
     }
     NumberAnimation {
         id: slideAnim
@@ -362,5 +449,6 @@ T2.SwipeDelegate {
         property: "position"
         from: listItem.swipe.position
     }
+//END Items
 }
 
