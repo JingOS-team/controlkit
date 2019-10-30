@@ -53,7 +53,7 @@ import "private"
  *
  */
 T2.SwipeDelegate {
-    id: root
+    id: listItem
 
     /**
      * supportsMouseEvents: bool
@@ -61,7 +61,7 @@ T2.SwipeDelegate {
      *TODO: remove
      * The default value is false.
      */
-    property alias supportsMouseEvents: root.hoverEnabled
+    property alias supportsMouseEvents: listItem.hoverEnabled
 
     /**
      * containsMouse: bool
@@ -69,7 +69,7 @@ T2.SwipeDelegate {
      * NOTE: on mobile touch devices this will be true only when pressed is also true
      * KF6: remove
      */
-    property alias containsMouse: root.hovered
+    property alias containsMouse: listItem.hovered
 
     /**
      * alternatingBackground: bool
@@ -154,16 +154,32 @@ T2.SwipeDelegate {
 
     LayoutMirroring.childrenInherit: true
 
+    hoverEnabled: true
+    implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
+    width: parent ? parent.width : implicitWidth
+    implicitHeight: Math.max(Units.gridUnit * 2, contentItem.implicitHeight) + topPadding + bottomPadding
+
+    padding: Kirigami.Settings.tabletMode ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
+
+    leftPadding: padding * 2
+
+    rightPadding: padding * 2 + (overlayLoader.visible ? overlayLoader.width : (hovered || !supportsMouseEvents) * actionsLayout.width) + overlayLoader.anchors.rightMargin
+    
+    topPadding: padding
+    bottomPadding: padding
+
     Loader {
         id: overlayLoader
-        parent: root
+        parent: listItem
         z: contentItem ? contentItem.z + 1 : 0
+        visible: active
+        active: Kirigami.Settings.tabletMode
         sourceComponent: handleComponent
         anchors {
             right: contentItem ? contentItem.right : undefined
             top: parent.top
             bottom: parent.bottom
-            rightMargin: -root.leftPadding
+            rightMargin: -listItem.leftPadding
         }
     }
     Component {
@@ -177,16 +193,24 @@ T2.SwipeDelegate {
             implicitWidth: Kirigami.Units.iconSizes.smallMedium
 
             preventStealing: true
-            property real openPosition: (root.width - width - root.leftPadding - root.rightPadding)/root.width
+            readonly property real openPosition: (listItem.width - width - listItem.leftPadding - listItem.rightPadding)/listItem.width
+            property real startX: 0
+            property real lastX: 0
+            property bool openIntention
+
+            onPressed: startX = mapToItem(listItem, 0, 0).x;
             onClicked: {
-                if (root.LayoutMirroring.enabled) {
-                    if (root.swipe.position < 0.5) {
+                if (Math.abs(mapToItem(listItem, 0, 0).x - startX) > Qt.styleHints.startDragDistance) {
+                    return;
+                }
+                if (listItem.LayoutMirroring.enabled) {
+                    if (listItem.swipe.position < 0.5) {
                         slideAnim.to = openPosition
                     } else {
                         slideAnim.to = 0
                     }
                 } else {
-                    if (root.swipe.position > -0.5) {
+                    if (listItem.swipe.position > -0.5) {
                         slideAnim.to = -openPosition
                     } else {
                         slideAnim.to = 0
@@ -195,23 +219,27 @@ T2.SwipeDelegate {
                 slideAnim.restart();
             }
             onPositionChanged: {
-                var pos = mapToItem(root, mouse.x, mouse.y);
+                var currentX = mapToItem(listItem, 0, 0).x;
+                var pos = mapToItem(listItem, mouse.x, mouse.y);
                 
-                if (root.LayoutMirroring.enabled) {
-                    root.swipe.position = Math.max(0, Math.min(openPosition, (pos.x / root.width)))
+                if (listItem.LayoutMirroring.enabled) {
+                    listItem.swipe.position = Math.max(0, Math.min(openPosition, (pos.x / listItem.width)));
+                    openIntention = currentX > lastX;
                 } else {
-                    root.swipe.position = Math.min(0, Math.max(-openPosition, (pos.x / root.width - 1)))
+                    listItem.swipe.position = Math.min(0, Math.max(-openPosition, (pos.x / (listItem.width -listItem.rightPadding) - 1)));
+                    openIntention = currentX < lastX;
                 }
+                lastX = currentX;
             }
             onReleased: {
-                if (root.LayoutMirroring.enabled) {
-                    if (root.swipe.position > 0.5) {
+                if (listItem.LayoutMirroring.enabled) {
+                    if (openIntention) {
                         slideAnim.to = openPosition
                     } else {
                         slideAnim.to = 0
                     }
                 } else {
-                    if (root.swipe.position < -0.5) {
+                    if (openIntention) {
                         slideAnim.to = -openPosition
                     } else {
                         slideAnim.to = 0
@@ -223,18 +251,18 @@ T2.SwipeDelegate {
             Kirigami.Icon {
                 id: handleIcon
                 anchors.fill: parent
-                selected: root.checked || (root.pressed && !root.checked && !root.sectionDelegate)
-                source: (LayoutMirroring.enabled ? (root.background.x < root.background.width/2 ? "overflow-menu-right" : "overflow-menu-left") : (root.background.x < -root.background.width/2 ? "overflow-menu-right" : "overflow-menu-left"))
+                selected: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate)
+                source: (LayoutMirroring.enabled ? (listItem.background.x < listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left") : (listItem.background.x < -listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left"))
             }
         }
     }
 
-    property Component behindDelegate: Rectangle {
+    property Component actionsDelegate: Rectangle {
         anchors.fill: parent
 
         color: Controls.SwipeDelegate.pressed ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : Qt.darker(Kirigami.Theme.backgroundColor, 1.05)
 
-        visible: root.swipe.position != 0
+        visible: listItem.swipe.position != 0
         Controls.SwipeDelegate.onPressedChanged: {
             slideAnim.to = 0;
             slideAnim.restart();
@@ -251,7 +279,7 @@ T2.SwipeDelegate {
         }
         EdgeShadow {
             edge: LayoutMirroring.enabled ? Qt.RightEdge : Qt.LeftEdge
-            x: LayoutMirroring.enabled ? root.background.x - width : (root.background.x + root.background.width)
+            x: LayoutMirroring.enabled ? listItem.background.x - width : (listItem.background.x + listItem.background.width)
             visible: background.x != 0
             anchors {
                 top: parent.top
@@ -266,19 +294,35 @@ T2.SwipeDelegate {
                 bottom: parent.bottom
             }
 
+            property bool hasVisibleActions: false
+            function updateVisibleActions(definitelyVisible = false) {
+                if (definitelyVisible) {
+                    hasVisibleActions = true;
+                } else {
+                    var actionCount = listItem.actions.length;
+                    for (var i = 0; i < actionCount; i++) {
+                        // Assuming that visible is only false if it is explicitly false, and not just falsy
+                        if (listItem.actions[i].visible === false) {
+                            continue;
+                        }
+                        hasVisibleActions = true;
+                        break;
+                    }
+                }
+            }
+
             Repeater {
                 model: {
-                    if (root.actions.length === 0) {
+                    if (listItem.actions.length === 0) {
                         return null;
                     } else {
-                        return root.actions[0].text !== undefined &&
-                            root.actions[0].trigger !== undefined ?
-                                root.actions :
-                                root.actions[0];
+                        return listItem.actions[0].text !== undefined &&
+                            listItem.actions[0].trigger !== undefined ?
+                                listItem.actions :
+                                listItem.actions[0];
                     }
                 }
                 delegate: Controls.ToolButton {
-                    anchors.verticalCenter: parent.verticalCenter
                     icon.name: modelData.iconName !== "" ? modelData.iconName : ""
                     icon.source: modelData.iconSource !== "" ? modelData.iconSource : ""
                     enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
@@ -286,9 +330,9 @@ T2.SwipeDelegate {
                     onVisibleChanged: actionsLayout.updateVisibleActions(visible);
                     Component.onCompleted: actionsLayout.updateVisibleActions(visible);
                     Component.onDestruction: actionsLayout.updateVisibleActions(visible);
-                    Controls.ToolTip.delay: Units.toolTipDelay
+                    Controls.ToolTip.delay: Kirigami.Units.toolTipDelay
                     Controls.ToolTip.timeout: 5000
-                    Controls.ToolTip.visible: listItem.visible && (Settings.tabletMode ? pressed : hovered) && Controls.ToolTip.text.length > 0
+                    Controls.ToolTip.visible: listItem.visible && (Kirigami.Settings.tabletMode ? pressed : hovered) && Controls.ToolTip.text.length > 0
                     Controls.ToolTip.text: modelData.tooltip || modelData.text
 
                     onClicked: {
@@ -302,22 +346,21 @@ T2.SwipeDelegate {
             }
         }
     }
-    background: Rectangle {
-        color: Controls.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
-        radius: 10
-    }
+
+    background: DefaultListItemBackground {}
+
     swipe {
         enabled: false
-        right: root.LayoutMirroring.enabled ? null : root.behindDelegate
-        left: root.LayoutMirroring.enabled ? root.behindDelegate : null
+        right: listItem.LayoutMirroring.enabled || !Kirigami.Settings.tabletMode ? null : listItem.actionsDelegate
+        left: listItem.LayoutMirroring.enabled && Kirigami.Settings.tabletMod ? listItem.actionsDelegate : null
     }
     NumberAnimation {
         id: slideAnim
         duration: Kirigami.Units.longDuration
         easing.type: Easing.InOutQuad
-        target: root.swipe
+        target: listItem.swipe
         property: "position"
-        from: root.swipe.position
+        from: listItem.swipe.position
     }
 }
 
