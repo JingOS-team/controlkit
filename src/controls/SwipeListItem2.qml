@@ -212,17 +212,24 @@ T2.SwipeDelegate {
 //BEGIN Items
     Loader {
         id: overlayLoader
-
-        parent: listItem
-        z: contentItem ? contentItem.z + 1 : 0
-        visible: active
-        active: Kirigami.Settings.tabletMode
-        sourceComponent: handleComponent
         anchors {
             right: contentItem ? contentItem.right : undefined
             top: parent.top
             bottom: parent.bottom
             rightMargin: -listItem.rightPadding + internal.calculateMargin()
+        }
+
+        parent: listItem
+        z: contentItem ? contentItem.z + 1 : 0
+        visible: active && opacity > 0
+        sourceComponent: Kirigami.Settings.tabletMode ? handleComponent : actionsDelegate
+        opacity: Kirigami.Settings.tabletMode || listItem.hovered || !listItem.supportsMouseEvents ? 1 : 0
+        Behavior on opacity {
+            OpacityAnimator {
+                id: opacityAnim
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
         }
     }
 
@@ -343,44 +350,55 @@ T2.SwipeDelegate {
         }
     }
 
-    property Component actionsDelegate: Rectangle {
-        anchors.fill: parent
+    //TODO: expose in API?
+    Component {
+        id: actionsBackgroundDelegate
+        Rectangle {
 
-        color: Controls.SwipeDelegate.pressed ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : Qt.darker(Kirigami.Theme.backgroundColor, 1.05)
+            anchors.fill: parent
 
-        visible: listItem.swipe.position != 0
-        Controls.SwipeDelegate.onPressedChanged: {
-            slideAnim.to = 0;
-            slideAnim.restart();
-        }
+            color: Controls.SwipeDelegate.pressed ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : Qt.darker(Kirigami.Theme.backgroundColor, 1.05)
 
-        EdgeShadow {
-            edge: Qt.TopEdge
-            visible: background.x != 0
-            anchors {
-                right: parent.right
-                left: parent.left
-                top: parent.top
+            visible: listItem.swipe.position != 0
+            Controls.SwipeDelegate.onPressedChanged: {
+                slideAnim.to = 0;
+                slideAnim.restart();
+            }
+
+            EdgeShadow {
+                edge: Qt.TopEdge
+                visible: background.x != 0
+                anchors {
+                    right: parent.right
+                    left: parent.left
+                    top: parent.top
+                }
+            }
+            EdgeShadow {
+                edge: LayoutMirroring.enabled ? Qt.RightEdge : Qt.LeftEdge
+                x: LayoutMirroring.enabled ? listItem.background.x - width : (listItem.background.x + listItem.background.width)
+                visible: background.x != 0
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+            }
+            Loader {
+                anchors {
+                    right: parent.right
+                    top: parent.top
+                    bottom: parent.bottom
+                    rightMargin: internal.calculateMargin()
+                }
+                sourceComponent: actionsDelegate
             }
         }
-        EdgeShadow {
-            edge: LayoutMirroring.enabled ? Qt.RightEdge : Qt.LeftEdge
-            x: LayoutMirroring.enabled ? listItem.background.x - width : (listItem.background.x + listItem.background.width)
-            visible: background.x != 0
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-            }
-        }
+    }
+
+    Component {
+        id: actionsDelegate
         RowLayout {
             id: actionsLayout
-            anchors {
-                right: parent.right
-                top: parent.top
-                bottom: parent.bottom
-                rightMargin: internal.calculateMargin()
-            }
-
             property bool hasVisibleActions: false
             function updateVisibleActions(definitelyVisible = false) {
                 if (definitelyVisible) {
@@ -438,8 +456,8 @@ T2.SwipeDelegate {
 
     swipe {
         enabled: false
-        right: listItem.LayoutMirroring.enabled || !Kirigami.Settings.tabletMode ? null : listItem.actionsDelegate
-        left: listItem.LayoutMirroring.enabled && Kirigami.Settings.tabletMode ? listItem.actionsDelegate : null
+        right: listItem.LayoutMirroring.enabled || !Kirigami.Settings.tabletMode ? null : actionsBackgroundDelegate
+        left: listItem.LayoutMirroring.enabled && Kirigami.Settings.tabletMode ? actionsBackgroundDelegate : null
     }
     NumberAnimation {
         id: slideAnim
