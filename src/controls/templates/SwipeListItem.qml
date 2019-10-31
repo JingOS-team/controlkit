@@ -207,6 +207,24 @@ T2.SwipeDelegate {
         }
     }
 
+    Connections {
+        target: Kirigami.Settings
+        onTabletModeChanged: {
+            if (Kirigami.Settings.tabletMode) {
+                if (!internal.swipeFilterItem) {
+                    var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
+                    listItem.ListView.view.parent.parent._swipeFilter = component.createObject(listItem.ListView.view.parent.parent);
+                }
+            } else {
+                if (listItem.ListView.view.parent.parent._swipeFilter) {
+                    listItem.ListView.view.parent.parent._swipeFilter.destroy();
+                    slideAnim.to = 0;
+                    slideAnim.restart();
+                }
+            }
+        }
+    }
+
 //BEGIN Items
     Loader {
         id: overlayLoader
