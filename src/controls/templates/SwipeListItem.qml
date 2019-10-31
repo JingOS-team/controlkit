@@ -1,5 +1,5 @@
 /*
- *   Copyright 2010 Marco Martin <notmart@gmail.com>
+ *   Copyright 2019 Marco Martin <notmart@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -17,12 +17,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
  */
 
-import QtQuick 2.7
-import QtQuick.Layouts 1.2
-import QtQuick.Controls 2.7 as Controls
-import org.kde.kirigami 2.7
+import QtQuick 2.6
+import QtQuick.Layouts 1.4
+import QtQuick.Controls 2.4 as Controls
+import QtQuick.Templates 2.4 as T2
+import org.kde.kirigami 2.11 as Kirigami
 import "../private"
-import QtQuick.Templates 2.0 as T2
 
 /**
  * An item delegate Intended to support extra actions obtainable
@@ -38,11 +38,11 @@ import QtQuick.Templates 2.0 as T2
  *         }
  *         actions: [
  *              Action {
- *                  iconName: "document-decrypt"
+ *                  icon.name: "document-decrypt"
  *                  onTriggered: print("Action 1 clicked")
  *              },
  *              Action {
- *                  iconName: model.action2Icon
+ *                  icon.name: model.action2Icon
  *                  onTriggered: //do something
  *              }
  *         ]
@@ -51,12 +51,10 @@ import QtQuick.Templates 2.0 as T2
  * }
  * @endcode
  *
- * @inherit QtQuick.Templates.ItemDelegate
  */
-T2.ItemDelegate {
+T2.SwipeDelegate {
     id: listItem
 
-//BEGIN properties
     /**
      * supportsMouseEvents: bool
      * Holds if the item emits signals related to mouse interaction.
@@ -69,6 +67,7 @@ T2.ItemDelegate {
      * containsMouse: bool
      * True when the user hover the mouse over the list item
      * NOTE: on mobile touch devices this will be true only when pressed is also true
+     * KF6: remove
      */
     property alias containsMouse: listItem.hovered
 
@@ -102,7 +101,7 @@ T2.ItemDelegate {
      * the editing of an item.
      * @since 2.5
      */
-    property alias actionsVisible: behindItem.visible
+    readonly property bool actionsVisible: actionsLayout.hasVisibleActions
 
     /**
      * actions: list<Action>
@@ -110,7 +109,7 @@ T2.ItemDelegate {
      * contain the actions for the item, that can be revealed by
      * sliding away the list item.
      */
-    property list<Action> actions
+    property list<Controls.Action> actions
 
     /**
      * textColor: color
@@ -119,13 +118,13 @@ T2.ItemDelegate {
      * Note: if custom text elements are inserted in an AbstractListItem,
      * their color property will have to be manually bound with this property
      */
-    property color textColor: Theme.textColor
+    property color textColor: Kirigami.Theme.textColor
 
     /**
      * backgroundColor: color
      * Color for the background of the item
      */
-    property color backgroundColor: Theme.backgroundColor
+    property color backgroundColor: Kirigami.Theme.backgroundColor
 
     /**
      * alternateBackgroundColor: color
@@ -133,7 +132,7 @@ T2.ItemDelegate {
      * It is advised to leave the default.
      * @since 2.7
      */
-    property color alternateBackgroundColor: Theme.alternateBackgroundColor
+    property color alternateBackgroundColor: Kirigami.Theme.alternateBackgroundColor
 
     /**
      * activeTextColor: color
@@ -143,121 +142,264 @@ T2.ItemDelegate {
      * Note: if custom text elements are inserted in an AbstractListItem,
      * their color property will have to be manually bound with this property
      */
-    property color activeTextColor: Theme.highlightedTextColor
+    property color activeTextColor: Kirigami.Theme.highlightedTextColor
 
     /**
      * activeBackgroundColor: color
      * Color for the background of the item when pressed or selected
      * It is advised to leave the default value (Theme.highlightColor)
      */
-    property color activeBackgroundColor: Theme.highlightColor
+    property color activeBackgroundColor: Kirigami.Theme.highlightColor
 
-    default property alias _default: listItem.contentItem
+
+    LayoutMirroring.childrenInherit: true
 
     hoverEnabled: true
-    implicitWidth: contentItem ? contentItem.implicitWidth : Units.gridUnit * 12
+    implicitWidth: contentItem ? contentItem.implicitWidth : Kirigami.Units.gridUnit * 12
     width: parent ? parent.width : implicitWidth
-    implicitHeight: Math.max(Units.gridUnit * 2, contentItem.implicitHeight, actionsLayout.implicitHeight) + topPadding + bottomPadding
+    implicitHeight: Math.max(Kirigami.Units.gridUnit * 2, contentItem.implicitHeight) + topPadding + bottomPadding
 
-    padding: Settings.tabletMode ? Units.largeSpacing : Units.smallSpacing
+    padding: Kirigami.Settings.tabletMode ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
 
     leftPadding: padding * 2
 
-    rightPadding: padding * 2 + (handleMouse.visible ? handleMouse.width : (hovered || !supportsMouseEvents) * actionsLayout.width) + handleMouse.anchors.rightMargin
+    rightPadding: padding * 2 +  (overlayLoader.visible ? overlayLoader.width : 0) + internal.calculateMargin()
     
     topPadding: padding
     bottomPadding: padding
 
-//END properties
+    QtObject {
+        id: internal
 
-    Item {
-        id: behindItem
-        parent: listItem
-        z: -1
-        //TODO: a global "open" state
-        enabled: background.x !== 0
-        property bool indicateActiveFocus: listItem.pressed || Settings.tabletMode || listItem.activeFocus || (view ? view.activeFocus : false)
         property Flickable view: listItem.ListView.view || (listItem.parent ? (listItem.parent.ListView.view || listItem.parent) : null)
-        property T2.ScrollBar flickableVerticalScrollbar: view ? (view.T2.ScrollBar.vertical ? view.T2.ScrollBar.vertical : null) : null
-        property T2.ScrollBar scrollviewVerticalScrollbar: view ? (view.parent.T2.ScrollBar.vertical ? view.parent.T2.ScrollBar.vertical : null) : null
+
+        readonly property QtObject swipeFilterItem: (view && view.parent && view.parent.parent && view.parent.parent._swipeFilter) ? view.parent.parent._swipeFilter : null
+
+        readonly property bool edgeEnabled: swipeFilterItem ? swipeFilterItem.currentItem === listItem || swipeFilterItem.currentItem === listItem.parent : false
+
+        property bool indicateActiveFocus: listItem.pressed || Kirigami.Settings.tabletMode || listItem.activeFocus || (view ? view.activeFocus : false)
+
+        // Search for scrollbar of the view or of the ScrollView
+        property T2.ScrollBar verticalScrollBar: {
+            if (!view) {
+                return null;
+            }
+            return view.T2.ScrollBar.vertical || view.parent.T2.ScrollBar.vertical;
+        }
+
+        //install the SwipeItemEventFilter
         onViewChanged: {
-            if (view && Settings.tabletMode && !behindItem.view.parent.parent._swipeFilter) {
+            if (!Kirigami.Settings.tabletMode) {
+                return;
+            }
+            if (internal.view && Kirigami.Settings.tabletMode && !internal.view.parent.parent._swipeFilter) {
                 var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
-                behindItem.view.parent.parent._swipeFilter = component.createObject(behindItem.view.parent.parent);
+                internal.view.parent.parent._swipeFilter = component.createObject(internal.view.parent.parent);
             }
         }
 
-        // Some of the views use flickables, and some use scrollviews, so we
-        // need to handle both when we determine whether or not to move items
-        // over to the right so the scrollbar doesn't overlap them
         function calculateMargin() {
-            if (scrollviewVerticalScrollbar && scrollviewVerticalScrollbar.visible) {
-                return scrollviewVerticalScrollbar.width
-            } else if (flickableVerticalScrollbar && flickableVerticalScrollbar.visible) {
-                return flickableVerticalScrollbar.width
+            if (verticalScrollBar && verticalScrollBar.visible) {
+                return verticalScrollBar.width
+            } else {
+                return Kirigami.Units.smallSpacing
             }
-            return Units.smallSpacing
+        }
+    }
+
+//BEGIN Items
+    Loader {
+        id: overlayLoader
+        anchors {
+            right: contentItem ? contentItem.right : undefined
+            top: parent.top
+            bottom: parent.bottom
+            rightMargin: -listItem.rightPadding + internal.calculateMargin()
         }
 
-        anchors {
-            fill: parent
+        parent: listItem
+        z: contentItem ? contentItem.z + 1 : 0
+        width: item ? item.implicitWidth : actionsLayout.implicitWidth
+        active: Kirigami.Settings.tabletMode
+        visible: listItem.actionsVisible && opacity > 0
+        sourceComponent: handleComponent
+        opacity: Kirigami.Settings.tabletMode || listItem.hovered || !listItem.supportsMouseEvents ? 1 : 0
+        Behavior on opacity {
+            OpacityAnimator {
+                id: opacityAnim
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
         }
-        Rectangle {
-            id: shadowHolder
-            color: Qt.darker(Theme.backgroundColor, 1.05);
-            anchors.fill: parent
-        }
-        EdgeShadow {
-            edge: Qt.TopEdge
-            visible: background.x != 0
+    }
+
+    Component {
+        id: handleComponent
+
+        MouseArea {
+            id: dragButton
             anchors {
                 right: parent.right
-                left: parent.left
-                top: parent.top
             }
-        }
-        EdgeShadow {
-            edge: LayoutMirroring.enabled ? Qt.RightEdge : Qt.LeftEdge
-            x: LayoutMirroring.enabled ? listItem.background.x - width : (listItem.background.x + listItem.background.width)
-            visible: background.x != 0
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-            }
-        }
-        MouseArea {
-            anchors.fill: parent
+            implicitWidth: Kirigami.Units.iconSizes.smallMedium
+
             preventStealing: true
-            enabled: background.x != 0
+            readonly property real openPosition: (listItem.width - width - listItem.leftPadding - listItem.rightPadding)/listItem.width
+            property real startX: 0
+            property real lastPosition: 0
+            property bool openIntention
+
+            onPressed: startX = mapToItem(listItem, 0, 0).x;
             onClicked: {
-                positionAnimation.from = background.x;
-                positionAnimation.to = 0;
-                positionAnimation.running = true;
+                if (Math.abs(mapToItem(listItem, 0, 0).x - startX) > Qt.styleHints.startDragDistance) {
+                    return;
+                }
+                if (listItem.LayoutMirroring.enabled) {
+                    if (listItem.swipe.position < 0.5) {
+                        slideAnim.to = openPosition
+                    } else {
+                        slideAnim.to = 0
+                    }
+                } else {
+                    if (listItem.swipe.position > -0.5) {
+                        slideAnim.to = -openPosition
+                    } else {
+                        slideAnim.to = 0
+                    }
+                }
+                slideAnim.restart();
             }
-        }
-        Row {
-            id: actionsLayout
-            z: 1
-            visible: listItem.actionsVisible
-            parent: Settings.tabletMode ? behindItem : listItem
-            opacity: Settings.tabletMode || listItem.hovered || !listItem.supportsMouseEvents ? 1 : 0
-            Behavior on opacity {
-                OpacityAnimator {
-                    duration: Units.longDuration
-                    easing.type: Easing.InOutQuad
+            onPositionChanged: {
+                var pos = mapToItem(listItem, mouse.x, mouse.y);
+                
+                if (listItem.LayoutMirroring.enabled) {
+                    listItem.swipe.position = Math.max(0, Math.min(openPosition, (pos.x / listItem.width)));
+                    openIntention = listItem.swipe.position > lastPosition;
+                } else {
+                    listItem.swipe.position = Math.min(0, Math.max(-openPosition, (pos.x / (listItem.width -listItem.rightPadding) - 1)));
+                    openIntention = listItem.swipe.position < lastPosition;
+                }
+                lastPosition = listItem.swipe.position;
+            }
+            onReleased: {
+                if (listItem.LayoutMirroring.enabled) {
+                    if (openIntention) {
+                        slideAnim.to = openPosition
+                    } else {
+                        slideAnim.to = 0
+                    }
+                } else {
+                    if (openIntention) {
+                        slideAnim.to = -openPosition
+                    } else {
+                        slideAnim.to = 0
+                    }
+                }
+                slideAnim.restart();
+            }
+
+            Kirigami.Icon {
+                id: handleIcon
+                anchors.fill: parent
+                selected: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate)
+                source: (LayoutMirroring.enabled ? (listItem.background.x < listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left") : (listItem.background.x < -listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left"))
+            }
+
+            Connections {
+                id: swipeFilterConnection
+
+                target: internal.edgeEnabled ? internal.swipeFilterItem : null
+                onPeekChanged: {
+                    if (!listItem.actionsVisible) {
+                        return;
+                    }
+
+                    if (listItem.LayoutMirroring.enabled) {
+                        listItem.swipe.position = Math.max(0, Math.min(dragButton.openPosition, internal.swipeFilterItem.peek));
+                        dragButton.openIntention = listItem.swipe.position > dragButton.lastPosition;
+
+                    } else {
+                        listItem.swipe.position = Math.min(0, Math.max(-dragButton.openPosition, -internal.swipeFilterItem.peek));
+                        dragButton.openIntention = listItem.swipe.position < dragButton.lastPosition;
+                    }
+
+                    dragButton.lastPosition = listItem.swipe.position;
+                }
+                onPressed: {
+                    if (internal.edgeEnabled) {
+                        dragButton.onPressed(mouse);
+                    }
+                }
+                onClicked: {
+                    if (Math.abs(listItem.background.x) < Units.gridUnit && internal.edgeEnabled) {
+                        dragButton.clicked(mouse);
+                    }
+                }
+                onReleased: {
+                    if (internal.edgeEnabled) {
+                        dragButton.released(mouse);
+                    }
+                }
+                onCurrentItemChanged: {
+                    if (!internal.edgeEnabled) {
+                        slideAnim.to = 0;
+                        slideAnim.restart();
+                    }
                 }
             }
-            anchors {
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-                rightMargin: LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
-                leftMargin:  LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
+        }
+    }
+
+    //TODO: expose in API?
+    Component {
+        id: actionsBackgroundDelegate
+        Rectangle {
+
+            anchors.fill: parent
+
+            color: Controls.SwipeDelegate.pressed ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : Qt.darker(Kirigami.Theme.backgroundColor, 1.05)
+
+            visible: listItem.swipe.position != 0
+            Controls.SwipeDelegate.onPressedChanged: {
+                slideAnim.to = 0;
+                slideAnim.restart();
             }
-            height: Math.min( parent.height / 1.5, Units.iconSizes.smallMedium)
-            width: childrenRect.width
-            property bool exclusive: false
-            property Item checkedButton
-            spacing: Settings.tabletMode ? Units.largeSpacing : 0
+
+            EdgeShadow {
+                edge: Qt.TopEdge
+                visible: background.x != 0
+                anchors {
+                    right: parent.right
+                    left: parent.left
+                    top: parent.top
+                }
+            }
+            EdgeShadow {
+                edge: LayoutMirroring.enabled ? Qt.RightEdge : Qt.LeftEdge
+                x: LayoutMirroring.enabled ? listItem.background.x - width : (listItem.background.x + listItem.background.width)
+                visible: background.x != 0
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+            }
+        }
+    }
+
+ 
+        RowLayout {
+            id: actionsLayout
+            anchors {
+                    right: parent.right
+                    top: parent.top
+                    bottom: parent.bottom
+                    rightMargin: internal.calculateMargin()
+                }
+            visible: parent != listItem
+            parent: Kirigami.Settings.tabletMode
+                    ? listItem.swipe.leftItem || listItem.swipe.rightItem || listItem 
+                    : overlayLoader
+
             property bool hasVisibleActions: false
             function updateVisibleActions(definitelyVisible = false) {
                 if (definitelyVisible) {
@@ -274,6 +416,7 @@ T2.ItemDelegate {
                     }
                 }
             }
+
             Repeater {
                 model: {
                     if (listItem.actions.length === 0) {
@@ -286,7 +429,6 @@ T2.ItemDelegate {
                     }
                 }
                 delegate: Controls.ToolButton {
-                    anchors.verticalCenter: parent.verticalCenter
                     icon.name: modelData.iconName !== "" ? modelData.iconName : ""
                     icon.source: modelData.iconSource !== "" ? modelData.iconSource : ""
                     enabled: (modelData && modelData.enabled !== undefined) ? modelData.enabled : true;
@@ -294,181 +436,38 @@ T2.ItemDelegate {
                     onVisibleChanged: actionsLayout.updateVisibleActions(visible);
                     Component.onCompleted: actionsLayout.updateVisibleActions(visible);
                     Component.onDestruction: actionsLayout.updateVisibleActions(visible);
-                    Controls.ToolTip.delay: Units.toolTipDelay
+                    Controls.ToolTip.delay: Kirigami.Units.toolTipDelay
                     Controls.ToolTip.timeout: 5000
-                    Controls.ToolTip.visible: listItem.visible && (Settings.tabletMode ? pressed : hovered) && Controls.ToolTip.text.length > 0
+                    Controls.ToolTip.visible: listItem.visible && (Kirigami.Settings.tabletMode ? pressed : hovered) && Controls.ToolTip.text.length > 0
                     Controls.ToolTip.text: modelData.tooltip || modelData.text
 
                     onClicked: {
                         if (modelData && modelData.trigger !== undefined) {
                             modelData.trigger();
                         }
-                        positionAnimation.from = background.x;
-                        positionAnimation.to = 0;
-                        positionAnimation.running = true;
+                        slideAnim.to = 0;
+                        slideAnim.restart();
                     }
                 }
             }
         }
+  
+
+    background: DefaultListItemBackground {}
+
+    swipe {
+        enabled: false
+        right: listItem.LayoutMirroring.enabled || !Kirigami.Settings.tabletMode ? null : actionsBackgroundDelegate
+        left: listItem.LayoutMirroring.enabled && Kirigami.Settings.tabletMode ? actionsBackgroundDelegate : null
     }
-
-    MouseArea {
-        id: handleMouse
-        parent: listItem.background
-        visible: Settings.tabletMode && listItem.actionsVisible && actionsLayout.hasVisibleActions
-        z: 99
-        anchors {
-            right: parent.right
-            verticalCenter: parent.verticalCenter
-            rightMargin: LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
-            leftMargin:  LayoutMirroring.enabled ? 0 : behindItem.calculateMargin()
-        }
-
-        preventStealing: true
-        width: Units.iconSizes.smallMedium
-        height: width
-        property var downTimestamp;
-        property int startX
-        property int startMouseX
-
-        onClicked: {
-            positionAnimation.from = background.x;
-            if (listItem.background.x > -listItem.background.width/2) {
-                positionAnimation.to = (LayoutMirroring.enabled ? -1 : +1) * (-listItem.width + height + handleMouse.anchors.rightMargin);
-            } else {
-                positionAnimation.to = 0;
-            }
-            positionAnimation.restart();
-        }
-        onPressed: {
-            downTimestamp = (new Date()).getTime();
-            startX = listItem.background.x;
-            startMouseX = mouse.x;
-        }
-        onPositionChanged: {
-            if (LayoutMirroring.enabled) {
-                listItem.background.x = Math.max(0, Math.min(listItem.width - height, listItem.background.x - (startMouseX - mouse.x)));
-            } else {
-                listItem.background.x = Math.min(0, Math.max(-listItem.width + height, listItem.background.x - (startMouseX - mouse.x)));
-            }
-        }
-        onReleased: {
-            var speed = ((startX - listItem.background.x) / ((new Date()).getTime() - downTimestamp) * 1000);
-            var absoluteDelta = startX - listItem.background.x;
-            if (LayoutMirroring.enabled) {
-                speed = -speed;
-                absoluteDelta = -absoluteDelta;
-            }
-
-            if (Math.abs(speed) < Units.gridUnit) {
-                return;
-            }
-            if (speed > listItem.width/2 || absoluteDelta > listItem.width/2) {
-                positionAnimation.to = (LayoutMirroring.enabled ? -1 : +1) * (-listItem.width + height + handleMouse.anchors.rightMargin);
-            } else {
-                positionAnimation.to = 0;
-            }
-            positionAnimation.from = background.x;
-            positionAnimation.running = true;
-        }
-        Icon {
-            id: handleIcon
-            anchors.fill: parent
-            selected: listItem.checked || (listItem.pressed && !listItem.checked && !listItem.sectionDelegate)
-            source: (LayoutMirroring.enabled ? (listItem.background.x < listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left") : (listItem.background.x < -listItem.background.width/2 ? "overflow-menu-right" : "overflow-menu-left"))
-        }
-    }
-
     NumberAnimation {
-        id: positionAnimation
-        property: "x"
-        target: background
-        duration: Units.longDuration
+        id: slideAnim
+        duration: Kirigami.Units.longDuration
         easing.type: Easing.InOutQuad
+        target: listItem.swipe
+        property: "position"
+        from: listItem.swipe.position
     }
-
-//BEGIN signal handlers
-    onContentItemChanged: {
-        if (!contentItem) {
-            return;
-        }
-        contentItem.parent = background;
-        contentItem.anchors.top = background.top;
-        contentItem.anchors.left = background.left;
-        contentItem.anchors.right = background.right;
-        contentItem.anchors.leftMargin = Qt.binding(function() {return listItem.leftPadding});
-        contentItem.anchors.rightMargin = Qt.binding(function() {return listItem.rightPadding});
-        contentItem.anchors.topMargin = Qt.binding(function() {return listItem.topPadding});
-        contentItem.z = 0;
-    }
-    Component.onCompleted: {
-        //this will happen only once
-        listItem.contentItemChanged();
-    }
-    Connections {
-        target: Settings
-        onTabletModeChanged: {
-            if (Settings.tabletMode) {
-                if (!internal.swipeFilterItem) {
-                    var component = Qt.createComponent(Qt.resolvedUrl("../private/SwipeItemEventFilter.qml"));
-                    listItem.ListView.view.parent.parent._swipeFilter = component.createObject(listItem.ListView.view.parent.parent);
-                }
-            } else {
-                if (listItem.ListView.view.parent.parent._swipeFilter) {
-                    listItem.ListView.view.parent.parent._swipeFilter.destroy();
-                    positionAnimation.to = 0;
-                    positionAnimation.from = background.x;
-                    positionAnimation.running = true;
-                }
-            }
-        }
-    }
-    QtObject {
-        id: internal
-        readonly property QtObject swipeFilterItem: (behindItem.view && behindItem.view.parent && behindItem.view.parent.parent && behindItem.view.parent.parent._swipeFilter) ? behindItem.view.parent.parent._swipeFilter : null
-
-        readonly property bool edgeEnabled: swipeFilterItem ? swipeFilterItem.currentItem === listItem || swipeFilterItem.currentItem === listItem.parent : false
-    }
-
-    Connections {
-        id: swipeFilterConnection
-
-        target: internal.edgeEnabled ? internal.swipeFilterItem : null
-        onPeekChanged: {
-            if (!listItem.actionsVisible) {
-                return;
-            }
-            if (listItem.LayoutMirroring.enabled) {
-                listItem.background.x = (listItem.background.width - listItem.background.height) * (1 - internal.swipeFilterItem.peek);
-            } else {
-                listItem.background.x = -(listItem.background.width - listItem.background.height) * internal.swipeFilterItem.peek;
-            }
-        }
-        onPressed: {
-            if (internal.edgeEnabled) {
-                handleMouse.onPressed(mouse);
-            }
-        }
-        onClicked: {
-            if (Math.abs(listItem.background.x) < Units.gridUnit && internal.edgeEnabled) {
-                handleMouse.clicked(mouse);
-            }
-        }
-        onReleased: {
-            if (internal.edgeEnabled) {
-                handleMouse.released(mouse);
-            }
-        }
-        onCurrentItemChanged: {
-            if (!internal.edgeEnabled) {
-                positionAnimation.to = 0;
-                positionAnimation.from = background.x;
-                positionAnimation.running = true;
-            }
-        }
-    }
-
-//END signal handlers
-
-    Accessible.role: Accessible.ListItem
+//END Items
 }
+
