@@ -101,7 +101,7 @@ T2.SwipeDelegate {
      * the editing of an item.
      * @since 2.5
      */
-    readonly property bool actionsVisible: swipe.position != 0
+    readonly property bool actionsVisible: actionsLayout.hasVisibleActions
 
     /**
      * actions: list<Action>
@@ -163,8 +163,6 @@ T2.SwipeDelegate {
 
     leftPadding: padding * 2
 
-    //rightPadding: padding * 2 + (overlayLoader.visible ? overlayLoader.width : (hovered || !supportsMouseEvents) * actionsLayout.width) + overlayLoader.anchors.rightMargin
-
     rightPadding: padding * 2 +  (overlayLoader.visible ? overlayLoader.width : 0) + internal.calculateMargin()
     
     topPadding: padding
@@ -221,8 +219,10 @@ T2.SwipeDelegate {
 
         parent: listItem
         z: contentItem ? contentItem.z + 1 : 0
-        visible: active && opacity > 0
-        sourceComponent: Kirigami.Settings.tabletMode ? handleComponent : actionsDelegate
+        width: item ? item.implicitWidth : actionsLayout.implicitWidth
+        active: Kirigami.Settings.tabletMode
+        visible: listItem.actionsVisible && opacity > 0
+        sourceComponent: handleComponent
         opacity: Kirigami.Settings.tabletMode || listItem.hovered || !listItem.supportsMouseEvents ? 1 : 0
         Behavior on opacity {
             OpacityAnimator {
@@ -310,9 +310,9 @@ T2.SwipeDelegate {
 
                 target: internal.edgeEnabled ? internal.swipeFilterItem : null
                 onPeekChanged: {
-                    /*if (!listItem.actionsVisible) {
+                    if (!listItem.actionsVisible) {
                         return;
-                    }*/
+                    }
 
                     if (listItem.LayoutMirroring.enabled) {
                         listItem.swipe.position = Math.max(0, Math.min(dragButton.openPosition, internal.swipeFilterItem.peek));
@@ -395,10 +395,20 @@ T2.SwipeDelegate {
         }
     }
 
-    Component {
-        id: actionsDelegate
+ 
         RowLayout {
             id: actionsLayout
+            anchors {
+                    right: parent.right
+                    top: parent.top
+                    bottom: parent.bottom
+                    rightMargin: internal.calculateMargin()
+                }
+            visible: parent != listItem
+            parent: Kirigami.Settings.tabletMode
+                    ? listItem.swipe.leftItem || listItem.swipe.rightItem || listItem 
+                    : overlayLoader
+
             property bool hasVisibleActions: false
             function updateVisibleActions(definitelyVisible = false) {
                 if (definitelyVisible) {
@@ -450,7 +460,7 @@ T2.SwipeDelegate {
                 }
             }
         }
-    }
+  
 
     background: DefaultListItemBackground {}
 
