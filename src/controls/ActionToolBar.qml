@@ -82,11 +82,8 @@ Item {
             : Controls.ToolBar.Header
 
     implicitHeight: actionsLayout.implicitHeight
-
     implicitWidth: actionsLayout.implicitWidth
-
-    Layout.minimumWidth: moreButton.implicitWidth
-    Layout.maximumWidth: placeholderLayout.implicitWidth + moreButton.width
+    Layout.minimumWidth: moreButton.visible ? moreButton.implicitWidth : 0
 
     RowLayout {
         id: actionsLayout

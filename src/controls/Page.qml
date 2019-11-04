@@ -240,18 +240,12 @@ T2.Page {
         id: title
         level: 1
         Layout.fillWidth: true
-
-        Layout.preferredWidth: titleTextMetrics.width
-        Layout.minimumWidth: titleTextMetrics.width
+        Layout.maximumWidth: implicitWidth + 1 // The +1 is to make sure we do not trigger eliding at max width
+        Layout.minimumWidth: 0
         opacity: root.isCurrentPage ? 1 : 0.4
         maximumLineCount: 1
         elide: Text.ElideRight
         text: root.title
-        TextMetrics {
-            id: titleTextMetrics
-            text: root.title
-            font: title.font
-        }
     }
 
     /**

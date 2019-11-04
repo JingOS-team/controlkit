@@ -27,8 +27,7 @@ import "../" as Private
 AbstractPageHeader {
     id: root
 
-    implicitWidth: titleLoader.implcitWidth + toolBar.implicitWidth + Units.smallSpacing * 3
-
+    implicitWidth: layout.implcitWidth + Units.smallSpacing * 2
     Layout.preferredHeight: Math.max(titleLoader.implicitHeight, toolBar.implicitHeight) + Units.smallSpacing * 2
 
     MouseArea {
@@ -36,57 +35,58 @@ AbstractPageHeader {
         onClicked: page.forceActiveFocus()
     }
 
-    Loader {
-        id: titleLoader
+    RowLayout {
+        id: layout
+        anchors.fill: parent
+        anchors.leftMargin: Units.smallSpacing
+        anchors.rightMargin: Units.smallSpacing
+        spacing: Units.smallSpacing
 
-        anchors {
-            verticalCenter: parent.verticalCenter
-            left: parent.left
-            leftMargin: Units.smallSpacing
-            rightMargin: Units.smallSpacing
+        Loader {
+            id: titleLoader
+
+            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+            Layout.fillWidth: item ? item.Layout.fillWidth : undefined
+            Layout.minimumWidth: item ? item.Layout.minimumWidth : undefined
+            Layout.preferredWidth: item ? item.Layout.preferredWidth : undefined
+            Layout.maximumWidth: item ? item.Layout.maximumWidth : undefined
+
+            sourceComponent: page ? page.titleDelegate : null
         }
 
-        visible: pageRow.globalToolBar.toolbarActionAlignment == Qt.AlignRight && width > item.Layout.minimumWidth
+        ActionToolBar {
+            id: toolBar
 
-        sourceComponent: page ? page.titleDelegate : null
-    }
+            Layout.alignment: Qt.AlignVCenter
+            Layout.fillWidth: true
 
-    ActionToolBar {
-        id: toolBar
+            visible: width > 0
+            alignment: pageRow.globalToolBar.toolbarActionAlignment
+            display: buttonTextMetrics.toobig ? Controls.Button.IconOnly : Controls.Button.TextBesideIcon
 
-        anchors {
-            left: titleLoader.right
-            leftMargin: Units.smallSpacing
-            right: parent.right
-            rightMargin: Units.smallSpacing
-            verticalCenter: parent.verticalCenter
-        }
+            actions: {
+                var result = []
 
-        alignment: pageRow.globalToolBar.toolbarActionAlignment
-        display: buttonTextMetrics.toobig ? Controls.Button.IconOnly : Controls.Button.TextBesideIcon
-
-        actions: {
-            var result = []
-
-            if (page) {
-                if (page.actions.main) {
-                    result.push(page.actions.main)
+                if (page) {
+                    if (page.actions.main) {
+                        result.push(page.actions.main)
+                    }
+                    if (page.actions.left) {
+                        result.push(page.actions.left)
+                    }
+                    if (page.actions.right) {
+                        result.push(page.actions.right)
+                    }
+                    if (page.actions.contextualActions.length > 0 && !buttonTextMetrics.toobig) {
+                        result = result.concat(Array.prototype.map.call(page.actions.contextualActions, function(item) { return item }))
+                    }
                 }
-                if (page.actions.left) {
-                    result.push(page.actions.left)
-                }
-                if (page.actions.right) {
-                    result.push(page.actions.right)
-                }
-                if (page.actions.contextualActions.length > 0 && !buttonTextMetrics.toobig) {
-                    result = result.concat(Array.prototype.map.call(page.actions.contextualActions, function(item) { return item }))
-                }
+
+                return result
             }
 
-            return result
+            hiddenActions: page && buttonTextMetrics.toobig ? page.actions.contextualActions : []
         }
-
-        hiddenActions: page && buttonTextMetrics.toobig ? page.actions.contextualActions : []
     }
 
 
