@@ -110,6 +110,9 @@ Controls.TextField
             Kirigami.Icon {
                 height: parent.height
                 width: parent.height
+
+                anchors.verticalCenter: parent.verticalCenter
+
                 source: modelData.icon.name.length > 0 ? modelData.icon.name : modelData.icon.source
                 visible: modelData.visible
                 MouseArea {
