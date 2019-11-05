@@ -238,241 +238,240 @@ OverlayDrawer {
         }
     }
 
-    leftPadding: 0
-    rightPadding: 0
-    topPadding: 0
-    bottomPadding: 0
+    rightPadding: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : Units.smallSpacing
 
-    contentItem: ColumnLayout {
-        spacing: 0
+    contentItem: ScrollView {
+        id: scrollView
+        //ensure the attached property exists
+        Theme.inherit: true
+        anchors.fill: parent
         implicitWidth: Math.min (Units.gridUnit * 20, root.parent.width * 0.8)
+        horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
 
-        ColumnLayout {
-            id: topContent
-            spacing: 0
-            Layout.alignment: Qt.AlignHCenter
-            Layout.fillWidth: true
-            Layout.preferredHeight: implicitHeight * opacity
-            //NOTE: why this? just Layout.fillWidth: true doesn't seem sufficient
-            //as items are added only after this column creation
-            Layout.minimumWidth: parent.width
-            visible: children.length > 0 && childrenRect.height > 0 && opacity > 0
-            opacity: (!root.collapsed || showTopContentWhenCollapsed) ? 1 : 0
-            Behavior on opacity {
-                //not an animator as is binded
-                NumberAnimation {
-                    duration: Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        }
+        Flickable {
+            id: mainFlickable
+            contentWidth: width
+            contentHeight: mainColumn.Layout.minimumHeight
+            
+            ColumnLayout {
+                id: mainColumn
+                width: mainFlickable.width
+                spacing: 0
+                height: Math.max(root.height, Layout.minimumHeight)
 
-        ScrollView {
-            id: scrollView
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            //ensure the attached property exists
-            Theme.inherit: true
-            horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
+                //TODO: cable visible of bannerimage
+                Item {
+                    implicitHeight: root.collapsible 
+                            ? Math.max(collapseButton.height + Units.smallSpacing, bannerImage.Layout.preferredHeight)
+                            : bannerImage.Layout.preferredHeight
 
-            Flickable {
-                id: mainFlickable
-                contentWidth: width
-                contentHeight: mainColumn.Layout.minimumHeight
+                    Layout.fillWidth: true
+                    visible: !bannerImage.empty || root.collapsible
 
-                ColumnLayout {
-                    id: mainColumn
-                    width: mainFlickable.width
-                    spacing: 0
-                    height: scrollView.height
+                    BannerImage {
+                        id: bannerImage
+                        anchors.fill: parent
+                        opacity: !root.collapsed
+                        fillMode: Image.PreserveAspectCrop
 
-                    //TODO: cable visible of bannerimage
-                    Item {
-                        implicitHeight: root.collapsible 
-                                ? Math.max(collapseButton.height + Units.smallSpacing, bannerImage.Layout.preferredHeight)
-                                : bannerImage.Layout.preferredHeight
-
-                        Layout.fillWidth: true
-                        visible: !bannerImage.empty || root.collapsible
-
-                        BannerImage {
-                            id: bannerImage
-                            anchors.fill: parent
-                            opacity: !root.collapsed
-                            fillMode: Image.PreserveAspectCrop
-
-                            Behavior on opacity {
-                                OpacityAnimator {
-                                    duration: Units.longDuration
-                                    easing.type: Easing.InOutQuad
-                                }
-                            }
-                            leftPadding: root.collapsible ? collapseButton.width + Units.smallSpacing*2 : topPadding
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: root.bannerClicked()
-                            }
-                            EdgeShadow {
-                                edge: Qt.BottomEdge
-                                visible: bannerImageSource != ""
-                                anchors {
-                                    left: parent.left
-                                    right: parent.right
-                                    bottom: parent.top
-                                }
-                            }
-                        }
-                        PrivateActionToolButton {
-                            id: collapseButton
-                            readonly property bool noTitle: (!root.title || root.title.length===0) && (!root.titleIcon || root.title.length===0)
-                            anchors {
-                                top: parent.top
-                                left: parent.left
-                                topMargin: root.collapsed || noTitle ? 0 : Units.smallSpacing + Units.iconSizes.large/2 - height/2
-                                leftMargin: root.collapsed || noTitle ? 0 : Units.smallSpacing
-                                Behavior on leftMargin {
-                                    NumberAnimation {
-                                        duration: Units.longDuration
-                                        easing.type: Easing.InOutQuad
-                                    }
-                                }
-                                Behavior on topMargin {
-                                    NumberAnimation {
-                                        duration: Units.longDuration
-                                        easing.type: Easing.InOutQuad
-                                    }
-                                }
-                            }
-
-                            width: Units.iconSizes.smallMedium + Units.largeSpacing * 2
-                            height: width
-
-                            Behavior on y {
-                                YAnimator {
-                                    duration: Units.longDuration
-                                    easing.type: Easing.InOutQuad
-                                }
-                            }
-
-                            visible: root.collapsible
-                            kirigamiAction: Action {
-                                icon.name: "application-menu"
-                                checkable: true
-                                checked: !root.collapsed
-                                onCheckedChanged: root.collapsed = !checked
-                            }
-                        }
-                    }
-
-                    T2.StackView {
-                        id: stackView
-                        Layout.fillWidth: true
-                        Layout.rightMargin: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : 0
-                        Layout.minimumHeight: currentItem ? currentItem.implicitHeight : 0
-                        Layout.maximumHeight: Layout.minimumHeight
-                        property ActionsMenu openSubMenu
-                        initialItem: menuComponent
-                        //NOTE: it's important those are NumberAnimation and not XAnimators
-                        // as while the animation is running the drawer may close, and
-                        //the animator would stop when not drawing see BUG 381576
-                        popEnter: Transition {
-                            NumberAnimation { property: "x"; from: (stackView.mirrored ? -1 : 1) * -stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
-                        }
-
-                        popExit: Transition {
-                            NumberAnimation { property: "x"; from: 0; to: (stackView.mirrored ? -1 : 1) * stackView.width; duration: 400; easing.type: Easing.OutCubic }
-                        }
-
-                        pushEnter: Transition {
-                            NumberAnimation { property: "x"; from: (stackView.mirrored ? -1 : 1) * stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
-                        }
-
-                        pushExit: Transition {
-                            NumberAnimation { property: "x"; from: 0; to: (stackView.mirrored ? -1 : 1) * -stackView.width; duration: 400; easing.type: Easing.OutCubic }
-                        }
-
-                        replaceEnter: Transition {
-                            NumberAnimation { property: "x"; from: (stackView.mirrored ? -1 : 1) * stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
-                        }
-
-                        replaceExit: Transition {
-                            NumberAnimation { property: "x"; from: 0; to: (stackView.mirrored ? -1 : 1) * -stackView.width; duration: 400; easing.type: Easing.OutCubic }
-                        }
-                    }
-                    Item {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: root.actions.length>0
-                        Layout.minimumHeight: Units.smallSpacing
-                    }
-
-                    ColumnLayout {
-                        id: mainContent
-                        Layout.alignment: Qt.AlignHCenter
-                        Layout.rightMargin: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : 0
-
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        visible: children.length > 0 && (opacity > 0 || mainContentAnimator.running)
-                        opacity: !root.collapsed || showContentWhenCollapsed
                         Behavior on opacity {
                             OpacityAnimator {
-                                id: mainContentAnimator
                                 duration: Units.longDuration
                                 easing.type: Easing.InOutQuad
                             }
                         }
-                    }
-                    Item {
-                        Layout.minimumWidth: Units.smallSpacing
-                        Layout.minimumHeight: root.bottomPadding
-                    }
-
-                    Component {
-                        id: menuComponent
-
-                        Column {
-                            spacing: 0
-                            property alias model: actionsRepeater.model
-                            property Action current
-
-                            property int level: 0
-                            Layout.maximumHeight: Layout.minimumHeight
-
-                            BasicListItem {
-                                id: backItem
-                                visible: level > 0
-                                supportsMouseEvents: true
-                                icon: (LayoutMirroring.enabled ? "go-previous-symbolic-rtl" : "go-previous-symbolic")
-
-                                label: MnemonicData.richTextLabel
-                                MnemonicData.enabled: backItem.enabled && backItem.visible
-                                MnemonicData.controlType: MnemonicData.MenuItem
-                                MnemonicData.label: qsTr("Back")
-
-                                separatorVisible: false
-                                onClicked: stackView.pop()
+                        leftPadding: root.collapsible ? collapseButton.width + Units.smallSpacing*2 : topPadding
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: root.bannerClicked()
+                        }
+                        EdgeShadow {
+                            edge: Qt.BottomEdge
+                            visible: bannerImageSource != ""
+                            anchors {
+                                left: parent.left
+                                right: parent.right
+                                bottom: parent.top
                             }
-                            Shortcut {
-                                sequence: backItem.MnemonicData.sequence
-                                onActivated: backItem.clicked()
+                        }
+                    }
+                    PrivateActionToolButton {
+                        id: collapseButton
+                        readonly property bool noTitle: (!root.title || root.title.length===0) && (!root.titleIcon || root.title.length===0)
+                        anchors {
+                            top: parent.top
+                            left: parent.left
+                            topMargin: root.collapsed || noTitle ? 0 : Units.smallSpacing + Units.iconSizes.large/2 - height/2
+                            leftMargin: root.collapsed || noTitle ? 0 : Units.smallSpacing
+                            Behavior on leftMargin {
+                                NumberAnimation {
+                                    duration: Units.longDuration
+                                    easing.type: Easing.InOutQuad
+                                }
                             }
+                            Behavior on topMargin {
+                                NumberAnimation {
+                                    duration: Units.longDuration
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
+                        }
 
-                            Repeater {
-                                id: actionsRepeater
-                                model: root.actions
-                                delegate: Column {
+                        width: Units.iconSizes.smallMedium + Units.largeSpacing * 2
+                        height: width
+
+                        Behavior on y {
+                            YAnimator {
+                                duration: Units.longDuration
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+
+                        visible: root.collapsible
+                        kirigamiAction: Action {
+                            icon.name: "application-menu"
+                            checkable: true
+                            checked: !root.collapsed
+                            onCheckedChanged: root.collapsed = !checked
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    id: topContent
+                    spacing: 0
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.leftMargin: root.leftPadding
+                    Layout.rightMargin: root.rightPadding
+                    Layout.bottomMargin: Units.smallSpacing
+                    Layout.topMargin: root.topPadding
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.preferredHeight: implicitHeight * opacity
+                    //NOTE: why this? just Layout.fillWidth: true doesn't seem sufficient
+                    //as items are added only after this column creation
+                    Layout.minimumWidth: parent.width - root.leftPadding - root.rightPadding
+                    visible: children.length > 0 && childrenRect.height > 0 && opacity > 0
+                    opacity: !root.collapsed || showTopContentWhenCollapsed
+                    Behavior on opacity {
+                        //not an animator as is binded
+                        NumberAnimation {
+                            duration: Units.longDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                }
+
+                T2.StackView {
+                    id: stackView
+                    Layout.fillWidth: true
+                    Layout.minimumHeight: currentItem ? currentItem.implicitHeight : 0
+                    Layout.maximumHeight: Layout.minimumHeight
+                    property ActionsMenu openSubMenu
+                    initialItem: menuComponent
+                    //NOTE: it's important those are NumberAnimation and not XAnimators
+                    // as while the animation is running the drawer may close, and
+                    //the animator would stop when not drawing see BUG 381576
+                    popEnter: Transition {
+                        NumberAnimation { property: "x"; from: (stackView.mirrored ? -1 : 1) * -stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
+                    }
+
+                    popExit: Transition {
+                        NumberAnimation { property: "x"; from: 0; to: (stackView.mirrored ? -1 : 1) * stackView.width; duration: 400; easing.type: Easing.OutCubic }
+                    }
+
+                    pushEnter: Transition {
+                        NumberAnimation { property: "x"; from: (stackView.mirrored ? -1 : 1) * stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
+                    }
+
+                    pushExit: Transition {
+                        NumberAnimation { property: "x"; from: 0; to: (stackView.mirrored ? -1 : 1) * -stackView.width; duration: 400; easing.type: Easing.OutCubic }
+                    }
+
+                    replaceEnter: Transition {
+                        NumberAnimation { property: "x"; from: (stackView.mirrored ? -1 : 1) * stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
+                    }
+
+                    replaceExit: Transition {
+                        NumberAnimation { property: "x"; from: 0; to: (stackView.mirrored ? -1 : 1) * -stackView.width; duration: 400; easing.type: Easing.OutCubic }
+                    }
+                }
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: root.actions.length>0
+                    Layout.minimumHeight: Units.smallSpacing
+                }
+
+                ColumnLayout {
+                    id: mainContent
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.leftMargin: root.leftPadding
+                    Layout.rightMargin: root.rightPadding
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    //NOTE: why this? just Layout.fillWidth: true doesn't seem sufficient
+                    //as items are added only after this column creation
+                    Layout.minimumWidth: parent.width - root.leftPadding - root.rightPadding
+                    visible: children.length > 0 && (opacity > 0 || mainContentAnimator.running)
+                    opacity: !root.collapsed || showContentWhenCollapsed
+                    Behavior on opacity {
+                        OpacityAnimator {
+                            id: mainContentAnimator
+                            duration: Units.longDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                }
+                Item {
+                    Layout.minimumWidth: Units.smallSpacing
+                    Layout.minimumHeight: root.bottomPadding
+                }
+
+                Component {
+                    id: menuComponent
+
+                    Column {
+                        spacing: 0
+                        property alias model: actionsRepeater.model
+                        property Action current
+
+                        property int level: 0
+                        Layout.maximumHeight: Layout.minimumHeight
+
+                        BasicListItem {
+                            id: backItem
+                            visible: level > 0
+                            supportsMouseEvents: true
+                            icon: (LayoutMirroring.enabled ? "go-previous-symbolic-rtl" : "go-previous-symbolic")
+
+                            label: MnemonicData.richTextLabel
+                            MnemonicData.enabled: backItem.enabled && backItem.visible
+                            MnemonicData.controlType: MnemonicData.MenuItem
+                            MnemonicData.label: qsTr("Back")
+
+                            separatorVisible: false
+                            onClicked: stackView.pop()
+                        }
+                        Shortcut {
+                            sequence: backItem.MnemonicData.sequence
+                            onActivated: backItem.clicked()
+                        }
+
+                        Repeater {
+                            id: actionsRepeater
+                            model: root.actions
+                            delegate: Column {
+                                width: parent.width
+                                GlobalDrawerActionItem {
+                                    id: drawerItem
                                     width: parent.width
-                                    GlobalDrawerActionItem {
-                                        id: drawerItem
+                                }
+                                Repeater {
+                                    model: drawerItem.visible && modelData.hasOwnProperty("expandible") && modelData.expandible ? modelData.children : null
+                                    delegate: GlobalDrawerActionItem {
                                         width: parent.width
-                                    }
-                                    Repeater {
-                                        model: drawerItem.visible && modelData.hasOwnProperty("expandible") && modelData.expandible ? modelData.children : null
-                                        delegate: GlobalDrawerActionItem {
-                                            width: parent.width
-                                            leftPadding: Units.largeSpacing * 2
-                                            opacity: !root.collapsed
-                                        }
+                                        leftPadding: Units.largeSpacing * 2
+                                        opacity: !root.collapsed
                                     }
                                 }
                             }
