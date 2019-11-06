@@ -69,7 +69,8 @@ OverlayDrawer {
     edge: Qt.application.layoutDirection == Qt.RightToLeft ? Qt.RightEdge : Qt.LeftEdge
     handleClosedIcon.source: null
     handleOpenIcon.source: null
-    handleVisible: (typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true) && (!isMenu || Settings.isMobile)
+    handleVisible: (modal || !drawerOpen) && (typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true) && (!isMenu || Settings.isMobile)
+    
     enabled: !isMenu || Settings.isMobile
 
     /**
