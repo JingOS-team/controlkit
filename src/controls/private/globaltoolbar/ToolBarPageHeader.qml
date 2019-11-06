@@ -60,7 +60,7 @@ AbstractPageHeader {
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
 
-            visible: width > 0
+            visible: actions.length > 0
             alignment: pageRow.globalToolBar.toolbarActionAlignment
             display: buttonTextMetrics.toobig ? Controls.Button.IconOnly : Controls.Button.TextBesideIcon
 
