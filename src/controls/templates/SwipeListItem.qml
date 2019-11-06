@@ -411,7 +411,7 @@ T2.SwipeDelegate {
                     right: parent.right
                     top: parent.top
                     bottom: parent.bottom
-                    rightMargin: internal.calculateMargin()
+                    rightMargin: Kirigami.Settings.tabletMode ? internal.calculateMargin() : 0
                 }
             visible: parent != listItem
             parent: Kirigami.Settings.tabletMode
