@@ -328,12 +328,15 @@ void ContentItem::snapToItem()
     QQuickItem *nextItem = childAt(firstItem->x() + firstItem->width() + 1, 0);
 
     //need to make the last item visible?
-    if (nextItem && width() - (viewportRight()) < viewportLeft() - firstItem->x()) {
+    if (nextItem && ((m_view->dragging() && m_lastDragDelta < 0) ||
+        (!m_view->dragging() && width() - (viewportRight()) < viewportLeft() - firstItem->x()))) {
         m_viewAnchorItem = nextItem;
         animateX(-nextItem->x() + m_leftPinnedSpace);
 
     //The first one found?
-    } else if (viewportLeft() <= firstItem->x() + firstItem->width()/2 || !nextItem) {
+    } else if ((m_view->dragging() && m_lastDragDelta >= 0) ||
+        (!m_view->dragging() && viewportLeft() <= firstItem->x() + firstItem->width()/2) ||
+        !nextItem) {
         m_viewAnchorItem = firstItem;
         animateX(-firstItem->x() + m_leftPinnedSpace);
 
@@ -1235,6 +1238,7 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
             m_contentItem->setBoundedX(m_contentItem->x() + pos.x() - m_oldMouseX);
         }
 
+        m_contentItem->m_lastDragDelta = pos.x() - m_oldMouseX;
         m_oldMouseX = pos.x();
 
         setKeepMouseGrab(m_dragging);
@@ -1262,6 +1266,7 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
         m_mouseDown = false;
 
         m_contentItem->snapToItem();
+        m_contentItem->m_lastDragDelta = 0;
         if (m_dragging) {
             m_dragging = false;
             emit draggingChanged();
@@ -1333,6 +1338,7 @@ void ColumnView::mouseMoveEvent(QMouseEvent *event)
         m_contentItem->setBoundedX(m_contentItem->x() + event->pos().x() - m_oldMouseX);
     }
 
+    m_contentItem->m_lastDragDelta = event->pos().x() - m_oldMouseX;
     m_oldMouseX = event->pos().x();
     event->accept();
 }
@@ -1355,28 +1361,32 @@ void ColumnView::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
 
+    m_contentItem->snapToItem();
+    m_contentItem->m_lastDragDelta = 0;
+
     if (m_dragging) {
         m_dragging = false;
         emit draggingChanged();
     }
 
-    m_contentItem->snapToItem();
     setKeepMouseGrab(false);
     event->accept();
 }
 
 void ColumnView::mouseUngrabEvent()
 {
-    if (m_dragging) {
-        m_dragging = false;
-        emit draggingChanged();
-    }
-
     m_mouseDown = false;
 
     if (m_contentItem->m_slideAnim->state() != QAbstractAnimation::Running) {
         m_contentItem->snapToItem();
     }
+    m_contentItem->m_lastDragDelta = 0;
+
+    if (m_dragging) {
+        m_dragging = false;
+        emit draggingChanged();
+    }
+
     setKeepMouseGrab(false);
 }
 

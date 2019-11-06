@@ -94,6 +94,7 @@ private:
     qreal m_rightPinnedSpace = 0;
 
     qreal m_columnWidth = 0;
+    qreal m_lastDragDelta = 0;
     ColumnView::ColumnResizeMode m_columnResizeMode = ColumnView::FixedColumns;
     bool m_shouldAnimate = false;
     friend class ColumnView;
