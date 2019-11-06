@@ -151,6 +151,8 @@ T2.SwipeDelegate {
      */
     property color activeBackgroundColor: Kirigami.Theme.highlightColor
 
+    //TODO KF6 remove this super wrong thing
+    default property alias _default: listItem.contentItem
 
     LayoutMirroring.childrenInherit: true
 
