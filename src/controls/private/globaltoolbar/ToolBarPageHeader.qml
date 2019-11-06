@@ -27,7 +27,7 @@ import "../" as Private
 AbstractPageHeader {
     id: root
 
-    implicitWidth: layout.implcitWidth + Units.smallSpacing * 2
+    implicitWidth: layout.implicitWidth + Units.smallSpacing * 2
     Layout.preferredHeight: Math.max(titleLoader.implicitHeight, toolBar.implicitHeight) + Units.smallSpacing * 2
 
     MouseArea {
@@ -62,40 +62,31 @@ AbstractPageHeader {
 
             visible: actions.length > 0
             alignment: pageRow.globalToolBar.toolbarActionAlignment
-            display: buttonTextMetrics.toobig ? Controls.Button.IconOnly : Controls.Button.TextBesideIcon
 
             actions: {
                 var result = []
 
                 if (page) {
                     if (page.actions.main) {
+                        page.actions.main.displayHint |= Action.DisplayHint.KeepVisible
                         result.push(page.actions.main)
                     }
                     if (page.actions.left) {
+                        page.actions.left.displayHint |= Action.DisplayHint.KeepVisible
                         result.push(page.actions.left)
                     }
                     if (page.actions.right) {
+                        page.actions.right.displayHint |= Action.DisplayHint.KeepVisible
                         result.push(page.actions.right)
                     }
-                    if (page.actions.contextualActions.length > 0 && !buttonTextMetrics.toobig) {
+                    if (page.actions.contextualActions.length > 0) {
                         result = result.concat(Array.prototype.map.call(page.actions.contextualActions, function(item) { return item }))
                     }
                 }
 
                 return result
             }
-
-            hiddenActions: page && buttonTextMetrics.toobig ? page.actions.contextualActions : []
         }
-    }
-
-
-    TextMetrics {
-        id: buttonTextMetrics
-        text: (page.actions.left ? page.actions.left.text : "") + (page.actions.main ? page.actions.main.text : "") + (page.actions.right ? page.actions.right.text : "")
-        readonly property int collapsedButtonsWidth: toolBar.Layout.minimumWidth + (page.actions.left ? toolBar.Layout.minimumWidth + Units.gridUnit : 0) + (page.actions.main ? toolBar.Layout.minimumWidth + Units.gridUnit : 0) + (page.actions.right ? toolBar.Layout.minimumWidth + Units.gridUnit : 0)
-        readonly property int requiredWidth: width + collapsedButtonsWidth
-        readonly property bool toobig: root.width - root.leftPadding - root.rightPadding - titleLoader.implicitWidth - Units.gridUnit < buttonTextMetrics.requiredWidth
     }
 }
 
