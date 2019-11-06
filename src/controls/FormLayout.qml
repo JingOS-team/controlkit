@@ -269,7 +269,17 @@ Item {
             level: item.Kirigami.FormData.isSection ? 3 : 5
 
             Layout.columnSpan: item.Kirigami.FormData.isSection ? lay.columns : 1
-            Layout.preferredHeight: item.Kirigami.FormData.label.length > 0 ? Math.max(implicitHeight, item.Kirigami.FormData.buddyFor.height) : Kirigami.Units.smallSpacing
+            Layout.preferredHeight: {
+                if (item.Kirigami.FormData.label.length > 0) {
+                    if (root.wideMode) {
+                        return Math.max(implicitHeight, item.Kirigami.FormData.buddyFor.height)
+                    } else {
+                        return implicitHeight
+                    }
+                } else {
+                    Kirigami.Units.smallSpacing
+                }
+            }
 
             Layout.alignment: item.Kirigami.FormData.isSection
                              ? Qt.AlignLeft
