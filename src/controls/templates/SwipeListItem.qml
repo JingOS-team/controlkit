@@ -168,6 +168,7 @@ T2.SwipeDelegate {
     topPadding: padding
     bottomPadding: padding
 
+    contentItem: Item {}
     QtObject {
         id: internal
 
