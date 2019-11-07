@@ -265,7 +265,7 @@ T2.SwipeDelegate {
             implicitWidth: Kirigami.Units.iconSizes.smallMedium
 
             preventStealing: true
-            readonly property real openPosition: (listItem.width - width - listItem.leftPadding - listItem.rightPadding)/listItem.width
+            readonly property real openPosition: (listItem.width - width - listItem.leftPadding * 2)/listItem.width
             property real startX: 0
             property real lastPosition: 0
             property bool openIntention
@@ -374,17 +374,22 @@ T2.SwipeDelegate {
     //TODO: expose in API?
     Component {
         id: actionsBackgroundDelegate
-        Rectangle {
+        MouseArea {
 
             anchors.fill: parent
 
-            color: Controls.SwipeDelegate.pressed ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : Qt.darker(Kirigami.Theme.backgroundColor, 1.05)
+            // Controls.SwipeDelegate.onPressedChanged is broken with touch
+            onClicked: {
+                    slideAnim.to = 0;
+                    slideAnim.restart();
+            }
+            Rectangle {
+                anchors.fill: parent
+                color: parent.pressed ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : Qt.darker(Kirigami.Theme.backgroundColor, 1.05)
+            }
 
             visible: listItem.swipe.position != 0
-            Controls.SwipeDelegate.onPressedChanged: {
-                slideAnim.to = 0;
-                slideAnim.restart();
-            }
+
 
             EdgeShadow {
                 edge: Qt.TopEdge
