@@ -35,19 +35,24 @@ LinearGradient {
      */
     property int edge: Qt.LeftEdge
 
-    implicitWidth: Units.gridUnit/2
-    implicitHeight: Units.gridUnit/2
+    property int radius: Units.gridUnit
+    implicitWidth: radius
+    implicitHeight: radius
 
     start: Qt.point((edge !== Qt.RightEdge ? 0 : width), (edge !== Qt.BottomEdge ? 0 : height))
     end: Qt.point((edge !== Qt.LeftEdge ? 0 : width), (edge !== Qt.TopEdge ? 0 : height))
     gradient: Gradient {
         GradientStop {
             position: 0.0
-            color: Qt.rgba(0, 0, 0, 0.2)
+            color: Qt.rgba(0, 0, 0, 0.25)
         }
         GradientStop {
-            position: 0.3
+            position: 0.20
             color: Qt.rgba(0, 0, 0, 0.1)
+        }
+        GradientStop {
+            position: 0.35
+            color: Qt.rgba(0, 0, 0, 0.02)
         }
         GradientStop {
             position: 1.0

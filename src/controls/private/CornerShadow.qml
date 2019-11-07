@@ -32,9 +32,15 @@ RadialGradient {
      */
     property int corner: Qt.TopRightCorner
 
-    width: Units.gridUnit/2
-    height: Units.gridUnit/2
+    readonly property real margin: -Math.floor(radius/3)
 
+    property int radius: Units.gridUnit
+
+    width: radius - margin
+    height: radius - margin
+
+    horizontalRadius: width
+    verticalRadius: height
     horizontalOffset: {
         switch (corner) {
             case Qt.TopLeftCorner:
@@ -57,11 +63,19 @@ RadialGradient {
     gradient: Gradient {
         GradientStop {
             position: 0.0
-            color: Qt.rgba(0, 0, 0, 0.2)
+            color: Qt.rgba(0, 0, 0, 0.25)
         }
         GradientStop {
-            position: 0.3
+            position: 1 - radius/(radius - margin)
+            color: Qt.rgba(0, 0, 0, 0.25)
+        }
+        GradientStop {
+            position: 1 - radius/(radius - margin) + radius/(radius - margin) * 0.2
             color: Qt.rgba(0, 0, 0, 0.1)
+        }
+        GradientStop {
+            position: 1 - radius/(radius - margin) + radius/(radius - margin) * 0.35
+            color: Qt.rgba(0, 0, 0, 0.02)
         }
         GradientStop {
             position: 1.0

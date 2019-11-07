@@ -21,6 +21,7 @@ import QtQuick 2.6
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.4 as Kirigami
 import "templates" as T
+import "private"
 
 /**
  * A AbstractCard is the base for cards. A Card is a visual object that serves
@@ -38,8 +39,7 @@ import "templates" as T
 T.AbstractCard {
     id: root
 
-    background: Rectangle {
-        color: Kirigami.Theme.backgroundColor
+    background: DefaultCardBackground {
         Rectangle {
             anchors.fill: parent
             color: Kirigami.Theme.highlightColor
@@ -56,14 +56,6 @@ T.AbstractCard {
                     easing.type: Easing.InOutQuad
                 }
             }
-        }
-        layer.enabled: true
-        layer.effect: DropShadow {
-            horizontalOffset: 0
-            verticalOffset: 1
-            radius: 12
-            samples: 32
-            color: Qt.rgba(0, 0, 0, 0.5)
         }
     }
 }

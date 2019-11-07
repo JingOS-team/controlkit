@@ -29,6 +29,7 @@
         <file alias="private/CornerShadow.qml">src/controls/private/CornerShadow.qml</file>
         <file alias="private/ActionButton.qml">src/controls/private/ActionButton.qml</file>
         <file alias="private/DefaultListItemBackground.qml">src/controls/private/DefaultListItemBackground.qml</file>
+        <file alias="private/DefaultCardBackground.qml">src/controls/private/DefaultCardBackground.qml</file>
         <file alias="private/BannerImage.qml">src/controls/private/BannerImage.qml</file>
         <file alias="private/EdgeShadow.qml">src/controls/private/EdgeShadow.qml</file>
         <file alias="private/globaltoolbar/AbstractPageHeader.qml">src/controls/private/globaltoolbar/AbstractPageHeader.qml</file>
