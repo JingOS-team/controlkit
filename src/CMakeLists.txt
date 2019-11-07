@@ -48,6 +48,10 @@ if(STATIC_LIBRARY)
     qt5_add_resources(
         RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/../kirigami.qrc
     )
+
+    if (UNIX AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND NOT(APPLE) AND NOT(DISABLE_DBUS))
+        qt5_add_dbus_interface(kirigami_SRCS libkirigami/org.kde.KWin.TabletModeManager.xml tabletmodemanager_interface)
+    endif()
 endif(STATIC_LIBRARY)
 
 
