@@ -42,8 +42,10 @@ Controls.ToolButton {
     //TODO: replace with upstream action when we depend on Qt 5.10
     //TODO: upstream action makes the style to re-draw the content, it'd be ideal except for the custom dropDown icon needed for actionsMenu
     property Controls.Action kirigamiAction
-    property bool showText: true
-    property bool showMenuArrow: true
+    property bool showText: !(kirigamiAction && kirigamiAction.displayHint !== undefined
+                              && kirigamiAction.displayHintSet(Action.DisplayHint.IconOnly))
+    property bool showMenuArrow: !(kirigamiAction && kirigamiAction.displayHint !== undefined
+                                   && kirigamiAction.displayHintSet(Action.DisplayHint.HideChildIndicator))
     property alias menu: menu
 
     //we need our own text delegate

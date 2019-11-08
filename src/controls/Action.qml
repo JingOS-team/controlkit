@@ -30,6 +30,35 @@ Controls.Action {
     id: root
 
     /**
+     * Hints for implementations using Actions indicating preferences about how to display the action.
+     */
+    enum DisplayHint {
+        /**
+         * Indicates there is no specific preference.
+         */
+        NoPreference = 0,
+        /**
+         * Only display an icon for this Action.
+         */
+        IconOnly = 1,
+        /**
+         * Try to keep the action visible even when space constrained.
+         * Mutually exclusive with AlwaysHide, KeepVisible has priority.
+         */
+        KeepVisible = 2,
+        /**
+         * If possible, hide the action in an overflow menu or similar location.
+         * Mutually exclusive with KeepVisible, KeepVisible has priority.
+         */
+        AlwaysHide = 4,
+        /**
+         * When this action has children, do not display any indicator (like a
+         * menu arrow) for this action.
+         */
+        HideChildIndicator = 8
+    }
+
+    /**
      * visible: bool
      * True (default) when the graphic representation of the action
      * is supposed to be visible.
@@ -85,6 +114,37 @@ Controls.Action {
     property bool expandible: false
 
     property Controls.Action parent
+
+    /**
+     * displayHint: int
+     *
+     * A combination of values from the Action.DisplayHint enum. These are provided to implementations to indicate
+     * a preference for certain display styles. The default is DisplayHint.NoPreference.
+     *
+     * Note that these are only preferences, implementations may choose to disregard them.
+     *
+     * @since 2.12
+     */
+    property int displayHint: Action.DisplayHint.NoPreference
+
+    /**
+     * Helper function to check if a certain display hint has been set.
+     *
+     * This function is mostly convenience to enforce the mutual exclusivity of KeepVisible and AlwaysHide.
+     *
+     * @param hint The display hint to check if it is set.
+     *
+     * @return true if the hint was set for this action, false if not.
+     *
+     * @since 2.12
+     */
+    function displayHintSet(hint) {
+        if (hint === Action.DisplayHint.AlwaysHide && (displayHint & Action.DisplayHint.KeepVisible)) {
+            return false;
+        }
+
+        return (displayHint & hint)
+    }
 
     default property alias children: root.__children
     property list<QtObject> __children
