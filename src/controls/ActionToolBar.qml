@@ -96,7 +96,7 @@ Item {
         }
 
         Repeater {
-            model: placeholderLayout.visibleActions
+            model: root.actions
 
             delegate: PrivateActionToolButton {
                 id: actionDelegate
@@ -107,8 +107,11 @@ Item {
                 // from creating useless spacing
                 Layout.rightMargin: Kirigami.Units.smallSpacing
 
+                visible: details.visibleActions.indexOf(modelData) != -1
+                         && (modelData.visible === undefined || modelData.visible)
+
                 flat: root.flat && !modelData.icon.color.a
-                display: root.display
+                display: details.iconOnlyActions.indexOf(modelData) != -1 ? Controls.Button.IconOnly : root.display
                 kirigamiAction: modelData
             }
         }
@@ -122,12 +125,11 @@ Item {
             id: moreButton
 
             Layout.alignment: Qt.AlignRight
-
-            visible: hiddenActions.length > 0 || placeholderLayout.hiddenActions.length > 0
-            showMenuArrow: false
+            visible: root.hiddenActions.length > 0 || details.hiddenActions.length > 0
 
             kirigamiAction: Kirigami.Action {
                 icon.name: "overflow-menu"
+                displayHint: Kirigami.Action.DisplayHint.IconOnly | Kirigami.Action.DisplayHint.HideChildIndicator
                 children: Array.prototype.map.call(root.actions, function (i) { return i }).concat(Array.prototype.map.call(hiddenActions, function (i) { return i }))
             }
 
@@ -135,69 +137,24 @@ Item {
                 Binding {
                     target: parentItem
                     property: "visible"
-                    value: placeholderLayout.visibleActions.indexOf(parentAction) == -1 &&
+                    value: details.visibleActions.indexOf(parentAction) == -1 &&
                                 (parentAction.visible === undefined || parentAction.visible)
                 }
             }
 
             menu.itemDelegate: ActionMenuItem {
-                visible: placeholderLayout.visibleActions.indexOf(action) == -1 &&
+                visible: details.visibleActions.indexOf(action) == -1 &&
                                     (action.visible === undefined || action.visible)
             }
         }
     }
 
-    RowLayout {
-        id: placeholderLayout
-        enabled: false
-        opacity: 0 // Cannot use visible: false because then relayout doesn't happen correctly
-        spacing: Kirigami.Units.smallSpacing
-
-        property var visibleActions: []
-        property var hiddenActions: []
-        property real layoutWidth: root.width - moreButton.width - Kirigami.Units.smallSpacing
-
-        Repeater {
-            id: placeholderRepeater
-            model: root.actions
-
-            PrivateActionToolButton {
-                flat: root.flat && !modelData.icon.color.a
-                display: root.display
-                visible: modelData.visible === undefined || modelData.visible
-                kirigamiAction: modelData
-
-                property bool actionVisible: x + width < placeholderLayout.layoutWidth
-            }
-        }
-
-        Component.onCompleted: Qt.callLater(updateVisibleActions)
-        onWidthChanged: Qt.callLater(updateVisibleActions)
-
-        function updateVisibleActions() {
-            var visible = []
-            var hidden = []
-
-            if (root.width >= placeholderLayout.width + moreButton.width + Kirigami.Units.smallSpacing) {
-                visibleActions = Array.prototype.map.call(root.actions, function(item) { return item })
-                hiddenActions = []
-                return
-            }
-
-            for (var i = 0; i < root.actions.length; ++i) {
-                var item = placeholderRepeater.itemAt(i)
-                if (item.actionVisible) {
-                    visible.push(item.kirigamiAction)
-                } else {
-                    hidden.push(item.kirigamiAction)
-
-                }
-            }
-
-            visibleActions = visible
-            hiddenActions = hidden
-        }
+    ActionToolBarLayoutDetails {
+        id: details
+        anchors.fill: parent
+        actions: root.actions
+        rightPadding: moreButton.width + Kirigami.Units.smallSpacing
+        flat: root.flat
+        display: root.display
     }
-
-    onWidthChanged: Qt.callLater(placeholderLayout.updateVisibleActions)
 }
