@@ -37,23 +37,37 @@ class QmlComponentsPoolSingleton
 public:
     QmlComponentsPoolSingleton()
     {}
-
-    QmlComponentsPool self;
+    static QmlComponentsPool *instance(QQmlEngine *engine);
+private:
+    QHash<QQmlEngine*, QmlComponentsPool*> m_instances;
 };
 
 Q_GLOBAL_STATIC(QmlComponentsPoolSingleton, privateQmlComponentsPoolSelf)
 
 
-QmlComponentsPool::QmlComponentsPool(QObject *parent)
-    : QObject(parent)
-{}
-
-void QmlComponentsPool::initialize(QQmlEngine *engine)
+QmlComponentsPool *QmlComponentsPoolSingleton::instance(QQmlEngine *engine)
 {
-    if (!engine || m_instance) {
-        return;
+    Q_ASSERT(engine);
+    auto componentPool = privateQmlComponentsPoolSelf->m_instances.value(engine);
+
+    if (componentPool) {
+        return componentPool;
     }
 
+    componentPool = new QmlComponentsPool(engine);
+
+    QObject::connect(componentPool, &QObject::destroyed, [engine]() {
+        if (privateQmlComponentsPoolSelf) {
+            privateQmlComponentsPoolSelf->m_instances.remove(engine);
+        }
+    });
+    privateQmlComponentsPoolSelf->m_instances[engine] = componentPool;
+    return componentPool;
+}
+
+QmlComponentsPool::QmlComponentsPool(QQmlEngine *engine)
+    : QObject(engine)
+{
     QQmlComponent *component = new QQmlComponent(engine, this);
 
     component->setData(QByteArrayLiteral("import QtQuick 2.7\n"
@@ -572,12 +586,12 @@ QQuickItem *ContentItem::ensureSeparator(QQuickItem *item)
     QQuickItem *separatorItem = m_separators.value(item);
     
     if (!separatorItem) {
-        separatorItem = qobject_cast<QQuickItem *>(privateQmlComponentsPoolSelf->self.m_separatorComponent->beginCreate(QQmlEngine::contextForObject(item)));
+        separatorItem = qobject_cast<QQuickItem *>(privateQmlComponentsPoolSelf->instance(qmlEngine(item))->m_separatorComponent->beginCreate(QQmlEngine::contextForObject(item)));
         if (separatorItem) {
             separatorItem->setParentItem(item);
             separatorItem->setZ(9999);
             separatorItem->setProperty("column", QVariant::fromValue(item));
-            privateQmlComponentsPoolSelf->self.m_separatorComponent->completeCreate();
+            QmlComponentsPoolSingleton::instance(qmlEngine(item))->m_separatorComponent->completeCreate();
             m_separators[item] = separatorItem;
         }
     }
@@ -590,12 +604,12 @@ QQuickItem *ContentItem::ensureRightSeparator(QQuickItem *item)
     QQuickItem *separatorItem = m_rightSeparators.value(item);
     
     if (!separatorItem) {
-        separatorItem = qobject_cast<QQuickItem *>(privateQmlComponentsPoolSelf->self.m_rightSeparatorComponent->beginCreate(QQmlEngine::contextForObject(item)));
+        separatorItem = qobject_cast<QQuickItem *>(QmlComponentsPoolSingleton::instance(qmlEngine(item))->m_rightSeparatorComponent->beginCreate(QQmlEngine::contextForObject(item)));
         if (separatorItem) {
             separatorItem->setParentItem(item);
             separatorItem->setZ(9999);
             separatorItem->setProperty("column", QVariant::fromValue(item));
-            privateQmlComponentsPoolSelf->self.m_rightSeparatorComponent->completeCreate();
+            QmlComponentsPoolSingleton::instance(qmlEngine(item))->m_rightSeparatorComponent->completeCreate();
             m_rightSeparators[item] = separatorItem;
         }
     }
@@ -759,7 +773,7 @@ qreal ColumnView::columnWidth() const
 void ColumnView::setColumnWidth(qreal width)
 {
     // Always forget the internal binding when the user sets anything, even the same value
-    disconnect(&privateQmlComponentsPoolSelf->self, &QmlComponentsPool::gridUnitChanged, this, nullptr);
+    disconnect(QmlComponentsPoolSingleton::instance(qmlEngine(this)), &QmlComponentsPool::gridUnitChanged, this, nullptr);
 
     if (m_contentItem->m_columnWidth == width) {
         return;
@@ -902,7 +916,7 @@ int ColumnView::scrollDuration() const
 
 void ColumnView::setScrollDuration(int duration)
 {
-    disconnect(&privateQmlComponentsPoolSelf->self, &QmlComponentsPool::longDurationChanged, this, nullptr);
+    disconnect(QmlComponentsPoolSingleton::instance(qmlEngine(this)), &QmlComponentsPool::longDurationChanged, this, nullptr);
 
     if (m_contentItem->m_slideAnim->duration() == duration) {
         return;
@@ -1392,22 +1406,20 @@ void ColumnView::mouseUngrabEvent()
 
 void ColumnView::classBegin()
 {
-    privateQmlComponentsPoolSelf->self.initialize(qmlEngine(this));
-
     auto syncColumnWidth = [this]() {
-        m_contentItem->m_columnWidth = privateQmlComponentsPoolSelf->self.m_units->property("gridUnit").toInt() * 20;
+        m_contentItem->m_columnWidth = privateQmlComponentsPoolSelf->instance(qmlEngine(this))->m_units->property("gridUnit").toInt() * 20;
         emit columnWidthChanged();
     };
 
-    connect(&privateQmlComponentsPoolSelf->self, &QmlComponentsPool::gridUnitChanged, this, syncColumnWidth);
+    connect(QmlComponentsPoolSingleton::instance(qmlEngine(this)), &QmlComponentsPool::gridUnitChanged, this, syncColumnWidth);
     syncColumnWidth();
 
     auto syncDuration = [this]() {
-        m_contentItem->m_slideAnim->setDuration(privateQmlComponentsPoolSelf->self.m_units->property("longDuration").toInt());
+        m_contentItem->m_slideAnim->setDuration(QmlComponentsPoolSingleton::instance(qmlEngine(this))->m_units->property("longDuration").toInt());
         emit scrollDurationChanged();
     };
 
-    connect(&privateQmlComponentsPoolSelf->self, &QmlComponentsPool::longDurationChanged, this, syncDuration);
+    connect(QmlComponentsPoolSingleton::instance(qmlEngine(this)), &QmlComponentsPool::longDurationChanged, this, syncDuration);
     syncDuration();
 
     QQuickItem::classBegin();

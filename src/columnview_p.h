@@ -32,10 +32,8 @@ class QmlComponentsPool: public QObject
     Q_OBJECT
 
 public:
-    QmlComponentsPool(QObject *parent = nullptr);
+    QmlComponentsPool(QQmlEngine *engine);
     ~QmlComponentsPool();
-
-    void initialize(QQmlEngine *engine);
 
     QQmlComponent *m_separatorComponent = nullptr;
     QQmlComponent *m_rightSeparatorComponent = nullptr;
