@@ -112,6 +112,12 @@ AbstractApplicationWindow {
     //redefines here as here we can know a pointer to PageRow
     wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth * 1.5
 
+    Component.onCompleted: {
+        if (pageStack.currentItem) {
+            pageStack.currentItem.forceActiveFocus()
+        }
+    }
+
     PageRow {
         id: __pageStack
         globalToolBar.style: Kirigami.ApplicationHeaderStyle.Auto

@@ -287,6 +287,7 @@ ContentItem::ContentItem(ColumnView *parent)
     : QQuickItem(parent),
       m_view(parent)
 {
+    setFlags(flags() | ItemIsFocusScope);
     m_slideAnim = new QPropertyAnimation(this);
     m_slideAnim->setTargetObject(this);
     m_slideAnim->setPropertyName("x");

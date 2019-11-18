@@ -114,6 +114,12 @@ AbstractApplicationItem {
     //redefines here as here we can know a pointer to PageRow
     wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth*2
 
+    Component.onCompleted: {
+        if (pageStack.currentItem) {
+            pageStack.currentItem.forceActiveFocus()
+        }
+    }
+
     PageRow {
         id: __pageStack
         anchors {
