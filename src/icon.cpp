@@ -138,14 +138,8 @@ Icon::Icon(QQuickItem *parent)
 {
     setFlag(ItemHasContents, true);
     //FIXME: not necessary anymore
-    connect(qApp, &QGuiApplication::paletteChanged, this, [this]() {
-        m_changed = true;
-        update();
-    });
-    connect(this, &QQuickItem::enabledChanged, this, [this]() {
-        m_changed = true;
-        update();
-    });
+    connect(qApp, &QGuiApplication::paletteChanged, this, &QQuickItem::polish);
+    connect(this, &QQuickItem::enabledChanged, this, &QQuickItem::polish);
 }
 
 
@@ -159,17 +153,13 @@ void Icon::setSource(const QVariant &icon)
         return;
     }
     m_source = icon;
-    m_changed = true;
     m_monochromeHeuristics.clear();
 
     if (!m_theme) {
         m_theme = static_cast<Kirigami::PlatformTheme *>(qmlAttachedPropertiesObject<Kirigami::PlatformTheme>(this, true));
         Q_ASSERT(m_theme);
 
-        connect(m_theme, &Kirigami::PlatformTheme::colorsChanged, this, [this]() {
-            m_changed = true;
-            update();
-        });
+        connect(m_theme, &Kirigami::PlatformTheme::colorsChanged, this, &QQuickItem::polish);
     }
 
     if (icon.type() == QVariant::String) {
@@ -185,7 +175,8 @@ void Icon::setSource(const QVariant &icon)
         m_networkReply->close();
     }
     m_loadedImage = QImage();
-    update();
+
+    polish();
     emit sourceChanged();
 }
 
@@ -200,8 +191,7 @@ void Icon::setActive(const bool active)
         return;
     }
     m_active = active;
-    m_changed = true;
-    update();
+    polish();
     emit activeChanged();
 }
 
@@ -221,8 +211,7 @@ void Icon::setSelected(const bool selected)
         return;
     }
     m_selected = selected;
-    m_changed = true;
-    update();
+    polish();
     emit selectedChanged();
 }
 
@@ -239,8 +228,7 @@ void Icon::setIsMask(bool mask)
 
     m_isMask = mask;
     m_isMaskHeuristic = mask;
-    m_changed = true;
-    update();
+    polish();
     emit isMaskChanged();
 }
 
@@ -256,8 +244,7 @@ void Icon::setColor(const QColor &color)
     }
 
     m_color = color;
-    m_changed = true;
-    update();
+    polish();
     emit colorChanged();
 }
 
@@ -283,8 +270,7 @@ void Icon::setSmooth(const bool smooth)
         return;
     }
     m_smooth = smooth;
-    m_changed = true;
-    update();
+    polish();
     emit smoothChanged();
 }
 
@@ -301,76 +287,32 @@ QSGNode* Icon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* /
     }
 
     if (m_changed || node == nullptr) {
-        QImage img;
         const QSize itemSize(width(), height());
         QRect nodeRect(QPoint(0,0), itemSize);
-
-        if (itemSize.width() != 0 && itemSize.height() != 0) {
-            const auto multiplier = QCoreApplication::instance()->testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
-            const QSize size = itemSize * multiplier;
-
-            switch(m_source.type()){
-            case QVariant::Pixmap:
-                img = m_source.value<QPixmap>().toImage();
-                break;
-            case QVariant::Image:
-                img = m_source.value<QImage>();
-                break;
-            case QVariant::Bitmap:
-                img = m_source.value<QBitmap>().toImage();
-                break;
-            case QVariant::Icon:
-                img = m_source.value<QIcon>().pixmap(size, iconMode(), QIcon::On).toImage();
-                break;
-            case QVariant::Url:
-            case QVariant::String:
-                img = findIcon(size);
-                break;
-            case QVariant::Brush:
-                //todo: fill here too?
-            case QVariant::Color:
-                img = QImage(size, QImage::Format_Alpha8);
-                img.fill(m_source.value<QColor>());
-                break;
-            default:
-                break;
-            }
-
-            if (img.isNull()){
-                img = QImage(size, QImage::Format_Alpha8);
-                img.fill(Qt::transparent);
-            }
-            if (img.size() != size) {
-                // At this point, the image will already be scaled, but we need to output it in
-                // the correct aspect ratio, painted centered in the viewport. So:
-                QRect destination(QPoint(0, 0), img.size().scaled(itemSize, Qt::KeepAspectRatio));
-                destination.moveCenter(nodeRect.center());
-                nodeRect = destination;
-            }
-            
-            const QColor tintColor = !m_color.isValid() || m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
-
-            //TODO: initialize m_isMask with icon.isMask()
-            if (tintColor.alpha() > 0 && (isMask() || guessMonochrome(img))) {
-                QPainter p(&img);
-                p.setCompositionMode(QPainter::CompositionMode_SourceIn);
-                p.fillRect(img.rect(), tintColor);
-                p.end();
-            }
-        }
-        m_changed = false;
 
         ManagedTextureNode* mNode = dynamic_cast<ManagedTextureNode*>(node);
         if (!mNode) {
             delete node;
             mNode = new ManagedTextureNode;
         }
-        mNode->setTexture(s_iconImageCache->loadTexture(window(), img));
+        if (itemSize.width() != 0 && itemSize.height() != 0) {
+            const auto multiplier = QCoreApplication::instance()->testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : (window() ? window()->devicePixelRatio() : qGuiApp->devicePixelRatio());
+            const QSize size = itemSize * multiplier;
+            mNode->setTexture(s_iconImageCache->loadTexture(window(), m_icon));
+            if (m_icon.size() != size) {
+                // At this point, the image will already be scaled, but we need to output it in
+                // the correct aspect ratio, painted centered in the viewport. So:
+                QRect destination(QPoint(0, 0), m_icon.size().scaled(itemSize, Qt::KeepAspectRatio));
+                destination.moveCenter(nodeRect.center());
+                nodeRect = destination;
+            }
+        }
         mNode->setRect(nodeRect);
         node = mNode;
         if (m_smooth) {
             mNode->setFiltering(QSGTexture::Linear);
         }
+        m_changed = false;
     }
 
     return node;
@@ -378,11 +320,10 @@ QSGNode* Icon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* /
 
 void Icon::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    if (newGeometry.size() != oldGeometry.size()) {
-        m_changed = true;
-        update();
-    }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+    if (newGeometry.size() != oldGeometry.size()) {
+        polish();
+    }
 }
 
 void Icon::handleRedirect(QNetworkReply* reply)
@@ -424,6 +365,60 @@ void Icon::handleFinished(QNetworkReply* reply)
         // broken image from data, inform the user of this with some useful broken-image thing...
         const QSize size = QSize(width(), height()) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
         m_loadedImage = QIcon::fromTheme(m_fallback).pixmap(size, iconMode(), QIcon::On).toImage();
+    }
+    polish();
+}
+
+void Icon::updatePolish()
+{
+    QQuickItem::updatePolish();
+
+    const QSize itemSize(width(), height());
+    if (itemSize.width() != 0 && itemSize.height() != 0) {
+        const auto multiplier = QCoreApplication::instance()->testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : (window() ? window()->devicePixelRatio() : qGuiApp->devicePixelRatio());
+        const QSize size = itemSize * multiplier;
+
+        switch(m_source.type()){
+        case QVariant::Pixmap:
+            m_icon = m_source.value<QPixmap>().toImage();
+            break;
+        case QVariant::Image:
+            m_icon = m_source.value<QImage>();
+            break;
+        case QVariant::Bitmap:
+            m_icon = m_source.value<QBitmap>().toImage();
+            break;
+        case QVariant::Icon:
+            m_icon = m_source.value<QIcon>().pixmap(size, iconMode(), QIcon::On).toImage();
+            break;
+        case QVariant::Url:
+        case QVariant::String:
+            m_icon = findIcon(size);
+            break;
+        case QVariant::Brush:
+            //todo: fill here too?
+        case QVariant::Color:
+            m_icon = QImage(size, QImage::Format_Alpha8);
+            m_icon.fill(m_source.value<QColor>());
+            break;
+        default:
+            break;
+        }
+
+        if (m_icon.isNull()){
+            m_icon = QImage(size, QImage::Format_Alpha8);
+            m_icon.fill(Qt::transparent);
+        }
+
+        const QColor tintColor = !m_color.isValid() || m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
+
+        //TODO: initialize m_isMask with icon.isMask()
+        if (tintColor.alpha() > 0 && (isMask() || guessMonochrome(m_icon))) {
+            QPainter p(&m_icon);
+            p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+            p.fillRect(m_icon.rect(), tintColor);
+            p.end();
+        }
     }
     m_changed = true;
     update();

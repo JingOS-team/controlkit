@@ -97,6 +97,7 @@ protected:
     void handleRedirect(QNetworkReply* reply);
     QIcon::Mode iconMode() const;
     bool guessMonochrome(const QImage &img);
+    void updatePolish() override;
 
 private:
     Kirigami::PlatformTheme *m_theme = nullptr;
@@ -112,5 +113,7 @@ private:
     QImage m_loadedImage;
     QColor m_color = Qt::transparent;
     QString m_fallback = QStringLiteral("unknown");
+
+    QImage m_icon;
 };
 
