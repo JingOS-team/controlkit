@@ -51,7 +51,7 @@ MouseArea {
             flickableItem = contentItem;
             if (typeof(flickableItem.keyNavigationEnabled) != "undefined") {
                 flickableItem.keyNavigationEnabled = true;
-                flickableItem.keyNavigationWraps = true;
+                flickableItem.keyNavigationWraps = false;
             }
             contentItem.parent = flickableParent;
         } else {
