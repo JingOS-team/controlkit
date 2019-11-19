@@ -736,6 +736,11 @@ ColumnView::ColumnView(QQuickItem *parent)
     connect(m_contentItem, &ContentItem::widthChanged, this, &ColumnView::contentWidthChanged);
     connect(m_contentItem, &ContentItem::xChanged, this, &ColumnView::contentXChanged);
 
+    connect(this, &ColumnView::activeFocusChanged, this, [this]() {
+        if (hasActiveFocus() && m_currentItem) {
+            m_currentItem->forceActiveFocus();
+        }
+    });
     ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(this, true));
     attached->setView(this);
     attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(m_contentItem, true));

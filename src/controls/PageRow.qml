@@ -403,7 +403,17 @@ T.Control {
             push(initialPage, null)
         }
     }
-
+/*
+    onActiveFocusChanged:  {
+        if (activeFocus) {
+            layersStack.currentItem.forceActiveFocus()
+            if (columnView.activeFocus) {
+                print("SSS"+columnView.currentItem)
+                columnView.currentItem.forceActiveFocus();
+            }
+        }
+    }
+*/
     Keys.forwardTo: [currentItem]
 
     GlobalToolBar.PageRowGlobalToolBarStyleGroup {
