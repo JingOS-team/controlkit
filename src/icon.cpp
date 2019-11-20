@@ -178,6 +178,7 @@ void Icon::setSource(const QVariant &icon)
 
     polish();
     emit sourceChanged();
+    emit validChanged();
 }
 
 QVariant Icon::source() const

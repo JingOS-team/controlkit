@@ -39,7 +39,7 @@ Item {
     id: root
     z: 90
     property int minimumHeight: 0
-    property int preferredHeight: Units.gridUnit * 2
+    property int preferredHeight: Units.iconSizes.medium + Units.smallSpacing * 2
     property int maximumHeight: Units.gridUnit * 3
 
     property PageRow pageRow: __appWindow.pageStack
