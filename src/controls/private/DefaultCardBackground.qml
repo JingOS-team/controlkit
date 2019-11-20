@@ -21,6 +21,7 @@ import QtQuick 2.6
 import org.kde.kirigami 2.11 as Kirigami
 
 Rectangle {
+    color: Kirigami.Theme.backgroundColor
 
     CornerShadow {
         id: topLeft
