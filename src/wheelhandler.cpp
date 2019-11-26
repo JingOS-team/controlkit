@@ -77,7 +77,7 @@ bool GlobalWheelFilter::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::Wheel) {
         QQuickItem *item = qobject_cast<QQuickItem *>(watched);
-        if (!item) {
+        if (!item || !item->isEnabled()) {
             return QObject::eventFilter(watched, event);
         }
         QWheelEvent *we = static_cast<QWheelEvent *>(event);
