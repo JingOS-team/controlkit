@@ -23,6 +23,28 @@ pragma Singleton
 
 /**
  * A set of named colors for the application
+ * 
+ * Since frameworks 5.38 Kirigami.Theme has been made an attached 
+ * property - the recommended way to interact with the Kirigami.Theme
+ * object is documented in its replacement found at 
+ * Kirigami::PlatformTheme.
+ *
+ * Attempting to access the depreciated colors declared here will 
+ * generate warnings. Use the attached properties color sets instead. 
+ * For example, instead of using:
+ * 
+ * @code
+ * color: Kirigami.Theme.buttonTextColor
+ * @endcode
+ * 
+ * Use the button color set instead:
+ * 
+ * @code
+ * Kirigami.Theme.colorSet: Kirigami.Theme.Button
+ * color: Kirigami.Theme.textColor
+ * @endcode
+ * 
+ * For more color sets, see Kirigami::PlatformTheme::ColorSet.
  * @inherit QtQuick.QtObject
  */
 QtObject {
