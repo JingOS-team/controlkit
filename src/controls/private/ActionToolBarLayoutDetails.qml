@@ -61,6 +61,7 @@ Item {
     property real iconOnlyWidth: 0
     readonly property real iconLayoutWidth: width - rightPadding
     readonly property real fullLayoutWidth: iconLayoutWidth - iconOnlyWidth
+    readonly property real maximumWidth: fullSizePlaceholderLayout.width + leftPadding + rightPadding
 
     enabled: false
     opacity: 0 // Cannot use visible: false because then relayout doesn't happen correctly

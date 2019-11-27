@@ -178,7 +178,8 @@ T2.Control {
     onImplicitHeightChanged: {
         height = implicitHeight;
     }
-       contentItem: GridLayout {
+
+    contentItem: GridLayout {
         id: contentLayout
 
         // Used to defer opacity animation until we know if InlineMessage was
@@ -266,13 +267,18 @@ T2.Control {
             flat: false
             actions: root.actions
             visible: root.actions.length
+            alignment: Qt.AlignRight
 
             Layout.alignment: Qt.AlignRight
+            Layout.maximumWidth: maximumContentWidth
+            Layout.fillWidth: true
 
             Layout.row: {
-                if (messageTextMetrics.width + Kirigami.Units.smallSpacing >
-                    (contentLayout.width - icon.width - actionsLayout.width
-                    - closeButton.width - (3 * contentLayout.columnSpacing))) {
+                var width = contentLayout.width - icon.width - actionsLayout.maximumContentWidth
+                            - (closeButton.visible ? closeButton.width : 0)
+                            - 3 * contentLayout.columnSpacing
+
+                if (messageTextMetrics.width + Kirigami.Units.smallSpacing > width) {
                     return 1;
                 }
                 return 0;
@@ -290,13 +296,7 @@ T2.Control {
             Layout.row: 0
             Layout.column: actionsLayout.Layout.row ? 2 : 3
 
-            //TODO: use toolbuttons icons when we can depend from Qt 5.10
-            Kirigami.Icon {
-                anchors.centerIn: parent
-                source: "dialog-close"
-                width: Kirigami.Units.iconSizes.smallMedium
-                height: width
-            }
+            icon.name: "dialog-close"
 
             onClicked: root.visible = false
         }

@@ -81,6 +81,14 @@ Item {
             ? parent.position
             : Controls.ToolBar.Header
 
+    /**
+     * The maximum width of the contents of this ToolBar. If the toolbar's width is larger than this value, empty space will
+     * be added on the sides, according to the Alignment property.
+     *
+     * The value of this property is derived from the ToolBar's actions and their properties.
+     */
+    readonly property alias maximumContentWidth: details.maximumWidth
+
     implicitHeight: actionsLayout.implicitHeight
     implicitWidth: actionsLayout.implicitWidth
     Layout.minimumWidth: moreButton.visible ? moreButton.implicitWidth : 0
