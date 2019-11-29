@@ -179,47 +179,45 @@ void MnemonicAttached::updateSequence()
         return;
     }
 
-    if (m_weights.isEmpty()) {
-        return;
+    if (!m_weights.isEmpty()) {
+        QMap<int, QChar>::const_iterator i = m_weights.constEnd();
+        do {
+            --i;
+            QChar c = i.value();
+            QKeySequence ks(QStringLiteral("Alt+") % c);
+            MnemonicAttached *otherMa = s_sequenceToObject.value(ks);
+            Q_ASSERT(otherMa != this);
+            if (!otherMa || otherMa->m_weight < m_weight) {
+                //the old shortcut is less valuable than the current: remove it
+                if (otherMa) {
+                    s_sequenceToObject.remove(otherMa->sequence());
+                    otherMa->m_sequence = {};
+                }
+
+                s_sequenceToObject[ks] = this;
+                m_sequence = ks;
+                m_richTextLabel = text;
+                m_richTextLabel.replace(QRegularExpression(QLatin1String("\\&([^\\&])")), QStringLiteral("\\1"));
+                m_actualRichTextLabel = m_richTextLabel;
+                m_mnemonicLabel = m_richTextLabel;
+                const int mnemonicPos = m_mnemonicLabel.indexOf(c);
+                if (mnemonicPos > -1) {
+                    m_mnemonicLabel.replace(mnemonicPos, 1, c);
+                }
+                const int richTextPos = m_richTextLabel.indexOf(c);
+                if (richTextPos > -1) {
+                    m_richTextLabel.replace(richTextPos, 1, QLatin1String("<u>") % c % QLatin1String("</u>"));
+                }
+
+                //remap the sequence of the previous shortcut
+                if (otherMa) {
+                    otherMa->updateSequence();
+                }
+
+                break;
+            }
+        } while (i != m_weights.constBegin());
     }
-
-    QMap<int, QChar>::const_iterator i = m_weights.constEnd();
-    do {
-        --i;
-        QChar c = i.value();
-        QKeySequence ks(QStringLiteral("Alt+") % c);
-        MnemonicAttached *otherMa = s_sequenceToObject.value(ks);
-        Q_ASSERT(otherMa != this);
-        if (!otherMa || otherMa->m_weight < m_weight) {
-            //the old shortcut is less valuable than the current: remove it
-            if (otherMa) {
-                s_sequenceToObject.remove(otherMa->sequence());
-                otherMa->m_sequence = {};
-            }
-
-            s_sequenceToObject[ks] = this;
-            m_sequence = ks;
-            m_richTextLabel = text;
-            m_richTextLabel.replace(QRegularExpression(QLatin1String("\\&([^\\&])")), QStringLiteral("\\1"));
-            m_actualRichTextLabel = m_richTextLabel;
-            m_mnemonicLabel = m_richTextLabel;
-            const int mnemonicPos = m_mnemonicLabel.indexOf(c);
-            if (mnemonicPos > -1) {
-                m_mnemonicLabel.replace(mnemonicPos, 1, c);
-            }
-            const int richTextPos = m_richTextLabel.indexOf(c);
-            if (richTextPos > -1) {
-                m_richTextLabel.replace(richTextPos, 1, QLatin1String("<u>") % c % QLatin1String("</u>"));
-            }
-
-            //remap the sequence of the previous shortcut
-            if (otherMa) {
-                otherMa->updateSequence();
-            }
-
-            break;
-        }
-    } while (i != m_weights.constBegin());
 
     if (!m_sequence.isEmpty()) {
         emit sequenceChanged();
