@@ -37,25 +37,26 @@ Item {
             fill: parent
             margins: Units.smallSpacing
         }
-        property int thickness: Math.floor(Units.devicePixelRatio)*2
+        readonly property int thickness: Math.floor(Units.devicePixelRatio)*2
+        readonly property int drawerPosition: drawer ? drawer.position : 0
 
         Rectangle {
             anchors {
                 right: parent.right
                 top: parent.top
-                topMargin: -iconRoot.thickness/2 * drawer.position
+                topMargin: -iconRoot.thickness/2 * iconRoot.drawerPosition
             }
-            antialiasing: drawer.position != 0
+            antialiasing: iconRoot.drawerPosition != 0
             transformOrigin: Item.Right
-            width: (1 - drawer.position) * parent.width + drawer.position * (Math.sqrt(2*(parent.width*parent.width)))
+            width: (1 - iconRoot.drawerPosition) * parent.width + iconRoot.drawerPosition * (Math.sqrt(2*(parent.width*parent.width)))
             height: iconRoot.thickness
             color: canvas.color
-            rotation: -45 * drawer.position
+            rotation: -45 * iconRoot.drawerPosition
         }
 
         Rectangle {
             anchors.centerIn: parent
-            width: parent.width - parent.width * drawer.position
+            width: parent.width - parent.width * iconRoot.drawerPosition
             height: iconRoot.thickness
             color: canvas.color
         }
@@ -64,14 +65,14 @@ Item {
             anchors {
                 right: parent.right
                 bottom: parent.bottom
-                bottomMargin: -iconRoot.thickness/2 * drawer.position
+                bottomMargin: -iconRoot.thickness/2 * iconRoot.drawerPosition
             }
-            antialiasing: drawer.position != 0
+            antialiasing: iconRoot.drawerPosition != 0
             transformOrigin: Item.Right
-            width: (1 - drawer.position) * parent.width + drawer.position * (Math.sqrt(2*(parent.width*parent.width)))
+            width: (1 - iconRoot.drawerPosition) * parent.width + iconRoot.drawerPosition * (Math.sqrt(2*(parent.width*parent.width)))
             height: iconRoot.thickness
             color: canvas.color
-            rotation: 45 * drawer.position
+            rotation: 45 * iconRoot.drawerPosition
         }
     }
 }
