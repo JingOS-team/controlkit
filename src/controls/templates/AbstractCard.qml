@@ -115,6 +115,7 @@ T.ItemDelegate {
             Layout.rowSpan: root.headerOrientation == Qt.Vertical ? 1 : 2
             Layout.preferredWidth: header ? header.implicitWidth : 0
             Layout.preferredHeight: root.headerOrientation == Qt.Vertical ? mainLayout.preferredHeight(header) : -1
+            visible: children.length > 0
         }
         Item {
             id: contentItemParent
@@ -122,12 +123,14 @@ T.ItemDelegate {
             Layout.fillHeight: true
             Layout.preferredWidth: contentItem ? contentItem.implicitWidth : 0
             Layout.preferredHeight: mainLayout.preferredHeight(contentItem)
+            visible: children.length > 0
         }
         Item {
             id: footerParent
             Layout.fillWidth: true
             Layout.preferredWidth: footer ? footer.implicitWidth : 0
             Layout.preferredHeight: mainLayout.preferredHeight(footer)
+            visible: children.length > 0
         }
     }
 
