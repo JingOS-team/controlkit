@@ -142,7 +142,7 @@ Item {
                 visible: (modelData.visible === undefined || modelData.visible)
                          && (modelData.displayHint !== undefined && modelData.displayHintSet(Kirigami.Action.DisplayHint.KeepVisible))
                 kirigamiAction: modelData
-                property bool actionVisible: visible && (x + width < details.iconLayoutWidth)
+                property bool actionVisible: visible && (iconOnlyPlaceholderRepeater.count === 1 || (x + width < details.iconLayoutWidth))
             }
         }
     }
