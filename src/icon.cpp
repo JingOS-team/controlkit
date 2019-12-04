@@ -123,7 +123,7 @@ QSharedPointer<QSGTexture> ImageTexturesCache::loadTexture(QQuickWindow *window,
 
 QSharedPointer<QSGTexture> ImageTexturesCache::loadTexture(QQuickWindow *window, const QImage &image)
 {
-    return loadTexture(window, image, nullptr);
+    return loadTexture(window, image, {});
 }
 
 Q_GLOBAL_STATIC(ImageTexturesCache, s_iconImageCache)
