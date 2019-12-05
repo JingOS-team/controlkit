@@ -374,6 +374,10 @@ void Icon::updatePolish()
 {
     QQuickItem::updatePolish();
 
+    if (m_source.isNull()) {
+        return;
+    }
+
     const QSize itemSize(width(), height());
     if (itemSize.width() != 0 && itemSize.height() != 0) {
         const auto multiplier = QCoreApplication::instance()->testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : (window() ? window()->devicePixelRatio() : qGuiApp->devicePixelRatio());
