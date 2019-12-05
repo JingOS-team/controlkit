@@ -111,9 +111,10 @@ Item {
 
                 Layout.alignment: Qt.AlignVCenter
                 Layout.minimumWidth: implicitWidth
-                // Use rightMargin instead of spacing on the layout to prevent spacer items
-                // from creating useless spacing
-                Layout.rightMargin: Kirigami.Units.smallSpacing
+                // Use leftMargin instead of spacing on the layout to prevent spacer items
+                // from creating useless spacing, only for items that are actually next to
+                // other items.
+                Layout.leftMargin: index > 0 ? Kirigami.Units.smallSpacing : 0
 
                 visible: details.visibleActions.indexOf(modelData) != -1
                          && (modelData.visible === undefined || modelData.visible)

@@ -38,7 +38,7 @@ AbstractPageHeader {
     RowLayout {
         id: layout
         anchors.fill: parent
-        anchors.leftMargin: Units.smallSpacing
+        anchors.leftMargin: Units.largeSpacing
         anchors.rightMargin: Units.smallSpacing
         spacing: Units.smallSpacing
 
