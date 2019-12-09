@@ -121,6 +121,8 @@ T.ItemDelegate {
             id: contentItemParent
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.topMargin: root.topPadding
+            Layout.bottomMargin: root.bottomPadding
             Layout.preferredWidth: contentItem ? contentItem.implicitWidth : 0
             Layout.preferredHeight: mainLayout.preferredHeight(contentItem)
             visible: children.length > 0
