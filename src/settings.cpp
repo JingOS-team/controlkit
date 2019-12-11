@@ -24,6 +24,7 @@
 #include <QSettings>
 #include <QFile>
 #include <QGuiApplication>
+#include <QIcon>
 
 #include "libkirigami/tabletmodewatcher.h"
 
@@ -157,4 +158,13 @@ QStringList Settings::information() const
         tr("The %1 windowing system").arg(QGuiApplication::platformName()),
         tr("Qt %2 (built against %3)").arg(QString::fromLocal8Bit(qVersion()), QStringLiteral(QT_VERSION_STR))
     };
+}
+
+QVariant Settings::applicationWindowIcon() const
+{
+    const QIcon& windowIcon = qApp->windowIcon();
+    if (windowIcon.isNull()) {
+        return QVariant();
+    }
+    return windowIcon;
 }

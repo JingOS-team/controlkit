@@ -120,7 +120,7 @@ ScrollablePage
                 Layout.preferredWidth: height
                 Layout.maximumWidth: page.width / 3;
                 Layout.rightMargin: Units.largeSpacing
-                source: page.aboutData.programLogo || page.aboutData.programIconName || page.aboutData.componentName
+                source: Settings.applicationWindowIcon || page.aboutData.programLogo || page.aboutData.programIconName || page.aboutData.componentName
             }
             Heading {
                 Layout.fillWidth: true

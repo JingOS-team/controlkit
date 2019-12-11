@@ -20,6 +20,7 @@
 #define SETTINGS_H
 
 #include <QObject>
+#include <QVariant>
 
 /**
  * This class contains global kirigami settings about the current device setup
@@ -70,6 +71,14 @@ class Settings : public QObject
      * @since org.kde.kirigami 2.6
      */
     Q_PROPERTY(QStringList information READ information CONSTANT)
+    
+    /**
+     * @returns application window icon, basically \QApplication::windowIcon()
+     *
+     * @since 5.62
+     * @since org.kde.kirigami 2.10
+     */
+    Q_PROPERTY(QVariant applicationWindowIcon READ applicationWindowIcon CONSTANT)
 
 public:
     Settings(QObject *parent = nullptr);
@@ -90,6 +99,8 @@ public:
     int mouseWheelScrollLines() const;
 
     QStringList information() const;
+    
+    QVariant applicationWindowIcon() const;
 
     static Settings *self();
 
