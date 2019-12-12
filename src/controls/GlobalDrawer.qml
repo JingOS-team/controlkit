@@ -251,6 +251,13 @@ OverlayDrawer {
     signal bannerClicked()
 
     /**
+     * When the sidebar is collapsible, this controls the visibility of
+     * the collapse button
+     * @since 2.12
+     */
+    property bool collapseButtonVisible: true
+
+    /**
      * Reverts the menu back to its initial state
      */
     function resetMenu() {
@@ -496,6 +503,14 @@ OverlayDrawer {
                             }
                         }
                     }
+                }
+            
+                QQC2.ToolButton {
+                    icon.name: root.collapsed ? "view-right-new" : "view-right-close"
+                    Layout.fillWidth: root.collapsed
+                    onClicked: root.collapsed = !root.collapsed
+                    visible: root.collapsible && root.collapseButtonVisible
+                    text: root.collapsed ? "" : qsTr("Close Sidebar")
                 }
             }
         }
