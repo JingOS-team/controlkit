@@ -106,22 +106,36 @@ Item {
         Repeater {
             model: root.actions
 
-            delegate: PrivateActionToolButton {
-                id: actionDelegate
+            delegate: Loader {
+                id: delegate
 
                 Layout.alignment: Qt.AlignVCenter
-                Layout.minimumWidth: implicitWidth
                 // Use leftMargin instead of spacing on the layout to prevent spacer items
                 // from creating useless spacing, only for items that are actually next to
                 // other items.
                 Layout.leftMargin: index > 0 ? Kirigami.Units.smallSpacing : 0
+                Layout.fillWidth: item ? item.Layout.fillWidth : false
+                Layout.minimumWidth: item ? item.Layout.minimumWidth : implicitWidth
+                Layout.preferredWidth: item ? item.Layout.preferredWidth : implicitWidth
+                Layout.maximumWidth: item ? item.Layout.maximumWidth : -1
+
+                property var kirigamiAction: modelData
+
+                sourceComponent: {
+                    if (modelData.displayComponent && !modelData.displayHintSet(Action.DisplayHint.IconOnly)) {
+                        return modelData.displayComponent
+                    }
+                    return toolButtonDelegate
+                }
 
                 visible: details.visibleActions.indexOf(modelData) != -1
                          && (modelData.visible === undefined || modelData.visible)
 
-                flat: root.flat && !modelData.icon.color.a
-                display: details.iconOnlyActions.indexOf(modelData) != -1 ? Controls.Button.IconOnly : root.display
-                kirigamiAction: modelData
+                onLoaded: {
+                    if (sourceComponent == toolButtonDelegate) {
+                        item.kirigamiAction = modelData
+                    }
+                }
             }
         }
 
@@ -155,6 +169,13 @@ Item {
                 visible: details.visibleActions.indexOf(action) == -1 &&
                                     (action.visible === undefined || action.visible)
             }
+
+            menu.loaderDelegate: Loader {
+                property var kirigamiAction
+                height: visible ? implicitHeight : 0
+                visible: details.visibleActions.indexOf(kirigamiAction) == -1 &&
+                                    (kirigamiAction.visible === undefined || kirigamiAction.visible)
+            }
         }
     }
 
@@ -165,5 +186,28 @@ Item {
         rightPadding: moreButton.width + Kirigami.Units.smallSpacing
         flat: root.flat
         display: root.display
+    }
+
+    Component {
+        id: toolButtonDelegate
+
+        PrivateActionToolButton {
+            id: button
+            flat: root.flat && !kirigamiAction.icon.color.a
+            display: details.iconOnlyActions.indexOf(kirigamiAction) != -1 ? Controls.Button.IconOnly : root.display
+
+            menu.actions: {
+                if (kirigamiAction.displayComponent && kirigamiAction.displayHintSet(Kirigami.Action.DisplayHint.IconOnly)) {
+                    kirigamiAction.displayHint |= Kirigami.Action.DisplayHint.HideChildIndicator
+                    return [kirigamiAction]
+                }
+
+                if (kirigamiAction.children) {
+                    return kirigamiAction.children
+                }
+
+                return []
+            }
+        }
     }
 }

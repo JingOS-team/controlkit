@@ -72,14 +72,6 @@ Item {
         var iconOnly = []
         var iconsWidth = 0
 
-        if (details.width >= fullSizePlaceholderLayout.width + details.rightPadding) {
-            visibleActions = Array.prototype.map.call(details.actions, function(i) { return i })
-            hiddenActions = []
-            iconOnlyActions = []
-            iconOnlyWidth = 0
-            return
-        }
-
         for (var i = 0; i < root.actions.length; ++i) {
             var item = fullSizePlaceholderRepeater.itemAt(i)
             var iconOnlyItem = iconOnlyPlaceholderRepeater.itemAt(i)
@@ -116,13 +108,45 @@ Item {
 
             model: details.actions
 
-            PrivateActionToolButton {
-                flat: details.flat && !modelData.icon.color.a
-                display: details.display
+            Loader {
+                property var kirigamiAction: modelData
+
+                sourceComponent: {
+                    if (modelData.displayComponent && !modelData.displayHintSet(Kirigami.Action.DisplayHint.IconOnly)) {
+                        return modelData.displayComponent
+                    }
+                    return toolButtonDelegate
+                }
+
                 visible: (modelData.visible === undefined || modelData.visible)
-                         && (modelData.displayHint !== undefined && !modelData.displayHintSet(Kirigami.Action.DisplayHint.AlwaysHide))
-                kirigamiAction: modelData
+                    && (modelData.displayHint !== undefined && !modelData.displayHintSet(Kirigami.Action.DisplayHint.AlwaysHide))
+
                 property bool actionVisible: visible && (x + width < details.fullLayoutWidth)
+
+                onLoaded: {
+                    if (sourceComponent == toolButtonDelegate) {
+                        item.kirigamiAction = modelData
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: toolButtonDelegate
+        PrivateActionToolButton {
+            flat: details.flat && !kirigamiAction.icon.color.a
+            display: details.display
+            menu.actions: {
+                if (kirigamiAction.displayComponent && kirigamiAction.displayHintSet(Kirigami.Action.DisplayHint.IconOnly)) {
+                    return [kirigamiAction]
+                }
+
+                if (kirigamiAction.children) {
+                    return kirigamiAction.children
+                }
+
+                return []
             }
         }
     }

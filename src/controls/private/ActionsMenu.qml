@@ -30,6 +30,7 @@ Controls.Menu
     //renamed to work on both Qt 5.9 and 5.10
     property Component itemDelegate: ActionMenuItem {}
     property Component separatorDelegate: Controls.MenuSeparator { }
+    property Component loaderDelegate: Loader { property var kirigamiAction }
     property Controls.Action parentAction
     property Controls.MenuItem parentItem
 
@@ -49,6 +50,10 @@ Controls.Menu
                 if (!action.hasOwnProperty("children") && !action.children || action.children.length === 0) {
                     if (action.hasOwnProperty("separator") && action.separator) {
                         item = theMenu.separatorDelegate.createObject(null, {});
+                    }
+                    else if (action.displayComponent) {
+                        item = theMenu.loaderDelegate.createObject(null,
+                                { kirigamiAction: action, sourceComponent: action.displayComponent });
                     }
                     else {
                         item = theMenu.itemDelegate.createObject(null, { action: action });

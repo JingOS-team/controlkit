@@ -146,6 +146,14 @@ Controls.Action {
         return (displayHint & hint)
     }
 
+    /**
+     * A Component that should be preferred when displaying this Action.
+     *
+     * @since 5.65
+     * @since 2.12
+     */
+    property Component displayComponent: null
+
     default property alias children: root.__children
     property list<QtObject> __children
 
