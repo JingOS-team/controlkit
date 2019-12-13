@@ -77,7 +77,7 @@ AbstractListItem {
         Heading {
             level: 3
             text: listSection.text
-            Layout.fillWidth: true
+            Layout.fillWidth: rowLayout.children.length === 1
         }
     }
 }
