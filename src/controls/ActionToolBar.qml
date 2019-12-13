@@ -89,6 +89,14 @@ Item {
      */
     readonly property alias maximumContentWidth: details.maximumWidth
 
+    /**
+     * The name of the icon to use for the overflow menu button.
+     *
+     * @since 5.65
+     * @since 2.12
+     */
+    property string overflowIconName: "overflow-menu"
+
     implicitHeight: actionsLayout.implicitHeight
     implicitWidth: actionsLayout.implicitWidth
     Layout.minimumWidth: moreButton.visible ? moreButton.implicitWidth : 0
@@ -158,7 +166,7 @@ Item {
             }
 
             kirigamiAction: Kirigami.Action {
-                icon.name: "overflow-menu"
+                icon.name: root.overflowIconName
                 displayHint: Kirigami.Action.DisplayHint.IconOnly | Kirigami.Action.DisplayHint.HideChildIndicator
                 children: Array.prototype.map.call(root.actions, function (i) { return i }).concat(Array.prototype.map.call(hiddenActions, function (i) { return i }))
             }
