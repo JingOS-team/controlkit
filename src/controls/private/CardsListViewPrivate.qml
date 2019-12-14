@@ -25,10 +25,12 @@ import org.kde.kirigami 2.4 as Kirigami
 ListView {
     id: root
 
+    rightMargin: Kirigami.Units.largeSpacing * 2
+    leftMargin: Kirigami.Units.largeSpacing * 2
+
     property Component _delegateComponent
     delegate: Kirigami.DelegateRecycler {
-        width: root.width - Kirigami.Units.largeSpacing * 4
-        x: Kirigami.Units.largeSpacing * 2
+        width: root.width - root.leftMargin - root.rightMargin
         sourceComponent: root._delegateComponent
     }
 }
