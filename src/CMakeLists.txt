@@ -49,7 +49,7 @@ if(STATIC_LIBRARY)
         RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/../kirigami.qrc
     )
 
-    if (UNIX AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND NOT(APPLE) AND NOT(DISABLE_DBUS))
+    if (UNIX AND NOT ANDROID AND NOT(APPLE) AND NOT(DISABLE_DBUS))
         qt5_add_dbus_interface(kirigami_SRCS libkirigami/org.kde.KWin.TabletModeManager.xml tabletmodemanager_interface)
     endif()
 endif(STATIC_LIBRARY)
@@ -60,7 +60,7 @@ add_library(kirigamiplugin ${kirigami_SRCS} ${RESOURCES})
 if(STATIC_LIBRARY)
     SET_TARGET_PROPERTIES(kirigamiplugin PROPERTIES
         AUTOMOC_MOC_OPTIONS -Muri=org.kde.kirigami)
-    if (UNIX AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND NOT(APPLE) AND NOT(DISABLE_DBUS))
+    if (UNIX AND NOT ANDROID AND NOT(APPLE) AND NOT(DISABLE_DBUS))
         set(Kirigami_EXTRA_LIBS Qt5::DBus)
     else()
         set(Kirigami_EXTRA_LIBS "")

@@ -8,7 +8,7 @@ set(minimal_SRCS
 
 qt5_add_resources(RESOURCES kirigami-icons.qrc resources.qrc)
 
-if (CMAKE_SYSTEM_NAME STREQUAL "Android")
+if (ANDROID)
     set(minimal_EXTRA_LIBS Qt5::AndroidExtras
     #FIXME: we shouldn't have to link to it but otherwise the lib won't be packaged on Android
     Qt5::QuickControls2)
