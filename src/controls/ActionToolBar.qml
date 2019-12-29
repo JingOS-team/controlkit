@@ -148,7 +148,14 @@ Item {
             id: moreButton
 
             Layout.alignment: Qt.AlignRight
-            visible: root.hiddenActions.length > 0 || details.hiddenActions.length > 0
+            visible: {
+                // Only show the overflow button when we actually have visible actions in the menu,
+                // otherwise we end up showing an overflow button that shows nothing.
+                var visibleCount = Array.prototype.reduce.call(kirigamiAction.children, function (total, current) {
+                    return (details.visibleActions.indexOf(current) == -1 && (current.visible === undefined || current.visible)) ? total + 1 : total
+                }, 0);
+                return visibleCount > 0
+            }
 
             kirigamiAction: Kirigami.Action {
                 icon.name: "overflow-menu"
