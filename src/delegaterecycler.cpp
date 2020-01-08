@@ -25,6 +25,27 @@
 #include <QQmlEngine>
 #include <QDebug>
 
+DelegateRecyclerAttached::DelegateRecyclerAttached(QObject *parent)
+    : QObject(parent)
+{
+}
+
+DelegateRecyclerAttached::~DelegateRecyclerAttached()
+{}
+/*
+void setRecycler(DelegateRecycler *recycler)
+{
+    m_recycler = recycler;
+}
+
+DelegateRecycler *recycler() const
+{
+    return m_recycler;
+}
+*/
+
+
+
 class DelegateCache
 {
 public:
@@ -84,6 +105,11 @@ void DelegateCache::insert(QQmlComponent *component, QQuickItem *item)
         return;
     }
 
+    DelegateRecyclerAttached *attached = qobject_cast<DelegateRecyclerAttached *>(qmlAttachedPropertiesObject<DelegateRecycler>(item, false));
+    if (attached) {
+        emit attached->pooled();
+    }
+    
     item->setParentItem(nullptr);
     items.append(item);
 }
@@ -92,7 +118,13 @@ QQuickItem *DelegateCache::take(QQmlComponent *component)
 {
     auto it = m_unusedItems.find(component);
     if (it != m_unusedItems.end() && !it->isEmpty()) {
-        return it->takeFirst();
+        QQuickItem *item = it->takeFirst();
+        DelegateRecyclerAttached *attached = qobject_cast<DelegateRecyclerAttached *>(qmlAttachedPropertiesObject<DelegateRecycler>(item, false));
+        if (attached) {
+            emit attached->reused();
+        }
+
+        return item;
     }
     return nullptr;
 }
@@ -310,6 +342,11 @@ void DelegateRecycler::resetSourceComponent()
 {
     s_delegateCache->deref(m_sourceComponent);
     m_sourceComponent = nullptr;
+}
+
+DelegateRecyclerAttached *DelegateRecycler::qmlAttachedProperties(QObject *object)
+{
+    return new DelegateRecyclerAttached(object);
 }
 
 void DelegateRecycler::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)

@@ -27,6 +27,23 @@
 
 class DelegateCache;
 
+class DelegateRecyclerAttached : public QObject
+{
+    Q_OBJECT
+
+public:
+    DelegateRecyclerAttached(QObject *parent = nullptr);
+    ~DelegateRecyclerAttached();
+
+
+
+Q_SIGNALS:
+    void pooled();
+    void reused();
+
+
+};
+
 /**
  * This class may be used as a delegate of a ListView or a GridView in the case
  * the intended delegate is a bit heavy, with many objects inside.
@@ -63,6 +80,8 @@ public:
     void setSourceComponent(QQmlComponent *component);
     void resetSourceComponent();
 
+    static DelegateRecyclerAttached *qmlAttachedProperties(QObject *object);
+
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
     void focusInEvent(QFocusEvent *event) override;
@@ -87,5 +106,7 @@ private:
     bool m_widthFromItem = false;
     bool m_heightFromItem = false;
 };
+
+QML_DECLARE_TYPEINFO(DelegateRecycler, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif
