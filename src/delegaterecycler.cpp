@@ -118,13 +118,7 @@ QQuickItem *DelegateCache::take(QQmlComponent *component)
 {
     auto it = m_unusedItems.find(component);
     if (it != m_unusedItems.end() && !it->isEmpty()) {
-        QQuickItem *item = it->takeFirst();
-        DelegateRecyclerAttached *attached = qobject_cast<DelegateRecyclerAttached *>(qmlAttachedPropertiesObject<DelegateRecycler>(item, false));
-        if (attached) {
-            emit attached->reused();
-        }
-
-        return item;
+        return it->takeFirst();
     }
     return nullptr;
 }
@@ -325,6 +319,11 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
                                     QQmlContext::PropertyPair{ QStringLiteral("index"), m_propertiesTracker->property("trackedIndex")},
                                     QQmlContext::PropertyPair{ QStringLiteral("delegateRecycler"), QVariant::fromValue<QObject*>(this) }
                                  });
+
+        DelegateRecyclerAttached *attached = qobject_cast<DelegateRecyclerAttached *>(qmlAttachedPropertiesObject<DelegateRecycler>(m_item, false));
+        if (attached) {
+            emit attached->reused();
+        }
     }
 
     if (m_item) {
