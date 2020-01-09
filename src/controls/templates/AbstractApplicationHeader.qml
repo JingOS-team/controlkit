@@ -59,11 +59,6 @@ Item {
 
     //FIXME: remove
     property QtObject __appWindow: applicationWindow();
-
-    anchors {
-        left: parent.left
-        right: parent.right
-    }
     implicitHeight: preferredHeight
 
     /**
