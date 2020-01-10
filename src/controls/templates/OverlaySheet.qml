@@ -202,16 +202,20 @@ QtObject {
 
         readonly property int contentItemPreferredWidth: root.contentItem.Layout.preferredWidth > 0 ? root.contentItem.Layout.preferredWidth : root.contentItem.implicitWidth
 
-        readonly property int contentItemMaximumWidth: width > Units.gridUnit * 30 ? mainItem.width * 0.95 : width
+        readonly property int contentItemMaximumWidth: width > Units.gridUnit * 30 ? width * 0.95 : width
 
-        onWidthChanged: {
-            if (!contentItem.contentItem)
-                return
+        function updateContentWidth() {
+            if (!contentItem.contentItem) {
+                return;
+            }
 
-            var width = Math.max(mainItem.width/2, Math.min(mainItem.width, mainItem.contentItemPreferredWidth));
-            contentItem.contentItem.x = (mainItem.width - width)/2
-            contentItem.contentItem.width = width;
+            var newWidth = Math.min(contentItemMaximumWidth, Math.max(mainItem.width/2, Math.min(mainItem.width, mainItem.contentItemPreferredWidth)));
+            contentItem.contentItem.x = (mainItem.width - newWidth)/2
+            contentItem.contentItem.width = newWidth;
         }
+        onContentItemMaximumWidthChanged: updateContentWidth()
+        onWidthChanged: updateContentWidth()
+
         onHeightChanged: {
             var focusItem;
 
