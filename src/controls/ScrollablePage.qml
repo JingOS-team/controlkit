@@ -184,9 +184,9 @@ Page {
              return;
         }
 
-        if (scrollView.oldMainItem && scrollView.oldMainItem.hasOwnProperty("parent") && (typeof applicationWindow == 'undefined' || scrollView.oldMainItem.parent !== applicationWindow().overlay)) {
-             scrollView.oldMainItem.parent = overlay
-         }
-         scrollView.oldMainItem = mainItem
+        if (scrollView.oldMainItem && scrollView.oldMainItem instanceof Item && (typeof applicationWindow == 'undefined' || scrollView.oldMainItem.parent !== applicationWindow().overlay)) {
+            scrollView.oldMainItem.parent = overlay
+        }
+        scrollView.oldMainItem = mainItem
     }
 }
