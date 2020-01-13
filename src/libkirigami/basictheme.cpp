@@ -66,7 +66,7 @@ QObject *BasicThemeDeclarative::instance(const BasicTheme *theme)
             import org.kde.kirigami 2.0 as Kirigami\n\
             QtObject {\n\
                 property QtObject theme: Kirigami.Theme\n\
-            }", QUrl());
+            }", QUrl(QStringLiteral("basictheme.cpp")));
 
     QObject *obj = c.create();
     m_declarativeBasicTheme = obj->property("theme").value<QObject *>();

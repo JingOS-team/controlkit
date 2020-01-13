@@ -87,7 +87,7 @@ QmlComponentsPool::QmlComponentsPool(QQmlEngine *engine)
                 "anchors.right: column.right;"
                 "anchors.bottom: column.bottom;"
             "}"
-        "}"), QUrl());
+        "}"), QUrl(QStringLiteral("columnview.cpp")));
 
     m_instance = component->create();
     //qWarning()<<component->errors();
