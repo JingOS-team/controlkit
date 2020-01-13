@@ -77,7 +77,7 @@ QmlComponentsPool::QmlComponentsPool(QQmlEngine *engine)
             "readonly property Kirigami.Units units: Kirigami.Units\n"
             "readonly property Component separator: Kirigami.Separator {"
                 "property Item column\n"
-                "visible: column.Kirigami.ColumnView.view.contentX < column.x;"
+                "visible: column.Kirigami.ColumnView.view && column.Kirigami.ColumnView.view.contentX < column.x;"
                 "anchors.top: column.top;"
                 "anchors.bottom: column.bottom;"
             "}\n"
