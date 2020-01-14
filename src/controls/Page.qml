@@ -22,6 +22,7 @@ import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.7 as Kirigami
 import "private"
 import QtQuick.Templates 2.1 as T2
+import QtQuick.Controls 2.1 as QQC2
 
 /**
  * Page is a container for all the app pages: everything pushed to the
@@ -30,7 +31,7 @@ import QtQuick.Templates 2.1 as T2
  * @see ScrollablePage
  * @inherit QtQuick.Templates.Page
  */
-T2.Page {
+QQC2.Page {
     id: root
 
     /**
