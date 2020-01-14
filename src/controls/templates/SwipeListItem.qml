@@ -165,7 +165,7 @@ T2.SwipeDelegate {
 
     leftPadding: padding * 2
 
-    rightPadding: padding * 2 +  (overlayLoader.visible ? overlayLoader.width : 0) + internal.calculateMargin()
+    rightPadding: padding * 2 +  (overlayLoader.visible ? overlayLoader.width : 0) + Kirigami.Units.smallSpacing
     
     topPadding: padding
     bottomPadding: padding
@@ -200,14 +200,6 @@ T2.SwipeDelegate {
                 internal.view.parent.parent._swipeFilter = component.createObject(internal.view.parent.parent);
             }
         }
-
-        function calculateMargin() {
-            if (verticalScrollBar && verticalScrollBar.visible) {
-                return verticalScrollBar.width
-            } else {
-                return Kirigami.Units.smallSpacing
-            }
-        }
     }
 
     Connections {
@@ -235,7 +227,7 @@ T2.SwipeDelegate {
             right: contentItem ? contentItem.right : undefined
             top: parent.top
             bottom: parent.bottom
-            rightMargin: -listItem.rightPadding + internal.calculateMargin()
+            rightMargin: -listItem.rightPadding + Kirigami.Units.smallSpacing
         }
 
         parent: listItem
@@ -419,7 +411,7 @@ T2.SwipeDelegate {
                     right: parent.right
                     top: parent.top
                     bottom: parent.bottom
-                    rightMargin: Kirigami.Settings.tabletMode ? internal.calculateMargin() : 0
+                    rightMargin: Kirigami.Units.smallSpacing
                 }
             visible: parent != listItem
             parent: Kirigami.Settings.tabletMode

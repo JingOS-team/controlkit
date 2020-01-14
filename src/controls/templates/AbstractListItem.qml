@@ -141,10 +141,10 @@ T2.ItemDelegate {
 
     padding: Settings.tabletMode ? Units.largeSpacing : Units.smallSpacing
 
-    leftPadding: LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical && internal.view.T2.ScrollBar.vertical.visible ? internal.view.T2.ScrollBar.vertical.width : padding*2
+    leftPadding: padding*2
     topPadding: padding
 
-    rightPadding: !LayoutMirroring.enabled && internal.view && internal.view.T2.ScrollBar.vertical && internal.view.T2.ScrollBar.vertical.visible ? internal.view.T2.ScrollBar.vertical.width : padding*2
+    rightPadding: padding*2
     bottomPadding: padding
 
     implicitWidth: contentItem ? contentItem.implicitWidth + leftPadding + rightPadding : Units.gridUnit * 12

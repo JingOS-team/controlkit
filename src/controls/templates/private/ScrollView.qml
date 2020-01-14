@@ -96,6 +96,7 @@ MouseArea {
         id: flickableParent
         anchors {
             fill: parent
+            rightMargin: !Kirigami.Settings.tabletMode && flickableItem.ScrollBar.vertical && flickableItem.ScrollBar.vertical.visible ? flickableItem.ScrollBar.vertical.width : 0
         }
     }
     Component {
