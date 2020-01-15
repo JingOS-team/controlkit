@@ -204,18 +204,33 @@ QtObject {
 
         readonly property int contentItemMaximumWidth: width > Units.gridUnit * 30 ? width * 0.95 : width
 
+        property bool ownSizeUpdate: false
         function updateContentWidth() {
             if (!contentItem.contentItem) {
                 return;
             }
 
             var newWidth = Math.min(contentItemMaximumWidth, Math.max(mainItem.width/2, Math.min(mainItem.width, mainItem.contentItemPreferredWidth)));
+
+            if (scrollView.verticalScrollBar && scrollView.verticalScrollBar.interactive) {
+                newWidth -= scrollView.verticalScrollBar.width;
+            }
+
+            ownSizeUpdate = true;
             contentItem.contentItem.x = (mainItem.width - newWidth)/2
             contentItem.contentItem.width = newWidth;
+            ownSizeUpdate = false;
         }
         onContentItemMaximumWidthChanged: updateContentWidth()
         onWidthChanged: updateContentWidth()
-
+        Connections {
+            target: contentItem.contentItem
+            onWidthChanged: {
+                if (!mainItem.ownSizeUpdate) {
+                    mainItem.updateContentWidth();
+                }
+            }
+        }
         onHeightChanged: {
             var focusItem;
 
@@ -268,14 +283,6 @@ QtObject {
                 to: openAnimation.topOpenPosition
                 duration: Units.longDuration
                 easing.type: Easing.OutQuad
-                onRunningChanged: {
-                    //HACK to center listviews
-                    if (!running && contentItem.contentItem) {
-                        var width = Math.max(mainItem.width/2, Math.min(mainItem.contentItemMaximumWidth, mainItem.contentItemPreferredWidth));
-                        contentItem.contentItem.x = (mainItem.width - width)/2
-                        contentItem.contentItem.width = width;
-                    }
-                }
             }
             OpacityAnimator {
                 target: mainItem
@@ -456,7 +463,7 @@ QtObject {
                     fill: parent
                     leftMargin: leftPadding
                     topMargin: topPadding + (headerItem.visible ? headerItem.height : 0)
-                    rightMargin: rightPadding
+                    rightMargin: rightPadding + (scrollView.verticalScrollBar && scrollView.verticalScrollBar.interactive ? scrollView.verticalScrollBar.width : 0)
                     bottomMargin: bottomPadding + (footerItem.visible ? footerItem.height : 0)
                 }
             }
