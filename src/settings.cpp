@@ -25,6 +25,8 @@
 #include <QFile>
 #include <QGuiApplication>
 #include <QIcon>
+#include <QTouchDevice>
+#include <QWindow>
 
 #include "libkirigami/tabletmodewatcher.h"
 
@@ -42,7 +44,9 @@ Q_GLOBAL_STATIC(SettingsSingleton, privateSettingsSelf)
 
 
 Settings::Settings(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      m_hasTouchScreen(false),
+      m_hasTransientTouchInput(false)
 {
     m_tabletModeAvailable = Kirigami::TabletModeWatcher::self()->isTabletModeAvailable();
     connect(Kirigami::TabletModeWatcher::self(), &Kirigami::TabletModeWatcher::tabletModeAvailableChanged,
@@ -58,6 +62,7 @@ Settings::Settings(QObject *parent)
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
     m_mobile = true;
+    m_hasTouchScreen = true;
 #else
     //Mostly for debug purposes and for platforms which are always mobile,
     //such as Plasma Mobile
@@ -65,6 +70,21 @@ Settings::Settings(QObject *parent)
         m_mobile = QByteArrayList{"1", "true"}.contains(qgetenv("QT_QUICK_CONTROLS_MOBILE"));
     } else {
         m_mobile = false;
+    }
+
+    for (const auto &device : QTouchDevice::devices()) {
+        if (device->type() == QTouchDevice::TouchScreen) {
+            m_hasTouchScreen = true;
+            break;
+        }
+    }
+    if (m_hasTouchScreen) {
+        connect(qApp, &QGuiApplication::focusWindowChanged,
+                this, [this](QWindow *win) {
+                    if (win) {
+                        win->installEventFilter(this);
+                    }
+                });
     }
 #endif
 
@@ -88,6 +108,22 @@ Settings *Settings::self()
     return &privateSettingsSelf()->self;
 }
 
+bool Settings::eventFilter(QObject *watched, QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::TouchBegin:
+        setTransientTouchInput(true);
+        break;
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseMove:
+    case QEvent::Wheel:
+        setTransientTouchInput(false);
+    default:
+        break;
+    }
+
+    return false;
+}
 
 void Settings::setTabletModeAvailable(bool mobileAvailable)
 {
@@ -132,6 +168,23 @@ void Settings::setTabletMode(bool tablet)
 bool Settings::tabletMode() const
 {
     return m_tabletMode;
+}
+
+void Settings::setTransientTouchInput(bool touch)
+{
+    if (touch == m_hasTransientTouchInput) {
+        return;
+    }
+
+    m_hasTransientTouchInput = touch;
+    if (!m_tabletMode) {
+        emit hasTransientTouchInputChanged();
+    }
+}
+
+bool Settings::hasTransientTouchInput() const
+{
+    return m_hasTransientTouchInput || m_tabletMode;
 }
 
 QString Settings::style() const

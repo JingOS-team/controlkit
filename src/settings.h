@@ -53,6 +53,11 @@ class Settings : public QObject
     Q_PROPERTY(bool tabletMode READ tabletMode NOTIFY tabletModeChanged)
 
     /**
+     * True if the user in this moment is interacting with the app with the touch screen
+     */
+    Q_PROPERTY(bool hasTransientTouchInput READ hasTransientTouchInput NOTIFY hasTransientTouchInputChanged)
+
+    /**
      * name of the QtQuickControls2 style we are using,
      * for instance org.kde.desktop, Plasma, Material, Universal etc
      */
@@ -93,6 +98,9 @@ public:
     void setTabletMode(bool tablet);
     bool tabletMode() const;
 
+    void setTransientTouchInput(bool touch);
+    bool hasTransientTouchInput() const;
+
     QString style() const;
     void setStyle(const QString &style);
 
@@ -104,10 +112,14 @@ public:
 
     static Settings *self();
 
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 Q_SIGNALS:
     void tabletModeAvailableChanged();
     void tabletModeChanged();
     void isMobileChanged();
+    void hasTransientTouchInputChanged();
 
 private:
     QString m_style;
@@ -115,6 +127,8 @@ private:
     bool m_tabletModeAvailable : 1;
     bool m_mobile : 1;
     bool m_tabletMode : 1;
+    bool m_hasTouchScreen : 1;
+    bool m_hasTransientTouchInput : 1;
 };
 
 #endif

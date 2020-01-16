@@ -96,7 +96,7 @@ MouseArea {
         id: flickableParent
         anchors {
             fill: parent
-            rightMargin: !Kirigami.Settings.tabletMode && flickableItem.ScrollBar.vertical && flickableItem.ScrollBar.vertical.visible ? flickableItem.ScrollBar.vertical.width : 0
+            rightMargin: !Kirigami.Settings.hasTransientTouchInput && flickableItem.ScrollBar.vertical && flickableItem.ScrollBar.vertical.visible ? flickableItem.ScrollBar.vertical.width : 0
         }
     }
     Component {
@@ -114,7 +114,7 @@ MouseArea {
         ScrollBar {
             z: flickableParent.z + 1
             visible: root.contentItem.visible && size < 1
-            interactive: !Kirigami.Settings.tabletMode
+            interactive: !Kirigami.Settings.hasTransientTouchInput
 
             //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
             height: parent.height - anchors.topMargin
@@ -130,7 +130,7 @@ MouseArea {
         ScrollBar {
             z: flickableParent.z + 1
             visible: root.contentItem.visible && size < 1
-            interactive: !Kirigami.Settings.tabletMode
+            interactive: !Kirigami.Settings.hasTransientTouchInput
 
             //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
             height: parent.height - anchors.topMargin
