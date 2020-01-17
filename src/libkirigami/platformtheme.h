@@ -137,6 +137,36 @@ class KIRIGAMI2_EXPORT PlatformTheme : public QObject
      */
     Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setCustomHighlightColor RESET setCustomHighlightColor NOTIFY colorsChanged)
 
+    /**
+     * Background for areas that are active or requesting attention
+     */
+    Q_PROPERTY(QColor activeBackgroundColor READ activeBackgroundColor WRITE setCustomActiveBackgroundColor RESET setCustomActiveBackgroundColor NOTIFY colorsChanged)
+
+    /**
+     * Background color for links
+     */
+    Q_PROPERTY(QColor linkBackgroundColor READ linkBackgroundColor WRITE setCustomLinkBackgroundColor RESET setCustomLinkBackgroundColor NOTIFY colorsChanged)
+
+    /**
+     * Background color for visited links, usually a bit darker than linkBackgroundColor
+     */
+    Q_PROPERTY(QColor visitedLinkBackgroundColor READ visitedLinkBackgroundColor WRITE setCustomVisitedLinkBackgroundColor RESET setCustomVisitedLinkBackgroundColor NOTIFY colorsChanged)
+
+    /**
+     * Background color for negative areas, such as critical errors and destructive actions
+     */
+    Q_PROPERTY(QColor negativeBackgroundColor READ negativeBackgroundColor WRITE setCustomNegativeBackgroundColor RESET setCustomNegativeBackgroundColor NOTIFY colorsChanged)
+
+    /**
+     * Background color for neutral areas, such as warnings (but not critical)
+     */
+    Q_PROPERTY(QColor neutralBackgroundColor READ neutralBackgroundColor WRITE setCustomNeutralBackgroundColor RESET setCustomNeutralBackgroundColor NOTIFY colorsChanged)
+
+    /**
+     * Background color for positive areas, such as success messages and trusted content
+     */
+    Q_PROPERTY(QColor positiveBackgroundColor READ positiveBackgroundColor WRITE setCustomPositiveBackgroundColor RESET setCustomPositiveBackgroundColor NOTIFY colorsChanged)
+    
     //decoration colors
     /**
      * A decoration color that indicates active focus
@@ -200,7 +230,12 @@ public:
     QColor backgroundColor() const;
     QColor alternateBackgroundColor() const;
     QColor highlightColor() const;
-    //TODO: add active/positive/neutral/negative backgrounds?
+    QColor activeBackgroundColor() const;
+    QColor linkBackgroundColor() const;
+    QColor visitedLinkBackgroundColor() const;
+    QColor negativeBackgroundColor() const;
+    QColor neutralBackgroundColor() const;
+    QColor positiveBackgroundColor() const;
 
     //decoration colors
     QColor focusColor() const;
@@ -230,6 +265,12 @@ public:
     void setCustomBackgroundColor(const QColor &color = QColor());
     void setCustomAlternateBackgroundColor(const QColor &color = QColor());
     void setCustomHighlightColor(const QColor &color = QColor());
+    void setCustomActiveBackgroundColor(const QColor &color = QColor());
+    void setCustomLinkBackgroundColor(const QColor &color = QColor());
+    void setCustomVisitedLinkBackgroundColor(const QColor &color = QColor());
+    void setCustomNegativeBackgroundColor(const QColor &color = QColor());
+    void setCustomNeutralBackgroundColor(const QColor &color = QColor());
+    void setCustomPositiveBackgroundColor(const QColor &color = QColor());
     //decoration colors
     void setCustomFocusColor(const QColor &color = QColor());
     void setCustomHoverColor(const QColor &color = QColor());
@@ -265,6 +306,12 @@ protected:
     void setBackgroundColor(const QColor &color);
     void setAlternateBackgroundColor(const QColor &color);
     void setHighlightColor(const QColor &color);
+    void setActiveBackgroundColor(const QColor &color);
+    void setLinkBackgroundColor(const QColor &color);
+    void setVisitedLinkBackgroundColor(const QColor &color);
+    void setNegativeBackgroundColor(const QColor &color);
+    void setNeutralBackgroundColor(const QColor &color);
+    void setPositiveBackgroundColor(const QColor &color);
 
     //decoration colors
     void setFocusColor(const QColor &color);

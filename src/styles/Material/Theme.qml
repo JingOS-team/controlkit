@@ -40,13 +40,19 @@ QtObject {
     property color backgroundColor: theme.Material.background
     property color alternateBackgroundColor: Qt.darker(theme.Material.background, 1.05)
     property color activeTextColor: theme.Material.primary
+    property color activeBackgroundColor: theme.Material.primary
     property color linkColor: "#2980B9"
+    property color linkBackgroundColor: "#2980B9"
     property color visitedLinkColor: "#7F8C8D"
+    property color visitedLinkBackgroundColor: "#7F8C8D"
     property color hoverColor: theme.Material.highlightedButtonColor
     property color focusColor: theme.Material.highlightedButtonColor
     property color negativeTextColor: "#DA4453"
+    property color negativeBackgroundColor: "#DA4453"
     property color neutralTextColor: "#F67400"
+    property color neutralBackgroundColor: "#F67400"
     property color positiveTextColor: "#27AE60"
+    property color positiveBackgroundColor: "#27AE60"
 
     property color buttonTextColor: theme.Material.foreground
     property color buttonBackgroundColor: theme.Material.buttonColor

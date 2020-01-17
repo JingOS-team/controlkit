@@ -130,6 +130,12 @@ Module {
         Property { name: "positiveTextColor"; type: "QColor" }
         Property { name: "backgroundColor"; type: "QColor" }
         Property { name: "highlightColor"; type: "QColor" }
+        Property { name: "activeBackgroundColor"; type: "QColor" }
+        Property { name: "linkBackgroundColor"; type: "QColor" }
+        Property { name: "visitedLinkBackgroundColor"; type: "QColor" }
+        Property { name: "negativeBackgroundColor"; type: "QColor" }
+        Property { name: "neutralBackgroundColor"; type: "QColor" }
+        Property { name: "positiveBackgroundColor"; type: "QColor" }
         Property { name: "focusColor"; type: "QColor" }
         Property { name: "hoverColor"; type: "QColor" }
         Property { name: "defaultFont"; type: "QFont"; isReadonly: true }
@@ -1816,13 +1822,19 @@ Module {
         Property { name: "highlightedTextColor"; type: "QColor" }
         Property { name: "backgroundColor"; type: "QColor" }
         Property { name: "activeTextColor"; type: "QColor" }
+        Property { name: "activeBackgroundColor"; type: "QColor" }
         Property { name: "linkColor"; type: "QColor" }
+        Property { name: "linkBackgroundColor"; type: "QColor" }
         Property { name: "visitedLinkColor"; type: "QColor" }
+        Property { name: "visitedLinkBackgroundColor"; type: "QColor" }
         Property { name: "hoverColor"; type: "QColor" }
         Property { name: "focusColor"; type: "QColor" }
         Property { name: "negativeTextColor"; type: "QColor" }
+        Property { name: "negativeBackgroundColor"; type: "QColor" }
         Property { name: "neutralTextColor"; type: "QColor" }
+        Property { name: "neutralBackgroundColor"; type: "QColor" }
         Property { name: "positiveTextColor"; type: "QColor" }
+        Property { name: "positiveBackgroundColor"; type: "QColor" }
         Property { name: "buttonTextColor"; type: "QColor" }
         Property { name: "buttonBackgroundColor"; type: "QColor" }
         Property { name: "buttonHoverColor"; type: "QColor" }

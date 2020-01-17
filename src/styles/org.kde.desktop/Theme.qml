@@ -33,13 +33,19 @@ QtObject {
     property color backgroundColor: palette.window
     property color alternateBackgroundColor: Qt.darker(palette.window, 1.05)
     property color activeTextColor: palette.highlight
+    property color activeBackgroundColor: palette.highlight
     property color linkColor: "#2980B9"
+    property color linkBackgroundColor: "#2980B9"
     property color visitedLinkColor: "#7F8C8D"
+    property color visitedLinkBackgroundColor: "#7F8C8D"
     property color hoverColor: palette.highlight
     property color focusColor: palette.highlight
     property color negativeTextColor: "#DA4453"
+    property color negativeBackgroundColor: "#DA4453"
     property color neutralTextColor: "#F67400"
+    property color neutralBackgroundColor: "#F67400"
     property color positiveTextColor: "#27AE60"
+    property color positiveBackgroundColor: "#27AE60"
 
     property color buttonTextColor: palette.buttonText
     property color buttonBackgroundColor: palette.button

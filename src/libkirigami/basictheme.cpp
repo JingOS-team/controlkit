@@ -214,15 +214,27 @@ void BasicTheme::syncColors()
     }{
         setActiveTextColor(PROXYCOLOR(activeTextColor, ActiveTextColor));
     }{
+        setActiveBackgroundColor(PROXYCOLOR(activeBackgroundColor, ActiveBackgroundColor));
+    }{
         setLinkColor(PROXYCOLOR(linkColor, LinkColor));
+    }{
+        setLinkBackgroundColor(PROXYCOLOR(linkBackgroundColor, LinkBackgroundColor));
     }{
         setVisitedLinkColor(PROXYCOLOR(visitedLinkColor, VisitedLinkColor));
     }{
+        setVisitedLinkBackgroundColor(PROXYCOLOR(visitedLinkBackgroundColor, VisitedLinkBackgroundColor));
+    }{
         setNegativeTextColor(PROXYCOLOR(negativeTextColor, NegativeTextColor));
+    }{
+        setNegativeBackgroundColor(PROXYCOLOR(negativeBackgroundColor, NegativeBackgroundColor));
     }{
         setNeutralTextColor(PROXYCOLOR(neutralTextColor, NeutralTextColor));
     }{
+        setNeutralBackgroundColor(PROXYCOLOR(neutralBackgroundColor, NeutralBackgroundColor));
+    }{
         setPositiveTextColor(PROXYCOLOR(positiveTextColor, PositiveTextColor));
+    }{
+        setPositiveBackgroundColor(PROXYCOLOR(positiveBackgroundColor, PositiveBackgroundColor));
     }{
         RESOLVECOLOR(hoverColor, HoverColor);
         setHoverColor(color);
