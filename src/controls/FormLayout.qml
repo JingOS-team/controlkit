@@ -65,7 +65,7 @@ Item {
      */
     property bool wideMode: width >= lay.wideImplicitWidth
 
-    implicitWidth: lay.implicitWidth
+    implicitWidth: lay.wideImplicitWidth
     implicitHeight: lay.implicitHeight
     Layout.preferredHeight: lay.implicitHeight
 
@@ -109,14 +109,32 @@ Item {
             }
             return hint;
         }
-        anchors {
-            left: root.wideMode ? undefined : parent.left
-            top: parent.top
-            //to make room for the invisible spacer elements
-            topMargin: -lay.columnSpacing
-           // right: parent.right
-           horizontalCenter: root.wideMode ? parent.horizontalCenter : undefined
-        }
+        states: [
+            State {
+                when: root.wideMode
+                AnchorChanges {
+                    target: lay
+                    anchors {
+                        left: undefined
+                        right: undefined
+                        horizontalCenter: root.horizontalCenter
+                    }
+                }
+            },
+            State {
+                when: !root.wideMode
+                AnchorChanges {
+                    target: lay
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        horizontalCenter: undefined
+                    }
+                }
+            }
+        ]
+
+        implicitWidth: root.wideMode ? undefined : root.width
         width: Math.min(implicitWidth, parent.width)
         Timer {
             id: hintCompression
