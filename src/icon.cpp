@@ -574,7 +574,7 @@ bool Icon::guessMonochrome(const QImage &img)
     auto it = dist.constBegin();
     qreal entropy = 0;
     while (it != dist.constEnd()) {
-        reverseDist.insertMulti(it.value(), it.key());
+        reverseDist.insert(it.value(), it.key());
         qreal probability = qreal(it.value()) / qreal(img.size().width() * img.size().height() - transparentPixels);
         entropy -= probability * log(probability) / log(255);
         ++it;
