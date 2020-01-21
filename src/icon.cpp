@@ -572,7 +572,6 @@ bool Icon::guessMonochrome(const QImage &img)
 
     QMultiMap<int, int> reverseDist;
     auto it = dist.constBegin();
-    std::vector<qreal> probabilities(dist.size());
     qreal entropy = 0;
     while (it != dist.constEnd()) {
         reverseDist.insertMulti(it.value(), it.key());
