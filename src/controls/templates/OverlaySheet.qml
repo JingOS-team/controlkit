@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
 */
 
-import QtQuick 2.5
+import QtQuick 2.11
 import QtQuick.Layouts 1.2
 import QtQuick.Window 2.2
 import org.kde.kirigami 2.7
@@ -444,7 +444,7 @@ QtObject {
             }
         }
 
-        Item {
+        FocusScope {
             id: flickableContents
             //anchors.horizontalCenter: parent.horizontalCenter
             x: (mainItem.width - width) / 2
@@ -456,6 +456,15 @@ QtObject {
             width: mainItem.contentItemPreferredWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.contentItemMaximumWidth, mainItem.contentItemPreferredWidth))
 
             height: (scrollView.contentItem != flickableContents ? scrollView.flickableItem.contentHeight + listHeaderHeight : (root.contentItem.height + topPadding + bottomPadding)) + (headerItem.visible ? headerItem.height : 0) + (footerItem.visible ? footerItem.height : 0)
+            Connections {
+                target: flickableContents.Window.activeFocusItem
+                enabled: flickableContents.focus && flickableContents.Window.activeFocusItem && flickableContents.Window.activeFocusItem.hasOwnProperty("text")
+                onTextChanged: {
+                    if (Qt.inputMethod.cursorRectangle.y + Qt.inputMethod.cursorRectangle.height > mainItem.Window.height) {
+                        scrollView.flickableItem.contentY += (Qt.inputMethod.cursorRectangle.y + Qt.inputMethod.cursorRectangle.height) - mainItem.Window.height
+                    }
+                }
+            }
 
             Item {
                 id: contentItemParent
