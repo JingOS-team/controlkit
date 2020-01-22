@@ -91,7 +91,6 @@ BasicListItem {
         }
         isMask: true
         Layout.alignment: Qt.AlignVCenter
-        Layout.rightMargin: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : 0
         Layout.leftMargin: !root.collapsed ? 0 : parent.width - listItem.width
         Layout.preferredHeight: !root.collapsed ? Units.iconSizes.smallMedium : Units.iconSizes.small/2
         selected: listItem.checked || listItem.pressed

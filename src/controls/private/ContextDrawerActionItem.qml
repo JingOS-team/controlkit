@@ -64,7 +64,6 @@ BasicListItem {
     Icon {
         isMask: true
         Layout.alignment: Qt.AlignVCenter
-        Layout.rightMargin: !Settings.isMobile && mainFlickable && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : 0
         Layout.preferredHeight: Units.iconSizes.small/2
         selected: listItem.checked || listItem.pressed
         Layout.preferredWidth: Layout.preferredHeight
