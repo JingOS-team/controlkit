@@ -134,7 +134,7 @@ Item {
             }
         ]
 
-        implicitWidth: root.wideMode ? undefined : root.width
+        implicitWidth: root.wideMode ? 0 : root.width
         width: Math.min(implicitWidth, parent.width)
         Timer {
             id: hintCompression

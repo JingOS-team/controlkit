@@ -224,7 +224,7 @@ QtObject {
         onContentItemMaximumWidthChanged: updateContentWidth()
         onWidthChanged: updateContentWidth()
         Connections {
-            target: contentItem.contentItem
+            target: typeof contentItem.contentItem === "undefined" ? null : contentItem.contentItem
             onWidthChanged: {
                 if (!mainItem.ownSizeUpdate) {
                     mainItem.updateContentWidth();
@@ -457,7 +457,7 @@ QtObject {
 
             height: (scrollView.contentItem != flickableContents ? scrollView.flickableItem.contentHeight + listHeaderHeight : (root.contentItem.height + topPadding + bottomPadding)) + (headerItem.visible ? headerItem.height : 0) + (footerItem.visible ? footerItem.height : 0)
             Connections {
-                target: flickableContents.Window.activeFocusItem
+                target: enabled ? flickableContents.Window.activeFocusItem : null
                 enabled: flickableContents.focus && flickableContents.Window.activeFocusItem && flickableContents.Window.activeFocusItem.hasOwnProperty("text")
                 onTextChanged: {
                     if (Qt.inputMethod.cursorRectangle.y + Qt.inputMethod.cursorRectangle.height > mainItem.Window.height) {
