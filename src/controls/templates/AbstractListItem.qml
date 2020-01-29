@@ -149,7 +149,7 @@ T2.ItemDelegate {
 
     implicitWidth: contentItem ? contentItem.implicitWidth + leftPadding + rightPadding : Units.gridUnit * 12
 
-    implicitHeight: contentItem ? contentItem.implicitHeight + topPadding + bottomPadding : undefined
+    implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
     width: parent && parent.width > 0 ? parent.width : implicitWidth
     Layout.fillWidth: true
