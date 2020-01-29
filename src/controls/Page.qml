@@ -19,7 +19,7 @@
 
 import QtQuick 2.5
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.7 as Kirigami
+import org.kde.kirigami 2.10 as Kirigami
 import "private"
 import QtQuick.Templates 2.1 as T2
 import QtQuick.Controls 2.1 as QQC2
@@ -216,11 +216,7 @@ QQC2.Page {
      *
      * @since 2.1
      */
-    readonly property bool isCurrentPage: typeof applicationWindow === "undefined" || !globalToolBar.row
-                ? true
-                : (globalToolBar.row.layers.depth > 1
-                    ? globalToolBar.row.layers.currentItem === root
-                    : globalToolBar.row.currentItem === root)
+    readonly property bool isCurrentPage: Kirigami.ColumnView.view ? Kirigami.ColumnView.index == Kirigami.ColumnView.view.currentIndex : true
 
     /**
      * overlay: Item
