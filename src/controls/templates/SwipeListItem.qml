@@ -485,6 +485,7 @@ T2.SwipeDelegate {
         target: listItem.swipe
         property: "position"
         from: listItem.swipe.position
+        onRunningChanged: if (!running)print("AAA"+target)
     }
 //END Items
 }
