@@ -34,12 +34,28 @@ ScenePositionAttached::~ScenePositionAttached()
 
 int ScenePositionAttached::x() const
 {
-    return m_item->mapToScene(QPointF()).x();
+    qreal x = 0;
+    QQuickItem *item = m_item;
+
+    while (item) {
+        x += item->x();
+        item = item->parentItem();
+    }
+
+    return x;
 }
 
 int ScenePositionAttached::y() const
 {
-    return m_item->mapToScene(QPointF()).y();
+    qreal y = 0;
+    QQuickItem *item = m_item;
+
+    while (item) {
+        y += item->y();
+        item = item->parentItem();
+    }
+
+    return y;
 }
 
 void ScenePositionAttached::connectAncestors(QQuickItem *item)
