@@ -117,9 +117,8 @@ MouseArea {
             interactive: !Kirigami.Settings.hasTransientTouchInput
 
             //NOTE: use this instead of anchors as crashes on some Qt 5.8 checkouts
-            height: parent.height - anchors.topMargin
+            height: parent.height
             anchors {
-                topMargin: parent.flickableItem.headerItem ? parent.flickableItem.headerItem.height : 0
                 right: parent.right
                 top: parent.top
             }
