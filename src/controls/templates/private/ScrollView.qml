@@ -94,6 +94,7 @@ MouseArea {
     }
     Item {
         id: flickableParent
+        clip: true
         anchors {
             fill: parent
             rightMargin: !Kirigami.Settings.hasTransientTouchInput && flickableItem.ScrollBar.vertical && flickableItem.ScrollBar.vertical.visible ? flickableItem.ScrollBar.vertical.width : 0
