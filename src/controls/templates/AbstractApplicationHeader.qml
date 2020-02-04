@@ -42,7 +42,7 @@ Item {
     property int preferredHeight: Units.iconSizes.medium + Units.smallSpacing * 2
     property int maximumHeight: Units.gridUnit * 3
 
-    property PageRow pageRow: __appWindow.pageStack
+    property PageRow pageRow: __appWindow ? __appWindow.pageStack: null
     property Page page: pageRow.currentItem
 
     default property alias contentItem: mainItem.data
@@ -58,7 +58,7 @@ Item {
     LayoutMirroring.childrenInherit: true
 
     //FIXME: remove
-    property QtObject __appWindow: applicationWindow();
+    property QtObject __appWindow: typeof applicationWindow !== "undefined" ? applicationWindow() : null;
     implicitHeight: preferredHeight
 
     /**
@@ -104,7 +104,7 @@ Item {
             bottom: parent.bottom
         }
 
-        height: __appWindow.reachableMode && __appWindow.reachableModeEnabled ? root.maximumHeight : (root.minimumHeight > 0 ? Math.max(root.height, root.minimumHeight) : root.preferredHeight)
+        height: __appWindow && __appWindow.reachableMode && __appWindow.reachableModeEnabled ? root.maximumHeight : (root.minimumHeight > 0 ? Math.max(root.height, root.minimumHeight) : root.preferredHeight)
 
         //FIXME: see FIXME below
         Connections {
@@ -126,7 +126,7 @@ Item {
 
             onContentYChanged: {
                 if (updatingContentY || !Settings.isMobile ||
-                    !__appWindow.controlsVisible ||
+                    (__appWindow && !__appWindow.controlsVisible) ||
                     !root.page) {
                     oldContentY = root.page.flickable.contentY;
                     return;
@@ -137,7 +137,7 @@ Item {
                     return;
                 }
 
-                if ((root.pageRow ? root.pageRow.wideMode : __appWindow.wideScreen) || !Settings.isMobile) {
+                if ((root.pageRow ? root.pageRow.wideMode : (__appWindow && __appWindow.wideScreen)) || !Settings.isMobile) {
                     root.implicitHeight = root.preferredHeight;
                 } else {
                     var oldHeight = root.implicitHeight;
@@ -158,7 +158,7 @@ Item {
                 }
             }
             onMovementEnded: {
-                if ((root.pageRow ? root.pageRow.wideMode : __appWindow.wideScreen) || !Settings.isMobile) {
+                if ((root.pageRow ? root.pageRow.wideMode : (__appWindow && __appWindow.wideScreen)) || !Settings.isMobile) {
                     return;
                 }
                 if (root.height > root.minimumHeight + (root.preferredHeight - root.minimumHeight)/2 ) {
