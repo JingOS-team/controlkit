@@ -36,7 +36,7 @@ QtObject {
                     : Kirigami.ApplicationHeaderStyle.ToolBar)
         } else {
             //forbid ToolBar on mobile systems
-            return Kirigami.Settings.isMobile && style == Kirigami.ApplicationHeaderStyle.ToolBar ? Kirigami.ApplicationHeaderStyle.Breadcrumb : style;
+            return style;
         }
     }
 
