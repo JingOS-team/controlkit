@@ -35,7 +35,7 @@ Controls.TabBar {
                 top:parent.top
                 bottom:parent.bottom
             }
-            width: mainRepeater.count == 1 ? implicitWidth : Math.max(implicitWidth, MAth.round(root.width/mainRepeater.count))
+            width: mainRepeater.count == 1 ? implicitWidth : Math.max(implicitWidth, Math.round(root.width/mainRepeater.count))
             height: root.height
             readonly property Kirigami.Page page: pageRow.get(modelData)
             text: page ? page.title : ""
