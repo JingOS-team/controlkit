@@ -301,6 +301,7 @@ OverlayDrawer {
                 anchors {
                     left: parent.left
                     right: parent.right
+                    rightMargin: Math.min(0, -scrollView.width + mainFlickable.width)
                 }
                 spacing: 0
                 y: bannerImage.visible ? Math.max(headerContainer.height, -mainFlickable.contentY) - height : 0
