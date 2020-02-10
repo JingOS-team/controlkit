@@ -30,7 +30,6 @@ Controls.ToolButton {
     implicitWidth: menuArrow.visible || (showText && ( kirigamiAction ? kirigamiAction.text.length > 0 : text.length > 0))
     ? Math.max(layout.implicitWidth + Units.largeSpacing*2, background.implicitWidth)
     : implicitHeight
-    implicitHeight: background.implicitHeight
 
     Theme.colorSet: Theme.Button
     Theme.inherit: kirigamiAction && kirigamiAction.icon.color.a === 0
@@ -94,6 +93,8 @@ Controls.ToolButton {
         onPressed: mouse.accepted = false
         Theme.colorSet: checked && (control.kirigamiAction && control.kirigamiAction.icon.color.a) ? Theme.Selection : control.Theme.colorSet
         Theme.inherit: control.kirigamiAction && Theme.colorSet != Theme.Selection && control.kirigamiAction.icon.color.a === 0
+        implicitWidth: layout.implicitWidth
+        implicitHeight: layout.implicitHeight
         GridLayout {
             id: layout
             columns: control.display == Controls.ToolButton.TextUnderIcon ? 1 : 2 + (menuArrow.visible ? 1 : 0)
