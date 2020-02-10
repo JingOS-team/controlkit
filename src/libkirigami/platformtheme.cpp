@@ -898,7 +898,16 @@ PlatformTheme *PlatformTheme::qmlAttachedProperties(QObject *object)
         return PlatformThemePrivate::s_pluginFactory->createPlatformTheme(object);
     } else if (!s_factoryChecked) {
         s_factoryChecked = true;
-#if QT_CONFIG(library)
+
+#ifdef KIRIGAMI_BUILD_TYPE_STATIC
+        for (QObject* staticPlugin : QPluginLoader::staticInstances()) {
+            KirigamiPluginFactory *factory = qobject_cast<KirigamiPluginFactory *>(staticPlugin);
+            if (factory) {
+                PlatformThemePrivate::s_pluginFactory = factory;
+                return factory->createPlatformTheme(object);
+            }
+        }
+#else
         const auto libraryPaths = QCoreApplication::libraryPaths();
         for (const QString &path : libraryPaths) {
             QDir dir(path + QStringLiteral("/kf5/kirigami"));

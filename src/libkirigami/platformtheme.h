@@ -24,6 +24,7 @@
 #include <QQuickItem>
 #include <QColor>
 #include <QPalette>
+#include <QIcon>
 
 #ifndef KIRIGAMI_BUILD_TYPE_STATIC
 #include <kirigami2_export.h>
