@@ -120,6 +120,11 @@ Item {
                         horizontalCenter: root.horizontalCenter
                     }
                 }
+                PropertyChanges {
+                    target: lay
+                    implicitWidth: undefined
+                    width: undefined
+                }
             },
             State {
                 when: !root.wideMode
@@ -131,10 +136,15 @@ Item {
                         horizontalCenter: undefined
                     }
                 }
+                PropertyChanges {
+                    target: lay
+                    implicitWidth: root.width
+                    width: Math.min(implicitWidth, parent.width)
+                }
+                
             }
         ]
 
-        implicitWidth: root.wideMode ? undefined : root.width
         width: Math.min(implicitWidth, parent.width)
         Timer {
             id: hintCompression
@@ -146,6 +156,7 @@ Item {
         }
         onImplicitWidthChanged: hintCompression.restart();
         //This invisible row is used to sync alignment between multiple layouts
+
         Item {
             Layout.preferredWidth: {
                 var hint = 1;
