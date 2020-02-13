@@ -1,20 +1,7 @@
 /*
- *   Copyright 2019 Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2019 Marco Martin <mart@kde.org>
  *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as
- *   published by the Free Software Foundation; either version 2, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "columnview.h"
@@ -415,7 +402,7 @@ void ContentItem::layoutItems()
     m_rightPinnedSpace = 0;
     for (QQuickItem *child : m_items) {
         ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
-    
+
         if (child->isVisible()) {
             if (attached->isPinned() && m_view->columnResizeMode() != ColumnView::SingleColumn) {
                 QQuickItem *sep = nullptr;
@@ -490,7 +477,7 @@ void ContentItem::layoutPinnedItems()
 
     for (QQuickItem *child : m_items) {
         ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
-    
+
         if (child->isVisible()) {
             if (attached->isPinned()) {
                 QQuickItem *sep = nullptr;
@@ -585,7 +572,7 @@ void ContentItem::forgetItem(QQuickItem *item)
 QQuickItem *ContentItem::ensureSeparator(QQuickItem *item)
 {
     QQuickItem *separatorItem = m_separators.value(item);
-    
+
     if (!separatorItem) {
         separatorItem = qobject_cast<QQuickItem *>(privateQmlComponentsPoolSelf->instance(qmlEngine(item))->m_separatorComponent->beginCreate(QQmlEngine::contextForObject(item)));
         if (separatorItem) {
@@ -603,7 +590,7 @@ QQuickItem *ContentItem::ensureSeparator(QQuickItem *item)
 QQuickItem *ContentItem::ensureRightSeparator(QQuickItem *item)
 {
     QQuickItem *separatorItem = m_rightSeparators.value(item);
-    
+
     if (!separatorItem) {
         separatorItem = qobject_cast<QQuickItem *>(QmlComponentsPoolSingleton::instance(qmlEngine(item))->m_rightSeparatorComponent->beginCreate(QQmlEngine::contextForObject(item)));
         if (separatorItem) {
@@ -628,7 +615,7 @@ void ContentItem::itemChange(QQuickItem::ItemChange change, const QQuickItem::It
         //connect(attached, &ColumnViewAttached::fillWidthChanged, m_view, &ColumnView::polish);
          connect(attached, &ColumnViewAttached::fillWidthChanged, this, [this, attached](){
              m_view->polish();
-             
+
         });
         connect(attached, &ColumnViewAttached::reservedSpaceChanged, m_view, &ColumnView::polish);
 
@@ -1132,7 +1119,7 @@ QQuickItem *ColumnView::removeItem(int pos)
         return nullptr;
     }
 
-    return removeItem(m_contentItem->m_items[pos]); 
+    return removeItem(m_contentItem->m_items[pos]);
 }
 
 QQuickItem *ColumnView::pop(QQuickItem *item)
@@ -1209,7 +1196,7 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
         me->setAccepted(false);
         setKeepMouseGrab(false);
 
-        // On press, we set the current index of the view to the root item 
+        // On press, we set the current index of the view to the root item
         QQuickItem *candidateItem = item;
         while (candidateItem->parentItem() && candidateItem->parentItem() != m_contentItem) {
             candidateItem = candidateItem->parentItem();

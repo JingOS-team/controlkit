@@ -1,20 +1,7 @@
 /*
- *   Copyright 2012 Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2012 Marco Martin <mart@kde.org>
  *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as
- *   published by the Free Software Foundation; either version 2, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Library General Public License for more details
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 import QtQuick 2.1
@@ -51,7 +38,7 @@ T2.Drawer {
     /**
      * peeking: true
      * When true the drawer is in a state between open and closed. the drawer is visible but not completely open.
-     * This is usually the case when the user is dragging the drawer from a screen 
+     * This is usually the case when the user is dragging the drawer from a screen
      * edge, so the user is "peeking" what's in the drawer
      */
     property bool peeking: false
@@ -96,7 +83,7 @@ T2.Drawer {
      * If no custom icon is set, a menu icon is shown for the application  globalDrawer
      * and an overflow menu icon is shown for the contextDrawer.
      * That's the default for the GlobalDrawer and ContextDrawer components respectively.
-     * 
+     *
      * For OverlayDrawer the default is view-right-close or view-left-close depending on the drawer location
      * @since 2.5
      */
@@ -111,7 +98,7 @@ T2.Drawer {
      *
      * If no custom icon is set, an X icon is shown,
      * which will morph into the Menu or overflow icons
-     * 
+     *
      * For OverlayDrawer the default is view-right-new or view-left-new depending on the drawer location
      * @since 2.5
      */
@@ -205,7 +192,7 @@ T2.Drawer {
                 if (applicationWindow().footer) {
                     margin = applicationWindow().footer.height + Units.smallSpacing;
                 }
-                
+
                 if(root.height < root.parent.height) {
                     margin = root.parent.height - root.height - root.y + Units.smallSpacing;
                 }
@@ -349,7 +336,7 @@ T2.Drawer {
                 script: exitAnimation.animating = true
             }
             SmoothedAnimation {
-                velocity: 5 
+                velocity: 5
             }
             ScriptAction {
                 script: exitAnimation.animating = false

@@ -1,21 +1,8 @@
 /*
-*   Copyright (C) 2017 by Marco Martin <mart@kde.org>
-*
-*   This program is free software; you can redistribute it and/or modify
-*   it under the terms of the GNU Library General Public License as
-*   published by the Free Software Foundation; either version 2, or
-*   (at your option) any later version.
-*
-*   This program is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU Library General Public License for more details
-*
-*   You should have received a copy of the GNU Library General Public
-*   License along with this program; if not, write to the
-*   Free Software Foundation, Inc.,
-*   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
+ *  SPDX-FileCopyrightText: 2017 by Marco Martin <mart@kde.org>
+ *
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #ifndef PLATFORMTHEME_H
 #define PLATFORMTHEME_H
@@ -129,7 +116,7 @@ class KIRIGAMI2_EXPORT PlatformTheme : public QObject
      * The generic background color
      * Alternate background; for example, for use in lists.
      * This color may be the same as BackgroundNormal,
-     * especially in sets other than View and Window. 
+     * especially in sets other than View and Window.
      */
     Q_PROPERTY(QColor alternateBackgroundColor READ alternateBackgroundColor WRITE setCustomAlternateBackgroundColor RESET setCustomAlternateBackgroundColor NOTIFY colorsChanged)
 
@@ -167,7 +154,7 @@ class KIRIGAMI2_EXPORT PlatformTheme : public QObject
      * Background color for positive areas, such as success messages and trusted content
      */
     Q_PROPERTY(QColor positiveBackgroundColor READ positiveBackgroundColor WRITE setCustomPositiveBackgroundColor RESET setCustomPositiveBackgroundColor NOTIFY colorsChanged)
-    
+
     //decoration colors
     /**
      * A decoration color that indicates active focus

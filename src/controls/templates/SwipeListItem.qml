@@ -1,20 +1,7 @@
 /*
- *   Copyright 2019 Marco Martin <notmart@gmail.com>
+ *  SPDX-FileCopyrightText: 2019 Marco Martin <notmart@gmail.com>
  *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as
- *   published by the Free Software Foundation; either version 2, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Library General Public License for more details
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 import QtQuick 2.6
@@ -47,7 +34,7 @@ import "../private"
  *              }
  *         ]
  *     }
- * 
+ *
  * }
  * @endcode
  *
@@ -76,7 +63,7 @@ T2.SwipeDelegate {
      * If true the background of the list items will be alternating between two
      * colors, helping readability with multiple column views.
      * Use it only when implementing a view which shows data visually in multiple columns
-     * @ since 2.7 
+     * @ since 2.7
      */
     property bool alternatingBackground: false
 
@@ -166,7 +153,7 @@ T2.SwipeDelegate {
     leftPadding: padding * 2
 
     rightPadding: padding * 2 +  (overlayLoader.visible ? overlayLoader.width : 0) + Kirigami.Units.smallSpacing
-    
+
     topPadding: padding
     bottomPadding: padding
 
@@ -284,7 +271,7 @@ T2.SwipeDelegate {
             }
             onPositionChanged: {
                 var pos = mapToItem(listItem, mouse.x, mouse.y);
-                
+
                 if (listItem.LayoutMirroring.enabled) {
                     listItem.swipe.position = Math.max(0, Math.min(openPosition, (pos.x / listItem.width)));
                     openIntention = listItem.swipe.position > lastPosition;
@@ -404,7 +391,7 @@ T2.SwipeDelegate {
         }
     }
 
- 
+
         RowLayout {
             id: actionsLayout
             anchors {
@@ -415,7 +402,7 @@ T2.SwipeDelegate {
                 }
             visible: parent != listItem
             parent: Kirigami.Settings.tabletMode
-                    ? listItem.swipe.leftItem || listItem.swipe.rightItem || listItem 
+                    ? listItem.swipe.leftItem || listItem.swipe.rightItem || listItem
                     : overlayLoader
 
             property bool hasVisibleActions: false
@@ -469,7 +456,7 @@ T2.SwipeDelegate {
                 }
             }
         }
-  
+
 
     background: DefaultListItemBackground {}
 

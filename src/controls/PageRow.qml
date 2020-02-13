@@ -1,20 +1,7 @@
 /*
- *   Copyright 2016 Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2016 Marco Martin <mart@kde.org>
  *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as
- *   published by the Free Software Foundation; either version 2, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Library General Public License for more details
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 import QtQuick 2.5
@@ -163,7 +150,7 @@ T.Control {
      * Pushes a page on the stack.
      * The page can be defined as a component, item or string.
      * If an item is used then the page will get re-parented.
-     * If a string is used then it is interpreted as a url that is used to load a page 
+     * If a string is used then it is interpreted as a url that is used to load a page
      * component.
      * The last pushed page will become the current item.
      *
@@ -191,7 +178,7 @@ T.Control {
      * Inserts a new page or a list of new at an arbitrary position
      * The page can be defined as a component, item or string.
      * If an item is used then the page will get re-parented.
-     * If a string is used then it is interpreted as a url that is used to load a page 
+     * If a string is used then it is interpreted as a url that is used to load a page
      * component.
      * The current Page will not be changed, currentIndex will be adjusted
      * accordingly if needed to keep the same current page.
@@ -284,7 +271,7 @@ T.Control {
     }
 
     /**
-     * Remove the given page 
+     * Remove the given page
      * @param page The page can be given both as integer position or by reference
      * @return The page that has just been removed
      * @since 2.7
@@ -439,7 +426,7 @@ T.Control {
             var d = root.depth;
             for (var i = 1; i < d; ++i) {
                 pop();
-            } 
+            }
         }
 
         popEnter: Transition {
@@ -481,7 +468,7 @@ T.Control {
                     from: height/2
                     to: 0
                     duration: Units.longDuration
-                    easing.type: Easing.OutCubic 
+                    easing.type: Easing.OutCubic
                 }
             }
         }
@@ -570,7 +557,7 @@ T.Control {
 
                 if (pageComp.status === Component.Error) {
                     throw new Error("Error while loading page: " + pageComp.errorString());
-                } 
+                }
             } else {
                 // copy properties to the page
                 for (var prop in properties) {

@@ -1,21 +1,8 @@
 /*
-*   Copyright (C) 2017 by Marco Martin <mart@kde.org>
-*
-*   This program is free software; you can redistribute it and/or modify
-*   it under the terms of the GNU Library General Public License as
-*   published by the Free Software Foundation; either version 2, or
-*   (at your option) any later version.
-*
-*   This program is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU Library General Public License for more details
-*
-*   You should have received a copy of the GNU Library General Public
-*   License along with this program; if not, write to the
-*   Free Software Foundation, Inc.,
-*   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
+ *  SPDX-FileCopyrightText: 2017 by Marco Martin <mart@kde.org>
+ *
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #include "platformtheme.h"
 #include "kirigamipluginfactory.h"
@@ -184,7 +171,7 @@ void PlatformThemePrivate::findParentStyle()
             }
             break;
         }
-        
+
     }
 }
 
@@ -193,7 +180,7 @@ QColor PlatformThemePrivate::tint(const QColor &c1, const QColor &c2, qreal rati
     qreal r = c1.redF() + (c2.redF() - c1.redF()) * ratio;
     qreal g = c1.greenF() + (c2.greenF() - c1.greenF()) * ratio;
     qreal b = c1.blueF() + (c2.blueF() - c1.blueF()) * ratio;
- 
+
     return QColor::fromRgbF(r, g, b, 1);
 }
 

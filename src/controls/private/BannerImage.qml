@@ -1,20 +1,7 @@
 /*
- *   Copyright 2018 Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2018 Marco Martin <mart@kde.org>
  *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as
- *   published by the Free Software Foundation; either version 2, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Library General Public License for more details
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 import QtQuick 2.6
@@ -35,7 +22,7 @@ Image {
      */
     property alias imageSource: root.source
     property alias iconSource: root.titleIcon
-    
+
     /**
      * title: string
      * A title to be displayed on top of the image
@@ -91,9 +78,9 @@ Image {
         anchors {
             left: parent.left
             right: parent.right
-            top: root.status != 
+            top: root.status !=
 Image.Ready || (root.titleAlignment & Qt.AlignTop) ? parent.top : undefined
-            bottom: root.status != 
+            bottom: root.status !=
 Image.Ready || (root.titleAlignment & Qt.AlignBottom) ? parent.bottom : undefined
         }
         visible: root.source != "" && root.title != "" && ((root.titleAlignment & Qt.AlignTop) || (root.titleAlignment & Qt.AlignBottom))
@@ -107,7 +94,7 @@ Image.Ready || (root.titleAlignment & Qt.AlignBottom) ? parent.bottom : undefine
             }
             GradientStop {
                 position: (root.titleAlignment & Qt.AlignTop) ? 1.0 : 0.0
-                color: Qt.rgba(0, 0, 0, root.status == 
+                color: Qt.rgba(0, 0, 0, root.status ==
 Image.Ready ? 0 : 0.3)
             }
         }

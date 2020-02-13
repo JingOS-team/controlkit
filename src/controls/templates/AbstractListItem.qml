@@ -1,20 +1,7 @@
 /*
- *   Copyright 2010 Marco Martin <notmart@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Marco Martin <notmart@gmail.com>
  *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as
- *   published by the Free Software Foundation; either version 2, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Library General Public License for more details
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 import QtQuick 2.1
@@ -33,7 +20,7 @@ import QtQuick.Templates 2.4 as QQC2
  */
 T2.ItemDelegate {
     id: listItem
-    
+
     /**
      * supportsMouseEvents: bool
      * Holds if the item emits signals related to mouse interaction.
@@ -55,7 +42,7 @@ T2.ItemDelegate {
      * If true the background of the list items will be alternating between two
      * colors, helping readability with multiple column views.
      * Use it only when implementing a view which shows data visually in multiple columns
-     * @ since 2.7 
+     * @ since 2.7
      */
     property bool alternatingBackground: false
 
