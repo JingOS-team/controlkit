@@ -37,7 +37,7 @@ Kirigami.ApplicationWindow {
         titleIcon: "konversation"
         modal: true
         drawerOpen: false
-        isMenu: !Kirigami.Settings.isMobile
+        isMenu: true
 
         actions: [
             Kirigami.Action {
