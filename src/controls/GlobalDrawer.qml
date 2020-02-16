@@ -479,6 +479,12 @@ OverlayDrawer {
                                 GlobalDrawerActionItem {
                                     id: drawerItem
                                     width: parent.width
+                                    onCheckedChanged: {
+                                        // move every checked item into view
+                                        if (checked && topContent.height + backItem.height + (model.index + 1) * height - mainFlickable.contentY > mainFlickable.height) {
+                                            mainFlickable.contentY += height
+                                        }
+                                    }
                                 }
                                 Repeater {
                                     model: drawerItem.visible && modelData.hasOwnProperty("expandible") && modelData.expandible ? modelData.children : null
