@@ -282,7 +282,7 @@ bool Icon::smooth() const
 
 QSGNode* Icon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* /*data*/)
 {
-    if (m_source.isNull()) {
+    if (m_source.isNull() || qFuzzyIsNull(width()) || qFuzzyIsNull(height())) {
         delete node;
         return Q_NULLPTR;
     }
