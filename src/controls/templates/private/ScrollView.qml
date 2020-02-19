@@ -29,6 +29,10 @@ MouseArea {
     //TODO: horizontalScrollBarPolicy is completely noop just for compatibility right now
     property int horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
     property int verticalScrollBarPolicy: Qt.ScrollBarAsNeeded
+    property int topPadding: 0
+    property int leftPadding: 0
+    property int rightPadding: !Kirigami.Settings.hasTransientTouchInput && flickableItem.ScrollBar.vertical && flickableItem.ScrollBar.vertical.visible ? flickableItem.ScrollBar.vertical.width : 0
+    property int bottomPadding: 0
 
     readonly property Item verticalScrollBar: flickableItem.ScrollBar.vertical ? flickableItem.ScrollBar.vertical : null
 
@@ -97,7 +101,10 @@ MouseArea {
         clip: true
         anchors {
             fill: parent
-            rightMargin: !Kirigami.Settings.hasTransientTouchInput && flickableItem.ScrollBar.vertical && flickableItem.ScrollBar.vertical.visible ? flickableItem.ScrollBar.vertical.width : 0
+            leftMargin: root.leftPadding
+            topMargin: root.topPadding
+            rightMargin: root.rightPadding
+            bottomMargin: root.bottomPadding
         }
     }
     Component {

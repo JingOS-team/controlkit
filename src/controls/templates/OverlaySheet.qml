@@ -549,6 +549,7 @@ QtObject {
             id: scrollView
             anchors.fill: parent
             horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
+            rightPadding: 0
         }
     }
 }
