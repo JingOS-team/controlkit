@@ -79,6 +79,10 @@ QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
 
 void KirigamiPlugin::registerTypes(const char *uri)
 {
+#if defined(Q_OS_ANDROID) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QResource::registerResource(QStringLiteral("assets:/android_rcc_bundle.rcc"));
+#endif
+
     Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.kirigami"));
     const QString style = QQuickStyle::name();
 

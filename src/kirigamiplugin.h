@@ -53,7 +53,9 @@ private:
     QUrl componentUrl(const QString &fileName) const;
     QString resolveFilePath(const QString &path) const
     {
-#ifdef KIRIGAMI_BUILD_TYPE_STATIC
+#if defined(Q_OS_ANDROID) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        return QStringLiteral(":/android_rcc_bundle/qml/org/kde/kirigami.2/") + path;
+#elif defined(KIRIGAMI_BUILD_TYPE_STATIC)
         return QStringLiteral(":/org/kde/kirigami/") + path;
 #else
         return baseUrl().toLocalFile() + QLatin1Char('/') + path;
@@ -61,7 +63,9 @@ private:
     }
     QString resolveFileUrl(const QString &filePath) const
     {
-#ifdef KIRIGAMI_BUILD_TYPE_STATIC
+#if defined(Q_OS_ANDROID) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        return QStringLiteral("qrc:/android_rcc_bundle/qml/org/kde/kirigami.2/") + filePath;
+#elif defined(KIRIGAMI_BUILD_TYPE_STATIC)
         return filePath;
 #else
         return baseUrl().toString() + QLatin1Char('/') + filePath;
