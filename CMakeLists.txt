@@ -44,10 +44,6 @@ if(STATIC_LIBRARY)
     add_definitions(-DKIRIGAMI_BUILD_TYPE_STATIC)
     add_definitions(-DQT_PLUGIN)
     add_definitions(-DQT_STATICPLUGIN=1)
-else(STATIC_LIBRARY)
-    if (BUILD_TESTING)
-        add_subdirectory(autotests)
-    endif()
 endif(STATIC_LIBRARY)
 
 ################# set KDE specific information #################
@@ -128,9 +124,12 @@ if (BUILD_EXAMPLES AND NOT STATIC_LIBRARY)
     add_subdirectory(examples)
 endif()
 
+if (BUILD_TESTING AND NOT STATIC_LIBRARY)
+    add_subdirectory(autotests)
+endif()
+
 if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
     ecm_install_po_files_as_qm(po)
 endif()
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
-

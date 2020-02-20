@@ -78,18 +78,18 @@ target_link_libraries(kirigamiplugin
     )
 
 if (NOT STATIC_LIBRARY)
-
-    add_custom_target(copy)
-
-    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2)
-    add_custom_command(TARGET copy PRE_BUILD
+    add_custom_command(TARGET kirigamiplugin POST_BUILD
+                        COMMAND ${CMAKE_COMMAND} -E
+                            make_directory ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2/)
+    add_custom_command(TARGET kirigamiplugin POST_BUILD
                         COMMAND ${CMAKE_COMMAND} -E
                             copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/controls ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2/)
-    add_custom_command(TARGET copy PRE_BUILD
+    add_custom_command(TARGET kirigamiplugin POST_BUILD
                         COMMAND ${CMAKE_COMMAND} -E
                             copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/styles  ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2/styles)
-
-    add_dependencies(kirigamiplugin copy)
+    add_custom_command(TARGET kirigamiplugin POST_BUILD
+                        COMMAND ${CMAKE_COMMAND} -E
+                            copy $<TARGET_FILE:kirigamiplugin> ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2/)
 
     install(DIRECTORY controls/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2)
 

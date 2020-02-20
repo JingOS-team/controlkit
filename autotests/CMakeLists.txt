@@ -3,7 +3,19 @@ if(NOT Qt5Test_FOUND)
     return()
 endif()
 
-add_test(NAME qmltests COMMAND qmltestrunner WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+macro(kirigami_add_tests)
+    foreach(test ${ARGV})
+        add_test(NAME ${test}
+                 COMMAND qmltestrunner -import ${CMAKE_BINARY_DIR}/bin -input ${test}
+                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+    endforeach()
+endmacro()
 
-set_property(TEST qmltests PROPERTY ENVIRONMENT 
-"QML2_IMPORT_PATH=${CMAKE_BINARY_DIR}/bin")
+kirigami_add_tests(
+    tst_keynavigation.qml
+    tst_listskeynavigation.qml
+    tst_pagerow.qml
+    tst_icon.qml
+)
+

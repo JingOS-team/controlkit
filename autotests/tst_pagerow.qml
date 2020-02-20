@@ -25,11 +25,8 @@ import QtTest 1.0
 
 TestCase {
     id: testCase
-//     when: mainWindow.visible
     width: 400
     height: 400
-//     visible: true
-    when: mainWindow.visible
     name: "GoBack"
 
     function applicationWindow() { return mainWindow; }
@@ -38,7 +35,6 @@ TestCase {
         id: mainWindow
         width: 480
         height: 360
-        visible: true
         pageStack.initialPage: Kirigami.Page {
             Rectangle {
                 anchors.fill: parent
@@ -69,6 +65,14 @@ TestCase {
         signalName: "activeChanged"
     }
 
+    function initTestCase() {
+        mainWindow.show()
+    }
+
+    function cleanupTestCase() {
+        mainWindow.close()
+    }
+
     function init() {
         mainWindow.pageStack.clear()
         spyActive.clear()
@@ -89,7 +93,7 @@ TestCase {
         mainWindow.pageStack.push(randomPage)
         compare(mainWindow.pageStack.depth, 2)
         compare(mainWindow.pageStack.currentIndex, 1)
-        compare(spyCurrentIndex.count, 2)
+        compare(spyCurrentIndex.count, 3)
         spyActive.clear()
         mainWindow.requestActivate()
         spyCurrentIndex.clear()
@@ -116,7 +120,6 @@ TestCase {
                 anchors.fill: parent
                 color: "blue"
                 Component.onDestruction: {
-                    console.log("ko", page)
                     testCase.destructions++
                 }
             }
@@ -135,7 +138,7 @@ TestCase {
         mainWindow.pageStack.clear()
 
         compare(mainWindow.pageStack.depth, 0)
-        console.log(spyDestructions.wait())
-        compare(testCase.destructions, 3)
+        spyDestructions.wait()
+        compare(testCase.destructions, 2)
     }
 }

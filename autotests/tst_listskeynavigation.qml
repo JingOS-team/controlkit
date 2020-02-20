@@ -29,14 +29,12 @@ TestCase {
     id: testCase
     width: 400
     height: 400
-    when: mainWindow.visible
     name: "KeyboardListsNavigation"
 
     KeyboardListTest {
         id: mainWindow
         width: 480
         height: 360
-        visible: true
     }
 
     SignalSpy {
@@ -48,6 +46,14 @@ TestCase {
         id: spyCurrentIndex
         target: mainWindow.pageStack.currentItem.flickable
         signalName: "currentIndexChanged"
+    }
+
+    function initTestCase() {
+        mainWindow.show()
+    }
+
+    function cleanupTestCase() {
+        mainWindow.close()
     }
 
     function test_press() {

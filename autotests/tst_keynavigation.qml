@@ -28,14 +28,12 @@ TestCase {
     id: testCase
     width: 400
     height: 400
-    when: mainWindow.visible
     name: "KeyboardNavigation"
 
     KeyboardTest {
         id: mainWindow
         width: 480
         height: 360
-        visible: true
     }
 
     SignalSpy {
@@ -47,6 +45,14 @@ TestCase {
         id: spyLastKey
         target: mainWindow.pageStack.currentItem
         signalName: "lastKeyChanged"
+    }
+
+    function initTestCase() {
+        mainWindow.show()
+    }
+
+    function cleanupTestCase() {
+        mainWindow.close()
     }
 
     function test_press() {
