@@ -57,6 +57,33 @@ class CopyHelperPrivate : public QObject
         }
 };
 
+// we can't do this in the plugin object directly, as that can live in a different thread
+// and event filters are only allowed in the same thread as the filtered object
+class LanguageChangeEventFilter : public QObject
+{
+    Q_OBJECT
+public:
+    bool eventFilter(QObject *receiver, QEvent *event) override
+    {
+        if (event->type() == QEvent::LanguageChange && receiver == QCoreApplication::instance()) {
+            emit languageChangeEvent();
+        }
+        return QObject::eventFilter(receiver, event);
+    }
+
+Q_SIGNALS:
+    void languageChangeEvent();
+};
+
+KirigamiPlugin::KirigamiPlugin(QObject *parent)
+    : QQmlExtensionPlugin(parent)
+{
+    auto filter = new LanguageChangeEventFilter;
+    filter->moveToThread(QCoreApplication::instance()->thread());
+    QCoreApplication::instance()->installEventFilter(filter);
+    connect(filter, &LanguageChangeEventFilter::languageChangeEvent, this, &KirigamiPlugin::languageChangeEvent);
+}
+
 QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
 {
     for (const QString &style : qAsConst(m_stylesFallbackChain)) {
@@ -222,6 +249,12 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("SwipeListItem2.qml")), uri, 2, 11, "SwipeListItem2");
 
     qmlProtectModule(uri, 2);
+}
+
+void KirigamiPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
+{
+    Q_UNUSED(uri);
+    connect(this, &KirigamiPlugin::languageChangeEvent, engine, &QQmlEngine::retranslate);
 }
 
 #include "kirigamiplugin.moc"

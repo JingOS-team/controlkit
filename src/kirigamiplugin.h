@@ -33,7 +33,9 @@ class KirigamiPlugin : public QQmlExtensionPlugin
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
+    KirigamiPlugin(QObject *parent = nullptr);
     void registerTypes(const char *uri) override;
+    void initializeEngine(QQmlEngine *engine, const char *uri) override;
 
 #ifdef KIRIGAMI_BUILD_TYPE_STATIC
     static KirigamiPlugin& getInstance()
@@ -48,6 +50,9 @@ public:
         instance.registerTypes("org.kde.kirigami");
     }
 #endif
+
+Q_SIGNALS:
+    void languageChangeEvent();
 
 private:
     QUrl componentUrl(const QString &fileName) const;
