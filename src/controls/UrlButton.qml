@@ -32,6 +32,12 @@ LinkButton
         Qt.openUrlExternally(url)
     }
 
+    QQC2.ToolTip {
+        // If button's text has been overridden, show a tooltip to expose the raw URL
+        visible: button.text != button.url && button.mouseArea.containsMouse
+        text: url
+    }
+
     QQC2.Menu {
         id: menu
         QQC2.MenuItem {

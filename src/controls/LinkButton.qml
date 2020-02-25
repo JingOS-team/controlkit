@@ -24,6 +24,7 @@ QQC2.Label {
 
     property Action action: null
     property alias acceptedButtons: area.acceptedButtons
+    property alias mouseArea: area
     Accessible.role: Accessible.Button
     Accessible.name: text
     Accessible.onPressAction: control.clicked(null)
