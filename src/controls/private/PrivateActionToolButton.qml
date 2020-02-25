@@ -40,7 +40,7 @@ Controls.ToolButton {
     checked: (kirigamiAction && kirigamiAction.checked)
     enabled: kirigamiAction && kirigamiAction.enabled
     opacity: enabled ? 1 : 0.4
-    visible: kirigamiAction && kirigamiAction.visible
+    visible: (kirigamiAction && kirigamiAction.hasOwnProperty("visible")) ? kirigamiAction.visible : true
     onClicked: {
         if (kirigamiAction) {
             kirigamiAction.trigger();
@@ -123,7 +123,7 @@ Controls.ToolButton {
     }
     Controls.ToolTip {
         visible: control.hovered && text.length > 0 && !menu.visible && !control.pressed
-        text: kirigamiAction ? (kirigamiAction.tooltip.length ? kirigamiAction.tooltip : kirigamiAction.text) : ""
+        text: kirigamiAction ? (kirigamiAction.tooltip && kirigamiAction.tooltip.length ? kirigamiAction.tooltip : kirigamiAction.text) : ""
         delay: Units.toolTipDelay
         timeout: 5000
         y: control.height

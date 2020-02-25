@@ -105,8 +105,18 @@ Item {
                     return toolButtonDelegate
                 }
 
-                visible: (modelData.visible === undefined || modelData.visible)
-                    && (modelData.displayHint !== undefined && !modelData.displayHintSet(Kirigami.Action.DisplayHint.AlwaysHide))
+                visible: {
+                    if (modelData.hasOwnProperty("visible") && !modelData.visible) {
+                        return false
+                    }
+
+                    if (modelData.hasOwnProperty("displayHint") &&
+                        modelData.displayHintSet(Kirigami.Action.DisplayHint.AlwaysHide)) {
+                        return false
+                    }
+
+                    return true
+                }
 
                 property bool actionVisible: visible && (x + width < details.fullLayoutWidth)
 
@@ -150,8 +160,16 @@ Item {
             PrivateActionToolButton {
                 flat: details.flat && !modelData.icon.color.a
                 display: Controls.Button.IconOnly
-                visible: (modelData.visible === undefined || modelData.visible)
-                         && (modelData.displayHint !== undefined && modelData.displayHintSet(Kirigami.Action.DisplayHint.KeepVisible))
+                visible: {
+                    if (modelData.hasOwnProperty("visible") && !modelData.visible) {
+                        return false
+                    }
+                    if (modelData.hasOwnProperty("displayHint")
+                        && modelData.displayHintSet(Kirigami.Action.DisplayHint.KeepVisible)) {
+                        return true
+                    }
+                    return false
+                }
                 kirigamiAction: modelData
                 property bool actionVisible: visible && (iconOnlyPlaceholderRepeater.count === 1 || (x + width < details.iconLayoutWidth))
             }
