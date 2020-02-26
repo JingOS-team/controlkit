@@ -356,7 +356,10 @@ QQC2.Page {
             id: overlayItem
             parent: root
             z: 9997
-            anchors.fill: parent
+            anchors {
+                fill: parent
+                topMargin: globalToolBar.height
+            }
         },
         //global top toolbar if we are in a PageRow (in the row or as a layer)
         Loader {
