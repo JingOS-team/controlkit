@@ -512,7 +512,7 @@ QImage Icon::findIcon(const QSize &size)
         }
     }
 
-    if (img.isNull()) {
+    if (!iconSource.isEmpty() && img.isNull()) {
         img = QIcon::fromTheme(m_fallback).pixmap(size, iconMode(), QIcon::On).toImage();
     }
     return img;
