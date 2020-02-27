@@ -27,5 +27,6 @@ kirigami_add_tests(
     tst_listskeynavigation.qml
     tst_pagerow.qml
     tst_icon.qml
+    tst_actiontoolbar.qml
 )
 
