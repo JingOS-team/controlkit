@@ -14,9 +14,20 @@ Controls.ToolButton {
 
     signal menuAboutToShow
 
-    implicitWidth: menuArrow.visible || (showText && ( kirigamiAction ? kirigamiAction.text.length > 0 : text.length > 0))
-    ? Math.max(layout.implicitWidth + Units.largeSpacing*2, background.implicitWidth)
-    : implicitHeight
+    implicitWidth: {
+        if (!menuArrow.visible) {
+            if (!showText || display == Controls.Button.IconOnly) {
+                return implicitHeight
+            }
+
+            var textLength = kirigamiAction ? kirigamiAction.text.length : text.length
+            if (textLength == 0) {
+                return implicitHeight
+            }
+        }
+
+        return Math.max(layout.implicitWidth + Units.largeSpacing * 2, background.implicitWidth)
+    }
 
     Theme.colorSet: Theme.Button
     Theme.inherit: kirigamiAction && kirigamiAction.icon.color.a === 0
