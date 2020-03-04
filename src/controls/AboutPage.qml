@@ -7,7 +7,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 2.4 as QQC2
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.5
+import org.kde.kirigami 2.6
 
 /**
  * An about page that is ready to integrate in a kirigami app
