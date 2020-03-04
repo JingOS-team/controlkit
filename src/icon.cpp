@@ -317,11 +317,7 @@ void Icon::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 void Icon::handleRedirect(QNetworkReply* reply)
 {
     QNetworkAccessManager* qnam = reply->manager();
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
     if (reply->error() != QNetworkReply::NoError) {
-#else
-    if (reply->networkError() != QNetworkReply::NoError) {
-#endif
         return;
     }
     const QUrl possibleRedirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
