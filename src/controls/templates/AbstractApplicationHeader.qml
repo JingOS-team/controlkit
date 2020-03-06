@@ -8,7 +8,7 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.2
 import "private"
 import org.kde.kirigami 2.4
-
+import QtQuick.Controls 2.4 as Controls
 
 /**
  * An item that can be used as a title for the application.
@@ -29,8 +29,10 @@ Item {
     property int preferredHeight: Units.iconSizes.medium + Units.smallSpacing * 2
     property int maximumHeight: Units.gridUnit * 3
 
+    property int position: Controls.ToolBar.Header
+    
     property PageRow pageRow: __appWindow ? __appWindow.pageStack: null
-    property Page page: pageRow.currentItem
+    property Page page: pageRow ? pageRow.currentItem : null
 
     default property alias contentItem: mainItem.data
     readonly property int paintedHeight: headerItem.y + headerItem.height - 1
@@ -88,7 +90,8 @@ Item {
         anchors {
             left: parent.left
             right: parent.right
-            bottom: parent.bottom
+            bottom: root.position === Controls.ToolBar.Header ? parent.bottom : undefined
+            top: root.position === Controls.ToolBar.Footer ? parent.top : undefined
         }
 
         height: __appWindow && __appWindow.reachableMode && __appWindow.reachableModeEnabled ? root.maximumHeight : (root.minimumHeight > 0 ? Math.max(root.height, root.minimumHeight) : root.preferredHeight)
@@ -112,6 +115,11 @@ Item {
             readonly property bool passive: root.pageRow && parent.parent == root.pageRow && root.pageRow.globalToolBar.actualStyle !== ApplicationHeaderStyle.TabBar && root.pageRow.globalToolBar.actualStyle != ApplicationHeaderStyle.Breadcrumb
 
             onContentYChanged: {
+                
+                if(root.page && root.page.flickable && root.page.flickable.contentHeight < root.page.height) {
+                    return
+                }                
+                
                 if (updatingContentY || !Settings.isMobile ||
                     (__appWindow && !__appWindow.controlsVisible) ||
                     !root.page) {
@@ -136,7 +144,9 @@ Item {
                     //if the implicitHeight is changed, use that to simulate scroll
                     if (oldHeight !== implicitHeight) {
                         updatingContentY = true;
-                        root.page.flickable.contentY -= (oldHeight - root.implicitHeight);
+                        if(root.position === Controls.ToolBar.Header) {                            
+                            root.page.flickable.contentY -= (oldHeight - root.implicitHeight);
+                        }
                         updatingContentY = false;
                     } else {
                         oldContentY = root.page.flickable.contentY;
