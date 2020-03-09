@@ -107,30 +107,34 @@ PlatformThemePrivate::PlatformThemePrivate(PlatformTheme *q)
 PlatformThemePrivate::~PlatformThemePrivate()
 {}
 
-void setPaletteColor(QPalette& customPalette, QPalette::ColorGroup cg, QPalette::ColorRole cr, const QColor &color)
+void setPaletteColor(QPalette& customPalette, QPalette::ColorGroup cg, QPalette::ColorRole cr, const QColor &color, bool *changed)
 {
     if (customPalette.color(cg, cr) != color) {
+        *changed = true;
         customPalette.setColor(cg, cr, color);
     }
 }
 
 void PlatformThemePrivate::syncCustomPalette()
 {
+    bool changed = false;
     for (auto state : { QPalette::Active, QPalette::Inactive, QPalette::Disabled }) {
-        setPaletteColor(customPalette, state, QPalette::WindowText, q->textColor());
-        setPaletteColor(customPalette, state, QPalette::Window, q->backgroundColor());
-        setPaletteColor(customPalette, state, QPalette::Base, q->backgroundColor());
-        setPaletteColor(customPalette, state, QPalette::Text, q->textColor());
-        setPaletteColor(customPalette, state, QPalette::Button, q->backgroundColor());
-        setPaletteColor(customPalette, state, QPalette::ButtonText, q->textColor());
-        setPaletteColor(customPalette, state, QPalette::Highlight, q->highlightColor());
-        setPaletteColor(customPalette, state, QPalette::HighlightedText, q->highlightedTextColor());
-        setPaletteColor(customPalette, state, QPalette::ToolTipBase, q->backgroundColor());
-        setPaletteColor(customPalette, state, QPalette::ToolTipText, q->textColor());
-        setPaletteColor(customPalette, state, QPalette::Link, q->linkColor());
-        setPaletteColor(customPalette, state, QPalette::LinkVisited, q->visitedLinkColor());
+        setPaletteColor(customPalette, state, QPalette::WindowText, q->textColor(), &changed);
+        setPaletteColor(customPalette, state, QPalette::Window, q->backgroundColor(), &changed);
+        setPaletteColor(customPalette, state, QPalette::Base, q->backgroundColor(), &changed);
+        setPaletteColor(customPalette, state, QPalette::Text, q->textColor(), &changed);
+        setPaletteColor(customPalette, state, QPalette::Button, q->backgroundColor(), &changed);
+        setPaletteColor(customPalette, state, QPalette::ButtonText, q->textColor(), &changed);
+        setPaletteColor(customPalette, state, QPalette::Highlight, q->highlightColor(), &changed);
+        setPaletteColor(customPalette, state, QPalette::HighlightedText, q->highlightedTextColor(), &changed);
+        setPaletteColor(customPalette, state, QPalette::ToolTipBase, q->backgroundColor(), &changed);
+        setPaletteColor(customPalette, state, QPalette::ToolTipText, q->textColor(), &changed);
+        setPaletteColor(customPalette, state, QPalette::Link, q->linkColor(), &changed);
+        setPaletteColor(customPalette, state, QPalette::LinkVisited, q->visitedLinkColor(), &changed);
     }
-    emit q->paletteChanged(customPalette);
+    if (changed) {
+        emit q->paletteChanged(customPalette);
+    }
 }
 
 void PlatformThemePrivate::findParentStyle()
