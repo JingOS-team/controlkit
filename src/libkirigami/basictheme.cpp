@@ -40,6 +40,9 @@ BasicThemeDeclarative::~BasicThemeDeclarative()
 
 QObject *BasicThemeDeclarative::instance(const BasicTheme *theme)
 {
+    if (qApp->closingDown()) {
+        return nullptr;
+    }
     if (m_declarativeBasicTheme) {
         return m_declarativeBasicTheme;
     }
@@ -153,31 +156,33 @@ static inline QColor colorGroupTint(const QColor &color, PlatformTheme::ColorGro
 //TODO: tint for which we need to chain to m_parentBasicTheme's color
 #define RESOLVECOLOR(colorName, upperCaseColor) \
     QColor color;\
-    switch (colorSet()) {\
-    case BasicTheme::Button:\
-        color = basicThemeDeclarative()->instance(this)->property("button"#upperCaseColor).value<QColor>();\
-        break;\
-    case BasicTheme::View:\
-        color = basicThemeDeclarative()->instance(this)->property("view"#upperCaseColor).value<QColor>();\
-        break;\
-    case BasicTheme::Selection:\
-        color = basicThemeDeclarative()->instance(this)->property("selection"#upperCaseColor).value<QColor>();\
-        break;\
-    case BasicTheme::Tooltip:\
-        color = basicThemeDeclarative()->instance(this)->property("tooltip"#upperCaseColor).value<QColor>();\
-        break;\
-    case BasicTheme::Complementary:\
-        color = basicThemeDeclarative()->instance(this)->property("complementary"#upperCaseColor).value<QColor>();\
-        break;\
-    case BasicTheme::Window:\
-    default:\
-        color = basicThemeDeclarative()->instance(this)->property(#colorName).value<QColor>();\
-    }\
-    color = colorGroupTint(color, colorGroup());
+    if (basicThemeDeclarative()->instance(this)) {\
+        switch (colorSet()) {\
+        case BasicTheme::Button:\
+            color = basicThemeDeclarative()->instance(this)->property("button"#upperCaseColor).value<QColor>();\
+            break;\
+        case BasicTheme::View:\
+            color = basicThemeDeclarative()->instance(this)->property("view"#upperCaseColor).value<QColor>();\
+            break;\
+        case BasicTheme::Selection:\
+            color = basicThemeDeclarative()->instance(this)->property("selection"#upperCaseColor).value<QColor>();\
+            break;\
+        case BasicTheme::Tooltip:\
+            color = basicThemeDeclarative()->instance(this)->property("tooltip"#upperCaseColor).value<QColor>();\
+            break;\
+        case BasicTheme::Complementary:\
+            color = basicThemeDeclarative()->instance(this)->property("complementary"#upperCaseColor).value<QColor>();\
+            break;\
+        case BasicTheme::Window:\
+        default:\
+            color = basicThemeDeclarative()->instance(this)->property(#colorName).value<QColor>();\
+        }\
+        color = colorGroupTint(color, colorGroup());\
+    }
 
 
 #define PROXYCOLOR(colorName, upperCaseColor) \
-    colorGroupTint(basicThemeDeclarative()->instance(this)->property(#colorName).value<QColor>(), colorGroup())
+    colorGroupTint(basicThemeDeclarative()->instance(this) ? basicThemeDeclarative()->instance(this)->property(#colorName).value<QColor>() : QColor(), colorGroup())
 
 
 
