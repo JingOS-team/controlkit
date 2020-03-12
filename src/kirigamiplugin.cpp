@@ -17,6 +17,7 @@
 #include "pagepool.h"
 #include "scenepositionattached.h"
 #include "wheelhandler.h"
+#include "shadowedrectangle.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -234,6 +235,11 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     //TODO: remove
     qmlRegisterType(componentUrl(QStringLiteral("SwipeListItem2.qml")), uri, 2, 11, "SwipeListItem2");
+
+    // 2.12
+    qmlRegisterType<ShadowedRectangle>(uri, 2, 12, "ShadowedRectangle");
+    qmlRegisterUncreatableType<BorderGroup>(uri, 2, 12, "BorderGroup", QStringLiteral("Used as grouped property"));
+    qmlRegisterUncreatableType<ShadowGroup>(uri, 2, 12, "ShadowGroup", QStringLiteral("Used as grouped property"));
 
     qmlProtectModule(uri, 2);
 }
