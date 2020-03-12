@@ -138,6 +138,14 @@ T2.SwipeDelegate {
      */
     property color activeBackgroundColor: Kirigami.Theme.highlightColor
 
+    /**
+     * alwaysVisibleActions: bool
+     * If true, the actions behind this SwipeListItem will be always visible.
+     * Valid both in tablet and desktop modes
+     * @since 2.15
+     */
+    property bool alwaysVisibleActions: false
+
     //TODO KF6 remove this super wrong thing
     default property alias _default: listItem.contentItem
 
@@ -148,7 +156,7 @@ T2.SwipeDelegate {
     width: parent ? parent.width : implicitWidth
     implicitHeight: Math.max(Kirigami.Units.gridUnit * 2, contentItem.implicitHeight) + topPadding + bottomPadding
 
-    padding: Kirigami.Settings.tabletMode ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
+    padding: !listItem.alwaysVisibleActions && Kirigami.Settings.tabletMode ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
 
     leftPadding: padding * 2
 
@@ -179,7 +187,7 @@ T2.SwipeDelegate {
 
         //install the SwipeItemEventFilter
         onViewChanged: {
-            if (!Kirigami.Settings.tabletMode) {
+            if (listItem.alwaysVisibleActions || !Kirigami.Settings.tabletMode) {
                 return;
             }
             if (internal.view && Kirigami.Settings.tabletMode && !internal.view.parent.parent._swipeFilter) {
@@ -220,10 +228,10 @@ T2.SwipeDelegate {
         parent: listItem
         z: contentItem ? contentItem.z + 1 : 0
         width: item ? item.implicitWidth : actionsLayout.implicitWidth
-        active: Kirigami.Settings.tabletMode
+        active: !listItem.alwaysVisibleActions && Kirigami.Settings.tabletMode
         visible: listItem.actionsVisible && opacity > 0
         sourceComponent: handleComponent
-        opacity: Kirigami.Settings.tabletMode || listItem.hovered || !listItem.supportsMouseEvents ? 1 : 0
+        opacity: listItem.alwaysVisibleActions || Kirigami.Settings.tabletMode || listItem.hovered || !listItem.supportsMouseEvents ? 1 : 0
         Behavior on opacity {
             OpacityAnimator {
                 id: opacityAnim
@@ -401,7 +409,7 @@ T2.SwipeDelegate {
                     rightMargin: Kirigami.Units.smallSpacing
                 }
             visible: parent != listItem
-            parent: Kirigami.Settings.tabletMode
+            parent: !listItem.alwaysVisibleActions && Kirigami.Settings.tabletMode
                     ? listItem.swipe.leftItem || listItem.swipe.rightItem || listItem
                     : overlayLoader
 
@@ -462,8 +470,8 @@ T2.SwipeDelegate {
 
     swipe {
         enabled: false
-        right: listItem.LayoutMirroring.enabled || !Kirigami.Settings.tabletMode ? null : actionsBackgroundDelegate
-        left: listItem.LayoutMirroring.enabled && Kirigami.Settings.tabletMode ? actionsBackgroundDelegate : null
+        right: listItem.alwaysVisibleActions ||listItem.LayoutMirroring.enabled || !Kirigami.Settings.tabletMode ? null : actionsBackgroundDelegate
+        left: listItem.alwaysVisibleActions ||listItem.LayoutMirroring.enabled && Kirigami.Settings.tabletMode ? actionsBackgroundDelegate : null
     }
     NumberAnimation {
         id: slideAnim
