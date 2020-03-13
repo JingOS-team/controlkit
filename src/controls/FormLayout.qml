@@ -275,7 +275,7 @@ Item {
             id: labelItem
 
             property var item
-            enabled: item.enabled
+            enabled: item.enabled && item.Kirigami.FormData.enabled
             visible: item.visible
             Kirigami.MnemonicData.enabled: item.Kirigami.FormData.buddyFor && item.Kirigami.FormData.buddyFor.activeFocusOnTab
             Kirigami.MnemonicData.controlType: Kirigami.MnemonicData.FormLabel
