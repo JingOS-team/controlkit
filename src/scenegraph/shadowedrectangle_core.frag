@@ -19,6 +19,8 @@ uniform lowp vec2 aspect;
 
 in lowp vec2 uv;
 
+out lowp vec4 out_color;
+
 const lowp float minimum_shadow_radius = 0.05;
 
 // Calculate the distance to a rectangle with rounded corners.
@@ -49,9 +51,9 @@ void main()
     lowp vec4 col = vec4(0.0);
 
     // Calculate the shadow's distance field.
-    lowp float shadow = sdf_rounded_rectangle(uv, aspect * inverse_scale, offset * inverse_scale, vec4(shadowRadius * inverse_scale));
+    lowp float shadow = sdf_rounded_rectangle(uv, aspect * inverse_scale, offset * 2.0 * inverse_scale, vec4(shadowRadius * inverse_scale));
     // Render it, interpolating the color over the distance.
-    col = mix(col, shadowColor * sign(size), shadowColor.a * (1.0 - smoothstep(-size * 0.5, size * 0.5, shadow)));
+    col = mix(col, shadowColor * sign(size), 1.0 - smoothstep(-size * 0.5, size * 0.5, shadow));
 
     // Calculate the main rectangle distance field.
     lowp float rect = sdf_rounded_rectangle(uv, aspect * inverse_scale, vec2(0.0), vec4(radius * inverse_scale));
@@ -63,7 +65,7 @@ void main()
     col = mix(col, vec4(0.0), 1.0 - smoothstep(0.001 - g, 0.001 + g, rect));
 
     // Then, render it again but this time with the proper color and properly alpha blended.
-    col = mix(col, color, color.a * (1.0 - smoothstep(0.001 - g, 0.001 + g, rect)));
+    col = mix(col, color, 1.0 - smoothstep(0.001 - g, 0.001 + g, rect));
 
-    gl_FragColor = col * opacity;
+    out_color = col * opacity;
 }

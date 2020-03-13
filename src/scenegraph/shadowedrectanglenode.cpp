@@ -12,8 +12,8 @@ QColor premultiply(const QColor &color)
 {
     return QColor::fromRgbF(
         color.redF() * color.alphaF(),
-        color.greenF() * color.greenF(),
-        color.blueF() * color.blueF(),
+        color.greenF() * color.alphaF(),
+        color.blueF() * color.alphaF(),
         color.alphaF()
     );
 }
