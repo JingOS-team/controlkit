@@ -8,6 +8,7 @@
 
 #include <QSGMaterial>
 #include <QSGMaterialShader>
+#include <QColor>
 
 /**
  * A material rendering a rectangle with a shadow.
