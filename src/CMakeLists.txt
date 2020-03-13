@@ -28,6 +28,7 @@ set(kirigami_SRCS
     scenegraph/shadowedrectanglenode.cpp
     scenegraph/shadowedrectanglematerial.cpp
     scenegraph/shadowedborderrectanglematerial.cpp
+    scenegraph/paintedrectangleitem.cpp
     ${kirigami_QM_LOADER}
     ${KIRIGAMI_STATIC_FILES}
     )

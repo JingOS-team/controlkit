@@ -9,6 +9,8 @@
 #include <memory>
 #include <QQuickItem>
 
+class PaintedRectangleItem;
+
 /**
  * Grouped property for rectangle border.
  */
@@ -153,6 +155,8 @@ public:
     void setColor(const QColor &newColor);
     Q_SIGNAL void colorChanged();
 
+    void componentComplete() override;
+
 protected:
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
 
@@ -161,4 +165,5 @@ private:
     const std::unique_ptr<ShadowGroup> m_shadow;
     qreal m_radius = 0.0;
     QColor m_color = Qt::white;
+    PaintedRectangleItem *m_softwareItem = nullptr;
 };

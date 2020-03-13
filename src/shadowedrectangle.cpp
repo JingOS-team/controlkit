@@ -6,7 +6,12 @@
 
 #include "shadowedrectangle.h"
 
+#include <QQuickWindow>
+#include <QSGRendererInterface>
+#include <QSGRectangleNode>
+
 #include "scenegraph/shadowedrectanglenode.h"
+#include "scenegraph/paintedrectangleitem.h"
 
 BorderGroup::BorderGroup(QObject* parent)
     : QObject(parent)
@@ -161,6 +166,36 @@ void ShadowedRectangle::setColor(const QColor & newColor)
     m_color = newColor;
     update();
     Q_EMIT colorChanged();
+}
+
+void ShadowedRectangle::componentComplete()
+{
+    QQuickItem::componentComplete();
+
+    if (window()->rendererInterface()->graphicsApi() == QSGRendererInterface::Software) {
+        m_softwareItem = new PaintedRectangleItem{this};
+
+        auto updateItem = [this]() {
+            auto borderWidth = m_border->width();
+            auto rect = boundingRect().adjusted(-borderWidth / 2, -borderWidth / 2, borderWidth / 2, borderWidth / 2);
+            m_softwareItem->setX(-borderWidth / 2);
+            m_softwareItem->setY(-borderWidth / 2);
+            m_softwareItem->setSize(rect.size());
+            m_softwareItem->setColor(m_color);
+            m_softwareItem->setRadius(m_radius);
+            m_softwareItem->setBorderWidth(borderWidth);
+            m_softwareItem->setBorderColor(m_border->color());
+        };
+
+        updateItem();
+
+        connect(this, &ShadowedRectangle::widthChanged, m_softwareItem, updateItem);
+        connect(this, &ShadowedRectangle::heightChanged, m_softwareItem, updateItem);
+        connect(this, &ShadowedRectangle::colorChanged, m_softwareItem, updateItem);
+        connect(this, &ShadowedRectangle::radiusChanged, m_softwareItem, updateItem);
+        connect(m_border.get(), &BorderGroup::changed, m_softwareItem, updateItem);
+        setFlag(QQuickItem::ItemHasContents, false);
+    }
 }
 
 QSGNode *ShadowedRectangle::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
