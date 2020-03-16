@@ -43,6 +43,8 @@
         <file alias="private/globaltoolbar/TabBarControl.qml">src/controls/private/globaltoolbar/TabBarControl.qml</file>
         <file alias="private/ActionsMenu.qml">src/controls/private/ActionsMenu.qml</file>
         <file alias="private/ActionMenuItem.qml">src/controls/private/ActionMenuItem.qml</file>
+        <file alias="private/CardsGridViewPrivate.qml">src/controls/private/CardsGridViewPrivate.qml</file>
+        <file alias="private/CardsListViewPrivate.qml">src/controls/private/CardsListViewPrivate.qml</file>
         <file alias="Separator.qml">src/controls/Separator.qml</file>
         <file alias="OverlayDrawer.qml">src/controls/OverlayDrawer.qml</file>
         <file alias="OverlaySheet.qml">src/controls/OverlaySheet.qml</file>
