@@ -29,6 +29,33 @@ ShadowedRectangleNode::ShadowedRectangleNode()
     setFlags(QSGNode::OwnsGeometry | QSGNode::OwnsMaterial);
 }
 
+void ShadowedRectangleNode::setBorderEnabled(bool enabled)
+{
+    // We can achieve more performant shaders by splitting the two into separate
+    // shaders. This requires separating the materials as well. So when
+    // borderWidth is increased to something where the border should be visible,
+    // switch to the with-border material. Otherwise use the no-border version.
+
+    if (enabled) {
+        if (m_material->type() == &ShadowedRectangleMaterial::staticType) {
+            auto newMaterial = new ShadowedBorderRectangleMaterial();
+            setMaterial(newMaterial);
+            m_material = newMaterial;
+            m_rect = QRectF{};
+            markDirty(QSGNode::DirtyMaterial);
+        }
+    } else {
+        if (m_material->type() == &ShadowedBorderRectangleMaterial::staticType) {
+            auto newMaterial = new ShadowedRectangleMaterial();
+            setMaterial(newMaterial);
+            m_material = newMaterial;
+            m_material->aspect = m_aspect;
+            m_rect = QRectF{};
+            markDirty(QSGNode::DirtyMaterial);
+        }
+    }
+}
+
 void ShadowedRectangleNode::setRect(const QRectF& rect)
 {
     if (rect == m_rect) {
@@ -107,29 +134,8 @@ void ShadowedRectangleNode::setOffset(const QVector2D& offset)
 
 void ShadowedRectangleNode::setBorderWidth(qreal width)
 {
-    // We can achieve more performant shaders by splitting the two into separate
-    // shaders. This requires separating the materials as well. So when
-    // borderWidth is increased to something where the border should be visible,
-    // switch to the with-border material. Otherwise use the no-border version.
-
-    if (qFuzzyIsNull(width)) {
-        if (m_material->type() == &ShadowedBorderRectangleMaterial::staticType) {
-            auto newMaterial = new ShadowedRectangleMaterial();
-            setMaterial(newMaterial);
-            m_material = newMaterial;
-            m_borderWidth = width;
-            m_rect = QRectF{};
-            markDirty(QSGNode::DirtyMaterial);
-        }
+    if (m_material->type() != &ShadowedBorderRectangleMaterial::staticType) {
         return;
-    } else {
-        if (m_material->type() == &ShadowedRectangleMaterial::staticType) {
-            auto newMaterial = new ShadowedBorderRectangleMaterial();
-            setMaterial(newMaterial);
-            m_material = newMaterial;
-            m_rect = QRectF{};
-            markDirty(QSGNode::DirtyMaterial);
-        }
     }
 
     auto minDimension = std::min(m_rect.width(), m_rect.height());
@@ -166,9 +172,6 @@ void ShadowedRectangleNode::updateGeometry()
 
     rect = rect.adjusted(-offsetLength * m_aspect.x(), -offsetLength * m_aspect.y(),
                          offsetLength * m_aspect.x(), offsetLength * m_aspect.y());
-
-    rect = rect.adjusted(-m_borderWidth * m_aspect.x(), -m_borderWidth * m_aspect.y(),
-                         m_borderWidth * m_aspect.x(), m_borderWidth * m_aspect.y());
 
     QSGGeometry::updateTexturedRectGeometry(m_geometry, rect, QRectF{0.0, 0.0, 1.0, 1.0});
     markDirty(QSGNode::DirtyGeometry);

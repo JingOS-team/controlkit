@@ -219,13 +219,14 @@ QSGNode *ShadowedRectangle::updatePaintNode(QSGNode *node, QQuickItem::UpdatePai
     }
 
     auto elevatedNode = static_cast<ShadowedRectangleNode*>(node);
-    elevatedNode->setBorderWidth(m_border->width());
+    elevatedNode->setBorderEnabled(!qFuzzyIsNull(m_border->width()));
     elevatedNode->setRect(boundingRect());
     elevatedNode->setSize(m_shadow->size());
     elevatedNode->setRadius(m_radius);
     elevatedNode->setOffset(QVector2D{float(m_shadow->xOffset()), float(m_shadow->yOffset())});
     elevatedNode->setColor(m_color);
     elevatedNode->setShadowColor(m_shadow->color());
+    elevatedNode->setBorderWidth(m_border->width());
     elevatedNode->setBorderColor(m_border->color());
     elevatedNode->updateGeometry();
 

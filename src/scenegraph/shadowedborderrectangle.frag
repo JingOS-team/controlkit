@@ -50,7 +50,7 @@ lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 s
 void main()
 {
     // Scaling factor that is the inverse of the amount of scaling applied to the geometry.
-    lowp float inverse_scale = 1.0 / (1.0 + size + length(offset) * 2.0 + borderWidth * 2.0);
+    lowp float inverse_scale = 1.0 / (1.0 + size + length(offset) * 2.0);
 
     // Correction factor to round the corners of a larger shadow.
     // We want to account for size in regards to shadow radius, so that a larger shadow is
@@ -62,7 +62,7 @@ void main()
     lowp vec4 col = vec4(0.0);
 
     // Calculate the shadow's distance field.
-    lowp float shadow = sdf_rounded_rectangle(uv, (aspect + borderWidth) * inverse_scale, offset * 2.0 * inverse_scale, vec4(shadow_radius * inverse_scale));
+    lowp float shadow = sdf_rounded_rectangle(uv, aspect * inverse_scale, offset * 2.0 * inverse_scale, vec4(shadow_radius * inverse_scale));
     // Render it, interpolating the color over the distance.
     col = mix(col, shadowColor * sign(size), 1.0 - smoothstep(-size * 0.5, size * 0.5, shadow));
 
@@ -70,7 +70,7 @@ void main()
     lowp vec4 corner_radius = vec4(radius * inverse_scale);
 
     // Calculate the outer rectangle distance field.
-    lowp float outer_rect = sdf_rounded_rectangle(uv, (aspect + borderWidth) * inverse_scale, vec2(0.0), corner_radius);
+    lowp float outer_rect = sdf_rounded_rectangle(uv, aspect * inverse_scale, vec2(0.0), corner_radius);
 
     // First, remove anything that was rendered by the shadow if it is inside the rectangle.
     // This allows us to use colors with alpha without rendering artifacts.
@@ -81,8 +81,8 @@ void main()
 
     // Calculate the inner rectangle distance field.
     // This uses a reduced corner radius because the inner corners need to be smaller than the outer corners.
-    lowp vec4 inner_radius = vec4((radius - borderWidth) * inverse_scale);
-    lowp float inner_rect = sdf_rounded_rectangle(uv, (aspect - borderWidth) * inverse_scale, vec2(0.0), inner_radius);
+    lowp vec4 inner_radius = vec4((radius - borderWidth * 2.0) * inverse_scale);
+    lowp float inner_rect = sdf_rounded_rectangle(uv, (aspect - borderWidth * 2.0) * inverse_scale, vec2(0.0), inner_radius);
 
     // Like above, but this time cut out the inner rectangle.
     col = sdf_render(inner_rect, col, vec4(0.0), 1.0);

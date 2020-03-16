@@ -29,12 +29,12 @@ public:
     ShadowedRectangleNode();
 
     /**
-     * Set the width of the border.
+     * Set whether to draw a border.
      *
      * Note that this will switch between a material with or without border.
      * This means this needs to be called before any other setters.
      */
-    void setBorderWidth(qreal width);
+    void setBorderEnabled(bool enabled);
 
     void setRect(const QRectF &rect);
     void setSize(qreal size);
@@ -42,6 +42,7 @@ public:
     void setColor(const QColor &color);
     void setShadowColor(const QColor &color);
     void setOffset(const QVector2D &offset);
+    void setBorderWidth(qreal width);
     void setBorderColor(const QColor &color);
 
     /**
