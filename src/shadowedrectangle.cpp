@@ -172,7 +172,12 @@ void ShadowedRectangle::componentComplete()
 {
     QQuickItem::componentComplete();
 
-    if (window()->rendererInterface()->graphicsApi() == QSGRendererInterface::Software) {
+    checkSoftwareItem();
+}
+
+void ShadowedRectangle::checkSoftwareItem()
+{
+    if (!m_softwareItem && window() && window()->rendererInterface()->graphicsApi() == QSGRendererInterface::Software) {
         m_softwareItem = new PaintedRectangleItem{this};
 
         auto updateItem = [this]() {
@@ -195,6 +200,13 @@ void ShadowedRectangle::componentComplete()
         connect(this, &ShadowedRectangle::radiusChanged, m_softwareItem, updateItem);
         connect(m_border.get(), &BorderGroup::changed, m_softwareItem, updateItem);
         setFlag(QQuickItem::ItemHasContents, false);
+    }
+}
+
+void ShadowedRectangle::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value)
+{
+    if (change == QQuickItem::ItemSceneChange && value.window) {
+        checkSoftwareItem();
     }
 }
 

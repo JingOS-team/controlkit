@@ -158,9 +158,11 @@ public:
     void componentComplete() override;
 
 protected:
+    void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value);
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
 
 private:
+    void checkSoftwareItem();
     const std::unique_ptr<BorderGroup> m_border;
     const std::unique_ptr<ShadowGroup> m_shadow;
     qreal m_radius = 0.0;
