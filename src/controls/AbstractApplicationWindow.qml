@@ -303,7 +303,7 @@ QQC2.ApplicationWindow {
 
     QtObject {
         id: internal
-        property Item __passiveNotification
+        property QtObject __passiveNotification
     }
 
     Shortcut {
