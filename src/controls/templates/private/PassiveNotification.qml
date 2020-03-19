@@ -159,7 +159,7 @@ Controls.Popup {
                 }
                 Timer {
                     id: timer
-                    running: mainLayout.Window.active && root.visible && !hover.hovered
+                    running: root.visible && !hover.hovered
                     onTriggered: delegate.close();
                 }
 
