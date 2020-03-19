@@ -26,6 +26,7 @@ set(kirigami_SRCS
     wheelhandler.cpp
     shadowedrectangle.cpp
     shadowedtexture.cpp
+    colorutils.cpp
     scenegraph/shadowedrectanglenode.cpp
     scenegraph/shadowedrectanglematerial.cpp
     scenegraph/shadowedborderrectanglematerial.cpp
@@ -85,7 +86,7 @@ target_link_libraries(kirigamiplugin
         PUBLIC
             Qt5::Core
         PRIVATE
-            ${Kirigami_EXTRA_LIBS} Qt5::Qml Qt5::Quick Qt5::QuickControls2
+            ${Kirigami_EXTRA_LIBS} Qt5::Qml Qt5::Quick Qt5::QuickControls2 Qt5::Concurrent
     )
 
 if (BUILD_SHARED_LIBS)

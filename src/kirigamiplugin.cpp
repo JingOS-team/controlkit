@@ -19,6 +19,7 @@
 #include "wheelhandler.h"
 #include "shadowedrectangle.h"
 #include "shadowedtexture.h"
+#include "colorutils.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -244,6 +245,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     qmlRegisterUncreatableType<BorderGroup>(uri, 2, 12, "BorderGroup", QStringLiteral("Used as grouped property"));
     qmlRegisterUncreatableType<ShadowGroup>(uri, 2, 12, "ShadowGroup", QStringLiteral("Used as grouped property"));
+    qmlRegisterSingletonType<ColorUtils>(uri, 2, 12, "ColorUtils", [](QQmlEngine*, QJSEngine*) { return new ColorUtils; });
 
     qmlRegisterUncreatableType<CornersGroup>(uri, 2, 12, "CornersGroup", QStringLiteral("Used as grouped property"));
 
