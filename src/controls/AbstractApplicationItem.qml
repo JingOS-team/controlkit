@@ -132,7 +132,7 @@ Item {
      */
     function showPassiveNotification(message, timeout, actionText, callBack) {
         if (!internal.__passiveNotification) {
-            var component = Qt.createComponent("templates/PassiveNotification.qml");
+            var component = Qt.createComponent("templates/private/PassiveNotification.qml");
             internal.__passiveNotification = component.createObject(root);
         }
 
