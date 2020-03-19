@@ -71,6 +71,12 @@ QtObject {
     property real devicePixelRatio: Math.max(1, (fontMetrics.font.pixelSize / fontMetrics.font.pointSize))
 
     /**
+     * units.veryLongDuration should be used for specialty animations that benefit
+     * from being even longer than longDuration.
+     */
+    property int veryLongDuration: 500
+
+    /**
      * units.longDuration should be used for longer, screen-covering animations, for opening and
      * closing of dialogs and other "not too small" animations
      */

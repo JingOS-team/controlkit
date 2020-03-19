@@ -2083,6 +2083,7 @@ Module {
         Property { name: "devicePixelRatio"; type: "double" }
         Property { name: "longDuration"; type: "int" }
         Property { name: "shortDuration"; type: "int" }
+        Property { name: "veryLongDuration"; type: "int" }
         Property { name: "toolTipDelay"; type: "int" }
         Property { name: "wheelScrollLines"; type: "int"; isReadonly: true }
         Property { name: "fontMetrics"; type: "QVariant" }
