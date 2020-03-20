@@ -100,6 +100,7 @@ Controls.Popup {
             function close() {
                 closeAnim.running = true;
             }
+            implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
             Component.onCompleted: openAnim.restart()
             ParallelAnimation {
@@ -165,6 +166,10 @@ Controls.Popup {
 
                 Controls.Label {
                     id: label
+                    Layout.maximumWidth: Math.min(root.parent.width - Kirigami.Units.largeSpacing*2, implicitWidth)
+                    elide: Text.ElideRight
+                    wrapMode: Text.WordWrap
+                    maximumLineCount: 4
                 }
 
                 Controls.Button {
