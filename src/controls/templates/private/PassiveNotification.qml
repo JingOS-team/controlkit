@@ -100,7 +100,6 @@ Controls.Popup {
             function close() {
                 closeAnim.running = true;
             }
-            implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
             Component.onCompleted: openAnim.restart()
             ParallelAnimation {
@@ -150,7 +149,8 @@ Controls.Popup {
 
                 Kirigami.Theme.colorSet: root.Kirigami.Theme.colorSet
                 width: mainLayout.width
-
+                //FIXME: why this is not automatic?
+                implicitHeight: Math.max(label.implicitHeight, actionButton.implicitHeight)
                 HoverHandler {
                     id: hover
                 }
@@ -166,7 +166,7 @@ Controls.Popup {
 
                 Controls.Label {
                     id: label
-                    Layout.maximumWidth: Math.min(root.parent.width - Kirigami.Units.largeSpacing*2, implicitWidth)
+                    Layout.maximumWidth: Math.min(root.parent.width - Kirigami.Units.largeSpacing * 4, implicitWidth)
                     elide: Text.ElideRight
                     wrapMode: Text.WordWrap
                     maximumLineCount: 4
