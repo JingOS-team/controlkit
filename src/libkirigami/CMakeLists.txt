@@ -59,10 +59,11 @@ install(TARGETS KF5Kirigami2
         EXPORT KF5Kirigami2Targets
         ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
+if(BUILD_SHARED_LIBS)
+    list(APPEND Kirigami2_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/kirigami2_export.h)
+endif()
 
-install(FILES
-            ${CMAKE_CURRENT_BINARY_DIR}/kirigami2_export.h
-            ${Kirigami2_HEADERS}
+install(FILES ${Kirigami2_HEADERS}
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/Kirigami2
         COMPONENT Devel)
 
