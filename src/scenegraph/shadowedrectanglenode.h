@@ -10,7 +10,9 @@
 #include <QColor>
 #include <QVector2D>
 
+class QSGMaterialType;
 class ShadowedRectangleMaterial;
+class ShadowedBorderRectangleMaterial;
 
 /**
  * Scene graph node for a shadowed rectangle.
@@ -53,10 +55,16 @@ public:
      */
     void updateGeometry();
 
-private:
-    QSGGeometry *m_geometry;
-    ShadowedRectangleMaterial *m_material;
+protected:
+    virtual ShadowedRectangleMaterial *createBorderlessMaterial();
+    virtual ShadowedBorderRectangleMaterial *createBorderMaterial();
+    virtual QSGMaterialType* borderMaterialType();
+    virtual QSGMaterialType* borderlessMaterialType();
 
+    QSGGeometry *m_geometry;
+    ShadowedRectangleMaterial *m_material = nullptr;
+
+private:
     QRectF m_rect;
     qreal m_size = 0.0;
     qreal m_radius = 0.0;

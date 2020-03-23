@@ -25,15 +25,19 @@ set(kirigami_SRCS
     mnemonicattached.cpp
     wheelhandler.cpp
     shadowedrectangle.cpp
+    shadowedtexture.cpp
     scenegraph/shadowedrectanglenode.cpp
     scenegraph/shadowedrectanglematerial.cpp
     scenegraph/shadowedborderrectanglematerial.cpp
     scenegraph/paintedrectangleitem.cpp
+    scenegraph/shadowedtexturenode.cpp
+    scenegraph/shadowedtexturematerial.cpp
+    scenegraph/shadowedbordertexturematerial.cpp
     ${kirigami_QM_LOADER}
     ${KIRIGAMI_STATIC_FILES}
     )
 
-qt5_add_resources(SHADERS scenegraph/shaders.qrc)
+qt5_add_resources(SHADERS scenegraph/shaders/shaders.qrc)
 
 add_subdirectory(libkirigami)
 

@@ -54,6 +54,7 @@ ShadowedRectangleShader::ShadowedRectangleShader()
 
     setShaderSourceFiles(QOpenGLShader::Fragment, {
         shaderRoot + header,
+        shaderRoot + QStringLiteral("sdf.glsl"),
         shaderRoot + QStringLiteral("shadowedrectangle.frag")
     });
 }

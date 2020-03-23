@@ -18,6 +18,7 @@
 #include "scenepositionattached.h"
 #include "wheelhandler.h"
 #include "shadowedrectangle.h"
+#include "shadowedtexture.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -238,6 +239,9 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     // 2.12
     qmlRegisterType<ShadowedRectangle>(uri, 2, 12, "ShadowedRectangle");
+    qmlRegisterType<ShadowedTexture>(uri, 2, 12, "ShadowedTexture");
+    qmlRegisterType(componentUrl(QStringLiteral("ShadowedImage.qml")), uri, 2, 12, "ShadowedImage");
+
     qmlRegisterUncreatableType<BorderGroup>(uri, 2, 12, "BorderGroup", QStringLiteral("Used as grouped property"));
     qmlRegisterUncreatableType<ShadowGroup>(uri, 2, 12, "ShadowGroup", QStringLiteral("Used as grouped property"));
 

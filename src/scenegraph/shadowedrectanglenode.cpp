@@ -23,9 +23,6 @@ ShadowedRectangleNode::ShadowedRectangleNode()
     m_geometry = new QSGGeometry{QSGGeometry::defaultAttributes_TexturedPoint2D(), 4};
     setGeometry(m_geometry);
 
-    m_material = new ShadowedRectangleMaterial{};
-    setMaterial(m_material);
-
     setFlags(QSGNode::OwnsGeometry | QSGNode::OwnsMaterial);
 }
 
@@ -37,19 +34,18 @@ void ShadowedRectangleNode::setBorderEnabled(bool enabled)
     // switch to the with-border material. Otherwise use the no-border version.
 
     if (enabled) {
-        if (m_material->type() == &ShadowedRectangleMaterial::staticType) {
-            auto newMaterial = new ShadowedBorderRectangleMaterial();
+        if (!m_material || m_material->type() == borderlessMaterialType()) {
+            auto newMaterial = createBorderMaterial();
             setMaterial(newMaterial);
             m_material = newMaterial;
             m_rect = QRectF{};
             markDirty(QSGNode::DirtyMaterial);
         }
     } else {
-        if (m_material->type() == &ShadowedBorderRectangleMaterial::staticType) {
-            auto newMaterial = new ShadowedRectangleMaterial();
+        if (!m_material || m_material->type() == borderMaterialType()) {
+            auto newMaterial = createBorderlessMaterial();
             setMaterial(newMaterial);
             m_material = newMaterial;
-            m_material->aspect = m_aspect;
             m_rect = QRectF{};
             markDirty(QSGNode::DirtyMaterial);
         }
@@ -134,7 +130,7 @@ void ShadowedRectangleNode::setOffset(const QVector2D& offset)
 
 void ShadowedRectangleNode::setBorderWidth(qreal width)
 {
-    if (m_material->type() != &ShadowedBorderRectangleMaterial::staticType) {
+    if (m_material->type() != borderMaterialType()) {
         return;
     }
 
@@ -151,7 +147,7 @@ void ShadowedRectangleNode::setBorderWidth(qreal width)
 
 void ShadowedRectangleNode::setBorderColor(const QColor& color)
 {
-    if (m_material->type() != &ShadowedBorderRectangleMaterial::staticType) {
+    if (m_material->type() != borderMaterialType()) {
         return;
     }
 
@@ -175,4 +171,24 @@ void ShadowedRectangleNode::updateGeometry()
 
     QSGGeometry::updateTexturedRectGeometry(m_geometry, rect, QRectF{0.0, 0.0, 1.0, 1.0});
     markDirty(QSGNode::DirtyGeometry);
+}
+
+ShadowedRectangleMaterial *ShadowedRectangleNode::createBorderlessMaterial()
+{
+    return new ShadowedRectangleMaterial{};
+}
+
+ShadowedBorderRectangleMaterial *ShadowedRectangleNode::createBorderMaterial()
+{
+    return new ShadowedBorderRectangleMaterial{};
+}
+
+QSGMaterialType *ShadowedRectangleNode::borderlessMaterialType()
+{
+    return &ShadowedRectangleMaterial::staticType;
+}
+
+QSGMaterialType *ShadowedRectangleNode::borderMaterialType()
+{
+    return &ShadowedBorderRectangleMaterial::staticType;
 }

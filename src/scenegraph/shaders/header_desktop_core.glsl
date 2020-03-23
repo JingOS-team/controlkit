@@ -12,3 +12,5 @@
 // This file is intended for desktop OpenGL version 4.5 or greater.
 
 #version 450
+
+#define CORE_PROFILE

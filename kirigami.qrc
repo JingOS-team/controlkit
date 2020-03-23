@@ -79,6 +79,7 @@
         <file alias="AbstractApplicationHeader.qml">src/controls/AbstractApplicationHeader.qml</file>
         <file alias="FormLayout.qml">src/controls/FormLayout.qml</file>
         <file alias="ListItemDragHandle.qml">src/controls/ListItemDragHandle.qml</file>
+        <file alias="ShadowedImage.qml">src/controls/ShadowedImage.qml</file>
         <file alias="styles/Material/AbstractListItem.qml">src/styles/Material/AbstractListItem.qml</file>
         <file alias="styles/Material/Theme.qml">src/styles/Material/Theme.qml</file>
         <file alias="styles/Material/SwipeListItem.qml">src/styles/Material/SwipeListItem.qml</file>

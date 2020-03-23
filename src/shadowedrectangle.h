@@ -41,6 +41,11 @@ public:
 
     Q_SIGNAL void changed();
 
+    inline bool isEnabled() const
+    {
+        return !qFuzzyIsNull(m_width);
+    }
+
 private:
     qreal m_width = 0.0;
     QColor m_color = Qt::black;
@@ -110,6 +115,8 @@ private:
  * using distance fields, which provide greatly improved performance. The shadow is
  * rendered outside of the item's bounds, so the item's width and height are the
  * rectangle's width and height.
+ *
+ * @since 5.69 / 2.12
  */
 class ShadowedRectangle : public QQuickItem
 {
@@ -158,7 +165,7 @@ public:
     void componentComplete() override;
 
 protected:
-    void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value);
+    void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value) override;
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
 
 private:

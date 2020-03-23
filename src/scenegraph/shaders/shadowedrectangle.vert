@@ -6,12 +6,16 @@
 
 uniform highp mat4 matrix;
 uniform lowp vec2 aspect;
-uniform lowp vec2 offset;
 
+#ifdef CORE_PROFILE
+in highp vec4 in_vertex;
+in mediump vec2 in_uv;
+out mediump vec2 uv;
+#else
 attribute highp vec4 in_vertex;
 attribute mediump vec2 in_uv;
-
 varying mediump vec2 uv;
+#endif
 
 void main() {
     uv = (-1.0 + 2.0 * in_uv) * aspect;

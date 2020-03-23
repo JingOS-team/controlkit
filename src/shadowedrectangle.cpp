@@ -175,6 +175,35 @@ void ShadowedRectangle::componentComplete()
     checkSoftwareItem();
 }
 
+void ShadowedRectangle::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value)
+{
+    if (change == QQuickItem::ItemSceneChange && value.window) {
+        checkSoftwareItem();
+    }
+}
+
+QSGNode *ShadowedRectangle::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
+{
+    Q_UNUSED(data);
+
+    if (!node) {
+        node = new ShadowedRectangleNode{};
+    }
+
+    auto shadowNode = static_cast<ShadowedRectangleNode*>(node);
+    shadowNode->setBorderEnabled(m_border->isEnabled());
+    shadowNode->setRect(boundingRect());
+    shadowNode->setSize(m_shadow->size());
+    shadowNode->setRadius(m_radius);
+    shadowNode->setOffset(QVector2D{float(m_shadow->xOffset()), float(m_shadow->yOffset())});
+    shadowNode->setColor(m_color);
+    shadowNode->setShadowColor(m_shadow->color());
+    shadowNode->setBorderWidth(m_border->width());
+    shadowNode->setBorderColor(m_border->color());
+    shadowNode->updateGeometry();
+    return shadowNode;
+}
+
 void ShadowedRectangle::checkSoftwareItem()
 {
     if (!m_softwareItem && window() && window()->rendererInterface()->graphicsApi() == QSGRendererInterface::Software) {
@@ -201,34 +230,4 @@ void ShadowedRectangle::checkSoftwareItem()
         connect(m_border.get(), &BorderGroup::changed, m_softwareItem, updateItem);
         setFlag(QQuickItem::ItemHasContents, false);
     }
-}
-
-void ShadowedRectangle::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value)
-{
-    if (change == QQuickItem::ItemSceneChange && value.window) {
-        checkSoftwareItem();
-    }
-}
-
-QSGNode *ShadowedRectangle::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
-{
-    Q_UNUSED(data);
-
-    if (!node) {
-        node = new ShadowedRectangleNode;
-    }
-
-    auto elevatedNode = static_cast<ShadowedRectangleNode*>(node);
-    elevatedNode->setBorderEnabled(!qFuzzyIsNull(m_border->width()));
-    elevatedNode->setRect(boundingRect());
-    elevatedNode->setSize(m_shadow->size());
-    elevatedNode->setRadius(m_radius);
-    elevatedNode->setOffset(QVector2D{float(m_shadow->xOffset()), float(m_shadow->yOffset())});
-    elevatedNode->setColor(m_color);
-    elevatedNode->setShadowColor(m_shadow->color());
-    elevatedNode->setBorderWidth(m_border->width());
-    elevatedNode->setBorderColor(m_border->color());
-    elevatedNode->updateGeometry();
-
-    return elevatedNode;
 }
