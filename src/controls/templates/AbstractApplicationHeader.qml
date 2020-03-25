@@ -107,7 +107,7 @@ Item {
             id: headerSlideConnection
             target: root.page ? root.page.flickable : null
             enabled: !passive
-            property int oldContentY
+            property real oldContentY
             property bool updatingContentY: false
 
             //FIXME HACK: if we are in global mode, meaning if we are the toolbar showing the global breadcrumb (but the pages are showing their own toolbar), not to try to mess with page contentY.
@@ -115,22 +115,9 @@ Item {
             readonly property bool passive: root.pageRow && parent.parent == root.pageRow && root.pageRow.globalToolBar.actualStyle !== ApplicationHeaderStyle.TabBar && root.pageRow.globalToolBar.actualStyle != ApplicationHeaderStyle.Breadcrumb
 
             onContentYChanged: {
-                
                 if(root.page && root.page.flickable && root.page.flickable.contentHeight < root.page.height) {
                     return
                 }                
-                
-                if (updatingContentY || !Settings.isMobile ||
-                    (__appWindow && !__appWindow.controlsVisible) ||
-                    !root.page) {
-                    oldContentY = root.page.flickable.contentY;
-                    return;
-                //TODO: merge
-                //if moves but not dragging, just update oldContentY
-                } else if (!root.page.flickable.dragging) {
-                    oldContentY = root.page.flickable.contentY;
-                    return;
-                }
 
                 if ((root.pageRow ? root.pageRow.wideMode : (__appWindow && __appWindow.wideScreen)) || !Settings.isMobile) {
                     root.implicitHeight = root.preferredHeight;
@@ -142,27 +129,23 @@ Item {
                                                  root.implicitHeight + oldContentY - root.page.flickable.contentY));
 
                     //if the implicitHeight is changed, use that to simulate scroll
-                    if (oldHeight !== implicitHeight) {
-                        updatingContentY = true;
-                        if(root.position === Controls.ToolBar.Header) {                            
-                            root.page.flickable.contentY -= (oldHeight - root.implicitHeight);
-                        }
-                        updatingContentY = false;
-                    } else {
+                    if (oldHeight === implicitHeight) {
                         oldContentY = root.page.flickable.contentY;
                     }
-
                 }
             }
+
             onMovementEnded: {
                 if ((root.pageRow ? root.pageRow.wideMode : (__appWindow && __appWindow.wideScreen)) || !Settings.isMobile) {
                     return;
                 }
                 if (root.height > root.minimumHeight + (root.preferredHeight - root.minimumHeight)/2 ) {
-                    root.implicitHeight = root.preferredHeight;
+                    heightAnim.to = root.preferredHeight;
                 } else {
-                    root.implicitHeight = root.minimumHeight;
+                    heightAnim.to = root.minimumHeight;
                 }
+                heightAnim.from = root.implicitHeight
+                heightAnim.restart();
             }
         }
         Connections {
