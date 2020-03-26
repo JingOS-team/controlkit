@@ -30,6 +30,7 @@ Kirigami.ActionTextField
     property bool showPassword: false
     echoMode: root.showPassword ? TextInput.Normal : TextInput.Password
     placeholderText: qsTr("Password")
+    inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
     rightActions: [
         Kirigami.Action {
             iconName: root.showPassword ? "password-show-off" : "password-show-on"
