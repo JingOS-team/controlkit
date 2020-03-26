@@ -22,6 +22,7 @@ LinkButton
     id: button
     property string url
     text: url
+    enabled: !!url
     visible: text.length > 0
     acceptedButtons: Qt.LeftButton | Qt.RightButton
 
