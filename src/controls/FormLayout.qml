@@ -109,7 +109,6 @@ Item {
                 }
                 PropertyChanges {
                     target: lay
-                    implicitWidth: undefined
                     width: undefined
                 }
             },
