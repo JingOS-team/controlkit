@@ -10,6 +10,8 @@
 #include <QQmlEngine>
 #include <QQmlComponent>
 #include <QQmlContext>
+#include <QQmlIncubator>
+#include <QQmlProperty>
 
 PagePool::PagePool(QObject *parent)
     : QObject(parent)
@@ -58,6 +60,12 @@ bool PagePool::cachePages() const
 
 QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
 {
+    return loadPageWithProperties(url, QVariantMap(), callback);
+}
+
+QQuickItem *PagePool::loadPageWithProperties(
+        const QString &url, const QVariantMap &properties, QJSValue callback)
+{
     Q_ASSERT(qmlEngine(this));
     QQmlContext *ctx = QQmlEngine::contextForObject(this);
     Q_ASSERT(ctx);
@@ -100,14 +108,14 @@ QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
         }
 
         connect(component, &QQmlComponent::statusChanged, this,
-                [this, component, callback] (QQmlComponent::Status status) mutable {
+                [this, component, callback, properties] (QQmlComponent::Status status) mutable {
             if (status != QQmlComponent::Ready) {
                 qWarning() << component->errors();
                 m_componentForUrl.remove(component->url());
                 component->deleteLater();
                 return;
             }
-            QQuickItem *item = createFromComponent(component);
+            QQuickItem *item = createFromComponent(component, properties);
             if (item) {
                 QJSValueList args = {qmlEngine(this)->newQObject(item)};
                 callback.call(args);
@@ -127,7 +135,7 @@ QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
         return nullptr;
     }
 
-    QQuickItem *item = createFromComponent(component);
+    QQuickItem *item = createFromComponent(component, properties);
     if (m_cachePages) {
         component->deleteLater();
     } else {
@@ -148,12 +156,55 @@ QQuickItem *PagePool::loadPage(const QString &url, QJSValue callback)
     }
 }
 
-QQuickItem *PagePool::createFromComponent(QQmlComponent *component)
+// As soon as we can depend on Qt 5.14, usage of this incubator should be
+// replaced with a call to QQmlComponent::createWithInitialProperties
+class PropertyInitializingIncubator : public QQmlIncubator
+{
+    const QVariantMap &_props;
+    QQmlContext *_ctx;
+
+public:
+    PropertyInitializingIncubator(
+            const QVariantMap &props, QQmlContext *ctx,
+            IncubationMode mode = Asynchronous)
+        : QQmlIncubator(mode), _props(props), _ctx(ctx)
+    {}
+
+protected:
+    void setInitialState(QObject *obj) override
+    {
+        QMapIterator<QString, QVariant> i(_props);
+        while (i.hasNext()) {
+            i.next();
+
+            QQmlProperty p(obj, i.key(), _ctx);
+            if (!p.isValid()) {
+                qWarning() << "Invalid property " << i.key();
+                continue;
+            }
+            if (!p.write(i.value())) {
+                qWarning() << "Could not set property " << i.key();
+                continue;
+            }
+        }
+    }
+};
+
+
+QQuickItem *PagePool::createFromComponent(QQmlComponent *component, const QVariantMap &properties)
 {
     QQmlContext *ctx = QQmlEngine::contextForObject(this);
     Q_ASSERT(ctx);
 
-    QObject *obj = component->create(ctx);
+    PropertyInitializingIncubator incubator(properties, ctx);
+    component->create(incubator, ctx);
+
+    while (!incubator.isReady()) {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
+    }
+
+    QObject *obj = incubator.object();
+
     // Error?
     if (!obj) {
         return nullptr;

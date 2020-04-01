@@ -56,6 +56,9 @@ public:
      */
     Q_INVOKABLE QQuickItem *loadPage(const QString &url, QJSValue callback = QJSValue());
 
+    Q_INVOKABLE QQuickItem *loadPageWithProperties(
+            const QString &url, const QVariantMap &properties, QJSValue callback = QJSValue());
+
     /**
      * @returns The url of the page for the given instance, empty if there is no correspondence
      */
@@ -89,7 +92,7 @@ Q_SIGNALS:
     void cachePagesChanged();
 
 private:
-    QQuickItem *createFromComponent(QQmlComponent *component);
+    QQuickItem *createFromComponent(QQmlComponent *component, const QVariantMap &properties);
 
     QUrl m_lastLoadedUrl;
     QPointer <QQuickItem> m_lastLoadedItem;
