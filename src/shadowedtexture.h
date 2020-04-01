@@ -32,10 +32,7 @@ public:
     void setSource(QQuickItem *newSource);
     Q_SIGNAL void sourceChanged();
 
-//     void componentComplete() override;
-
 protected:
-//     void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value) override;
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
 
 private:

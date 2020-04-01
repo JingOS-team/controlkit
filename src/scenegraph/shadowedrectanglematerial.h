@@ -27,7 +27,7 @@ public:
 
     QVector2D aspect = QVector2D{1.0, 1.0};
     float size = 0.0;
-    float radius = 0.0;
+    QVector4D radius = QVector4D{0.0, 0.0, 0.0, 0.0};
     QColor color = Qt::white;
     QColor shadowColor = Qt::black;
     QVector2D offset;

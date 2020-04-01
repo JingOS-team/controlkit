@@ -9,6 +9,7 @@
 #include <QSGGeometryNode>
 #include <QColor>
 #include <QVector2D>
+#include <QVector4D>
 
 class QSGMaterialType;
 class ShadowedRectangleMaterial;
@@ -40,7 +41,7 @@ public:
 
     void setRect(const QRectF &rect);
     void setSize(qreal size);
-    void setRadius(qreal radius);
+    void setRadius(const QVector4D &radius);
     void setColor(const QColor &color);
     void setShadowColor(const QColor &color);
     void setOffset(const QVector2D &offset);
@@ -67,7 +68,7 @@ protected:
 private:
     QRectF m_rect;
     qreal m_size = 0.0;
-    qreal m_radius = 0.0;
+    QVector4D m_radius = QVector4D{0.0, 0.0, 0.0, 0.0};
     QVector2D m_offset = QVector2D{0.0, 0.0};
     QVector2D m_aspect = QVector2D{1.0, 1.0};
     qreal m_borderWidth = 0.0;

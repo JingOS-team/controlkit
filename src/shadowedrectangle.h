@@ -109,6 +109,63 @@ private:
 };
 
 /**
+ * Grouped property for corner radius.
+ */
+class CornersGroup : public QObject
+{
+    Q_OBJECT
+    /**
+     * The radius of the top-left corner.
+     *
+     * In pixels. Defaults to -1, which indicates this value should not be used.
+     */
+    Q_PROPERTY(qreal topLeftRadius READ topLeft WRITE setTopLeft NOTIFY changed)
+    /**
+     * The radius of the top-right corner.
+     *
+     * In pixels. Defaults to -1, which indicates this value should not be used.
+     */
+    Q_PROPERTY(qreal topRightRadius READ topRight WRITE setTopRight NOTIFY changed)
+    /**
+     * The radius of the bottom-left corner.
+     *
+     * In pixels. Defaults to -1, which indicates this value should not be used.
+     */
+    Q_PROPERTY(qreal bottomLeftRadius READ bottomLeft WRITE setBottomLeft NOTIFY changed)
+    /**
+     * The radius of the bottom-right corner.
+     *
+     * In pixels. Defaults to -1, which indicates this value should not be used.
+     */
+    Q_PROPERTY(qreal bottomRightRadius READ bottomRight WRITE setBottomRight NOTIFY changed)
+
+public:
+    explicit CornersGroup(QObject *parent = nullptr);
+
+    qreal topLeft() const;
+    void setTopLeft(qreal newTopLeft);
+
+    qreal topRight() const;
+    void setTopRight(qreal newTopRight);
+
+    qreal bottomLeft() const;
+    void setBottomLeft(qreal newBottomLeft);
+
+    qreal bottomRight() const;
+    void setBottomRight(qreal newBottomRight);
+
+    Q_SIGNAL void changed();
+
+    QVector4D toVector4D(float all) const;
+
+private:
+    float m_topLeft = -1.0;
+    float m_topRight = -1.0;
+    float m_bottomLeft = -1.0;
+    float m_bottomRight = -1.0;
+};
+
+/**
  * A rectangle with a shadow.
  *
  * This item will render a rectangle, with a shadow below it. The rendering is done
@@ -124,7 +181,10 @@ class ShadowedRectangle : public QQuickItem
     /**
      * Corner radius of the rectangle.
      *
-     * This is the amount of rounding to apply to the rectangle's corners, in pixels.
+     * This is the amount of rounding to apply to all of the rectangle's
+     * corners, in pixels. Individual corners can have a different radius, see
+     * \property corners.
+     *
      * The default is 0.
      */
     Q_PROPERTY(qreal radius READ radius WRITE setRadius NOTIFY radiusChanged)
@@ -146,6 +206,15 @@ class ShadowedRectangle : public QQuickItem
      * \sa ShadowGroup
      */
     Q_PROPERTY(ShadowGroup *shadow READ shadow CONSTANT)
+    /**
+     * Corner radius.
+     *
+     * Note that the values from this group override \property radius for the
+     * corner they affect.
+     *
+     * \sa CornerGroup
+     */
+    Q_PROPERTY(CornersGroup *corners READ corners CONSTANT)
 
 public:
     ShadowedRectangle(QQuickItem *parent = nullptr);
@@ -153,6 +222,7 @@ public:
 
     BorderGroup *border() const;
     ShadowGroup *shadow() const;
+    CornersGroup *corners() const;
 
     qreal radius() const;
     void setRadius(qreal newRadius);
@@ -172,6 +242,7 @@ private:
     void checkSoftwareItem();
     const std::unique_ptr<BorderGroup> m_border;
     const std::unique_ptr<ShadowGroup> m_shadow;
+    const std::unique_ptr<CornersGroup> m_corners;
     qreal m_radius = 0.0;
     QColor m_color = Qt::white;
     PaintedRectangleItem *m_softwareItem = nullptr;

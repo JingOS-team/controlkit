@@ -10,7 +10,7 @@
 
 uniform lowp float opacity;
 uniform lowp float size;
-uniform lowp float radius;
+uniform lowp vec4 radius;
 uniform lowp vec4 color;
 uniform lowp vec4 shadowColor;
 uniform lowp vec2 offset;
@@ -33,18 +33,18 @@ void main()
     // Correction factor to round the corners of a larger shadow.
     // We want to account for size in regards to shadow radius, so that a larger shadow is
     // more rounded, but only if we are not already rounding the corners due to corner radius.
-    lowp float size_factor = 0.5 * (minimum_shadow_radius / max(radius, minimum_shadow_radius));
-    lowp float shadow_radius = radius + size * size_factor;
+    lowp vec4 size_factor = 0.5 * (minimum_shadow_radius / max(radius, minimum_shadow_radius));
+    lowp vec4 shadow_radius = radius + size * size_factor;
 
     lowp vec4 col = vec4(0.0);
 
     // Calculate the shadow's distance field.
-    lowp float shadow = sdf_rounded_rectangle(uv - offset * 2.0 * inverse_scale, aspect * inverse_scale, vec4(shadow_radius * inverse_scale));
+    lowp float shadow = sdf_rounded_rectangle(uv - offset * 2.0 * inverse_scale, aspect * inverse_scale, shadow_radius * inverse_scale);
     // Render it, interpolating the color over the distance.
     col = mix(col, shadowColor * sign(size), 1.0 - smoothstep(-size * 0.5, size * 0.5, shadow));
 
     // Calculate the main rectangle distance field.
-    lowp float rect = sdf_rounded_rectangle(uv, aspect * inverse_scale, vec4(radius * inverse_scale));
+    lowp float rect = sdf_rounded_rectangle(uv, aspect * inverse_scale, radius * inverse_scale);
 
     // First, remove anything that was rendered by the shadow if it is inside the rectangle.
     // This allows us to use colors with alpha without rendering artifacts.

@@ -12,8 +12,8 @@ import org.kde.kirigami 2.12 as Kirigami
 Kirigami.ApplicationWindow {
     id: window
 
-    width: 500
-    height: 500
+    width: 600
+    height: 800
 
     pageStack.initialPage: Kirigami.Page {
         leftPadding: 0
@@ -38,43 +38,27 @@ Kirigami.ApplicationWindow {
 
                 border.width: borderWidthSlider.value
                 border.color: Kirigami.Theme.textColor
+
+                corners.topLeftRadius: topLeftSlider.value
+                corners.topRightRadius: topRightSlider.value
+                corners.bottomLeftRadius: bottomLeftSlider.value
+                corners.bottomRightRadius: bottomRightSlider.value
             }
 
-            Item { width: 1; height: Kirigami.Units.gridUnit }
+            Kirigami.FormLayout {
+                Item { Kirigami.FormData.isSection: true }
 
-            Slider {
-                id: sizeSlider
+                Slider { id: radiusSlider; from: 0; to: 200; Kirigami.FormData.label: "Overall Radius" }
+                Slider { id: topLeftSlider; from: -1; to: 200; value: -1; Kirigami.FormData.label: "Top Left Radius" }
+                Slider { id: topRightSlider; from: -1; to: 200; value: -1; Kirigami.FormData.label: "Top Right Radius" }
+                Slider { id: bottomLeftSlider; from: -1; to: 200; value: -1; Kirigami.FormData.label: "Bottom Left Radius" }
+                Slider { id: bottomRightSlider; from: -1; to: 200; value: -1; Kirigami.FormData.label: "Bottom Right Radius" }
 
-                from: 0
-                to: 100
-            }
+                Slider { id: sizeSlider; from: 0; to: 100; Kirigami.FormData.label: "Shadow Size" }
+                Slider { id: xOffsetSlider; from: -100; to: 100; Kirigami.FormData.label: "Shadow X-Offset" }
+                Slider { id: yOffsetSlider; from: -100; to: 100; Kirigami.FormData.label: "Shadow Y-Offset" }
 
-            Slider {
-                id: radiusSlider
-
-                from: 0
-                to: 200
-            }
-
-            Slider {
-                id: xOffsetSlider
-
-                from: -100
-                to: 100
-            }
-
-            Slider {
-                id: yOffsetSlider
-
-                from: -100
-                to: 100
-            }
-
-            Slider {
-                id: borderWidthSlider
-
-                from: 0
-                to: 50
+                Slider { id: borderWidthSlider; from: 0; to: 50; Kirigami.FormData.label: "Border Width" }
             }
         }
     }

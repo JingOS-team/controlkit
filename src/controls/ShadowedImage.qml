@@ -12,6 +12,7 @@ Item {
     property alias radius: shadowRectangle.radius
     property alias shadow: shadowRectangle.shadow
     property alias border: shadowRectangle.border
+    property alias corners: shadowRectangle.corners
     property alias source: image.source
 
     ShadowedTexture {

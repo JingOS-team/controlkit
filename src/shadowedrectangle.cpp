@@ -113,13 +113,92 @@ void ShadowGroup::setColor(const QColor & newColor)
     Q_EMIT changed();
 }
 
+CornersGroup::CornersGroup(QObject* parent)
+    : QObject(parent)
+{
+}
+
+qreal CornersGroup::topLeft() const
+{
+    return m_topLeft;
+}
+
+void CornersGroup::setTopLeft(qreal newTopLeft)
+{
+    if (newTopLeft == m_topLeft) {
+        return;
+    }
+
+    m_topLeft = newTopLeft;
+    Q_EMIT changed();
+}
+
+qreal CornersGroup::topRight() const
+{
+    return m_topRight;
+}
+
+void CornersGroup::setTopRight(qreal newTopRight)
+{
+    if (newTopRight == m_topRight) {
+        return;
+    }
+
+    m_topRight = newTopRight;
+    Q_EMIT changed();
+}
+
+qreal CornersGroup::bottomLeft() const
+{
+    return m_bottomLeft;
+}
+
+void CornersGroup::setBottomLeft(qreal newBottomLeft)
+{
+    if (newBottomLeft == m_bottomLeft) {
+        return;
+    }
+
+    m_bottomLeft = newBottomLeft;
+    Q_EMIT changed();
+}
+
+qreal CornersGroup::bottomRight() const
+{
+    return m_bottomRight;
+}
+
+void CornersGroup::setBottomRight(qreal newBottomRight)
+{
+    if (newBottomRight == m_bottomRight) {
+        return;
+    }
+
+    m_bottomRight = newBottomRight;
+    Q_EMIT changed();
+}
+
+QVector4D CornersGroup::toVector4D(float all) const
+{
+    return QVector4D{
+        m_bottomRight < 0.0 ? all : m_bottomRight,
+        m_topRight < 0.0 ? all : m_topRight,
+        m_bottomLeft < 0.0 ? all : m_bottomLeft,
+        m_topLeft < 0.0 ? all : m_topLeft
+    };
+}
+
 ShadowedRectangle::ShadowedRectangle(QQuickItem *parentItem)
-    : QQuickItem(parentItem), m_border(new BorderGroup), m_shadow(new ShadowGroup)
+    : QQuickItem(parentItem)
+    , m_border(new BorderGroup)
+    , m_shadow(new ShadowGroup)
+    , m_corners(new CornersGroup)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 
     connect(m_border.get(), &BorderGroup::changed, this, &ShadowedRectangle::update);
     connect(m_shadow.get(), &ShadowGroup::changed, this, &ShadowedRectangle::update);
+    connect(m_corners.get(), &CornersGroup::changed, this, &ShadowedRectangle::update);
 }
 
 ShadowedRectangle::~ShadowedRectangle()
@@ -134,6 +213,11 @@ BorderGroup *ShadowedRectangle::border() const
 ShadowGroup *ShadowedRectangle::shadow() const
 {
     return m_shadow.get();
+}
+
+CornersGroup *ShadowedRectangle::corners() const
+{
+    return m_corners.get();
 }
 
 qreal ShadowedRectangle::radius() const
@@ -194,7 +278,7 @@ QSGNode *ShadowedRectangle::updatePaintNode(QSGNode *node, QQuickItem::UpdatePai
     shadowNode->setBorderEnabled(m_border->isEnabled());
     shadowNode->setRect(boundingRect());
     shadowNode->setSize(m_shadow->size());
-    shadowNode->setRadius(m_radius);
+    shadowNode->setRadius(m_corners->toVector4D(m_radius));
     shadowNode->setOffset(QVector2D{float(m_shadow->xOffset()), float(m_shadow->yOffset())});
     shadowNode->setColor(m_color);
     shadowNode->setShadowColor(m_shadow->color());

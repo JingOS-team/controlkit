@@ -41,20 +41,6 @@ void ShadowedTexture::setSource(QQuickItem *newSource)
     Q_EMIT sourceChanged();
 }
 
-// void ShadowedRectangle::componentComplete()
-// {
-//     QQuickItem::componentComplete();
-//
-//     checkSoftwareItem();
-// }
-//
-// void ShadowedRectangle::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value)
-// {
-//     if (change == QQuickItem::ItemSceneChange && value.window) {
-//         checkSoftwareItem();
-//     }
-// }
-
 QSGNode *ShadowedTexture::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data)
 {
     Q_UNUSED(data);
@@ -67,7 +53,7 @@ QSGNode *ShadowedTexture::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaint
     shadowNode->setBorderEnabled(border()->isEnabled());
     shadowNode->setRect(boundingRect());
     shadowNode->setSize(shadow()->size());
-    shadowNode->setRadius(radius());
+    shadowNode->setRadius(corners()->toVector4D(radius()));
     shadowNode->setOffset(QVector2D{float(shadow()->xOffset()), float(shadow()->yOffset())});
     shadowNode->setColor(color());
     shadowNode->setShadowColor(shadow()->color());

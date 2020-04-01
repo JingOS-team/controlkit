@@ -86,13 +86,18 @@ void ShadowedRectangleNode::setSize(qreal size)
     }
 }
 
-void ShadowedRectangleNode::setRadius(qreal radius)
+void ShadowedRectangleNode::setRadius(const QVector4D &radius)
 {
-    auto minDimension = std::min(m_rect.width(), m_rect.height());
-    float uniformRadius = radius * 2.0 / minDimension;
+    float minDimension = std::min(m_rect.width(), m_rect.height());
+    auto uniformRadius = QVector4D{
+        std::min(radius.x() * 2.0f / minDimension, 1.0f),
+        std::min(radius.y() * 2.0f / minDimension, 1.0f),
+        std::min(radius.z() * 2.0f / minDimension, 1.0f),
+        std::min(radius.w() * 2.0f / minDimension, 1.0f)
+    };
 
-    if (!qFuzzyCompare(m_material->radius, uniformRadius)) {
-        m_material->radius = std::min(uniformRadius, 1.0f);
+    if (m_material->radius != uniformRadius) {
+        m_material->radius = uniformRadius;
         markDirty(QSGNode::DirtyMaterial);
         m_radius = radius;
     }
