@@ -20,7 +20,5 @@ import "templates" as T
 T.OverlaySheet {
     id: root
 
-    background: DefaultCardBackground {
-        anchors.fill: parent
-    }
+    background: DefaultCardBackground {}
 }

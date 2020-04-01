@@ -1,13 +1,14 @@
 /*
- *  SPDX-FileCopyrightText: 2016 by Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2016-2020 Marco Martin <notmart@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
+
 import QtQuick 2.11
 import QtQuick.Layouts 1.2
 import QtQuick.Window 2.2
-import org.kde.kirigami 2.7
+import org.kde.kirigami 2.11
 import QtGraphicalEffects 1.0
 import QtQuick.Templates 2.0 as T2
 import "private"
@@ -108,30 +109,25 @@ QtObject {
 
 
     function open() {
-        openAnimation.from = -mainItem.height;
-        openAnimation.to = openAnimation.topOpenPosition;
         openAnimation.running = true;
         root.sheetOpen = true;
         mainItem.visible = true;
     }
 
     function close() {
-        if (scrollView.flickableItem.contentY < 0) {
-            closeAnimation.to = -height;
-        } else {
-            closeAnimation.to = scrollView.flickableItem.contentHeight;
-        }
         closeAnimation.running = true;
     }
 
     onBackgroundChanged: {
-        background.parent = flickableContents;
+        background.parent = contentLayout.parent;
+        background.anchors.fill = contentLayout;
         background.z = -1;
     }
     onContentItemChanged: {
-        if (contentItem.hasOwnProperty("contentY") && // Check if flickable
-            contentItem.hasOwnProperty("contentHeight")) {
+        if (contentItem instanceof Flickable) {
+            scrollView.flickableItem = contentItem;
             contentItem.parent = scrollView;
+            contentItem.anchors.fill = scrollView;
             scrollView.contentItem = contentItem;
         } else {
             contentItem.parent = contentItemParent;
@@ -139,6 +135,7 @@ QtObject {
             contentItem.anchors.left = contentItemParent.left;
             contentItem.anchors.right = contentItemParent.right;
         }
+        scrollView.flickableItem.interactive = false;
         scrollView.flickableItem.flickableDirection = Flickable.VerticalFlick;
     }
     onSheetOpenChanged: {
@@ -200,33 +197,6 @@ QtObject {
 
         readonly property int contentItemMaximumWidth: width > Units.gridUnit * 30 ? width * 0.95 : width
 
-        property bool ownSizeUpdate: false
-        function updateContentWidth() {
-            if (!contentItem.contentItem) {
-                return;
-            }
-
-            var newWidth = Math.min(contentItemMaximumWidth, Math.max(mainItem.width/2, Math.min(mainItem.width, mainItem.contentItemPreferredWidth)));
-
-            if (scrollView.verticalScrollBar && scrollView.verticalScrollBar.interactive) {
-                newWidth -= scrollView.verticalScrollBar.width;
-            }
-
-            ownSizeUpdate = true;
-            contentItem.contentItem.x = (mainItem.width - newWidth)/2
-            contentItem.contentItem.width = newWidth;
-            ownSizeUpdate = false;
-        }
-        onContentItemMaximumWidthChanged: updateContentWidth()
-        onWidthChanged: updateContentWidth()
-        Connections {
-            target: typeof contentItem.contentItem === "undefined" ? null : contentItem.contentItem
-            onWidthChanged: {
-                if (!mainItem.ownSizeUpdate) {
-                    mainItem.updateContentWidth();
-                }
-            }
-        }
         onHeightChanged: {
             var focusItem;
 
@@ -256,7 +226,7 @@ QtObject {
                 cursorY = focusItem.positionToRectangle(focusItem.cursorPosition).y;
             }
 
-
+            
             var pos = focusItem.mapToItem(flickableContents, 0, cursorY - Units.gridUnit*3);
             //focused item already visible? add some margin for the space of the action buttons
             if (pos.y >= scrollView.flickableItem.contentY && pos.y <= scrollView.flickableItem.contentY + scrollView.flickableItem.height - Units.gridUnit * 8) {
@@ -266,17 +236,13 @@ QtObject {
         }
 
         ParallelAnimation {
-            id: openAnimation
+            id: openAnimation 
             property int margins: Units.gridUnit * 5
-            property int topOpenPosition: Math.min(-mainItem.height*0.15, scrollView.flickableItem.contentHeight - mainItem.height + margins)
-            property alias from: openAnimationInternal.from
-            property alias to: openAnimationInternal.to
             NumberAnimation {
-                id: openAnimationInternal
-                target: scrollView.flickableItem
+                target: outerFlickable
                 properties: "contentY"
-                from: -mainItem.height
-                to: openAnimation.topOpenPosition
+                from: -outerFlickable.height
+                to: Math.max(0, outerFlickable.height - outerFlickable.contentHeight + Units.gridUnit * 2)
                 duration: Units.longDuration
                 easing.type: Easing.OutQuad
             }
@@ -289,14 +255,25 @@ QtObject {
             }
         }
 
+        NumberAnimation {
+            id: resetAnimation
+            target: outerFlickable
+            properties: "contentY"
+            from: outerFlickable.contentY
+            to: outerFlickable.visibleArea.yPosition < (1 - outerFlickable.visibleArea.heightRatio)/2 || scrollView.flickableItem.contentHeight < outerFlickable.height
+                ? Math.max(0, outerFlickable.height - outerFlickable.contentHeight + Units.gridUnit * 2)
+                : outerFlickable.contentHeight - outerFlickable.height + outerFlickable.topEmptyArea + headerItem.height + footerItem.height
+            duration: Units.longDuration
+            easing.type: Easing.OutQuad
+        }
+
         SequentialAnimation {
             id: closeAnimation
-            property int to: -mainItem.height
             ParallelAnimation {
                 NumberAnimation {
-                    target: scrollView.flickableItem
+                    target: outerFlickable
                     properties: "contentY"
-                    to: closeAnimation.to
+                    to: outerFlickable.visibleArea.yPosition < (1 - outerFlickable.visibleArea.heightRatio)/2 ? -mainItem.height : outerFlickable.contentHeight
                     duration: Units.longDuration
                     easing.type: Easing.InQuad
                 }
@@ -319,139 +296,20 @@ QtObject {
             anchors.fill: parent
             color: "black"
             opacity: 0.6 * Math.min(
-                (Math.min(scrollView.flickableItem.contentY + scrollView.flickableItem.height, scrollView.flickableItem.height) / scrollView.flickableItem.height),
-                (2 + (scrollView.flickableItem.contentHeight - scrollView.flickableItem.contentY - scrollView.flickableItem.topMargin - scrollView.flickableItem.bottomMargin)/scrollView.flickableItem.height))
-        }
-
-        Icon {
-            id: closeIcon
-            anchors {
-                right: headerItem.right
-                margins: Units.smallSpacing
-                top: headerItem.top
-            }
-            z: 3
-            visible: !Settings.isMobile
-            width: Units.iconSizes.smallMedium
-            height: width
-            source: closeMouseArea.containsMouse ? "window-close" : "window-close-symbolic"
-            active: closeMouseArea.containsMouse
-            MouseArea {
-                id: closeMouseArea
-                hoverEnabled: true
-                anchors.fill: parent
-                onClicked: root.close();
-            }
-        }
-        Rectangle {
-            id: headerItem
-            width: flickableContents.width
-            x: flickableContents.x
-            visible: root.header
-            height: Math.max(headerParent.implicitHeight, closeIcon.height) + Units.smallSpacing * 2
-            color: Theme.backgroundColor
-            //different y depending if we're a listview or a normal item
-            y: Math.max(0, -scrollView.flickableItem.contentY - (scrollView.contentItem != flickableContents ? height : 0))
-            z: 2
-            Item {
-                id: headerParent
-                implicitHeight: header ? header.implicitHeight : 0
-                anchors {
-                    fill: parent
-                    margins: Units.smallSpacing
-                    rightMargin: closeIcon.width + Units.smallSpacing
-                }
-            }
-
-            EdgeShadow {
-                z: -2
-                edge: Qt.TopEdge
-                anchors {
-                    right: parent.right
-                    left: parent.left
-                    top: parent.bottom
-                }
-
-                opacity: parent.y == 0 ? 1 : 0
-
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: Units.longDuration
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-            }
-        }
-        Rectangle {
-            id: footerItem
-            width: flickableContents.width
-            x: flickableContents.x
-            visible: root.footer
-            height: footerParent.implicitHeight + Units.smallSpacing * 2 + extraMargin
-            color: Theme.backgroundColor
-            y: mainItem.mapFromItem(flickableContents, 0, flickableContents.height).y - height
-            onHeightChanged: y = Math.min(mainItem.height, mainItem.mapFromItem(flickableContents, 0, flickableContents.height).y) - footerItem.height;
-            //Show an extra margin when:
-            //* the application is in mobile mode (no toolbarapplicationheader)
-            //* the bottom screen controls are visible
-            //* the sheet is displayed *under* the controls
-            property int extraMargin: (!root.parent ||
-                typeof applicationWindow === "undefined" ||
-                (root.parent === applicationWindow().overlay) ||
-                !applicationWindow().controlsVisible ||
-                (applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar && applicationWindow().pageStack.globalToolBar.actualStyle === ApplicationHeaderStyle.ToolBar) ||
-                (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0))
-                    ? 0 : Units.gridUnit * 3
-            Connections {
-                target: scrollView.flickableItem
-                onContentYChanged: footerItem.y = Math.min(mainItem.height, mainItem.mapFromItem(flickableContents, 0, flickableContents.height).y) - footerItem.height;
-
-                onHeightChanged: scrollView.flickableItem.contentYChanged()
-            }
-            z: 2
-            Item {
-                id: footerParent
-                implicitHeight: footer ? footer.implicitHeight : 0
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    right: parent.right
-                    margins: Units.smallSpacing
-                }
-            }
-
-            EdgeShadow {
-                z: -2
-                edge: Qt.BottomEdge
-                anchors {
-                    right: parent.right
-                    left: parent.left
-                    bottom: parent.top
-                }
-
-                opacity: parent.y + parent.height < mainItem.height ? 0 : 1
-
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: Units.longDuration
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-            }
+                (Math.min(outerFlickable.contentY + outerFlickable.height, outerFlickable.height) / outerFlickable.height),
+                (2 + (outerFlickable.contentHeight - outerFlickable.contentY - outerFlickable.topMargin - outerFlickable.bottomMargin)/outerFlickable.height))
         }
 
         FocusScope {
             id: flickableContents
-            //anchors.horizontalCenter: parent.horizontalCenter
-            x: (mainItem.width - width) / 2
 
-            readonly property real listHeaderHeight: scrollView.flickableItem && root.contentItem.headerItem ? root.contentItem.headerItem.height : 0
+            readonly property real listHeaderHeight: scrollView.flickableItem ? -scrollView.flickableItem.originY : 0
 
             y: (scrollView.contentItem != flickableContents ? -scrollView.flickableItem.contentY - listHeaderHeight  - (headerItem.visible ? headerItem.height : 0): 0)
 
             width: mainItem.contentItemPreferredWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.contentItemMaximumWidth, mainItem.contentItemPreferredWidth))
 
-            height: (scrollView.contentItem != flickableContents ? scrollView.flickableItem.contentHeight + listHeaderHeight : (root.contentItem.height + topPadding + bottomPadding)) + (headerItem.visible ? headerItem.height : 0) + (footerItem.visible ? footerItem.height : 0)
+            height: scrollView.contentItem == flickableContents ? (root.contentItem.height + topPadding + bottomPadding) + (headerItem.visible ? headerItem.height : 0) + (footerItem.visible ? footerItem.height : 0) : 0
             Connections {
                 target: enabled ? flickableContents.Window.activeFocusItem : null
                 enabled: flickableContents.focus && flickableContents.Window.activeFocusItem && flickableContents.Window.activeFocusItem.hasOwnProperty("text")
@@ -473,35 +331,6 @@ QtObject {
                 }
             }
         }
-        Binding {
-            when: scrollView.flickableItem != null
-            target: scrollView.flickableItem
-            property: "topMargin"
-            //hack needed for smoother open anim
-            value: openAnimation.running ? -scrollView.flickableItem.contentY : -openAnimation.topOpenPosition
-        }
-        Binding {
-            when: scrollView.flickableItem != null
-            target: scrollView.flickableItem
-            property: "bottomMargin"
-            value: openAnimation.margins
-        }
-
-        Binding {
-            target: scrollView.verticalScrollBar ? scrollView.verticalScrollBar.anchors : null
-            property: "topMargin"
-            value: headerItem.y + headerItem.height
-        }
-        Binding {
-            target: scrollView.verticalScrollBar
-            property: "height"
-            value: mainItem.height - (scrollView.verticalScrollBar ? scrollView.verticalScrollBar.anchors.topMargin : 0) - (mainItem.height - footerItem.y)
-        }
-        Binding {
-            target: scrollView.verticalScrollBar ? scrollView.verticalScrollBar.anchors : null
-            property: "rightMargin"
-            value: mainItem.width - flickableContents.width - flickableContents.x
-        }
 
         Connections {
             target: scrollView.flickableItem
@@ -511,41 +340,229 @@ QtObject {
                     open();
                 }
             }
-            onDraggingChanged: {
-                if (scrollView.flickableItem.dragging) {
+        }
+
+        Flickable {
+            id: outerFlickable
+            anchors.fill: parent
+            contentWidth: width
+            topMargin: height
+            bottomMargin: height
+            // +1: we need the flickable to be always interactive
+            contentHeight: Math.max(height+1, scrollView.flickableItem.contentHeight + topEmptyArea)
+
+            readonly property int topEmptyArea: Math.max(height-scrollView.flickableItem.contentHeight, Units.gridUnit * 3)
+  
+            property int oldContentY: NaN
+            property bool lastMovementWasDown: false
+            property real startDraggingPos
+            onContentYChanged: {
+                if (scrollView.userInteracting) {
                     return;
                 }
 
-                //close
-                if ((mainItem.height + scrollView.flickableItem.contentY) < mainItem.height/2) {
-                    closeAnimation.to = -mainItem.height;
-                    closeAnimation.running = true;
+                let startPos = -scrollView.flickableItem.topMargin - flickableContents.listHeaderHeight;
+                let pos = contentY - topEmptyArea - flickableContents.listHeaderHeight;
+                let endPos = scrollView.flickableItem.contentHeight - scrollView.flickableItem.height + scrollView.flickableItem.bottomMargin - flickableContents.listHeaderHeight;
 
-                } else if ((mainItem.height*0.6 + scrollView.flickableItem.contentY) > scrollView.flickableItem.contentHeight) {
-                    closeAnimation.to = scrollView.flickableItem.contentHeight;
-                    closeAnimation.running = true;
+                if (endPos - pos > 0) {
+                    contentLayout.y = Math.max(0, scrollView.flickableItem.topMargin - pos - flickableContents.listHeaderHeight);
+                } else if (scrollView.flickableItem.topMargin - pos < 0) {
+                    contentLayout.y = endPos - pos;
+                }
+
+                scrollView.flickableItem.contentY = Math.max(
+                    startPos, Math.min(pos, endPos));
+
+                lastMovementWasDown = contentY < oldContentY;
+                oldContentY = contentY;
+            }
+
+            onFlickEnded: {
+                if (openAnimation.running || closeAnimation.running) {
+                    return;
+                }
+                if (scrollView.flickableItem.atYBeginning ||scrollView.flickableItem.atYEnd) {
+                    resetAnimation.restart();
                 }
             }
-        }
 
-        Binding {
-            target: scrollView.verticalScrollBar
-            property: "visible"
-            value: scrollView.flickableItem.contentHeight > mainItem.height*0.8
-        }
-        Connections {
-            target: scrollView.verticalScrollBar
-            onActiveChanged: {
-                if (!scrollView.verticalScrollBar.active) {
-                    scrollView.flickableItem.movementEnded();
+            onDraggingChanged: {
+                if (dragging) {
+                    startDraggingPos = contentY;
+                    return;
+                }
+
+                let shouldClose = false;
+
+                // close
+                if (scrollView.flickableItem.atYBeginning) {
+                    if (startDraggingPos - contentY > Units.gridUnit * 4 &&
+                        contentY < -Units.gridUnit * 4 &&
+                        lastMovementWasDown) {
+                        shouldClose = true;
+                    }
+                }
+
+                if (scrollView.flickableItem.atYEnd) {
+                    if (contentY - startDraggingPos > Units.gridUnit * 4 &&
+                        contentY > contentHeight - height + Units.gridUnit * 4  &&
+                        !lastMovementWasDown) {
+                        shouldClose = true;
+                    }
+                }
+
+                if (shouldClose) {
+                    closeAnimation.restart();
+                } else if (scrollView.flickableItem.atYBeginning || scrollView.flickableItem.atYEnd) {
+                    resetAnimation.restart();
                 }
             }
-        }
-        ScrollView {
-            id: scrollView
-            anchors.fill: parent
-            horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
-            rightPadding: 0
+
+            onHeightChanged: {
+                if (scrollView.flickableItem.contentHeight < height) {
+                    contentYChanged();
+                }
+            }
+
+            ColumnLayout {
+                id: contentLayout
+                spacing: 0
+                // Its events should be filtered but not scrolled
+                parent: outerFlickable
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: mainItem.contentItemPreferredWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.contentItemMaximumWidth, mainItem.contentItemPreferredWidth))
+                height: Math.min(implicitHeight, parent.height)
+
+                Icon {
+                    id: closeIcon
+                    anchors {
+                        right: contentLayout.right
+                        margins: Units.smallSpacing
+                        top: contentLayout.top
+                    }
+                    parent: outerFlickable
+                    z: 3
+                    visible: !Settings.isMobile
+                    width: Units.iconSizes.smallMedium
+                    height: width
+                    source: closeMouseArea.containsMouse ? "window-close" : "window-close-symbolic"
+                    active: closeMouseArea.containsMouse
+                    MouseArea {
+                        id: closeMouseArea
+                        hoverEnabled: true
+                        anchors.fill: parent
+                        onClicked: root.close();
+                    }
+                }
+
+                Rectangle {
+                    id: headerItem
+                    Layout.fillWidth: true
+                    visible: root.header || closeIcon.visible
+                    implicitHeight: Math.max(headerParent.implicitHeight, closeIcon.height) + Units.smallSpacing * 2
+                    color: Theme.backgroundColor
+                    z: 2
+                    Item {
+                        id: headerParent
+                        implicitHeight: header ? header.implicitHeight : 0
+                        anchors {
+                            fill: parent
+                            margins: Units.smallSpacing
+                            rightMargin: closeIcon.width + Units.smallSpacing
+                        }
+                    }
+                    
+                    Separator {
+                        anchors {
+                            right: parent.right
+                            left: parent.left
+                            top: parent.bottom
+                        }
+                    }
+                }
+        
+                ScrollView {
+                    id: scrollView
+
+                    property bool userInteracting: false
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    implicitHeight: flickableItem.contentHeight
+                }
+                Connections {
+                    target: scrollView.flickableItem
+                    property real oldContentY: 0
+                    onContentYChanged: {
+                        if (outerFlickable.moving) {
+                            oldContentY = scrollView.flickableItem.contentY;
+                            return;
+                        }
+                        scrollView.userInteracting = true;
+                        
+                        let diff = scrollView.flickableItem.contentY - oldContentY
+
+                        outerFlickable.contentY = outerFlickable.contentY + diff;
+
+                        if (diff > 0) {
+                            contentLayout.y = Math.max(0,  contentLayout.y - diff);
+                        } else if (scrollView.flickableItem.contentY < outerFlickable.topEmptyArea + headerItem.height) {
+                            contentLayout.y = Math.min(outerFlickable.topEmptyArea,  contentLayout.y + (contentLayout.y - diff));
+                        }
+
+                        oldContentY = scrollView.flickableItem.contentY;
+                        scrollView.userInteracting = false;
+                    }
+                }
+                Item {
+                    implicitHeight: footerItem.height
+                }
+            }
+
+            // footer item is outside the layout as it should never scroll away
+            Rectangle {
+                id: footerItem
+                width: contentLayout.width
+                parent: outerFlickable
+                x: contentLayout.x
+                y: Math.min(parent.height, contentLayout.y + contentLayout.height) - height
+                visible: root.footer
+                implicitHeight: footerParent.implicitHeight + Units.smallSpacing * 2 + extraMargin
+                color: Theme.backgroundColor
+
+                //Show an extra margin when:
+                //* the application is in mobile mode (no toolbarapplicationheader)
+                //* the bottom screen controls are visible
+                //* the sheet is displayed *under* the controls
+                property int extraMargin: (!root.parent ||
+                    typeof applicationWindow === "undefined" ||
+                    (root.parent === applicationWindow().overlay) ||
+                    !applicationWindow().controlsVisible ||
+                    (applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar && applicationWindow().pageStack.globalToolBar.actualStyle === ApplicationHeaderStyle.ToolBar) ||
+                    (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") === 0))
+                        ? 0 : Units.gridUnit * 3
+
+                z: 2
+                Item {
+                    id: footerParent
+                    implicitHeight: footer ? footer.implicitHeight : 0
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        right: parent.right
+                        margins: Units.smallSpacing
+                    }
+                }
+
+                Separator {
+                    anchors {
+                        right: parent.right
+                        left: parent.left
+                        bottom: parent.top
+                    }
+                }
+            }
         }
     }
 }
