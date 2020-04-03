@@ -353,9 +353,9 @@ QtObject {
                 anchors {
                     fill: parent
                     leftMargin: leftPadding
-                    topMargin: topPadding + (headerItem.visible ? headerItem.height : 0)
-                    rightMargin: rightPadding + (scrollView.verticalScrollBar && scrollView.verticalScrollBar.interactive ? scrollView.verticalScrollBar.width : 0)
-                    bottomMargin: bottomPadding + (footerItem.visible ? footerItem.height : 0)
+                    topMargin: topPadding
+                    rightMargin: rightPadding
+                    bottomMargin: bottomPadding
                 }
             }
         }
