@@ -270,7 +270,7 @@ QtObject {
                 target: outerFlickable
                 properties: "contentY"
                 from: -outerFlickable.height
-                to: Math.max(0, outerFlickable.height - outerFlickable.contentHeight + Units.gridUnit * 2)
+                to: Math.max(0, outerFlickable.height - outerFlickable.contentHeight + headerItem.height + footerItem.height)
                 duration: Units.longDuration
                 easing.type: Easing.OutQuad
             }
@@ -289,7 +289,7 @@ QtObject {
             properties: "contentY"
             from: outerFlickable.contentY
             to: outerFlickable.visibleArea.yPosition < (1 - outerFlickable.visibleArea.heightRatio)/2 || scrollView.flickableItem.contentHeight < outerFlickable.height
-                ? Math.max(0, outerFlickable.height - outerFlickable.contentHeight + Units.gridUnit * 2)
+                ? Math.max(0, outerFlickable.height - outerFlickable.contentHeight + headerItem.height + footerItem.height)
                 : outerFlickable.contentHeight - outerFlickable.height + outerFlickable.topEmptyArea + headerItem.height + footerItem.height
             duration: Units.longDuration
             easing.type: Easing.OutQuad
