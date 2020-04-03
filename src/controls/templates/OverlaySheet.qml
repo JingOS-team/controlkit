@@ -73,6 +73,34 @@ QtObject {
     property int bottomPadding: Units.gridUnit
 
     /**
+     * leftInset: real
+     * padding that gets applied to both the content *and* the background
+     * @since 2.12
+     */
+    property real leftInset: 0
+
+    /**
+     * topInset: real
+     * padding that gets applied to both the content *and* the background
+     * @since 2.12
+     */
+    property real topInset: 0
+
+    /**
+     * rightInset: real
+     * padding that gets applied to both the content *and* the background
+     * @since 2.12
+     */
+    property real rightInset: 0
+
+    /**
+     * bottomInset: real
+     * padding that gets applied to both the content *and* the background
+     * @since 2.12
+     */
+    property real bottomInset: 0
+
+    /**
      * header: Item
      * an optional item which will be used as the sheet's header,
      * always kept on screen
@@ -352,7 +380,7 @@ QtObject {
             contentHeight: Math.max(height+1, scrollView.flickableItem.contentHeight + topEmptyArea)
 
             readonly property int topEmptyArea: Math.max(height-scrollView.flickableItem.contentHeight, Units.gridUnit * 3)
-  
+
             property int oldContentY: NaN
             property bool lastMovementWasDown: false
             property real startDraggingPos
@@ -366,9 +394,9 @@ QtObject {
                 let endPos = scrollView.flickableItem.contentHeight - scrollView.flickableItem.height + scrollView.flickableItem.bottomMargin - flickableContents.listHeaderHeight;
 
                 if (endPos - pos > 0) {
-                    contentLayout.y = Math.max(0, scrollView.flickableItem.topMargin - pos - flickableContents.listHeaderHeight);
+                    contentLayout.y = Math.max(root.topInset, scrollView.flickableItem.topMargin - pos - flickableContents.listHeaderHeight);
                 } else if (scrollView.flickableItem.topMargin - pos < 0) {
-                    contentLayout.y = endPos - pos;
+                    contentLayout.y = endPos - pos + root.topInset;
                 }
 
                 scrollView.flickableItem.contentY = Math.max(
@@ -431,48 +459,46 @@ QtObject {
                 // Its events should be filtered but not scrolled
                 parent: outerFlickable
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: mainItem.contentItemPreferredWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.contentItemMaximumWidth, mainItem.contentItemPreferredWidth))
-                height: Math.min(implicitHeight, parent.height)
+                width: mainItem.contentItemPreferredWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.contentItemMaximumWidth, mainItem.contentItemPreferredWidth)) - root.leftInset - root.rightInset
+                height: Math.min(implicitHeight, parent.height) - root.topInset - root.bottomInset
 
-                Icon {
-                    id: closeIcon
-                    anchors {
-                        right: contentLayout.right
-                        margins: Units.smallSpacing
-                        top: contentLayout.top
-                    }
-                    parent: outerFlickable
-                    z: 3
-                    visible: !Settings.isMobile
-                    width: Units.iconSizes.smallMedium
-                    height: width
-                    source: closeMouseArea.containsMouse ? "window-close" : "window-close-symbolic"
-                    active: closeMouseArea.containsMouse
-                    MouseArea {
-                        id: closeMouseArea
-                        hoverEnabled: true
-                        anchors.fill: parent
-                        onClicked: root.close();
-                    }
-                }
-
-                Rectangle {
+                Item {
                     id: headerItem
                     Layout.fillWidth: true
-                    visible: root.header || closeIcon.visible
+                    //Layout.margins: 1
+                    visible: root.header || !Settings.isMobile
                     implicitHeight: Math.max(headerParent.implicitHeight, closeIcon.height) + Units.smallSpacing * 2
-                    color: Theme.backgroundColor
                     z: 2
                     Item {
                         id: headerParent
                         implicitHeight: header ? header.implicitHeight : 0
                         anchors {
                             fill: parent
+                            leftMargin: root.leftPadding
                             margins: Units.smallSpacing
                             rightMargin: closeIcon.width + Units.smallSpacing
                         }
                     }
-                    
+                    Icon {
+                        id: closeIcon
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                            right: parent.right
+                            rightMargin: y
+                        }
+                        z: 3
+                        visible: !Settings.isMobile
+                        width: Units.iconSizes.smallMedium
+                        height: width
+                        source: closeMouseArea.containsMouse ? "window-close" : "window-close-symbolic"
+                        active: closeMouseArea.containsMouse
+                        MouseArea {
+                            id: closeMouseArea
+                            hoverEnabled: true
+                            anchors.fill: parent
+                            onClicked: root.close();
+                        }
+                    }
                     Separator {
                         anchors {
                             right: parent.right
@@ -506,9 +532,9 @@ QtObject {
                         outerFlickable.contentY = outerFlickable.contentY + diff;
 
                         if (diff > 0) {
-                            contentLayout.y = Math.max(0,  contentLayout.y - diff);
+                            contentLayout.y = Math.max(root.topInset,  contentLayout.y - diff);
                         } else if (scrollView.flickableItem.contentY < outerFlickable.topEmptyArea + headerItem.height) {
-                            contentLayout.y = Math.min(outerFlickable.topEmptyArea,  contentLayout.y + (contentLayout.y - diff));
+                            contentLayout.y = Math.min(outerFlickable.topEmptyArea,  contentLayout.y + (contentLayout.y - diff)) + root.topInset;
                         }
 
                         oldContentY = scrollView.flickableItem.contentY;
@@ -523,10 +549,11 @@ QtObject {
             // footer item is outside the layout as it should never scroll away
             Rectangle {
                 id: footerItem
-                width: contentLayout.width
+                width: contentLayout.width - 2
+                radius: Units.smallSpacing
                 parent: outerFlickable
-                x: contentLayout.x
-                y: Math.min(parent.height, contentLayout.y + contentLayout.height) - height
+                x: contentLayout.x + 1
+                y: Math.min(parent.height, contentLayout.y + contentLayout.height  -1) - height
                 visible: root.footer
                 implicitHeight: footerParent.implicitHeight + Units.smallSpacing * 2 + extraMargin
                 color: Theme.backgroundColor
