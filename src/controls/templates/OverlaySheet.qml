@@ -384,7 +384,10 @@ QtObject {
             property int oldContentY: NaN
             property bool lastMovementWasDown: false
             property real startDraggingPos
-
+            WheelHandler {
+                target: outerFlickable
+                scrollFlickableTarget: null
+            }
             onContentYChanged: {
                 if (scrollView.userInteracting) {
                     return;
