@@ -131,7 +131,7 @@ QtObject {
      * whether to show the close button in the top-right corner
      * @since 5.44
      */
-    property alias showCloseButton: closeIcon.visible
+    property bool showCloseButton: !Settings.isMobile
 
     property Item parent
 
@@ -470,7 +470,7 @@ QtObject {
                     id: headerItem
                     Layout.fillWidth: true
                     //Layout.margins: 1
-                    visible: root.header || !Settings.isMobile
+                    visible: root.header || root.showCloseButton
                     implicitHeight: Math.max(headerParent.implicitHeight, closeIcon.height) + Units.smallSpacing * 2
                     z: 2
                     Item {
@@ -491,7 +491,7 @@ QtObject {
                             margins: Units.smallSpacing
                         }
                         z: 3
-                        visible: !Settings.isMobile
+                        visible: root.showCloseButton
                         width: Units.iconSizes.smallMedium
                         height: width
                         source: closeMouseArea.containsMouse ? "window-close" : "window-close-symbolic"
