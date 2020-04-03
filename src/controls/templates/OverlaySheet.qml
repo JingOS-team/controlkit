@@ -384,6 +384,7 @@ QtObject {
             property int oldContentY: NaN
             property bool lastMovementWasDown: false
             property real startDraggingPos
+
             onContentYChanged: {
                 if (scrollView.userInteracting) {
                     return;

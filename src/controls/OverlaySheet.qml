@@ -20,9 +20,9 @@ import "templates" as T
 T.OverlaySheet {
     id: root
 
-    leftInset: -Kirigami.Units.smallSpacing
+    leftInset: 0
     topInset: -Kirigami.Units.smallSpacing
-    rightInset: -Kirigami.Units.smallSpacing
+    rightInset: 0
     bottomInset: -Kirigami.Units.smallSpacing
 
     background: Item {
@@ -36,7 +36,7 @@ T.OverlaySheet {
             color: Kirigami.Theme.backgroundColor
 
             shadow {
-                size: Kirigami.Units.gridUnit
+                size: Kirigami.Units.gridUnit*2
                 yOffset: 2
                 color: Qt.rgba(0, 0, 0, 0.8)
             }
