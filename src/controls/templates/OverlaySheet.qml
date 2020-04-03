@@ -486,9 +486,9 @@ QtObject {
                     Icon {
                         id: closeIcon
                         anchors {
-                            verticalCenter: parent.verticalCenter
                             right: parent.right
-                            rightMargin: y
+                            top: parent.top
+                            margins: Units.smallSpacing
                         }
                         z: 3
                         visible: !Settings.isMobile
