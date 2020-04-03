@@ -10,7 +10,6 @@
 #include <QQmlEngine>
 #include <QQmlComponent>
 #include <QQmlContext>
-#include <QQmlIncubator>
 #include <QQmlProperty>
 
 PagePool::PagePool(QObject *parent)
@@ -156,59 +155,26 @@ QQuickItem *PagePool::loadPageWithProperties(
     }
 }
 
-// As soon as we can depend on Qt 5.14, usage of this incubator should be
-// replaced with a call to QQmlComponent::createWithInitialProperties
-class PropertyInitializingIncubator : public QQmlIncubator
-{
-    const QVariantMap &_props;
-    QQmlContext *_ctx;
-
-public:
-    PropertyInitializingIncubator(
-            const QVariantMap &props, QQmlContext *ctx,
-            IncubationMode mode = Asynchronous)
-        : QQmlIncubator(mode), _props(props), _ctx(ctx)
-    {}
-
-protected:
-    void setInitialState(QObject *obj) override
-    {
-        QMapIterator<QString, QVariant> i(_props);
-        while (i.hasNext()) {
-            i.next();
-
-            QQmlProperty p(obj, i.key(), _ctx);
-            if (!p.isValid()) {
-                qWarning() << "Invalid property " << i.key();
-                continue;
-            }
-            if (!p.write(i.value())) {
-                qWarning() << "Could not set property " << i.key();
-                continue;
-            }
-        }
-    }
-};
-
-
 QQuickItem *PagePool::createFromComponent(QQmlComponent *component, const QVariantMap &properties)
 {
     QQmlContext *ctx = QQmlEngine::contextForObject(this);
     Q_ASSERT(ctx);
 
-    PropertyInitializingIncubator incubator(properties, ctx);
-    component->create(incubator, ctx);
-
-    while (!incubator.isReady()) {
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
-    }
-
-    QObject *obj = incubator.object();
+    //TODO:  As soon as we can depend on Qt 5.14, use QQmlComponent::createWithInitialProperties
+    QObject *obj = component->beginCreate(ctx);
 
     // Error?
     if (!obj) {
         return nullptr;
     }
+
+    auto it = properties.constBegin();
+    while (it != properties.constEnd()) {
+        obj->setProperty(it.key().toUtf8().data(), it.value());
+        ++it;
+    }
+
+    component->completeCreate();
 
     QQuickItem *item = qobject_cast<QQuickItem *>(obj);
     if (!item) {
