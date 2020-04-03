@@ -80,15 +80,23 @@ Kirigami.Action {
             pageStack.push(initialProperties ?
                                pagePool.loadPageWithProperties(page, initialProperties) :
                                pagePool.loadPage(page));
+                               
         } else {
-            pagePool.loadPage(page, function(item) {
+            var callback = function(item) {
                 if (basePage) {
                     pageStack.pop(basePage);
                 } else {
                     pageStack.clear();
                 }
                 pageStack.push(item);
-            });
+            };
+
+            if (initialProperties) {
+                pagePool.loadPage(page, initialProperties, callback);
+
+            } else {
+                pagePool.loadPage(page, callback);
+            }
         }
     }
 }
