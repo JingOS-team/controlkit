@@ -17,14 +17,10 @@ endif()
 
 option(BUILD_SHARED_LIBS "Build a shared module" ON)
 option(DESKTOP_ENABLED "Build and install The Desktop style" ON)
-option(STATIC_LIBRARY "Build as a static library (deprecated, use BUILD_SHARED_LIBS instead)" OFF)
 option(BUILD_EXAMPLES "Build and install examples" OFF)
 option(DISABLE_DBUS "Build without D-Bus support" OFF)
-
-if(NOT BUILD_SHARED_LIBS)
-    set(STATIC_LIBRARY 1)
-elseif(STATIC_LIBRARY)
-    set(BUILD_SHARED_LIBS 0)
+if(DEFINED STATIC_LIBRARY)
+    message(FATAL_ERROR "Use the BUILD_SHARED_LIBS=OFF option to build a static library, STATIC_LIBRARY is no longer a supported option")
 endif()
 
 # Make CPack available to easy generate binary packages
@@ -40,11 +36,11 @@ set(CMAKE_AUTOMOC ON)
 set(AUTOMOC_MOC_OPTIONS -Muri=org.kde.kirigami)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-if(STATIC_LIBRARY)
+if(NOT BUILD_SHARED_LIBS)
     add_definitions(-DKIRIGAMI_BUILD_TYPE_STATIC)
     add_definitions(-DQT_PLUGIN)
     add_definitions(-DQT_STATICPLUGIN=1)
-endif(STATIC_LIBRARY)
+endif()
 
 ################# set KDE specific information #################
 
@@ -120,11 +116,11 @@ if (NOT ANDROID)
     add_subdirectory(templates)
 endif()
 
-if (BUILD_EXAMPLES AND NOT STATIC_LIBRARY)
+if (BUILD_EXAMPLES AND BUILD_SHARED_LIBS)
     add_subdirectory(examples)
 endif()
 
-if (BUILD_TESTING AND NOT STATIC_LIBRARY)
+if (BUILD_TESTING AND BUILD_SHARED_LIBS)
     add_subdirectory(autotests)
 endif()
 

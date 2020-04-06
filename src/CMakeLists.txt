@@ -1,6 +1,6 @@
 project(kirigami)
 
-if (NOT STATIC_LIBRARY)
+if (BUILD_SHARED_LIBS)
     ecm_create_qm_loader(kirigami_QM_LOADER libkirigami2plugin_qt)
 else()
     set(KIRIGAMI_STATIC_FILES
@@ -41,7 +41,7 @@ qt5_add_resources(SHADERS scenegraph/shaders/shaders.qrc)
 
 add_subdirectory(libkirigami)
 
-if(STATIC_LIBRARY)
+if(NOT BUILD_SHARED_LIBS)
     # `rcc` is a bit dumb and isn't designed to use auto generated files, to
     # avoid poluting the source directory, use absolute paths
     set(kirigami_QML_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../)
@@ -63,12 +63,12 @@ if(STATIC_LIBRARY)
     if (UNIX AND NOT ANDROID AND NOT(APPLE) AND NOT(DISABLE_DBUS))
         qt5_add_dbus_interface(kirigami_SRCS libkirigami/org.kde.KWin.TabletModeManager.xml tabletmodemanager_interface)
     endif()
-endif(STATIC_LIBRARY)
+endif()
 
 
 add_library(kirigamiplugin ${kirigami_SRCS} ${RESOURCES} ${SHADERS})
 
-if(STATIC_LIBRARY)
+if(NOT BUILD_SHARED_LIBS)
     SET_TARGET_PROPERTIES(kirigamiplugin PROPERTIES
         AUTOMOC_MOC_OPTIONS -Muri=org.kde.kirigami)
     if (UNIX AND NOT ANDROID AND NOT(APPLE) AND NOT(DISABLE_DBUS))
@@ -76,9 +76,9 @@ if(STATIC_LIBRARY)
     else()
         set(Kirigami_EXTRA_LIBS "")
     endif()
-else(STATIC_LIBRARY)
+else()
     set(Kirigami_EXTRA_LIBS KF5::Kirigami2)
-endif(STATIC_LIBRARY)
+endif()
 
 
 target_link_libraries(kirigamiplugin
@@ -88,7 +88,7 @@ target_link_libraries(kirigamiplugin
             ${Kirigami_EXTRA_LIBS} Qt5::Qml Qt5::Quick Qt5::QuickControls2
     )
 
-if (NOT STATIC_LIBRARY)
+if (BUILD_SHARED_LIBS)
     add_custom_target(copy_to_bin ALL
         COMMAND ${CMAKE_COMMAND} -E
                 make_directory ${CMAKE_BINARY_DIR}/bin/org/kde/kirigami.2/
@@ -114,6 +114,6 @@ if (NOT STATIC_LIBRARY)
     install(FILES ${PRI_FILENAME}
             DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
-endif(NOT STATIC_LIBRARY)
+endif()
 
 install(TARGETS kirigamiplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2)
