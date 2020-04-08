@@ -26,6 +26,11 @@ QUrl PagePool::lastLoadedUrl() const
     return m_lastLoadedUrl;
 }
 
+QQuickItem *PagePool::lastLoadedItem() const
+{
+    return m_lastLoadedItem;
+}
+
 void PagePool::setCachePages(bool cache)
 {
     if (cache == m_cachePages) {
@@ -168,10 +173,17 @@ QQuickItem *PagePool::createFromComponent(QQmlComponent *component, const QVaria
         return nullptr;
     }
 
-    auto it = properties.constBegin();
-    while (it != properties.constEnd()) {
-        obj->setProperty(it.key().toUtf8().data(), it.value());
-        ++it;
+    for (auto it = properties.constBegin(); it != properties.constEnd(); ++it) {
+
+        QQmlProperty p(obj, it.key(), ctx);
+        if (!p.isValid()) {
+            qWarning() << "Invalid property " << it.key();
+            continue;
+        }
+        if (!p.write(it.value())) {
+            qWarning() << "Could not set property " << it.key();
+            continue;
+        }
     }
 
     component->completeCreate();
@@ -191,6 +203,8 @@ QQuickItem *PagePool::createFromComponent(QQmlComponent *component, const QVaria
     } else {
         QQmlEngine::setObjectOwnership(item, QQmlEngine::JavaScriptOwnership);
     }
+
+    emit lastLoadedItemChanged();
 
     return item;
 }
@@ -266,5 +280,16 @@ void PagePool::deletePage(const QVariant &page)
     item->deleteLater();
 }
 
+void PagePool::clear()
+{
+    for (const auto& url : m_urlForItem) {
+        deletePage(url);
+    }
+    m_lastLoadedUrl = QUrl();
+    m_lastLoadedItem = nullptr;
+    
+    emit lastLoadedUrlChanged();
+    emit lastLoadedItemChanged();
+}
 
 #include "moc_pagepool.cpp"

@@ -62,6 +62,11 @@ Kirigami.Action {
             return;
         }
 
+        if (initialProperties && typeof(initialProperties) !== "object") {
+            console.warn("initialProperties must be of type object");
+            return;
+        }
+
         if (pagePool.resolvedUrl(page) == pagePool.lastLoadedUrl) {
             return;
         }

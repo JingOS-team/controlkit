@@ -28,6 +28,11 @@ class PagePool : public QObject
     Q_PROPERTY(QUrl lastLoadedUrl READ lastLoadedUrl NOTIFY lastLoadedUrlChanged)
 
     /**
+     * The last item that was loaded with @loadPage.
+     */
+    Q_PROPERTY(QQuickItem *lastLoadedItem READ lastLoadedItem NOTIFY lastLoadedItemChanged)
+
+    /**
      * If true (default) the pages will be kept around, will have C++ ownership and only one instance per page will be created.
      * If false the pages will have Javascript ownership (thus deleted on pop by the page stacks) and each call to loadPage will create a new page instance. When cachePages is false, Components gets cached never the less
      */
@@ -38,6 +43,7 @@ public:
     ~PagePool();
 
     QUrl lastLoadedUrl() const;
+    QQuickItem *lastLoadedItem() const;
 
     void setCachePages(bool cache);
     bool cachePages() const;
@@ -87,8 +93,14 @@ public:
      */
     Q_INVOKABLE bool isLocalUrl(const QUrl &url);
 
+    /**
+     * Deletes all pages managed by the pool.
+     */
+    Q_INVOKABLE void clear();
+
 Q_SIGNALS:
     void lastLoadedUrlChanged();
+    void lastLoadedItemChanged();
     void cachePagesChanged();
 
 private:
