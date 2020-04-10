@@ -159,16 +159,13 @@ Item {
                 //*the finger is still on the button
                 if (Math.abs((button.x + button.width/2) - startX) < Units.gridUnit &&
                     mouse.y > 0) {
-                    if (!actionUnderMouse) {
-                        return;
-                    }
 
                     //if an action has been assigned, trigger it
                     if (actionUnderMouse && actionUnderMouse.trigger) {
                         actionUnderMouse.trigger();
                     }
 
-                    if (actionUnderMouse.hasOwnProperty("children") && actionUnderMouse.children.length > 0) {
+                    if (actionUnderMouse && actionUnderMouse.hasOwnProperty("children") && actionUnderMouse.children.length > 0) {
                         var subMenuUnderMouse;
                         switch (actionUnderMouse) {
                         case leftAction:

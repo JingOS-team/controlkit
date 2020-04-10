@@ -339,7 +339,7 @@ T2.SwipeDelegate {
                     }
                 }
                 onClicked: {
-                    if (Math.abs(listItem.background.x) < Units.gridUnit && internal.edgeEnabled) {
+                    if (Math.abs(listItem.background.x) < Kirigami.Units.gridUnit && internal.edgeEnabled) {
                         dragButton.clicked(mouse);
                     }
                 }
