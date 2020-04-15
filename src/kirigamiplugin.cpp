@@ -20,6 +20,7 @@
 #include "shadowedrectangle.h"
 #include "shadowedtexture.h"
 #include "colorutils.h"
+#include "pagerouter.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -248,6 +249,9 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterSingletonType<ColorUtils>(uri, 2, 12, "ColorUtils", [] (QQmlEngine*, QJSEngine*) -> QObject* { return new ColorUtils; });
 
     qmlRegisterUncreatableType<CornersGroup>(uri, 2, 12, "CornersGroup", QStringLiteral("Used as grouped property"));
+    qmlRegisterType<PageRouter>(uri, 2, 12, "PageRouter");
+    qmlRegisterType<PageRoute>(uri, 2, 12, "PageRoute");
+    qmlRegisterUncreatableType<PageRouterAttached>(uri, 2, 12, "PageRouterAttached", QStringLiteral("PageRouterAttached cannot be created"));
 
     qmlProtectModule(uri, 2);
 }

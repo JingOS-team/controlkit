@@ -57,6 +57,17 @@ T.Control {
     contentItem: columnView
 
     /**
+     * columnView: Kirigami::ColumnView
+     *
+     * The ColumnView that this PageRow owns.
+     * Generally, you shouldn't need to change
+     * the value of this.
+     *
+     * @since 2.12
+     */
+    property alias columnView: columnView
+
+    /**
      * items: list<Item>
      * All the items that are present in the PageRow
      * @since 2.6

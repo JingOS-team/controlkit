@@ -23,6 +23,8 @@ It is a Tier-1 KDE Framework starting with KDE Frameworks 5.37.
 - \link org::kde::kirigami::Page Page  \endlink
 - \link org::kde::kirigami::ScrollablePage ScrollablePage  \endlink
 - \link org::kde::kirigami::OverlaySheet  OverlaySheet \endlink
+- \link PageRouter  PageRouter \endlink
+- \link PageRoute  PageRoute \endlink
 - \link org::kde::kirigami::Theme Theme  \endlink
 - \link org::kde::kirigami::Units  Units \endlink
 - \link org::kde::kirigami::Icon Icon  \endlink

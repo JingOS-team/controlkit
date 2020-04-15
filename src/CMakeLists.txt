@@ -27,6 +27,7 @@ set(kirigami_SRCS
     shadowedrectangle.cpp
     shadowedtexture.cpp
     colorutils.cpp
+    pagerouter.cpp
     scenegraph/shadowedrectanglenode.cpp
     scenegraph/shadowedrectanglematerial.cpp
     scenegraph/shadowedborderrectanglematerial.cpp

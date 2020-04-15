@@ -28,6 +28,7 @@ kirigami_add_tests(
     tst_pagerow.qml
     tst_icon.qml
     tst_actiontoolbar.qml
+    tst_pagerouter.qml
     pagepool/tst_pagepool.qml
 )
 
