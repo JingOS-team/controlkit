@@ -208,7 +208,6 @@ QtObject {
 
         anchors.fill: parent
 
-        z: 9998
         visible: false
         drag.filterChildren: true
         hoverEnabled: true
