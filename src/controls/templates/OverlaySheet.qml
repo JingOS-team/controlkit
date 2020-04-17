@@ -214,8 +214,8 @@ QtObject {
         clip: true
 
         onClicked: {
-            var pos = mapToItem(flickableContents, mouse.x, mouse.y);
-            if (!flickableContents.contains(pos)) {
+            var pos = mapToItem(scrollView.contentItem, mouse.x, mouse.y);
+            if (!scrollView.contentItem.contains(pos)) {
                 root.close();
             }
         }
