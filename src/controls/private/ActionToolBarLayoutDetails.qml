@@ -118,7 +118,7 @@ Item {
                     return true
                 }
 
-                property bool actionVisible: visible && (x + width < details.fullLayoutWidth)
+                property bool actionVisible: visible && (x + width <= details.fullLayoutWidth)
 
                 onLoaded: {
                     if (sourceComponent == toolButtonDelegate) {
