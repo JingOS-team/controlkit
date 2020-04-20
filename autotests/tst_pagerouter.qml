@@ -7,31 +7,31 @@ Kirigami.PageRow {
     id: root
     TestCase {
         name: "PageRouterGeneralTests"
-        function test_10_init() {
+        function test_a_init() {
             compare(router.currentRoutes().length, 1)
         }
-        function test_20_navigate() {
+        function test_b_navigate() {
             router.navigateToRoute(["home", "login"])
             compare(router.currentRoutes().length, 2)
         }
-        function test_30_data() {
+        function test_c_data() {
             router.navigateToRoute(["home", {"route": "login", "data": "red"}])
             compare(router.routeActive(["home", {"route": "login", "data": "red"}]), true)
             compare(router.routeActive(["home", {"route": "login", "data": "blue"}]), false)
         }
-        function test_40_cache_works() {
+        function test_d_cache_works() {
             router.navigateToRoute(["home", {"route": "login", "data": "red"}, {"route": "login", "data": "blue"}])
             compare(router.currentRoutes().length, 3)
         }
-        function test_50_push() {
+        function test_e_push() {
             router.pushRoute("home")
             compare(router.currentRoutes().length, 4)
         }
-        function test_60_pop() {
+        function test_f_pop() {
             router.popRoute()
             compare(router.currentRoutes().length, 3)
         }
-        function test_70_bring_to_view() {
+        function test_g_bring_to_view() {
             router.bringToView("home")
             compare(root.columnView.currentIndex, 0)
             router.bringToView({"route": "login", "data": "red"})
@@ -39,18 +39,18 @@ Kirigami.PageRow {
             router.bringToView({"route": "login", "data": "blue"})
             compare(root.columnView.currentIndex, 2)
         }
-        function test_80_routeactive() {
+        function test_h_routeactive() {
             compare(router.routeActive(["home"]), true)
             compare(router.routeActive(["home", "login"]), true)
             compare(router.routeActive(["home", {"route": "login", "data": "red"}]), true)
             compare(router.routeActive(["home", {"route": "login", "data": "blue"}]), false)
         }
-        function test_90_initial_route() {
+        function test_i_initial_route() {
             router.initialRoute = "login"
             compare(router.routeActive(["login"]), false)
             compare(router.currentRoutes().length, 3)
         }
-        function test_100_navigation_two() {
+        function test_j_navigation_two() {
             router.navigateToRoute(["home", {"route": "login", "data": "red"}, {"route": "login", "data": "blue"}])
             compare(router.currentRoutes().length, 3)
             router.navigateToRoute(["home"])

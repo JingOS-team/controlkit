@@ -228,7 +228,7 @@ void PageRouter::navigateToRoute(QJSValue route)
         auto incoming = incomingRoutes.at(i);
         if (i >= resolvedRoutes.length()) {
             resolvedRoutes.append(incoming);
-        } else if (current != incoming) {
+        } else if (current.name != incoming.name || current.data != incoming.data) {
             resolvedRoutes.replace(i, incoming);
         }
     }
