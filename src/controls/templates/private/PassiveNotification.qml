@@ -59,9 +59,8 @@ Controls.Popup {
 
         open();
 
-        for (let i = 0; i < outerLayout.children.length - 3; ++i) {
-            outerLayout.children[i].close();
-        }
+        // Skip the last three elements of this array.
+        outerLayout.children.slice(0, -3).forEach(child => child.close());
 
         let delegate = delegateComponent.createObject(outerLayout, {
             "text": message,
@@ -71,10 +70,9 @@ Controls.Popup {
         });
 
         // Reorder items to have the last on top
-        let children = outerLayout.children;
-        for (let i in children) {
-            children[i].Layout.row = children.length-1-i;
-        }
+        outerLayout.children.forEach((value, index) => {
+            value.Layout.row = outerLayout.children.length-1-index;
+        });
     }
 
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary

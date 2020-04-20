@@ -145,13 +145,7 @@ Controls.Action {
     property list<QtObject> __children
 
     onChildrenChanged: {
-        var child;
-        for (var i in children) {
-            child = children[i];
-            if (child.hasOwnProperty("parent")) {
-                child.parent = root
-            }
-        }
+        Array.prototype.filter.call(children, child => child.hasOwnProperty("parent")).forEach(child => child.parent = root)
     }
 
     /**
@@ -159,14 +153,6 @@ Controls.Action {
      * All child actions that are visible
      */
     readonly property var visibleChildren: {
-        var visible = [];
-        var child;
-        for (var i in children) {
-            child = children[i];
-            if (!child.hasOwnProperty("visible") || child.visible) {
-                visible.push(child)
-            }
-        }
-        return visible;
+        return Array.prototype.filter.call(children, child => !child.hasOwnProperty("visible") || child.visible)
     }
 }

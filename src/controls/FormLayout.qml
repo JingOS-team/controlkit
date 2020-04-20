@@ -81,20 +81,10 @@ Item {
         property var knownItems: []
         property var buddies: []
         property int knownItemsImplicitWidth: {
-            var hint = 0;
-            for (var i in knownItems) {
-                hint = Math.max(hint, knownItems[i].Layout.preferredWidth > 0 ? knownItems[i].Layout.preferredWidth : knownItems[i].implicitWidth);
-            }
-            return hint;
+            return knownItems.reduce((item, widthAccumulator) => Math.max(widthAccumulator, item.Layout.preferredWidth > 0 ? item.Layout.preferredWidth : item.implicitWidth));
         }
         property int buddiesImplicitWidth: {
-            var hint = 0;
-            for (var i in buddies) {
-                if (buddies[i].visible) {
-                    hint = Math.max(hint, buddies[i].implicitWidth);
-                }
-            }
-            return hint;
+            return buddies.filter(buddy => buddy.visible).reduce((buddy, widthAccumulator) => Math.max(widthAccumulator, buddy.implicitWidth));
         }
         states: [
             State {
@@ -147,18 +137,14 @@ Item {
         Item {
             Layout.preferredWidth: {
                 var hint = 1;
-                for (var i in root.twinFormLayouts) {
-                    hint = Math.max(hint, root.twinFormLayouts[i].children[0].buddiesImplicitWidth);
-                }
+                root.twinFormLayouts.forEach(item => hint = Math.max(hint, item.children[0].buddiesImplicitWidth));
                 return hint;
             }
         }
         Item {
             Layout.preferredWidth: {
                 var hint = 1;
-                for (var i in root.twinFormLayouts) {
-                    hint = Math.max(hint, root.twinFormLayouts[i].children[0].knownItemsImplicitWidth);
-                }
+                root.twinFormLayouts.forEach(item => hint = Math.max(hint, item.children[0].knownItemsImplicitWidth));
                 return hint;
             }
         }
