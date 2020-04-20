@@ -16,6 +16,9 @@
 #include <QPluginLoader>
 #include <QDir>
 #include <QQuickStyle>
+#include <QSettings>
+#include <QStandardPaths>
+#include <QList>
 
 namespace Kirigami {
 
@@ -86,6 +89,14 @@ public:
     QColor customFocusColor;
     QColor customHoverColor;
 
+    QColor titlebarTextColor;
+    QColor titlebarBackgroundColor;
+    QColor customTitlebarTextColor;
+    QColor customTitlebarBackgroundColor;
+
+    QColor titlebarInactiveTextColor;
+    QColor titlebarInactiveBackgroundColor;
+
     QPalette customPalette;
 
     QFont font;
@@ -102,6 +113,24 @@ KirigamiPluginFactory *PlatformThemePrivate::s_pluginFactory = nullptr;
 PlatformThemePrivate::PlatformThemePrivate(PlatformTheme *q)
     : q(q)
 {
+    auto settings = new QSettings(QDir::cleanPath(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QDir::separator() + QStringLiteral("kdeglobals")), QSettings::IniFormat);
+    settings->beginGroup(QStringLiteral("WM"));
+    std::map<QColor*,QString> map = {
+        {&titlebarBackgroundColor, QStringLiteral("activeBackground")},
+        {&titlebarTextColor, QStringLiteral("activeForeground")},
+        {&titlebarInactiveTextColor, QStringLiteral("inactiveForeground")},
+        {&titlebarInactiveBackgroundColor, QStringLiteral("inactiveBackground")},
+    };
+    for (auto const &x: map) {
+        auto colorSetting = settings->value(x.second).toStringList();
+        x.first->setRgb(
+            colorSetting.at(0).toInt(),
+            colorSetting.at(1).toInt(),
+            colorSetting.at(2).toInt(),
+            colorSetting.value(3, QStringLiteral("255")).toInt()
+        );
+    }
+    delete settings;
 }
 
 PlatformThemePrivate::~PlatformThemePrivate()
@@ -170,6 +199,8 @@ void PlatformThemePrivate::findParentStyle()
                 q->setCustomNegativeBackgroundColor(t->d->customNegativeBackgroundColor);
                 q->setCustomNeutralBackgroundColor(t->d->customNeutralBackgroundColor);
                 q->setCustomPositiveBackgroundColor(t->d->customPositiveBackgroundColor);
+                q->setCustomTitlebarBackgroundColor(t->d->customTitlebarTextColor);
+                q->setCustomTitlebarTextColor(t->d->customTitlebarTextColor);
                 q->setCustomFocusColor(t->d->customFocusColor);
                 q->setCustomHoverColor(t->d->customHoverColor);
             }
@@ -398,6 +429,28 @@ QColor PlatformTheme::hoverColor() const
     return d->customHoverColor.isValid() ? d->customHoverColor : d->hoverColor;
 }
 
+QColor PlatformTheme::titlebarBackgroundColor() const
+{
+    return d->customTitlebarBackgroundColor.isValid() ? d->customTitlebarBackgroundColor : [=]() {
+        if (colorGroup() == PlatformTheme::Inactive) {
+            return d->titlebarInactiveBackgroundColor;
+        } else {
+            return d->titlebarBackgroundColor;
+        }
+    }();
+}
+
+QColor PlatformTheme::titlebarTextColor() const
+{
+    return d->customTitlebarTextColor.isValid() ? d->customTitlebarTextColor : [=](){
+        if (colorGroup() == PlatformTheme::Inactive) {
+            return d->titlebarInactiveTextColor;
+        } else {
+            return d->titlebarTextColor;
+        }
+    }();
+}
+
 //setters for theme implementations
 void PlatformTheme::setTextColor(const QColor &color)
 {
@@ -596,6 +649,38 @@ void PlatformTheme::setFocusColor(const QColor &color)
     }
 
     d->focusColor = color;
+    d->emitCompressedColorChanged();
+}
+
+void PlatformTheme::setTitlebarBackgroundColor(const QColor& color)
+{
+    if (d->titlebarBackgroundColor == color) return;
+
+    d->titlebarBackgroundColor = color;
+    d->emitCompressedColorChanged();
+}
+
+void PlatformTheme::setTitlebarTextColor(const QColor& color)
+{
+    if (d->titlebarTextColor == color) return;
+
+    d->titlebarBackgroundColor = color;
+    d->emitCompressedColorChanged();
+}
+
+void PlatformTheme::setTitlebarInactiveBackgroundColor(const QColor& color)
+{
+    if (d->titlebarInactiveBackgroundColor == color) return;
+
+    d->titlebarInactiveBackgroundColor = color;
+    d->emitCompressedColorChanged();
+}
+
+void PlatformTheme::setTitlebarInactiveTextColor(const QColor& color)
+{
+    if (d->titlebarInactiveTextColor == color) return;
+
+    d->titlebarInactiveBackgroundColor = color;
     d->emitCompressedColorChanged();
 }
 
@@ -841,6 +926,28 @@ void PlatformTheme::setCustomFocusColor(const QColor &color)
 
     d->customFocusColor = color;
     PROPAGATECUSTOMCOLOR(CustomFocusColor, color)
+    d->emitCompressedColorChanged();
+}
+
+void PlatformTheme::setCustomTitlebarBackgroundColor(const QColor &color)
+{
+    if (d->customTitlebarBackgroundColor == color) {
+        return;
+    }
+
+    d->customTitlebarBackgroundColor = color;
+    PROPAGATECUSTOMCOLOR(CustomTitlebarBackgroundColor, color)
+    d->emitCompressedColorChanged();
+}
+
+void PlatformTheme::setCustomTitlebarTextColor(const QColor &color)
+{
+    if (d->customTitlebarTextColor == color) {
+        return;
+    }
+
+    d->customTitlebarTextColor = color;
+    PROPAGATECUSTOMCOLOR(CustomTitlebarTextColor, color)
     d->emitCompressedColorChanged();
 }
 

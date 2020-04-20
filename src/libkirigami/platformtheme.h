@@ -166,6 +166,17 @@ class KIRIGAMI2_EXPORT PlatformTheme : public QObject
      */
     Q_PROPERTY(QColor hoverColor READ hoverColor WRITE setCustomHoverColor RESET setCustomHoverColor NOTIFY colorsChanged)
 
+    // wm colors
+    /**
+     * The background color to use for a window's titlebar.
+     */
+    Q_PROPERTY(QColor titlebarBackgroundColor READ titlebarBackgroundColor WRITE setCustomTitlebarBackgroundColor RESET setCustomTitlebarBackgroundColor NOTIFY colorsChanged)
+
+    /**
+     * The foreground color to use for a window's titlebar.
+     */
+    Q_PROPERTY(QColor titlebarTextColor READ titlebarTextColor WRITE setCustomTitlebarTextColor RESET setCustomTitlebarTextColor NOTIFY colorsChanged)
+
     // font and palette
     Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
     //Active palette
@@ -263,6 +274,12 @@ public:
     void setCustomFocusColor(const QColor &color = QColor());
     void setCustomHoverColor(const QColor &color = QColor());
 
+    //wm colors
+    QColor titlebarBackgroundColor() const;
+    void setCustomTitlebarBackgroundColor(const QColor &color = QColor());
+    QColor titlebarTextColor() const;
+    void setCustomTitlebarTextColor(const QColor &color = QColor());
+
     //QML attached property
     static PlatformTheme *qmlAttachedProperties(QObject *object);
 
@@ -304,6 +321,12 @@ protected:
     //decoration colors
     void setFocusColor(const QColor &color);
     void setHoverColor(const QColor &color);
+
+    // wm colors
+    void setTitlebarBackgroundColor(const QColor &color);
+    void setTitlebarTextColor(const QColor &color);
+    void setTitlebarInactiveBackgroundColor(const QColor &color);
+    void setTitlebarInactiveTextColor(const QColor &color);
 
     void setDefaultFont(const QFont &defaultFont);
     void setPalette(const QPalette &palette);
