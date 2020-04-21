@@ -418,7 +418,7 @@ T2.SwipeDelegate {
                 if (definitelyVisible) {
                     hasVisibleActions = true;
                 } else {
-                    hasVisibleActions = listItem.actions.some(action => action.visible);
+                    hasVisibleActions = Array.prototype.some.call(listItem.actions, action => action.visible);
                 }
             }
 
