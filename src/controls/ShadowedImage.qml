@@ -13,15 +13,21 @@ Item {
     property alias shadow: shadowRectangle.shadow
     property alias border: shadowRectangle.border
     property alias corners: shadowRectangle.corners
+
     property alias source: image.source
+    property alias asynchronous: image.asynchronous
+    property alias fillMode: image.fillMode
+    property alias sourceSize: image.sourceSize
+
+    Image {
+        id: image
+        visible: false
+    }
 
     ShadowedTexture {
         id: shadowRectangle
         anchors.fill: parent
 
-        source: Image {
-            id: image
-            visible: false
-        }
+        source: image.status == Image.Ready ? image : null
     }
 }

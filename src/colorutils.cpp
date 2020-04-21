@@ -191,3 +191,22 @@ QColor ColorUtils::scaleColor(QColor color, QJSValue adjustments)
 
     return copy;
 }
+
+QColor ColorUtils::tintWithAlpha(const QColor &targetColor, const QColor &tintColor, double alpha)
+{
+    qreal tintAlpha = tintColor.alphaF() * alpha;
+    qreal inverseAlpha = 1.0 - tintAlpha;
+
+    if (qFuzzyCompare(tintAlpha, 1.0)) {
+        return tintColor;
+    } else if (qFuzzyIsNull(tintAlpha)) {
+        return targetColor;
+    }
+
+    return QColor::fromRgbF(
+        tintColor.redF() * tintAlpha + targetColor.redF() * inverseAlpha,
+        tintColor.greenF() * tintAlpha + targetColor.greenF() * inverseAlpha,
+        tintColor.blueF() * tintAlpha + targetColor.blueF() * inverseAlpha,
+        tintAlpha + inverseAlpha * targetColor.alphaF()
+    );
+}

@@ -7,7 +7,7 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.0 as Controls
-import org.kde.kirigami 2.5 as Kirigami
+import org.kde.kirigami 2.12 as Kirigami
 import "private"
 
 /**
@@ -73,6 +73,10 @@ Kirigami.AbstractCard {
         anchors.bottomMargin: root.headerOrientation == Qt.Horizontal ? -root.bottomPadding : 0
         //height: Layout.preferredHeight
         implicitWidth: root.headerOrientation == Qt.Horizontal ? sourceSize.width : Layout.preferredWidth
+
+        corners.topLeftRadius: root.background.radius
+        corners.topRightRadius: root.headerOrientation == Qt.Horizontal ? 0 : root.background.radius
+        corners.bottomLeftRadius: root.headerOrientation == Qt.Horizontal ? root.background.radius : 0
     }
 
     onHeaderChanged: {

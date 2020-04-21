@@ -51,7 +51,7 @@ void ShadowedTextureNode::setTextureSource(QSGTextureProvider *source)
 
 void ShadowedTextureNode::preprocess()
 {
-    if (m_textureSource && m_material) {
+    if (m_textureSource && m_material && m_textureSource->texture()) {
         if (m_material->type() == borderlessMaterialType()) {
             preprocessTexture<ShadowedTextureMaterial>(m_material, m_textureSource);
         } else {

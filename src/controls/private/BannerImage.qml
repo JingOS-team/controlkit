@@ -7,14 +7,14 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.4 as Kirigami
+import org.kde.kirigami 2.12 as Kirigami
 
 /**
  * This Component is used as the header of GlobalDrawer and as the header
  * of Card, It can be accessed there as a grouped property but can never
  * be instantiated directly
  */
-Image {
+Kirigami.ShadowedImage {
     id: root
 
     /*
@@ -70,34 +70,28 @@ Image {
     fillMode: Image.PreserveAspectCrop
     asynchronous: true
 
+    color: "transparent"
+
     Component.onCompleted: {
         titleLayout.completed = true;
     }
 
-    LinearGradient {
+    Kirigami.ShadowedRectangle {
         anchors {
             left: parent.left
             right: parent.right
-            top: root.status !=
-Image.Ready || (root.titleAlignment & Qt.AlignTop) ? parent.top : undefined
-            bottom: root.status !=
-Image.Ready || (root.titleAlignment & Qt.AlignBottom) ? parent.bottom : undefined
+            top: (root.titleAlignment & Qt.AlignTop) ? parent.top : undefined
+            bottom: (root.titleAlignment & Qt.AlignBottom) ? parent.bottom : undefined
         }
+        height: Math.min(parent.height, titleLayout.height * 1.5)
+
+        opacity: 0.5
+        color: "black"
+
         visible: root.source != "" && root.title != "" && ((root.titleAlignment & Qt.AlignTop) || (root.titleAlignment & Qt.AlignBottom))
-        height: Math.min(parent.height, titleLayout.height * 2)
-        start: Qt.point(0, 0)
-        end: Qt.point(0, height)
-        gradient: Gradient {
-            GradientStop {
-                position: (root.titleAlignment & Qt.AlignTop) ? 0.0 : 1.0
-                color: Qt.rgba(0, 0, 0, 0.8)
-            }
-            GradientStop {
-                position: (root.titleAlignment & Qt.AlignTop) ? 1.0 : 0.0
-                color: Qt.rgba(0, 0, 0, root.status ==
-Image.Ready ? 0 : 0.3)
-            }
-        }
+
+        corners.topLeftRadius: root.titleAlignment & Qt.AlignTop ? root.corners.topLeftRadius : 0
+        corners.topRightRadius: root.titleAlignment & Qt.AlignTop ? root.corners.topRightRadius : 0
     }
 
     RowLayout {

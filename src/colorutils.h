@@ -159,4 +159,22 @@ public:
      * @since org.kde.kirigami 2.12
      */
     Q_INVOKABLE QColor scaleColor(QColor color, QJSValue adjustments);
+
+    /**
+     * Tint a color using a separate alpha value.
+     *
+     * This does the same as Qt.tint() except that rather than using the tint
+     * color's alpha value, it uses a separate value that gets multiplied with
+     * the tint color's alpha. This avoids needing to create a new color just to
+     * adjust an alpha value.
+     *
+     * \param targetColor The color to tint.
+     * \param tintColor The color to tint with.
+     * \param alpha The amount of tinting to apply.
+     *
+     * \return The tinted color.
+     *
+     * \sa Qt.tint()
+     */
+    Q_INVOKABLE QColor tintWithAlpha(const QColor &targetColor, const QColor &tintColor, double alpha);
 };

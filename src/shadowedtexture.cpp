@@ -33,7 +33,8 @@ void ShadowedTexture::setSource(QQuickItem *newSource)
     }
 
     m_source = newSource;
-    if (!m_source->parentItem()) {
+    m_sourceChanged = true;
+    if (m_source && !m_source->parentItem()) {
         m_source->setParentItem(this);
     }
 
@@ -45,11 +46,17 @@ QSGNode *ShadowedTexture::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaint
 {
     Q_UNUSED(data);
 
-    if (!node) {
-        node = new ShadowedTextureNode{};
+    if (!node || m_sourceChanged) {
+        m_sourceChanged = false;
+        delete node;
+        if (m_source) {
+            node = new ShadowedTextureNode{};
+        } else {
+            node = new ShadowedRectangleNode{};
+        }
     }
 
-    auto shadowNode = static_cast<ShadowedTextureNode*>(node);
+    auto shadowNode = static_cast<ShadowedRectangleNode*>(node);
     shadowNode->setBorderEnabled(border()->isEnabled());
     shadowNode->setRect(boundingRect());
     shadowNode->setSize(shadow()->size());
@@ -61,37 +68,9 @@ QSGNode *ShadowedTexture::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaint
     shadowNode->setBorderColor(border()->color());
 
     if (m_source) {
-        shadowNode->setTextureSource(m_source->textureProvider());
+        static_cast<ShadowedTextureNode*>(node)->setTextureSource(m_source->textureProvider());
     }
 
     shadowNode->updateGeometry();
     return shadowNode;
 }
-
-// void ShadowedTexture::checkSoftwareItem()
-// {
-//     if (!m_softwareItem && window() && window()->rendererInterface()->graphicsApi() == QSGRendererInterface::Software) {
-//         m_softwareItem = new PaintedRectangleItem{this};
-//
-//         auto updateItem = [this]() {
-//             auto borderWidth = m_border->width();
-//             auto rect = boundingRect().adjusted(-borderWidth / 2, -borderWidth / 2, borderWidth / 2, borderWidth / 2);
-//             m_softwareItem->setX(-borderWidth / 2);
-//             m_softwareItem->setY(-borderWidth / 2);
-//             m_softwareItem->setSize(rect.size());
-//             m_softwareItem->setColor(m_color);
-//             m_softwareItem->setRadius(m_radius);
-//             m_softwareItem->setBorderWidth(borderWidth);
-//             m_softwareItem->setBorderColor(m_border->color());
-//         };
-//
-//         updateItem();
-//
-//         connect(this, &ShadowedTexture::widthChanged, m_softwareItem, updateItem);
-//         connect(this, &ShadowedTexture::heightChanged, m_softwareItem, updateItem);
-//         connect(this, &ShadowedRectangle::colorChanged, m_softwareItem, updateItem);
-//         connect(this, &ShadowedRectangle::radiusChanged, m_softwareItem, updateItem);
-//         connect(m_border.get(), &BorderGroup::changed, m_softwareItem, updateItem);
-//         setFlag(QQuickItem::ItemHasContents, false);
-//     }
-// }

@@ -5,8 +5,7 @@
  */
 
 import QtQuick 2.6
-import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.4 as Kirigami
+import org.kde.kirigami 2.12
 import "templates" as T
 import "private"
 
@@ -27,21 +26,25 @@ T.AbstractCard {
     id: root
 
     background: DefaultCardBackground {
-        Rectangle {
-            anchors.fill: parent
-            color: Kirigami.Theme.highlightColor
-            opacity: {
-                if (root.showClickFeedback || highlighted) {
-                    return (root.highlighted || root.down) ? 0.3 : (root.hovered ? 0.1 : 0);
-                } else {
-                    return 0;
+        id: bg
+
+        readonly property color pressedColor: ColorUtils.tintWithAlpha(Theme.backgroundColor, Theme.highlightColor, 0.3)
+        readonly property color hoverColor: ColorUtils.tintWithAlpha(Theme.backgroundColor, Theme.highlightColor, 0.1)
+
+        color: {
+            if (root.showClickFeedback || highlighted) {
+                if (root.highlighted || root.down) {
+                    return bg.pressedColor
+                } else if (root.hovered) {
+                    return bg.hoverColor
                 }
             }
-            Behavior on opacity {
-                OpacityAnimator {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
+            return Theme.backgroundColor
+        }
+        Behavior on color {
+            ColorAnimation {
+                duration: Units.longDuration
+                easing.type: Easing.InOutQuad
             }
         }
     }

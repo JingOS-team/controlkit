@@ -230,7 +230,7 @@ const lowp float sdf_null = 99999.0;
 // A constant for a default level of smoothing when rendering an sdf.
 //
 // This
-const lowp float sdf_default_smoothing = 0.001;
+const lowp float sdf_default_smoothing = 0.005;
 
 // Render an sdf shape.
 //

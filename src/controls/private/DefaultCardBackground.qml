@@ -5,89 +5,19 @@
  */
 
 import QtQuick 2.6
-import org.kde.kirigami 2.11 as Kirigami
+import org.kde.kirigami 2.12 as Kirigami
 
-Rectangle {
+Kirigami.ShadowedRectangle {
     color: Kirigami.Theme.backgroundColor
 
-    CornerShadow {
-        id: topLeft
-        corner: Qt.BottomRightCorner
-        z: -1
-        anchors {
-            right: parent.left
-            bottom: parent.top
-            margins: margin
-            bottomMargin: margin - 1
-        }
-    }
-    CornerShadow {
-        id: topRight
-        corner: Qt.BottomLeftCorner
-        z: -1
-        anchors {
-            left: parent.right
-            bottom: parent.top
-            margins: margin
-            bottomMargin: margin - 1
-        }
-    }
-    CornerShadow {
-        id: bottomLeft
-        corner: Qt.TopRightCorner
-        z: -1
-        anchors {
-            right: parent.left
-            top: parent.bottom
-            margins: margin
-        }
-    }
-    CornerShadow {
-        id: bottomRight
-        corner: Qt.TopLeftCorner
-        z: -1
-        anchors {
-            left: parent.right
-            top: parent.bottom
-            margins: margin
-        }
-    }
-    EdgeShadow {
-        edge: Qt.BottomEdge
-        z: -1
-        anchors {
-            left: bottomLeft.right
-            right: bottomRight.left
-            bottom: parent.top
-            bottomMargin: - 1
-        }
-    }
-    EdgeShadow {
-        edge: Qt.TopEdge
-        z: -1
-        anchors {
-            left: topLeft.right
-            right: topRight.left
-            top: parent.bottom
-        }
-    }
-    EdgeShadow {
-        edge: Qt.LeftEdge
-        z: -1
-        anchors {
-            top: topRight.bottom
-            bottom: bottomRight.top
-            left: parent.right
-        }
-    }
-    EdgeShadow {
-        edge: Qt.RightEdge
-        z: -1
-        anchors {
-            top: topLeft.bottom
-            bottom: bottomLeft.top
-            right: parent.left
-        }
-    }
+    radius: Kirigami.Units.smallSpacing
+
+    shadow.size: Kirigami.Units.largeSpacing
+    shadow.color: Qt.rgba(0.0, 0.0, 0.0, 0.15)
+    shadow.yOffset: Kirigami.Units.devicePixelRatio * 2
+
+    border.width: Kirigami.Units.devicePixelRatio
+    border.color: Qt.tint(Kirigami.Theme.textColor,
+                          Qt.rgba(color.r, color.g, color.b, 0.6))
 }
 
