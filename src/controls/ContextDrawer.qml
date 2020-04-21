@@ -132,7 +132,7 @@ OverlayDrawer {
                 } else {
 
                     // Check if at least one action is visible
-                    var somethingVisible = root.actions.some(action => action.visible);
+                    var somethingVisible = Array.prototype.some.call(root.actions, action => action.visible);
 
                     if (!somethingVisible) {
                         return null;
