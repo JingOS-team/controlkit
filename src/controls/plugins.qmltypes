@@ -551,6 +551,17 @@ Module {
     }
     Component {
         prototype: "QQuickItem"
+        name: "org.kde.kirigami/PlaceholderMessage 2.12"
+        exports: ["org.kde.kirigami/PlaceholderMessage 2.12"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "text"; type: "string" }
+        Property { name: "icon"; type: "string" }
+        Property { name: "fadedIcon"; type: "bool" }
+    }
+    Component {
+        prototype: "QQuickItem"
         name: "QtQuick.Controls.Material.impl/BoxShadow 2.0"
         exports: ["QtQuick.Controls.Material.impl/BoxShadow 2.0"]
         exportMetaObjectRevisions: [0]

@@ -92,5 +92,6 @@
         <file alias="styles/org.kde.desktop/SwipeListItem.qml">@kirigami_QML_DIR@/src/styles/org.kde.desktop/SwipeListItem.qml</file>
         <file alias="styles/org.kde.desktop/ApplicationWindow.qml">@kirigami_QML_DIR@/src/styles/org.kde.desktop/ApplicationWindow.qml</file>
         <file alias="styles/org.kde.desktop/AbstractApplicationHeader.qml">@kirigami_QML_DIR@/src/styles/org.kde.desktop/AbstractApplicationHeader.qml</file>
+        <file alias="PlaceholderMessage.qml">@kirigami_QML_DIR@/src/controls/PlaceholderMessage.qml</file>
     </qresource>
 </RCC>

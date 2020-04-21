@@ -243,6 +243,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType<ShadowedRectangle>(uri, 2, 12, "ShadowedRectangle");
     qmlRegisterType<ShadowedTexture>(uri, 2, 12, "ShadowedTexture");
     qmlRegisterType(componentUrl(QStringLiteral("ShadowedImage.qml")), uri, 2, 12, "ShadowedImage");
+    qmlRegisterType(componentUrl(QStringLiteral("PlaceholderMessage.qml")), uri, 2, 12, "PlaceholderMessage");
 
     qmlRegisterUncreatableType<BorderGroup>(uri, 2, 12, "BorderGroup", QStringLiteral("Used as grouped property"));
     qmlRegisterUncreatableType<ShadowGroup>(uri, 2, 12, "ShadowGroup", QStringLiteral("Used as grouped property"));

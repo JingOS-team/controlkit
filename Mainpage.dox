@@ -37,6 +37,7 @@ It is a Tier-1 KDE Framework starting with KDE Frameworks 5.37.
 - \link org::kde::kirigami::SwipeListItem  SwipeListItem \endlink
 - \link org::kde::kirigami::Heading Heading  \endlink
 - \link org::kde::kirigami::Label Label  \endlink
+- \link org::kde::kirigami::PlaceholderMessage PlaceholderMessage  \endlink
 
 
 \section example Minimal Example

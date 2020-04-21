@@ -90,5 +90,6 @@
         <file alias="styles/org.kde.desktop/SwipeListItem.qml">src/styles/org.kde.desktop/SwipeListItem.qml</file>
         <file alias="styles/org.kde.desktop/ApplicationWindow.qml">src/styles/org.kde.desktop/ApplicationWindow.qml</file>
         <file alias="styles/org.kde.desktop/AbstractApplicationHeader.qml">src/styles/org.kde.desktop/AbstractApplicationHeader.qml</file>
+        <file alias="PlaceholderMessage.qml">src/controls/PlaceholderMessage.qml</file>
     </qresource>
 </RCC>
