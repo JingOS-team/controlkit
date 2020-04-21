@@ -37,4 +37,5 @@ protected:
 
 private:
     QQuickItem *m_source = nullptr;
+    bool m_sourceChanged = false;
 };
