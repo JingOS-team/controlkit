@@ -518,6 +518,7 @@ Module {
         defaultProperty: "_basicDefault"
         Property { name: "icon"; type: "QVariant" }
         Property { name: "label"; type: "string" }
+        Property { name: "subtitle"; type: "string" }
         Property { name: "reserveSpaceForIcon"; type: "bool" }
         Property { name: "_basicDefault"; type: "QQuickItem"; isList: true; isReadonly: true }
         Property { name: "supportsMouseEvents"; type: "bool" }
