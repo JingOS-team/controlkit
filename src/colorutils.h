@@ -51,7 +51,7 @@ public:
      * @since 5.69
      * @since org.kde.kirigami 2.12
      */
-    Q_INVOKABLE ColorUtils::Brightness brightnessForColor(QColor color);
+    Q_INVOKABLE ColorUtils::Brightness brightnessForColor(const QColor &color);
 
     /**
      * Returns the result of overlaying the foreground color on the background
@@ -73,7 +73,7 @@ public:
      * @since 5.69
      * @since org.kde.kirigami 2.12
      */
-    Q_INVOKABLE QColor alphaBlend(QColor foreground, QColor background);
+    Q_INVOKABLE QColor alphaBlend(const QColor &foreground, const QColor &background);
 
     /**
      * Returns a linearly interpolated color between color one and color two.
@@ -98,7 +98,7 @@ public:
      * @since 5.69
      * @since org.kde.kirigami 2.12
      */
-    Q_INVOKABLE QColor linearInterpolation(QColor one, QColor two, double balance);
+    Q_INVOKABLE QColor linearInterpolation(const QColor &one, const QColor &two, double balance);
 
     /**
      * Increases or decreases the properties of `color` by fixed amounts.
@@ -127,7 +127,7 @@ public:
      * @since 5.69
      * @since org.kde.kirigami 2.12
      */
-    Q_INVOKABLE QColor adjustColor(QColor color, QJSValue adjustments);
+    Q_INVOKABLE QColor adjustColor(const QColor &color, const QJSValue &adjustments);
 
     /**
      * Smoothly scales colors.
@@ -158,7 +158,7 @@ public:
      * @since 5.69
      * @since org.kde.kirigami 2.12
      */
-    Q_INVOKABLE QColor scaleColor(QColor color, QJSValue adjustments);
+    Q_INVOKABLE QColor scaleColor(const QColor &color, const QJSValue &adjustments);
 
     /**
      * Tint a color using a separate alpha value.

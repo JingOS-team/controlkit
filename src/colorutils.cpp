@@ -13,20 +13,22 @@
 
 ColorUtils::ColorUtils(QObject *parent) : QObject(parent) {}
 
-ColorUtils::Brightness ColorUtils::brightnessForColor(QColor color) {
-    auto luma = [](QColor color) {
-        return (0.299*color.red() + 0.587*color.green() + 0.114*color.blue())/255;
+ColorUtils::Brightness ColorUtils::brightnessForColor(const QColor &color) {
+    auto luma = [](const QColor &color) {
+        return (0.299 * color.red() + 0.587 * color.green() + 0.114 * color.blue()) / 255;
     };
 
     return luma(color) > 0.5 ? ColorUtils::Brightness::Light : ColorUtils::Brightness::Dark;
 }
 
-QColor ColorUtils::alphaBlend(QColor foreground, QColor background) {
+QColor ColorUtils::alphaBlend(const QColor &foreground, const QColor &background) {
     const auto foregroundAlpha = foreground.alpha();
     const auto inverseForegroundAlpha = 0xff - foregroundAlpha;
     const auto backgroundAlpha = background.alpha();
 
-    if (foregroundAlpha == 0x00) return background;
+    if (foregroundAlpha == 0x00) {
+        return background;
+    }
 
     if (backgroundAlpha == 0xff) {
         return QColor::fromRgb(
@@ -48,17 +50,21 @@ QColor ColorUtils::alphaBlend(QColor foreground, QColor background) {
     }
 }
 
-QColor ColorUtils::linearInterpolation(QColor one, QColor two, double balance) {
+QColor ColorUtils::linearInterpolation(const QColor &one, const QColor &two, double balance) {
 
-    auto scaleAlpha = [](QColor color, double factor) {
-        return QColor::fromRgb(color.red(), color.green(), color.blue(), color.alpha()*factor);
+    auto scaleAlpha = [](const QColor &color, double factor) {
+        return QColor::fromRgb(color.red(), color.green(), color.blue(), color.alpha() * factor);
     };
     auto linearlyInterpolateDouble = [](double one, double two, double factor) {
         return one + (two - one) * factor;
     };
 
-    if (one == Qt::transparent) return scaleAlpha(two, balance);
-    if (two == Qt::transparent) return scaleAlpha(one, 1 - balance);
+    if (one == Qt::transparent) {
+        return scaleAlpha(two, balance);
+    }
+    if (two == Qt::transparent) {
+        return scaleAlpha(one, 1 - balance);
+    }
 
     return QColor::fromHsv(
         std::fmod(linearlyInterpolateDouble(one.hue(), two.hue(), balance), 360.0),
@@ -82,11 +88,11 @@ struct ParsedAdjustments
     double alpha = 0.0;
 };
 
-ParsedAdjustments parseAdjustments(QJSValue value)
+ParsedAdjustments parseAdjustments(const QJSValue &value)
 {
     ParsedAdjustments parsed;
 
-    auto checkProperty = [](QJSValue value, QString property) {
+    auto checkProperty = [](const QJSValue &value, const QString &property) {
         if (value.hasProperty(property)) {
             auto val = value.property(property);
             if (val.isNumber()) {
@@ -96,7 +102,7 @@ ParsedAdjustments parseAdjustments(QJSValue value)
         return QVariant();
     };
 
-    std::map<QString, double&> map = {
+    std::vector<std::pair<QString, double&>> items {
         { QStringLiteral("red"), parsed.red },
         { QStringLiteral("green"), parsed.green },
         { QStringLiteral("blue"), parsed.blue },
@@ -109,9 +115,11 @@ ParsedAdjustments parseAdjustments(QJSValue value)
         { QStringLiteral("alpha"), parsed.alpha }
     };
 
-    for (std::pair<QString, double&> item : map) {
+    for (const auto &item : items) {
         auto val = checkProperty(value, item.first);
-        if (val != QVariant()) item.second = val.toDouble();
+        if (val.isValid()) {
+            item.second = val.toDouble();
+        }
     }
 
     if ((parsed.red || parsed.green || parsed.blue) && (parsed.hue || parsed.saturation || parsed.value)) {
@@ -121,18 +129,31 @@ ParsedAdjustments parseAdjustments(QJSValue value)
     return parsed;
 }
 
-QColor ColorUtils::adjustColor(QColor color, QJSValue adjustments)
+QColor ColorUtils::adjustColor(const QColor &color, const QJSValue &adjustments)
 {
     auto adjusts = parseAdjustments(adjustments);
 
-    if (qBound(-360.0, adjusts.hue, 360.0) != adjusts.hue) qCritical() << "Hue is out of bounds";
-
-    if (qBound(-255.0, adjusts.red, 255.0) != adjusts.red) qCritical() << "Red is out of bounds";
-    if (qBound(-255.0, adjusts.green, 255.0) != adjusts.green) qCritical() << "Green is out of bounds";
-    if (qBound(-255.0, adjusts.blue, 255.0) != adjusts.blue) qCritical() << "Green is out of bounds";
-    if (qBound(-255.0, adjusts.saturation, 255.0) != adjusts.saturation) qCritical() << "Saturation is out of bounds";
-    if (qBound(-255.0, adjusts.value, 255.0) != adjusts.value) qCritical() << "Value is out of bounds";
-    if (qBound(-255.0, adjusts.alpha, 255.0) != adjusts.alpha) qCritical() << "Alpha is out of bounds";
+    if (qBound(-360.0, adjusts.hue, 360.0) != adjusts.hue) {
+        qCritical() << "Hue is out of bounds";
+    }
+    if (qBound(-255.0, adjusts.red, 255.0) != adjusts.red) {
+        qCritical() << "Red is out of bounds";
+    }
+    if (qBound(-255.0, adjusts.green, 255.0) != adjusts.green) {
+        qCritical() << "Green is out of bounds";
+    }
+    if (qBound(-255.0, adjusts.blue, 255.0) != adjusts.blue) {
+        qCritical() << "Green is out of bounds";
+    }
+    if (qBound(-255.0, adjusts.saturation, 255.0) != adjusts.saturation) {
+        qCritical() << "Saturation is out of bounds";
+    }
+    if (qBound(-255.0, adjusts.value, 255.0) != adjusts.value) {
+        qCritical() << "Value is out of bounds";
+    }
+    if (qBound(-255.0, adjusts.alpha, 255.0) != adjusts.alpha) {
+        qCritical() << "Alpha is out of bounds";
+    }
 
     auto copy = color;
 
@@ -146,9 +167,9 @@ QColor ColorUtils::adjustColor(QColor color, QJSValue adjustments)
         copy.setBlue(copy.blue() + adjusts.blue);
     } else if (adjusts.hue || adjusts.saturation || adjusts.value) {
         copy.setHsl(
-            std::fmod(copy.hue()+adjusts.hue, 360.0),
-            copy.saturation()+adjusts.saturation,
-            copy.value()+adjusts.value,
+            std::fmod(copy.hue() + adjusts.hue, 360.0),
+            copy.saturation() + adjusts.saturation,
+            copy.value() + adjusts.value,
             copy.alpha()
         );
     }
@@ -156,22 +177,36 @@ QColor ColorUtils::adjustColor(QColor color, QJSValue adjustments)
     return copy;
 }
 
-QColor ColorUtils::scaleColor(QColor color, QJSValue adjustments)
+QColor ColorUtils::scaleColor(const QColor& color, const QJSValue &adjustments)
 {
     auto adjusts = parseAdjustments(adjustments);
     auto copy = color;
 
-    if (qBound(-100.0, adjusts.red, 100.00) != adjusts.red) qCritical() << "Red is out of bounds";
-    if (qBound(-100.0, adjusts.green, 100.00) != adjusts.green) qCritical() << "Green is out of bounds";
-    if (qBound(-100.0, adjusts.blue, 100.00) != adjusts.blue) qCritical() << "Blue is out of bounds";
-    if (qBound(-100.0, adjusts.saturation, 100.00) != adjusts.saturation) qCritical() << "Saturation is out of bounds";
-    if (qBound(-100.0, adjusts.value, 100.00) != adjusts.value) qCritical() << "Value is out of bounds";
-    if (qBound(-100.0, adjusts.alpha, 100.00) != adjusts.alpha) qCritical() << "Alpha is out of bounds";
+    if (qBound(-100.0, adjusts.red, 100.00) != adjusts.red) {
+        qCritical() << "Red is out of bounds";
+    }
+    if (qBound(-100.0, adjusts.green, 100.00) != adjusts.green) {
+        qCritical() << "Green is out of bounds";
+    }
+    if (qBound(-100.0, adjusts.blue, 100.00) != adjusts.blue) {
+        qCritical() << "Blue is out of bounds";
+    }
+    if (qBound(-100.0, adjusts.saturation, 100.00) != adjusts.saturation) {
+        qCritical() << "Saturation is out of bounds";
+    }
+    if (qBound(-100.0, adjusts.value, 100.00) != adjusts.value) {
+        qCritical() << "Value is out of bounds";
+    }
+    if (qBound(-100.0, adjusts.alpha, 100.00) != adjusts.alpha) {
+        qCritical() << "Alpha is out of bounds";
+    }
     
-    if (adjusts.hue != 0) qCritical() << "Hue cannot be scaled";
+    if (adjusts.hue != 0) {
+        qCritical() << "Hue cannot be scaled";
+    }
 
     auto shiftToAverage = [](double current, double factor) {
-        auto scale = qBound(-100.0, factor, 100.0)/100;
+        auto scale = qBound(-100.0, factor, 100.0) / 100;
         return current + (scale > 0 ? 255 - current : current) * scale;
     };
 
