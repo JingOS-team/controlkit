@@ -81,10 +81,10 @@ Item {
         property var knownItems: []
         property var buddies: []
         property int knownItemsImplicitWidth: {
-            return Array.prototype.reduce.call(knownItems, (item, widthAccumulator) => Math.max(widthAccumulator, item.Layout.preferredWidth > 0 ? item.Layout.preferredWidth : item.implicitWidth));
+            return Array.prototype.map.call(knownItems, (item) => item.Layout.preferredWidth > 0 ? item.Layout.preferredWidth : item.implicitWidth).reduce(Math.max);
         }
         property int buddiesImplicitWidth: {
-            return Array.prototype.filter.call(buddies, buddy => buddy.visible).reduce((buddy, widthAccumulator) => Math.max(widthAccumulator, buddy.implicitWidth));
+            return Array.prototype.filter.call(buddies, buddy => buddy.visible).map(buddy => buddy.implicitWidth).reduce(Math.max)
         }
         states: [
             State {
