@@ -351,8 +351,7 @@ void Icon::handleFinished(QNetworkReply* reply)
         qWarning() << "received broken image" << reply->url();
 
         // broken image from data, inform the user of this with some useful broken-image thing...
-        const QSize size = QSize(width(), height()) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
-        m_loadedImage = QIcon::fromTheme(m_fallback).pixmap(size, iconMode(), QIcon::On).toImage();
+        m_loadedImage = QIcon::fromTheme(m_fallback).pixmap(window(), QSize(width(), height()), iconMode(), QIcon::On).toImage();
     }
     polish();
 }
@@ -381,7 +380,7 @@ void Icon::updatePolish()
             m_icon = m_source.value<QBitmap>().toImage();
             break;
         case QVariant::Icon:
-            m_icon = m_source.value<QIcon>().pixmap(size, iconMode(), QIcon::On).toImage();
+            m_icon = m_source.value<QIcon>().pixmap(window(), itemSize, iconMode(), QIcon::On).toImage();
             break;
         case QVariant::Url:
         case QVariant::String:
@@ -464,7 +463,7 @@ QImage Icon::findIcon(const QSize &size)
             connect(m_networkReply.data(), &QNetworkReply::finished, this, [this](){ handleFinished(m_networkReply); });
         }
         // Temporary icon while we wait for the real image to load...
-        img = QIcon::fromTheme(QStringLiteral("image-x-icon")).pixmap(size, iconMode(), QIcon::On).toImage();
+        img = QIcon::fromTheme(QStringLiteral("image-x-icon")).pixmap(window(), size, iconMode(), QIcon::On).toImage();
     } else {
         if (iconSource.startsWith(QLatin1String("qrc:/"))) {
             iconSource = iconSource.mid(3);
@@ -482,7 +481,7 @@ QImage Icon::findIcon(const QSize &size)
             }
         }
         if (!icon.isNull()) {
-            img = icon.pixmap(size, iconMode(), QIcon::On).toImage();
+            img = icon.pixmap(window(), size, iconMode(), QIcon::On).toImage();
 
             /*const QColor tintColor = !m_color.isValid() || m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
 
@@ -496,7 +495,7 @@ QImage Icon::findIcon(const QSize &size)
     }
 
     if (!iconSource.isEmpty() && img.isNull()) {
-        img = QIcon::fromTheme(m_fallback).pixmap(size, iconMode(), QIcon::On).toImage();
+        img = QIcon::fromTheme(m_fallback).pixmap(window(), size, iconMode(), QIcon::On).toImage();
     }
     return img;
 }
