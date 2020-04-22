@@ -71,6 +71,8 @@ GridLayout {
 
     Component.onCompleted: childrenChanged()
     onChildrenChanged: {
-        Array.prototype.forEach.call(children, child => child.Layout.fillHeight = true)
+        for (var i = 0; i < children.length; ++i) {
+            children[i].Layout.fillHeight = true;
+        }
     }
 }

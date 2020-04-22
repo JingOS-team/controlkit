@@ -418,7 +418,15 @@ T2.SwipeDelegate {
                 if (definitelyVisible) {
                     hasVisibleActions = true;
                 } else {
-                    hasVisibleActions = Array.prototype.some.call(listItem.actions, action => action.visible);
+                    var actionCount = listItem.actions.length;
+                    for (var i = 0; i < actionCount; i++) {
+                        // Assuming that visible is only false if it is explicitly false, and not just falsy
+                        if (listItem.actions[i].visible === false) {
+                            continue;
+                        }
+                        hasVisibleActions = true;
+                        break;
+                    }
                 }
             }
 
