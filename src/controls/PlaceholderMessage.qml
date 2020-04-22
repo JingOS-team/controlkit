@@ -23,8 +23,9 @@ import "private"
  * Example usage:
  *
  * @code{.qml}
- * import org.kde.kirigami 2.11 as Kirigami
  ** used as a "this view is empty" message
+ * import org.kde.kirigami 2.12 as Kirigami
+ *
  * ListView {
  *     id: listView
  *     model: [...]
@@ -44,6 +45,8 @@ import "private"
  * @endcode
  * @code{.qml}
  ** Used as a "here's how to proceed" message
+ * import org.kde.kirigami 2.12 as Kirigami
+ *
  * ListView {
  *     id: listView
  *     model: [...]
@@ -72,6 +75,8 @@ import "private"
  * @endcode
  * @code{.qml}
  ** Used as a "there was a problem here" message
+ * import org.kde.kirigami 2.12 as Kirigami
+ *
  * Kirigami.Page {
  *     id: root
  *     readonly property bool networkConnected: [...]
@@ -90,6 +95,8 @@ import "private"
  * }
  * @endcode
  * @code{.qml}
+ * import org.kde.kirigami 2.12 as Kirigami
+ *
  ** Used as a loading indicator
  * Kirigami.Page {
  *     id: root
