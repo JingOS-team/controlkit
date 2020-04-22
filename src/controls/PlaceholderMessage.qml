@@ -195,6 +195,6 @@ ColumnLayout {
 
         Layout.alignment: Qt.AlignHCenter
 
-        visible: action && action.visible
+        visible: action && action.enabled
     }
 }
