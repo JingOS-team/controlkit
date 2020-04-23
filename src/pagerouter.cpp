@@ -334,16 +334,34 @@ bool PageRouter::isActive(QObject *object)
 PageRouterAttached* PageRouter::qmlAttachedProperties(QObject *object)
 {
     auto attached = new PageRouterAttached(object);
-    auto pointer = object;
-    // Climb the parent tree to find our parent PageRouter
-    while (pointer != nullptr) {
-        auto casted = qobject_cast<PageRouter*>(pointer);
-        if (casted != nullptr) {
-            attached->m_router = casted;
-            connect(casted, &PageRouter::currentIndexChanged, attached, &PageRouterAttached::isCurrentChanged);
-            break;
+    auto asItem = qobject_cast<QQuickItem*>(object);
+    auto seekParent = [](QObject *seek) -> PageRouter* {
+        auto pointer = seek;
+        while (pointer != nullptr) {
+            auto casted = qobject_cast<PageRouter*>(pointer);
+            if (casted != nullptr) {
+                return casted;
+            }
+            pointer = pointer->parent();
         }
-        pointer = pointer->parent();
+        return nullptr;
+    };
+    if (asItem) {
+        while (asItem != nullptr) {
+            auto parent = seekParent(asItem);
+            if (parent != nullptr) {
+                attached->m_router = parent;
+                connect(parent, &PageRouter::currentIndexChanged, attached, &PageRouterAttached::isCurrentChanged);
+                break;
+            }
+            asItem = asItem->parentItem();
+        }
+    } else {
+        auto parent = seekParent(object);
+        if (parent != nullptr) {
+            attached->m_router = parent;
+            connect(parent, &PageRouter::currentIndexChanged, attached, &PageRouterAttached::isCurrentChanged);
+        }
     }
     if (attached->m_router.isNull()) {
         qCritical() << "PageRouterAttached could not find a parent PageRouter";
