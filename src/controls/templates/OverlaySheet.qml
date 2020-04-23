@@ -269,7 +269,7 @@ QtObject {
                 target: outerFlickable
                 properties: "contentY"
                 from: -outerFlickable.height
-                to: Math.max(0, outerFlickable.height - outerFlickable.contentHeight + headerItem.height + footerItem.height)
+                to: Math.max(0, outerFlickable.height - outerFlickable.contentHeight + headerItem.height + footerItem.height) + outerFlickable.topMargin/2 - contentLayout.height/2
                 duration: Units.longDuration
                 easing.type: Easing.OutQuad
             }
@@ -288,7 +288,7 @@ QtObject {
             properties: "contentY"
             from: outerFlickable.contentY
             to: outerFlickable.visibleArea.yPosition < (1 - outerFlickable.visibleArea.heightRatio)/2 || scrollView.flickableItem.contentHeight < outerFlickable.height
-                ? Math.max(0, outerFlickable.height - outerFlickable.contentHeight + headerItem.height + footerItem.height)
+                ? Math.max(0, outerFlickable.height - outerFlickable.contentHeight + headerItem.height + footerItem.height) + outerFlickable.topMargin/2 - contentLayout.height/2
                 : outerFlickable.contentHeight - outerFlickable.height + outerFlickable.topEmptyArea + headerItem.height + footerItem.height
             duration: Units.longDuration
             easing.type: Easing.OutQuad
@@ -512,7 +512,7 @@ QtObject {
                         }
                     }
                 }
-        
+
                 ScrollView {
                     id: scrollView
 
@@ -521,7 +521,9 @@ QtObject {
                     Layout.fillHeight: true
 
                     implicitHeight: flickableItem.contentHeight
+                    Layout.maximumHeight: flickableItem.contentHeight
                 }
+
                 Connections {
                     target: scrollView.flickableItem
                     property real oldContentY: 0
@@ -547,6 +549,7 @@ QtObject {
                     }
                 }
                 Item {
+                    visible: footerItem.visible
                     implicitHeight: footerItem.height
                 }
             }
