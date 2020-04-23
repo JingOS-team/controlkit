@@ -25,33 +25,5 @@ T.OverlaySheet {
     rightInset: 0
     bottomInset: -Kirigami.Units.smallSpacing
 
-    background: Item {
-        Kirigami.ShadowedRectangle {
-            // HACK to make it overlap the border perfectly
-            anchors{
-                fill: parent
-                margins: 0.5
-            }
-            radius: Kirigami.Units.smallSpacing
-            color: Kirigami.Theme.backgroundColor
-
-            shadow {
-                size: Kirigami.Units.gridUnit*2
-                yOffset: 2
-                color: Qt.rgba(0, 0, 0, 0.8)
-            }
-        }
-
-        // FIXME: the border of ShadowedRectangle isn't correctly pixel aligned, fix and replace this asap
-        Rectangle {
-            anchors.fill: parent
-            radius: Kirigami.Units.smallSpacing
-            color: "transparent"
-
-            border {
-                width: Math.floor(Kirigami.Units.devicePixelRatio)
-                color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.8))
-            }
-        }
-    }
+    background: DefaultCardBackground {}
 }
