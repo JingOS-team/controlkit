@@ -507,6 +507,8 @@ QtObject {
                             right: parent.right
                             left: parent.left
                             top: parent.bottom
+                            leftMargin: 1
+                            rightMargin: 1
                         }
                     }
                 }
