@@ -67,40 +67,6 @@ lowp float sdf_triangle(in lowp vec2 point, in lowp vec2 p0, in lowp vec2 p1, in
     return -sqrt(d.x)*sign(d.y);
 }
 
-// Distance field for an arbitrary polygon.
-//
-// \param point A point on the distance field.
-// \param vertices An array of points that make up the polygon.
-// \param count The amount of points to use for the polygon.
-//
-// \note points should be an array of vec2 of size SDF_POLYGON_MAX_POINT_COUNT.
-//       Use count to indicate how many items of that array should be used.
-//
-// \return The signed distance from point to triangle. If negative, point is
-//         inside the triangle.
-
-// Strictly speaking, GLES 2.0 doesn't support function array arguments (apparently), so our validation fails here.
-// But at least Mesa GLES 2.0 accepts it, so skip validation here instead.
-#if !defined(GL_ES) || !defined(VALIDATING)
-lowp float sdf_polygon(in lowp vec2 point, in lowp vec2[SDF_POLYGON_MAX_POINT_COUNT] vertices, in lowp int count)
-{
-    lowp float d = dot(point - vertices[0], point - vertices[0]);
-    lowp float s = 1.0;
-    for (int i = 0, j = count - 1; i < count && i < SDF_POLYGON_MAX_POINT_COUNT; j = i, i++)
-    {
-        lowp vec2 e = vertices[j] - vertices[i];
-        lowp vec2 w = point - vertices[i];
-        lowp float h = clamp( dot(w, e) / dot(e, e), 0.0, 1.0 );
-        lowp vec2 b = w - e * h;
-        d = min(d, dot(b, b));
-
-        bvec3 c = bvec3(point.y >= vertices[i].y, point.y < vertices[j].y, e.x * w.y > e.y * w.x);
-        if(all(c) || all(not(c))) s *= -1.0;
-    }
-    return s * sqrt(d);
-}
-#endif
-
 // Distance field for a rectangle.
 //
 // \param point A point on the distance field.
@@ -230,7 +196,7 @@ const lowp float sdf_null = 99999.0;
 // A constant for a default level of smoothing when rendering an sdf.
 //
 // This
-const lowp float sdf_default_smoothing = 0.005;
+const lowp float sdf_default_smoothing = 0.625;
 
 // Render an sdf shape.
 //
@@ -245,7 +211,7 @@ const lowp float sdf_default_smoothing = 0.005;
 lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor)
 {
     lowp float g = fwidth(sdf);
-    return mix(sourceColor, sdfColor, 1.0 - smoothstep(sdf_default_smoothing - g, sdf_default_smoothing + g, sdf));
+    return mix(sourceColor, sdfColor, 1.0 - smoothstep(-sdf_default_smoothing * g, sdf_default_smoothing * g, sdf));
 }
 
 // Render an sdf shape.
@@ -258,7 +224,7 @@ lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 s
 lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor, in lowp float smoothing)
 {
     lowp float g = fwidth(sdf);
-    return mix(sourceColor, sdfColor, 1.0 - smoothstep(smoothing - g, smoothing + g, sdf));
+    return mix(sourceColor, sdfColor, 1.0 - smoothstep(-smoothing * g, smoothing * g, sdf));
 }
 
 // Render an sdf shape alpha-blended onto an existing color.
@@ -272,5 +238,5 @@ lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 s
 lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor, in lowp float alpha, in lowp float smoothing)
 {
     lowp float g = fwidth(sdf);
-    return mix(sourceColor, sdfColor, alpha * (1.0 - smoothstep(smoothing - g, smoothing + g, sdf)));
+    return mix(sourceColor, sdfColor, alpha * (1.0 - smoothstep(-smoothing * g, smoothing * g, sdf)));
 }

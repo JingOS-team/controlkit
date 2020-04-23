@@ -31,9 +31,12 @@ int ShadowedTextureMaterial::compare(const QSGMaterial *other) const
     auto material = static_cast<const ShadowedTextureMaterial *>(other);
 
     auto result = ShadowedRectangleMaterial::compare(other);
-    if (result == 0
-        && material->textureSource == textureSource) {
-        return 0;
+    if (result == 0) {
+        if (material->textureSource == textureSource) {
+            return 0;
+        } else {
+            return (material->textureSource < textureSource) ? 1 : -1;
+        }
     }
 
     return result;
