@@ -322,7 +322,7 @@ QtObject {
         Rectangle {
             anchors.fill: parent
             color: "black"
-            opacity: 0.6 * Math.min(
+            opacity: 0.3 * Math.min(
                 (Math.min(outerFlickable.contentY + outerFlickable.height, outerFlickable.height) / outerFlickable.height),
                 (2 + (outerFlickable.contentHeight - outerFlickable.contentY - outerFlickable.topMargin - outerFlickable.bottomMargin)/outerFlickable.height))
         }
