@@ -66,9 +66,9 @@ T.ItemDelegate {
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.View
 
-    topPadding: Kirigami.Units.largeSpacing
+    topPadding: contentItemParent.children.length > 0 ? Kirigami.Units.largeSpacing : 0
     leftPadding: Kirigami.Units.largeSpacing
-    bottomPadding: Kirigami.Units.largeSpacing
+    bottomPadding: contentItemParent.children.length > 0 ? Kirigami.Units.largeSpacing : 0
     rightPadding: Kirigami.Units.largeSpacing
 
     GridLayout {
