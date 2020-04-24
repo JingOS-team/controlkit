@@ -123,6 +123,31 @@ import "private"
  *     }
  * }
  * @endcode
+ * @code{.qml}
+ * import org.kde.kirigami 2.12 as Kirigami
+ *
+ ** Used as a "Here's what you do next" button
+ * Kirigami.Page {
+ *     id: root
+ *
+ *     Kirigami.PlaceholderMessage {
+ *         anchors.centerIn: parent
+ *         anchors.left: parent.left
+ *         anchors.right:  parent.right
+ *         anchors.margins: Kirigami.Units.largeSpacing
+ *
+ *         visible: root.loading
+ *
+ *         action: Kirigami.Action {
+ *             iconName: "list-add"
+ *             text: "Add item..."
+ *             onTriggered: {
+ *                 [...]
+ *             }
+ *         }
+ *     }
+ * }
+ * @endcode
  * @since 2.12
  */
 ColumnLayout {
@@ -132,7 +157,8 @@ ColumnLayout {
      * text: string
      * The text to show as a placeholder label
      *
-     * Mandatory; no default value.
+     * Optional; if not defined, the message will have no text. Useful when you
+     * only want to display an icon, action button, and/or other custom content
      *
      * @since 5.70
      */
@@ -190,6 +216,8 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
+
+        visible: text.length > 0
 
         level: 2
         opacity: 0.5
