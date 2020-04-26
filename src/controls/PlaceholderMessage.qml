@@ -189,7 +189,7 @@ ColumnLayout {
      */
     property alias helpfulAction: actionButton.action
 
-    spacing: units.largeSpacing
+    spacing: Kirigami.Units.largeSpacing
 
     Kirigami.Icon {
 
