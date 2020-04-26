@@ -8,7 +8,6 @@
 
 #include <QIcon>
 #include <QtMath>
-#include <QtConcurrent>
 #include <cmath>
 #include <map>
 

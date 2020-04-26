@@ -27,7 +27,7 @@ endif()
 include(CPack)
 include(FeatureSummary)
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Concurrent Quick Gui Svg QuickControls2)
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Gui Svg QuickControls2)
 if (BUILD_TESTING)
     find_package(Qt5QuickTest ${REQUIRED_QT_VERSION} CONFIG QUIET)
 endif()
