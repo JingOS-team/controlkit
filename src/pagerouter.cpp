@@ -9,6 +9,7 @@
 #include <QJSValue>
 #include <QJSEngine>
 #include <QQmlProperty>
+#include <QQuickWindow>
 #include "pagerouter.h"
 
 ParsedRoute parseRoute(QJSValue value)
@@ -181,6 +182,8 @@ void PageRouter::push(ParsedRoute route)
         if (routesCacheForKey(route.name)) {
             m_cachedRoutes << clone;
         }
+        auto attached = qobject_cast<PageRouterAttached*>(qmlAttachedPropertiesObject<PageRouter>(item, true));
+        attached->m_router = this;
         component->completeCreate();
         m_pageStack->addItem(qobject_cast<QQuickItem*>(item));
         m_pageStack->setCurrentIndex(m_currentRoutes.length()-1);
@@ -334,39 +337,73 @@ bool PageRouter::isActive(QObject *object)
 PageRouterAttached* PageRouter::qmlAttachedProperties(QObject *object)
 {
     auto attached = new PageRouterAttached(object);
-    auto asItem = qobject_cast<QQuickItem*>(object);
-    auto seekParent = [](QObject *seek) -> PageRouter* {
-        auto pointer = seek;
-        while (pointer != nullptr) {
-            auto casted = qobject_cast<PageRouter*>(pointer);
-            if (casted != nullptr) {
-                return casted;
-            }
-            pointer = pointer->parent();
-        }
-        return nullptr;
-    };
-    if (asItem) {
-        while (asItem != nullptr) {
-            auto parent = seekParent(asItem);
-            if (parent != nullptr) {
-                attached->m_router = parent;
-                connect(parent, &PageRouter::currentIndexChanged, attached, &PageRouterAttached::isCurrentChanged);
-                break;
-            }
-            asItem = asItem->parentItem();
-        }
-    } else {
-        auto parent = seekParent(object);
-        if (parent != nullptr) {
-            attached->m_router = parent;
-            connect(parent, &PageRouter::currentIndexChanged, attached, &PageRouterAttached::isCurrentChanged);
-        }
-    }
-    if (attached->m_router.isNull()) {
-        qCritical() << "PageRouterAttached could not find a parent PageRouter";
-    }
     return attached;
+}
+
+void PageRouterAttached::findParent()
+{
+    QQuickItem *parent = qobject_cast<QQuickItem *>(this->parent());
+    while (parent != nullptr) {
+        auto attached = qobject_cast<PageRouterAttached*>(qmlAttachedPropertiesObject<PageRouter>(parent, false));
+        if (attached != nullptr && attached->m_router != nullptr) {
+            m_router = attached->m_router;
+            Q_EMIT routerChanged();
+            Q_EMIT dataChanged();
+            Q_EMIT isCurrentChanged();
+            break;
+        }
+        parent = parent->parentItem();
+    }
+}
+
+void PageRouterAttached::navigateToRoute(QJSValue route)
+{
+    if (m_router) {
+        m_router->navigateToRoute(route);
+    } else {
+        qCritical() << "PageRouterAttached does not have a parent PageRouter";
+        return;
+    }
+}
+
+bool PageRouterAttached::routeActive(QJSValue route)
+{
+    if (m_router) {
+        return m_router->routeActive(route);
+    } else {
+        qCritical() << "PageRouterAttached does not have a parent PageRouter";
+        return false;
+    }
+}
+
+void PageRouterAttached::pushRoute(QJSValue route)
+{
+    if (m_router) {
+        m_router->pushRoute(route);
+    } else {
+        qCritical() << "PageRouterAttached does not have a parent PageRouter";
+        return;
+    }
+}
+
+void PageRouterAttached::popRoute()
+{
+    if (m_router) {
+        m_router->popRoute();
+    } else {
+        qCritical() << "PageRouterAttached does not have a parent PageRouter";
+        return;
+    }
+}
+
+void PageRouterAttached::bringToView(QJSValue route)
+{
+    if (m_router) {
+        m_router->bringToView(route);
+    } else {
+        qCritical() << "PageRouterAttached does not have a parent PageRouter";
+        return;
+    }
 }
 
 QVariant PageRouterAttached::data() const
@@ -402,4 +439,16 @@ QJSValue PageRouter::currentRoutes() const
     return ret;
 }
 
-PageRouterAttached::PageRouterAttached(QObject *parent) : QObject(parent) {}
+PageRouterAttached::PageRouterAttached(QObject *parent) : QObject(parent)
+{
+    findParent();
+    auto item = qobject_cast<QQuickItem*>(parent);
+    if (item != nullptr) {
+        connect(item, &QQuickItem::windowChanged, this, [this]() {
+            findParent();
+        });
+        connect(item, &QQuickItem::parentChanged, this, [this]() {
+            findParent();
+        });
+    }
+}

@@ -439,6 +439,8 @@ private:
     QPointer<PageRouter> m_router;
     QVariant m_data;
 
+    void findParent();
+
     friend class PageRouter;
 
 public:
@@ -446,15 +448,15 @@ public:
     QVariant data() const;
     bool isCurrent() const;
     /// @see PageRouter::navigateToRoute()
-    Q_INVOKABLE void navigateToRoute(QJSValue route) { m_router->navigateToRoute(route); };
+    Q_INVOKABLE void navigateToRoute(QJSValue route);
     /// @see PageRouter::routeActive()
-    Q_INVOKABLE bool routeActive(QJSValue route) { return m_router->routeActive(route); };
+    Q_INVOKABLE bool routeActive(QJSValue route);
     /// @see PageRouter::pushRoute()
-    Q_INVOKABLE void pushRoute(QJSValue route) { m_router->pushRoute(route); };
+    Q_INVOKABLE void pushRoute(QJSValue route);
     /// @see PageRouter::popRoute()
-    Q_INVOKABLE void popRoute() { m_router->popRoute(); };
+    Q_INVOKABLE void popRoute();
     // @see PageRouter::bringToView()
-    Q_INVOKABLE void bringToView(QJSValue route) { m_router->bringToView(route); };
+    Q_INVOKABLE void bringToView(QJSValue route);
 
 Q_SIGNALS:
     void routerChanged();
