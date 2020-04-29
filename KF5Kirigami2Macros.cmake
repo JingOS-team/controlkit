@@ -12,7 +12,7 @@ function(kirigami_package_breeze_icons)
     endif()
 
     #include icons used by Kirigami components themselves
-    set(ARG_ICONS ${ARG_ICONS} go-next go-previous go-up handle-sort overflow-menu-left overflow-menu-right go-next-symbolic go-next-symbolic-rtl go-previous-symbolic go-previous-symbolic-rtl overflow-menu user view-left-new view-right-new view-left-close view-right-close)
+    set(ARG_ICONS ${ARG_ICONS} go-next go-previous go-up handle-sort overflow-menu-left overflow-menu-right go-next-symbolic go-next-symbolic-rtl go-previous-symbolic go-previous-symbolic-rtl overflow-menu user view-left-new view-right-new view-left-close view-right-close dialog-positive dialog-warning dialog-error dialog-information)
 
     function(_find_breeze_icon icon varName)
         #HACKY
