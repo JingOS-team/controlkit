@@ -38,19 +38,7 @@ void PagePool::setCachePages(bool cache)
     }
 
     if (cache) {
-        for (auto *c : m_componentForUrl.values()) {
-            c->deleteLater();
-        }
-        m_componentForUrl.clear();
-
-        for (auto *i : m_itemForUrl.values()) {
-            // items that had been deparented are safe to delete
-            if (!i->parentItem()) {
-                i->deleteLater();
-            }
-            QQmlEngine::setObjectOwnership(i, QQmlEngine::JavaScriptOwnership);
-        }
-        m_itemForUrl.clear();
+        clear();
     }
 
     m_cachePages = cache;
@@ -76,25 +64,23 @@ QQuickItem *PagePool::loadPageWithProperties(
 
     const QUrl actualUrl = resolvedUrl(url);
 
-    QQuickItem *foundItem = nullptr;
-    if (actualUrl == m_lastLoadedUrl && m_lastLoadedItem) {
-        foundItem = m_lastLoadedItem;
-    } else if (m_itemForUrl.contains(actualUrl)) {
-        foundItem = m_itemForUrl[actualUrl];
-    }
+    auto found = m_itemForUrl.find(actualUrl);
+    if (found != m_itemForUrl.end()) {
+        m_lastLoadedUrl = found.key();
+        m_lastLoadedItem = found.value();
 
-    if (foundItem) {
         if (callback.isCallable()) {
-            QJSValueList args = {qmlEngine(this)->newQObject(foundItem)};
+            QJSValueList args = {qmlEngine(this)->newQObject(found.value())};
             callback.call(args);
-            m_lastLoadedUrl = actualUrl;
             emit lastLoadedUrlChanged();
+            emit lastLoadedItemChanged();
             // We could return the item, but for api coherence return null
             return nullptr;
+
         } else {
-            m_lastLoadedUrl = actualUrl;
             emit lastLoadedUrlChanged();
-            return foundItem;
+            emit lastLoadedItemChanged();
+            return found.value();
         }
     }
 
@@ -232,6 +218,11 @@ QUrl PagePool::urlForPage(QQuickItem *item) const
     return m_urlForItem.value(item);
 }
 
+QQuickItem *PagePool::pageForUrl(const QUrl &url) const
+{
+    return m_itemForUrl.value(resolvedUrl(url.toString()), nullptr);
+}
+
 bool PagePool::contains(const QVariant &page) const
 {
     if (page.canConvert<QQuickItem *>()) {
@@ -282,9 +273,21 @@ void PagePool::deletePage(const QVariant &page)
 
 void PagePool::clear()
 {
-    for (const auto& url : m_urlForItem) {
-        deletePage(url);
+    for (auto *c : m_componentForUrl.values()) {
+        c->deleteLater();
     }
+    m_componentForUrl.clear();
+
+    for (auto *i : m_itemForUrl.values()) {
+        // items that had been deparented are safe to delete
+        if (!i->parentItem()) {
+            i->deleteLater();
+        }
+        QQmlEngine::setObjectOwnership(i, QQmlEngine::JavaScriptOwnership);
+    }
+    m_itemForUrl.clear();
+
+    m_urlForItem.clear();
     m_lastLoadedUrl = QUrl();
     m_lastLoadedItem = nullptr;
     

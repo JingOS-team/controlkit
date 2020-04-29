@@ -71,6 +71,11 @@ public:
     Q_INVOKABLE QUrl urlForPage(QQuickItem *item) const;
 
     /**
+     * @returns The page associated with a given URL, nullptr if there is no correspondence
+     */
+    Q_INVOKABLE QQuickItem *pageForUrl(const QUrl &url) const;
+
+    /**
      * @returns true if the is managed by the PagePool
      * @param the page can be either a QQuickItem or an url
      */

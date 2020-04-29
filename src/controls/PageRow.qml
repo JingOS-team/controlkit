@@ -434,7 +434,7 @@ T.Control {
 
         function clear () {
             //don't let it kill the main page row
-            var d = root.depth;
+            var d = layersStack.depth;
             for (var i = 1; i < d; ++i) {
                 pop();
             }
