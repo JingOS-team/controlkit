@@ -89,6 +89,8 @@ public:
     QPalette customPalette;
 
     QFont font;
+    QFont smallFont;
+
     bool m_inherit = true;
     bool m_init = true;
     bool m_supportsIconColoring = false;
@@ -614,6 +616,18 @@ void PlatformTheme::setDefaultFont(const QFont &font)
     emit defaultFontChanged(font);
 }
 
+QFont PlatformTheme::smallFont() const
+{
+    return d->smallFont;
+}
+
+void PlatformTheme::setSmallFont(const QFont &font)
+{
+    if (d->smallFont != font) {
+        d->smallFont = font;
+        emit smallFontChanged(font);
+    }
+}
 
 #define PROPAGATECUSTOMCOLOR(colorName, color)\
             for (PlatformTheme *t : qAsConst(d->m_childThemes)) {\

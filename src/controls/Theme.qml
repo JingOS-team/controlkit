@@ -89,6 +89,15 @@ QtObject {
     property color complementaryFocusColor: "#2196F3"
 
     property font defaultFont: fontMetrics.font
+    property font smallFont: {
+        let font = fontMetrics.font
+        if (!!font.pixelSize) {
+            font.pixelSize =- 2
+        } else {
+            font.pointSize =- 2
+        }
+        return font
+    }
 
     property list<QtObject> children: [
         TextMetrics {

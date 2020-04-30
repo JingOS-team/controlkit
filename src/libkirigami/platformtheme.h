@@ -168,6 +168,10 @@ class KIRIGAMI2_EXPORT PlatformTheme : public QObject
 
     // font and palette
     Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
+
+    // small font
+    Q_PROPERTY(QFont smallFont READ smallFont NOTIFY defaultFontChanged)
+
     //Active palette
     Q_PROPERTY(QPalette palette READ palette NOTIFY paletteChanged)
 
@@ -230,6 +234,7 @@ public:
     QColor hoverColor() const;
 
     QFont defaultFont() const;
+    QFont smallFont() const;
 
     //this may is used by the desktop QQC2 to set the styleoption palettes
     QPalette palette() const;
@@ -270,6 +275,7 @@ Q_SIGNALS:
     //TODO: parameters to signals as this is also a c++ api
     void colorsChanged();
     void defaultFontChanged(const QFont &font);
+    void smallFontChanged(const QFont &font);
     void colorSetChanged(Kirigami::PlatformTheme::ColorSet colorSet);
     void colorGroupChanged(Kirigami::PlatformTheme::ColorGroup colorGroup);
     void paletteChanged(const QPalette &pal);
@@ -306,6 +312,7 @@ protected:
     void setHoverColor(const QColor &color);
 
     void setDefaultFont(const QFont &defaultFont);
+    void setSmallFont(const QFont &smallFont);
     void setPalette(const QPalette &palette);
 private:
     PlatformThemePrivate *d;

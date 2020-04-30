@@ -69,7 +69,16 @@ BasicTheme::BasicTheme(QObject *parent)
     : PlatformTheme(parent)
 {
     //TODO: correct?
-    connect(qApp, &QGuiApplication::fontDatabaseChanged, this, [this]() {setDefaultFont(qApp->font());});
+    connect(qApp, &QGuiApplication::fontDatabaseChanged, this, [this] () {
+        setDefaultFont(qApp->font());
+        auto smallFont = qApp->font();
+        if (smallFont.pixelSize() != -1) {
+            smallFont.setPixelSize(smallFont.pixelSize()-2);
+        } else {
+            smallFont.setPointSize(smallFont.pointSize()-2);
+        }
+        setSmallFont(smallFont);
+    });
 
     //connect all the declarative object signals to the timer start to compress, use the old syntax as they are all signals defined in QML
     connect(basicThemeDeclarative()->instance(this), SIGNAL(textColorChanged()),
