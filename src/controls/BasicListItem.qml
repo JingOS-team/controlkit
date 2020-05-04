@@ -118,8 +118,7 @@ AbstractListItem {
                 Layout.fillWidth: true
                 color: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents)) ? listItem.activeTextColor : listItem.textColor
                 elide: Text.ElideRight
-                // TODO: use smallest font size once this is available in Kirigami
-                // font.pointSize: Theme.smallestFont.pointSize
+                font: Theme.smallFont
                 opacity: 0.6
                 visible: text.length > 0
             }
