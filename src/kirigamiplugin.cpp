@@ -253,6 +253,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType<PageRouter>(uri, 2, 12, "PageRouter");
     qmlRegisterType<PageRoute>(uri, 2, 12, "PageRoute");
     qmlRegisterUncreatableType<PageRouterAttached>(uri, 2, 12, "PageRouterAttached", QStringLiteral("PageRouterAttached cannot be created"));
+    qmlRegisterType(componentUrl(QStringLiteral("RouterWindow.qml")), uri, 2, 12, "RouterWindow");
 
     qmlProtectModule(uri, 2);
 }
