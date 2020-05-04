@@ -3,10 +3,10 @@ import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.12 as Kirigami
 
 Kirigami.ApplicationWindow {
-    id: applicaionWindow
+    id: applicationWindow
     Kirigami.PageRouter {
         initialRoute: "home"
-        pageStack: applicaionWindow.pageStack.columnView
+        pageStack: applicationWindow.pageStack.columnView
 
         Kirigami.PageRoute {
             name: "home"

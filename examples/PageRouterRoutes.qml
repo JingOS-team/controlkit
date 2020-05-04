@@ -2,9 +2,9 @@ import QtQuick 2.12
 import org.kde.kirigami 2.12 as Kirigami
 
 Kirigami.ApplicationWindow {
-    id: applicaionWindow
+    id: applicationWindow
     Kirigami.PageRouter {
-        pageStack: applicaionWindow.pageStack.columnView
+        pageStack: applicationWindow.pageStack.columnView
 
         Kirigami.PageRoute {
             name: "routeOne"
