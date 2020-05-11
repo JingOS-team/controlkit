@@ -261,6 +261,7 @@ private:
 
     QVariant dataFor(QObject* object);
     bool isActive(QObject* object);
+    void pushFromObject(QObject *object, QJSValue route);
 
     friend class PageRouterAttached;
 
@@ -408,6 +409,7 @@ Q_SIGNALS:
     void initialRouteChanged();
     void pageStackChanged();
     void currentIndexChanged();
+    void navigationChanged();
 };
 
 /**
@@ -432,12 +434,25 @@ class PageRouterAttached : public QObject
      * Accessing this property outside of a PageRouter will result in undefined behaviour.
      */
     Q_PROPERTY(bool isCurrent READ isCurrent NOTIFY isCurrentChanged)
+    
+    /**
+     * Which route this PageRouterAttached should watch for.
+     * 
+     * @include PageRouterWatchedRoute.qml
+     */
+    Q_PROPERTY(QJSValue watchedRoute READ watchedRoute WRITE setWatchedRoute NOTIFY watchedRouteChanged)
+
+    /**
+     * Whether the watchedRoute is currently active.
+     */
+    Q_PROPERTY(bool watchedRouteActive READ watchedRouteActive NOTIFY navigationChanged)
 
 private:
     explicit PageRouterAttached(QObject *parent = nullptr);
 
     QPointer<PageRouter> m_router;
     QVariant m_data;
+    QJSValue m_watchedRoute;
 
     void findParent();
 
@@ -457,11 +472,38 @@ public:
     Q_INVOKABLE void popRoute();
     // @see PageRouter::bringToView()
     Q_INVOKABLE void bringToView(QJSValue route);
+    /**
+     * @brief Push a route from this route on the stack.
+     * 
+     * Replace the routes after the route this is invoked on
+     * with the provided @p route.
+     * 
+     * For example, if you invoke this method on the second route
+     * in the PageRouter's stack, routes after the second
+     * route will be replaced with the provided routes.
+     */
+    Q_INVOKABLE void pushFromHere(QJSValue route);
+    /**
+     * @brief Pop routes after this route on the stack.
+     * 
+     * Pop the routes after the route this is invoked on with
+     * the provided @p route.
+     * 
+     * For example, if you invoke this method on the second route
+     * in the PageRouter's stack, routes after the second route
+     * will be removed from the stack.
+     */
+    Q_INVOKABLE void popFromHere();
+    bool watchedRouteActive();
+    void setWatchedRoute(QJSValue route);
+    QJSValue watchedRoute();
 
 Q_SIGNALS:
     void routerChanged();
     void dataChanged();
     void isCurrentChanged();
+    void navigationChanged();
+    void watchedRouteChanged();
 };
 
 QML_DECLARE_TYPEINFO(PageRouter, QML_HAS_ATTACHED_PROPERTIES)

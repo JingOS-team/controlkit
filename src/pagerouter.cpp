@@ -249,6 +249,7 @@ void PageRouter::navigateToRoute(QJSValue route)
     for (auto toPush : resolvedRoutes) {
         push(toPush);
     }
+    Q_EMIT navigationChanged();
 }
 
 void PageRouter::bringToView(QJSValue route)
@@ -292,6 +293,7 @@ bool PageRouter::routeActive(QJSValue route)
 void PageRouter::pushRoute(QJSValue route)
 {
     push(parseRoute(route));
+    Q_EMIT navigationChanged();
 }
 
 void PageRouter::popRoute()
@@ -301,6 +303,7 @@ void PageRouter::popRoute()
         m_currentRoutes.last().item->deleteLater();
     }
     m_currentRoutes.removeLast();
+    Q_EMIT navigationChanged();
 }
 
 QVariant PageRouter::dataFor(QObject *object)
@@ -350,6 +353,7 @@ void PageRouterAttached::findParent()
             Q_EMIT routerChanged();
             Q_EMIT dataChanged();
             Q_EMIT isCurrentChanged();
+            Q_EMIT navigationChanged();
             break;
         }
         parent = parent->parentItem();
@@ -424,6 +428,79 @@ bool PageRouterAttached::isCurrent() const
         qCritical() << "PageRouterAttached does not have a parent PageRouter";
         return false;
     }
+}
+
+bool PageRouterAttached::watchedRouteActive()
+{
+    if (m_router) {
+        return m_router->routeActive(m_watchedRoute);
+    } else {
+        qCritical() << "PageRouterAttached does not have a parent PageRouter";
+        return false;
+    }
+}
+
+void PageRouterAttached::setWatchedRoute(QJSValue route)
+{
+    m_watchedRoute = route;
+    Q_EMIT watchedRouteChanged();
+}
+
+QJSValue PageRouterAttached::watchedRoute()
+{
+    return m_watchedRoute;
+}
+
+void PageRouterAttached::pushFromHere(QJSValue route)
+{
+    if (m_router) {
+        m_router->pushFromObject(parent(), route);
+    } else {
+        qCritical() << "PageRouterAttached does not have a parent PageRouter";
+    }
+}
+
+void PageRouterAttached::popFromHere()
+{
+    if (m_router) {
+        m_router->pushFromObject(parent(), QJSValue());
+    } else {
+        qCritical() << "PageRouterAttached does not have a parent PageRouter";
+    }
+}
+
+void PageRouter::pushFromObject(QObject *object, QJSValue inputRoute)
+{
+    auto parsed = parseRoutes(inputRoute);
+
+    auto pointer = object;
+    while (pointer != nullptr) {
+        bool popping = false;
+        for (auto route : m_currentRoutes) {
+            if (popping) {
+                if (!route.cache) {
+                    m_currentRoutes.removeAll(route);
+                    route.item->deleteLater();
+                }
+                continue;
+            }
+            if (route.item == pointer) {
+                m_pageStack->pop(qobject_cast<QQuickItem*>(route.item));
+                popping = true;
+            }
+        }
+        if (popping) {
+            if (!inputRoute.isUndefined()) {
+                for (auto route : parsed) {
+                    push(route);
+                }
+            }
+            Q_EMIT navigationChanged();
+            return;
+        }
+        pointer = pointer->parent();
+    }
+    qWarning() << "Object" << object << "not in current routes";
 }
 
 QJSValue PageRouter::currentRoutes() const
