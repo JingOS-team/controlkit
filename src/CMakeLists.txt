@@ -21,6 +21,7 @@ set(kirigami_SRCS
     settings.cpp
     formlayoutattached.cpp
     pagepool.cpp
+    imagecolors.cpp
     scenepositionattached.cpp
     mnemonicattached.cpp
     wheelhandler.cpp

@@ -244,3 +244,74 @@ QColor ColorUtils::tintWithAlpha(const QColor &targetColor, const QColor &tintCo
         tintAlpha + inverseAlpha * targetColor.alphaF()
     );
 }
+
+ColorUtils::LabColor ColorUtils::colorToLab(const QColor &color)
+{
+    //  http://wiki.nuaj.net/index.php/Color_Transforms#RGB_.E2.86.92_XYZ
+    // First: convert to XYZ
+    qreal r = color.redF();
+    qreal g = color.greenF();
+    qreal b = color.blueF();
+    
+    // Apply gamma correction (i.e. conversion to linear-space)
+    if (r > 0.04045) {
+        r = pow((r + 0.055 ) / 1.055, 2.4);
+    } else {
+        r = r / 12.92;
+    }
+
+    if (g > 0.04045 ) {
+        g = pow((g + 0.055 ) / 1.055, 2.4);
+    } else {
+        g = g / 12.92;
+    }
+
+    if (b > 0.04045) {
+        b = pow((b + 0.055 ) / 1.055, 2.4);
+    } else {
+        b = b / 12.92;
+    }
+
+    // Observer. = 2°, Illuminant = D65
+    qreal x = r * 0.4124 + g * 0.3576 + b * 0.1805;
+    qreal y = r * 0.2126 + g * 0.7152 + b * 0.0722;
+    qreal z = r * 0.0193 + g * 0.1192 + b * 0.9505;
+
+    // Second: convert from XYZ to L*a*b
+    x = x / 0.95047;     // Observer= 2°, Illuminant= D65
+    y = y / 1.0;
+    z = z / 1.08883;
+
+    if (x > 0.008856) {
+        x = pow(x, 1.0/3.0);
+    } else {
+        x = (7.787 * x) + (16.0 / 116.0);
+    }
+
+    if (y > 0.008856) {
+        y = pow(y, 1.0/3.0);
+    } else {
+        y = (7.787 * y) + (16.0 / 116.0);
+    }
+
+    if (z > 0.008856) {
+        z = pow(z, 1.0/3.0);
+    } else {
+        z = (7.787 * z) +  (16.0 / 116.0);
+    }
+
+    LabColor labColor;
+    labColor.l = (116 * y) - 16;
+    labColor.a = 500 * (x - y);
+    labColor.b = 200 * (y - z);
+
+    return labColor;
+}
+
+qreal ColorUtils::chroma(const QColor &color)
+{
+    LabColor labColor = colorToLab(color);
+
+    // Chroma is hypotenuse of a and b
+    return sqrt(pow(labColor.a, 2) + pow(labColor.b, 2));
+}

@@ -177,4 +177,23 @@ public:
      * \sa Qt.tint()
      */
     Q_INVOKABLE QColor tintWithAlpha(const QColor &targetColor, const QColor &tintColor, double alpha);
+
+    /**
+     * Returns the CIELAB chroma of the given color.
+     *
+     * CIELAB chroma may give a better quantification of how vibrant a color is compared to HSV saturation.
+     *
+     * \sa https://en.wikipedia.org/wiki/Colorfulness
+     * \sa https://en.wikipedia.org/wiki/CIELAB_color_space
+     */
+    Q_INVOKABLE static qreal chroma(const QColor &color);
+
+    struct LabColor {
+        qreal l = 0;
+        qreal a = 0;
+        qreal b = 0;
+    };
+
+    // Not for QML, returns the comvertion from srgb of a QColor and Lab colorspace
+    static ColorUtils::LabColor colorToLab(const QColor &color);
 };
