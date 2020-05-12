@@ -33,9 +33,7 @@ import "private"
  *
  *     Kirigami.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         anchors.left: parent.left
- *         anchors.right: parent.right
- *         anchors.margins: Kirigami.Units.largeSpacing
+ *         width: parent.width - (Kirigami.Units.largeSpacing * 4)
  *
  *         visible: listView.count == 0
  *
@@ -54,9 +52,7 @@ import "private"
  *
  *     Kirigami.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         anchors.left: parent.left
- *         anchors.right: parent.right
- *         anchors.margins: Kirigami.Units.largeSpacing
+ *         width: parent.width - (Kirigami.Units.largeSpacing * 4)
  *
  *         visible: listView.count == 0
  *
@@ -83,9 +79,7 @@ import "private"
  *
  *     Kirigami.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         anchors.left: parent.left
- *         anchors.right:  parent.right
- *         anchors.margins: Kirigami.Units.largeSpacing
+ *         width: parent.width - (Kirigami.Units.largeSpacing * 4)
  *
  *         visible: root.networkConnected
  *
@@ -105,9 +99,7 @@ import "private"
  *
  *     Kirigami.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         anchors.left: parent.left
- *         anchors.right:  parent.right
- *         anchors.margins: Kirigami.Units.largeSpacing
+ *         width: parent.width - (Kirigami.Units.largeSpacing * 4)
  *
  *         visible: root.loading
  *
@@ -132,9 +124,7 @@ import "private"
  *
  *     Kirigami.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         anchors.left: parent.left
- *         anchors.right:  parent.right
- *         anchors.margins: Kirigami.Units.largeSpacing
+ *         width: parent.width - (Kirigami.Units.largeSpacing * 4)
  *
  *         visible: root.loading
  *
