@@ -149,6 +149,7 @@ QtObject {
     onBackgroundChanged: {
         background.parent = contentLayout.parent;
         background.anchors.fill = contentLayout;
+        background.anchors.margins = -1
         background.z = -1;
     }
     onContentItemChanged: {
@@ -507,8 +508,6 @@ QtObject {
                             right: parent.right
                             left: parent.left
                             top: parent.bottom
-                            leftMargin: 1
-                            rightMargin: 1
                         }
                     }
                 }
@@ -595,6 +594,8 @@ QtObject {
                         right: parent.right
                         left: parent.left
                         bottom: parent.top
+                        leftMargin: -1
+                        rightMargin: -1
                     }
                 }
             }
