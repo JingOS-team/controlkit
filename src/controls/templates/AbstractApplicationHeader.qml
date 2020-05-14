@@ -46,6 +46,8 @@ Item {
     LayoutMirroring.enabled: Qt.application.layoutDirection == Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
 
+    Theme.inherit: true
+
     //FIXME: remove
     property QtObject __appWindow: typeof applicationWindow !== "undefined" ? applicationWindow() : null;
     implicitHeight: preferredHeight

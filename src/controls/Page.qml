@@ -384,6 +384,10 @@ QQC2.Page {
                 right: parent.right
                 bottom: parent.bottom
             }
+            //if the page doesn't inherit, assume it has custom colors we want to use them here too
+            Kirigami.Theme.inherit: !root.Kirigami.Theme.inherit
+            Kirigami.Theme.colorSet: Kirigami.Theme.Button
+
             //It should be T2.Page, Qt 5.7 doesn't like it
             property Item page: root
             height: item ? item.implicitHeight : 0

@@ -141,6 +141,9 @@ void ImageColors::update()
         m_futureImageData = new QFutureWatcher<ImageData>(this);
         connect(m_futureImageData, &QFutureWatcher<ImageData>::finished,
                 this, [this] () {
+                    if (!m_futureImageData) {
+                        return;
+                    }
                     m_imageData = m_futureImageData->future().result();
                     m_futureImageData->deleteLater();
                     m_futureImageData = nullptr;

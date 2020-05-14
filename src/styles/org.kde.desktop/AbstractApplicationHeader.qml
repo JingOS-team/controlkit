@@ -24,7 +24,7 @@ import "../../templates" as T
 T.AbstractApplicationHeader {
     id: root
 
-    Theme.inherit: false
+    Theme.inherit: true
 
     background: Rectangle {
         color: Theme.backgroundColor

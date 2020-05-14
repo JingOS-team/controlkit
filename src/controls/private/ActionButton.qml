@@ -14,8 +14,7 @@ import "../templates/private"
 
 Item {
     id: root
-    Theme.colorSet: Theme.Button
-    Theme.inherit: false
+
     anchors {
         left: parent.left
         right: parent.right
