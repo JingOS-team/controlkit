@@ -437,11 +437,17 @@ QColor ImageColors::highlight() const
 
 QColor ImageColors::closestToWhite() const
 {
-   return m_imageData.m_closestToWhite;
+    if (qGray(m_imageData.m_closestToWhite.rgb()) < 200) {
+        return QColor(230, 230, 230);
+    }
+    return m_imageData.m_closestToWhite;
 }
 
 QColor ImageColors::closestToBlack() const
 {
+    if (qGray(m_imageData.m_closestToBlack.rgb()) > 80) {
+        return QColor(20, 20, 20);
+    }
     return m_imageData.m_closestToBlack;
 }
 
