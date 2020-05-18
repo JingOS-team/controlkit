@@ -89,7 +89,23 @@ ScrollablePage
                 source: "user"
             }
             QQC2.Label {
-                text: modelData.emailAddress ? qsTr("%1 <%2>").arg(modelData.name).arg(modelData.emailAddress) : modelData.name
+                text: modelData.name
+            }
+            Row {
+                // Group action buttons together
+                spacing: 0
+                QQC2.ToolButton {
+                    visible: modelData.emailAddress
+                    width: height
+                    icon.name: "mail-sent"
+                    onClicked: Qt.openUrlExternally("mailto:%1".arg(modelData.emailAddress))
+                }
+                QQC2.ToolButton {
+                    visible: modelData.webAddress
+                    width: height
+                    icon.name: "globe"
+                    onClicked: Qt.openUrlExternally(modelData.webAddress)
+                }
             }
         }
     }
