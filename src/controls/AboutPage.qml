@@ -98,12 +98,18 @@ ScrollablePage
                     visible: modelData.emailAddress
                     width: height
                     icon.name: "mail-sent"
+                    QQC2.ToolTip.delay: Units.toolTipDelay
+                    QQC2.ToolTip.visible: hovered
+                    QQC2.ToolTip.text: qsTr("Send an email to %1").arg(modelData.emailAddress)
                     onClicked: Qt.openUrlExternally("mailto:%1".arg(modelData.emailAddress))
                 }
                 QQC2.ToolButton {
                     visible: modelData.webAddress
                     width: height
                     icon.name: "globe"
+                    QQC2.ToolTip.delay: Units.toolTipDelay
+                    QQC2.ToolTip.visible: hovered
+                    QQC2.ToolTip.text: modelData.webAddress
                     onClicked: Qt.openUrlExternally(modelData.webAddress)
                 }
             }
