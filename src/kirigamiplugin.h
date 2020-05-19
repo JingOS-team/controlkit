@@ -33,6 +33,7 @@ public:
 
     static void registerTypes()
     {
+        Q_INIT_RESOURCE(shaders);
         static KirigamiPlugin instance;
         instance.registerTypes("org.kde.kirigami");
     }
