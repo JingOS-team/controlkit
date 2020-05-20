@@ -26,7 +26,8 @@ HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/shadowedrectangle.h \
                $$PWD/src/shadowedtexture.h \
                $$PWD/src/pagerouter.h \
-               $$PWD/src/pagepool.h
+               $$PWD/src/pagepool.h \
+               $$PWD/src/avatar.h
 SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/enums.cpp \
                $$PWD/src/settings.cpp \
@@ -52,7 +53,8 @@ SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/shadowedrectangle.cpp \
                $$PWD/src/shadowedtexture.cpp \
                $$PWD/src/pagerouter.cpp \
-               $$PWD/src/pagepool.cpp
+               $$PWD/src/pagepool.cpp \
+               $$PWD/src/avatar.cpp
 
 INCLUDEPATH += $$PWD/src $$PWD/src/libkirigami
 DEFINES     += KIRIGAMI_BUILD_TYPE_STATIC

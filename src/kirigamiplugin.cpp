@@ -22,6 +22,7 @@
 #include "colorutils.h"
 #include "pagerouter.h"
 #include "imagecolors.h"
+#include "avatar.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -258,6 +259,8 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     // 2.13
     qmlRegisterType<ImageColors>(uri, 2, 13, "ImageColors");
+    qmlRegisterSingletonType<AvatarPrivate>("org.kde.kirigami.private", 2, 13, "AvatarPrivate", [] (QQmlEngine*, QJSEngine*) -> QObject* { return new AvatarPrivate; });
+    qmlRegisterType(componentUrl(QStringLiteral("Avatar.qml")), uri, 2, 13, "Avatar");
 
     qmlProtectModule(uri, 2);
 }

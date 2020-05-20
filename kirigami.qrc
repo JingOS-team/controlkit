@@ -58,6 +58,7 @@
         <file alias="templates/private/BackButton.qml">src/controls/templates/private/BackButton.qml</file>
         <file alias="templates/private/IconPropertiesGroup.qml">src/controls/templates/private/IconPropertiesGroup.qml</file>
         <file alias="templates/private/ForwardButton.qml">src/controls/templates/private/ForwardButton.qml</file>
+        <file alias="templates/private/BorderPropertiesGroup.qml">src/controls/templates/private/BorderPropertiesGroup.qml</file>
         <file alias="templates/OverlayDrawer.qml">src/controls/templates/OverlayDrawer.qml</file>
         <file alias="templates/OverlaySheet.qml">src/controls/templates/OverlaySheet.qml</file>
         <file alias="templates/SwipeListItem.qml">src/controls/templates/SwipeListItem.qml</file>
@@ -80,6 +81,7 @@
         <file alias="FormLayout.qml">src/controls/FormLayout.qml</file>
         <file alias="ListItemDragHandle.qml">src/controls/ListItemDragHandle.qml</file>
         <file alias="ShadowedImage.qml">src/controls/ShadowedImage.qml</file>
+        <file alias="Avatar.qml">src/controls/ShadowedImage.qml</file>
         <file alias="styles/Material/AbstractListItem.qml">src/styles/Material/AbstractListItem.qml</file>
         <file alias="styles/Material/Theme.qml">src/styles/Material/Theme.qml</file>
         <file alias="styles/Material/SwipeListItem.qml">src/styles/Material/SwipeListItem.qml</file>
