@@ -143,7 +143,9 @@ QtObject {
     }
 
     function close() {
-        closeAnimation.running = true;
+        if (root.sheetOpen) {
+            closeAnimation.running = true;
+        }
     }
 
     onBackgroundChanged: {
@@ -171,7 +173,7 @@ QtObject {
         if (sheetOpen) {
             open();
         } else {
-            close();
+            closeAnimation.running = true;
             Qt.inputMethod.hide();
         }
     }
