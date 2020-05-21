@@ -64,6 +64,12 @@ QtObject {
     property color complementaryHoverColor: palette.highlight
     property color complementaryFocusColor: palette.highlight
 
+    property color headerTextColor: palette.text
+    property color headerBackgroundColor: palette.base
+    property color headerAlternateBackgroundColor: palette.alternateBase
+    property color headerHoverColor: palette.highlight
+    property color headerFocusColor: palette.highlight
+
     property font defaultFont: fontMetrics.font
 
     property list<QtObject> children: [
