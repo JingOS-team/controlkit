@@ -261,6 +261,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType<ImageColors>(uri, 2, 13, "ImageColors");
     qmlRegisterSingletonType<AvatarPrivate>("org.kde.kirigami.private", 2, 13, "AvatarPrivate", [] (QQmlEngine*, QJSEngine*) -> QObject* { return new AvatarPrivate; });
     qmlRegisterType(componentUrl(QStringLiteral("Avatar.qml")), uri, 2, 13, "Avatar");
+    qmlRegisterType(componentUrl(QStringLiteral("swipenavigator/SwipeNavigator.qml")), uri, 2, 13, "SwipeNavigator");
 
     qmlProtectModule(uri, 2);
 }

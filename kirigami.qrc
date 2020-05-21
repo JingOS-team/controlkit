@@ -82,6 +82,13 @@
         <file alias="ListItemDragHandle.qml">src/controls/ListItemDragHandle.qml</file>
         <file alias="ShadowedImage.qml">src/controls/ShadowedImage.qml</file>
         <file alias="Avatar.qml">src/controls/Avatar.qml</file>
+        <file alias="swipenavigator/PrivateSwipeHighlight.qml">src/controls/swipenavigator/PrivateSwipeHighlight.qml</file>
+        <file alias="swipenavigator/PrivateSwipeProgress.qml">src/controls/swipenavigator/PrivateSwipeProgress.qml</file>
+        <file alias="swipenavigator/PrivateSwipeStack.qml">src/controls/swipenavigator/PrivateSwipeStack.qml</file>
+        <file alias="swipenavigator/PrivateSwipeTab.qml">src/controls/swipenavigator/PrivateSwipeTab.qml</file>
+        <file alias="swipenavigator/PrivateSwipeTabBar.qml">src/controls/swipenavigator/PrivateSwipeTabBar.qml</file>
+        <file alias="swipenavigator/PrivateSwipeTabBarLoader.qml">src/controls/swipenavigator/PrivateSwipeTabBarLoader.qml</file>
+        <file alias="swipenavigator/SwipeNavigator.qml">src/controls/swipenavigator/SwipeNavigator.qml</file>
         <file alias="styles/Material/AbstractListItem.qml">src/styles/Material/AbstractListItem.qml</file>
         <file alias="styles/Material/Theme.qml">src/styles/Material/Theme.qml</file>
         <file alias="styles/Material/SwipeListItem.qml">src/styles/Material/SwipeListItem.qml</file>
