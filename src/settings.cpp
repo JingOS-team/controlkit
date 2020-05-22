@@ -97,6 +97,7 @@ Settings *Settings::self()
 
 bool Settings::eventFilter(QObject *watched, QEvent *event)
 {
+    Q_UNUSED(watched)
     switch (event->type()) {
     case QEvent::TouchBegin:
         setTransientTouchInput(true);
