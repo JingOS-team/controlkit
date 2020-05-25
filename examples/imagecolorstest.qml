@@ -14,7 +14,7 @@ RowLayout {
 
     Kirigami.ImageColors {
         id: palette
-        source: icon
+        source: icon.source
     }
     Kirigami.ImageColors {
         id: imgPalette
@@ -45,7 +45,7 @@ RowLayout {
             onClicked: {
                 i = (i+1)%icons.length
                 icon.source = icons[i]
-                palette.update()
+               // palette.update()
             }
         }
 

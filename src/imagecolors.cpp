@@ -78,13 +78,8 @@ void ImageColors::setSourceImage(const QImage &image)
 
     m_sourceItem.clear();
 
-    if (m_sourceImage.isNull()) {
-        m_sourceImage = image;
-        update();
-    } else {
-        m_sourceImage = image;
-        update();
-    }
+    m_sourceImage = image;
+    update();
 }
 
 QImage ImageColors::sourceImage() const
