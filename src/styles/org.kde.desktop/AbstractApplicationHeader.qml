@@ -24,7 +24,8 @@ import "../../templates" as T
 T.AbstractApplicationHeader {
     id: root
 
-    Theme.inherit: true
+    Theme.inherit: false
+    Theme.colorSet: Theme.Header
 
     background: Rectangle {
         // Always use window bg color for toolbar, even if the page

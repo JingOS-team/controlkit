@@ -26,9 +26,7 @@ T.AbstractApplicationHeader {
     id: root
 
     Theme.inherit: false
-    Theme.textColor: root.parent.Theme.highlightedTextColor
-    Theme.backgroundColor: root.parent.Theme.highlightColor
-    Theme.highlightColor: root.parent.Theme.backgroundColor
+    Theme.colorSet: Theme.Header
 
     background: Rectangle {
         color: Theme.backgroundColor

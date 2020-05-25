@@ -183,7 +183,8 @@ public:
         Button, /** Color set used by buttons */
         Selection, /** Color set used by selectged areas */
         Tooltip, /** Color set used by tooltips */
-        Complementary /** Color set meant to be complementary to Window: usually is a dark theme for light themes */
+        Complementary, /** Color set meant to be complementary to Window: usually is a dark theme for light themes */
+        Header /** Color set to be used by heading areas of applications, such as toolbars */
     };
     Q_ENUM(ColorSet)
 

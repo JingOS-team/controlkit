@@ -71,6 +71,12 @@ QtObject {
     property color complementaryHoverColor: theme.Material.highlightedButtonColor
     property color complementaryFocusColor: theme.Material.highlightedButtonColor
 
+    property color headerTextColor: fontMetrics.Material.primaryTextColor
+    property color headerBackgroundColor: fontMetrics.Material.primaryColor
+    property color headerAlternateBackgroundColor: Qt.lighter(fontMetrics.Material.primaryColor, 1.05)
+    property color headerHoverColor: theme.Material.highlightedButtonColor
+    property color headerFocusColor: theme.Material.highlightedButtonColor
+
     property font defaultFont: fontMetrics.font
 
     property list<QtObject> children: [
