@@ -343,6 +343,46 @@ PageRouterAttached* PageRouter::qmlAttachedProperties(QObject *object)
     return attached;
 }
 
+QSet<QObject*> flatParentTree(QObject* object)
+{
+    // See below comment in Climber::climbObjectParents for why this is here.
+    static const QMetaObject* metaObject = QMetaType::metaObjectForType(QMetaType::type("QQuickItem*"));
+    QSet<QObject*> ret;
+    // Use an inline struct type so that climbItemParents and climbObjectParents
+    // can call eachother
+    struct Climber
+    {
+        void climbItemParents(QSet<QObject*> &out, QQuickItem *item) {
+            auto parent = item->parentItem();
+            while (parent != nullptr) {
+                out << parent;
+                climbObjectParents(out, parent);
+                parent = parent->parentItem();
+            }
+        }
+        void climbObjectParents(QSet<QObject*> &out, QObject *object) {
+            auto parent = object->parent();
+            while (parent != nullptr) {
+                out << parent;
+                // We manually call metaObject()->inherits() and
+                // use a reinterpret cast because qobject_cast seems
+                // to have stability issues here due to mutable 
+                // pointer mechanics.
+                if (parent->metaObject()->inherits(metaObject)) {
+                    climbItemParents(out, reinterpret_cast<QQuickItem*>(parent));
+                }
+                parent = parent->parent();
+            }
+        }
+    };
+    Climber climber;
+    if (qobject_cast<QQuickItem*>(object)) {
+        climber.climbItemParents(ret, qobject_cast<QQuickItem*>(object));
+    }
+    climber.climbObjectParents(ret, object);
+    return ret;
+}
+
 void PageRouterAttached::findParent()
 {
     QQuickItem *parent = qobject_cast<QQuickItem *>(this->parent());
@@ -472,9 +512,9 @@ void PageRouterAttached::popFromHere()
 void PageRouter::pushFromObject(QObject *object, QJSValue inputRoute)
 {
     auto parsed = parseRoutes(inputRoute);
+    auto objects = flatParentTree(object);
 
-    auto pointer = object;
-    while (pointer != nullptr) {
+    for (const auto& obj : objects) {
         bool popping = false;
         for (auto route : m_currentRoutes) {
             if (popping) {
@@ -484,7 +524,7 @@ void PageRouter::pushFromObject(QObject *object, QJSValue inputRoute)
                 }
                 continue;
             }
-            if (route.item == pointer) {
+            if (route.item == obj) {
                 m_pageStack->pop(qobject_cast<QQuickItem*>(route.item));
                 popping = true;
             }
@@ -498,7 +538,6 @@ void PageRouter::pushFromObject(QObject *object, QJSValue inputRoute)
             Q_EMIT navigationChanged();
             return;
         }
-        pointer = pointer->parent();
     }
     qWarning() << "Object" << object << "not in current routes";
 }
