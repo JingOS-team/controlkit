@@ -161,6 +161,54 @@ class ImageColors : public QObject
      */
     Q_PROPERTY(QColor closestToBlack READ closestToBlack NOTIFY paletteChanged)
 
+    /**
+     * The value to return when palette is not available, e.g. when
+     * ImageColors is still computing it or the source is invalid.
+     */
+    Q_PROPERTY(QVariantList fallbackPalette MEMBER m_fallbackPalette NOTIFY fallbackPaletteChanged)
+
+    /**
+     * The value to return when paletteBrightness is not available, e.g. when
+     * ImageColors is still computing it or the source is invalid.
+     */
+    Q_PROPERTY(ColorUtils::Brightness fallbackPaletteBrightness MEMBER m_fallbackPaletteBrightness NOTIFY fallbackPaletteBrightnessChanged)
+
+    /**
+     * The value to return when average is not available, e.g. when
+     * ImageColors is still computing it or the source is invalid.
+     */
+    Q_PROPERTY(QColor fallbackAverage MEMBER m_fallbackAverage NOTIFY fallbackAverageChanged)
+
+    /**
+     * The value to return when dominant is not available, e.g. when
+     * ImageColors is still computing it or the source is invalid.
+     */
+    Q_PROPERTY(QColor fallbackDominant MEMBER m_fallbackDominant NOTIFY fallbackDominantChanged)
+
+    /**
+     * The value to return when dominantContrasting is not available, e.g. when
+     * ImageColors is still computing it or the source is invalid.
+     */
+    Q_PROPERTY(QColor fallbackDominantContrasting MEMBER m_fallbackDominantContrasting NOTIFY fallbackDominantContrastingChanged)
+
+    /**
+     * The value to return when highlight is not available, e.g. when
+     * ImageColors is still computing it or the source is invalid.
+     */
+    Q_PROPERTY(QColor fallbackHighlight MEMBER m_fallbackHighlight NOTIFY fallbackHighlightChanged)
+
+    /**
+     * The value to return when foreground is not available, e.g. when
+     * ImageColors is still computing it or the source is invalid.
+     */
+    Q_PROPERTY(QColor fallbackForeground MEMBER m_fallbackForeground NOTIFY fallbackForegroundChanged)
+
+    /**
+     * The value to return when background is not available, e.g. when
+     * ImageColors is still computing it or the source is invalid.
+     */
+    Q_PROPERTY(QColor fallbackBackground MEMBER m_fallbackBackground NOTIFY fallbackBackgroundChanged)
+
 public:
     explicit ImageColors(QObject* parent = nullptr);
     ~ImageColors();
@@ -190,6 +238,14 @@ public:
 Q_SIGNALS:
     void sourceChanged();
     void paletteChanged();
+    void fallbackPaletteChanged();
+    void fallbackPaletteBrightnessChanged();
+    void fallbackAverageChanged();
+    void fallbackDominantChanged();
+    void fallbackDominantContrastingChanged();
+    void fallbackHighlightChanged();
+    void fallbackForegroundChanged();
+    void fallbackBackgroundChanged();
 
 private:
     static inline void positionColor(QRgb rgb, QList<ImageData::colorStat> &clusters);
@@ -208,5 +264,14 @@ private:
 
     QFutureWatcher<ImageData> *m_futureImageData = nullptr;
     ImageData m_imageData;
+
+    QVariantList m_fallbackPalette;
+    ColorUtils::Brightness m_fallbackPaletteBrightness;
+    QColor m_fallbackAverage;
+    QColor m_fallbackDominant;
+    QColor m_fallbackDominantContrasting;
+    QColor m_fallbackHighlight;
+    QColor m_fallbackForeground;
+    QColor m_fallbackBackground;
 };
 

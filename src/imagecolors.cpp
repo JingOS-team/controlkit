@@ -17,6 +17,7 @@
  */
 
 #include "imagecolors.h"
+#include "platformtheme.h"
 
 #include <QColor>
 #include <QDebug>
@@ -25,6 +26,13 @@
 
 #include <cmath>
 
+#define return_fallback(value) if (m_futureImageData == nullptr || !m_futureImageData->future().isFinished()) {\
+    return value;\
+}
+
+#define return_fallback_finally(value, finally) if (m_futureImageData == nullptr || !m_futureImageData->future().isFinished()) {\
+    return value.isValid() ? value : static_cast<Kirigami::PlatformTheme*>(qmlAttachedPropertiesObject<Kirigami::PlatformTheme>(this, true))->finally();\
+}
 
 ImageColors::ImageColors(QObject *parent)
     : QObject(parent)
@@ -370,11 +378,13 @@ ImageData ImageColors::generatePalette(const QImage &sourceImage)
 
 QVariantList ImageColors::palette() const
 {
+    return_fallback(m_fallbackPalette)
     return m_imageData.m_palette;
 }
 
 ColorUtils::Brightness ImageColors::paletteBrightness() const
 {
+    return_fallback(m_fallbackPaletteBrightness)
     return qGray(m_imageData.m_dominant.rgb()) < 128
             ? ColorUtils::Dark
             : ColorUtils::Light;
@@ -382,21 +392,25 @@ ColorUtils::Brightness ImageColors::paletteBrightness() const
 
 QColor ImageColors::average() const
 {
+    return_fallback_finally(m_fallbackAverage, linkBackgroundColor)
     return m_imageData.m_average;
 }
 
 QColor ImageColors::dominant() const
 {
+    return_fallback_finally(m_fallbackAverage, linkBackgroundColor)
     return m_imageData.m_dominant;
 }
 
 QColor ImageColors::dominantContrast() const
 {
+    return_fallback_finally(m_fallbackAverage, linkBackgroundColor)
     return m_imageData.m_dominantContrast;
 }
 
 QColor ImageColors::foreground() const
 {
+    return_fallback_finally(m_fallbackAverage, textColor)
     if (paletteBrightness() == ColorUtils::Dark) {
         if (qGray(m_imageData.m_closestToWhite.rgb()) < 200) {
             return QColor(230, 230, 230);
@@ -412,6 +426,7 @@ QColor ImageColors::foreground() const
 
 QColor ImageColors::background() const
 {
+    return_fallback_finally(m_fallbackAverage, backgroundColor)
     if (paletteBrightness() == ColorUtils::Dark) {
         if (qGray(m_imageData.m_closestToBlack.rgb()) > 80) {
             return QColor(20, 20, 20);
@@ -427,11 +442,13 @@ QColor ImageColors::background() const
 
 QColor ImageColors::highlight() const
 {
+    return_fallback_finally(m_fallbackAverage, linkColor)
     return m_imageData.m_highlight;
 }
 
 QColor ImageColors::closestToWhite() const
 {
+    return_fallback(Qt::white)
     if (qGray(m_imageData.m_closestToWhite.rgb()) < 200) {
         return QColor(230, 230, 230);
     }
@@ -440,6 +457,7 @@ QColor ImageColors::closestToWhite() const
 
 QColor ImageColors::closestToBlack() const
 {
+    return_fallback(Qt::black)
     if (qGray(m_imageData.m_closestToBlack.rgb()) > 80) {
         return QColor(20, 20, 20);
     }
