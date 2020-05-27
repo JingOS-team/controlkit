@@ -6,7 +6,7 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 2.4 as QQC2
-import QtQuick.Layouts 1.13
+import QtQuick.Layouts 1.12
 import org.kde.kirigami 2.12 as Kirigami
 
 import "private"
