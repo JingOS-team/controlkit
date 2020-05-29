@@ -506,10 +506,16 @@ OverlayDrawer {
                                     visible: !root.collapsed && (modelData.hasOwnProperty("expandible") && modelData.expandible && !!modelData.children && modelData.children.length > 0)
                                     height: sectionHeader.implicitHeight
                                     width: parent.width
+                                    Rectangle {
+                                        Theme.colorSet: Theme.View
+                                        Theme.inherit: false
+                                        anchors.fill: parent
+                                        color: Theme.backgroundColor
+                                    }
                                     AbstractListItem {
                                         id: sectionHeader
                                         anchors.fill: parent
-                                        separatorVisible: false
+                                        separatorVisible: true
                                         sectionDelegate: true
                                         hoverEnabled: false
                                         supportsMouseEvents: false
