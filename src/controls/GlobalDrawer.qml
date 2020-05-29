@@ -9,7 +9,7 @@ import QtQuick.Templates 2.0 as T2
 import QtQuick.Controls 2.2 as QQC2
 import QtQuick.Layouts 1.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.13
 
 import "private"
 import "templates/private"
@@ -490,7 +490,7 @@ OverlayDrawer {
                             delegate: Column {
                                 width: parent.width
                                 GlobalDrawerActionItem {
-                                    id: drawerItem
+                                    visible: !(modelData.hasOwnProperty("expandible") && modelData.expandible)
                                     width: parent.width
                                     onCheckedChanged: {
                                         // move every checked item into view
@@ -501,8 +501,44 @@ OverlayDrawer {
                                     Theme.colorSet: drawerItem.visible && !root.modal && !root.collapsed && actionsRepeater.withSections ? Theme.Window : parent.Theme.colorSet
                                     backgroundColor: Theme.backgroundColor
                                 }
+                                Item {
+                                    id: headerItem
+                                    visible: (modelData.hasOwnProperty("expandible") && modelData.expandible && !!modelData.children && modelData.children.length > 0)
+                                    height: sectionHeader.implicitHeight
+                                    width: parent.width
+                                    AbstractListItem {
+                                        id: sectionHeader
+                                        anchors.fill: parent
+                                        separatorVisible: false
+                                        sectionDelegate: true
+                                        hoverEnabled: false
+                                        supportsMouseEvents: false
+                                        contentItem: RowLayout {
+                                            Icon {
+                                                height: header.height
+                                                width: height
+                                                source: modelData.icon.name || modelData.icon.source
+                                            }
+                                            Heading {
+                                                id: header
+                                                level: 3
+                                                text: modelData.text
+                                            }
+                                            Item {
+                                                Layout.fillWidth: true
+                                            }
+                                        }
+                                    }
+                                    Separator {
+                                        anchors {
+                                            left: parent.left
+                                            right: parent.right
+                                            bottom: parent.bottom
+                                        }
+                                    }
+                                }
                                 Repeater {
-                                    model: drawerItem.visible && modelData.hasOwnProperty("expandible") && modelData.expandible ? modelData.children : null
+                                    model: headerItem.visible ? modelData.children : null
                                     delegate: GlobalDrawerActionItem {
                                         width: parent.width
                                         opacity: !root.collapsed
