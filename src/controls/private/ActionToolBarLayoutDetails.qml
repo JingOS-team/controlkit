@@ -49,6 +49,9 @@ Item {
     readonly property real iconLayoutWidth: width - rightPadding
     readonly property real fullLayoutWidth: iconLayoutWidth - iconOnlyWidth
     readonly property real maximumWidth: fullSizePlaceholderLayout.width + leftPadding + rightPadding
+    property bool hasCollapsed: false
+    property var previousWidth: null
+    property bool goingAway: false
 
     enabled: false
     opacity: 0 // Cannot use visible: false because then relayout doesn't happen correctly
@@ -63,9 +66,11 @@ Item {
             var item = fullSizePlaceholderRepeater.itemAt(i)
             var iconOnlyItem = iconOnlyPlaceholderRepeater.itemAt(i)
 
-            if (item.actionVisible) {
+            if ((hasCollapsed ? item.actionVisibleWithPadding : item.actionVisible) ||
+               ((goingAway && hiddenActions.length == 1) ? item.actionVisible : false)) {
                 visible.push(item.kirigamiAction)
-            } else if (iconOnlyItem.actionVisible) {
+            } else if ((hasCollapsed ? iconOnlyItem.actionVisibleWithPadding : iconOnlyItem.actionVisible) ||
+                      ((goingAway && hiddenActions.length == 1) ? iconOnlyItem.actionVisible : false)) {
                 visible.push(item.kirigamiAction)
                 iconOnly.push(item.kirigamiAction)
                 iconsWidth += iconOnlyItem.width + details.spacing
@@ -74,13 +79,21 @@ Item {
             }
         }
 
+        hasCollapsed = hidden.length > 0
+
         visibleActions = visible
         hiddenActions = hidden
         iconOnlyActions = iconOnly
         iconOnlyWidth = iconsWidth
     }
 
-    onWidthChanged: Qt.callLater(update)
+    onWidthChanged: {
+        if (previousWidth != null) {
+            goingAway = previousWidth < width
+        }
+        previousWidth = width
+        Qt.callLater(update)
+    }
     Component.onCompleted: Qt.callLater(update)
 
     RowLayout {
@@ -118,7 +131,8 @@ Item {
                     return true
                 }
 
-                property bool actionVisible: visible && (x + width <= details.fullLayoutWidth)
+                property bool actionVisibleWithPadding: visible && (x + width <= details.fullLayoutWidth)
+                property bool actionVisible: visible && (x + width <= (details.fullLayoutWidth + details.rightPadding))
 
                 onLoaded: {
                     if (sourceComponent == toolButtonDelegate) {
@@ -171,7 +185,8 @@ Item {
                     return false
                 }
                 kirigamiAction: modelData
-                property bool actionVisible: visible && (iconOnlyPlaceholderRepeater.count === 1 || (x + width < details.iconLayoutWidth))
+                property bool actionVisibleWithPadding: visible && (iconOnlyPlaceholderRepeater.count === 1 || (x + width < details.iconLayoutWidth))
+                property bool actionVisible: visible && (iconOnlyPlaceholderRepeater.count === 1 || (x + width < (details.iconLayoutWidth + details.rightPadding)))
             }
         }
     }
