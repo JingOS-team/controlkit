@@ -490,7 +490,7 @@ OverlayDrawer {
                             delegate: Column {
                                 width: parent.width
                                 GlobalDrawerActionItem {
-                                    visible: !(modelData.hasOwnProperty("expandible") && modelData.expandible)
+                                    visible: root.collapsed || !(modelData.hasOwnProperty("expandible") && modelData.expandible)
                                     width: parent.width
                                     onCheckedChanged: {
                                         // move every checked item into view
@@ -503,7 +503,7 @@ OverlayDrawer {
                                 }
                                 Item {
                                     id: headerItem
-                                    visible: (modelData.hasOwnProperty("expandible") && modelData.expandible && !!modelData.children && modelData.children.length > 0)
+                                    visible: !root.collapsed && (modelData.hasOwnProperty("expandible") && modelData.expandible && !!modelData.children && modelData.children.length > 0)
                                     height: sectionHeader.implicitHeight
                                     width: parent.width
                                     AbstractListItem {
