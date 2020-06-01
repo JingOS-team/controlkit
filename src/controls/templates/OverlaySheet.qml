@@ -52,25 +52,25 @@ QtObject {
      * leftPadding: int
      * default contents padding at left
      */
-    property int leftPadding: Units.gridUnit
+    property int leftPadding: Units.largeSpacing
 
     /**
      * topPadding: int
      * default contents padding at top
      */
-    property int topPadding: Units.gridUnit
+    property int topPadding: Units.largeSpacing
 
     /**
      * rightPadding: int
      * default contents padding at right
      */
-    property int rightPadding: Units.gridUnit
+    property int rightPadding: Units.largeSpacing
 
     /**
      * bottomPadding: int
      * default contents padding at bottom
      */
-    property int bottomPadding: Units.gridUnit
+    property int bottomPadding: Units.largeSpacing
 
     /**
      * leftInset: real
@@ -491,6 +491,8 @@ QtObject {
                             right: parent.right
                             top: parent.top
                             margins: Units.smallSpacing
+                            rightMargin: root.rightPadding
+                            verticalCenter: headerItem.verticalCenter
                         }
                         z: 3
                         visible: root.showCloseButton
