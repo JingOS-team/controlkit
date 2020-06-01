@@ -256,6 +256,8 @@ OverlayDrawer {
 
     //rightPadding: !Settings.isMobile && mainFlickable.contentHeight > mainFlickable.height ? Units.gridUnit : Units.smallSpacing
 
+    Theme.colorSet: modal ? Theme.Window : Theme.View
+
     onHeaderChanged: {
         if (header) {
             header.parent = headerContainer
