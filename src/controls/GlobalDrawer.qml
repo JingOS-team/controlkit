@@ -506,19 +506,10 @@ OverlayDrawer {
                                     visible: !root.collapsed && (modelData.hasOwnProperty("expandible") && modelData.expandible && !!modelData.children && modelData.children.length > 0)
                                     height: sectionHeader.implicitHeight
                                     width: parent.width
-                                    Rectangle {
-                                        Theme.colorSet: Theme.View
-                                        Theme.inherit: false
-                                        anchors.fill: parent
-                                        color: Theme.backgroundColor
-                                    }
-                                    AbstractListItem {
+                                    ListSectionHeader {
                                         id: sectionHeader
                                         anchors.fill: parent
                                         separatorVisible: true
-                                        sectionDelegate: true
-                                        hoverEnabled: false
-                                        supportsMouseEvents: false
                                         contentItem: RowLayout {
                                             Icon {
                                                 height: header.height
