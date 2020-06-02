@@ -510,6 +510,7 @@ OverlayDrawer {
                                         id: sectionHeader
                                         anchors.fill: parent
                                         separatorVisible: true
+                                        Theme.colorSet: root.modal ? Theme.View : Theme.Window
                                         contentItem: RowLayout {
                                             Icon {
                                                 height: header.height
