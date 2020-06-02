@@ -339,7 +339,7 @@ QtObject {
 
             width: mainItem.contentItemPreferredWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.contentItemMaximumWidth, mainItem.contentItemPreferredWidth))
 
-            height: scrollView.contentItem == flickableContents ? (root.contentItem.height + topPadding + bottomPadding) + (headerItem.visible ? headerItem.height : 0) + (footerItem.visible ? footerItem.height : 0) : 0
+            height: scrollView.contentItem == flickableContents ? root.contentItem.height + topPadding + bottomPadding : 0
             Connections {
                 target: enabled ? flickableContents.Window.activeFocusItem : null
                 enabled: flickableContents.focus && flickableContents.Window.activeFocusItem && flickableContents.Window.activeFocusItem.hasOwnProperty("text")
