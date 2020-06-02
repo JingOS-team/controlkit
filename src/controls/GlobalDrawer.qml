@@ -509,7 +509,6 @@ OverlayDrawer {
                                     ListSectionHeader {
                                         id: sectionHeader
                                         anchors.fill: parent
-                                        separatorVisible: true
                                         Theme.colorSet: root.modal ? Theme.View : Theme.Window
                                         contentItem: RowLayout {
                                             Icon {
@@ -525,13 +524,6 @@ OverlayDrawer {
                                             Item {
                                                 Layout.fillWidth: true
                                             }
-                                        }
-                                    }
-                                    Separator {
-                                        anchors {
-                                            left: parent.left
-                                            right: parent.right
-                                            bottom: parent.bottom
                                         }
                                     }
                                 }
