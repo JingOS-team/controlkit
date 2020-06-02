@@ -536,11 +536,19 @@ OverlayDrawer {
                                     }
                                 }
                                 Repeater {
+                                    id: __repeater
                                     model: headerItem.visible ? modelData.children : null
                                     delegate: GlobalDrawerActionItem {
                                         width: parent.width
                                         opacity: !root.collapsed
                                         leftPadding: actionsRepeater.withSections && !root.collapsed && !root.modal ? padding * 2 : padding * 4
+                                    }
+                                }
+                                Separator {
+                                    visible: __repeater.count > 0
+                                    anchors {
+                                        left: parent.left
+                                        right: parent.right
                                     }
                                 }
                             }
