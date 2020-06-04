@@ -34,6 +34,14 @@ AbstractListItem {
     property alias subtitle: subtitleItem.text
 
     /**
+     * bold: bool
+     * Control whether the text (in both primary text and subtitle) should be rendered as bold
+     * @since 5.71
+     * @since org.kde.kirigami 2.13
+     */
+    property bool bold: false
+
+    /**
      * icon: var
      * A single icon that will be displayed in the list item.
      * The icon can be a grouped property with name,size,color etc, as QtQuickControls2 icons are defined.
@@ -111,6 +119,7 @@ AbstractListItem {
                 Layout.fillWidth: true
                 color: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents)) ? listItem.activeTextColor : listItem.textColor
                 elide: Text.ElideRight
+                font.weight: listItem.bold ? Font.Bold : Font.Normal
                 opacity: 1
             }
             QQC2.Label {
@@ -119,7 +128,7 @@ AbstractListItem {
                 color: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents)) ? listItem.activeTextColor : listItem.textColor
                 elide: Text.ElideRight
                 font: Theme.smallFont
-                opacity: 0.6
+                opacity: listItem.bold ? 0.9 : 0.7
                 visible: text.length > 0
             }
         }
