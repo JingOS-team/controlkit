@@ -475,6 +475,17 @@ OverlayDrawer {
 
                         Repeater {
                             id: actionsRepeater
+
+                            readonly property bool withSections: {
+                                for (var i = 0; i < root.actions.length; i++) {
+                                    let action = root.actions[i];
+                                    if (!(action.hasOwnProperty("expandible") && action.expandible)) {
+                                        return false;
+                                    }
+                                }
+                                return true;
+                            }
+
                             model: root.actions
                             delegate: Column {
                                 width: parent.width
@@ -487,13 +498,15 @@ OverlayDrawer {
                                             mainFlickable.contentY += height
                                         }
                                     }
+                                    Theme.colorSet: drawerItem.visible && !root.modal && !root.collapsed && actionsRepeater.withSections ? Theme.Window : parent.Theme.colorSet
+                                    backgroundColor: Theme.backgroundColor
                                 }
                                 Repeater {
                                     model: drawerItem.visible && modelData.hasOwnProperty("expandible") && modelData.expandible ? modelData.children : null
                                     delegate: GlobalDrawerActionItem {
                                         width: parent.width
-                                        leftPadding: Units.largeSpacing * 2
                                         opacity: !root.collapsed
+                                        leftPadding: actionsRepeater.withSections && !root.collapsed && !root.modal ? padding * 2 : padding * 4
                                     }
                                 }
                             }
