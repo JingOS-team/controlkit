@@ -22,7 +22,7 @@ BasicListItem {
     reserveSpaceForIcon: !isSeparator
     reserveSpaceForLabel: !isSeparator
 
-    label: model ? (model.tooltip ? model.tooltip : model.text) : (modelData.tooltip ? modelData.tooltip : modelData.text)
+    label: model ? (model.text ? model.text : model.tooltip) : (modelData.text ? modelData.text : modelData.tooltip)
     hoverEnabled: (!isExpandible || root.collapsed) && !Settings.tabletMode
     sectionDelegate: isExpandible
     font.pointSize: isExpandible ? Theme.defaultFont.pointSize * 1.30 : Theme.defaultFont.pointSize
