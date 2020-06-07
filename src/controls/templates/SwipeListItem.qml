@@ -414,7 +414,11 @@ T2.SwipeDelegate {
                     : overlayLoader
 
             property bool hasVisibleActions: false
-            function updateVisibleActions(definitelyVisible = false) {
+            function updateVisibleActions(definitelyVisible) {
+                if (definitelyVisible === undefined) {
+                    definitelyVisible = false
+                }
+
                 if (definitelyVisible) {
                     hasVisibleActions = true;
                 } else {
