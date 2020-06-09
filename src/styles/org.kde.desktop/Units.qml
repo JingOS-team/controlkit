@@ -9,7 +9,10 @@ import QtQuick.Window 2.2
 
 pragma Singleton
 
-
+/**
+ * A set of values to define semantically sizes and durations
+ * @inherit QtQuick.QtObject
+ */
 QtObject {
     id: units
 
@@ -68,7 +71,7 @@ QtObject {
      * use theme.mSize(theme.defaultFont), units.smallSpacing and units.largeSpacing.
      * The devicePixelRatio follows the definition of "device independent pixel" by Microsoft.
      */
-    property real devicePixelRatio: Math.max(1, (fontMetrics.font.pixelSize / fontMetrics.font.pointSize))
+    property real devicePixelRatio: Math.max(1, ((fontMetrics.font.pixelSize*0.75) / fontMetrics.font.pointSize))
 
     /**
      * units.veryLongDuration should be used for specialty animations that benefit
@@ -88,6 +91,11 @@ QtObject {
      */
     property int shortDuration: 150
 
+    /**
+     * time in ms by which the display of tooltips will be delayed.
+     *
+     * @sa ToolTip.delay property
+     */
     property int toolTipDelay: 700
 
     //readonly property QtObject __styleItem: QtQuickControlsPrivate.StyleItem {elementType: "frame" }
@@ -98,6 +106,9 @@ QtObject {
      */
     readonly property int wheelScrollLines: 3//__styleItem.styleHint("wheelScrollLines")
 
+    /**
+     * metrics used by the default font
+     */
     property variant fontMetrics: TextMetrics {
         text: "M"
         function roundedIconSize(size) {
