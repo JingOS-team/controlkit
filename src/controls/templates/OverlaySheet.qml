@@ -217,8 +217,8 @@ QtObject {
         clip: true
 
         onClicked: {
-            var pos = mapToItem(scrollView.contentItem, mouse.x, mouse.y);
-            if (!scrollView.contentItem.contains(pos)) {
+            var pos = mapToItem(contentLayout, mouse.x, mouse.y);
+            if (!contentLayout.contains(pos)) {
                 root.close();
             }
         }
@@ -256,7 +256,7 @@ QtObject {
                 cursorY = focusItem.positionToRectangle(focusItem.cursorPosition).y;
             }
 
-            
+
             var pos = focusItem.mapToItem(flickableContents, 0, cursorY - Units.gridUnit*3);
             //focused item already visible? add some margin for the space of the action buttons
             if (pos.y >= scrollView.flickableItem.contentY && pos.y <= scrollView.flickableItem.contentY + scrollView.flickableItem.height - Units.gridUnit * 8) {
@@ -266,7 +266,7 @@ QtObject {
         }
 
         ParallelAnimation {
-            id: openAnimation 
+            id: openAnimation
             property int margins: Units.gridUnit * 5
             NumberAnimation {
                 target: outerFlickable
@@ -536,7 +536,7 @@ QtObject {
                             return;
                         }
                         scrollView.userInteracting = true;
-                        
+
                         let diff = scrollView.flickableItem.contentY - oldContentY
 
                         outerFlickable.contentY = outerFlickable.contentY + diff;
