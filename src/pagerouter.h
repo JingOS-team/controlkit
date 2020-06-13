@@ -422,7 +422,7 @@ class PageRouterAttached : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(PageRouter *router READ router NOTIFY routerChanged)
+    Q_PROPERTY(PageRouter *router READ router WRITE setRouter NOTIFY routerChanged)
     /**
      * The data for the page this item belongs to. Accessing this property
      * outside of a PageRouter will result in undefined behavior.
@@ -460,6 +460,10 @@ private:
 
 public:
     PageRouter* router() const { return m_router; };
+    void setRouter(PageRouter* router) {
+    	m_router = router;
+    	Q_EMIT routerChanged();
+    }
     QVariant data() const;
     bool isCurrent() const;
     /// @see PageRouter::navigateToRoute()
