@@ -490,6 +490,7 @@ OverlayDrawer {
                             delegate: Column {
                                 width: parent.width
                                 GlobalDrawerActionItem {
+                                    id: drawerItem
                                     visible: root.collapsed || !(modelData.hasOwnProperty("expandible") && modelData.expandible)
                                     width: parent.width
                                     onCheckedChanged: {
