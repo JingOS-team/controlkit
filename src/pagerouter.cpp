@@ -22,9 +22,14 @@ ParsedRoute* parseRoute(QJSValue value)
             QVariant()
         };
     } else {
+        auto map = value.toVariant().value<QVariantMap>();
+        map.remove(QStringLiteral("route"));
+        map.remove(QStringLiteral("data"));
         return new ParsedRoute{
             value.property(QStringLiteral("route")).toString(),
-            value.property(QStringLiteral("data")).toVariant()
+            value.property(QStringLiteral("data")).toVariant(),
+            map,
+            false
         };
     }
 }
@@ -38,14 +43,20 @@ QList<ParsedRoute*> parseRoutes(QJSValue values)
                 ret << new ParsedRoute{
                     route.toString(),
                     QVariant(),
+                    QVariantMap(),
                     false,
                     nullptr
                 };
             } else if (route.canConvert<QVariantMap>()) {
                 auto map = route.value<QVariantMap>();
+                auto copy = map;
+                copy.remove(QStringLiteral("route"));
+                copy.remove(QStringLiteral("data"));
+
                 ret << new ParsedRoute{
                     map.value(QStringLiteral("route")).toString(),
                     map.value(QStringLiteral("data")),
+                    copy,
                     false,
                     nullptr
                 };
@@ -154,6 +165,11 @@ void PageRouter::push(ParsedRoute* route)
         auto item = m_cache.take(qMakePair(route->name, route->hash()));
         if (item && item->item) {
             m_currentRoutes << item;
+
+            for ( auto it = route->properties.begin(); it != route->properties.end(); it++ ) {
+                item->item->setProperty(qUtf8Printable(it.key()), it.value());
+            }
+
             m_pageStack->addItem(item->item);
             return;
         }
@@ -169,6 +185,9 @@ void PageRouter::push(ParsedRoute* route)
         auto qqItem = qobject_cast<QQuickItem*>(item);
         if (!qqItem) {
             qCritical() << "Route" << route->name << "is not an item! This is undefined behaviour and will likely crash your application.";
+        }
+        for ( auto it = route->properties.begin(); it != route->properties.end(); it++ ) {
+            qqItem->setProperty(qUtf8Printable(it.key()), it.value());
         }
         route->setItem(qqItem);
         route->cache = routesCacheForKey(route->name);
@@ -413,6 +432,9 @@ void PageRouter::preload(ParsedRoute* route)
         if (!qqItem) {
             qCritical() << "Route" << route->name << "is not an item! This is undefined behaviour and will likely crash your application.";
         }
+        for ( auto it = route->properties.begin(); it != route->properties.end(); it++ ) {
+            qqItem->setProperty(qUtf8Printable(it.key()), it.value());
+        }
         route->setItem(qqItem);
         route->cache = routesCacheForKey(route->name);
         auto attached = qobject_cast<PageRouterAttached*>(qmlAttachedPropertiesObject<PageRouter>(item, true));
@@ -595,6 +617,15 @@ void PageRouterAttached::pushFromHere(QJSValue route)
     }
 }
 
+void PageRouterAttached::replaceFromHere(QJSValue route)
+{
+    if (m_router) {
+        m_router->pushFromObject(parent(), route, true);
+    } else {
+        qCritical() << "PageRouterAttached does not have a parent PageRouter";
+    }
+}
+
 void PageRouterAttached::popFromHere()
 {
     if (m_router) {
@@ -616,7 +647,7 @@ void PageRouter::placeInCache(ParsedRoute *route)
     m_cache.insert(qMakePair(string, hash), route, routesCostForKey(route->name));
 }
 
-void PageRouter::pushFromObject(QObject *object, QJSValue inputRoute)
+void PageRouter::pushFromObject(QObject *object, QJSValue inputRoute, bool replace)
 {
     auto parsed = parseRoutes(inputRoute);
     auto objects = flatParentTree(object);
@@ -631,6 +662,10 @@ void PageRouter::pushFromObject(QObject *object, QJSValue inputRoute)
             }
             if (route->item == obj) {
                 m_pageStack->pop(route->item);
+                if (replace) {
+                    m_currentRoutes.removeAll(route);
+                    m_pageStack->removeItem(route->item);
+                }
                 popping = true;
             }
         }

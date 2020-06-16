@@ -20,6 +20,7 @@ class ParsedRoute : public QObject {
 public:
     QString name;
     QVariant data;
+    QVariantMap properties;
     bool cache;
     QQuickItem* item = nullptr;
     void itemDestroyed() {
@@ -36,8 +37,8 @@ public:
         }
         return ret;
     }
-    explicit ParsedRoute(const QString& name = QString(), QVariant data = QVariant(), bool cache = false, QQuickItem *item = nullptr)
-        : name(name), data(data), cache(cache) {
+    explicit ParsedRoute(const QString& name = QString(), QVariant data = QVariant(), QVariantMap properties = QVariantMap(), bool cache = false, QQuickItem *item = nullptr)
+        : name(name), data(data), properties(properties), cache(cache) {
         setItem(item);
     }
     virtual ~ParsedRoute() {
@@ -445,7 +446,7 @@ private:
 
     QVariant dataFor(QObject* object);
     bool isActive(QObject* object);
-    void pushFromObject(QObject *object, QJSValue route);
+    void pushFromObject(QObject *object, QJSValue route, bool replace = false);
 
     friend class PageRouterAttached;
     friend class PreloadRouteGroup;
@@ -699,6 +700,13 @@ public:
      * will be removed from the stack.
      */
     Q_INVOKABLE void popFromHere();
+    /**
+     * @brief Replaces this route with the given routes on the stack.
+     * 
+     * Behaves like pushFromHere, except the current route is also
+     * popped.
+     */
+    Q_INVOKABLE void replaceFromHere(QJSValue route);
     bool watchedRouteActive();
     void setWatchedRoute(QJSValue route);
     QJSValue watchedRoute();
