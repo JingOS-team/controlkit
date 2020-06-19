@@ -8,6 +8,7 @@
 #include <QQmlApplicationEngine>
 #ifdef Q_OS_ANDROID
 #include "./3rdparty/kirigami/src/kirigamiplugin.h"
+Q_IMPORT_PLUGIN(KirigamiPlugin)
 #endif
 
 int main(int argc, char *argv[])
@@ -18,7 +19,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
 #ifdef Q_OS_ANDROID
-    KirigamiPlugin::getInstance().registerTypes();
+    KirigamiPlugin::getInstance().registerTypes(&engine);
 #endif
 
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));

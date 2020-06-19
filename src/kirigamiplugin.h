@@ -31,11 +31,14 @@ public:
          return instance;
     }
 
-    static void registerTypes()
+    static void registerTypes(QQmlEngine *engine = nullptr)
     {
         Q_INIT_RESOURCE(shaders);
-        static KirigamiPlugin instance;
-        instance.registerTypes("org.kde.kirigami");
+        if (engine) {
+            engine->addImportPath(QLatin1String(":/"));
+        } else {
+            qWarning() << "Registering Kirigami on a null QQmlEngine instance - you likely want to pass a valid engine, or you will want to manually add the qrc root path :/ to your import paths list so the engine is able to load the plugin";
+        }
     }
 #endif
 
@@ -49,7 +52,7 @@ private:
 #if defined(Q_OS_ANDROID) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
         return QStringLiteral(":/android_rcc_bundle/qml/org/kde/kirigami.2/") + path;
 #elif defined(KIRIGAMI_BUILD_TYPE_STATIC)
-        return QStringLiteral(":/org/kde/kirigami/") + path;
+        return QStringLiteral(":/org/kde/kirigami.2/") + path;
 #else
         return baseUrl().toLocalFile() + QLatin1Char('/') + path;
 #endif

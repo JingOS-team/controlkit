@@ -1,5 +1,6 @@
 <RCC>
-    <qresource prefix="/org/kde/kirigami/">
+    <qresource prefix="/org/kde/kirigami.2/">
+        <file alias="qmldir">@kirigami_QML_DIR@/src/qmldir</file>
         <file alias="AbstractApplicationWindow.qml">@kirigami_QML_DIR@/src/controls/AbstractApplicationWindow.qml</file>
         <file alias="ContextDrawer.qml">@kirigami_QML_DIR@/src/controls/ContextDrawer.qml</file>
         <file alias="Action.qml">@kirigami_QML_DIR@/src/controls/Action.qml</file>
