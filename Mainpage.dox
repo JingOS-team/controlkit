@@ -137,17 +137,18 @@ Kirigami.ApplicationWindow {
 @endcode
 
 \section deployment Deployment
-CMake is recomended for both building Kirigami and the project using it, QMake is supported as well, so we can have several configurations, depending what is the host build system and how the deployment needs to be done.
+CMake is recomended for both building Kirigami and the project using it, qmake is supported as well, so we can have several configurations, depending what is the host build system and how the deployment needs to be done.
 Kirigami can be built in two ways: both as a module or statically linked in the application, leading to four combinations:
-* Kirigami built as a module with CMake
-* Kirigami statically built with CMake (needed to link statically from applications built with CMake)
-* Kirigami built as a module with QMake
-* Kirigami statically built with QMake (needed to link statically from applications built with QMake)
+
+- Kirigami built as a module with CMake
+- Kirigami statically built with CMake (needed to link statically from applications built with CMake)
+- Kirigami built as a module with qmake
+- Kirigami statically built with qmake (needed to link statically from applications built with qmake)
 
 The simplest and recomended way to use Kirigami is to just use the module provided by the Linux distribution, or build it as a module and deploy it together the main application.
 For example when building an application on Android with CMake, if Kirigami for Android is built and installed in the same temporary directory before the application, the create-apk- step of the application will include the Kirigami files as well in the APK.
 
-If QMake needs to be used, it's recomended to follow the schema of the example app present in the folder examples/minimalqmake of the Kirigami source code.
+If qmake needs to be used, it's recomended to follow the schema of the example app present in the folder examples/minimalqmake of the Kirigami source code.
 
 It will use Kirigami statically linked only on Android, while on desktop systems it will use the version provided by the distribution. What platforms use the static version and what the dynamic one can be freely adjusted.
 The application needs to have a folder called "3rdparty" containing clones of two KDE repositories: kirigami and breeze-icons (available at git://anongit.kde.org/kirigami.git and git://anongit.kde.org/breeze-icons.git).
