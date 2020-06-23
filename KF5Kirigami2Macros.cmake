@@ -59,7 +59,7 @@ function(kirigami_package_breeze_icons)
         # first time config?
         if (NOT EXISTS ${_BREEZEICONS_DIR})
             find_package(Git)
-            execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://anongit.kde.org/breeze-icons.git ${_BREEZEICONS_DIR})
+            execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://invent.kde.org/frameworks/breeze-icons.git ${_BREEZEICONS_DIR})
         endif()
 
         # external projects are only pulled at make time, not configure time
@@ -69,7 +69,7 @@ function(kirigami_package_breeze_icons)
         ExternalProject_Add(
             breeze-icons
             PREFIX breeze-icons
-            GIT_REPOSITORY https://anongit.kde.org/breeze-icons.git
+            GIT_REPOSITORY https://invent.kde.org/frameworks/breeze-icons.git
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ""
             INSTALL_COMMAND ""
