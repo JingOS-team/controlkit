@@ -5,11 +5,13 @@
  */
 
 import QtQuick 2.6
+import QtQuick.Window 2.6
 import QtQuick.Controls 2.0 as QQC2
+import QtQuick.Controls.impl 2.3 as QQC2Impl
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.5
 
-BasicListItem {
+AbstractListItem {
     id: listItem
     supportsMouseEvents: (!isExpandible || root.collapsed)
     readonly property bool wideMode: width > height * 2
@@ -17,16 +19,54 @@ BasicListItem {
 
     readonly property bool isExpandible: modelData && modelData.hasOwnProperty("expandible") && modelData.expandible
 
-    reserveSpaceForIcon: !isSeparator
-    reserveSpaceForLabel: !isSeparator
     checked: modelData.checked || (actionsMenu && actionsMenu.visible)
     width: parent.width
 
-    icon: modelData.icon.name || modelData.icon.source
-    iconColor: modelData.icon.color
+    contentItem: RowLayout {
+        Icon {
+            id: iconItem
+            source: modelData.icon.name || modelData.icon.source
+            property int size: Units.iconSizes.smallMedium
+            Layout.minimumHeight: size
+            Layout.maximumHeight: size
+            Layout.minimumWidth: size
+            selected: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents))
+            visible: source != undefined
+        }
+        QQC2Impl.MnemonicLabel {
+            id: labelItem
+            text:  width > height * 2 ? listItem.MnemonicData.mnemonicLabel : ""
+            Layout.fillWidth: true
+            mnemonicVisible: listItem.MnemonicData.active
+            color: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents)) ? listItem.activeTextColor : listItem.textColor
+            elide: Text.ElideRight
+            font: listItem.font
+            // Work around Qt bug where NativeRendering breaks for non-integer scale factors
+            // https://bugreports.qt.io/browse/QTBUG-67007
+            renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
+        }
+        Separator {
+            id: separatorAction
 
-    label: width > height * 2 ? MnemonicData.richTextLabel : ""
+            visible: listItem.isSeparator
+            Layout.fillWidth: true
+        }
 
+        Icon {
+            Shortcut {
+                sequence: listItem.MnemonicData.sequence
+                onActivated: listItem.clicked()
+            }
+            isMask: true
+            Layout.alignment: Qt.AlignVCenter
+            Layout.leftMargin: !root.collapsed ? 0 : parent.width - listItem.width
+            Layout.preferredHeight: !root.collapsed ? Units.iconSizes.smallMedium : Units.iconSizes.small/2
+            selected: listItem.checked || listItem.pressed
+            Layout.preferredWidth: Layout.preferredHeight
+            source: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
+            visible: (!isExpandible || root.collapsed) && !listItem.isSeparator && modelData.hasOwnProperty("children") && modelData.children!==undefined && modelData.children.length > 0
+        }
+    }
     MnemonicData.enabled: listItem.enabled && listItem.visible
     MnemonicData.controlType: MnemonicData.MenuItem
     MnemonicData.label: modelData.text
@@ -63,28 +103,6 @@ BasicListItem {
     opacity: !root.collapsed
     height: implicitHeight * opacity
 
-
-    Separator {
-        id: separatorAction
-
-        visible: listItem.isSeparator
-        Layout.fillWidth: true
-    }
-
-    Icon {
-        Shortcut {
-            sequence: listItem.MnemonicData.sequence
-            onActivated: listItem.clicked()
-        }
-        isMask: true
-        Layout.alignment: Qt.AlignVCenter
-        Layout.leftMargin: !root.collapsed ? 0 : parent.width - listItem.width
-        Layout.preferredHeight: !root.collapsed ? Units.iconSizes.smallMedium : Units.iconSizes.small/2
-        selected: listItem.checked || listItem.pressed
-        Layout.preferredWidth: Layout.preferredHeight
-        source: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
-        visible: (!isExpandible || root.collapsed) && !listItem.isSeparator && modelData.hasOwnProperty("children") && modelData.children!==undefined && modelData.children.length > 0
-    }
     data: [
         QQC2.ToolTip {
             visible: !listItem.isSeparator && (modelData.hasOwnProperty("tooltip") && modelData.tooltip.length || root.collapsed) && (!actionsMenu || !actionsMenu.visible) &&  listItem.hovered && text.length > 0

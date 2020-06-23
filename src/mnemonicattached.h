@@ -66,6 +66,14 @@ class MnemonicAttached : public QObject
      */
     Q_PROPERTY(QKeySequence sequence READ sequence NOTIFY sequenceChanged)
 
+    /**
+     * True when the user is pressing alt and the accelerators should be shown
+     *
+     * @since 5.72
+     * @since 2.15
+     */
+    Q_PROPERTY(bool active READ active NOTIFY activeChanged)
+
 public:
     enum ControlType {
         ActionElement, /** pushbuttons, checkboxes etc */
@@ -93,6 +101,8 @@ public:
 
     QKeySequence sequence();
 
+    bool active() const;
+
     //QML attached property
     static MnemonicAttached *qmlAttachedProperties(QObject *object);
 
@@ -107,6 +117,7 @@ Q_SIGNALS:
     void richTextLabelChanged();
     void mnemonicLabelChanged();
     void controlTypeChanged();
+    void activeChanged();
 
 private:
     void calculateWeights();
@@ -143,6 +154,7 @@ private:
     QString m_mnemonicLabel;
     QKeySequence m_sequence;
     bool m_enabled = true;
+    bool m_active = false;
 
     QPointer<QQuickWindow> m_window;
 

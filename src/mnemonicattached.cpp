@@ -63,6 +63,8 @@ bool MnemonicAttached::eventFilter(QObject *watched, QEvent *e)
         if (ke->key() == Qt::Key_Alt) {
             m_actualRichTextLabel = m_richTextLabel;
             emit richTextLabelChanged();
+            m_active = true;
+            emit activeChanged();
         }
 
     } else if (e->type() == QEvent::KeyRelease) {
@@ -71,6 +73,8 @@ bool MnemonicAttached::eventFilter(QObject *watched, QEvent *e)
             m_actualRichTextLabel = m_label;
             m_actualRichTextLabel.replace(QRegularExpression(QStringLiteral("\\&([^\\&])")), QStringLiteral("\\1"));
             emit richTextLabelChanged();
+            m_active = false;
+            emit activeChanged();
         }
     }
     return false;
@@ -89,7 +93,7 @@ void MnemonicAttached::calculateWeights()
         QChar c = m_label[pos];
 
         // skip non typeable characters
-        if (!c.isLetterOrNumber()) {
+        if (!c.isLetterOrNumber() && c != QLatin1Char('&')) {
             start_character = true;
             ++pos;
             continue;
@@ -100,15 +104,13 @@ void MnemonicAttached::calculateWeights()
         // add special weight to first character
         if (pos == 0) {
             weight += FIRST_CHARACTER_EXTRA_WEIGHT;
-        }
-
         // add weight to word beginnings
-        if (start_character) {
+        } else if (start_character) {
             weight += WORD_BEGINNING_EXTRA_WEIGHT;
             start_character = false;
         }
 
-        // add weight to word beginnings
+        // add weight to characters that have an & beforehand
         if (wanted_character) {
             weight += WANTED_ACCEL_EXTRA_WEIGHT;
             wanted_character = false;
@@ -120,7 +122,10 @@ void MnemonicAttached::calculateWeights()
         }
 
         // try to preserve the wanted accelerators
-        if (c == QLatin1Char('&') && (pos == m_label.length() - 1 || m_label[pos+1] != QLatin1Char('&'))) {
+        if (c == QLatin1Char('&')
+            && (pos != m_label.length() - 1
+                && m_label[pos + 1] != QLatin1Char('&')
+                && m_label[pos + 1].isLetterOrNumber())) {
             wanted_character = true;
             ++pos;
             continue;
@@ -130,7 +135,9 @@ void MnemonicAttached::calculateWeights()
             ++weight;
         }
 
-        m_weights[weight] = c;
+        if (c != QLatin1Char('&')) {
+            m_weights[weight] = c;
+        }
 
         ++pos;
     }
@@ -152,7 +159,8 @@ void MnemonicAttached::updateSequence()
 
     calculateWeights();
 
-    const QString text = label();
+    // Preserve strings like "One & Two" where & is not an accelerator escape
+    const QString text = label().replace(QStringLiteral("& "), QStringLiteral("&& "));
 
     if (!m_enabled) {
         m_actualRichTextLabel = text;
@@ -171,6 +179,7 @@ void MnemonicAttached::updateSequence()
         do {
             --i;
             QChar c = i.value();
+
             QKeySequence ks(QStringLiteral("Alt+") % c);
             MnemonicAttached *otherMa = s_sequenceToObject.value(ks);
             Q_ASSERT(otherMa != this);
@@ -186,11 +195,13 @@ void MnemonicAttached::updateSequence()
                 m_richTextLabel = text;
                 m_richTextLabel.replace(QRegularExpression(QLatin1String("\\&([^\\&])")), QStringLiteral("\\1"));
                 m_actualRichTextLabel = m_richTextLabel;
-                m_mnemonicLabel = m_richTextLabel;
+                m_mnemonicLabel = text;
                 const int mnemonicPos = m_mnemonicLabel.indexOf(c);
-                if (mnemonicPos > -1) {
-                    m_mnemonicLabel.replace(mnemonicPos, 1, c);
+
+                if (mnemonicPos > -1 && (mnemonicPos == 0 || m_mnemonicLabel[mnemonicPos - 1] != QLatin1Char('&'))) {
+                    m_mnemonicLabel.replace(mnemonicPos, 1, QStringLiteral("&") % c);
                 }
+
                 const int richTextPos = m_richTextLabel.indexOf(c);
                 if (richTextPos > -1) {
                     m_richTextLabel.replace(richTextPos, 1, QLatin1String("<u>") % c % QLatin1String("</u>"));
@@ -212,6 +223,7 @@ void MnemonicAttached::updateSequence()
         m_actualRichTextLabel = text;
         m_actualRichTextLabel.replace(QRegularExpression(QStringLiteral("\\&([^\\&])")), QStringLiteral("\\1"));
         m_mnemonicLabel = m_actualRichTextLabel;
+        
     }
 
     emit richTextLabelChanged();
@@ -302,6 +314,11 @@ MnemonicAttached::ControlType MnemonicAttached::controlType() const
 QKeySequence MnemonicAttached::sequence()
 {
     return m_sequence;
+}
+
+bool MnemonicAttached::active() const
+{
+    return m_active;
 }
 
 MnemonicAttached *MnemonicAttached::qmlAttachedProperties(QObject *object)
