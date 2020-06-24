@@ -21,7 +21,6 @@ AbstractPageHeader {
             verticalCenter: parent.verticalCenter
             left: parent.left
             right: parent.right
-            leftMargin: Units.gridUnit
         }
         height: Math.min(root.height, item
             ? (item.Layout.preferredHeight > 0 ? item.Layout.preferredHeight : item.implicitHeight)

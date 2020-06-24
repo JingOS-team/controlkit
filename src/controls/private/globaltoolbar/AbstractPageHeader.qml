@@ -22,8 +22,8 @@ AbstractApplicationHeader {
     separatorVisible: pageRow.globalToolBar.separatorVisible
 
     leftPadding: Math.min(Qt.application.layoutDirection == Qt.LeftToRight
-                        ? Math.max(0, pageRow.ScenePosition.x - page.ScenePosition.x + pageRow.globalToolBar.leftReservedSpace - Units.gridUnit + Units.smallSpacing) + Units.gridUnit
-                        : Math.max(0, -pageRow.width + pageRow.ScenePosition.x + page.ScenePosition.x + page.width + pageRow.globalToolBar.leftReservedSpace),
+                        ? Math.max(page.title.length > 0 ? Units.gridUnit : 0, pageRow.ScenePosition.x - page.ScenePosition.x + pageRow.globalToolBar.leftReservedSpace + Units.smallSpacing)
+                        : Math.max(page.title.length > 0 ? Units.gridUnit : 0, -pageRow.width + pageRow.ScenePosition.x + page.ScenePosition.x + page.width + pageRow.globalToolBar.leftReservedSpace),
                     root.width/2)
 
     rightPadding: Qt.application.layoutDirection == Qt.LeftToRight
