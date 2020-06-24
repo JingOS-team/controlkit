@@ -25,6 +25,7 @@ AbstractListItem {
     contentItem: RowLayout {
         Icon {
             id: iconItem
+            color: modelData.icon.color
             source: modelData.icon.name || modelData.icon.source
             property int size: Units.iconSizes.smallMedium
             Layout.minimumHeight: size
