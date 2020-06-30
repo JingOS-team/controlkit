@@ -7,7 +7,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.12
 
 /**
  * A visual separator
@@ -18,7 +18,34 @@ import org.kde.kirigami 2.4
  */
 
 Rectangle {
+    id: root
     implicitHeight: Math.floor(Units.devicePixelRatio)
     implicitWidth: Math.floor(Units.devicePixelRatio)
-    color: Qt.tint(Theme.textColor, Qt.rgba(Theme.backgroundColor.r, Theme.backgroundColor.g, Theme.backgroundColor.b, 0.8))
+
+    enum Weight {
+        Light,
+        Normal
+    }
+
+    /**
+     * weight: int
+     * The visual weight of the separator.
+     * 
+     * Weight values:
+     * * Separator.Weight.Light
+     * * Separator.Weight.Normal
+     * 
+     * default: Separator.Weight.Normal
+     * 
+     * @since 5.72
+     * @since org.kde.kirigami 2.14
+     */
+    property int weight: Separator.Weight.Normal
+
+    /* TODO: If we get a separator color role, change this to
+     * mix weights lower than Normal with the background color
+     * and mix weights higher than Normal with the text color.
+     */
+    color: ColorUtils.linearInterpolation(Theme.backgroundColor, Theme.textColor, weight == Separator.Weight.Light ? 0.1 : 0.2);
 }
+
