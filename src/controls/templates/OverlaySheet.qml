@@ -400,9 +400,9 @@ QtObject {
                 let endPos = scrollView.flickableItem.contentHeight - scrollView.flickableItem.height + scrollView.flickableItem.bottomMargin - flickableContents.listHeaderHeight;
 
                 if (endPos - pos > 0) {
-                    contentLayout.y = Math.max(root.topInset, scrollView.flickableItem.topMargin - pos - flickableContents.listHeaderHeight);
+                    contentLayout.y = Math.round(Math.max(root.topInset, scrollView.flickableItem.topMargin - pos - flickableContents.listHeaderHeight));
                 } else if (scrollView.flickableItem.topMargin - pos < 0) {
-                    contentLayout.y = endPos - pos + root.topInset;
+                    contentLayout.y = Math.round(endPos - pos + root.topInset);
                 }
 
                 scrollView.flickableItem.contentY = Math.max(
