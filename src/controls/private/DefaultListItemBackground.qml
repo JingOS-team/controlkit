@@ -5,7 +5,7 @@
  */
 
 import QtQuick 2.1
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.14
 
 Rectangle {
     id: background
@@ -27,21 +27,25 @@ Rectangle {
     readonly property bool __separatorVisible: listItem.separatorVisible
 
     Separator {
+        id: topSeparator
         anchors {
             left: parent.left
             right: parent.right
             bottom: parent.top
         }
         visible: background.__separatorVisible
+        weight: Separator.Weight.Light
     }
 
     Separator {
+        id: bottomSeparator
         anchors {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
         }
         visible: background.__separatorVisible
+        weight: topSeparator.weight
     }
 }
 
