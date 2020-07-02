@@ -45,6 +45,13 @@ AbstractListItem {
             // Work around Qt bug where NativeRendering breaks for non-integer scale factors
             // https://bugreports.qt.io/browse/QTBUG-67007
             renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
+            opacity: !root.collapsed
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Units.longDuration/2
+                    easing.type: Easing.InOutQuad
+                }
+            }
         }
         Separator {
             id: separatorAction
@@ -60,7 +67,7 @@ AbstractListItem {
             }
             isMask: true
             Layout.alignment: Qt.AlignVCenter
-            Layout.leftMargin: !root.collapsed ? 0 : parent.width - listItem.width
+            Layout.leftMargin: !root.collapsed ? 0 : -width
             Layout.preferredHeight: !root.collapsed ? Units.iconSizes.smallMedium : Units.iconSizes.small/2
             selected: listItem.checked || listItem.pressed
             Layout.preferredWidth: Layout.preferredHeight
@@ -89,7 +96,7 @@ AbstractListItem {
     separatorVisible: false
     //TODO: animate the hide by collapse
     visible: (model ? model.visible || model.visible===undefined : modelData.visible) && opacity > 0
-    opacity: !root.collapsed || icon.length > 0
+    opacity: !root.collapsed || iconItem.source.length > 0
     Behavior on opacity {
         NumberAnimation {
             duration: Units.longDuration/2
@@ -101,7 +108,6 @@ AbstractListItem {
     hoverEnabled: (!isExpandible || root.collapsed) && !Settings.tabletMode
     sectionDelegate: isExpandible
     font.pointSize: isExpandible ? Theme.defaultFont.pointSize * 1.30 : Theme.defaultFont.pointSize
-    opacity: !root.collapsed
     height: implicitHeight * opacity
 
     data: [
