@@ -38,7 +38,7 @@ Rectangle {
      * default: Separator.Weight.Normal
      * 
      * @since 5.72
-     * @since org.kde.kirigami 2.14
+     * @since org.kde.kirigami 2.12
      */
     property int weight: Separator.Weight.Normal
 
