@@ -66,17 +66,6 @@ ScrollablePage
     title: qsTr("About")
 
     Component {
-        id: licencePage
-        ScrollablePage {
-            property alias text: content.text
-            QQC2.TextArea {
-                id: content
-                readOnly: true
-            }
-        }
-    }
-
-    Component {
         id: personDelegate
 
         RowLayout {
@@ -167,6 +156,21 @@ ScrollablePage
             visible: url.length > 0
         }
 
+        OverlaySheet {
+            id: licenseSheet
+            property alias text: bodyLabel.text
+            property alias name: heading.text
+
+            header: Heading {
+                id: heading
+            }
+
+            contentItem: QQC2.Label {
+                id: bodyLabel
+                text: licenseSheet.text
+            }
+        }
+
         Component {
             id: licenseLinkButton
 
@@ -175,7 +179,11 @@ ScrollablePage
                 QQC2.Label { text: qsTr("License:") }
                 LinkButton {
                     text: modelData.name
-                    onClicked: applicationWindow().pageStack.push(licencePage, { text: modelData.text, title: modelData.name } )
+                    onClicked: {
+                        licenseSheet.text = modelData.text
+                        licenseSheet.name = modelData.name
+                        licenseSheet.open()
+                    }
                 }
             }
         }
