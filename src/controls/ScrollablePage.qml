@@ -11,18 +11,13 @@ import org.kde.kirigami 2.4
 import "private"
 
 /**
- * ScrollablePage is a container for all the app pages: everything pushed to the
- * ApplicationWindow stackView should be a Page or ScrollablePage instance.
- * This Page subclass is for content that has to be scrolled around, such as
- * bigger content than the screen that would normally go in a Flickable
- * or a ListView.
- * Scrolling and scrolling indicators will be automatically managed
- *
+ * ScrollablePage is a Page that holds scrollable content, such as ListViews.
+ * Scrolling and scrolling indicators will be automatically managed.
  *
  * @code
  * ScrollablePage {
  *     id: root
- *     //The rectangle will automatically bescrollable
+ *     //The rectangle will automatically be scrollable
  *     Rectangle {
  *         width: root.width
  *         height: 99999
@@ -59,6 +54,8 @@ import "private"
  * }
  * [...]
  * @endcode
+ *
+ * @inherit Page
  *
  */
 Page {

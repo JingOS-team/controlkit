@@ -13,8 +13,10 @@ import QtQuick.Controls 2.1 as QQC2
 
 /**
  * Page is a container for all the app pages: everything pushed to the
- * ApplicationWindow stackView should be a Page instance (or a subclass,
- * such as ScrollablePage)
+ * ApplicationWindow's pageStack should be a Page.
+ *
+ * For content that should be scrollable, such as ListViews, use ScrollablePage instead.
+ *
  * @see ScrollablePage
  * @inherit QtQuick.Templates.Page
  */
