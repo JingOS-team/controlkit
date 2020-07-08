@@ -9,7 +9,7 @@
 #include "libkirigami/platformtheme.h"
 
 #include <QSGSimpleTextureNode>
-#include <qquickwindow.h>
+#include <QQuickWindow>
 #include <QIcon>
 #include <QBitmap>
 #include <QSGTexture>
