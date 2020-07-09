@@ -6,22 +6,160 @@
 
 #pragma once
 
+#include <QCache>
 #include <QQuickItem>
+#include <QRandomGenerator>
 #include "columnview.h"
 
-struct ParsedRoute {
+static std::map<quint32,QVariant> s_knownVariants;
+class PageRouter;
+
+class ParsedRoute : public QObject {
+    Q_OBJECT
+
+public:
     QString name;
     QVariant data;
     bool cache;
-    QObject* item;
-    bool operator==(const ParsedRoute& rhs)
-    {
-        return name == rhs.name && data == rhs.data && item == rhs.item && cache == rhs.cache;
+    QQuickItem* item = nullptr;
+    void itemDestroyed() {
+        item = nullptr;
     }
-    bool operator!=(const ParsedRoute& rhs)
-    {
-        return name != rhs.name && data != rhs.data && item != rhs.item && cache != rhs.cache;
+    QQuickItem* setItem(QQuickItem *newItem) {
+        auto ret = item;
+        if (ret != nullptr) {
+            disconnect(ret, &QObject::destroyed, this, &ParsedRoute::itemDestroyed);
+        }
+        item = newItem;
+        if (newItem != nullptr) {
+            connect(newItem, &QObject::destroyed, this, &ParsedRoute::itemDestroyed);
+        }
+        return ret;
     }
+    explicit ParsedRoute(const QString& name = QString(), QVariant data = QVariant(), bool cache = false, QQuickItem *item = nullptr)
+        : name(name), data(data), cache(cache) {
+        setItem(item);
+    }
+    virtual ~ParsedRoute() {
+        if (item) {
+            item->deleteLater();
+        }
+    }
+    quint32 hash() {
+        for (auto i = s_knownVariants.begin(); i != s_knownVariants.end(); i++) {
+            if (i->second == data) {
+                return i->first;
+            }
+        }
+        auto number = QRandomGenerator::system()->generate();
+        while (s_knownVariants.count(number) > 0) {
+            number = QRandomGenerator::system()->generate();
+        }
+        s_knownVariants[number] = data;
+        return number;
+    }
+    bool equals(const ParsedRoute* rhs, bool countItem = false)
+    {
+        return name == rhs->name &&
+               data == rhs->data &&
+               (!countItem || item == rhs->item) &&
+               cache == rhs->cache;
+    }
+};
+
+struct LRU {
+    int size = 10;
+    QList<QPair<QString,quint32>> evictionList;
+    QMap<QPair<QString,quint32>,int> costs;
+    QMap<QPair<QString,quint32>,ParsedRoute*> items;
+
+    ParsedRoute* take(QPair<QString,quint32> key) {
+        auto ret = items.take(key);
+        evictionList.removeAll(key);
+        return ret;
+    }
+    int totalCosts() {
+        int ret = 0;
+        for (auto cost : costs) {
+            ret += cost;
+        }
+        return ret;
+    }
+    void setSize(int size = 10) {
+        this->size = size;
+        prune();
+    }
+    void prune() {
+        while (size < totalCosts()) {
+            auto key = evictionList.last();
+            auto item = items.take(key);
+            delete item;
+            costs.take(key);
+            evictionList.takeLast();
+        }
+    }
+    void insert(QPair<QString,quint32> key, ParsedRoute *newItem, int cost) {
+        if (items.contains(key)) {
+            auto item = items.take(key);
+            evictionList.removeAll(key);
+            if (item != newItem) {
+                delete item;
+            }
+        }
+        costs[key] = cost;
+        items[key] = newItem;
+        evictionList.prepend(key);
+        prune();
+    }
+};
+
+class PageRouterAttached;
+
+/**
+ * Item holding data about when to preload a route.
+ * 
+ * @code{.qml}
+ * preload {
+ *   route: "updates-page"
+ *   when: updatesCount > 0
+ * }
+ * @endcode
+ */
+class PreloadRouteGroup : public QObject
+{
+    Q_OBJECT
+
+    /**
+     * @brief The route to preload.
+     * 
+     * When the condition is false, the route will not be preloaded.
+     */
+    Q_PROPERTY(QJSValue route MEMBER m_route WRITE setRoute NOTIFY changed)
+    QJSValue m_route;
+
+    /**
+     * @brief When the route should be preloaded.
+     * 
+     * When the condition is false, the route will not be preloaded.
+     */
+    Q_PROPERTY(bool when MEMBER m_when NOTIFY changed)
+    bool m_when;
+
+    void handleChange();
+    PageRouterAttached* m_parent;
+
+public:
+    ~PreloadRouteGroup();
+    void setRoute(QJSValue route) {
+        m_route = route;
+        Q_EMIT changed();
+    }
+    PreloadRouteGroup(QObject *parent) : QObject(parent) {
+        m_parent = qobject_cast<PageRouterAttached*>(parent);
+        Q_ASSERT(m_parent);
+        connect(this, &PreloadRouteGroup::changed, this, &PreloadRouteGroup::handleChange);
+    }
+    Q_SIGNAL void changed();
 };
 
 /**
@@ -69,20 +207,32 @@ class PageRoute : public QObject
      */
     Q_PROPERTY(bool cache MEMBER m_cache READ cache)
 
+    /**
+     * @brief How expensive this route is on memory.
+     * 
+     * This affects caching, as the sum of costs of routes in the cache
+     * can never exceed the cache's cap.
+     */
+    Q_PROPERTY(int cost MEMBER m_cost)
+
     Q_CLASSINFO("DefaultProperty", "component")
+
+Q_SIGNALS:
+    void preloadDataChanged();
+    void preloadChanged();
 
 private:
     QString m_name;
     QQmlComponent* m_component;
     bool m_cache = false;
+    int m_cost = 1;
 
 public:
     QQmlComponent* component() { return m_component; };
     QString name() { return m_name; };
     bool cache() { return m_cache; };
+    int cost() { return m_cost; };
 };
-
-class PageRouterAttached;
 
 /**
  * An item managing pages and data of a ColumnView using named routes.
@@ -183,6 +333,20 @@ class PageRouter : public QObject, public QQmlParserStatus
      */
     Q_PROPERTY(ColumnView* pageStack MEMBER m_pageStack NOTIFY pageStackChanged)
 
+    /**
+     * @brief How large the cache can be.
+     * 
+     * The combined costs of cached routes will never exceed the cache capacity.
+     */
+    Q_PROPERTY(int cacheCapacity READ cacheCapacity WRITE setCacheCapacity)
+
+    /**
+     * @brief How large the preloaded pool can be.
+     * 
+     * The combined costs of preloaded routes will never exceed the pool capacity.
+     */
+    Q_PROPERTY(int preloadedPoolCapacity READ preloadedPoolCapacity WRITE setPreloadedPoolCapacity)
+
 private:
     /**
      * @brief The routes the PageRouter is aware of.
@@ -214,14 +378,21 @@ private:
      * should be kept in sync. Undesirable behaviour will result
      * from desynchronisation of the two.
      */
-    QList<ParsedRoute> m_currentRoutes;
+    QList<ParsedRoute*> m_currentRoutes;
 
     /**
      * @brief Cached routes.
      * 
-     * A list of ParsedRoutes with instantiated items.
+     * An LRU cache of ParsedRoutes with items that were previously on the stack.
      */
-    QList<ParsedRoute> m_cachedRoutes;
+    LRU m_cache;
+
+    /** @brief Preloaded routes.
+     * 
+     * A LRU cache of ParsedRoutes with items that may be on the stack in the future,
+     * but were not on the stack before.
+     */
+    LRU m_preload;
 
     /**
      * @brief Helper function to push a route.
@@ -229,7 +400,7 @@ private:
      * This function has the shared logic between
      * navigateToRoute and pushRoute.
      */
-    void push(ParsedRoute route);
+    void push(ParsedRoute* route);
 
     /**
      * @brief Helper function to access whether m_routes has a key.
@@ -254,6 +425,19 @@ private:
      */
     bool routesCacheForKey(const QString &key);
 
+    /**
+     * @brief Helper function to access the cost of a key for m_routes.
+     * 
+     * The return value will be -1 if @p key does not exist in
+     * m_routes.
+     */
+    int routesCostForKey(const QString &key);
+
+    void preload(ParsedRoute *route);
+    void unpreload(ParsedRoute *route);
+
+    void placeInCache(ParsedRoute *route);
+
     static void appendRoute(QQmlListProperty<PageRoute>* list, PageRoute*);
     static int routeCount(QQmlListProperty<PageRoute>* list);
     static PageRoute* route(QQmlListProperty<PageRoute>* list, int);
@@ -264,6 +448,8 @@ private:
     void pushFromObject(QObject *object, QJSValue route);
 
     friend class PageRouterAttached;
+    friend class PreloadRouteGroup;
+    friend class ParsedRoute;
 
 protected:
     void classBegin() override;
@@ -277,6 +463,12 @@ public:
 
     QJSValue initialRoute() const;
     void setInitialRoute(QJSValue initialRoute);
+
+    int cacheCapacity() const { return m_cache.size; };
+    void setCacheCapacity(int size) { m_cache.setSize(size); };
+
+    int preloadedPoolCapacity() const { return m_preload.size; };
+    void setPreloadedPoolCapacity(int size) { m_preload.setSize(size); };
 
     /**
      * @brief Navigate to the given route.
@@ -443,6 +635,11 @@ class PageRouterAttached : public QObject
     Q_PROPERTY(QJSValue watchedRoute READ watchedRoute WRITE setWatchedRoute NOTIFY watchedRouteChanged)
 
     /**
+     * Route preloading settings.
+     */
+    Q_PROPERTY(PreloadRouteGroup* preload READ preload)
+
+    /**
      * Whether the watchedRoute is currently active.
      */
     Q_PROPERTY(bool watchedRouteActive READ watchedRouteActive NOTIFY navigationChanged)
@@ -451,14 +648,18 @@ private:
     explicit PageRouterAttached(QObject *parent = nullptr);
 
     QPointer<PageRouter> m_router;
+    PreloadRouteGroup* m_preload;
     QVariant m_data;
     QJSValue m_watchedRoute;
 
     void findParent();
 
     friend class PageRouter;
+    friend class PreloadRouteGroup;
+    friend class ParsedRoute;
 
 public:
+    PreloadRouteGroup* preload() const { return m_preload; };
     PageRouter* router() const { return m_router; };
     void setRouter(PageRouter* router) {
     	m_router = router;
