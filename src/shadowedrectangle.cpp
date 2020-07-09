@@ -292,6 +292,11 @@ void ShadowedRectangle::checkSoftwareItem()
 {
     if (!m_softwareItem && window() && window()->rendererInterface()->graphicsApi() == QSGRendererInterface::Software) {
         m_softwareItem = new PaintedRectangleItem{this};
+        // The software item is added as a "normal" child item, this means it
+        // will be part of the normal item sort order. Since there is no way to
+        // control the ordering of children, just make sure to have a very low Z
+        // value for the child, to force it to be the lowest item.
+        m_softwareItem->setZ(-99.0);
 
         auto updateItem = [this]() {
             auto borderWidth = m_border->width();
