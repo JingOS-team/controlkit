@@ -162,8 +162,7 @@ void PageRouter::push(ParsedRoute* route)
         return;
     }
     if (routesCacheForKey(route->name)) {
-        auto item = m_cache.take(qMakePair(route->name, route->hash()));
-        if (item && item->item) {
+        auto push = [route, this](ParsedRoute* item) {
             m_currentRoutes << item;
 
             for ( auto it = route->properties.begin(); it != route->properties.end(); it++ ) {
@@ -171,6 +170,15 @@ void PageRouter::push(ParsedRoute* route)
             }
 
             m_pageStack->addItem(item->item);
+        };
+        auto item = m_cache.take(qMakePair(route->name, route->hash()));
+        if (item && item->item) {
+            push(item);
+            return;
+        }
+        item = m_preload.take(qMakePair(route->name, route->hash()));
+        if (item && item->item) {
+            push(item);
             return;
         }
     }
