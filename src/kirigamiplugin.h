@@ -14,6 +14,10 @@
 #include <QQmlEngine>
 #include <QQmlExtensionPlugin>
 
+#ifdef KIRIGAMI_BUILD_TYPE_STATIC
+#include <QDebug>
+#endif
+
 class KirigamiPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
