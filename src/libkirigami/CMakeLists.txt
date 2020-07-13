@@ -18,7 +18,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 ecm_qt_declare_logging_category(libkirigami_SRCS
     HEADER loggingcategory.h
     IDENTIFIER KirigamiLog
-    CATEGORY_NAME kf5.kirigami
+    CATEGORY_NAME kf.kirigami
     DEFAULT_SEVERITY Warning
 )
 
