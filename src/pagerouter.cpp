@@ -497,7 +497,9 @@ void PreloadRouteGroup::handleChange()
 
 PreloadRouteGroup::~PreloadRouteGroup()
 {
-    m_parent->m_router->unpreload(parseRoute(m_route));
+    if (m_parent->m_router) {
+        m_parent->m_router->unpreload(parseRoute(m_route));
+    }
 }
 
 void PageRouterAttached::findParent()
