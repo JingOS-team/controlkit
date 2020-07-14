@@ -29,6 +29,10 @@ Kirigami.ActionTextField
     id: root
 
     placeholderText: qsTr("Search...")
+
+    Accessible.name: qsTr("Search")
+    Accessible.searchEdit: true
+
     focusSequence: "Ctrl+F"
     rightActions: [
         Kirigami.Action {
