@@ -23,6 +23,21 @@ MouseArea {
 
     readonly property Item verticalScrollBar: flickableItem.ScrollBar.vertical ? flickableItem.ScrollBar.vertical : null
 
+    Accessible.onScrollDownAction: flickableItem.Accessible.onScrollDownAction
+    Accessible.onScrollUpAction: flickableItem.Accessible.onScrollUpAction
+
+    Keys.onUpPressed: scroll(Kirigami.Units.gridUnit * 2)
+    Keys.onDownPressed: scroll(-Kirigami.Units.gridUnit * 2)
+
+    function scroll(y) {
+        const minYExtent = flickableItem.topMargin - flickableItem.originY;
+        const maxYExtent = flickableItem.height - (flickableItem.contentHeight + flickableItem.bottomMargin + flickableItem.originY);
+
+        flickableItem.contentY = Math.min(-maxYExtent, Math.max(-minYExtent, flickableItem.contentY - y));
+    }
+
+    focus: true
+
     onVerticalScrollBarPolicyChanged: {
         if (flickableItem.ScrollBar.vertical) {
             flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy != Qt.ScrollBarAlwaysOff;
