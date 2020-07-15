@@ -8,6 +8,8 @@ import QtQuick 2.7
 import QtQuick.Controls 2.4 as Controls
 import "private"
 
+import org.kde.kirigami 2.14 as Kirigami
+
 /**
  * An item that represents an abstract Action
  *
@@ -18,6 +20,8 @@ Controls.Action {
 
     /**
      * Hints for implementations using Actions indicating preferences about how to display the action.
+     *
+     * @deprected since 2.14, use Kirigami.DisplayHint instead.
      */
     enum DisplayHint {
         /**
@@ -112,7 +116,7 @@ Controls.Action {
      *
      * @since 2.12
      */
-    property int displayHint: Action.DisplayHint.NoPreference
+    property int displayHint: Kirigami.DisplayHint.NoPreference
 
     /**
      * Helper function to check if a certain display hint has been set.
@@ -126,7 +130,7 @@ Controls.Action {
      * @since 2.12
      */
     function displayHintSet(hint) {
-        if (hint === Action.DisplayHint.AlwaysHide && (displayHint & Action.DisplayHint.KeepVisible)) {
+        if (hint === Kirigami.DisplayHint.AlwaysHide && (displayHint & Kirigami.DisplayHint.KeepVisible)) {
             return false;
         }
 

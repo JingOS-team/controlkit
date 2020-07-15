@@ -7,7 +7,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.4 as Controls
-import org.kde.kirigami 2.5 as Kirigami
+import org.kde.kirigami 2.14 as Kirigami
 import "private"
 
 /**
@@ -117,7 +117,7 @@ Item {
                 property var kirigamiAction: modelData
 
                 sourceComponent: {
-                    if (modelData.displayComponent && !modelData.displayHintSet(Action.DisplayHint.IconOnly)) {
+                    if (modelData.displayComponent && !modelData.displayHintSet(Kirigami.DisplayHint.IconOnly)) {
                         return modelData.displayComponent
                     }
                     return toolButtonDelegate
@@ -154,7 +154,7 @@ Item {
 
             kirigamiAction: Kirigami.Action {
                 icon.name: root.overflowIconName
-                displayHint: Kirigami.Action.DisplayHint.IconOnly | Kirigami.Action.DisplayHint.HideChildIndicator
+                displayHint: Kirigami.DisplayHint.IconOnly | Kirigami.DisplayHint.HideChildIndicator
                 children: Array.prototype.map.call(root.actions, function (i) { return i }).concat(Array.prototype.map.call(hiddenActions, function (i) { return i }))
             }
 
@@ -199,8 +199,8 @@ Item {
             display: details.iconOnlyActions.indexOf(kirigamiAction) != -1 ? Controls.Button.IconOnly : root.display
 
             menu.actions: {
-                if (kirigamiAction.displayComponent && kirigamiAction.displayHintSet(Kirigami.Action.DisplayHint.IconOnly)) {
-                    kirigamiAction.displayHint |= Kirigami.Action.DisplayHint.HideChildIndicator
+                if (kirigamiAction.displayComponent && kirigamiAction.displayHintSet(Kirigami.DisplayHint.IconOnly)) {
+                    kirigamiAction.displayHint |= Kirigami.DisplayHint.HideChildIndicator
                     return [kirigamiAction]
                 }
 

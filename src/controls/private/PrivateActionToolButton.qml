@@ -7,7 +7,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.4 as Controls
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.14
 
 Controls.ToolButton {
     id: control
@@ -40,9 +40,9 @@ Controls.ToolButton {
     //TODO: upstream action makes the style to re-draw the content, it'd be ideal except for the custom dropDown icon needed for actionsMenu
     property Controls.Action kirigamiAction
     property bool showText: !(kirigamiAction && kirigamiAction.displayHint !== undefined
-                              && kirigamiAction.displayHintSet(Action.DisplayHint.IconOnly))
+                              && kirigamiAction.displayHintSet(DisplayHint.IconOnly))
     property bool showMenuArrow: !(kirigamiAction && kirigamiAction.displayHint !== undefined
-                                   && kirigamiAction.displayHintSet(Action.DisplayHint.HideChildIndicator))
+                                   && kirigamiAction.displayHintSet(DisplayHint.HideChildIndicator))
     property alias menu: menu
 
     //we need our own text delegate

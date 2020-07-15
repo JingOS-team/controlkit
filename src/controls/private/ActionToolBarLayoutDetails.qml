@@ -8,7 +8,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.4 as Controls
-import org.kde.kirigami 2.5 as Kirigami
+import org.kde.kirigami 2.14 as Kirigami
 
 /**
  * This fairly complex thing determines the layout of ActionToolBar, that is,
@@ -112,7 +112,7 @@ Item {
                 property var kirigamiAction: modelData
 
                 sourceComponent: {
-                    if (modelData.displayComponent && !modelData.displayHintSet(Kirigami.Action.DisplayHint.IconOnly)) {
+                    if (modelData.displayComponent && !modelData.displayHintSet(Kirigami.DisplayHint.IconOnly)) {
                         return modelData.displayComponent
                     }
                     return toolButtonDelegate
@@ -124,7 +124,7 @@ Item {
                     }
 
                     if (modelData.hasOwnProperty("displayHint") &&
-                        modelData.displayHintSet(Kirigami.Action.DisplayHint.AlwaysHide)) {
+                        modelData.displayHintSet(Kirigami.DisplayHint.AlwaysHide)) {
                         return false
                     }
 
@@ -149,7 +149,7 @@ Item {
             flat: details.flat && !kirigamiAction.icon.color.a
             display: details.display
             menu.actions: {
-                if (kirigamiAction.displayComponent && kirigamiAction.displayHintSet(Kirigami.Action.DisplayHint.IconOnly)) {
+                if (kirigamiAction.displayComponent && kirigamiAction.displayHintSet(Kirigami.DisplayHint.IconOnly)) {
                     return [kirigamiAction]
                 }
 
@@ -179,7 +179,7 @@ Item {
                         return false
                     }
                     if (modelData.hasOwnProperty("displayHint")
-                        && modelData.displayHintSet(Kirigami.Action.DisplayHint.KeepVisible)) {
+                        && modelData.displayHintSet(Kirigami.DisplayHint.KeepVisible)) {
                         return true
                     }
                     return false
