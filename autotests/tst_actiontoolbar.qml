@@ -36,6 +36,7 @@ TestCase {
     property ToolButton textIconButton: KirigamiPrivate.PrivateActionToolButton {
         kirigamiAction: Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
     }
+    property TextField textField: TextField { }
 
     Component {
         id: single;
@@ -80,6 +81,19 @@ TestCase {
         }
     }
 
+    Component {
+        id: mixed
+        Kirigami.ActionToolBar {
+            actions: [
+                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action"; displayHint: Kirigami.DisplayHint.IconOnly },
+                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" },
+                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action"; displayComponent: TextField { } },
+                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action"; displayHint: Kirigami.DisplayHint.AlwaysHide },
+                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action"; displayHint: Kirigami.DisplayHint.KeepVisible }
+            ]
+        }
+    }
+
     function test_layout_data() {
         return [
             // One action
@@ -115,7 +129,11 @@ TestCase {
             { tag: "qt_min", component: qtActions, width: 50, expected: testCase.iconButton.width },
             // Half window width, should display one action and overflow button
             { tag: "qt_half", component: qtActions, width: testCase.width / 2,
-                expected: testCase.textIconButton.width + testCase.iconButton.width }
+                expected: testCase.textIconButton.width + testCase.iconButton.width },
+            // Mix of different display hints, displayComponent and normal actions.
+            // Full window width, should display everything, but one action is collapsed to icon
+            { tag: "mixed", component: mixed, width: testCase.width,
+                expected: testCase.textIconButton.width + testCase.iconButton.width * 3 + testCase.textField.width + Kirigami.Units.smallSpacing * 3 }
         ]
     }
 
@@ -132,6 +150,7 @@ TestCase {
 
         toolbar.width = data.width
         waitForRendering(toolbar) // Allow events to propagate so toolbar can resize properly
+
         compare(toolbar.visibleWidth, data.expected)
     }
 }
