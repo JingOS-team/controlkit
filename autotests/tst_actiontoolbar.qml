@@ -7,7 +7,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtTest 1.0
-import org.kde.kirigami 2.11 as Kirigami
+import org.kde.kirigami 2.14 as Kirigami
 
 // TODO: Find a nicer way to handle this
 import "../src/controls/private" as KirigamiPrivate
@@ -132,6 +132,6 @@ TestCase {
 
         toolbar.width = data.width
         waitForRendering(toolbar) // Allow events to propagate so toolbar can resize properly
-        compare(toolbar.implicitWidth, data.expected)
+        compare(toolbar.visibleWidth, data.expected)
     }
 }
