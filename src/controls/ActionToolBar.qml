@@ -26,7 +26,7 @@ Item {
     * they will be put in the footer as a list of ToolButtons plus an optional
     * overflow menu, when not all of them will fit in the available Card width.
     */
-    property list<QtObject> actions
+    property alias actions: layout.actions
 
     /**
     * actions: hiddenActions<Action>
@@ -53,7 +53,7 @@ Item {
      */
     property int display: Controls.Button.TextBesideIcon
 
-    property int alignment: Qt.AlignLeft
+    property alias alignment: layout.alignment
 
     /**
      * position enum
@@ -74,7 +74,7 @@ Item {
      *
      * The value of this property is derived from the ToolBar's actions and their properties.
      */
-    readonly property alias maximumContentWidth: details.maximumWidth
+    readonly property alias maximumContentWidth: layout.implicitWidth
 
     /**
      * The name of the icon to use for the overflow menu button.
@@ -84,131 +84,72 @@ Item {
      */
     property string overflowIconName: "overflow-menu"
 
-    implicitHeight: actionsLayout.implicitHeight
-    implicitWidth: actionsLayout.implicitWidth
-    Layout.minimumWidth: moreButton.visible ? moreButton.implicitWidth : 0
+    property alias visibleWidth: layout.visibleWidth
 
-    RowLayout {
-        id: actionsLayout
+    implicitHeight: layout.implicitHeight
+    implicitWidth: layout.implicitWidth
+    Kirigami.ToolBarLayout {
+        id: layout
         anchors.fill: parent
-        spacing: 0
+        spacing: Kirigami.Units.smallSpacing
 
-        Item {
-            Layout.fillWidth: root.alignment == Qt.AlignRight || root.alignment == Qt.AlignHCenter || root.alignment == Qt.AlignCenter;
-            Layout.fillHeight: true
+        fullDelegate: PrivateActionToolButton {
+            flat: root.flat && !kirigamiAction.icon.color.a
+            display: root.display
+            kirigamiAction: Kirigami.ToolBarLayout.action
         }
 
-        Repeater {
-            model: root.actions
+        iconDelegate: PrivateActionToolButton {
+            flat: root.flat && !kirigamiAction.icon.color.a
+            display: Controls.Button.IconOnly
+            kirigamiAction: Kirigami.ToolBarLayout.action
 
-            delegate: Loader {
-                id: delegate
-
-                Layout.alignment: Qt.AlignVCenter
-                // Use leftMargin instead of spacing on the layout to prevent spacer items
-                // from creating useless spacing, only for items that are actually next to
-                // other items.
-                Layout.leftMargin: index > 0 ? Kirigami.Units.smallSpacing : 0
-                Layout.fillWidth: item ? item.Layout.fillWidth : false
-                Layout.minimumWidth: item ? item.Layout.minimumWidth : implicitWidth
-                Layout.preferredWidth: item ? item.Layout.preferredWidth : implicitWidth
-                Layout.maximumWidth: item ? item.Layout.maximumWidth : -1
-
-                property var kirigamiAction: modelData
-
-                sourceComponent: {
-                    if (modelData.displayComponent && !modelData.displayHintSet(Kirigami.DisplayHint.IconOnly)) {
-                        return modelData.displayComponent
-                    }
-                    return toolButtonDelegate
+            menu.actions: {
+                if (kirigamiAction.displayComponent) {
+                    kirigamiAction.displayHint |= Kirigami.DisplayHint.HideChildIndicator
+                    return [kirigamiAction]
                 }
-
-                visible: details.visibleActions.indexOf(modelData) != -1
-                         && (modelData.visible === undefined || modelData.visible)
-
-                onLoaded: {
-                    if (sourceComponent == toolButtonDelegate) {
-                        item.kirigamiAction = modelData
-                    }
-                }
+                return kirigamiAction.children
             }
         }
 
-        Item {
-            Layout.fillWidth: root.alignment == Qt.AlignLeft || root.alignment == Qt.AlignHCenter || root.alignment == Qt.AlignCenter;
-            Layout.fillHeight: true
-        }
-
-        PrivateActionToolButton {
-            id: moreButton
-
-            Layout.alignment: Qt.AlignRight
-            visible: {
-                // Only show the overflow button when we actually have visible actions in the menu,
-                // otherwise we end up showing an overflow button that shows nothing.
-                var visibleCount = Array.prototype.reduce.call(kirigamiAction.children, function (total, current) {
-                    return (details.visibleActions.indexOf(current) == -1 && (current.visible === undefined || current.visible)) ? total + 1 : total
-                }, 0);
-                return visibleCount > 0
-            }
+        moreButton: PrivateActionToolButton {
+            flat: root.flat
 
             kirigamiAction: Kirigami.Action {
                 icon.name: root.overflowIconName
                 displayHint: Kirigami.DisplayHint.IconOnly | Kirigami.DisplayHint.HideChildIndicator
-                children: Array.prototype.map.call(root.actions, function (i) { return i }).concat(Array.prototype.map.call(hiddenActions, function (i) { return i }))
+                children: {
+                    if (root.hiddenActions.length == 0) {
+                        return root.actions
+                    } else {
+                        result = []
+                        result.concat(Array.prototype.map.call(root.actions, (i) => i))
+                        result.concat(Array.prototype.map.call(hiddenActions, (i) => i))
+                        return result
+                    }
+                }
             }
 
             menu.submenuComponent: ActionsMenu {
                 Binding {
                     target: parentItem
                     property: "visible"
-                    value: details.visibleActions.indexOf(parentAction) == -1 &&
-                                (parentAction.visible === undefined || parentAction.visible)
+                    value: layout.hiddenActions.includes(parentAction)
+                           && (parentAction.visible === undefined || parentAction.visible)
                 }
             }
 
             menu.itemDelegate: ActionMenuItem {
-                visible: details.visibleActions.indexOf(action) == -1 &&
-                                    (action.visible === undefined || action.visible)
+                visible: layout.hiddenActions.includes(action)
+                         && (action.visible === undefined || action.visible)
             }
 
             menu.loaderDelegate: Loader {
                 property var kirigamiAction
                 height: visible ? implicitHeight : 0
-                visible: details.visibleActions.indexOf(kirigamiAction) == -1 &&
-                                    (kirigamiAction.visible === undefined || kirigamiAction.visible)
-            }
-        }
-    }
-
-    ActionToolBarLayoutDetails {
-        id: details
-        anchors.fill: parent
-        actions: root.actions
-        rightPadding: moreButton.width + Kirigami.Units.smallSpacing
-        flat: root.flat
-        display: root.display
-    }
-
-    Component {
-        id: toolButtonDelegate
-
-        PrivateActionToolButton {
-            id: button
-            flat: root.flat && !kirigamiAction.icon.color.a
-            display: details.iconOnlyActions.indexOf(kirigamiAction) != -1 ? Controls.Button.IconOnly : root.display
-
-            menu.actions: {
-                if (kirigamiAction.displayComponent && kirigamiAction.displayHintSet(Kirigami.DisplayHint.IconOnly)) {
-                    kirigamiAction.displayHint |= Kirigami.DisplayHint.HideChildIndicator
-                    return [kirigamiAction]
-                }
-
-                if (kirigamiAction.children) {
-                    return kirigamiAction.children
-                }
-
-                return []
+                visible: layout.hiddenActions.includes(kirigamiAction)
+                         && (kirigamiAction.visible === undefined || kirigamiAction.visible)
             }
         }
     }
