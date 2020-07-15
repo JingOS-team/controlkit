@@ -459,10 +459,17 @@ qreal ToolBarLayout::Private::layoutStart(qreal layoutWidth)
 void ToolBarLayout::Private::maybeHideDelegate(ToolBarLayoutDelegate* delegate, qreal &currentWidth, qreal totalWidth)
 {
     if (!delegate->isVisible() || currentWidth + delegate->width() < totalWidth) {
+        // If the delegate isn't visible anyway, or is visible but fits within
+        // the current layout, do nothing.
         return;
     }
 
     if (delegate->isKeepVisible()) {
+        // If the action is marked as KeepVisible, we need to try our best to
+        // keep it in view. If the full size delegate does not fit, we try the
+        // icon-only delegate. If that also does not fit, try and find other
+        // actions to hide. Finally, if that also fails, we will hide the
+        // delegate.
         if (currentWidth + delegate->iconWidth() > totalWidth) {
             auto currentIndex = sortedDelegates.indexOf(delegate);
             for (; currentIndex >= 0; --currentIndex) {
@@ -496,6 +503,8 @@ void ToolBarLayout::Private::maybeHideDelegate(ToolBarLayoutDelegate* delegate, 
             delegate->showIcon();
         }
     } else {
+        // The action is not marked as KeepVisible and it does not fit within
+        // the current layout, so hide it.
         delegate->hide();
         hiddenActions.append(delegate->action());
     }
