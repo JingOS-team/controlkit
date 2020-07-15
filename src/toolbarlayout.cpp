@@ -52,6 +52,7 @@ public:
     QQmlComponent *moreButton = nullptr;
     qreal spacing = 0.0;
     Qt::Alignment alignment = Qt::AlignLeft;
+    qreal visibleWidth = 0.0;
 
     bool completed = false;
     bool layoutQueued = false;
@@ -216,6 +217,11 @@ void ToolBarLayout::setAlignment(Qt::Alignment newAlignment)
     Q_EMIT alignmentChanged();
 }
 
+qreal ToolBarLayout::visibleWidth() const
+{
+    return d->visibleWidth;
+}
+
 void ToolBarLayout::relayout()
 {
     if (d->completed && !d->layouting) {
@@ -307,22 +313,25 @@ void ToolBarLayout::Private::performLayout()
 
     qreal layoutWidth = q->width() - (moreButtonInstance->width() + spacing);
 
-    qreal visibleWidth = 0.0;
+    qreal visibleActionsWidth = 0.0;
 
     if (maxWidth > layoutWidth) {
         // We have more items than fit into the view, so start hiding some.
         for (int i = 0; i < sortedDelegates.size(); ++i) {
             auto delegate = sortedDelegates.at(i);
 
-            maybeHideDelegate(delegate, visibleWidth, layoutWidth);
+            maybeHideDelegate(delegate, visibleActionsWidth, layoutWidth);
 
             if (delegate->isVisible()) {
-                visibleWidth += delegate->width() + spacing;
+                visibleActionsWidth += delegate->width() + spacing;
             }
         }
-        visibleWidth -= spacing;
+        if (!qFuzzyIsNull(visibleActionsWidth)) {
+            // Like above, remove spacing on the last element that incorrectly gets spacing added.
+            visibleActionsWidth -= spacing;
+        }
     } else {
-        visibleWidth = maxWidth;
+        visibleActionsWidth = maxWidth;
     }
 
     if (!hiddenActions.isEmpty()) {
@@ -333,7 +342,7 @@ void ToolBarLayout::Private::performLayout()
         moreButtonInstance->setVisible(false);
     }
 
-    qreal currentX = layoutStart(visibleWidth);
+    qreal currentX = layoutStart(visibleActionsWidth);
     for (auto entry : sortedDelegates) {
         if (!entry->isVisible()) {
             continue;
@@ -348,6 +357,12 @@ void ToolBarLayout::Private::performLayout()
 
     q->setImplicitSize(maxWidth, maxHeight);
     Q_EMIT q->hiddenActionsChanged();
+
+    qreal newVisibleWidth = visibleActionsWidth + (moreButtonInstance->isVisible() ? moreButtonInstance->width() : 0.0);
+    if (!qFuzzyCompare(newVisibleWidth, visibleWidth)) {
+        visibleWidth = newVisibleWidth;
+        Q_EMIT q->visibleWidthChanged();
+    }
 
     sortedDelegates.clear();
     layouting = false;

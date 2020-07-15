@@ -34,6 +34,7 @@ class ToolBarLayout : public QQuickItem
     Q_PROPERTY(QQmlComponent *moreButton READ moreButton WRITE setMoreButton NOTIFY moreButtonChanged)
     Q_PROPERTY(qreal spacing READ spacing WRITE setSpacing NOTIFY spacingChanged)
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment NOTIFY alignmentChanged)
+    Q_PROPERTY(qreal visibleWidth READ visibleWidth NOTIFY visibleWidthChanged)
 
 public:
     using ActionsProperty = QQmlListProperty<QObject>;
@@ -68,6 +69,9 @@ public:
     Qt::Alignment alignment() const;
     void setAlignment(Qt::Alignment newAlignment);
     Q_SIGNAL void alignmentChanged();
+
+    qreal visibleWidth() const;
+    Q_SIGNAL void visibleWidthChanged();
 
     Q_SLOT void relayout();
 
