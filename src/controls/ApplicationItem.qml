@@ -10,16 +10,10 @@ import org.kde.kirigami 2.4 as Kirigami
 import QtGraphicalEffects 1.0
 
 /**
- * A window that provides some basic features needed for all apps
- * This version is an Item as opposed to a window, it's intended
- * for use into a QQuickView
+ * An item that provides the features of ApplicationWindow without the window itself.
+ * This allows embedding into a larger application.
  *
- * It's usually used as a root QML component for the application.
- * It's based around the PageRow component, the application will be
- * about pages adding and removal.
- * For most of the usages, this class should be used instead
- * of AbstractApplicationWindow
- * @see AbstractApplicationWindow
+ * It's based around the PageRow component that allows adding/removing of pages.
  *
  * Example usage:
  * @code

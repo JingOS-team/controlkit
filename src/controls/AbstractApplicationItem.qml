@@ -12,23 +12,15 @@ import org.kde.kirigami 2.4
 import QtGraphicalEffects 1.0
 
 /**
- * A window that provides some basic features needed for all apps
- * Use this class only if you need a custom content for your application,
- * different from the Page Row behavior recommended by the HIG and provided
- * by ApplicationItem.
- * It is recommended to use ApplicationItem instead
- * @see ApplicationItem
- *
- * It's usually used as a root QML component for the application.
- * It provides support for a central page stack, side drawers and
- * a top ApplicationHeader, as well as basic support for the
- * Android back button
+ * An item that provides the features of AbstractApplicationWindow without the window itself.
+ * This allows embedding into a larger application.
+ * Unless you need extra flexibility it is recommended to use ApplicationItem instead.
  *
  * Example usage:
  * @code
  * import org.kde.kirigami 2.4 as Kirigami
  *
- * Kirigami.ApplicationItem {
+ * Kirigami.AbstractApplicationItem {
  *  [...]
  *     globalDrawer: Kirigami.GlobalDrawer {
  *         actions: [
@@ -56,7 +48,7 @@ import QtGraphicalEffects 1.0
  *         id: contextDrawer
  *     }
  *
- *     pageStack: PageStack {
+ *     pageStack: Kirigami.PageRow {
  *         ...
  *     }
  *  [...]
