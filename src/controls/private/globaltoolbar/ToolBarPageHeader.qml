@@ -7,7 +7,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.5
+import org.kde.kirigami 2.14
 import "../" as Private
 
 
@@ -54,15 +54,15 @@ AbstractPageHeader {
 
                 if (page) {
                     if (page.actions.main) {
-                        page.actions.main.displayHint |= Action.DisplayHint.KeepVisible
+                        page.actions.main.displayHint |= DisplayHint.KeepVisible
                         result.push(page.actions.main)
                     }
                     if (page.actions.left) {
-                        page.actions.left.displayHint |= Action.DisplayHint.KeepVisible
+                        page.actions.left.displayHint |= DisplayHint.KeepVisible
                         result.push(page.actions.left)
                     }
                     if (page.actions.right) {
-                        page.actions.right.displayHint |= Action.DisplayHint.KeepVisible
+                        page.actions.right.displayHint |= DisplayHint.KeepVisible
                         result.push(page.actions.right)
                     }
                     if (page.actions.contextualActions.length > 0) {
