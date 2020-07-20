@@ -14,52 +14,67 @@ Controls.ToolButton {
 
     signal menuAboutToShow
 
-    implicitWidth: {
-        if (!menuArrow.visible) {
-            if (!showText || display == Controls.Button.IconOnly) {
-                return implicitHeight
-            }
-
-            var textLength = kirigamiAction ? kirigamiAction.text.length : text.length
-            if (textLength == 0) {
-                return implicitHeight
-            }
-        }
-
-        return Math.max(layout.implicitWidth + Units.largeSpacing * 2, background.implicitWidth)
-    }
-
     Theme.colorSet: Theme.Button
-    Theme.inherit: kirigamiAction && kirigamiAction.icon.color.a === 0
-    Theme.backgroundColor: kirigamiAction && kirigamiAction.icon.color.a ? kirigamiAction.icon.color : undefined
-    Theme.textColor: kirigamiAction && !flat && kirigamiAction.icon.color.a ? Theme.highlightedTextColor : undefined
+    Theme.inherit: action && action.icon.color.a === 0
+    Theme.backgroundColor: action && action.icon.color.a ? action.icon.color : undefined
+    Theme.textColor: action && !flat && action.icon.color.a ? Theme.highlightedTextColor : undefined
 
     hoverEnabled: true
-    flat: !control.kirigamiAction || !control.kirigamiAction.icon.color.a
-    //TODO: replace with upstream action when we depend on Qt 5.10
-    //TODO: upstream action makes the style to re-draw the content, it'd be ideal except for the custom dropDown icon needed for actionsMenu
-    property Controls.Action kirigamiAction
-    property bool showText: !(kirigamiAction && kirigamiAction.displayHint !== undefined
-                              && kirigamiAction.displayHintSet(DisplayHint.IconOnly))
-    property bool showMenuArrow: !(kirigamiAction && kirigamiAction.displayHint !== undefined
-                                   && kirigamiAction.displayHintSet(DisplayHint.HideChildIndicator))
-    property alias menu: menu
+    flat: !control.action || !control.action.icon.color.a
 
-    //we need our own text delegate
-    text: ""
-    checkable: (kirigamiAction && kirigamiAction.checkable) || (menu.actions && menu.actions.length > 0)
-    checked: (kirigamiAction && kirigamiAction.checked)
-    enabled: kirigamiAction && kirigamiAction.enabled
-    opacity: enabled ? 1 : 0.4
-    visible: (kirigamiAction && kirigamiAction.hasOwnProperty("visible")) ? kirigamiAction.visible : true
-    onClicked: {
-        if (kirigamiAction) {
-            kirigamiAction.trigger();
+    display: Controls.ToolButton.TextBesideIcon
+
+    property bool showMenuArrow: !(action && action.displayHint !== undefined
+                                   && action.displayHintSet(DisplayHint.HideChildIndicator))
+
+    property var menuActions: {
+        if (action && action.hasOwnProperty("children")) {
+            return Array.prototype.map.call(action.children, (i) => i)
+        }
+        return []
+    }
+
+    property Component menuComponent: ActionsMenu {
+        submenuComponent: ActionsMenu { }
+    }
+
+    property QtObject menu: null
+
+    // We create the menu instance only when there are any actual menu items.
+    // This also happens in the background, avoiding slowdowns due to menu item
+    // creation on the main thread.
+    onMenuActionsChanged: {
+        if (menuComponent && menuActions.length > 0) {
+            updateMenuArrow()
+
+            if (!menu) {
+                let incubator = menuComponent.incubateObject(control, {"actions": menuActions})
+                if (incubator.status != Component.Ready) {
+                    incubator.onStatusChanged = function(status) {
+                        if (status == Component.Ready) {
+                            menu = incubator.object
+                            // Important: We handle the press on parent in the parent, so ignore it here.
+                            menu.closePolicy = Controls.Popup.CloseOnEscape | Controls.Popup.CloseOnPressOutsideParent
+                            menu.closed.connect(() => control.checked = false)
+                        }
+                    }
+                } else {
+                    menu = incubator.object
+                }
+            } else {
+                menu.actions = menuActions
+            }
         }
     }
 
+    onShowMenuArrowChanged: updateMenuArrow()
+
+    checkable: (action && action.checkable) || (menuActions && menuActions.length > 0)
+    opacity: enabled ? 1 : 0.4
+    visible: (action && action.hasOwnProperty("visible")) ? action.visible : true
+
     onToggled: {
-        if (menu.actions.length > 0) {
+        if (menuActions.length > 0 && menu) {
             if (checked) {
                 control.menuAboutToShow();
                 menu.popup(control, 0, control.height)
@@ -69,74 +84,21 @@ Controls.ToolButton {
         }
     }
 
-    ActionsMenu {
-        id: menu
-        y: control.height
-        actions: control.kirigamiAction && kirigamiAction.hasOwnProperty("children") ? control.kirigamiAction.children : null
+    Controls.ToolTip.visible: control.hovered && text.length > 0 && !(menu && menu.visible) && !control.pressed
+    Controls.ToolTip.text: action ? (action.tooltip && action.tooltip.length ? action.tooltip : action.text) : ""
+    Controls.ToolTip.delay: Units.toolTipDelay
+    Controls.ToolTip.timeout: 5000
 
-        // Important: We handle the press on parent in the parent, so ignore it here.
-        closePolicy: Controls.Popup.CloseOnEscape | Controls.Popup.CloseOnPressOutsideParent
-
-        submenuComponent: Component {
-            ActionsMenu {}
+    // This is slightly ugly but saves us from needing to recreate the entire
+    // contents of the toolbutton. When using QQC2-desktop-style, the background
+    // will be an item that renders the entire control. We can simply set a
+    // property on it to get a menu arrow.
+    function updateMenuArrow() {
+        if (background.hasOwnProperty("properties")) {
+            var properties = background.properties
+            properties.menu = showMenuArrow && menuActions.length > 0
+            background.properties = properties
         }
-
-        onClosed: {
-            control.checked = false
-        }
-    }
-
-    contentItem: MouseArea {
-        hoverEnabled: true
-        onPressed: mouse.accepted = false
-        Theme.colorSet: checked && (control.kirigamiAction && control.kirigamiAction.icon.color.a) ? Theme.Selection : control.Theme.colorSet
-        Theme.inherit: control.kirigamiAction && Theme.colorSet != Theme.Selection && control.kirigamiAction.icon.color.a === 0
-        implicitWidth: layout.implicitWidth
-        implicitHeight: layout.implicitHeight
-        GridLayout {
-            id: layout
-            columns: control.display == Controls.ToolButton.TextUnderIcon ? 1 : 2 + (menuArrow.visible ? 1 : 0)
-            rows: control.display == Controls.ToolButton.TextUnderIcon ? 2 : 1
-
-            anchors.centerIn: parent
-            Icon {
-                id: mainIcon
-                Layout.alignment: Qt.AlignCenter
-                Layout.minimumWidth: Units.iconSizes.smallMedium
-                Layout.minimumHeight: Units.iconSizes.smallMedium
-                source: control.kirigamiAction ? (control.kirigamiAction.icon ? control.kirigamiAction.icon.name : control.kirigamiAction.iconName) : ""
-                visible: control.kirigamiAction && control.kirigamiAction.iconName != "" && control.display != Controls.ToolButton.TextOnly
-                color: control.flat && control.kirigamiAction && control.kirigamiAction.icon && control.kirigamiAction.icon.color.a > 0 ? control.kirigamiAction.icon.color : label.color
-            }
-            Controls.Label {
-                id: label
-                MnemonicData.enabled: control.enabled
-                MnemonicData.controlType: MnemonicData.ActionElement
-                MnemonicData.label: control.kirigamiAction ? control.kirigamiAction.text : ""
-
-                text: MnemonicData.richTextLabel
-                visible: control.showText && text.length > 0 && control.display != Controls.ToolButton.IconOnly
-
-                Shortcut {
-                    sequence: label.MnemonicData.sequence
-                    onActivated: control.clicked()
-                }
-            }
-            Icon {
-                id: menuArrow
-                Layout.minimumWidth: Units.iconSizes.small
-                Layout.minimumHeight: Units.iconSizes.small
-                color: mainIcon.color
-                source: "arrow-down"
-                visible: showMenuArrow && menu.actions && menu.actions.length > 0
-            }
-        }
-    }
-    Controls.ToolTip {
-        visible: control.hovered && text.length > 0 && !menu.visible && !control.pressed
-        text: kirigamiAction ? (kirigamiAction.tooltip && kirigamiAction.tooltip.length ? kirigamiAction.tooltip : kirigamiAction.text) : ""
-        delay: Units.toolTipDelay
-        timeout: 5000
-        y: control.height
+        // TODO: Support other styles
     }
 }

@@ -101,62 +101,60 @@ Item {
         spacing: Kirigami.Units.smallSpacing
 
         fullDelegate: PrivateActionToolButton {
-            flat: root.flat && !kirigamiAction.icon.color.a
+            flat: root.flat && !action.icon.color.a
             display: root.display
-            kirigamiAction: Kirigami.ToolBarLayout.action
+            action: Kirigami.ToolBarLayout.action
         }
 
         iconDelegate: PrivateActionToolButton {
-            flat: root.flat && !kirigamiAction.icon.color.a
+            flat: root.flat && !action.icon.color.a
             display: Controls.Button.IconOnly
-            kirigamiAction: Kirigami.ToolBarLayout.action
+            action: Kirigami.ToolBarLayout.action
 
-            menu.actions: {
-                if (kirigamiAction.displayComponent) {
-                    kirigamiAction.displayHint |= Kirigami.DisplayHint.HideChildIndicator
-                    return [kirigamiAction]
+            showMenuArrow: false
+
+            menuActions: {
+                if (action.displayComponent) {
+                    return [action]
                 }
-                return kirigamiAction.children
+                return action.children
             }
         }
 
         moreButton: PrivateActionToolButton {
             flat: root.flat
 
-            kirigamiAction: Kirigami.Action {
-                icon.name: root.overflowIconName
-                displayHint: Kirigami.DisplayHint.IconOnly | Kirigami.DisplayHint.HideChildIndicator
-                children: {
-                    if (root.hiddenActions.length == 0) {
-                        return root.actions
-                    } else {
-                        result = []
-                        result.concat(Array.prototype.map.call(root.actions, (i) => i))
-                        result.concat(Array.prototype.map.call(hiddenActions, (i) => i))
-                        return result
+            text: qsTr("More Actions")
+            icon.name: root.overflowIconName
+
+            display: Controls.Button.IconOnly
+            showMenuArrow: false
+
+            menuActions: {
+                if (root.hiddenActions.length == 0) {
+                    return root.actions
+                } else {
+                    result = []
+                    result.concat(Array.prototype.map.call(root.actions, (i) => i))
+                    result.concat(Array.prototype.map.call(hiddenActions, (i) => i))
+                    return result
+                }
+            }
+
+            menuComponent: ActionsMenu {
+                submenuComponent: ActionsMenu {
+                    Binding {
+                        target: parentItem
+                        property: "visible"
+                        value: layout.hiddenActions.includes(parentAction)
+                               && (parentAction.visible === undefined || parentAction.visible)
                     }
                 }
-            }
 
-            menu.submenuComponent: ActionsMenu {
-                Binding {
-                    target: parentItem
-                    property: "visible"
-                    value: layout.hiddenActions.includes(parentAction)
-                           && (parentAction.visible === undefined || parentAction.visible)
+                itemDelegate: ActionMenuItem {
+                    visible: layout.hiddenActions.includes(action)
+                             && (action.visible === undefined || action.visible)
                 }
-            }
-
-            menu.itemDelegate: ActionMenuItem {
-                visible: layout.hiddenActions.includes(action)
-                         && (action.visible === undefined || action.visible)
-            }
-
-            menu.loaderDelegate: Loader {
-                property var kirigamiAction
-                height: visible ? implicitHeight : 0
-                visible: layout.hiddenActions.includes(kirigamiAction)
-                         && (kirigamiAction.visible === undefined || kirigamiAction.visible)
             }
         }
     }
