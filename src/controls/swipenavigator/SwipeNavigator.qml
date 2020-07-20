@@ -170,15 +170,110 @@ GridLayout {
 
         Layout.row: Kirigami.Settings.isMobile ? 0 : 1
 
-        Kirigami.ColumnView {
+        function clear() {
+            //don't let it kill the main page row
+            var d = stackView.depth;
+            for (var i = 1; i < d; ++i) {
+                pop();
+            }
+        }
+
+        initialItem: Kirigami.ColumnView {
             id: columnView
             columnResizeMode: Kirigami.ColumnView.SingleColumn
 
             contentChildren: swipeNavigatorRoot.pages
-            anchors.fill: parent
 
             Component.onCompleted: {
                 columnView.currentIndex = 0
+            }
+        }
+
+        popEnter: Transition {
+            OpacityAnimator {
+                from: 0
+                to: 1
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutCubic
+            }
+        }
+        popExit: Transition {
+            ParallelAnimation {
+                OpacityAnimator {
+                    from: 1
+                    to: 0
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
+                YAnimator {
+                    from: 0
+                    to: height/2
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InCubic
+                }
+            }
+        }
+
+        pushEnter: Transition {
+            ParallelAnimation {
+                //NOTE: It's a PropertyAnimation instead of an Animator because with an animator the item will be visible for an instant before starting to fade
+                PropertyAnimation {
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
+                YAnimator {
+                    from: height/2
+                    to: 0
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.OutCubic
+                }
+            }
+        }
+
+
+        pushExit: Transition {
+            OpacityAnimator {
+                from: 1
+                to: 0
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutCubic
+            }
+        }
+
+        replaceEnter: Transition {
+            ParallelAnimation {
+                OpacityAnimator {
+                    from: 0
+                    to: 1
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
+                YAnimator {
+                    from: height/2
+                    to: 0
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.OutCubic
+                }
+            }
+        }
+
+        replaceExit: Transition {
+            ParallelAnimation {
+                OpacityAnimator {
+                    from: 1
+                    to: 0
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InCubic
+                }
+                YAnimator {
+                    from: 0
+                    to: -height/2
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutCubic
+                }
             }
         }
     }
