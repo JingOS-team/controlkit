@@ -88,6 +88,11 @@ Item {
 
     implicitHeight: layout.implicitHeight
     implicitWidth: layout.implicitWidth
+
+    Layout.minimumWidth: layout.minimumWidth
+    Layout.preferredWidth: 0
+    Layout.fillWidth: true
+
     Kirigami.ToolBarLayout {
         id: layout
         anchors.fill: parent
