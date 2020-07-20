@@ -245,14 +245,16 @@ void PageRouter::navigateToRoute(QJSValue route)
     }
 
     for (int i = 0; i < incomingRoutes.length(); i++) {
-        auto current = resolvedRoutes.value(i);
         auto incoming = incomingRoutes.at(i);
-        Q_ASSERT(current);
         Q_ASSERT(incoming);
         if (i >= resolvedRoutes.length()) {
             resolvedRoutes.append(incoming);
-        } else if (current->name != incoming->name || current->data != incoming->data) {
-            resolvedRoutes.replace(i, incoming);
+        } else { 
+            auto current = resolvedRoutes.value(i);
+            Q_ASSERT(current);
+            if (current->name != incoming->name || current->data != incoming->data) {
+                resolvedRoutes.replace(i, incoming);
+            }
         }
     }
 
