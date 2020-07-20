@@ -9,7 +9,8 @@
 #include "toolbarlayout.h"
 
 ToolBarLayoutDelegate::ToolBarLayoutDelegate(ToolBarLayout* parent)
-    : m_parent(parent)
+    : QObject() // Note: delegates are managed by unique_ptr, so don't parent
+    , m_parent(parent)
 {
 }
 
@@ -29,19 +30,19 @@ void ToolBarLayoutDelegate::setAction(QObject* action)
     }
 
     if (m_action) {
-        QObject::disconnect(m_action, SIGNAL(visibleChanged()), m_parent, SLOT(relayout()));
-        QObject::disconnect(m_action, SIGNAL(displayHintChanged()), m_parent, SLOT(relayout()));
+        QObject::disconnect(m_action, SIGNAL(visibleChanged()), this, SLOT(actionVisibleChanged()));
+        QObject::disconnect(m_action, SIGNAL(displayHintChanged()), this, SLOT(displayHintChanged()));
     }
 
     m_action = action;
     if (m_action) {
         if (m_action->property("visible").isValid()) {
-            QObject::connect(m_action, SIGNAL(visibleChanged()), m_parent, SLOT(relayout()));
+            QObject::connect(m_action, SIGNAL(visibleChanged()), this, SLOT(actionVisibleChanged()));
             m_actionVisible = m_action->property("visible").toBool();
         }
 
         if (m_action->property("displayHint").isValid()) {
-            QObject::connect(m_action, SIGNAL(displayHintChanged()), m_parent, SLOT(relayout()));
+            QObject::connect(m_action, SIGNAL(displayHintChanged()), this, SLOT(displayHintChanged()));
             m_displayHint = DisplayHint::DisplayHints{m_action->property("displayHint").toUInt()};
         }
     }
@@ -54,16 +55,14 @@ void ToolBarLayoutDelegate::setFull(QQuickItem* full)
     }
 
     if (m_full) {
-        QObject::disconnect(m_full, &QQuickItem::widthChanged, m_parent, &ToolBarLayout::relayout);
-        QObject::disconnect(m_full, &QQuickItem::heightChanged, m_parent, &ToolBarLayout::relayout);
-        QObject::disconnect(m_full, &QQuickItem::visibleChanged, m_parent, &ToolBarLayout::relayout);
+        m_full->disconnect(this);
     }
 
     m_full = full;
     if (m_full) {
-        QObject::connect(m_full, &QQuickItem::widthChanged, m_parent, &ToolBarLayout::relayout);
-        QObject::connect(m_full, &QQuickItem::heightChanged, m_parent, &ToolBarLayout::relayout);
-        QObject::connect(m_full, &QQuickItem::visibleChanged, m_parent, &ToolBarLayout::relayout);
+        QObject::connect(m_full, &QQuickItem::widthChanged, this, [this]() { m_parent->relayout(); });
+        QObject::connect(m_full, &QQuickItem::heightChanged, this, [this]() { m_parent->relayout(); });
+        QObject::connect(m_full, &QQuickItem::visibleChanged, this, [this]() { ensureItemVisibility(); });
     }
 }
 
@@ -74,14 +73,14 @@ void ToolBarLayoutDelegate::setIcon(QQuickItem* icon)
     }
 
     if (m_icon) {
-        QObject::disconnect(m_icon, &QQuickItem::widthChanged, m_parent, &ToolBarLayout::relayout);
-        QObject::disconnect(m_icon, &QQuickItem::heightChanged, m_parent, &ToolBarLayout::relayout);
+        m_icon->disconnect(this);
     }
 
     m_icon = icon;
     if (m_icon) {
-        QObject::connect(m_icon, &QQuickItem::widthChanged, m_parent, &ToolBarLayout::relayout);
-        QObject::connect(m_icon, &QQuickItem::heightChanged, m_parent, &ToolBarLayout::relayout);
+        QObject::connect(m_icon, &QQuickItem::widthChanged, this, [this]() { m_parent->relayout(); });
+        QObject::connect(m_icon, &QQuickItem::heightChanged, this, [this]() { m_parent->relayout(); });
+        QObject::connect(m_icon, &QQuickItem::visibleChanged, this, [this]() { ensureItemVisibility(); });
     }
 }
 
@@ -107,28 +106,28 @@ bool ToolBarLayoutDelegate::isKeepVisible() const
 
 bool ToolBarLayoutDelegate::isVisible() const
 {
-    return m_visible;
+    return m_iconVisible || m_fullVisible;
 }
 
 void ToolBarLayoutDelegate::hide()
 {
-    m_visible = false;
-    m_full->setProperty("visible", false);
-    m_icon->setProperty("visible", false);
+    m_iconVisible = false;
+    m_fullVisible = false;
+    ensureItemVisibility();
 }
 
 void ToolBarLayoutDelegate::showFull()
 {
-    m_visible = true;
-    m_full->setProperty("visible", true);
-    m_icon->setProperty("visible", false);
+    m_iconVisible = false;
+    m_fullVisible = true;
+    ensureItemVisibility();
 }
 
 void ToolBarLayoutDelegate::showIcon()
 {
-    m_visible = true;
-    m_full->setProperty("visible", false);
-    m_icon->setProperty("visible", true);
+    m_iconVisible = true;
+    m_fullVisible = false;
+    ensureItemVisibility();
 }
 
 void ToolBarLayoutDelegate::setPosition(qreal x, qreal y)
@@ -170,15 +169,15 @@ qreal ToolBarLayoutDelegate::fullWidth() const
     return m_full->width();
 }
 
-void ToolBarLayoutDelegate::beginLayout()
+void ToolBarLayoutDelegate::actionVisibleChanged()
 {
-    auto visible = m_action->property("visible");
-    if (visible.isValid()) {
-        m_actionVisible = visible.toBool();
-    }
-    m_displayHint = DisplayHint::DisplayHints{m_action->property("displayHint").toUInt()};
+    m_actionVisible = m_action->property("visible").toBool();
+    m_parent->relayout();
 }
 
-void ToolBarLayoutDelegate::endLayout()
+void ToolBarLayoutDelegate::displayHintChanged()
 {
+    m_displayHint = DisplayHint::DisplayHints{m_action->property("displayHint").toUInt()};
+    m_parent->relayout();
 }
+

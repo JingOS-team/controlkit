@@ -285,8 +285,6 @@ void ToolBarLayout::Private::performLayout()
     // This will be used to determine which actions to show, which ones to
     // collapse to icon-only etc.
     for (auto entry : sortedDelegates) {
-        entry->beginLayout();
-
         if (!entry->isActionVisible()) {
             entry->hide();
             continue;
@@ -351,8 +349,6 @@ void ToolBarLayout::Private::performLayout()
         entry->setPosition(currentX, qRound((maxHeight - entry->height()) / 2.0));
 
         currentX += entry->width() + spacing;
-
-        entry->endLayout();
     }
 
     q->setImplicitSize(maxWidth, maxHeight);
@@ -398,6 +394,9 @@ QVector<ToolBarLayoutDelegate*> ToolBarLayout::Private::createDelegates()
     if (!moreButtonInstance && !timer.hasExpired()) {
         moreButtonInstance = qobject_cast<QQuickItem*>(moreButton->beginCreate(qmlContext(q)));
         moreButtonInstance->setParentItem(q);
+        connect(moreButtonInstance, &QQuickItem::visibleChanged, q, [this]() {
+            moreButtonInstance->setVisible(!hiddenActions.isEmpty());
+        });
         moreButton->completeCreate();
     }
 

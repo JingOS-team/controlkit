@@ -12,8 +12,9 @@
 
 class ToolBarLayout;
 
-class ToolBarLayoutDelegate
+class ToolBarLayoutDelegate : public QObject
 {
+    Q_OBJECT
 public:
     ToolBarLayoutDelegate(ToolBarLayout *parent);
     ~ToolBarLayoutDelegate();
@@ -44,10 +45,19 @@ public:
 
     DisplayHint::DisplayHints displayHint();
 
-    void beginLayout();
-    void endLayout();
-
 private:
+    Q_SLOT void actionVisibleChanged();
+    Q_SLOT void displayHintChanged();
+    inline void ensureItemVisibility()
+    {
+        if (m_full) {
+            m_full->setVisible(m_fullVisible);
+        }
+        if (m_icon) {
+            m_icon->setVisible(m_iconVisible);
+        }
+    }
+
     ToolBarLayout *m_parent = nullptr;
     QObject *m_action = nullptr;
     QQuickItem *m_full = nullptr;
@@ -56,6 +66,8 @@ private:
     DisplayHint::DisplayHints m_displayHint = DisplayHint::NoPreference;
     bool m_actionVisible = true;
     bool m_visible = true;
+    bool m_fullVisible = true;
+    bool m_iconVisible = true;
 };
 
 #endif // TOOLBARLAYOUTDELEGATE_H
