@@ -209,7 +209,7 @@ QQC2.Page {
      */
     readonly property bool isCurrentPage: Kirigami.ColumnView.view
             ? (Kirigami.ColumnView.index == Kirigami.ColumnView.view.currentIndex && Kirigami.ColumnView.view.parent.currentItem === Kirigami.ColumnView.view)
-            : (parent instanceof QQC2.StackView
+            : (parent && parent instanceof QQC2.StackView
                 ? parent.currentItem === root
                 : true)
 
