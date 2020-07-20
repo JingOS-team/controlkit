@@ -42,7 +42,7 @@ Kirigami.AbstractCard {
     * is enough space.
     * @since 2.6
     */
-    property list<QtObject> hiddenActions
+    property alias hiddenActions: actionsToolBar.hiddenActions
 
     /**
      * banner: Image
@@ -100,7 +100,6 @@ Kirigami.AbstractCard {
         id: actionsToolBar
         actions: root.actions
         position: Controls.ToolBar.Footer
-        hiddenActions: root.hiddenActions
         visible: root.footer == actionsToolBar
     }
 }

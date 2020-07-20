@@ -33,8 +33,10 @@ Item {
     * This list of actions is for those you always want in the menu, even if there
     * is enough space.
     * @since 2.6
+    * @deprecated since 2.14, use the AlwaysHide hint on actions instead.
     */
     property list<QtObject> hiddenActions
+    onHiddenActionsChanged: print("ActionToolBar::hiddenActions is deprecated, use the AlwaysHide hint on your actions instead")
 
     /**
      * flat: bool
