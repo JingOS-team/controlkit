@@ -16,6 +16,12 @@ ToolBarLayoutDelegate::ToolBarLayoutDelegate(ToolBarLayout* parent)
 
 ToolBarLayoutDelegate::~ToolBarLayoutDelegate()
 {
+    if (m_full) {
+        delete m_full;
+    }
+    if (m_icon) {
+        delete m_icon;
+    }
 }
 
 QObject * ToolBarLayoutDelegate::action() const
