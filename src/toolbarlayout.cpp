@@ -111,6 +111,11 @@ void ToolBarLayout::addAction(QObject* action)
 
 void ToolBarLayout::removeAction(QObject* action)
 {
+    auto itr = d->delegates.find(action);
+    if (itr != d->delegates.end()) {
+        itr->second->hide();
+    }
+
     d->actions.removeOne(action);
     d->removedActions.append(action);
     d->removalTimer->start();
@@ -119,9 +124,15 @@ void ToolBarLayout::removeAction(QObject* action)
 
 void ToolBarLayout::clearActions()
 {
+    for (auto action : d->actions) {
+        auto itr = d->delegates.find(action);
+        if (itr != d->delegates.end()) {
+            itr->second->hide();
+        }
+    }
+
     d->removedActions.append(d->actions);
     d->actions.clear();
-    d->delegates.clear();
     relayout();
 }
 
