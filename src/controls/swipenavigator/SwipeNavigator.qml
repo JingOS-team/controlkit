@@ -14,11 +14,12 @@ import org.kde.kirigami 2.13 as Kirigami
  * 
  * @include swipenavigator/main.qml
  */
-GridLayout {
+Item {
     id: swipeNavigatorRoot
-    rowSpacing: 0
-    columns: 1
 
+    implicitWidth: stackView.implicitWidth
+    implicitHeight: stackView.implicitHeight
+    
     /**
      * pages: list<Kirigami.Page>
      *
@@ -111,64 +112,11 @@ GridLayout {
         }
     }
 
-    ToolBar {
-        id: topToolBar
-
-        padding: 0
-        bottomPadding: 1
-        position: Kirigami.Settings.isMobile ? ToolBar.Footer : ToolBar.Header
-
-        Layout.row: Kirigami.Settings.isMobile ? 1 : 0
-
-        GridLayout {
-            id: _grid
-
-            rowSpacing: 0
-            columnSpacing: 0
-            anchors.fill: parent
-            rows: 2
-            columns: 3
-
-            // Row one
-            Item { id: _spacer; Layout.row: 0; Layout.column: 1; Layout.fillWidth: true }
-            Item { id: _dummyOne; Layout.row: 0; Layout.column: 0 }
-            Item { id: _dummyTwo; Layout.row: 0; Layout.column: 2 }
-
-            // Row two
-            Loader { id: _header; sourceComponent: swipeNavigatorRoot.header; Layout.row: 1; Layout.column: 0 }
-            PrivateSwipeTabBarLoader {
-                id: __main
-                readonly property int offset: _header.width - _footer.width
-                readonly property int effectiveOffset: _gridManager.tall ? 0 : offset
-                Layout.rightMargin: effectiveOffset > 0 ? effectiveOffset : 0
-                Layout.leftMargin: effectiveOffset < 0 ? -effectiveOffset : 0
-                Layout.fillHeight: true
-                Layout.alignment: Qt.AlignHCenter
-                Layout.row: 1
-                Layout.column: 1
-                states: [
-                    State {
-                        name: "shouldScroll"
-                        when: __main.shouldScroll
-                        PropertyChanges { target: __main; Layout.fillWidth: true }
-                    }
-                ]
-            }
-            Loader { id: _footer; sourceComponent: swipeNavigatorRoot.footer; Layout.row: 1; Layout.column: 2 }
-        }
-
-        Layout.fillWidth: true
-
-        Accessible.role: Accessible.PageTabList
-    }
 
     StackView {
         id: stackView
 
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-
-        Layout.row: Kirigami.Settings.isMobile ? 0 : 1
+        anchors.fill: parent
 
         function clear() {
             //don't let it kill the main page row
@@ -178,17 +126,78 @@ GridLayout {
             }
         }
 
-        initialItem: Kirigami.ColumnView {
-            id: columnView
-            columnResizeMode: Kirigami.ColumnView.SingleColumn
+        initialItem: GridLayout {
+            id: swipeNavigatorGrid
+            rowSpacing: 0
+            columns: 1
 
-            contentChildren: swipeNavigatorRoot.pages
+            ToolBar {
+                id: topToolBar
 
-            Component.onCompleted: {
-                columnView.currentIndex = 0
+                padding: 0
+                bottomPadding: 1
+                position: Kirigami.Settings.isMobile ? ToolBar.Footer : ToolBar.Header
+
+                Layout.row: Kirigami.Settings.isMobile ? 1 : 0
+
+                GridLayout {
+                    id: _grid
+
+                    rowSpacing: 0
+                    columnSpacing: 0
+                    anchors.fill: parent
+                    rows: 2
+                    columns: 3
+
+                    // Row one
+                    Item { id: _spacer; Layout.row: 0; Layout.column: 1; Layout.fillWidth: true }
+                    Item { id: _dummyOne; Layout.row: 0; Layout.column: 0 }
+                    Item { id: _dummyTwo; Layout.row: 0; Layout.column: 2 }
+
+                    // Row two
+                    Loader { id: _header; sourceComponent: swipeNavigatorRoot.header; Layout.row: 1; Layout.column: 0 }
+                    PrivateSwipeTabBarLoader {
+                        id: __main
+                        readonly property int offset: _header.width - _footer.width
+                        readonly property int effectiveOffset: _gridManager.tall ? 0 : offset
+                        Layout.rightMargin: effectiveOffset > 0 ? effectiveOffset : 0
+                        Layout.leftMargin: effectiveOffset < 0 ? -effectiveOffset : 0
+                        Layout.fillHeight: true
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.row: 1
+                        Layout.column: 1
+                        states: [
+                            State {
+                                name: "shouldScroll"
+                                when: __main.shouldScroll
+                                PropertyChanges { target: __main; Layout.fillWidth: true }
+                            }
+                        ]
+                    }
+                    Loader { id: _footer; sourceComponent: swipeNavigatorRoot.footer; Layout.row: 1; Layout.column: 2 }
+                }
+
+                Layout.fillWidth: true
+
+                Accessible.role: Accessible.PageTabList
+            }
+
+
+            Kirigami.ColumnView {
+                id: columnView
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.row: Kirigami.Settings.isMobile ? 0 : 1
+
+                columnResizeMode: Kirigami.ColumnView.SingleColumn
+
+                contentChildren: swipeNavigatorRoot.pages
+
+                Component.onCompleted: {
+                    columnView.currentIndex = 0
+                }
             }
         }
-
         popEnter: Transition {
             OpacityAnimator {
                 from: 0
