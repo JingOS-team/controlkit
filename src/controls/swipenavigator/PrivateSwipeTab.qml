@@ -11,7 +11,7 @@ import org.kde.kirigami 2.12 as Kirigami
 
 Rectangle {
     id: tabRoot
-    property bool small: false
+    property bool vertical: false
     signal indexChanged(real xPos, real tabWidth)
 
     Keys.onPressed: {
@@ -20,9 +20,8 @@ Rectangle {
         }
     }
     activeFocusOnTab: true
-    implicitHeight: swipeNavigatorRoot.big
-                    ? small ? Kirigami.Units.gridUnit*5 : Kirigami.Units.gridUnit*4
-                    : small ? Kirigami.Units.gridUnit*3 : Kirigami.Units.gridUnit*2
+    implicitWidth: vertical ? verticalTitleRow.implicitWidth : horizontalTitleRow.implicitWidth
+    implicitHeight: vertical ? verticalTitleRow.implicitHeight : horizontalTitleRow.implicitHeight
 
     onActiveFocusChanged: {
         if (activeFocus) {
@@ -60,7 +59,6 @@ Rectangle {
     Accessible.focusable: true
     Accessible.onPressAction: columnView.currentIndex = index
 
-    implicitWidth: small ? smallTitleRow.implicitWidth : largeTitleRow.implicitWidth
     border {
         width: activeFocus ? 2 : 0
         color: Kirigami.Theme.textColor
@@ -89,20 +87,22 @@ Rectangle {
     }
 
     RowLayout {
-        id: smallTitleRow
+        id: verticalTitleRow
         anchors.fill: parent
         Accessible.ignored: true
-        visible: small
+        visible: vertical
 
         ColumnLayout {
             Layout.margins: Kirigami.Settings.isMobile ? Kirigami.Units.smallSpacing : Kirigami.Units.largeSpacing
-            Layout.alignment: Qt.AlignVCenter
+            Layout.alignment: Qt.AlignCenter
 
             Kirigami.Icon {
                 visible: !!modelData.icon.name
                 source: modelData.icon.name
 
-                Layout.preferredHeight: swipeNavigatorRoot.big ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.small
+                Layout.preferredHeight: swipeNavigatorRoot.big
+                    ? Kirigami.Units.iconSizes.medium
+                    : (Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.smallMedium : Kirigami.Units.iconSizes.small)
                 Layout.preferredWidth: Layout.preferredHeight
 
                 Layout.alignment: (Qt.AlignHCenter | Qt.AlignBottom)
@@ -110,18 +110,20 @@ Rectangle {
             Kirigami.Heading {
                 level: swipeNavigatorRoot.big ? 2 : 5
                 text: modelData.title
+                horizontalAlignment: Text.AlignHCenter
+                elide: Text.ElideRight
 
                 Layout.fillWidth: true
-                Layout.alignment: (Qt.AlignLeft | Qt.AlignVCenter)
+                Layout.alignment: Qt.AlignCenter
             }
         }
     }
 
     RowLayout {
-        id: largeTitleRow
+        id: horizontalTitleRow
         anchors.fill: parent
         Accessible.ignored: true
-        visible: !small
+        visible: !vertical
 
         RowLayout {
             Layout.margins: swipeNavigatorRoot.big ? Kirigami.Units.largeSpacing*2 : Kirigami.Units.largeSpacing
@@ -131,7 +133,9 @@ Rectangle {
                 visible: !!modelData.icon.name
                 source: modelData.icon.name
 
-                Layout.preferredHeight: swipeNavigatorRoot.big ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.small
+                Layout.preferredHeight: swipeNavigatorRoot.big
+                    ? Kirigami.Units.iconSizes.medium
+                    : (Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.smallMedium : Kirigami.Units.iconSizes.small)
                 Layout.preferredWidth: Layout.preferredHeight
 
                 Layout.alignment: (Qt.AlignLeft | Qt.AlignVCenter)

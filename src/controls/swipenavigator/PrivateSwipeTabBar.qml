@@ -5,6 +5,7 @@
  */
 
 import QtQuick 2.12
+
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import org.kde.kirigami 2.12 as Kirigami
@@ -19,7 +20,7 @@ RowLayout {
             id: expandedLayouter
             Repeater {
                 model: swipeNavigatorRoot.pages
-                delegate: PrivateSwipeTab { small: false }
+                delegate: PrivateSwipeTab { vertical: false }
             }
         }
     }
@@ -28,8 +29,11 @@ RowLayout {
         model: swipeNavigatorRoot.pages
         delegate: PrivateSwipeTab {
             Layout.fillHeight: true
+            Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
-            small: expandedLayouter.width > swipeNavigatorRoot.width
+            vertical: Kirigami.Settings.isMobile
+                ? (swipeNavigatorRoot.width < swipeNavigatorRoot.height ? true : expandedLayouter.width > swipeNavigatorRoot.width)
+                : expandedLayouter.width > swipeNavigatorRoot.width
             onIndexChanged: swipeTabBarRoot.indexChanged(xPos, tabWidth)
         }
     }

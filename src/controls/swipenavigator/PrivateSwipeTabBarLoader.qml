@@ -17,7 +17,7 @@ Loader {
             id: shrunkLayouter
             Repeater {
                 model: swipeNavigatorRoot.pages
-                delegate: PrivateSwipeTab { small: true }
+                delegate: PrivateSwipeTab { vertical: true }
             }
         }
     }

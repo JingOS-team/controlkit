@@ -163,6 +163,7 @@ Item {
                         Layout.rightMargin: effectiveOffset > 0 ? effectiveOffset : 0
                         Layout.leftMargin: effectiveOffset < 0 ? -effectiveOffset : 0
                         Layout.fillHeight: true
+                        Layout.fillWidth: Kirigami.Settings.isMobile && swipeNavigatorRoot.height > swipeNavigatorRoot.width
                         Layout.alignment: Qt.AlignHCenter
                         Layout.row: 1
                         Layout.column: 1
