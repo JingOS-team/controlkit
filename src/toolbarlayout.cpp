@@ -420,6 +420,9 @@ ToolBarLayoutDelegate *ToolBarLayout::Private::createDelegate(QObject* action)
         auto delegate = qobject_cast<QQuickItem*>(component->beginCreate(qmlContext(q)));
         if (!delegate) {
             qWarning() << "Could not create delegate for ToolBarLayout: " << component << "does not provide an Item";
+            if (component->isError()) {
+                qWarning() << component->errorString();
+            }
             component->completeCreate();
             return nullptr;
         }
