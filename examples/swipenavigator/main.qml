@@ -1,9 +1,16 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.2
 import org.kde.kirigami 2.13 as Kirigami
 
 Kirigami.ApplicationWindow {
     Kirigami.SwipeNavigator {
         anchors.fill: parent
+        header: Button {
+            text: "Header"
+        }
+        footer: Button {
+            text: "Footer"
+        }
         Kirigami.Page {
             icon.name: "globe"
             title: "World Clocks"

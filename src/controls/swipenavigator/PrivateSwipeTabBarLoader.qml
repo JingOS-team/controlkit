@@ -9,54 +9,38 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import org.kde.kirigami 2.12 as Kirigami
 
-Loader {
-    id: __loader
-    readonly property bool shouldScroll: shrunkLayouter.width > swipeNavigatorRoot.width
-    property Item layouter: Item {
-        Row {
-            id: shrunkLayouter
-            Repeater {
-                model: swipeNavigatorRoot.pages
-                delegate: PrivateSwipeTab { vertical: true }
+ScrollView {
+    id: view
+    implicitWidth: bar.implicitWidth
+    ScrollBar.horizontal.visible: false
+
+    Item {
+        height: view.height
+        implicitHeight: bar.implicitHeight
+        implicitWidth: bar.implicitWidth
+        width: Math.max(view.width, bar.implicitWidth)
+        PrivateSwipeTabBar {
+            id: bar
+            anchors.centerIn: parent
+            width: Kirigami.Settings.isMobile && swipeNavigatorRoot.height > swipeNavigatorRoot.width ? parent.width : implicitWidth
+            property real targetDestination
+            NumberAnimation {
+                id: scrollAni
+                target: view.ScrollBar.horizontal
+                property: "position"
+                to: bar.targetDestination
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.OutExpo
             }
-        }
-    }
-    Component {
-        id: nonScrollable
-        PrivateSwipeTabBar {}
-    }
-    Component {
-        id: scrollable
-        ScrollView {
-            id: view
-            ScrollBar.horizontal.visible: false
-            Timer {
-                interval: 5000
-                running: true
-                repeat: true
-            }
-            PrivateSwipeTabBar {
-                id: bar
-                property real targetDestination
-                NumberAnimation {
-                    id: scrollAni
-                    target: view.ScrollBar.horizontal
-                    property: "position"
-                    to: bar.targetDestination
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.OutExpo
-                }
-                onIndexChanged: {
-                    if (xPos > (bar.width)/2) {
-                        bar.targetDestination = (1-view.ScrollBar.horizontal.size) * ((xPos+tabWidth) / bar.width)
-                        scrollAni.restart()
-                    } else {
-                        bar.targetDestination = (1-view.ScrollBar.horizontal.size) * ((xPos) / bar.width)
-                        scrollAni.restart()
-                    }
+            onIndexChanged: {
+                if (xPos > (bar.width)/2) {
+                    bar.targetDestination = (1-view.ScrollBar.horizontal.size) * ((xPos+tabWidth) / bar.width)
+                    scrollAni.restart()
+                } else {
+                    bar.targetDestination = (1-view.ScrollBar.horizontal.size) * ((xPos) / bar.width)
+                    scrollAni.restart()
                 }
             }
         }
     }
-    sourceComponent: shouldScroll ? scrollable : nonScrollable
 }

@@ -59,7 +59,7 @@ Item {
 
     QtObject {
         id: _gridManager
-        readonly property bool tall: (_header.width + __main.item.width + Math.abs(__main.offset) + _footer.width) > swipeNavigatorRoot.width
+        readonly property bool tall: (_header.width + __main.implicitWidth + Math.abs(__main.offset) + _footer.width) > swipeNavigatorRoot.width
         readonly property int rowOne: Kirigami.Settings.isMobile ? 1 : 0
         readonly property int rowTwo: Kirigami.Settings.isMobile ? 0 : 1
         readonly property int rowDirection: Kirigami.Settings.isMobile ? 1 : -1
@@ -102,6 +102,7 @@ Item {
                             // Move the header and footer down into the empty space
                             _header.Layout.row -= _gridManager.rowDirection
                             _footer.Layout.row -= _gridManager.rowDirection
+
                             // Now we can bring these guys back in
                             _dummyOne.visible = false
                             _dummyTwo.visible = false
@@ -163,17 +164,11 @@ Item {
                         Layout.rightMargin: effectiveOffset > 0 ? effectiveOffset : 0
                         Layout.leftMargin: effectiveOffset < 0 ? -effectiveOffset : 0
                         Layout.fillHeight: true
-                        Layout.fillWidth: Kirigami.Settings.isMobile && swipeNavigatorRoot.height > swipeNavigatorRoot.width
+                        Layout.fillWidth: true//Kirigami.Settings.isMobile && swipeNavigatorRoot.height > swipeNavigatorRoot.width
                         Layout.alignment: Qt.AlignHCenter
                         Layout.row: 1
                         Layout.column: 1
-                        states: [
-                            State {
-                                name: "shouldScroll"
-                                when: __main.shouldScroll
-                                PropertyChanges { target: __main; Layout.fillWidth: true }
-                            }
-                        ]
+
                     }
                     Loader { id: _footer; sourceComponent: swipeNavigatorRoot.footer; Layout.row: 1; Layout.column: 2 }
                 }
