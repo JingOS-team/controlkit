@@ -35,6 +35,7 @@ class ToolBarLayout : public QQuickItem
     Q_PROPERTY(qreal spacing READ spacing WRITE setSpacing NOTIFY spacingChanged)
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment NOTIFY alignmentChanged)
     Q_PROPERTY(qreal visibleWidth READ visibleWidth NOTIFY visibleWidthChanged)
+    Q_PROPERTY(qreal minimumWidth READ minimumWidth NOTIFY minimumWidthChanged)
 
 public:
     using ActionsProperty = QQmlListProperty<QObject>;
@@ -72,6 +73,9 @@ public:
 
     qreal visibleWidth() const;
     Q_SIGNAL void visibleWidthChanged();
+
+    qreal minimumWidth() const;
+    Q_SIGNAL void minimumWidthChanged();
 
     Q_SLOT void relayout();
 

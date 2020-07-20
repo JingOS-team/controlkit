@@ -233,6 +233,11 @@ qreal ToolBarLayout::visibleWidth() const
     return d->visibleWidth;
 }
 
+qreal ToolBarLayout::minimumWidth() const
+{
+    return d->moreButtonInstance ? d->moreButtonInstance->width() : 0;
+}
+
 void ToolBarLayout::relayout()
 {
     if (d->completed && !d->layouting) {
@@ -408,7 +413,11 @@ QVector<ToolBarLayoutDelegate*> ToolBarLayout::Private::createDelegates()
         connect(moreButtonInstance, &QQuickItem::visibleChanged, q, [this]() {
             moreButtonInstance->setVisible(!hiddenActions.isEmpty());
         });
+        connect(moreButtonInstance, &QQuickItem::widthChanged, q, [this]() {
+            Q_EMIT q->minimumWidthChanged();
+        });
         moreButton->completeCreate();
+        Q_EMIT q->minimumWidthChanged();
     }
 
     return result;
