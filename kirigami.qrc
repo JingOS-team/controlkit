@@ -88,7 +88,6 @@
         <file alias="swipenavigator/PrivateSwipeStack.qml">src/controls/swipenavigator/PrivateSwipeStack.qml</file>
         <file alias="swipenavigator/PrivateSwipeTab.qml">src/controls/swipenavigator/PrivateSwipeTab.qml</file>
         <file alias="swipenavigator/PrivateSwipeTabBar.qml">src/controls/swipenavigator/PrivateSwipeTabBar.qml</file>
-        <file alias="swipenavigator/PrivateSwipeTabBarLoader.qml">src/controls/swipenavigator/PrivateSwipeTabBarLoader.qml</file>
         <file alias="swipenavigator/SwipeNavigator.qml">src/controls/swipenavigator/SwipeNavigator.qml</file>
         <file alias="styles/Material/AbstractListItem.qml">src/styles/Material/AbstractListItem.qml</file>
         <file alias="styles/Material/Theme.qml">src/styles/Material/Theme.qml</file>

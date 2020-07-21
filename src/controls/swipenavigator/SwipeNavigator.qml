@@ -157,7 +157,7 @@ Item {
 
                     // Row two
                     Loader { id: _header; sourceComponent: swipeNavigatorRoot.header; Layout.row: 1; Layout.column: 0 }
-                    PrivateSwipeTabBarLoader {
+                    PrivateSwipeTabBar {
                         id: __main
                         readonly property int offset: _header.width - _footer.width
                         readonly property int effectiveOffset: _gridManager.tall ? 0 : offset
