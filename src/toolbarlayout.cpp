@@ -53,6 +53,7 @@ public:
     qreal spacing = 0.0;
     Qt::Alignment alignment = Qt::AlignLeft;
     qreal visibleWidth = 0.0;
+    Qt::LayoutDirection layoutDirection = Qt::LeftToRight;
 
     bool completed = false;
     bool layoutQueued = false;
@@ -238,6 +239,23 @@ qreal ToolBarLayout::minimumWidth() const
     return d->moreButtonInstance ? d->moreButtonInstance->width() : 0;
 }
 
+Qt::LayoutDirection ToolBarLayout::layoutDirection() const
+{
+    return d->layoutDirection;
+}
+
+void ToolBarLayout::setLayoutDirection(Qt::LayoutDirection &newLayoutDirection)
+{
+    if (newLayoutDirection == d->layoutDirection) {
+        return;
+    }
+
+    d->layoutDirection = newLayoutDirection;
+    relayout();
+    Q_EMIT layoutDirectionChanged();
+}
+
+
 void ToolBarLayout::relayout()
 {
     if (d->completed && !d->layouting) {
@@ -326,6 +344,9 @@ void ToolBarLayout::Private::performLayout()
     maxWidth -= spacing;
 
     qreal layoutWidth = q->width() - (moreButtonInstance->width() + spacing);
+    if (alignment & Qt::AlignHCenter) {
+        layoutWidth -= (moreButtonInstance->width() + spacing);
+    }
 
     qreal visibleActionsWidth = 0.0;
 
@@ -350,7 +371,11 @@ void ToolBarLayout::Private::performLayout()
 
     if (!hiddenActions.isEmpty()) {
         moreButtonInstance->setVisible(true);
-        moreButtonInstance->setX(q->width() - moreButtonInstance->width());
+        if (layoutDirection == Qt::LeftToRight) {
+            moreButtonInstance->setX(q->width() - moreButtonInstance->width());
+        } else {
+            moreButtonInstance->setX(0.0);
+        }
         moreButtonInstance->setY(qRound((maxHeight - moreButtonInstance->height()) / 2.0));
     } else {
         moreButtonInstance->setVisible(false);
@@ -362,9 +387,15 @@ void ToolBarLayout::Private::performLayout()
             continue;
         }
 
-        entry->setPosition(currentX, qRound((maxHeight - entry->height()) / 2.0));
+        qreal y = qRound((maxHeight - entry->height()) / 2.0);
 
-        currentX += entry->width() + spacing;
+        if (layoutDirection == Qt::LeftToRight) {
+            entry->setPosition(currentX, y);
+            currentX += entry->width() + spacing;
+        } else {
+            entry->setPosition(currentX - entry->width(), y);
+            currentX -= entry->width() + spacing;
+        }
     }
 
     q->setImplicitSize(maxWidth, maxHeight);
@@ -469,11 +500,12 @@ qreal ToolBarLayout::Private::layoutStart(qreal layoutWidth)
     qreal availableWidth = moreButtonInstance->isVisible() ? q->width() - (moreButtonInstance->width() + spacing) : q->width();
 
     if (alignment & Qt::AlignLeft) {
-        return 0.0;
+        return layoutDirection == Qt::LeftToRight ? 0.0 : q->width();
     } else if (alignment & Qt::AlignHCenter) {
-        return std::floor((availableWidth - layoutWidth) / 2.0);
+        return (q->width() / 2) + (layoutDirection == Qt::LeftToRight ? -layoutWidth / 2.0 : layoutWidth / 2.0);
     } else if (alignment & Qt::AlignRight) {
-        return availableWidth - layoutWidth;
+        qreal offset = availableWidth - layoutWidth;
+        return layoutDirection == Qt::LeftToRight ? offset : q->width() - offset;
     }
     return 0.0;
 }

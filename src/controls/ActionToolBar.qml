@@ -99,6 +99,7 @@ Item {
         id: layout
         anchors.fill: parent
         spacing: Kirigami.Units.smallSpacing
+        layoutDirection: root.LayoutMirroring.enabled ? Qt.RightToLeft : Qt.LeftToRight
 
         fullDelegate: PrivateActionToolButton {
             flat: root.flat && !action.icon.color.a
