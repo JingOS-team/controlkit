@@ -97,17 +97,17 @@ bool ToolBarLayoutDelegate::isActionVisible() const
 
 bool ToolBarLayoutDelegate::isHidden() const
 {
-    return (m_displayHint & DisplayHint::AlwaysHide);
+    return DisplayHint::isDisplayHintSet(m_displayHint, DisplayHint::AlwaysHide);
 }
 
 bool ToolBarLayoutDelegate::isIconOnly() const
 {
-    return (m_displayHint & DisplayHint::IconOnly);
+    return DisplayHint::isDisplayHintSet(m_displayHint, DisplayHint::IconOnly);
 }
 
 bool ToolBarLayoutDelegate::isKeepVisible() const
 {
-    return (m_displayHint & DisplayHint::KeepVisible);
+    return DisplayHint::isDisplayHintSet(m_displayHint, DisplayHint::KeepVisible);
 }
 
 bool ToolBarLayoutDelegate::isVisible() const

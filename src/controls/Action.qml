@@ -128,13 +128,12 @@ Controls.Action {
      * @return true if the hint was set for this action, false if not.
      *
      * @since 2.12
+     *
+     * @deprecated since 2.14, Use DisplayHint.displayHintSet(action, hint) instead.
      */
     function displayHintSet(hint) {
-        if (hint === Kirigami.DisplayHint.AlwaysHide && (displayHint & Kirigami.DisplayHint.KeepVisible)) {
-            return false;
-        }
-
-        return (displayHint & hint)
+        print("Action::displayHintSet is deprecated, use DisplayHint.displayHintSet(action, hint)")
+        return Kirigami.DisplayHint.displayHintSet(root, hint);
     }
 
     /**

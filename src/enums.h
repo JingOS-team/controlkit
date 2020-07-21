@@ -47,14 +47,15 @@ public:
     };
 };
 
-namespace DisplayHint
+class DisplayHint : public QObject
 {
-    Q_NAMESPACE
+    Q_OBJECT
 
+public:
     /**
      * Hints for implementations using Actions indicating preferences about how to display the action.
      */
-    enum DisplayHint {
+    enum Hint {
         /**
          * Indicates there is no specific preference.
          */
@@ -79,9 +80,51 @@ namespace DisplayHint
          */
         HideChildIndicator = 8
     };
-    Q_DECLARE_FLAGS(DisplayHints, DisplayHint)
-    Q_FLAG_NS(DisplayHints)
-}
+    Q_DECLARE_FLAGS(DisplayHints, Hint)
+    Q_ENUM(Hint)
+    Q_FLAG(DisplayHints)
+
+    // Note: These functions are instance methods because they need to be
+    // exposed to QML. Unfortunately static methods are not supported.
+
+    /**
+     * Helper function to check if a certain display hint has been set.
+     *
+     * This function is mostly convenience to enforce certain behaviour of the
+     * various display hints, primarily the mutual exclusivity of KeepVisible
+     * and AlwaysHide.
+     *
+     * @param values The display hints to check.
+     * @param hint The display hint to check if it is set.
+     *
+     * @return true if the hint was set for this action, false if not.
+     *
+     * @since 2.14
+     */
+    Q_INVOKABLE bool displayHintSet(DisplayHints values, Hint hint);
+
+    /**
+     * Check if a certain display hint has been set on an object.
+     *
+     * This overloads @f displayHintSet(DisplayHints, Hint) to accept a QObject
+     * instance. This object is checked to see if it has a displayHint property
+     * and if so, if that property has @p hint set.
+     *
+     * @param object The object to check.
+     * @param hint The hint to check for.
+     *
+     * @return false if object is null, object has no displayHint property or
+     *         the hint was not set. true if it has the property and the hint is
+     *         set.
+     */
+    Q_INVOKABLE bool displayHintSet(QObject *object, Hint hint);
+
+    /**
+     * Static version of \f displayHintSet(DisplayHints, Hint) that can be
+     * called from C++ code.
+     */
+    static bool isDisplayHintSet(DisplayHints values, Hint hint);
+};
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DisplayHint::DisplayHints)
 

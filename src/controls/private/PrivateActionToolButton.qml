@@ -24,8 +24,7 @@ Controls.ToolButton {
 
     display: Controls.ToolButton.TextBesideIcon
 
-    property bool showMenuArrow: !(action && action.displayHint !== undefined
-                                   && action.displayHintSet(DisplayHint.HideChildIndicator))
+    property bool showMenuArrow: !DisplayHint.displayHintSet(action, DisplayHint.HideChildIndicator)
 
     property var menuActions: {
         if (action && action.hasOwnProperty("children")) {
