@@ -61,6 +61,7 @@ public:
     std::unordered_map<QObject*, std::unique_ptr<ToolBarLayoutDelegate>> delegates;
     QVector<ToolBarLayoutDelegate*> sortedDelegates;
     QQuickItem *moreButtonInstance = nullptr;
+    ToolBarDelegateIncubator *moreButtonIncubator = nullptr;
 
     QVector<QObject*> removedActions;
     QTimer *removalTimer = nullptr;
@@ -306,9 +307,11 @@ void ToolBarLayout::Private::performLayout()
 
     sortedDelegates = createDelegates();
 
-    if (sortedDelegates.size() != actions.size() || !moreButtonInstance) {
+    bool ready = std::all_of(delegates.cbegin(), delegates.cend(), [](const std::pair<QObject* const, std::unique_ptr<ToolBarLayoutDelegate>> &entry) {
+        return entry.second->isReady();
+    });
+    if (!ready || !moreButtonInstance) {
         layouting = false;
-        q->relayout();
         return;
     }
 
@@ -415,18 +418,7 @@ QVector<ToolBarLayoutDelegate*> ToolBarLayout::Private::createDelegates()
 {
     QVector<ToolBarLayoutDelegate*> result;
 
-    // To prevent long delays when creating a ToolBarLayout, this limits the
-    // maximum amount of time that can be taken to create delegates. Should the
-    // deadline pass, we will return a partial list of delegates and layouting
-    // will be skipped, to be resumed at the next frame. Since we cache
-    // delegates, the next run will continue where we left off. This way we can
-    // spread delegate creation over several frames. There are probably other
-    // ways to do this, but this approach is nice and compact code-wise.
-    QDeadlineTimer timer(10);
-
-    int index = 0;
-    do {
-        auto action = actions.at(index++);
+    for (auto action : qAsConst(actions)) {
         if (delegates.find(action) != delegates.end()) {
             result.append(delegates.at(action).get());
         } else {
@@ -436,19 +428,28 @@ QVector<ToolBarLayoutDelegate*> ToolBarLayout::Private::createDelegates()
                 delegates.emplace(action, std::move(delegate));
             }
         }
-    } while (!timer.hasExpired() && index < actions.size());
+    }
 
-    if (!moreButtonInstance && !timer.hasExpired()) {
-        moreButtonInstance = qobject_cast<QQuickItem*>(moreButton->beginCreate(qmlContext(q)));
-        moreButtonInstance->setParentItem(q);
-        connect(moreButtonInstance, &QQuickItem::visibleChanged, q, [this]() {
-            moreButtonInstance->setVisible(!hiddenActions.isEmpty());
+    if (!moreButtonInstance && !moreButtonIncubator) {
+        moreButtonIncubator = new ToolBarDelegateIncubator(moreButton, qmlContext(q));
+        moreButtonIncubator->setStateCallback([this](QQuickItem *item) {
+            item->setParentItem(q);
         });
-        connect(moreButtonInstance, &QQuickItem::widthChanged, q, [this]() {
+        moreButtonIncubator->setCompletedCallback([this](ToolBarDelegateIncubator* incubator) {
+            moreButtonInstance = qobject_cast<QQuickItem*>(incubator->object());
+            connect(moreButtonInstance, &QQuickItem::visibleChanged, q, [this]() {
+                moreButtonInstance->setVisible(!hiddenActions.isEmpty());
+            });
+            connect(moreButtonInstance, &QQuickItem::widthChanged, q, [this]() {
+                Q_EMIT q->minimumWidthChanged();
+            });
+            q->relayout();
             Q_EMIT q->minimumWidthChanged();
+
+            delete incubator;
+            moreButtonIncubator = nullptr;
         });
-        moreButton->completeCreate();
-        Q_EMIT q->minimumWidthChanged();
+        moreButtonIncubator->create();
     }
 
     return result;
@@ -456,27 +457,6 @@ QVector<ToolBarLayoutDelegate*> ToolBarLayout::Private::createDelegates()
 
 ToolBarLayoutDelegate *ToolBarLayout::Private::createDelegate(QObject* action)
 {
-    auto create = [this, action](QQmlComponent *component) -> QQuickItem * {
-        auto delegate = qobject_cast<QQuickItem*>(component->beginCreate(qmlContext(q)));
-        if (!delegate) {
-            qWarning() << "Could not create delegate for ToolBarLayout: " << component << "does not provide an Item";
-            if (component->isError()) {
-                qWarning() << component->errorString();
-            }
-            component->completeCreate();
-            return nullptr;
-        }
-
-        delegate->setParentItem(q);
-
-        auto attached = static_cast<ToolBarLayoutAttached *>(qmlAttachedPropertiesObject<ToolBarLayout>(delegate, true));
-        attached->setAction(action);
-
-        component->completeCreate();
-
-        return delegate;
-    };
-
     QQmlComponent *fullComponent = nullptr;
     auto displayComponent = action->property("displayComponent");
     if (displayComponent.isValid()) {
@@ -489,8 +469,11 @@ ToolBarLayoutDelegate *ToolBarLayout::Private::createDelegate(QObject* action)
 
     auto result = new ToolBarLayoutDelegate(q);
     result->setAction(action);
-    result->setFull(create(fullComponent));
-    result->setIcon(create(iconDelegate));
+    result->createItems(fullComponent, iconDelegate, qmlContext(q), [this, action](QQuickItem *newItem) {
+        newItem->setParentItem(q);
+        auto attached = static_cast<ToolBarLayoutAttached*>(qmlAttachedPropertiesObject<ToolBarLayout>(newItem, true));
+        attached->setAction(action);
+    });
 
     return result;
 }

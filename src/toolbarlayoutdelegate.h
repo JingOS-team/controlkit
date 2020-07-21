@@ -8,9 +8,30 @@
 #define TOOLBARLAYOUTDELEGATE_H
 
 #include <QQuickItem>
+#include <QQmlIncubator>
 #include "enums.h"
 
 class ToolBarLayout;
+
+class ToolBarDelegateIncubator : public QQmlIncubator
+{
+public:
+    ToolBarDelegateIncubator(QQmlComponent *component, QQmlContext *context);
+
+    void setStateCallback(std::function<void(QQuickItem*)> callback);
+    void setCompletedCallback(std::function<void(ToolBarDelegateIncubator*)> callback);
+
+    void create();
+
+private:
+    void setInitialState(QObject *object) override;
+    void statusChanged(QQmlIncubator::Status status) override;
+
+    QQmlComponent *m_component;
+    QQmlContext *m_context;
+    std::function<void(QQuickItem*)> m_stateCallback;
+    std::function<void(ToolBarDelegateIncubator*)> m_completedCallback;
+};
 
 class ToolBarLayoutDelegate : public QObject
 {
@@ -21,9 +42,9 @@ public:
 
     QObject *action() const;
     void setAction(QObject *action);
-    void setFull(QQuickItem *full);
-    void setIcon(QQuickItem *icon);
+    void createItems(QQmlComponent *fullComponent, QQmlComponent *iconComponent, QQmlContext *context, std::function<void(QQuickItem*)> callback);
 
+    bool isReady() const;
     bool isActionVisible() const;
     bool isHidden() const;
     bool isIconOnly() const;
@@ -43,8 +64,6 @@ public:
     qreal iconWidth() const;
     qreal fullWidth() const;
 
-    DisplayHint::DisplayHints displayHint();
-
 private:
     Q_SLOT void actionVisibleChanged();
     Q_SLOT void displayHintChanged();
@@ -62,8 +81,11 @@ private:
     QObject *m_action = nullptr;
     QQuickItem *m_full = nullptr;
     QQuickItem *m_icon = nullptr;
+    ToolBarDelegateIncubator *m_fullIncubator = nullptr;
+    ToolBarDelegateIncubator *m_iconIncubator = nullptr;
 
     DisplayHint::DisplayHints m_displayHint = DisplayHint::NoPreference;
+    bool m_ready = false;
     bool m_actionVisible = true;
     bool m_visible = true;
     bool m_fullVisible = true;

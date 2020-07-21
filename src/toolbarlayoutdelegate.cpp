@@ -6,7 +6,54 @@
 
 #include "toolbarlayoutdelegate.h"
 
+#include <QQmlIncubator>
+
 #include "toolbarlayout.h"
+
+ToolBarDelegateIncubator::ToolBarDelegateIncubator(QQmlComponent* component, QQmlContext *context)
+    : QQmlIncubator(QQmlIncubator::Asynchronous)
+    , m_component(component)
+    , m_context(context)
+{
+}
+
+void ToolBarDelegateIncubator::setStateCallback(std::function<void (QQuickItem *)> callback)
+{
+    m_stateCallback = callback;
+}
+
+void ToolBarDelegateIncubator::setCompletedCallback(std::function<void (ToolBarDelegateIncubator *)> callback)
+{
+    m_completedCallback = callback;
+}
+
+void ToolBarDelegateIncubator::create()
+{
+    m_component->create(*this, m_context);
+}
+
+void ToolBarDelegateIncubator::setInitialState(QObject* object)
+{
+    auto item = qobject_cast<QQuickItem*>(object);
+    if (item) {
+        m_stateCallback(item);
+    }
+}
+
+void ToolBarDelegateIncubator::statusChanged(QQmlIncubator::Status status)
+{
+    if (status == QQmlIncubator::Error) {
+        qWarning() << "Could not create delegate for ToolBarLayout";
+        const auto e = errors();
+        for (auto error : e) {
+            qWarning() << error;
+        }
+    }
+
+    if (status == QQmlIncubator::Ready) {
+        m_completedCallback(this);
+    }
+}
 
 ToolBarLayoutDelegate::ToolBarLayoutDelegate(ToolBarLayout* parent)
     : QObject() // Note: delegates are managed by unique_ptr, so don't parent
@@ -54,40 +101,68 @@ void ToolBarLayoutDelegate::setAction(QObject* action)
     }
 }
 
-void ToolBarLayoutDelegate::setFull(QQuickItem* full)
+void ToolBarLayoutDelegate::createItems(QQmlComponent *fullComponent, QQmlComponent *iconComponent, QQmlContext *context, std::function<void(QQuickItem*)> callback)
 {
-    if (full == m_full) {
-        return;
-    }
+    m_fullIncubator = new ToolBarDelegateIncubator(fullComponent, context);
+    m_fullIncubator->setStateCallback(callback);
+    m_fullIncubator->setCompletedCallback([this](ToolBarDelegateIncubator *incubator) {
+        if (incubator->isError()) {
+            qWarning() << "Could not create delegate for ToolBarLayout";
+            const auto errors = incubator->errors();
+            for (auto error : errors) {
+                qWarning() << error;
+            }
+            return;
+        }
 
-    if (m_full) {
-        m_full->disconnect(this);
-    }
+        m_full = qobject_cast<QQuickItem*>(incubator->object());
+        connect(m_full, &QQuickItem::widthChanged, this, [this]() { m_parent->relayout(); });
+        connect(m_full, &QQuickItem::heightChanged, this, [this]() { m_parent->relayout(); });
+        connect(m_full, &QQuickItem::visibleChanged, this, [this]() { ensureItemVisibility(); });
 
-    m_full = full;
-    if (m_full) {
-        QObject::connect(m_full, &QQuickItem::widthChanged, this, [this]() { m_parent->relayout(); });
-        QObject::connect(m_full, &QQuickItem::heightChanged, this, [this]() { m_parent->relayout(); });
-        QObject::connect(m_full, &QQuickItem::visibleChanged, this, [this]() { ensureItemVisibility(); });
-    }
+        if (m_icon) {
+            m_ready = true;
+        }
+
+        m_parent->relayout();
+
+        delete incubator;
+        m_fullIncubator = nullptr;
+    });
+    m_iconIncubator = new ToolBarDelegateIncubator(iconComponent, context);
+    m_iconIncubator->setStateCallback(callback);
+    m_iconIncubator->setCompletedCallback([this](ToolBarDelegateIncubator *incubator) {
+        if (incubator->isError()) {
+            qWarning() << "Could not create delegate for ToolBarLayout";
+            const auto errors = incubator->errors();
+            for (auto error : errors) {
+                qWarning() << error;
+            }
+            return;
+        }
+
+        m_icon = qobject_cast<QQuickItem*>(incubator->object());
+        connect(m_icon, &QQuickItem::widthChanged, this, [this]() { m_parent->relayout(); });
+        connect(m_icon, &QQuickItem::heightChanged, this, [this]() { m_parent->relayout(); });
+        connect(m_icon, &QQuickItem::visibleChanged, this, [this]() { ensureItemVisibility(); });
+
+        if (m_full) {
+            m_ready = true;
+        }
+
+        m_parent->relayout();
+
+        delete incubator;
+        m_iconIncubator = nullptr;
+    });
+
+    m_fullIncubator->create();
+    m_iconIncubator->create();
 }
 
-void ToolBarLayoutDelegate::setIcon(QQuickItem* icon)
+bool ToolBarLayoutDelegate::isReady() const
 {
-    if (icon == m_icon) {
-        return;
-    }
-
-    if (m_icon) {
-        m_icon->disconnect(this);
-    }
-
-    m_icon = icon;
-    if (m_icon) {
-        QObject::connect(m_icon, &QQuickItem::widthChanged, this, [this]() { m_parent->relayout(); });
-        QObject::connect(m_icon, &QQuickItem::heightChanged, this, [this]() { m_parent->relayout(); });
-        QObject::connect(m_icon, &QQuickItem::visibleChanged, this, [this]() { ensureItemVisibility(); });
-    }
+    return m_ready;
 }
 
 bool ToolBarLayoutDelegate::isActionVisible() const
