@@ -163,6 +163,12 @@ Item {
                     visible: layout.hiddenActions.includes(action)
                              && (action.visible === undefined || action.visible)
                 }
+
+                separatorDelegate: Controls.MenuSeparator {
+                    property var action
+                    visible: layout.hiddenActions.includes(action)
+                             && (action.visible === undefined || action.visible)
+                }
             }
         }
     }

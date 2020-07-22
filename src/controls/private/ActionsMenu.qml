@@ -16,7 +16,7 @@ Controls.Menu
     property Component submenuComponent
     //renamed to work on both Qt 5.9 and 5.10
     property Component itemDelegate: ActionMenuItem {}
-    property Component separatorDelegate: Controls.MenuSeparator { }
+    property Component separatorDelegate: Controls.MenuSeparator { property var action }
     property Component loaderDelegate: Loader { property var action }
     property Controls.Action parentAction
     property Controls.MenuItem parentItem
@@ -36,7 +36,7 @@ Controls.Menu
             function create() {
                 if (!action.hasOwnProperty("children") && !action.children || action.children.length === 0) {
                     if (action.hasOwnProperty("separator") && action.separator) {
-                        item = theMenu.separatorDelegate.createObject(null, {});
+                        item = theMenu.separatorDelegate.createObject(null, { action: action });
                     }
                     else if (action.displayComponent) {
                         item = theMenu.loaderDelegate.createObject(null,
