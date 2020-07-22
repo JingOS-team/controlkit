@@ -156,6 +156,13 @@ Item {
                     visible: layout.hiddenActions.includes(action)
                              && (action.visible === undefined || action.visible)
                 }
+
+                loaderDelegate: Loader {
+                    property var kirigamiAction
+                    height: visible ? implicitHeight : 0
+                    visible: layout.hiddenActions.includes(kirigamiAction)
+                             && (kirigamiAction.visible === undefined || kirigamiAction.visible)
+                }
             }
         }
     }
