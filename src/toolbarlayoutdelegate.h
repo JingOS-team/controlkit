@@ -55,6 +55,7 @@ public:
     void hide();
     void showIcon();
     void showFull();
+    void show();
 
     void setPosition(qreal x, qreal y);
 
@@ -87,9 +88,8 @@ private:
     DisplayHint::DisplayHints m_displayHint = DisplayHint::NoPreference;
     bool m_ready = false;
     bool m_actionVisible = true;
-    bool m_visible = true;
-    bool m_fullVisible = true;
-    bool m_iconVisible = true;
+    bool m_fullVisible = false;
+    bool m_iconVisible = false;
 };
 
 #endif // TOOLBARLAYOUTDELEGATE_H

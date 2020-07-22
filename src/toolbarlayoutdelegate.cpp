@@ -116,9 +116,9 @@ void ToolBarLayoutDelegate::createItems(QQmlComponent *fullComponent, QQmlCompon
         }
 
         m_full = qobject_cast<QQuickItem*>(incubator->object());
+        m_full->setVisible(false);
         connect(m_full, &QQuickItem::widthChanged, this, [this]() { m_parent->relayout(); });
         connect(m_full, &QQuickItem::heightChanged, this, [this]() { m_parent->relayout(); });
-        connect(m_full, &QQuickItem::visibleChanged, this, [this]() { ensureItemVisibility(); });
 
         if (m_icon) {
             m_ready = true;
@@ -142,9 +142,9 @@ void ToolBarLayoutDelegate::createItems(QQmlComponent *fullComponent, QQmlCompon
         }
 
         m_icon = qobject_cast<QQuickItem*>(incubator->object());
+        m_icon->setVisible(false);
         connect(m_icon, &QQuickItem::widthChanged, this, [this]() { m_parent->relayout(); });
         connect(m_icon, &QQuickItem::heightChanged, this, [this]() { m_parent->relayout(); });
-        connect(m_icon, &QQuickItem::visibleChanged, this, [this]() { ensureItemVisibility(); });
 
         if (m_full) {
             m_ready = true;
@@ -201,13 +201,16 @@ void ToolBarLayoutDelegate::showFull()
 {
     m_iconVisible = false;
     m_fullVisible = true;
-    ensureItemVisibility();
 }
 
 void ToolBarLayoutDelegate::showIcon()
 {
     m_iconVisible = true;
     m_fullVisible = false;
+}
+
+void ToolBarLayoutDelegate::show()
+{
     ensureItemVisibility();
 }
 
@@ -221,7 +224,7 @@ void ToolBarLayoutDelegate::setPosition(qreal x, qreal y)
 
 qreal ToolBarLayoutDelegate::width() const
 {
-    if (m_icon->isVisible()) {
+    if (m_iconVisible) {
         return m_icon->width();
     }
     return m_full->width();
@@ -229,7 +232,7 @@ qreal ToolBarLayoutDelegate::width() const
 
 qreal ToolBarLayoutDelegate::height() const
 {
-    if (m_icon->isVisible()) {
+    if (m_iconVisible) {
         return m_icon->height();
     }
     return m_full->height();

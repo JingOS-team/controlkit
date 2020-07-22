@@ -373,13 +373,13 @@ void ToolBarLayout::Private::performLayout()
     }
 
     if (!hiddenActions.isEmpty()) {
-        moreButtonInstance->setVisible(true);
         if (layoutDirection == Qt::LeftToRight) {
             moreButtonInstance->setX(q->width() - moreButtonInstance->width());
         } else {
             moreButtonInstance->setX(0.0);
         }
         moreButtonInstance->setY(qRound((maxHeight - moreButtonInstance->height()) / 2.0));
+        moreButtonInstance->setVisible(true);
     } else {
         moreButtonInstance->setVisible(false);
     }
@@ -399,6 +399,8 @@ void ToolBarLayout::Private::performLayout()
             entry->setPosition(currentX - entry->width(), y);
             currentX -= entry->width() + spacing;
         }
+
+        entry->show();
     }
 
     q->setImplicitSize(maxWidth, maxHeight);
@@ -417,7 +419,6 @@ void ToolBarLayout::Private::performLayout()
 QVector<ToolBarLayoutDelegate*> ToolBarLayout::Private::createDelegates()
 {
     QVector<ToolBarLayoutDelegate*> result;
-
     for (auto action : qAsConst(actions)) {
         if (delegates.find(action) != delegates.end()) {
             result.append(delegates.at(action).get());
@@ -437,9 +438,8 @@ QVector<ToolBarLayoutDelegate*> ToolBarLayout::Private::createDelegates()
         });
         moreButtonIncubator->setCompletedCallback([this](ToolBarDelegateIncubator* incubator) {
             moreButtonInstance = qobject_cast<QQuickItem*>(incubator->object());
-            connect(moreButtonInstance, &QQuickItem::visibleChanged, q, [this]() {
-                moreButtonInstance->setVisible(!hiddenActions.isEmpty());
-            });
+            moreButtonInstance->setVisible(false);
+
             connect(moreButtonInstance, &QQuickItem::widthChanged, q, [this]() {
                 Q_EMIT q->minimumWidthChanged();
             });
