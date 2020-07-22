@@ -27,7 +27,7 @@ private:
 class ToolBarLayout : public QQuickItem
 {
     Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<QObject> actions READ actionsProperty CONSTANT)
+    Q_PROPERTY(QQmlListProperty<QObject> actions READ actionsProperty NOTIFY actionsChanged)
     Q_PROPERTY(QList<QObject*> hiddenActions READ hiddenActions NOTIFY hiddenActionsChanged)
     Q_PROPERTY(QQmlComponent *fullDelegate READ fullDelegate WRITE setFullDelegate NOTIFY fullDelegateChanged)
     Q_PROPERTY(QQmlComponent *iconDelegate READ iconDelegate WRITE setIconDelegate NOTIFY iconDelegateChanged)
@@ -48,6 +48,7 @@ public:
     void addAction(QObject *action);
     void removeAction(QObject *action);
     void clearActions();
+    Q_SIGNAL void actionsChanged();
 
     QList<QObject*> hiddenActions() const;
     Q_SIGNAL void hiddenActionsChanged();

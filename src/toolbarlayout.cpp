@@ -58,6 +58,7 @@ public:
     bool completed = false;
     bool layoutQueued = false;
     bool layouting = false;
+    bool actionsChanged = false;
     std::unordered_map<QObject*, std::unique_ptr<ToolBarLayoutDelegate>> delegates;
     QVector<ToolBarLayoutDelegate*> sortedDelegates;
     QQuickItem *moreButtonInstance = nullptr;
@@ -108,6 +109,8 @@ ToolBarLayout::ActionsProperty ToolBarLayout::actionsProperty() const
 void ToolBarLayout::addAction(QObject* action)
 {
     d->actions.append(action);
+    d->actionsChanged = true;
+
     relayout();
 }
 
@@ -121,6 +124,8 @@ void ToolBarLayout::removeAction(QObject* action)
     d->actions.removeOne(action);
     d->removedActions.append(action);
     d->removalTimer->start();
+    d->actionsChanged = true;
+
     relayout();
 }
 
@@ -135,6 +140,8 @@ void ToolBarLayout::clearActions()
 
     d->removedActions.append(d->actions);
     d->actions.clear();
+    d->actionsChanged = true;
+
     relayout();
 }
 
@@ -410,6 +417,14 @@ void ToolBarLayout::Private::performLayout()
     if (!qFuzzyCompare(newVisibleWidth, visibleWidth)) {
         visibleWidth = newVisibleWidth;
         Q_EMIT q->visibleWidthChanged();
+    }
+
+    if (actionsChanged) {
+        // Due to the way QQmlListProperty works, if we emit changed every time
+        // an action is added/removed, we end up emitting way too often. So
+        // instead only do it after everything else is done.
+        Q_EMIT q->actionsChanged();
+        actionsChanged = false;
     }
 
     sortedDelegates.clear();
