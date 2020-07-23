@@ -532,23 +532,20 @@ void ToolBarLayout::Private::maybeHideDelegate(int index, qreal &currentWidth, q
         // actions to hide. Finally, if that also fails, we will hide the
         // delegate.
         if (currentWidth + delegate->iconWidth() > totalWidth) {
-            auto currentIndex = sortedDelegates.indexOf(delegate);
-            for (; currentIndex >= 0; --currentIndex) {
+            // First, hide any earlier actions that are not marked as KeepVisible.
+            for (auto currentIndex = index - 1; currentIndex >= 0; --currentIndex) {
                 auto previousDelegate = sortedDelegates.at(currentIndex);
-                if (!previousDelegate->isVisible()) {
+                if (!previousDelegate->isVisible() || previousDelegate->isKeepVisible()) {
                     continue;
                 }
 
-                if (previousDelegate->isKeepVisible()) {
-                    continue;
-                } else {
-                    auto width = previousDelegate->width();
-                    previousDelegate->hide();
-                    hiddenActions.append(previousDelegate->action());
-                    currentWidth -= (width + spacing);
-                }
+                auto width = previousDelegate->width();
+                previousDelegate->hide();
+                hiddenActions.append(previousDelegate->action());
+                currentWidth -= (width + spacing);
 
                 if (currentWidth + delegate->fullWidth() <= totalWidth) {
+                    delegate->showFull();
                     break;
                 } else if (currentWidth + delegate->iconWidth() <= totalWidth) {
                     delegate->showIcon();
@@ -556,6 +553,32 @@ void ToolBarLayout::Private::maybeHideDelegate(int index, qreal &currentWidth, q
                 }
             }
 
+            if (currentWidth + delegate->width() <= totalWidth) {
+                return;
+            }
+
+            // Hiding normal actions did not help enough, so go through actions
+            // with KeepVisible set and try and collapse them to IconOnly.
+            for (auto currentIndex = index - 1; currentIndex >= 0; --currentIndex) {
+                auto previousDelegate = sortedDelegates.at(currentIndex);
+                if (!previousDelegate->isVisible() || !previousDelegate->isKeepVisible()) {
+                    continue;
+                }
+
+                auto extraSpace = previousDelegate->width() - previousDelegate->iconWidth();
+                previousDelegate->showIcon();
+                currentWidth -= extraSpace;
+
+                if (currentWidth + delegate->fullWidth() <= totalWidth) {
+                    delegate->showFull();
+                    break;
+                } else if (currentWidth + delegate->iconWidth() <= totalWidth) {
+                    delegate->showIcon();
+                    break;
+                }
+            }
+
+            // If that also did not work, then hide this action after all.
             if (currentWidth + delegate->width() > totalWidth) {
                 delegate->hide();
                 hiddenActions.append(delegate->action());
