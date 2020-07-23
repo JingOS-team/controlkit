@@ -40,7 +40,7 @@ public:
     QVector<ToolBarLayoutDelegate*> createDelegates();
     ToolBarLayoutDelegate *createDelegate(QObject *action);
     qreal layoutStart(qreal layoutWidth);
-    void maybeHideDelegate(ToolBarLayoutDelegate *delegate, qreal &currentWidth, qreal totalWidth);
+    void maybeHideDelegate(int index, qreal &currentWidth, qreal totalWidth);
 
     ToolBarLayout *q;
 
@@ -63,6 +63,7 @@ public:
     QVector<ToolBarLayoutDelegate*> sortedDelegates;
     QQuickItem *moreButtonInstance = nullptr;
     ToolBarDelegateIncubator *moreButtonIncubator = nullptr;
+    int firstHiddenIndex = -1;
 
     QVector<QObject*> removedActions;
     QTimer *removalTimer = nullptr;
@@ -311,6 +312,7 @@ void ToolBarLayout::Private::performLayout()
     layouting = true;
 
     hiddenActions.clear();
+    firstHiddenIndex = -1;
 
     sortedDelegates = createDelegates();
 
@@ -365,7 +367,7 @@ void ToolBarLayout::Private::performLayout()
         for (int i = 0; i < sortedDelegates.size(); ++i) {
             auto delegate = sortedDelegates.at(i);
 
-            maybeHideDelegate(delegate, visibleActionsWidth, layoutWidth);
+            maybeHideDelegate(i, visibleActionsWidth, layoutWidth);
 
             if (delegate->isVisible()) {
                 visibleActionsWidth += delegate->width() + spacing;
@@ -508,11 +510,18 @@ qreal ToolBarLayout::Private::layoutStart(qreal layoutWidth)
     return 0.0;
 }
 
-void ToolBarLayout::Private::maybeHideDelegate(ToolBarLayoutDelegate* delegate, qreal &currentWidth, qreal totalWidth)
+void ToolBarLayout::Private::maybeHideDelegate(int index, qreal &currentWidth, qreal totalWidth)
 {
-    if (!delegate->isVisible() || currentWidth + delegate->width() < totalWidth) {
-        // If the delegate isn't visible anyway, or is visible but fits within
-        // the current layout, do nothing.
+    auto delegate = sortedDelegates.at(index);
+
+    if (!delegate->isVisible()) {
+        // If the delegate isn't visible anyway, do nothing.
+        return;
+    }
+
+    if (currentWidth + delegate->width() < totalWidth && (firstHiddenIndex < 0 || index < firstHiddenIndex)) {
+        // If the delegate is fully visible and we have not already hidden
+        // actions, do nothing.
         return;
     }
 
@@ -559,6 +568,12 @@ void ToolBarLayout::Private::maybeHideDelegate(ToolBarLayoutDelegate* delegate, 
         // the current layout, so hide it.
         delegate->hide();
         hiddenActions.append(delegate->action());
+
+        // If this is the first item to be hidden, mark it so we know we should
+        // also hide the following items.
+        if (firstHiddenIndex < 0) {
+            firstHiddenIndex = index;
+        }
     }
 }
 
