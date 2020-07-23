@@ -265,6 +265,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     // 2.14
     qmlRegisterUncreatableType<PreloadRouteGroup>(uri, 2, 14, "PreloadRouteGroup", QStringLiteral("PreloadRouteGroup cannot be created"));
+    qmlRegisterType(componentUrl(QStringLiteral("FlexColumn.qml")), uri, 2, 14, "FlexColumn");
 
     qmlProtectModule(uri, 2);
 }
