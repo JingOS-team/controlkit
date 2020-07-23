@@ -57,6 +57,20 @@ Item {
      */
     property Component footer: Item {visible: false}
 
+    /**
+     * initialIndex: int
+     *
+     * The initial tab index of the SwipeNavigator.
+     */
+    property int initialIndex: 0
+
+    /**
+     * currentIndex: int
+     *
+     * The currently displayed index of the SwipeNavigator.
+     */
+    property alias currentIndex: columnView.currentIndex
+
     QtObject {
         id: _gridManager
         readonly property bool tall: (_header.width + __main.implicitWidth + Math.abs(__main.offset) + _footer.width) > swipeNavigatorRoot.width
@@ -190,7 +204,7 @@ Item {
                 contentChildren: swipeNavigatorRoot.pages
 
                 Component.onCompleted: {
-                    columnView.currentIndex = 0
+                    columnView.currentIndex = swipeNavigatorRoot.initialIndex
                 }
             }
         }
