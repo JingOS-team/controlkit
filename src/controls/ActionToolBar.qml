@@ -125,11 +125,11 @@ Item {
         moreButton: PrivateActionToolButton {
             flat: root.flat
 
-            text: qsTr("More Actions")
-            icon.name: root.overflowIconName
-
-            display: Controls.Button.IconOnly
-            showMenuArrow: false
+            action: Kirigami.Action {
+                tooltip: qsTr("More Actions")
+                icon.name: root.overflowIconName
+                displayHint: Kirigami.DisplayHint.IconOnly | Kirigami.DisplayHint.HideChildIndicator
+            }
 
             menuActions: {
                 if (root.hiddenActions.length == 0) {
