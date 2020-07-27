@@ -83,7 +83,7 @@ Controls.ToolButton {
         }
     }
 
-    Controls.ToolTip.visible: control.hovered && text.length > 0 && !(menu && menu.visible) && !control.pressed
+    Controls.ToolTip.visible: control.hovered && Controls.ToolTip.text.length > 0 && !(menu && menu.visible) && !control.pressed
     Controls.ToolTip.text: action ? (action.tooltip && action.tooltip.length ? action.tooltip : action.text) : ""
     Controls.ToolTip.delay: Units.toolTipDelay
     Controls.ToolTip.timeout: 5000
