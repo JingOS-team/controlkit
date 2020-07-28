@@ -166,7 +166,7 @@ T2.Control {
         height = implicitHeight;
     }
 
-    contentItem: GridLayout {
+    contentItem: Item {
         id: contentLayout
 
         // Used to defer opacity animation until we know if InlineMessage was
@@ -182,19 +182,27 @@ T2.Control {
             }
         }
 
-        rowSpacing: Kirigami.Units.largeSpacing
-        columnSpacing: Kirigami.Units.smallSpacing
+        implicitHeight: {
+            if (actionsLayout.atBottom) {
+                return text.implicitHeight + actionsLayout.height + Kirigami.Units.largeSpacing
+            } else {
+                return Math.max(icon.implicitHeight, text.implicitHeight, closeButton.implicitHeight, actionsLayout.height)
+            }
+        }
+
+        property bool multiline: text.lineCount > 1 || actionsLayout.atBottom
 
         Kirigami.Icon {
             id: icon
 
             width: Kirigami.Units.iconSizes.smallMedium
-            height: width
+            height: actionsLayout.atBottom ? width : width
 
-            Layout.alignment: text.lineCount > 1 ? Qt.AlignTop : Qt.AlignVCenter
-
-            Layout.minimumWidth: width
-            Layout.minimumHeight: height
+            anchors {
+                left: parent.left
+                top: actionsLayout.atBottom ? parent.top : undefined
+                verticalCenter: actionsLayout.atBottom ? undefined : parent.verticalCenter
+            }
 
             source: {
                 if (root.icon.source) {
@@ -216,19 +224,27 @@ T2.Control {
         }
 
         MouseArea {
-            implicitHeight: text.implicitHeight
+            id: textArea
 
-            Layout.fillWidth: true
-            Layout.alignment: text.lineCount > 1 ? Qt.AlignTop : Qt.AlignVCenter
-            Layout.row: 0
-            Layout.column: 1
+            anchors {
+                left: icon.right
+                leftMargin: Kirigami.Units.smallSpacing
+                right: closeButton.visible ? closeButton.left : parent.right
+                rightMargin: closeButton.visible ? Kirigami.Units.smallSpacing : 0
+                top: parent.top
+                bottom: actionsLayout.atBottom ? undefined : parent.bottom
+            }
 
             cursorShape: text.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+
+            implicitWidth: text.implicitWidth
+            height: actionsLayout.atBottom ? text.implicitHeight : implicitHeight
 
             Controls.Label {
                 id: text
 
                 width: parent.width
+                height: parent.height
 
                 color: Kirigami.Theme.textColor
                 wrapMode: Text.WordWrap
@@ -236,15 +252,10 @@ T2.Control {
 
                 text: root.text
 
+                verticalAlignment: Text.AlignVCenter
+
                 onLinkHovered: root.linkHovered(link)
                 onLinkActivated: root.linkActivated(link)
-            }
-            //this must be child of an item which doesn't try to resize it
-            TextMetrics {
-                id: messageTextMetrics
-
-                font: text.font
-                text: text.text
             }
         }
 
@@ -256,22 +267,22 @@ T2.Control {
             visible: root.actions.length
             alignment: Qt.AlignRight
 
-            Layout.alignment: Qt.AlignRight
-            Layout.maximumWidth: maximumContentWidth
-            Layout.fillWidth: true
-
-            Layout.row: {
-                var width = contentLayout.width - icon.width - actionsLayout.maximumContentWidth
-                            - (closeButton.visible ? closeButton.width : 0)
-                            - 3 * contentLayout.columnSpacing
-
-                if (messageTextMetrics.width + Kirigami.Units.smallSpacing > width) {
-                    return 1;
+            property bool atBottom: {
+                var remainingWidth = parent.width - text.implicitWidth - Kirigami.Units.smallSpacing * 2 - icon.width
+                if (closeButton.visible) {
+                    remainingWidth -= closeButton.width - Kirigami.Units.smallSpacing
                 }
-                return 0;
+
+                return text.lineCount > 1 || implicitWidth > remainingWidth
             }
-            Layout.column: Layout.row ? 0 : 2
-            Layout.columnSpan: Layout.row ? (closeButton.visible ? 3 : 2) : 1
+
+            anchors {
+                left: parent.left
+                top: atBottom ? textArea.bottom : parent.top
+                topMargin: atBottom ? Kirigami.Units.largeSpacing : 0
+                right: (!atBottom && closeButton.visible) ? closeButton.left : parent.right
+                rightMargin: !atBottom && closeButton.visible ? Kirigami.Units.smallSpacing : 0
+            }
         }
 
         Controls.ToolButton {
@@ -279,9 +290,13 @@ T2.Control {
 
             visible: root.showCloseButton
 
-            Layout.alignment: text.lineCount > 1 || actionsLayout.Layout.row ? Qt.AlignTop : Qt.AlignVCenter
-            Layout.row: 0
-            Layout.column: actionsLayout.Layout.row ? 2 : 3
+            anchors {
+                right: parent.right
+                top: actionsLayout.atBottom ? parent.top : undefined
+                verticalCenter: actionsLayout.atBottom ? undefined : parent.verticalCenter
+            }
+
+            height: actionsLayout.atBottom ? implicitHeight : implicitHeight
 
             icon.name: "dialog-close"
 
