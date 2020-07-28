@@ -491,7 +491,7 @@ OverlayDrawer {
                                 width: parent.width
                                 GlobalDrawerActionItem {
                                     id: drawerItem
-                                    visible: root.collapsed || !(modelData.hasOwnProperty("expandible") && modelData.expandible)
+                                    visible: root.collapsed || !(modelData.hasOwnProperty("expandible") && modelData.expandible) && (modelData.hasOwnProperty("visible") && modelData.visible)
                                     width: parent.width
                                     onCheckedChanged: {
                                         // move every checked item into view
