@@ -357,6 +357,9 @@ void ToolBarLayout::Private::performLayout()
 
     qreal layoutWidth = q->width() - (moreButtonInstance->width() + spacing);
     if (alignment & Qt::AlignHCenter) {
+        // When centering, we need to reserve space on both sides to make sure
+        // things are properly centered, otherwise we will be to the right of
+        // the center.
         layoutWidth -= (moreButtonInstance->width() + spacing);
     }
 
