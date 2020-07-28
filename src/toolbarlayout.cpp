@@ -57,7 +57,6 @@ public:
 
     bool completed = false;
     bool layoutQueued = false;
-    bool layouting = false;
     bool actionsChanged = false;
     std::unordered_map<QObject*, std::unique_ptr<ToolBarLayoutDelegate>> delegates;
     QVector<ToolBarLayoutDelegate*> sortedDelegates;
@@ -267,7 +266,7 @@ void ToolBarLayout::setLayoutDirection(Qt::LayoutDirection &newLayoutDirection)
 
 void ToolBarLayout::relayout()
 {
-    if (d->completed && !d->layouting) {
+    if (d->completed) {
         polish();
     }
 }
@@ -281,13 +280,17 @@ void ToolBarLayout::componentComplete()
 
 void ToolBarLayout::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    relayout();
+    if (newGeometry != oldGeometry) {
+        relayout();
+    }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 void ToolBarLayout::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData& data)
 {
-    relayout();
+    if (change == ItemVisibleHasChanged || change == ItemSceneChange) {
+        relayout();
+    }
     QQuickItem::itemChange(change, data);
 }
 
@@ -309,8 +312,6 @@ void ToolBarLayout::Private::performLayout()
         return;
     }
 
-    layouting = true;
-
     hiddenActions.clear();
     firstHiddenIndex = -1;
 
@@ -320,7 +321,6 @@ void ToolBarLayout::Private::performLayout()
         return entry.second->isReady();
     });
     if (!ready || !moreButtonInstance) {
-        layouting = false;
         return;
     }
 
@@ -433,7 +433,6 @@ void ToolBarLayout::Private::performLayout()
     }
 
     sortedDelegates.clear();
-    layouting = false;
 }
 
 QVector<ToolBarLayoutDelegate*> ToolBarLayout::Private::createDelegates()
