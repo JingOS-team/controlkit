@@ -365,7 +365,7 @@ void ToolBarLayout::Private::performLayout()
 
     qreal visibleActionsWidth = 0.0;
 
-    if (maxWidth > layoutWidth) {
+    if (maxWidth > q->width()) {
         // We have more items than fit into the view, so start hiding some.
         for (int i = 0; i < sortedDelegates.size(); ++i) {
             auto delegate = sortedDelegates.at(i);
