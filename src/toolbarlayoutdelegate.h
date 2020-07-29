@@ -13,6 +13,10 @@
 
 class ToolBarLayout;
 
+/*
+ * A helper subclass of QQmlIncubator that allows us to do some things more
+ * easily.
+ */
 class ToolBarDelegateIncubator : public QQmlIncubator
 {
 public:
@@ -33,6 +37,11 @@ private:
     std::function<void(ToolBarDelegateIncubator*)> m_completedCallback;
 };
 
+/*
+ * A helper class to encapsulate some of the delegate functionality used by
+ * ToolBarLayout. Primarily, this hides some of the difference that delegates
+ * are two items instead of one.
+ */
 class ToolBarLayoutDelegate : public QObject
 {
     Q_OBJECT
