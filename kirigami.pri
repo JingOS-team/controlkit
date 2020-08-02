@@ -1,4 +1,3 @@
-
 QT          += core qml quick gui svg network quickcontrols2 concurrent
 HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/enums.h \
@@ -63,7 +62,7 @@ DEFINES     += KIRIGAMI_BUILD_TYPE_STATIC
 
 API_VER=1.0
 
-RESOURCES += $$PWD/kirigami.qrc
+RESOURCES += $$PWD/kirigami.qrc $$PWD/src/scenegraph/shaders/shaders.qrc
 
 exists($$_PRO_FILE_PWD_/kirigami-icons.qrc) {
     message("Using icons QRC file shipped by the project")
