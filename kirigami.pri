@@ -1,5 +1,5 @@
 
-QT          += core qml quick gui svg network quickcontrols2
+QT          += core qml quick gui svg network quickcontrols2 concurrent
 HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/enums.h \
                $$PWD/src/settings.h \
@@ -21,6 +21,7 @@ HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/scenegraph/shadowedtexturematerial.h \
                $$PWD/src/scenegraph/shadowedtexturenode.h \
                $$PWD/src/icon.h \
+               $$PWD/src/imagecolors.h \
                $$PWD/src/delegaterecycler.h \
                $$PWD/src/wheelhandler.h \
                $$PWD/src/shadowedrectangle.h \
@@ -48,6 +49,7 @@ SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/scenegraph/shadowedtexturematerial.cpp \
                $$PWD/src/scenegraph/shadowedtexturenode.cpp \
                $$PWD/src/icon.cpp \
+               $$PWD/src/imagecolors.cpp \
                $$PWD/src/delegaterecycler.cpp \
                $$PWD/src/wheelhandler.cpp \
                $$PWD/src/shadowedrectangle.cpp \
