@@ -67,8 +67,8 @@ P.ScrollView {
             id: busyIndicatorFrame
             z: 99
             y: root.flickableItem.verticalLayoutDirection === ListView.BottomToTop
-                ? -root.flickableItem.contentY+height
-                : -root.flickableItem.contentY-height
+                ? -root.flickableItem.contentY+root.flickableItem.originY+height
+                : -root.flickableItem.contentY+root.flickableItem.originY-height
             width: root.flickableItem.width
             height: busyIndicator.height + Units.gridUnit * 2
             QQC2.BusyIndicator {
@@ -78,9 +78,6 @@ P.ScrollView {
                 visible: root.refreshing
                 //Android busywidget QQC seems to be broken at custom sizes
             }
-            property int headerItemHeight: (root.flickableItem.headerItem
-                    ? (root.flickableItem.headerItem.maximumHeight ? root.flickableItem.headerItem.maximumHeight : root.flickableItem.headerItem.height)
-                    : 0)
             Rectangle {
                 id: spinnerProgress
                 anchors {
@@ -93,8 +90,7 @@ P.ScrollView {
                 opacity: 0.8
                 border.color: Theme.backgroundColor
                 border.width: Math.ceil(Units.smallSpacing)
-                //also take into account the listview header height if present
-                property real progress: supportsRefreshing && !refreshing ? ((parent.y - busyIndicatorFrame.headerItemHeight)/busyIndicatorFrame.height) : 0
+                property real progress: supportsRefreshing && !refreshing ? (parent.y/busyIndicatorFrame.height) : 0
             }
             ConicalGradient {
                 source: spinnerProgress
@@ -111,7 +107,7 @@ P.ScrollView {
             onYChanged: {
                 //it's overshooting enough and not reachable: start countdown for reachability
 
-                if (y - busyIndicatorFrame.headerItemHeight > root.topPadding + Units.gridUnit && (typeof(applicationWindow) == "undefined" || !applicationWindow().reachableMode)) {
+                if (y > root.topPadding + Units.gridUnit && (typeof(applicationWindow) == "undefined" || !applicationWindow().reachableMode)) {
                     overshootResetTimer.running = true;
                 //not reachable and not overshooting enough, stop reachability countdown
                 } else if (typeof(applicationWindow) == "undefined" || !applicationWindow().reachableMode) {
@@ -123,8 +119,7 @@ P.ScrollView {
                     return;
                 }
 
-                //also take into account the listview header height if present
-                if (!root.refreshing && y - busyIndicatorFrame.headerItemHeight > busyIndicatorFrame.height/2 + topPadding) {
+                if (!root.refreshing && y > busyIndicatorFrame.height/2 + topPadding) {
                     refreshTriggerTimer.running = true;
                 } else {
                     refreshTriggerTimer.running = false;
@@ -134,8 +129,7 @@ P.ScrollView {
                 id: refreshTriggerTimer
                 interval: 500
                 onTriggered: {
-                    //also take into account the listview header height if present
-                    if (!root.refreshing && parent.y - busyIndicatorFrame.headerItemHeight > busyIndicatorFrame.height/2 + topPadding) {
+                    if (!root.refreshing && parent.y > busyIndicatorFrame.height/2 + topPadding) {
                         root.refreshing = true;
                     }
                 }
