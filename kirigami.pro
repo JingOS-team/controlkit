@@ -1,40 +1,9 @@
 TEMPLATE = lib
 CONFIG += static plugin
 
-QT          += qml quick gui quickcontrols2 svg
 URI = org.kde.kirigami
 QMAKE_MOC_OPTIONS += -Muri=org.kde.kirigami
-HEADERS     += $$PWD/src/kirigamiplugin.h \
-               $$PWD/src/enums.h \
-               $$PWD/src/settings.h \
-               $$PWD/src/columnview_p.h \
-               $$PWD/src/columnview.h \
-               $$PWD/src/formlayoutattached.h \
-               $$PWD/src/mnemonicattached.h \
-               $$PWD/src/scenepositionattached.h \
-               $$PWD/src/libkirigami/basictheme_p.h \
-               $$PWD/src/libkirigami/platformtheme.h \
-               $$PWD/src/libkirigami/kirigamipluginfactory.h \
-               $$PWD/src/libkirigami/tabletmodewatcher.h \
-               $$PWD/src/desktopicon.h \
-               $$PWD/src/delegaterecycler.h
-SOURCES     += $$PWD/src/kirigamiplugin.cpp \
-               $$PWD/src/enums.cpp \
-               $$PWD/src/settings.cpp \
-               $$PWD/src/columnview.cpp \
-               $$PWD/src/formlayoutattached.cpp \
-               $$PWD/src/mnemonicattached.cpp \
-               $$PWD/src/scenepositionattached.cpp \
-               $$PWD/src/libkirigami/basictheme.cpp \
-               $$PWD/src/libkirigami/platformtheme.cpp \
-               $$PWD/src/libkirigami/kirigamipluginfactory.cpp \
-               $$PWD/src/libkirigami/tabletmodewatcher.cpp \
-               $$PWD/src/desktopicon.cpp \
-               $$PWD/src/delegaterecycler.cpp
-RESOURCES   += $$PWD/kirigami.qrc
-DEFINES     += KIRIGAMI_BUILD_TYPE_STATIC
-
-
+include(kirigami.pri)
 
 API_VER=1.0
 
