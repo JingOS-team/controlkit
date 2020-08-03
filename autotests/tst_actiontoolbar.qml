@@ -27,14 +27,14 @@ TestCase {
     // to verify that layouting does the right thing.
     property ToolButton iconButton: KirigamiPrivate.PrivateActionToolButton {
         display: Button.IconOnly
-        kirigamiAction: Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
+        action: Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
     }
     property ToolButton textButton: KirigamiPrivate.PrivateActionToolButton {
         display: Button.TextOnly
-        kirigamiAction: Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
+        action: Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
     }
     property ToolButton textIconButton: KirigamiPrivate.PrivateActionToolButton {
-        kirigamiAction: Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
+        action: Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
     }
     property TextField textField: TextField { }
 
