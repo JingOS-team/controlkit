@@ -380,6 +380,7 @@ OverlayDrawer {
 
                 T2.StackView {
                     id: stackView
+                    clip: true
                     Layout.fillWidth: true
                     Layout.minimumHeight: currentItem ? currentItem.implicitHeight : 0
                     Layout.maximumHeight: Layout.minimumHeight
