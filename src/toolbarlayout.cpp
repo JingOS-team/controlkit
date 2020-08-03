@@ -355,6 +355,8 @@ void ToolBarLayout::Private::performLayout()
     // The last entry also gets spacing but shouldn't, so remove that.
     maxWidth -= spacing;
 
+    maxHeight = std::max(maxHeight, q->height());
+
     qreal layoutWidth = q->width() - (moreButtonInstance->width() + spacing);
     if (alignment & Qt::AlignHCenter) {
         // When centering, we need to reserve space on both sides to make sure
