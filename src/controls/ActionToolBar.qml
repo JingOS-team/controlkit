@@ -118,7 +118,12 @@ Item {
                 if (action.displayComponent) {
                     return [action]
                 }
-                return action.children
+
+                if (action.children) {
+                    return Array.prototype.map.call(action.children, i => i)
+                }
+
+                return []
             }
         }
 
