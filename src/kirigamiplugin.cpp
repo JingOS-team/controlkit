@@ -268,7 +268,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<PreloadRouteGroup>(uri, 2, 14, "PreloadRouteGroup", QStringLiteral("PreloadRouteGroup cannot be created"));
     qmlRegisterType(componentUrl(QStringLiteral("FlexColumn.qml")), uri, 2, 14, "FlexColumn");
     qmlRegisterType<ToolBarLayout>(uri, 2, 14, "ToolBarLayout");
-    qmlRegisterSingletonType<DisplayHint>(uri, 2, 14, "DisplayHint", [](QQmlEngine*, QJSEngine*) { return new DisplayHint; });
+    qmlRegisterSingletonType<DisplayHint>(uri, 2, 14, "DisplayHint", [](QQmlEngine*, QJSEngine*) -> QObject* { return new DisplayHint; });
 
     qmlProtectModule(uri, 2);
 }
