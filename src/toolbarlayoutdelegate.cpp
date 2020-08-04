@@ -32,6 +32,11 @@ void ToolBarDelegateIncubator::create()
     m_component->create(*this, m_context);
 }
 
+bool ToolBarDelegateIncubator::isFinished()
+{
+    return m_finished;
+}
+
 void ToolBarDelegateIncubator::setInitialState(QObject* object)
 {
     auto item = qobject_cast<QQuickItem*>(object);
@@ -48,10 +53,12 @@ void ToolBarDelegateIncubator::statusChanged(QQmlIncubator::Status status)
         for (auto error : e) {
             qWarning() << error;
         }
+        m_finished = true;
     }
 
     if (status == QQmlIncubator::Ready) {
         m_completedCallback(this);
+        m_finished = true;
     }
 }
 
@@ -126,8 +133,7 @@ void ToolBarLayoutDelegate::createItems(QQmlComponent *fullComponent, QQmlCompon
 
         m_parent->relayout();
 
-        delete incubator;
-        m_fullIncubator = nullptr;
+        QMetaObject::invokeMethod(this, &ToolBarLayoutDelegate::cleanupIncubators, Qt::QueuedConnection);
     });
     m_iconIncubator = new ToolBarDelegateIncubator(iconComponent, context);
     m_iconIncubator->setStateCallback(callback);
@@ -152,8 +158,7 @@ void ToolBarLayoutDelegate::createItems(QQmlComponent *fullComponent, QQmlCompon
 
         m_parent->relayout();
 
-        delete incubator;
-        m_iconIncubator = nullptr;
+        QMetaObject::invokeMethod(this, &ToolBarLayoutDelegate::cleanupIncubators, Qt::QueuedConnection);
     });
 
     m_fullIncubator->create();
@@ -265,3 +270,15 @@ void ToolBarLayoutDelegate::displayHintChanged()
     m_parent->relayout();
 }
 
+void ToolBarLayoutDelegate::cleanupIncubators()
+{
+    if (m_fullIncubator && m_fullIncubator->isFinished()) {
+        delete m_fullIncubator;
+        m_fullIncubator = nullptr;
+    }
+
+    if (m_iconIncubator && m_iconIncubator->isFinished()) {
+        delete m_iconIncubator;
+        m_iconIncubator = nullptr;
+    }
+}

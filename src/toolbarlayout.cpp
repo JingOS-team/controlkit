@@ -467,8 +467,10 @@ QVector<ToolBarLayoutDelegate*> ToolBarLayout::Private::createDelegates()
             q->relayout();
             Q_EMIT q->minimumWidthChanged();
 
-            delete incubator;
-            moreButtonIncubator = nullptr;
+            QTimer::singleShot(0, q, [this]() {
+                delete moreButtonIncubator;
+                moreButtonIncubator = nullptr;
+            });
         });
         moreButtonIncubator->create();
     }

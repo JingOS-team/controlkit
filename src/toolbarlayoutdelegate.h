@@ -27,6 +27,8 @@ public:
 
     void create();
 
+    bool isFinished();
+
 private:
     void setInitialState(QObject *object) override;
     void statusChanged(QQmlIncubator::Status status) override;
@@ -35,6 +37,7 @@ private:
     QQmlContext *m_context;
     std::function<void(QQuickItem*)> m_stateCallback;
     std::function<void(ToolBarDelegateIncubator*)> m_completedCallback;
+    bool m_finished = false;
 };
 
 /*
@@ -86,6 +89,7 @@ private:
             m_icon->setVisible(m_iconVisible);
         }
     }
+    void cleanupIncubators();
 
     ToolBarLayout *m_parent = nullptr;
     QObject *m_action = nullptr;
