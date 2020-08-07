@@ -18,7 +18,7 @@ import "private"
  * @inherits Item
  * @since 2.5
  */
-Item {
+Controls.Control {
     id: root
     /**
     * actions: list<Action>
@@ -95,9 +95,13 @@ Item {
     Layout.preferredWidth: 0
     Layout.fillWidth: true
 
-    Kirigami.ToolBarLayout {
+    leftPadding: 0
+    rightPadding: 0
+    topPadding: 0
+    bottomPadding: 0
+
+    contentItem: Kirigami.ToolBarLayout {
         id: layout
-        anchors.fill: parent
         spacing: Kirigami.Units.smallSpacing
         layoutDirection: root.LayoutMirroring.enabled ? Qt.RightToLeft : Qt.LeftToRight
 
