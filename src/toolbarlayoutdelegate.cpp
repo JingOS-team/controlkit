@@ -103,7 +103,7 @@ void ToolBarLayoutDelegate::setAction(QObject* action)
 
         if (m_action->property("displayHint").isValid()) {
             QObject::connect(m_action, SIGNAL(displayHintChanged()), this, SLOT(displayHintChanged()));
-            m_displayHint = DisplayHint::DisplayHints{m_action->property("displayHint").toUInt()};
+            m_displayHint = DisplayHint::DisplayHints{m_action->property("displayHint").toInt()};
         }
     }
 }
@@ -266,7 +266,7 @@ void ToolBarLayoutDelegate::actionVisibleChanged()
 
 void ToolBarLayoutDelegate::displayHintChanged()
 {
-    m_displayHint = DisplayHint::DisplayHints{m_action->property("displayHint").toUInt()};
+    m_displayHint = DisplayHint::DisplayHints{m_action->property("displayHint").toInt()};
     m_parent->relayout();
 }
 

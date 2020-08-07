@@ -23,7 +23,7 @@ bool DisplayHint::displayHintSet(QObject* object, DisplayHint::Hint hint)
 
     auto property = object->property("displayHint");
     if (property.isValid()) {
-        return isDisplayHintSet(DisplayHints{property.toUInt()}, hint);
+        return isDisplayHintSet(DisplayHints{property.toInt()}, hint);
     } else {
         return false;
     }
