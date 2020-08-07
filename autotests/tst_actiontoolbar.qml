@@ -27,22 +27,26 @@ TestCase {
     // to verify that layouting does the right thing.
     property ToolButton iconButton: KirigamiPrivate.PrivateActionToolButton {
         display: Button.IconOnly
-        action: Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
+        action: Kirigami.Action { icon.name: "document-new"; text: "Test Action" }
+        font.pointSize: 10
     }
     property ToolButton textButton: KirigamiPrivate.PrivateActionToolButton {
         display: Button.TextOnly
-        action: Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
+        action: Kirigami.Action { icon.name: "document-new"; text: "Test Action" }
+        font.pointSize: 10
     }
     property ToolButton textIconButton: KirigamiPrivate.PrivateActionToolButton {
-        action: Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
+        action: Kirigami.Action { icon.name: "document-new"; text: "Test Action" }
+        font.pointSize: 10
     }
-    property TextField textField: TextField { }
+    property TextField textField: TextField { font.pointSize: 10 }
 
     Component {
         id: single;
         Kirigami.ActionToolBar {
+            font.pointSize: 10
             actions: [
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action" }
             ]
         }
     }
@@ -50,10 +54,11 @@ TestCase {
     Component {
         id: multiple
         Kirigami.ActionToolBar {
+            font.pointSize: 10
             actions: [
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" },
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" },
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action" },
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action" },
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action" }
             ]
         }
     }
@@ -62,10 +67,11 @@ TestCase {
         id: iconOnly
         Kirigami.ActionToolBar {
             display: Button.IconOnly
+            font.pointSize: 10
             actions: [
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" },
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" },
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" }
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action" },
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action" },
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action" }
             ]
         }
     }
@@ -73,10 +79,11 @@ TestCase {
     Component {
         id: qtActions
         Kirigami.ActionToolBar {
+            font.pointSize: 10
             actions: [
-                Action { icon.name: "overflow-menu"; text: "Test Action" },
-                Action { icon.name: "overflow-menu"; text: "Test Action" },
-                Action { icon.name: "overflow-menu"; text: "Test Action" }
+                Action { icon.name: "document-new"; text: "Test Action" },
+                Action { icon.name: "document-new"; text: "Test Action" },
+                Action { icon.name: "document-new"; text: "Test Action" }
             ]
         }
     }
@@ -84,12 +91,13 @@ TestCase {
     Component {
         id: mixed
         Kirigami.ActionToolBar {
+            font.pointSize: 10
             actions: [
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action"; displayHint: Kirigami.DisplayHint.IconOnly },
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action" },
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action"; displayComponent: TextField { } },
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action"; displayHint: Kirigami.DisplayHint.AlwaysHide },
-                Kirigami.Action { icon.name: "overflow-menu"; text: "Test Action"; displayHint: Kirigami.DisplayHint.KeepVisible }
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action"; displayHint: Kirigami.DisplayHint.IconOnly },
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action" },
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action"; displayComponent: TextField { } },
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action"; displayHint: Kirigami.DisplayHint.AlwaysHide },
+                Kirigami.Action { icon.name: "document-new"; text: "Test Action"; displayHint: Kirigami.DisplayHint.KeepVisible }
             ]
         }
     }
@@ -110,8 +118,9 @@ TestCase {
             // Small width, should display just the overflow button
             { tag: "multi_min", component: multiple, width: 50, expected: testCase.iconButton.width },
             // Half window width, should display one action and overflow button
-            { tag: "multi_half", component: multiple, width: testCase.width / 2,
-                expected: testCase.textIconButton.width + testCase.iconButton.width },
+            { tag: "multi_half", component: multiple,
+                width: testCase.width / 2,
+                expected: testCase.textIconButton.width * 2 + testCase.iconButton.width + Kirigami.Units.smallSpacing },
             // Multiple actions, display set to icon only
             // Full window width, should display as many icon-only buttons as there are actions
             { tag: "icon_full", component: iconOnly, width: testCase.width,
@@ -120,7 +129,7 @@ TestCase {
             { tag: "icon_min", component: iconOnly, width: 50, expected: testCase.iconButton.width },
             // Quarter window width, should display one icon-only button and the overflow button
             { tag: "icon_quarter", component: iconOnly, width: testCase.width / 4,
-                expected: testCase.iconButton.width * 2 },
+                expected: testCase.iconButton.width * 3 + Kirigami.Units.smallSpacing * 2 },
             // QtQuick Controls actions
             // Full window width, should display as many buttons as there are actions
             { tag: "qt_full", component: qtActions, width: testCase.width,
@@ -128,12 +137,13 @@ TestCase {
             // Small width, should display just the overflow button
             { tag: "qt_min", component: qtActions, width: 50, expected: testCase.iconButton.width },
             // Half window width, should display one action and overflow button
-            { tag: "qt_half", component: qtActions, width: testCase.width / 2,
-                expected: testCase.textIconButton.width + testCase.iconButton.width },
+            { tag: "qt_half", component: qtActions,
+                width: testCase.width / 2,
+                expected: testCase.textIconButton.width * 2 + testCase.iconButton.width + Kirigami.Units.smallSpacing },
             // Mix of different display hints, displayComponent and normal actions.
             // Full window width, should display everything, but one action is collapsed to icon
             { tag: "mixed", component: mixed, width: testCase.width,
-                expected: testCase.textIconButton.width + testCase.iconButton.width * 3 + testCase.textField.width + Kirigami.Units.smallSpacing * 3 }
+                expected: testCase.textIconButton.width * 2 + testCase.iconButton.width * 2 + testCase.textField.width + Kirigami.Units.smallSpacing * 3 }
         ]
     }
 
