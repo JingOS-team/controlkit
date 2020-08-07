@@ -149,7 +149,7 @@ TestCase {
         verify(waitForRendering(toolbar))
 
         toolbar.width = data.width
-        waitForRendering(toolbar) // Allow events to propagate so toolbar can resize properly
+        wait(100) // Allow events to propagate so toolbar can resize properly
 
         compare(toolbar.visibleWidth, data.expected)
     }
