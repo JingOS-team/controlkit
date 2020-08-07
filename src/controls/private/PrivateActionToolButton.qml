@@ -69,7 +69,6 @@ Controls.ToolButton {
     onShowMenuArrowChanged: updateMenuArrow()
 
     checkable: (action && action.checkable) || (menuActions && menuActions.length > 0)
-    opacity: enabled ? 1 : 0.4
     visible: (action && action.hasOwnProperty("visible")) ? action.visible : true
 
     onToggled: {
