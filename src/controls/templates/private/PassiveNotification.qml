@@ -101,6 +101,11 @@ Controls.Popup {
                 closeAnim.running = true;
             }
 
+            leftPadding: Kirigami.Units.largeSpacing
+            rightPadding: Kirigami.Units.largeSpacing
+            topPadding: Kirigami.Units.largeSpacing
+            bottomPadding: Kirigami.Units.largeSpacing
+
             Component.onCompleted: openAnim.restart()
             ParallelAnimation {
                 id: openAnim
