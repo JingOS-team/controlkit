@@ -4,10 +4,11 @@ project(%{APPNAMELC})
 
 include(FeatureSummary)
 
-################# set KDE specific information #################
-find_package(ECM 0.0.8 REQUIRED NO_MODULE)
+set(QT5_MIN_VERSION 5.12)
+set(KF5_MIN_VERSION 5.65)
 
-# where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
+find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
@@ -17,15 +18,9 @@ include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 include(ECMPoQmTools)
 
-################# Find dependencies #################
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Qml QuickControls2 Svg)
-find_package(KF5Kirigami2)
-find_package(KF5I18n)
+find_package(Qt5 ${QT5_MIN_VERSION} REQUIRED COMPONENTS Core Gui Qml QuickControls2 Svg)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Kirigami2 I18n)
 
-################# Enable C++11 features for clang and gcc #################
-set(CMAKE_CXX_STANDARD 11)
-
-################# build and install #################
 add_subdirectory(src)
 
 install(PROGRAMS org.kde.%{APPNAMELC}.desktop DESTINATION ${KDE_INSTALL_APPDIR})
