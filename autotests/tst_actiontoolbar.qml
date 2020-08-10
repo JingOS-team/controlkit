@@ -153,12 +153,10 @@ TestCase {
     // to fit as many visible actions as possible and placing the hidden ones in an overflow menu.
     // This test, along with the data above, verifies that that this behaviour is correct.
     function test_layout(data) {
-        var toolbar = createTemporaryObject(data.component, testCase)
+        var toolbar = createTemporaryObject(data.component, testCase, {width: data.width})
 
         verify(toolbar)
         verify(waitForRendering(toolbar))
-
-        toolbar.width = data.width
 
         while (toolbar.visibleWidth == 0) {
             // The toolbar creates its delegates asynchronously during "idle
