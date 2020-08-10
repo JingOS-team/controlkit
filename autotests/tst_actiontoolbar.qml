@@ -159,7 +159,15 @@ TestCase {
         verify(waitForRendering(toolbar))
 
         toolbar.width = data.width
-        wait(100) // Allow events to propagate so toolbar can resize properly
+
+        while (toolbar.visibleWidth == 0) {
+            // The toolbar creates its delegates asynchronously during "idle
+            // time", this means we need to wait for a bit so the toolbar has
+            // the time to do that. As long as it has not finished creation, the
+            // toolbar will have a visibleWidth of 0, so we can use that to
+            // determine when it is done.
+            wait(50)
+        }
 
         compare(toolbar.visibleWidth, data.expected)
     }
