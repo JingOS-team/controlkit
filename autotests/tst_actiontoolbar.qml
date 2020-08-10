@@ -16,7 +16,7 @@ TestCase {
     id: testCase
     name: "ActionToolBarTest"
 
-    width: 500
+    width: 800
     height: 400
     visible: true
 
