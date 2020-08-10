@@ -119,8 +119,8 @@ TestCase {
             { tag: "multi_min", component: multiple, width: 50, expected: testCase.iconButton.width },
             // Half window width, should display one action and overflow button
             { tag: "multi_small", component: multiple,
-                width: testCase.textIconButton.width * 3,
-                expected: testCase.textIconButton.width * 2 + testCase.iconButton.width + Kirigami.Units.smallSpacing },
+                width: testCase.textIconButton.width * 2 + testCase.iconButton.width + Kirigami.Units.smallSpacing * 3,
+                expected: testCase.textIconButton.width * 2 + testCase.iconButton.width + Kirigami.Units.smallSpacing * 2 },
             // Multiple actions, display set to icon only
             // Full window width, should display as many icon-only buttons as there are actions
             { tag: "icon_full", component: iconOnly, width: testCase.width,
@@ -138,12 +138,12 @@ TestCase {
             { tag: "qt_min", component: qtActions, width: 50, expected: testCase.iconButton.width },
             // Half window width, should display one action and overflow button
             { tag: "qt_small", component: qtActions,
-                width: testCase.textIconButton.width * 3,
-                expected: testCase.textIconButton.width * 2 + testCase.iconButton.width + Kirigami.Units.smallSpacing },
+                width: testCase.textIconButton.width * 2 + testCase.iconButton.width + Kirigami.Units.smallSpacing * 3,
+                expected: testCase.textIconButton.width * 2 + testCase.iconButton.width + Kirigami.Units.smallSpacing * 2 },
             // Mix of different display hints, displayComponent and normal actions.
             // Full window width, should display everything, but one action is collapsed to icon
             { tag: "mixed", component: mixed, width: testCase.width,
-                expected: testCase.textIconButton.width * 2 + testCase.iconButton.width * 2 + testCase.textField.width + Kirigami.Units.smallSpacing * 3 }
+                expected: testCase.textIconButton.width * 2 + testCase.iconButton.width * 2 + testCase.textField.width + Kirigami.Units.smallSpacing * 4 }
         ]
     }
 
