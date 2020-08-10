@@ -14,7 +14,7 @@ import "../src/controls/private" as KirigamiPrivate
 
 TestCase {
     id: testCase
-    name: "IconTests"
+    name: "ActionToolBarTest"
 
     width: 500
     height: 400
@@ -118,8 +118,8 @@ TestCase {
             // Small width, should display just the overflow button
             { tag: "multi_min", component: multiple, width: 50, expected: testCase.iconButton.width },
             // Half window width, should display one action and overflow button
-            { tag: "multi_half", component: multiple,
-                width: testCase.width / 2,
+            { tag: "multi_small", component: multiple,
+                width: testCase.textIconButton.width * 3,
                 expected: testCase.textIconButton.width * 2 + testCase.iconButton.width + Kirigami.Units.smallSpacing },
             // Multiple actions, display set to icon only
             // Full window width, should display as many icon-only buttons as there are actions
@@ -128,7 +128,7 @@ TestCase {
             // Small width, should display just the overflow button
             { tag: "icon_min", component: iconOnly, width: 50, expected: testCase.iconButton.width },
             // Quarter window width, should display one icon-only button and the overflow button
-            { tag: "icon_quarter", component: iconOnly, width: testCase.width / 4,
+            { tag: "icon_small", component: iconOnly, width: testCase.iconButton.width * 4,
                 expected: testCase.iconButton.width * 3 + Kirigami.Units.smallSpacing * 2 },
             // QtQuick Controls actions
             // Full window width, should display as many buttons as there are actions
@@ -137,8 +137,8 @@ TestCase {
             // Small width, should display just the overflow button
             { tag: "qt_min", component: qtActions, width: 50, expected: testCase.iconButton.width },
             // Half window width, should display one action and overflow button
-            { tag: "qt_half", component: qtActions,
-                width: testCase.width / 2,
+            { tag: "qt_small", component: qtActions,
+                width: testCase.textIconButton.width * 3,
                 expected: testCase.textIconButton.width * 2 + testCase.iconButton.width + Kirigami.Units.smallSpacing },
             // Mix of different display hints, displayComponent and normal actions.
             // Full window width, should display everything, but one action is collapsed to icon
