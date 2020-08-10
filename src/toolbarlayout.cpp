@@ -420,7 +420,10 @@ void ToolBarLayout::Private::performLayout()
     q->setImplicitSize(maxWidth, maxHeight);
     Q_EMIT q->hiddenActionsChanged();
 
-    qreal newVisibleWidth = visibleActionsWidth + (moreButtonInstance->isVisible() ? moreButtonInstance->width() : 0.0);
+    qreal newVisibleWidth = visibleActionsWidth;
+    if (moreButtonInstance->isVisible()) {
+        newVisibleWidth += moreButtonInstance->width() + (newVisibleWidth > 0.0 ? spacing : 0.0);
+    }
     if (!qFuzzyCompare(newVisibleWidth, visibleWidth)) {
         visibleWidth = newVisibleWidth;
         Q_EMIT q->visibleWidthChanged();
