@@ -18,7 +18,7 @@ ShadowedTextureMaterial::ShadowedTextureMaterial()
 
 QSGMaterialShader* ShadowedTextureMaterial::createShader() const
 {
-    return new ShadowedTextureShader{};
+    return new ShadowedTextureShader{shaderType};
 }
 
 QSGMaterialType* ShadowedTextureMaterial::type() const
@@ -42,7 +42,8 @@ int ShadowedTextureMaterial::compare(const QSGMaterial *other) const
     return result;
 }
 
-ShadowedTextureShader::ShadowedTextureShader()
+ShadowedTextureShader::ShadowedTextureShader(ShadowedRectangleMaterial::ShaderType shaderType)
+    : ShadowedRectangleShader(shaderType)
 {
     auto header = QOpenGLContext::currentContext()->isOpenGLES() ? QStringLiteral("header_es.glsl") : QStringLiteral("header_desktop.glsl");
 
@@ -53,10 +54,15 @@ ShadowedTextureShader::ShadowedTextureShader()
         shaderRoot + QStringLiteral("shadowedrectangle.vert")
     });
 
+    auto shaderFile = QStringLiteral("shadowedtexture.frag");
+    if (shaderType == ShadowedRectangleMaterial::ShaderType::LowPower) {
+        shaderFile = QStringLiteral("shadowedtexture_lowpower.frag");
+    }
+
     setShaderSourceFiles(QOpenGLShader::Fragment, {
         shaderRoot + header,
         shaderRoot + QStringLiteral("sdf.glsl"),
-        shaderRoot + QStringLiteral("shadowedtexture.frag")
+        shaderRoot + shaderFile
     });
 }
 

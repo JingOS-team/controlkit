@@ -286,11 +286,15 @@ QSGNode *ShadowedRectangle::updatePaintNode(QSGNode *node, QQuickItem::UpdatePai
 {
     Q_UNUSED(data);
 
-    if (!node) {
-        node = new ShadowedRectangleNode{};
+    auto shadowNode = static_cast<ShadowedRectangleNode*>(node);
+
+    if (!shadowNode) {
+        shadowNode = new ShadowedRectangleNode{};
+        if (qEnvironmentVariableIsSet("KIRIGAMI_LOWPOWER_HARDWARE")) {
+            shadowNode->setShaderType(ShadowedRectangleMaterial::ShaderType::LowPower);
+        }
     }
 
-    auto shadowNode = static_cast<ShadowedRectangleNode*>(node);
     shadowNode->setBorderEnabled(m_border->isEnabled());
     shadowNode->setRect(boundingRect());
     shadowNode->setSize(m_shadow->size());

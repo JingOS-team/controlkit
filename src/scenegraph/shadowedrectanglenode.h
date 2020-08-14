@@ -11,8 +11,9 @@
 #include <QVector2D>
 #include <QVector4D>
 
+#include "shadowedrectanglematerial.h"
+
 class QSGMaterialType;
-class ShadowedRectangleMaterial;
 class ShadowedBorderRectangleMaterial;
 
 /**
@@ -47,6 +48,7 @@ public:
     void setOffset(const QVector2D &offset);
     void setBorderWidth(qreal width);
     void setBorderColor(const QColor &color);
+    void setShaderType(ShadowedRectangleMaterial::ShaderType type);
 
     /**
      * Update the geometry for this node.
@@ -64,6 +66,7 @@ protected:
 
     QSGGeometry *m_geometry;
     ShadowedRectangleMaterial *m_material = nullptr;
+    ShadowedRectangleMaterial::ShaderType m_shaderType = ShadowedRectangleMaterial::ShaderType::Standard;
 
 private:
     QRectF m_rect;

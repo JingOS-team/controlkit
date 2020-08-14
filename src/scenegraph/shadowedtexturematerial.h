@@ -33,7 +33,7 @@ public:
 class ShadowedTextureShader : public ShadowedRectangleShader
 {
 public:
-    ShadowedTextureShader();
+    ShadowedTextureShader(ShadowedRectangleMaterial::ShaderType shaderType);
 
     void initialize() override;
     void updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;

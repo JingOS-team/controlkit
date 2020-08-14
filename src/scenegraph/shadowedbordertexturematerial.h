@@ -27,7 +27,7 @@ public:
 class ShadowedBorderTextureShader : public ShadowedBorderRectangleShader
 {
 public:
-    ShadowedBorderTextureShader();
+    ShadowedBorderTextureShader(ShadowedRectangleMaterial::ShaderType shaderType);
 
     void initialize() override;
     void updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;

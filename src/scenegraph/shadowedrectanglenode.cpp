@@ -36,6 +36,7 @@ void ShadowedRectangleNode::setBorderEnabled(bool enabled)
     if (enabled) {
         if (!m_material || m_material->type() == borderlessMaterialType()) {
             auto newMaterial = createBorderMaterial();
+            newMaterial->shaderType = m_shaderType;
             setMaterial(newMaterial);
             m_material = newMaterial;
             m_rect = QRectF{};
@@ -44,6 +45,7 @@ void ShadowedRectangleNode::setBorderEnabled(bool enabled)
     } else {
         if (!m_material || m_material->type() == borderMaterialType()) {
             auto newMaterial = createBorderlessMaterial();
+            newMaterial->shaderType = m_shaderType;
             setMaterial(newMaterial);
             m_material = newMaterial;
             m_rect = QRectF{};
@@ -164,15 +166,23 @@ void ShadowedRectangleNode::setBorderColor(const QColor& color)
     }
 }
 
+void ShadowedRectangleNode::setShaderType(ShadowedRectangleMaterial::ShaderType type)
+{
+    m_shaderType = type;
+}
+
 void ShadowedRectangleNode::updateGeometry()
 {
-    auto rect = m_rect.adjusted(-m_size * m_aspect.x(), -m_size * m_aspect.y(),
-                                m_size * m_aspect.x(), m_size * m_aspect.y());
+    auto rect = m_rect;
+    if (m_shaderType == ShadowedRectangleMaterial::ShaderType::Standard) {
+        rect = rect.adjusted(-m_size * m_aspect.x(), -m_size * m_aspect.y(),
+                                    m_size * m_aspect.x(), m_size * m_aspect.y());
 
-    auto offsetLength = m_offset.length();
+        auto offsetLength = m_offset.length();
 
-    rect = rect.adjusted(-offsetLength * m_aspect.x(), -offsetLength * m_aspect.y(),
-                         offsetLength * m_aspect.x(), offsetLength * m_aspect.y());
+        rect = rect.adjusted(-offsetLength * m_aspect.x(), -offsetLength * m_aspect.y(),
+                            offsetLength * m_aspect.x(), offsetLength * m_aspect.y());
+    }
 
     QSGGeometry::updateTexturedRectGeometry(m_geometry, rect, QRectF{0.0, 0.0, 1.0, 1.0});
     markDirty(QSGNode::DirtyGeometry);

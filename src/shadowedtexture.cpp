@@ -48,17 +48,22 @@ QSGNode *ShadowedTexture::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaint
 {
     Q_UNUSED(data);
 
-    if (!node || m_sourceChanged) {
+    auto shadowNode = static_cast<ShadowedRectangleNode*>(node);
+
+    if (!shadowNode || m_sourceChanged) {
         m_sourceChanged = false;
-        delete node;
+        delete shadowNode;
         if (m_source) {
-            node = new ShadowedTextureNode{};
+            shadowNode = new ShadowedTextureNode{};
         } else {
-            node = new ShadowedRectangleNode{};
+            shadowNode = new ShadowedRectangleNode{};
+        }
+
+        if (qEnvironmentVariableIsSet("KIRIGAMI_LOWPOWER_HARDWARE")) {
+            shadowNode->setShaderType(ShadowedRectangleMaterial::ShaderType::LowPower);
         }
     }
 
-    auto shadowNode = static_cast<ShadowedRectangleNode*>(node);
     shadowNode->setBorderEnabled(border()->isEnabled());
     shadowNode->setRect(boundingRect());
     shadowNode->setSize(shadow()->size());
@@ -70,7 +75,7 @@ QSGNode *ShadowedTexture::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaint
     shadowNode->setBorderColor(border()->color());
 
     if (m_source) {
-        static_cast<ShadowedTextureNode*>(node)->setTextureSource(m_source->textureProvider());
+        static_cast<ShadowedTextureNode*>(shadowNode)->setTextureSource(m_source->textureProvider());
     }
 
     shadowNode->updateGeometry();

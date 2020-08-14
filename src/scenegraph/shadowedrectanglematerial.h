@@ -19,6 +19,11 @@
 class ShadowedRectangleMaterial : public QSGMaterial
 {
 public:
+    enum class ShaderType {
+        Standard,
+        LowPower
+    };
+
     ShadowedRectangleMaterial();
 
     QSGMaterialShader* createShader() const override;
@@ -31,6 +36,7 @@ public:
     QColor color = Qt::white;
     QColor shadowColor = Qt::black;
     QVector2D offset;
+    ShaderType shaderType = ShaderType::Standard;
 
     static QSGMaterialType staticType;
 };
@@ -38,7 +44,7 @@ public:
 class ShadowedRectangleShader : public QSGMaterialShader
 {
 public:
-    ShadowedRectangleShader();
+    ShadowedRectangleShader(ShadowedRectangleMaterial::ShaderType shaderType);
 
     char const *const *attributeNames() const override;
 
