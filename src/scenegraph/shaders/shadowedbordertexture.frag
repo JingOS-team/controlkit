@@ -70,10 +70,8 @@ void main()
     // Then, render it again but this time with the proper color and properly alpha blended.
     col = sdf_render(outer_rect, col, borderColor);
 
-    // Calculate the inner rectangle distance field.
-    // This uses a reduced corner radius because the inner corners need to be smaller than the outer corners.
-    lowp vec4 inner_radius = (radius - borderWidth * 2.0) * inverse_scale;
-    lowp float inner_rect = sdf_rounded_rectangle(uv, (aspect - borderWidth * 2.0) * inverse_scale, inner_radius);
+    // The inner rectangle distance field is the outer reduced by twice the border width.
+    lowp float inner_rect = outer_rect + (borderWidth * inverse_scale) * 2.0;
 
     // Like above, but this time cut out the inner rectangle.
     col = sdf_render(inner_rect, col, vec4(0.0));
@@ -82,7 +80,7 @@ void main()
     col = sdf_render(inner_rect, col, color);
 
     // Slightly increase the size of the inner rectangle, to avoid issues with anti-aliasing.
-    inner_rect = sdf_rounded_rectangle(uv, (aspect - borderWidth * 2.0 + 0.005) * inverse_scale, inner_radius);
+    inner_rect = inner_rect - 0.005;
 
     // Sample the texture, then blend it on top of the background color.
     lowp vec2 texture_uv = ((uv / aspect) + (1.0 * inverse_scale)) / (2.0 * inverse_scale);

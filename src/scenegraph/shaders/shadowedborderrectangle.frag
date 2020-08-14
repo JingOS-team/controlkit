@@ -59,10 +59,8 @@ void main()
     // Then, render it again but this time with the proper color and properly alpha blended.
     col = sdf_render(outer_rect, col, borderColor);
 
-    // Calculate the inner rectangle distance field.
-    // This uses a reduced corner radius because the inner corners need to be smaller than the outer corners.
-    lowp vec4 inner_radius = (radius - borderWidth * 2.0) * inverse_scale;
-    lowp float inner_rect = sdf_rounded_rectangle(uv, (aspect - borderWidth * 2.0) * inverse_scale, inner_radius);
+    // The inner rectangle distance field is the outer reduces by twice the border size.
+    lowp float inner_rect = outer_rect + (borderWidth * inverse_scale) * 2.0;
 
     // Like above, but this time cut out the inner rectangle.
     col = sdf_render(inner_rect, col, vec4(0.0));
