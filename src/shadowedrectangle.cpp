@@ -196,6 +196,12 @@ ShadowedRectangle::ShadowedRectangle(QQuickItem *parentItem)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 
+    if (qEnvironmentVariableIsSet("KIRIGAMI_SOFTWARE_SHADOWEDRECTANGLE")) {
+        m_forceSoftwareRendering = QByteArrayList{"1", "true"}.contains(qgetenv("KIRIGAMI_SOFTWARE_SHADOWEDRECTANGLE"));
+    } else {
+        m_forceSoftwareRendering = false;
+    }
+
     connect(m_border.get(), &BorderGroup::changed, this, &ShadowedRectangle::update);
     connect(m_shadow.get(), &ShadowGroup::changed, this, &ShadowedRectangle::update);
     connect(m_corners.get(), &CornersGroup::changed, this, &ShadowedRectangle::update);
@@ -232,7 +238,9 @@ void ShadowedRectangle::setRadius(qreal newRadius)
     }
 
     m_radius = newRadius;
-    update();
+    if (!isSoftwareRendering()) {
+        update();
+    }
     Q_EMIT radiusChanged();
 }
 
@@ -248,7 +256,9 @@ void ShadowedRectangle::setColor(const QColor & newColor)
     }
 
     m_color = newColor;
-    update();
+    if (!isSoftwareRendering()) {
+        update();
+    }
     Q_EMIT colorChanged();
 }
 
@@ -257,6 +267,16 @@ void ShadowedRectangle::componentComplete()
     QQuickItem::componentComplete();
 
     checkSoftwareItem();
+}
+
+bool ShadowedRectangle::isSoftwareRendering() const
+{
+    return m_forceSoftwareRendering || (window() && window()->rendererInterface()->graphicsApi() == QSGRendererInterface::Software);
+}
+
+PaintedRectangleItem *ShadowedRectangle::softwareItem() const
+{
+    return m_softwareItem;
 }
 
 void ShadowedRectangle::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value)
@@ -290,7 +310,7 @@ QSGNode *ShadowedRectangle::updatePaintNode(QSGNode *node, QQuickItem::UpdatePai
 
 void ShadowedRectangle::checkSoftwareItem()
 {
-    if (!m_softwareItem && window() && window()->rendererInterface()->graphicsApi() == QSGRendererInterface::Software) {
+    if (!m_softwareItem && isSoftwareRendering()) {
         m_softwareItem = new PaintedRectangleItem{this};
         // The software item is added as a "normal" child item, this means it
         // will be part of the normal item sort order. Since there is no way to

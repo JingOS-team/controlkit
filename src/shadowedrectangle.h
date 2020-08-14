@@ -234,7 +234,10 @@ public:
 
     void componentComplete() override;
 
+    bool isSoftwareRendering() const;
+
 protected:
+    PaintedRectangleItem *softwareItem() const;
     void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value) override;
     QSGNode *updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *data) override;
 
@@ -246,4 +249,5 @@ private:
     qreal m_radius = 0.0;
     QColor m_color = Qt::white;
     PaintedRectangleItem *m_softwareItem = nullptr;
+    bool m_forceSoftwareRendering = false;
 };
