@@ -7,6 +7,7 @@
 
 #include "icon.h"
 #include "libkirigami/platformtheme.h"
+#include "scenegraph/managedtexturenode.h"
 
 #include <QSGSimpleTextureNode>
 #include <QQuickWindow>
@@ -22,96 +23,7 @@
 #include <QPainter>
 #include <QScreen>
 
-class ManagedTextureNode : public QSGSimpleTextureNode
-{
-Q_DISABLE_COPY(ManagedTextureNode)
-public:
-    ManagedTextureNode();
 
-    void setTexture(QSharedPointer<QSGTexture> texture);
-
-private:
-    QSharedPointer<QSGTexture> m_texture;
-};
-
-ManagedTextureNode::ManagedTextureNode()
-{}
-
-void ManagedTextureNode::setTexture(QSharedPointer<QSGTexture> texture)
-{
-    m_texture = texture;
-    QSGSimpleTextureNode::setTexture(texture.data());
-}
-
-typedef QHash<qint64, QHash<QWindow*, QWeakPointer<QSGTexture> > > TexturesCache;
-
-struct ImageTexturesCachePrivate
-{
-    TexturesCache cache;
-};
-
-class ImageTexturesCache
-{
-public:
-    ImageTexturesCache();
-    ~ImageTexturesCache();
-
-    /**
-     * @returns the texture for a given @p window and @p image.
-     *
-     * If an @p image id is the same as one already provided before, we won't create
-     * a new texture and return a shared pointer to the existing texture.
-     */
-    QSharedPointer<QSGTexture> loadTexture(QQuickWindow *window, const QImage &image, QQuickWindow::CreateTextureOptions options);
-
-    QSharedPointer<QSGTexture> loadTexture(QQuickWindow *window, const QImage &image);
-
-
-private:
-    QScopedPointer<ImageTexturesCachePrivate> d;
-};
-
-
-ImageTexturesCache::ImageTexturesCache()
-    : d(new ImageTexturesCachePrivate)
-{
-}
-
-ImageTexturesCache::~ImageTexturesCache()
-{
-}
-
-QSharedPointer<QSGTexture> ImageTexturesCache::loadTexture(QQuickWindow *window, const QImage &image, QQuickWindow::CreateTextureOptions options)
-{
-    qint64 id = image.cacheKey();
-    QSharedPointer<QSGTexture> texture = d->cache.value(id).value(window).toStrongRef();
-
-    if (!texture) {
-        auto cleanAndDelete = [this, window, id](QSGTexture* texture) {
-            QHash<QWindow*, QWeakPointer<QSGTexture> >& textures = (d->cache)[id];
-            textures.remove(window);
-            if (textures.isEmpty())
-                d->cache.remove(id);
-            delete texture;
-        };
-        texture = QSharedPointer<QSGTexture>(window->createTextureFromImage(image, options), cleanAndDelete);
-        (d->cache)[id][window] = texture.toWeakRef();
-    }
-
-    //if we have a cache in an atlas but our request cannot use an atlassed texture
-    //create a new texture and use that
-    //don't use removedFromAtlas() as that requires keeping a reference to the non atlased version
-    if (!(options & QQuickWindow::TextureCanUseAtlas) && texture->isAtlasTexture()) {
-        texture = QSharedPointer<QSGTexture>(window->createTextureFromImage(image, options));
-    }
-
-    return texture;
-}
-
-QSharedPointer<QSGTexture> ImageTexturesCache::loadTexture(QQuickWindow *window, const QImage &image)
-{
-    return loadTexture(window, image, {});
-}
 
 Q_GLOBAL_STATIC(ImageTexturesCache, s_iconImageCache)
 
