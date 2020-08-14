@@ -198,6 +198,20 @@ const lowp float sdf_null = 99999.0;
 // This
 const lowp float sdf_default_smoothing = 0.625;
 
+// Render an sdf shape alpha-blended onto an existing color.
+//
+// This is an overload of sdf_render(float, vec4, vec4) that allows specifying a
+// blending amount and a smoothing amount.
+//
+// \param alpha The alpha to use for blending.
+// \param smoothing The amount of smoothing to apply to the sdf.
+//
+lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor, in lowp float alpha, in lowp float smoothing)
+{
+   lowp float g = fwidth(sdf);
+   return mix(sourceColor, sdfColor, alpha * (1.0 - smoothstep(-smoothing * g, smoothing * g, sdf)));
+}
+
 // Render an sdf shape.
 //
 // This will render the sdf shape on top of whatever source color is input,
@@ -210,8 +224,7 @@ const lowp float sdf_default_smoothing = 0.625;
 // \return sourceColor with the sdf shape rendered on top.
 lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor)
 {
-    lowp float g = fwidth(sdf);
-    return mix(sourceColor, sdfColor, 1.0 - smoothstep(-sdf_default_smoothing * g, sdf_default_smoothing * g, sdf));
+    return sdf_render(sdf, sourceColor, sdfColor, 1.0, sdf_default_smoothing);
 }
 
 // Render an sdf shape.
@@ -223,20 +236,5 @@ lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 s
 //
 lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor, in lowp float smoothing)
 {
-    lowp float g = fwidth(sdf);
-    return mix(sourceColor, sdfColor, 1.0 - smoothstep(-smoothing * g, smoothing * g, sdf));
-}
-
-// Render an sdf shape alpha-blended onto an existing color.
-//
-// This is an overload of sdf_render(float, vec4, vec4) that allows specifying a
-// blending amount and a smoothing amount.
-//
-// \param alpha The alpha to use for blending.
-// \param smoothing The amount of smoothing to apply to the sdf.
-//
-lowp vec4 sdf_render(in lowp float sdf, in lowp vec4 sourceColor, in lowp vec4 sdfColor, in lowp float alpha, in lowp float smoothing)
-{
-    lowp float g = fwidth(sdf);
-    return mix(sourceColor, sdfColor, alpha * (1.0 - smoothstep(-smoothing * g, smoothing * g, sdf)));
+    return sdf_render(sdf, sourceColor, sdfColor, 1.0, smoothing);
 }
