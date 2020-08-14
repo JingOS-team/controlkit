@@ -196,12 +196,6 @@ ShadowedRectangle::ShadowedRectangle(QQuickItem *parentItem)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 
-    if (qEnvironmentVariableIsSet("KIRIGAMI_SOFTWARE_SHADOWEDRECTANGLE")) {
-        m_forceSoftwareRendering = QByteArrayList{"1", "true"}.contains(qgetenv("KIRIGAMI_SOFTWARE_SHADOWEDRECTANGLE"));
-    } else {
-        m_forceSoftwareRendering = false;
-    }
-
     connect(m_border.get(), &BorderGroup::changed, this, &ShadowedRectangle::update);
     connect(m_shadow.get(), &ShadowGroup::changed, this, &ShadowedRectangle::update);
     connect(m_corners.get(), &CornersGroup::changed, this, &ShadowedRectangle::update);
@@ -271,7 +265,7 @@ void ShadowedRectangle::componentComplete()
 
 bool ShadowedRectangle::isSoftwareRendering() const
 {
-    return m_forceSoftwareRendering || (window() && window()->rendererInterface()->graphicsApi() == QSGRendererInterface::Software);
+    return window() && window()->rendererInterface()->graphicsApi() == QSGRendererInterface::Software;
 }
 
 PaintedRectangleItem *ShadowedRectangle::softwareItem() const

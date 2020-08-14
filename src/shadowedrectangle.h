@@ -253,5 +253,4 @@ private:
     qreal m_radius = 0.0;
     QColor m_color = Qt::white;
     PaintedRectangleItem *m_softwareItem = nullptr;
-    bool m_forceSoftwareRendering = false;
 };
