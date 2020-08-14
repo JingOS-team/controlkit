@@ -35,7 +35,6 @@
         <file alias="private/DefaultCardBackground.qml">@kirigami_QML_DIR@/src/controls/private/DefaultCardBackground.qml</file>
         <file alias="private/BannerImage.qml">@kirigami_QML_DIR@/src/controls/private/BannerImage.qml</file>
         <file alias="private/EdgeShadow.qml">@kirigami_QML_DIR@/src/controls/private/EdgeShadow.qml</file>
-        <file alias="private/ActionToolBarLayoutDetails.qml">@kirigami_QML_DIR@/src/controls/private/ActionToolBarLayoutDetails.qml</file>
         <file alias="private/globaltoolbar/AbstractPageHeader.qml">@kirigami_QML_DIR@/src/controls/private/globaltoolbar/AbstractPageHeader.qml</file>
         <file alias="private/globaltoolbar/BreadcrumbControl.qml">@kirigami_QML_DIR@/src/controls/private/globaltoolbar/BreadcrumbControl.qml</file>
         <file alias="private/globaltoolbar/PageRowGlobalToolBarStyleGroup.qml">@kirigami_QML_DIR@/src/controls/private/globaltoolbar/PageRowGlobalToolBarStyleGroup.qml</file>

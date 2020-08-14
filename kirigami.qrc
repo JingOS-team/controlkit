@@ -33,7 +33,6 @@
         <file alias="private/DefaultCardBackground.qml">src/controls/private/DefaultCardBackground.qml</file>
         <file alias="private/BannerImage.qml">src/controls/private/BannerImage.qml</file>
         <file alias="private/EdgeShadow.qml">src/controls/private/EdgeShadow.qml</file>
-        <file alias="private/ActionToolBarLayoutDetails.qml">src/controls/private/ActionToolBarLayoutDetails.qml</file>
         <file alias="private/globaltoolbar/AbstractPageHeader.qml">src/controls/private/globaltoolbar/AbstractPageHeader.qml</file>
         <file alias="private/globaltoolbar/PageRowGlobalToolBarStyleGroup.qml">src/controls/private/globaltoolbar/PageRowGlobalToolBarStyleGroup.qml</file>
         <file alias="private/globaltoolbar/PageRowGlobalToolBarUI.qml">src/controls/private/globaltoolbar/PageRowGlobalToolBarUI.qml</file>
