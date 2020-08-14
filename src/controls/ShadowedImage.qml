@@ -21,7 +21,8 @@ Item {
 
     Image {
         id: image
-        visible: false
+        anchors.fill: parent
+        visible: shadowRectangle.softwareRendering
     }
 
     ShadowedTexture {

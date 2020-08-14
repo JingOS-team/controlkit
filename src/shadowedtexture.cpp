@@ -11,7 +11,6 @@
 #include <QSGRectangleNode>
 
 #include "scenegraph/shadowedtexturenode.h"
-#include "scenegraph/paintedrectangleitem.h"
 
 ShadowedTexture::ShadowedTexture(QQuickItem *parentItem)
     : ShadowedRectangle(parentItem)
@@ -39,9 +38,7 @@ void ShadowedTexture::setSource(QQuickItem *newSource)
         m_source->setParentItem(this);
     }
 
-    if (isSoftwareRendering() && softwareItem()) {
-        softwareItem()->setSource(newSource);
-    } else {
+    if (!isSoftwareRendering()) {
         update();
     }
     Q_EMIT sourceChanged();

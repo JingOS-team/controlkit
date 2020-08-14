@@ -283,6 +283,8 @@ void ShadowedRectangle::itemChange(QQuickItem::ItemChange change, const QQuickIt
 {
     if (change == QQuickItem::ItemSceneChange && value.window) {
         checkSoftwareItem();
+        //TODO: only conditionally emit?
+        emit softwareRenderingChanged();
     }
 }
 

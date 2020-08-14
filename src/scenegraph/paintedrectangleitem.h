@@ -8,7 +8,6 @@
 #define PAINTEDRECTANGLEITEM_H
 
 #include <QQuickPaintedItem>
-#include <QImage>
 
 /**
  * A rectangle with a border and rounded corners, rendered through QPainter.
@@ -34,20 +33,11 @@ public:
 
     void paint(QPainter *painter) override;
 
-    void setSource(QQuickItem *source);
-    QQuickItem *source() const;
-
-protected:
-    void updatePolish() override;
-
 private:
     QColor m_color;
     qreal m_radius = 0.0;
     QColor m_borderColor;
     qreal m_borderWidth = 0.0;
-    QPointer <QQuickItem> m_source = nullptr;
-    QSharedPointer<QQuickItemGrabResult> m_grabResult;
-    QImage m_softwareTexture;
 };
 
 #endif // PAINTEDRECTANGLEITEM_H
