@@ -9,13 +9,17 @@
         <file>shadowedrectangle.vert</file>
         <file alias="shadowedrectangle_core.vert">shadowedrectangle.vert</file>
         <file>shadowedrectangle.frag</file>
+        <file>shadowedrectangle_lowpower.frag</file>
         <file alias="shadowedrectangle_core.frag">shadowedrectangle.frag</file>
         <file>shadowedborderrectangle.frag</file>
+        <file>shadowedborderrectangle_lowpower.frag</file>
         <file alias="shadowedborderrectangle_core.frag">shadowedborderrectangle.frag</file>
         <file>shadowedtexture.frag</file>
         <file alias="shadowedtexture_core.frag">shadowedborderrectangle.frag</file>
+        <file>shadowedtexture_lowpower.frag</file>
         <file>shadowedbordertexture.frag</file>
         <file alias="shadowedbordertexture_core.frag">shadowedborderrectangle.frag</file>
+        <file>shadowedbordertexture_lowpower.frag</file>
     </qresource>
 </RCC>
 
