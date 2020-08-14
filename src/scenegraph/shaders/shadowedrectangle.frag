@@ -21,6 +21,7 @@ in lowp vec2 uv;
 out lowp vec4 out_color;
 #else
 varying lowp vec2 uv;
+#define out_color gl_FragColor
 #endif
 
 const lowp float minimum_shadow_radius = 0.05;
@@ -53,9 +54,5 @@ void main()
     // Then, render it again but this time with the proper color and properly alpha blended.
     col = sdf_render(rect, col, color);
 
-#ifdef CORE_PROFILE
     out_color = col * opacity;
-#else
-    gl_FragColor = col * opacity;
-#endif
 }

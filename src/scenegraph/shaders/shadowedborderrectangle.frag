@@ -24,6 +24,7 @@ in lowp vec2 uv;
 out lowp vec4 out_color;
 #else
 varying lowp vec2 uv;
+#define out_color gl_FragColor
 #endif
 
 const lowp float minimum_shadow_radius = 0.05;
@@ -68,9 +69,5 @@ void main()
     // Finally, render the inner rectangle.
     col = sdf_render(inner_rect, col, color);
 
-#ifdef CORE_PROFILE
     out_color = col * opacity;
-#else
-    gl_FragColor = col * opacity;
-#endif
 }
