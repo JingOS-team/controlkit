@@ -121,7 +121,7 @@ Item {
                     return
                 }                
 
-                if ((root.pageRow ? root.pageRow.wideMode : (__appWindow && __appWindow.wideScreen)) || !Settings.isMobile) {
+                if ((root.pageRow ? root.pageRow.wideMode : (__appWindow && __appWindow.wideScreen)) || !Settings.isMobile || root.page.flickable.atYBeginning) {
                     root.implicitHeight = root.preferredHeight;
                 } else {
                     var oldHeight = root.implicitHeight;
