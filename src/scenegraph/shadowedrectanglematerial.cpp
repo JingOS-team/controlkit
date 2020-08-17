@@ -43,25 +43,7 @@ int ShadowedRectangleMaterial::compare(const QSGMaterial *other) const
 
 ShadowedRectangleShader::ShadowedRectangleShader(ShadowedRectangleMaterial::ShaderType shaderType)
 {
-    auto header = QOpenGLContext::currentContext()->isOpenGLES() ? QStringLiteral("header_es.glsl") : QStringLiteral("header_desktop.glsl");
-
-    auto shaderRoot = QStringLiteral(":/org/kde/kirigami/shaders/");
-
-    setShaderSourceFiles(QOpenGLShader::Vertex, {
-        shaderRoot + header,
-        shaderRoot + QStringLiteral("shadowedrectangle.vert")
-    });
-
-    auto shaderFile = QStringLiteral("shadowedrectangle.frag");
-    if (shaderType == ShadowedRectangleMaterial::ShaderType::LowPower) {
-        shaderFile = QStringLiteral("shadowedrectangle_lowpower.frag");
-    }
-
-    setShaderSourceFiles(QOpenGLShader::Fragment, {
-        shaderRoot + header,
-        shaderRoot + QStringLiteral("sdf.glsl"),
-        shaderRoot + shaderFile
-    });
+    setShader(shaderType, QStringLiteral("shadowedrectangle"));
 }
 
 const char *const * ShadowedRectangleShader::attributeNames() const
@@ -104,4 +86,29 @@ void ShadowedRectangleShader::updateState(const QSGMaterialShader::RenderState& 
         p->setUniformValue(m_shadowColorLocation, material->shadowColor);
         p->setUniformValue(m_offsetLocation, material->offset);
     }
+}
+
+void ShadowedRectangleShader::setShader(ShadowedRectangleMaterial::ShaderType shaderType, const QString& shader)
+{
+    auto header = QOpenGLContext::currentContext()->isOpenGLES() ? QStringLiteral("header_es.glsl") : QStringLiteral("header_desktop.glsl");
+
+    auto shaderRoot = QStringLiteral(":/org/kde/kirigami/shaders/");
+
+    setShaderSourceFiles(QOpenGLShader::Vertex, {
+        shaderRoot + header,
+        shaderRoot + QStringLiteral("shadowedrectangle.vert")
+    });
+
+    QString shaderFile = shader + QStringLiteral(".frag");
+    auto sdfFile = QStringLiteral("sdf.glsl");
+    if (shaderType == ShadowedRectangleMaterial::ShaderType::LowPower) {
+        shaderFile = shader + QStringLiteral("_lowpower.frag");
+        sdfFile = QStringLiteral("sdf_lowpower.glsl");
+    }
+
+    setShaderSourceFiles(QOpenGLShader::Fragment, {
+        shaderRoot + header,
+        shaderRoot + sdfFile,
+        shaderRoot + shaderFile
+    });
 }

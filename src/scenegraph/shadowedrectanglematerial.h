@@ -51,6 +51,9 @@ public:
     void initialize() override;
     void updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;
 
+protected:
+    void setShader(ShadowedRectangleMaterial::ShaderType shaderType, const QString &shader);
+
 private:
     int m_matrixLocation = -1;
     int m_opacityLocation = -1;
