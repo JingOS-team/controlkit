@@ -5,6 +5,7 @@
         <file>header_desktop.glsl</file>
         <file>header_desktop_core.glsl</file>
         <file>sdf.glsl</file>
+        <file>sdf_lowpower.glsl</file>
         <file alias="sdf_core.glsl">sdf.glsl</file>
         <file>shadowedrectangle.vert</file>
         <file alias="shadowedrectangle_core.vert">shadowedrectangle.vert</file>
