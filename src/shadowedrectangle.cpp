@@ -290,7 +290,10 @@ QSGNode *ShadowedRectangle::updatePaintNode(QSGNode *node, QQuickItem::UpdatePai
 
     if (!shadowNode) {
         shadowNode = new ShadowedRectangleNode{};
-        if (qEnvironmentVariableIsSet("KIRIGAMI_LOWPOWER_HARDWARE")) {
+
+        // Cache lowPower state so we only execute the full check once.
+        static bool lowPower = QByteArrayList{"1", "true"}.contains(qgetenv("KIRIGAMI_LOWPOWER_HARDWARE").toLower());
+        if (lowPower) {
             shadowNode->setShaderType(ShadowedRectangleMaterial::ShaderType::LowPower);
         }
     }
