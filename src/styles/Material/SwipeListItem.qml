@@ -41,7 +41,7 @@ import "../../templates" as T
  * @inherit QtQuick.Item
  */
 T.SwipeListItem {
-    id: root
+    id: listItem
 
     background: DefaultListItemBackground {
         MatImp.Ripple {
