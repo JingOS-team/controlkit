@@ -224,7 +224,7 @@ Q_SIGNALS:
 
 private:
     QString m_name;
-    QQmlComponent* m_component;
+    QQmlComponent* m_component = nullptr;
     bool m_cache = false;
     int m_cost = 1;
 
