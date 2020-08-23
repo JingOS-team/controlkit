@@ -5,6 +5,7 @@
  */
 
 import QtQuick 2.6
+import QtQuick.Controls 2.12 as QQC2
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.4 as Kirigami
 import "../../templates/private" as TemplatesPrivate
@@ -79,6 +80,10 @@ Kirigami.AbstractApplicationHeader {
             TemplatesPrivate.ForwardButton {
                 Layout.preferredWidth: height
             }
+        }
+
+        QQC2.ToolSeparator {
+            visible: (menuButton.visible || buttonsLayout.visible) && breadcrumbVisible && pageRow.depth > 1
         }
 
         Loader {
