@@ -8,7 +8,7 @@
 import QtQuick 2.11
 import QtQuick.Layouts 1.2
 import QtQuick.Window 2.2
-import org.kde.kirigami 2.11
+import org.kde.kirigami 2.14
 import QtGraphicalEffects 1.0
 import QtQuick.Templates 2.0 as T2
 import "private"
@@ -468,13 +468,22 @@ QtObject {
                 width: mainItem.contentItemPreferredWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.contentItemMaximumWidth, mainItem.contentItemPreferredWidth)) - root.leftInset - root.rightInset
                 height: Math.min(implicitHeight, parent.height) - root.topInset - root.bottomInset
 
-                Item {
+                // Even though we're not actually using any shadows here,
+                // we're using a ShadowedRectangle instead of a regular
+                // rectangle because it allows fine-grained control over which
+                // corners to round, which we need here
+                ShadowedRectangle {
                     id: headerItem
                     Layout.fillWidth: true
                     //Layout.margins: 1
                     visible: root.header || root.showCloseButton
                     implicitHeight: Math.max(headerParent.implicitHeight, closeIcon.height) + Units.smallSpacing * 2
                     z: 2
+                    corners.topLeftRadius: Units.smallSpacing
+                    corners.topRightRadius: Units.smallSpacing
+                    Theme.colorSet: Theme.Header
+                    Theme.inherit: false
+                    color: Theme.backgroundColor
                     Item {
                         id: headerParent
                         implicitHeight: header ? header.implicitHeight : 0
@@ -558,15 +567,23 @@ QtObject {
             }
 
             // footer item is outside the layout as it should never scroll away
-            Rectangle {
+
+            // Even though we're not actually using any shadows here,
+            // we're using a ShadowedRectangle instead of a regular
+            // rectangle because it allows fine-grained control over which
+            // corners to round, which we need here
+            ShadowedRectangle {
                 id: footerItem
                 width: contentLayout.width - 2
-                radius: Units.smallSpacing
+                corners.bottomLeftRadius: Units.smallSpacing
+                corners.bottomRightRadius: Units.smallSpacing
                 parent: outerFlickable
                 x: contentLayout.x + 1
                 y: Math.min(parent.height, contentLayout.y + contentLayout.height  -1) - height
                 visible: root.footer
                 implicitHeight: footerParent.implicitHeight + Units.smallSpacing * 2 + extraMargin
+                Theme.colorSet: Theme.Window
+                Theme.inherit: false
                 color: Theme.backgroundColor
 
                 //Show an extra margin when:
