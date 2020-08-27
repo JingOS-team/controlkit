@@ -496,7 +496,7 @@ QVector<ToolBarLayoutDelegate*> ToolBarLayout::Private::createDelegates()
     }
 
     if (!moreButtonInstance && !moreButtonIncubator) {
-        moreButtonIncubator = new ToolBarDelegateIncubator(moreButton, qmlContext(q));
+        moreButtonIncubator = new ToolBarDelegateIncubator(moreButton, qmlContext(moreButton));
         moreButtonIncubator->setStateCallback([this](QQuickItem *item) {
             item->setParentItem(q);
         });
@@ -535,7 +535,7 @@ ToolBarLayoutDelegate *ToolBarLayout::Private::createDelegate(QObject* action)
 
     auto result = new ToolBarLayoutDelegate(q);
     result->setAction(action);
-    result->createItems(fullComponent, iconDelegate, qmlContext(q), [this, action](QQuickItem *newItem) {
+    result->createItems(fullComponent, iconDelegate, [this, action](QQuickItem *newItem) {
         newItem->setParentItem(q);
         auto attached = static_cast<ToolBarLayoutAttached*>(qmlAttachedPropertiesObject<ToolBarLayout>(newItem, true));
         attached->setAction(action);

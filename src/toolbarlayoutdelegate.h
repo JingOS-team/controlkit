@@ -54,7 +54,7 @@ public:
 
     QObject *action() const;
     void setAction(QObject *action);
-    void createItems(QQmlComponent *fullComponent, QQmlComponent *iconComponent, QQmlContext *context, std::function<void(QQuickItem*)> callback);
+    void createItems(QQmlComponent *fullComponent, QQmlComponent *iconComponent, std::function<void(QQuickItem*)> callback);
 
     bool isReady() const;
     bool isActionVisible() const;

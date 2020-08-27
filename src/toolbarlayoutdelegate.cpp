@@ -116,9 +116,9 @@ void ToolBarLayoutDelegate::setAction(QObject* action)
     }
 }
 
-void ToolBarLayoutDelegate::createItems(QQmlComponent *fullComponent, QQmlComponent *iconComponent, QQmlContext *context, std::function<void(QQuickItem*)> callback)
+void ToolBarLayoutDelegate::createItems(QQmlComponent *fullComponent, QQmlComponent *iconComponent, std::function<void(QQuickItem*)> callback)
 {
-    m_fullIncubator = new ToolBarDelegateIncubator(fullComponent, context);
+    m_fullIncubator = new ToolBarDelegateIncubator(fullComponent, qmlContext(fullComponent));
     m_fullIncubator->setStateCallback(callback);
     m_fullIncubator->setCompletedCallback([this](ToolBarDelegateIncubator *incubator) {
         if (incubator->isError()) {
@@ -143,7 +143,7 @@ void ToolBarLayoutDelegate::createItems(QQmlComponent *fullComponent, QQmlCompon
 
         QMetaObject::invokeMethod(this, &ToolBarLayoutDelegate::cleanupIncubators, Qt::QueuedConnection);
     });
-    m_iconIncubator = new ToolBarDelegateIncubator(iconComponent, context);
+    m_iconIncubator = new ToolBarDelegateIncubator(iconComponent, qmlContext(iconComponent));
     m_iconIncubator->setStateCallback(callback);
     m_iconIncubator->setCompletedCallback([this](ToolBarDelegateIncubator *incubator) {
         if (incubator->isError()) {
