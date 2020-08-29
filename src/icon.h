@@ -13,7 +13,6 @@
 #include <QVariant>
 #include <QPointer>
 
-class QNetworkAccessManager;
 class QNetworkReply;
 
 namespace Kirigami {

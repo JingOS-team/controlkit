@@ -11,7 +11,6 @@
 #include <QObject>
 #include <QQuickWindow>
 
-class QQuickItem;
 
 /**
  * This Attached property is used to calculate automated keyboard sequences

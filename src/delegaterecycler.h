@@ -12,7 +12,6 @@
 #include <QPointer>
 
 
-class DelegateCache;
 
 class DelegateRecyclerAttached : public QObject
 {
