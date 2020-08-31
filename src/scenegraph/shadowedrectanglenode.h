@@ -13,7 +13,7 @@
 
 #include "shadowedrectanglematerial.h"
 
-class QSGMaterialType;
+struct QSGMaterialType;
 class ShadowedBorderRectangleMaterial;
 
 /**
