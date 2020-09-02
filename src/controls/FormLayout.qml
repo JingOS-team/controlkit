@@ -337,7 +337,8 @@ Item {
             Layout.topMargin: item.Kirigami.FormData.buddyFor.height > implicitHeight * 2 ? Kirigami.Units.smallSpacing/2 : 0
 
             activeFocusOnTab: indicator.visible && indicator.enabled
-            text: labelItem.Kirigami.MnemonicData.richTextLabel
+            //HACK: desktop style checkboxes have also the text in the background item
+            //text: labelItem.Kirigami.MnemonicData.richTextLabel
             enabled: labelItem.item.Kirigami.FormData.enabled
             checked: labelItem.item.Kirigami.FormData.checked
 
@@ -362,7 +363,7 @@ Item {
                 text: labelItem.text
                 verticalAlignment: root.wideMode ? Text.AlignVCenter : Text.AlignBottom
                 enabled: labelItem.item.Kirigami.FormData.enabled
-                leftPadding: parent.indicator.width
+                leftPadding: height//parent.indicator.width
             }
             Rectangle {
                 enabled: labelItem.indicator.enabled
