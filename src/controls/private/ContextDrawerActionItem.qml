@@ -48,6 +48,23 @@ BasicListItem {
         }
     }
 
+    Loader {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        sourceComponent: modelData.displayComponent
+        onStatusChanged: {
+            for (var i in parent.children) {
+                var child = parent.children[i];
+                if (child == this) {
+                    child.visible = status === Loader.Ready;
+                    break;
+                } else {
+                    child.visible = status !== Loader.Ready;
+                }
+            }
+        }
+        Component.onCompleted: statusChanged()
+    }
 
     Icon {
         isMask: true
