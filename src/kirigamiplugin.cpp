@@ -24,6 +24,7 @@
 #include "imagecolors.h"
 #include "avatar.h"
 #include "toolbarlayout.h"
+#include "sizegroup.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -269,6 +270,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("FlexColumn.qml")), uri, 2, 14, "FlexColumn");
     qmlRegisterType<ToolBarLayout>(uri, 2, 14, "ToolBarLayout");
     qmlRegisterSingletonType<DisplayHint>(uri, 2, 14, "DisplayHint", [](QQmlEngine*, QJSEngine*) -> QObject* { return new DisplayHint; });
+    qmlRegisterType<SizeGroup>(uri, 2, 14, "SizeGroup");
 
     qmlProtectModule(uri, 2);
 }
