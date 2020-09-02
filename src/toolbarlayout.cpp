@@ -54,6 +54,7 @@ public:
     Qt::Alignment alignment = Qt::AlignLeft;
     qreal visibleWidth = 0.0;
     Qt::LayoutDirection layoutDirection = Qt::LeftToRight;
+    HeightMode heightMode = ConstrainIfLarger;
 
     bool completed = false;
     bool layoutQueued = false;
@@ -263,6 +264,21 @@ void ToolBarLayout::setLayoutDirection(Qt::LayoutDirection &newLayoutDirection)
     Q_EMIT layoutDirectionChanged();
 }
 
+ToolBarLayout::HeightMode ToolBarLayout::heightMode() const
+{
+    return d->heightMode;
+}
+
+void ToolBarLayout::setHeightMode(HeightMode newHeightMode)
+{
+    if (newHeightMode == d->heightMode) {
+        return;
+    }
+
+    d->heightMode = newHeightMode;
+    relayout();
+    Q_EMIT heightModeChanged();
+}
 
 void ToolBarLayout::relayout()
 {
@@ -355,7 +371,9 @@ void ToolBarLayout::Private::performLayout()
     // The last entry also gets spacing but shouldn't, so remove that.
     maxWidth -= spacing;
 
-    maxHeight = std::max(maxHeight, q->height());
+    if (q->heightValid() && q->height() > 0.0) {
+        maxHeight = q->height();
+    }
 
     qreal layoutWidth = q->width() - (moreButtonInstance->width() + spacing);
     if (alignment & Qt::AlignHCenter) {
@@ -392,6 +410,11 @@ void ToolBarLayout::Private::performLayout()
         } else {
             moreButtonInstance->setX(0.0);
         }
+
+        if (heightMode == AlwaysFill || (heightMode == ConstrainIfLarger && moreButtonInstance->height() > maxHeight)) {
+            moreButtonInstance->setHeight(q->height());
+        }
+
         moreButtonInstance->setY(qRound((maxHeight - moreButtonInstance->height()) / 2.0));
         moreButtonInstance->setVisible(true);
     } else {
@@ -402,6 +425,10 @@ void ToolBarLayout::Private::performLayout()
     for (auto entry : sortedDelegates) {
         if (!entry->isVisible()) {
             continue;
+        }
+
+        if (heightMode == AlwaysFill || (heightMode == ConstrainIfLarger && entry->height() > maxHeight)) {
+            entry->setHeight(q->height());
         }
 
         qreal y = qRound((maxHeight - entry->height()) / 2.0);

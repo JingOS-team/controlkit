@@ -116,9 +116,31 @@ class ToolBarLayout : public QQuickItem
      * AlignLeft will align items to the right, and vice-versa.
      */
     Q_PROPERTY(Qt::LayoutDirection layoutDirection READ layoutDirection WRITE setLayoutDirection NOTIFY layoutDirectionChanged)
+    /**
+     * How to handle items that do not match the toolbar's height.
+     *
+     * When toolbar items do not match the height of the toolbar, there are
+     * several ways we can deal with this. This property sets the preferred way.
+     *
+     * The default is HeightMode::ConstrainIfLarger .
+     *
+     * \sa HeightMode
+     */
+    Q_PROPERTY(HeightMode heightMode READ heightMode WRITE setHeightMode NOTIFY heightModeChanged)
 
 public:
     using ActionsProperty = QQmlListProperty<QObject>;
+
+    /**
+     * An enum describing several modes that can be used to deal with items with
+     * a height that does not match the toolbar's height.
+     */
+    enum HeightMode {
+        AlwaysCenter, ///< Always center items, allowing them to go outside the bounds of the layout if they are larger.
+        AlwaysFill, ///< Always match the height of the layout. Larger items will be reduced in height, smaller items will be increased.
+        ConstrainIfLarger, ///< If the item is larger than the toolbar, reduce its height. Otherwise center it in the toolbar.
+    };
+    Q_ENUM(HeightMode)
 
     ToolBarLayout(QQuickItem *parent = nullptr);
     ~ToolBarLayout();
@@ -174,6 +196,10 @@ public:
     Qt::LayoutDirection layoutDirection() const;
     void setLayoutDirection(Qt::LayoutDirection &newLayoutDirection);
     Q_SIGNAL void layoutDirectionChanged();
+
+    HeightMode heightMode() const;
+    void setHeightMode(HeightMode newHeightMode);
+    Q_SIGNAL void heightModeChanged();
 
     /**
      * Queue a relayout of this layout.

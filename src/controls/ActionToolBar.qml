@@ -88,6 +88,13 @@ Controls.Control {
 
     property alias visibleWidth: layout.visibleWidth
 
+    /**
+     * Exposes heightMode of the internal layout.
+     *
+     * \sa ToolBarLayout::heightMode
+     */
+    property alias heightMode: layout.heightMode
+
     implicitHeight: layout.implicitHeight
     implicitWidth: layout.implicitWidth
 

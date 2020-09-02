@@ -227,6 +227,12 @@ void ToolBarLayoutDelegate::setPosition(qreal x, qreal y)
     m_icon->setY(y);
 }
 
+void ToolBarLayoutDelegate::setHeight(qreal height)
+{
+    m_full->setHeight(height);
+    m_icon->setHeight(height);
+}
+
 qreal ToolBarLayoutDelegate::width() const
 {
     if (m_iconVisible) {

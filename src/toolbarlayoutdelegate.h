@@ -70,6 +70,7 @@ public:
     void show();
 
     void setPosition(qreal x, qreal y);
+    void setHeight(qreal height);
 
     qreal width() const;
     qreal height() const;
