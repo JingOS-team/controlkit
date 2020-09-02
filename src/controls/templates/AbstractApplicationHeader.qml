@@ -26,7 +26,7 @@ Item {
     id: root
     z: 90
     property int minimumHeight: 0
-    property int preferredHeight: Units.iconSizes.medium + Units.smallSpacing * 2
+    property int preferredHeight: Math.max(...(Array.from(mainItem.children).map(elm => elm.implicitHeight))) + topPadding + bottomPadding
     property int maximumHeight: Units.gridUnit * 3
 
     property int position: Controls.ToolBar.Header
@@ -51,6 +51,7 @@ Item {
     //FIXME: remove
     property QtObject __appWindow: typeof applicationWindow !== "undefined" ? applicationWindow() : null;
     implicitHeight: preferredHeight
+    height: Layout.preferredHeight
 
     /**
      * background: Item
@@ -64,6 +65,8 @@ Item {
         background.parent = headerItem;
         background.anchors.fill = headerItem;
     }
+
+    Component.onCompleted: AppHeaderSizeGroup.items.push(this)
 
     onMinimumHeightChanged: implicitHeight = preferredHeight;
     onPreferredHeightChanged: implicitHeight = preferredHeight;
