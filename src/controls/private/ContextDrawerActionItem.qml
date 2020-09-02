@@ -36,17 +36,18 @@ BasicListItem {
 
         visible: listItem.isSeparator
         Layout.fillWidth: true
+    }
 
-        ActionsMenu {
-            id: actionsMenu
-            y: Settings.isMobile ? -height : listItem.height
-            z: 9999
-            actions: modelData.children
-            submenuComponent: Component {
-                ActionsMenu {}
-            }
+    ActionsMenu {
+        id: actionsMenu
+        y: Settings.isMobile ? -height : listItem.height
+        z: 99999999
+        actions: modelData.children
+        submenuComponent: Component {
+            ActionsMenu {}
         }
     }
+
 
     Icon {
         isMask: true

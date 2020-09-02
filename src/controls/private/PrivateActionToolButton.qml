@@ -16,9 +16,13 @@ Controls.ToolButton {
 
     Theme.colorSet: Theme.Button
     Theme.inherit: action && action.icon.color.a === 0
-    Theme.backgroundColor: action && action.icon.color.a ? action.icon.color : undefined
+    Theme.backgroundColor: action && action.icon.color.a ? ColorUtils.tintWithAlpha(Theme.backgroundColor, action.icon.color, kirigamiIcon.isMask ? 1 :0.4) : undefined
     Theme.textColor: action && !flat && action.icon.color.a ? Theme.highlightedTextColor : undefined
-
+Icon {
+    id:kirigamiIcon
+    visible: false
+    source: control.icon.name
+}
     hoverEnabled: true
     flat: !control.action || !control.action.icon.color.a
 
