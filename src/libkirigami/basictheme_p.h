@@ -66,9 +66,6 @@ public:
 
     static BasicThemeDeclarative *basicThemeDeclarative();
 
-Q_SIGNALS:
-    void colorsChanged();
-
 private:
     inline void syncCustomColorsToQML();
     //legacy colors
