@@ -122,7 +122,7 @@ void PageRouter::componentComplete()
     }
 }
 
-bool PageRouter::routesContainsKey(const QString &key)
+bool PageRouter::routesContainsKey(const QString &key) const
 {
     for (auto route : m_routes) {
         if (route->name() == key) return true;
@@ -130,7 +130,7 @@ bool PageRouter::routesContainsKey(const QString &key)
     return false;
 }
 
-QQmlComponent* PageRouter::routesValueForKey(const QString &key)
+QQmlComponent* PageRouter::routesValueForKey(const QString &key) const
 {
     for (auto route : m_routes) {
         if (route->name() == key) return route->component();
@@ -138,7 +138,7 @@ QQmlComponent* PageRouter::routesValueForKey(const QString &key)
     return nullptr;
 }
 
-bool PageRouter::routesCacheForKey(const QString &key)
+bool PageRouter::routesCacheForKey(const QString &key) const
 {
     for (auto route : m_routes) {
         if (route->name() == key) return route->cache();
@@ -146,7 +146,7 @@ bool PageRouter::routesCacheForKey(const QString &key)
     return false;
 }
 
-int PageRouter::routesCostForKey(const QString &key)
+int PageRouter::routesCostForKey(const QString &key) const
 {
     for (auto route : m_routes) {
         if (route->name() == key) return route->cost();
@@ -266,7 +266,7 @@ void PageRouter::navigateToRoute(QJSValue route)
 
     m_pageStack->clear();
     m_currentRoutes.clear();
-    for (auto toPush : resolvedRoutes) {
+    for (auto toPush : qAsConst(resolvedRoutes)) {
         push(toPush);
     }
     Q_EMIT navigationChanged();
@@ -280,7 +280,7 @@ void PageRouter::bringToView(QJSValue route)
     } else {
         auto parsed = parseRoute(route);
         auto index = 0;
-        for (auto currentRoute : m_currentRoutes) {
+        for (auto currentRoute : qAsConst(m_currentRoutes)) {
             if (currentRoute->name == parsed->name && currentRoute->data == parsed->data) {
                 m_pageStack->setCurrentIndex(index);
                 return;
@@ -328,14 +328,14 @@ QVariant PageRouter::dataFor(QObject *object)
 {
     auto pointer = object;
     auto qqiPointer = qobject_cast<QQuickItem*>(object);
-    QMap<QQuickItem*,ParsedRoute*> routes;
-    for (auto route : m_cache.items) {
+    QHash<QQuickItem*,ParsedRoute*> routes;
+    for (auto route : qAsConst(m_cache.items)) {
         routes[route->item] = route;
     }
-    for (auto route : m_preload.items) {
+    for (auto route : qAsConst(m_preload.items)) {
         routes[route->item] = route;
     }
-    for (auto route : m_currentRoutes) {
+    for (auto route : qAsConst(m_currentRoutes)) {
         routes[route->item] = route;
     }
     while (qqiPointer != nullptr) {
@@ -362,7 +362,7 @@ bool PageRouter::isActive(QObject *object)
     auto pointer = object;
     while (pointer != nullptr) {
         auto index = 0;
-        for (auto route : m_currentRoutes) {
+        for (auto route : qAsConst(m_currentRoutes)) {
             if (route->item == pointer) {
                 return m_pageStack->currentIndex() == index;
             }
@@ -422,7 +422,7 @@ QSet<QObject*> flatParentTree(QObject* object)
 
 void PageRouter::preload(ParsedRoute* route)
 {
-    for (auto preloaded : m_preload.items) {
+    for (auto preloaded : qAsConst(m_preload.items)) {
         if (preloaded->equals(route)) {
             delete route;
             return;
@@ -478,7 +478,7 @@ void PageRouter::preload(ParsedRoute* route)
 void PageRouter::unpreload(ParsedRoute* route)
 {
     ParsedRoute* toDelete = nullptr;
-    for (auto preloaded : m_preload.items) {
+    for (auto preloaded : qAsConst(m_preload.items)) {
         if (preloaded->equals(route)) {
             toDelete = preloaded;
         }
@@ -661,12 +661,12 @@ void PageRouter::placeInCache(ParsedRoute *route)
 
 void PageRouter::pushFromObject(QObject *object, QJSValue inputRoute, bool replace)
 {
-    auto parsed = parseRoutes(inputRoute);
-    auto objects = flatParentTree(object);
+    const auto parsed = parseRoutes(inputRoute);
+    const auto objects = flatParentTree(object);
 
     for (const auto& obj : objects) {
         bool popping = false;
-        for (auto route : m_currentRoutes) {
+        for (auto route : qAsConst(m_currentRoutes)) {
             if (popping) {
                 m_currentRoutes.removeAll(route);
                 placeInCache(route);

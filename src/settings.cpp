@@ -59,7 +59,8 @@ Settings::Settings(QObject *parent)
         m_mobile = false;
     }
 
-    for (const auto &device : QTouchDevice::devices()) {
+    const auto touchDevices = QTouchDevice::devices();
+    for (const auto &device : touchDevices) {
         if (device->type() == QTouchDevice::TouchScreen) {
             m_hasTouchScreen = true;
             break;

@@ -273,12 +273,12 @@ void PagePool::deletePage(const QVariant &page)
 
 void PagePool::clear()
 {
-    for (auto *c : m_componentForUrl.values()) {
+    for (auto *c : qAsConst(m_componentForUrl)) {
         c->deleteLater();
     }
     m_componentForUrl.clear();
 
-    for (auto *i : m_itemForUrl.values()) {
+    for (auto *i : qAsConst(m_itemForUrl)) {
         // items that had been deparented are safe to delete
         if (!i->parentItem()) {
             i->deleteLater();
