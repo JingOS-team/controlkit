@@ -304,7 +304,7 @@ Item {
                                 : (Qt.AlignLeft | Qt.AlignBottom))
             verticalAlignment: root.wideMode ? Text.AlignVCenter : Text.AlignBottom
 
-            //Layout.topMargin: item.Kirigami.FormData.buddyFor.y
+            Layout.topMargin: root.wideMode && item.Kirigami.FormData.buddyFor.parent != root ? item.Kirigami.FormData.buddyFor.y : 0
             onItemChanged: {
                 if (!item) {
                     labelItem.destroy();
