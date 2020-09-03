@@ -43,7 +43,7 @@ QmlComponentsPool *QmlComponentsPoolSingleton::instance(QQmlEngine *engine)
 
     componentPool = new QmlComponentsPool(engine);
 
-    QObject::connect(componentPool, &QObject::destroyed, [engine]() {
+    QObject::connect(componentPool, &QObject::destroyed, nullptr, [engine]() {
         if (privateQmlComponentsPoolSelf) {
             privateQmlComponentsPoolSelf->m_instances.remove(engine);
         }
@@ -613,9 +613,8 @@ void ContentItem::itemChange(QQuickItem::ItemChange change, const QQuickItem::It
         attached->setView(m_view);
 
         //connect(attached, &ColumnViewAttached::fillWidthChanged, m_view, &ColumnView::polish);
-         connect(attached, &ColumnViewAttached::fillWidthChanged, this, [this, attached](){
+        connect(attached, &ColumnViewAttached::fillWidthChanged, this, [this] {
              m_view->polish();
-
         });
         connect(attached, &ColumnViewAttached::reservedSpaceChanged, m_view, &ColumnView::polish);
 
