@@ -36,7 +36,6 @@ public:
 class MessageType : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Type)
 
 public:
     enum Type {
@@ -45,6 +44,7 @@ public:
         Warning,
         Error
     };
+    Q_ENUM(Type)
 };
 
 class DisplayHint : public QObject
