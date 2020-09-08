@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2020 Carson Black <uhhadd@gmail.com>
+//
+// SPDX-License-Identifier: LGPL-2.0-or-later
+
 #include "avatar.h"
 #include <QQuickStyle>
 #include <QMap>
