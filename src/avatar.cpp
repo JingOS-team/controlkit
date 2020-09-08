@@ -1,6 +1,8 @@
 #include "avatar.h"
 #include <QQuickStyle>
 #include <QMap>
+#include <QVector>
+#include <QStringRef>
 
 QString AvatarPrivate::initialsFromString(const QString& string)
 {
