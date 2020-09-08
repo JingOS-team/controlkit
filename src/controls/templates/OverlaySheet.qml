@@ -198,6 +198,7 @@ QtObject {
         id: mainItem
         Theme.colorSet: root.Theme.colorSet
         Theme.inherit: root.Theme.inherit
+        z: 101
         //we want to be over any possible OverlayDrawers, including handles
         parent: {
             if (root.parent && root.parent.ColumnView.view && (root.parent.ColumnView.view == root.parent || root.parent.ColumnView.view == root.parent.parent)) {
