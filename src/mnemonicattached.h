@@ -75,11 +75,11 @@ class MnemonicAttached : public QObject
 
 public:
     enum ControlType {
-        ActionElement, /** pushbuttons, checkboxes etc */
-        DialogButton, /** buttons for dialogs */
-        MenuItem, /** Menu items */
-        FormLabel, /** Buddy label in a FormLayout*/
-        SecondaryControl /** Other controls that are considered not much important and low priority for shortcuts */
+        ActionElement, /**< pushbuttons, checkboxes etc */
+        DialogButton, /**< buttons for dialogs */
+        MenuItem, /**< Menu items */
+        FormLabel, /**< Buddy label in a FormLayout*/
+        SecondaryControl /**< Other controls that are considered not much important and low priority for shortcuts */
     };
     Q_ENUM(ControlType)
 
