@@ -45,7 +45,7 @@ void ShadowedTextureNode::setTextureSource(QSGTextureProvider *source)
     }
 
     m_textureSource = source;
-    QObject::connect(m_textureSource.data(), &QSGTextureProvider::textureChanged, [this]() { markDirty(QSGNode::DirtyMaterial); });
+    QObject::connect(m_textureSource.data(), &QSGTextureProvider::textureChanged, nullptr, [this] { markDirty(QSGNode::DirtyMaterial); });
     markDirty(QSGNode::DirtyMaterial);
 }
 

@@ -29,7 +29,6 @@ Q_GLOBAL_STATIC(ImageTexturesCache, s_iconImageCache)
 
 Icon::Icon(QQuickItem *parent)
     : QQuickItem(parent),
-      m_smooth(false),
       m_changed(false),
       m_active(false),
       m_selected(false),
@@ -39,6 +38,7 @@ Icon::Icon(QQuickItem *parent)
     //FIXME: not necessary anymore
     connect(qApp, &QGuiApplication::paletteChanged, this, &QQuickItem::polish);
     connect(this, &QQuickItem::enabledChanged, this, &QQuickItem::polish);
+    connect(this, &QQuickItem::smoothChanged, this, &QQuickItem::polish);
 }
 
 
@@ -164,21 +164,6 @@ int Icon::implicitHeight() const
     return 32;
 }
 
-void Icon::setSmooth(const bool smooth)
-{
-    if (smooth == m_smooth) {
-        return;
-    }
-    m_smooth = smooth;
-    polish();
-    emit smoothChanged();
-}
-
-bool Icon::smooth() const
-{
-    return m_smooth;
-}
-
 QSGNode* Icon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* /*data*/)
 {
     if (m_source.isNull() || qFuzzyIsNull(width()) || qFuzzyIsNull(height())) {
@@ -209,7 +194,7 @@ QSGNode* Icon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* /
         }
         mNode->setRect(nodeRect);
         node = mNode;
-        if (m_smooth) {
+        if (smooth()) {
             mNode->setFiltering(QSGTexture::Linear);
         }
         m_changed = false;
@@ -363,7 +348,7 @@ QImage Icon::findIcon(const QSize &size)
         }
     } else if(iconSource.startsWith(QLatin1String("http://")) || iconSource.startsWith(QLatin1String("https://"))) {
         if(!m_loadedImage.isNull()) {
-            return m_loadedImage.scaled(size, Qt::KeepAspectRatio, m_smooth ? Qt::SmoothTransformation : Qt::FastTransformation );
+            return m_loadedImage.scaled(size, Qt::KeepAspectRatio, smooth() ? Qt::SmoothTransformation : Qt::FastTransformation );
         }
         const auto url = m_source.toUrl();
         QQmlEngine* engine = qmlEngine(this);
@@ -496,5 +481,3 @@ void Icon::setFallback(const QString& fallback)
         Q_EMIT fallbackChanged(fallback);
     }
 }
-
-#include "moc_icon.cpp"

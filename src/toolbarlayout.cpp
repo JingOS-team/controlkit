@@ -89,7 +89,7 @@ ToolBarLayout::ToolBarLayout(QQuickItem *parent)
     d->removalTimer->setInterval(1000);
     d->removalTimer->setSingleShot(true);
     connect(d->removalTimer, &QTimer::timeout, this, [this]() {
-        for (auto action : d->removedActions) {
+        for (auto action : qAsConst(d->removedActions)) {
             if (!d->actions.contains(action)) {
                 d->delegates.erase(action);
             }
@@ -132,7 +132,7 @@ void ToolBarLayout::removeAction(QObject* action)
 
 void ToolBarLayout::clearActions()
 {
-    for (auto action : d->actions) {
+    for (auto action : qAsConst(d->actions)) {
         auto itr = d->delegates.find(action);
         if (itr != d->delegates.end()) {
             itr->second->hide();
@@ -346,7 +346,7 @@ void ToolBarLayout::Private::performLayout()
     // First, calculate the total width and maximum height of all delegates.
     // This will be used to determine which actions to show, which ones to
     // collapse to icon-only etc.
-    for (auto entry : sortedDelegates) {
+    for (auto entry : qAsConst(sortedDelegates)) {
         if (!entry->isActionVisible()) {
             entry->hide();
             continue;
@@ -423,7 +423,7 @@ void ToolBarLayout::Private::performLayout()
     }
 
     qreal currentX = layoutStart(visibleActionsWidth);
-    for (auto entry : sortedDelegates) {
+    for (auto entry : qAsConst(sortedDelegates)) {
         if (!entry->isVisible()) {
             continue;
         }

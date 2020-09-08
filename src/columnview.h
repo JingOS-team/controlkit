@@ -225,14 +225,14 @@ class ColumnView : public QQuickItem
     Q_PROPERTY(QQmlListProperty<QObject> contentData READ contentData  FINAL)
     Q_CLASSINFO("DefaultProperty", "contentData")
 
-    Q_ENUMS(ColumnResizeMode)
-
 public:
     enum ColumnResizeMode {
         FixedColumns = 0,
         DynamicColumns,
         SingleColumn
     };
+    Q_ENUM(ColumnResizeMode)
+
     ColumnView(QQuickItem *parent = nullptr);
     ~ColumnView();
 

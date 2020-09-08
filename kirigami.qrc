@@ -1,10 +1,11 @@
 <RCC>
-    <qresource prefix="/org/kde/kirigami.2/">
+    <qresource prefix="/org/kde/kirigami.2">
         <file alias="qmldir">src/qmldir</file>
         <file alias="AbstractApplicationWindow.qml">src/controls/AbstractApplicationWindow.qml</file>
         <file alias="ContextDrawer.qml">src/controls/ContextDrawer.qml</file>
         <file alias="Action.qml">src/controls/Action.qml</file>
         <file alias="Page.qml">src/controls/Page.qml</file>
+        <file alias="PagePoolAction.qml">src/controls/PagePoolAction.qml</file>
         <file alias="PageRow.qml">src/controls/PageRow.qml</file>
         <file alias="AbstractListItem.qml">src/controls/AbstractListItem.qml</file>
         <file alias="Theme.qml">src/controls/Theme.qml</file>
@@ -21,6 +22,7 @@
         <file alias="ActionTextField.qml">src/controls/ActionTextField.qml</file>
         <file alias="SearchField.qml">src/controls/SearchField.qml</file>
         <file alias="PasswordField.qml">src/controls/PasswordField.qml</file>
+        <file alias="private/PrivateActionToolButton.qml">src/controls/private/PrivateActionToolButton.qml</file>
         <file alias="private/GlobalDrawerActionItem.qml">src/controls/private/GlobalDrawerActionItem.qml</file>
         <file alias="private/ContextDrawerActionItem.qml">src/controls/private/ContextDrawerActionItem.qml</file>
         <file alias="private/RefreshableScrollView.qml">src/controls/private/RefreshableScrollView.qml</file>
@@ -34,13 +36,13 @@
         <file alias="private/BannerImage.qml">src/controls/private/BannerImage.qml</file>
         <file alias="private/EdgeShadow.qml">src/controls/private/EdgeShadow.qml</file>
         <file alias="private/globaltoolbar/AbstractPageHeader.qml">src/controls/private/globaltoolbar/AbstractPageHeader.qml</file>
+        <file alias="private/globaltoolbar/BreadcrumbControl.qml">src/controls/private/globaltoolbar/BreadcrumbControl.qml</file>
         <file alias="private/globaltoolbar/PageRowGlobalToolBarStyleGroup.qml">src/controls/private/globaltoolbar/PageRowGlobalToolBarStyleGroup.qml</file>
         <file alias="private/globaltoolbar/PageRowGlobalToolBarUI.qml">src/controls/private/globaltoolbar/PageRowGlobalToolBarUI.qml</file>
         <file alias="private/PrivateActionToolButton.qml">src/controls/private/PrivateActionToolButton.qml</file>
+        <file alias="private/globaltoolbar/TabBarControl.qml">src/controls/private/globaltoolbar/TabBarControl.qml</file>
         <file alias="private/globaltoolbar/TitlesPageHeader.qml">src/controls/private/globaltoolbar/TitlesPageHeader.qml</file>
         <file alias="private/globaltoolbar/ToolBarPageHeader.qml">src/controls/private/globaltoolbar/ToolBarPageHeader.qml</file>
-        <file alias="private/globaltoolbar/BreadcrumbControl.qml">src/controls/private/globaltoolbar/BreadcrumbControl.qml</file>
-        <file alias="private/globaltoolbar/TabBarControl.qml">src/controls/private/globaltoolbar/TabBarControl.qml</file>
         <file alias="private/ActionsMenu.qml">src/controls/private/ActionsMenu.qml</file>
         <file alias="private/ActionMenuItem.qml">src/controls/private/ActionMenuItem.qml</file>
         <file alias="private/CardsGridViewPrivate.qml">src/controls/private/CardsGridViewPrivate.qml</file>
@@ -58,7 +60,6 @@
         <file alias="templates/private/BackButton.qml">src/controls/templates/private/BackButton.qml</file>
         <file alias="templates/private/IconPropertiesGroup.qml">src/controls/templates/private/IconPropertiesGroup.qml</file>
         <file alias="templates/private/ForwardButton.qml">src/controls/templates/private/ForwardButton.qml</file>
-        <file alias="templates/private/BorderPropertiesGroup.qml">src/controls/templates/private/BorderPropertiesGroup.qml</file>
         <file alias="templates/OverlayDrawer.qml">src/controls/templates/OverlayDrawer.qml</file>
         <file alias="templates/OverlaySheet.qml">src/controls/templates/OverlaySheet.qml</file>
         <file alias="templates/SwipeListItem.qml">src/controls/templates/SwipeListItem.qml</file>
@@ -67,8 +68,8 @@
         <file alias="Units.qml">src/controls/Units.qml</file>
         <file alias="SwipeListItem.qml">src/controls/SwipeListItem.qml</file>
         <file alias="ApplicationWindow.qml">src/controls/ApplicationWindow.qml</file>
-	<file alias="AbstractApplicationItem.qml">src/controls/AbstractApplicationItem.qml</file>
-	<file alias="ApplicationItem.qml">src/controls/ApplicationItem.qml</file>
+        <file alias="AbstractApplicationItem.qml">src/controls/AbstractApplicationItem.qml</file>
+        <file alias="ApplicationItem.qml">src/controls/ApplicationItem.qml</file>
         <file alias="ApplicationHeader.qml">src/controls/ApplicationHeader.qml</file>
         <file alias="Heading.qml">src/controls/Heading.qml</file>
         <file alias="ScrollablePage.qml">src/controls/ScrollablePage.qml</file>
@@ -77,17 +78,10 @@
         <file alias="LinkButton.qml">src/controls/LinkButton.qml</file>
         <file alias="Label.qml">src/controls/Label.qml</file>
         <file alias="BasicListItem.qml">src/controls/BasicListItem.qml</file>
+        <file alias="ListSectionHeader.qml">src/controls/ListSectionHeader.qml</file>
         <file alias="AbstractApplicationHeader.qml">src/controls/AbstractApplicationHeader.qml</file>
         <file alias="FormLayout.qml">src/controls/FormLayout.qml</file>
         <file alias="ListItemDragHandle.qml">src/controls/ListItemDragHandle.qml</file>
-        <file alias="ShadowedImage.qml">src/controls/ShadowedImage.qml</file>
-        <file alias="Avatar.qml">src/controls/Avatar.qml</file>
-        <file alias="swipenavigator/PrivateSwipeHighlight.qml">src/controls/swipenavigator/PrivateSwipeHighlight.qml</file>
-        <file alias="swipenavigator/PrivateSwipeProgress.qml">src/controls/swipenavigator/PrivateSwipeProgress.qml</file>
-        <file alias="swipenavigator/PrivateSwipeStack.qml">src/controls/swipenavigator/PrivateSwipeStack.qml</file>
-        <file alias="swipenavigator/PrivateSwipeTab.qml">src/controls/swipenavigator/PrivateSwipeTab.qml</file>
-        <file alias="swipenavigator/PrivateSwipeTabBar.qml">src/controls/swipenavigator/PrivateSwipeTabBar.qml</file>
-        <file alias="swipenavigator/SwipeNavigator.qml">src/controls/swipenavigator/SwipeNavigator.qml</file>
         <file alias="styles/Material/AbstractListItem.qml">src/styles/Material/AbstractListItem.qml</file>
         <file alias="styles/Material/Theme.qml">src/styles/Material/Theme.qml</file>
         <file alias="styles/Material/SwipeListItem.qml">src/styles/Material/SwipeListItem.qml</file>
@@ -99,5 +93,6 @@
         <file alias="styles/org.kde.desktop/ApplicationWindow.qml">src/styles/org.kde.desktop/ApplicationWindow.qml</file>
         <file alias="styles/org.kde.desktop/AbstractApplicationHeader.qml">src/styles/org.kde.desktop/AbstractApplicationHeader.qml</file>
         <file alias="PlaceholderMessage.qml">src/controls/PlaceholderMessage.qml</file>
+        <file alias="ShadowedImage.qml">src/controls/ShadowedImage.qml</file>
     </qresource>
 </RCC>

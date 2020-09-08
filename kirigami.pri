@@ -12,6 +12,7 @@ HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/libkirigami/platformtheme.h \
                $$PWD/src/libkirigami/kirigamipluginfactory.h \
                $$PWD/src/libkirigami/tabletmodewatcher.h \
+               $$PWD/src/scenegraph/managedtexturenode.h \
                $$PWD/src/scenegraph/paintedrectangleitem.h \
                $$PWD/src/scenegraph/shadowedrectanglenode.h \
                $$PWD/src/scenegraph/shadowedborderrectanglematerial.h \
@@ -42,6 +43,7 @@ SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/libkirigami/platformtheme.cpp \
                $$PWD/src/libkirigami/kirigamipluginfactory.cpp \
                $$PWD/src/libkirigami/tabletmodewatcher.cpp \
+               $$PWD/src/scenegraph/managedtexturenode.cpp \
                $$PWD/src/scenegraph/paintedrectangleitem.cpp \
                $$PWD/src/scenegraph/shadowedrectanglenode.cpp \
                $$PWD/src/scenegraph/shadowedborderrectanglematerial.cpp \

@@ -59,12 +59,6 @@ class Icon : public QQuickItem
     Q_PROPERTY(QString fallback READ fallback WRITE setFallback NOTIFY fallbackChanged)
 
     /**
-     * Whether pixmaps will be scaled smoothly if the size of this `Icon` is
-     * different from the source size.
-     */
-    Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
-
-    /**
      * The `implicitWidth` of this item, derived from the `source` image.
      */
     Q_PROPERTY(int implicitWidth READ implicitWidth CONSTANT)
@@ -135,9 +129,6 @@ public:
     int implicitWidth() const;
     int implicitHeight() const;
 
-    void setSmooth(const bool smooth);
-    bool smooth() const;
-
     void setActive(bool active = true);
     bool active() const;
 
@@ -159,8 +150,6 @@ public:
 
 Q_SIGNALS:
     void sourceChanged();
-    void smoothChanged();
-    void enabledChanged();
     void activeChanged();
     void validChanged();
     void selectedChanged();
@@ -182,7 +171,6 @@ private:
     QPointer<QNetworkReply> m_networkReply;
     QHash<int, bool> m_monochromeHeuristics;
     QVariant m_source;
-    bool m_smooth;
     bool m_changed;
     bool m_active;
     bool m_selected;

@@ -43,7 +43,7 @@ QmlComponentsPool *QmlComponentsPoolSingleton::instance(QQmlEngine *engine)
 
     componentPool = new QmlComponentsPool(engine);
 
-    QObject::connect(componentPool, &QObject::destroyed, [engine]() {
+    QObject::connect(componentPool, &QObject::destroyed, nullptr, [engine]() {
         if (privateQmlComponentsPoolSelf) {
             privateQmlComponentsPoolSelf->m_instances.remove(engine);
         }
@@ -400,7 +400,7 @@ void ContentItem::layoutItems()
     int i = 0;
     m_leftPinnedSpace = 0;
     m_rightPinnedSpace = 0;
-    for (QQuickItem *child : m_items) {
+    for (QQuickItem *child : qAsConst(m_items)) {
         ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
 
         if (child->isVisible()) {
@@ -475,7 +475,7 @@ void ContentItem::layoutPinnedItems()
     m_leftPinnedSpace = 0;
     m_rightPinnedSpace = 0;
 
-    for (QQuickItem *child : m_items) {
+    for (QQuickItem *child : qAsConst(m_items)) {
         ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
 
         if (child->isVisible()) {
@@ -505,7 +505,7 @@ void ContentItem::updateVisibleItems()
 {
     QList <QObject *> newItems;
 
-    for (auto *item : m_items) {
+    for (auto *item : qAsConst(m_items)) {
         if (item->isVisible() && item->x() + x() < width() && item->x() + item->width() + x() > 0) {
             newItems << item;
             connect(item, &QObject::destroyed, this, [this, item] {
@@ -514,7 +514,7 @@ void ContentItem::updateVisibleItems()
         }
     }
 
-    for (auto *item : m_visibleItems) {
+    for (auto *item : qAsConst(m_visibleItems)) {
         disconnect(item, &QObject::destroyed, this, nullptr);
     }
     const QQuickItem *oldFirstVisibleItem = m_visibleItems.isEmpty() ? nullptr : qobject_cast<QQuickItem *>(m_visibleItems.first());
@@ -613,9 +613,8 @@ void ContentItem::itemChange(QQuickItem::ItemChange change, const QQuickItem::It
         attached->setView(m_view);
 
         //connect(attached, &ColumnViewAttached::fillWidthChanged, m_view, &ColumnView::polish);
-         connect(attached, &ColumnViewAttached::fillWidthChanged, this, [this, attached](){
+        connect(attached, &ColumnViewAttached::fillWidthChanged, this, [this] {
              m_view->polish();
-
         });
         connect(attached, &ColumnViewAttached::reservedSpaceChanged, m_view, &ColumnView::polish);
 
@@ -933,7 +932,7 @@ void ColumnView::setSeparatorVisible(bool visible)
     m_separatorVisible = visible;
 
     if (visible) {
-        for (QQuickItem *item : m_contentItem->m_items) {
+        for (QQuickItem *item : qAsConst(m_contentItem->m_items)) {
             QQuickItem *sep = m_contentItem->ensureSeparator(item);
             if (sep) {
                 sep->setVisible(true);
@@ -949,10 +948,10 @@ void ColumnView::setSeparatorVisible(bool visible)
         }
 
     } else {
-        for (QQuickItem *sep : m_contentItem->m_separators.values()) {
+        for (QQuickItem *sep : qAsConst(m_contentItem->m_separators)) {
             sep->setVisible(false);
         }
-        for (QQuickItem *sep : m_contentItem->m_rightSeparators.values()) {
+        for (QQuickItem *sep : qAsConst(m_contentItem->m_rightSeparators)) {
             sep->setVisible(false);
         }
     }
@@ -1138,7 +1137,7 @@ QQuickItem *ColumnView::pop(QQuickItem *item)
 
 void ColumnView::clear()
 {
-    for (QQuickItem *item : m_contentItem->m_items) {
+    for (QQuickItem *item : qAsConst(m_contentItem->m_items)) {
         removeItem(item);
     }
     m_contentItem->m_items.clear();

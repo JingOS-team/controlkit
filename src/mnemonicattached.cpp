@@ -232,7 +232,7 @@ void MnemonicAttached::calculateWeights()
     if (m_weights.isEmpty()) {
         m_weight = m_baseWeight;
     } else {
-        m_weight = m_baseWeight + m_weights.keys().last();
+        m_weight = m_baseWeight + (m_weights.cend()-1).key();
     }
 }
 

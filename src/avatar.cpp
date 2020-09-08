@@ -5,17 +5,19 @@
 #include "avatar.h"
 #include <QQuickStyle>
 #include <QMap>
+#include <QVector>
+#include <QStringRef>
 
-auto AvatarPrivate::initialsFromString(const QString& string) -> QString
+QString AvatarPrivate::initialsFromString(const QString& string)
 {
     // "" -> ""
-    if (string.isEmpty()) return QStringLiteral("");
+    if (string.isEmpty()) return {};
 
     auto normalized = string.normalized(QString::NormalizationForm_D);
     // "FirstName Name Name LastName"
-    if (normalized.contains(QStringLiteral(" "))) {
+    if (normalized.contains(QLatin1Char(' '))) {
         // "FirstName Name Name LastName" -> "FirstName" "Name" "Name" "LastName"
-        QStringList split = normalized.split(QStringLiteral(" "));
+        const auto split = normalized.splitRef(QLatin1Char(' '));
         // "FirstName"
         auto first = split.first();
         // "LastName"
@@ -29,7 +31,7 @@ auto AvatarPrivate::initialsFromString(const QString& string) -> QString
             return QString(first.front());
         }
         // "FirstName" "LastName" -> "FL"
-        return QString(first.front())+QString(last.front());
+        return first.front() + last.front();
     // "OneName"
     } else {
         // "OneName" -> "O"

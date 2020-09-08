@@ -81,7 +81,7 @@ struct LRU {
     }
     int totalCosts() {
         int ret = 0;
-        for (auto cost : costs) {
+        for (auto cost : qAsConst(costs)) {
             ret += cost;
         }
         return ret;
@@ -408,7 +408,7 @@ private:
      * 
      * This function abstracts the QJSValue.
      */
-    bool routesContainsKey(const QString &key);
+    bool routesContainsKey(const QString &key) const;
 
     /**
      * @brief Helper function to access the component of a key for m_routes.
@@ -416,7 +416,7 @@ private:
      * The return value will be a nullptr if @p key does not exist in
      * m_routes.
      */
-    QQmlComponent *routesValueForKey(const QString &key);
+    QQmlComponent *routesValueForKey(const QString &key) const;
 
     /**
      * @brief Helper function to access the cache status of a key for m_routes.
@@ -424,7 +424,7 @@ private:
      * The return value will be false if @p key does not exist in
      * m_routes.
      */
-    bool routesCacheForKey(const QString &key);
+    bool routesCacheForKey(const QString &key) const;
 
     /**
      * @brief Helper function to access the cost of a key for m_routes.
@@ -432,7 +432,7 @@ private:
      * The return value will be -1 if @p key does not exist in
      * m_routes.
      */
-    int routesCostForKey(const QString &key);
+    int routesCostForKey(const QString &key) const;
 
     void preload(ParsedRoute *route);
     void unpreload(ParsedRoute *route);
