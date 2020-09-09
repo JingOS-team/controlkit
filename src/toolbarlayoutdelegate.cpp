@@ -70,6 +70,14 @@ ToolBarLayoutDelegate::ToolBarLayoutDelegate(ToolBarLayout* parent)
 
 ToolBarLayoutDelegate::~ToolBarLayoutDelegate()
 {
+    if (m_fullIncubator) {
+        m_fullIncubator->clear();
+        delete m_fullIncubator;
+    }
+    if (m_iconIncubator) {
+        m_iconIncubator->clear();
+        delete m_iconIncubator;
+    }
     if (m_full) {
         delete m_full;
     }
