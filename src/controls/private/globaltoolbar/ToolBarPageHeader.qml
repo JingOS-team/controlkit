@@ -45,9 +45,11 @@ AbstractPageHeader {
 
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
+            Layout.fillHeight: true
 
             visible: actions.length > 0
             alignment: pageRow.globalToolBar.toolbarActionAlignment
+            heightMode: ToolBarLayout.ConstrainIfLarger
 
             actions: {
                 var result = []
