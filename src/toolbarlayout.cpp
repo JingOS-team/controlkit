@@ -112,6 +112,18 @@ void ToolBarLayout::addAction(QObject* action)
     d->actions.append(action);
     d->actionsChanged = true;
 
+    connect(action, &QObject::destroyed, this, [this](QObject *action) {
+        auto itr = d->delegates.find(action);
+        if (itr != d->delegates.end()) {
+            d->delegates.erase(itr);
+        }
+
+        d->actions.removeOne(action);
+        d->actionsChanged = true;
+
+        relayout();
+    });
+
     relayout();
 }
 
