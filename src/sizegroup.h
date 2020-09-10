@@ -50,7 +50,7 @@ public:
     /**
      * Which items this SizeGroup should adjust
      */
-    Q_PROPERTY(QQmlListProperty<QQuickItem> items READ items)
+    Q_PROPERTY(QQmlListProperty<QQuickItem> items READ items CONSTANT)
     QQmlListProperty<QQuickItem> items();
 
     void adjustItems(Mode whatChanged);
