@@ -37,8 +37,8 @@ void SizeGroup::clearItems(QQmlListProperty<QQuickItem> *prop)
 
 void SizeGroup::connectItem(QQuickItem* item)
 {
-    auto conn1 = connect(item, &QQuickItem::implicitWidthChanged, [this](){ adjustItems(Mode::Width); });
-    auto conn2 = connect(item, &QQuickItem::implicitHeightChanged, [this](){ adjustItems(Mode::Height); });
+    auto conn1 = connect(item, &QQuickItem::implicitWidthChanged, this, [this](){ adjustItems(Mode::Width); });
+    auto conn2 = connect(item, &QQuickItem::implicitHeightChanged, this, [this](){ adjustItems(Mode::Height); });
     m_connections[item] = qMakePair(conn1, conn2);
     adjustItems(m_mode);
 }
