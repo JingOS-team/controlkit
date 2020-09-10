@@ -25,10 +25,10 @@ class SizeGroup : public QObject, public QQmlParserStatus
 public:
 
     enum Mode {
-        None = 0b0, /// SizeGroup does nothing
-        Width = 0b1, /// SizeGroup syncs item widths
-        Height = 0b10, /// SizeGroup syncs item heights
-        Both = 0b11 /// SizeGroup syncs both item widths and heights
+        None = 0, /// SizeGroup does nothing
+        Width = 1, /// SizeGroup syncs item widths
+        Height = 2, /// SizeGroup syncs item heights
+        Both = 3 /// SizeGroup syncs both item widths and heights
     };
     Q_ENUM(Mode)
     Q_DECLARE_FLAGS(Modes, Mode)
