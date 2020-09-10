@@ -50,7 +50,7 @@ void ToolBarDelegateIncubator::statusChanged(QQmlIncubator::Status status)
     if (status == QQmlIncubator::Error) {
         qWarning() << "Could not create delegate for ToolBarLayout";
         const auto e = errors();
-        for (auto error : e) {
+        for (const auto &error : e) {
             qWarning() << error;
         }
         m_finished = true;
@@ -116,7 +116,7 @@ void ToolBarLayoutDelegate::createItems(QQmlComponent *fullComponent, QQmlCompon
         if (incubator->isError()) {
             qWarning() << "Could not create delegate for ToolBarLayout";
             const auto errors = incubator->errors();
-            for (auto error : errors) {
+            for (const auto &error : errors) {
                 qWarning() << error;
             }
             return;
@@ -141,7 +141,7 @@ void ToolBarLayoutDelegate::createItems(QQmlComponent *fullComponent, QQmlCompon
         if (incubator->isError()) {
             qWarning() << "Could not create delegate for ToolBarLayout";
             const auto errors = incubator->errors();
-            for (auto error : errors) {
+            for (const auto &error : errors) {
                 qWarning() << error;
             }
             return;

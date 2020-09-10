@@ -38,7 +38,8 @@ QList<ParsedRoute*> parseRoutes(QJSValue values)
 {
     QList<ParsedRoute*> ret;
     if (values.isArray()) {
-        for (auto route : values.toVariant().toList()) {
+        const auto valuesList = values.toVariant().toList();
+        for (const auto &route : valuesList) {
             if (route.toString() != QString()) {
                 ret << new ParsedRoute{
                     route.toString(),
@@ -258,7 +259,7 @@ void PageRouter::navigateToRoute(QJSValue route)
         }
     }
 
-    for (auto route : m_currentRoutes) {
+    for (const auto &route : qAsConst(m_currentRoutes)) {
         if (!resolvedRoutes.contains(route)) {
             placeInCache(route);
         }
@@ -339,7 +340,8 @@ QVariant PageRouter::dataFor(QObject *object)
         routes[route->item] = route;
     }
     while (qqiPointer != nullptr) {
-        for (auto item : routes.keys()) {
+        const auto keys = routes.keys();
+        for (auto item : keys) {
             if (item == qqiPointer) {
                 return routes[item]->data;
             }
@@ -347,7 +349,8 @@ QVariant PageRouter::dataFor(QObject *object)
         qqiPointer = qqiPointer->parentItem();
     }
     while (pointer != nullptr) {
-        for (auto item : routes.keys()) {
+        const auto keys = routes.keys();
+        for (auto item : keys) {
             if (item == pointer) {
                 return routes[item]->data;
             }

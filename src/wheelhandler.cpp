@@ -73,7 +73,8 @@ bool GlobalWheelFilter::eventFilter(QObject *watched, QEvent *event)
         bool shouldBlock = false;
         bool shouldScrollFlickable = false;
 
-        for (auto *handler : m_handlersForItem.values(item)) {
+        const auto handlers = m_handlersForItem.values(item);
+        for (auto *handler : handlers) {
             if (handler->m_blockTargetWheel) {
                 shouldBlock = true;
             }
