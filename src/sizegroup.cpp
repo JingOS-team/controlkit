@@ -88,6 +88,8 @@ void SizeGroup::adjustItems(Mode whatChanged)
             maxWidth = qMax(maxWidth, item->implicitWidth());
             maxHeight = qMax(maxHeight, item->implicitHeight());
             break;
+        case Mode::None:
+            break;
         }
     }
 
@@ -106,6 +108,8 @@ void SizeGroup::adjustItems(Mode whatChanged)
         case Mode::Both:
             QQmlProperty(item, QStringLiteral("Layout.preferredWidth"), qmlContext(item)).write(maxWidth);
             QQmlProperty(item, QStringLiteral("Layout.preferredHeight"), qmlContext(item)).write(maxHeight);
+            break;
+        case Mode::None:
             break;
         }
     }
