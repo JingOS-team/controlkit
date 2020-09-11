@@ -8,7 +8,7 @@
 
 #include "sizegroup.h"
 
-#define pThis ((SizeGroup*)(prop->object))
+#define pThis (static_cast<SizeGroup *>(prop->object))
 
 void SizeGroup::appendItem(QQmlListProperty<QQuickItem> *prop, QQuickItem *value)
 {
