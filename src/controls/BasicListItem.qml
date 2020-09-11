@@ -10,24 +10,28 @@ import QtQuick.Controls 2.0 as QQC2
 import org.kde.kirigami 2.12
 
 /**
- * An item delegate for the primitive ListView component.
+ * A BasicListItem provides a simple list item design that can handle the
+ * most common list item usecases.
  *
- * It's intended to make all listviews look coherent.
- * It has a default icon and a label
- *
+ * @image html BasicListItemTypes.svg "The styles of the BasicListItem. From left to right top to bottom: light icon + title + subtitle, dark icon + title + subtitle, light icon + label, dark icon + label, light label, dark label." width=50%
  */
 AbstractListItem {
     id: listItem
 
     /**
-     * string: bool
-     * A single text label the list item will contain
+     * label: string
+     *
+     * The label of this list item. If a subtitle is provided, the label will
+     * behave as a title and will have a bold font. Every list item should have
+     * a label.
      */
     property alias label: listItem.text
 
     /**
-     * A subtitle that goes below the main label
-     * Optional; if not defined, the list item will only have a main label
+     * subtitle: string
+     *
+     * An optional subtitle that can appear under the label.
+     *
      * @since 5.70
      * @since org.kde.kirigami 2.12
      */
@@ -35,7 +39,10 @@ AbstractListItem {
 
     /**
      * bold: bool
-     * Control whether the text (in both primary text and subtitle) should be rendered as bold
+     *
+     * Whether the list item's text (both label and subtitle, if provided) should
+     * render in bold.
+     *
      * @since 5.71
      * @since org.kde.kirigami 2.13
      */
@@ -43,41 +50,80 @@ AbstractListItem {
 
     /**
      * icon: var
-     * A single icon that will be displayed in the list item.
-     * The icon can be a grouped property with name,size,color etc, as QtQuickControls2 icons are defined.
-     * The icon can also be either a QIcon, a string name of a fdo compatible name,
-     * or any url accepted by the Image element.
+     *
+     * @code ts
+     * interface IconGroup {
+     *     name:   string,
+     *     source: string,
+     *     width:  int,
+     *     height: int,
+     *     color:  color,
+     * }
+     * 
+     * type Icon = string | IconGroup | URL
+     * @endcode
+     *
+     * The icon that will render on this list item.
+     *
+     * This can either be an icon name, a URL, or an object with the following properties:
+     *
+     * - `name`: string
+     * - `source`: string
+     * - `width`: int
+     * - `height`: int
+     * - `color`: color
+     *
+     * If the type of the icon is a string containing an icon name, the icon will be looked up from the
+     * platform icon theme.
+     *
+     * Using an icon object allows you to specify more granular attributes of the icon,
+     * such as its color and dimensions.
+     *
+     * If the icon is a URL, the icon will be attempted to be loaded from the
+     * given URL.
      */
     property var icon
 
     /**
      * iconSize: int
-     * The preferred size for the icon
+     *
+     * The size at which the icon will render at. This will not affect icon lookup,
+     * unlike the icon group's width and height properties, which will.
+     *
      * @since 2.5
      */
     property alias iconSize: iconItem.size
 
     /**
      * iconColor: color
-     * The color the icon should be colorized to.
-     * By default it will be the text color.
-     * If the icon shouldn't be colorized in any way, set it to "transparent"
+     *
+     * The color of the icon.
+     *
+     * If the icon's original colors should be left intact, set this to the default value, "transparent".
+     * Note that this colour will only be applied if the icon can be recoloured, (e.g. you can use Kirigami.Theme.foregroundColor to change the icon's colour.)
+     *
      * @since 2.7
      */
     property alias iconColor: iconItem.color
 
     /**
      * reserveSpaceForIcon: bool
-     * If true, even when there is no icon the space will be reserved for it
-     * It's useful in layouts where only some entries have an icon,
-     * having the text all horizontally aligned
+     *
+     * Whether or not to reserve space for the icon, even if there is no icon.
+     *
+     * @image html BasicListItemReserve.svg "Left: reserveSpaceForIcon: false. Right: reserveSpaceForIcon: true" width=50%
+     *
      */
     property alias reserveSpaceForIcon: iconItem.visible
 
     /**
      * reserveSpaceForLabel: bool
-     * If false, the label will not try to be as wide as possible
-     * It's useful in layouts containing entries without text
+     *
+     * Whether or not the label of the list item should fill width.
+     *
+     * Setting this to false is useful if you have other items in the list item
+     * that should fill width instead of the label.
+     *
      */
     property alias reserveSpaceForLabel: labelItem.visible
 
