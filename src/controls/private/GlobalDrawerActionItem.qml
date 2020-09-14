@@ -68,7 +68,8 @@ AbstractListItem {
             isMask: true
             Layout.alignment: Qt.AlignVCenter
             Layout.leftMargin: !root.collapsed ? 0 : -width
-            Layout.preferredHeight: !root.collapsed ? Units.iconSizes.smallMedium : Units.iconSizes.small/2
+            Layout.preferredHeight: !root.collapsed ? Units.iconSizes.small : Units.iconSizes.small/2
+            opacity: 0.7
             selected: listItem.checked || listItem.pressed
             Layout.preferredWidth: Layout.preferredHeight
             source: (LayoutMirroring.enabled ? "go-next-symbolic-rtl" : "go-next-symbolic")
@@ -93,7 +94,6 @@ AbstractListItem {
         }
     }
 
-    separatorVisible: false
     //TODO: animate the hide by collapse
     visible: (model ? model.visible || model.visible===undefined : modelData.visible) && opacity > 0
     opacity: !root.collapsed || iconItem.source.length > 0
