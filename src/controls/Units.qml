@@ -20,7 +20,7 @@ QtObject {
     /**
      * The fundamental unit of space that should be used for sizes, expressed in pixels.
      * Given the screen has an accurate DPI settings, it corresponds to the height of
-     * the capital letter M
+     * the font's boundingRect.
      */
     property int gridUnit: fontMetrics.height
 
@@ -108,8 +108,7 @@ QtObject {
     /**
      * metrics used by the default font
      */
-    property variant fontMetrics: TextMetrics {
-        text: "M"
+    property variant fontMetrics: FontMetrics {
         function roundedIconSize(size) {
             if (size < 16) {
                 return size;
