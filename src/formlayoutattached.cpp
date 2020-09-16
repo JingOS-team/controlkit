@@ -33,6 +33,21 @@ QString FormLayoutAttached::label() const
     return m_label;
 }
 
+void FormLayoutAttached::setLabelAlignment(int section)
+{
+	if (m_labelAlignment == section) {
+		return;
+	}
+
+	m_labelAlignment = section;
+	emit labelAlignmentChanged();
+}
+
+int FormLayoutAttached::labelAlignment() const
+{
+	return m_labelAlignment;
+}
+
 void FormLayoutAttached::setIsSection(bool section)
 {
     if (m_isSection == section) {

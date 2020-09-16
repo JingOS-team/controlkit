@@ -166,6 +166,52 @@ Item {
 
     Item {
         id: temp
+
+        /**
+         * The following two functions are used in the label buddy items.
+         *
+         * They're in this mostly unused item to keep them private to the FormLayout
+         * without creating another QObject.
+         *
+         * Normally, such complex things in bindings are kinda bad for performance
+         * but this is a fairly static property. If for some reason an application
+         * decides to obsessively change its alignment, V8's JIT hotspot optimisations
+         * will kick in.
+         */
+
+        /**
+         * @param {Item} item
+         *
+         * @returns {number}
+         */
+        function effectiveLayout(item) {
+            let verticalAlignment =
+                item.Kirigami.FormData.labelAlignment != 0
+                ? item.Kirigami.FormData.labelAlignment
+                : (item.Kirigami.FormData.buddyFor.height > height * 2 ? Qt.AlignTop : Qt.AlignVCenter)
+
+            if (item.Kirigami.FormData.isSection) {
+                return Qt.AlignLeft
+            } else {
+                if (root.wideMode) {
+                    return Qt.AlignRight | verticalAlignment
+                } else {
+                    return Qt.AlignLeft | Qt.AlignBottom
+                }
+            }
+        }
+
+        /**
+         * @param {Item} item
+         *
+         * @returns {number}
+         */
+        function effectiveTextLayout(item) {
+            if (root.wideMode) {
+                return item.Kirigami.FormData.labelAlignment != 0 ? item.Kirigami.FormData.labelAlignment : Text.AlignVCenter
+            }
+            return Text.AlignBottom
+        }
     }
 
     Timer {
@@ -297,12 +343,8 @@ Item {
                 }
             }
 
-            Layout.alignment: item.Kirigami.FormData.isSection
-                             ? Qt.AlignLeft
-                             : (root.wideMode
-                                ? (Qt.AlignRight | Qt.AlignTop)
-                                : (Qt.AlignLeft | Qt.AlignBottom))
-            verticalAlignment: root.wideMode ? Text.AlignVCenter : Text.AlignBottom
+            Layout.alignment: temp.effectiveLayout(item)
+            verticalAlignment: temp.effectiveTextLayout(item)
 
             Layout.topMargin: root.wideMode && item.Kirigami.FormData.buddyFor.parent != root ? item.Kirigami.FormData.buddyFor.y : 0
             onItemChanged: {
@@ -329,11 +371,7 @@ Item {
             Layout.columnSpan: item.Kirigami.FormData.isSection ? lay.columns : 1
             Layout.preferredHeight: item.Kirigami.FormData.label.length > 0 ? implicitHeight : Kirigami.Units.smallSpacing
 
-            Layout.alignment: item.Kirigami.FormData.isSection
-                             ? Qt.AlignLeft
-                             : (root.wideMode
-                                ? (Qt.AlignRight | (item.Kirigami.FormData.buddyFor.height > height * 2 ? Qt.AlignTop : Qt.AlignVCenter))
-                                : (Qt.AlignLeft | Qt.AlignBottom))
+            Layout.alignment: temp.effectiveLayout(this)
             Layout.topMargin: item.Kirigami.FormData.buddyFor.height > implicitHeight * 2 ? Kirigami.Units.smallSpacing/2 : 0
 
             activeFocusOnTab: indicator.visible && indicator.enabled
@@ -361,7 +399,7 @@ Item {
                 id: labelItemHeading
                 level: labelItem.item.Kirigami.FormData.isSection ? 3 : 5
                 text: labelItem.text
-                verticalAlignment: root.wideMode ? Text.AlignVCenter : Text.AlignBottom
+                verticalAlignment: temp.effectiveTextLayout(labelItem.item)
                 enabled: labelItem.item.Kirigami.FormData.enabled
                 leftPadding: height//parent.indicator.width
             }

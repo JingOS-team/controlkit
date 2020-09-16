@@ -36,6 +36,10 @@ class FormLayoutAttached : public QObject
      */
     Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
     /**
+     * The alignment for the label of a form layout field
+     */
+    Q_PROPERTY(int labelAlignment READ labelAlignment WRITE setLabelAlignment NOTIFY labelAlignmentChanged)
+    /**
      * If true the FormLayout item is a section separator, a section separator
      * may have different looks:
      * * To make it just a space between two fields, just put an empty item with isSection:
@@ -129,6 +133,9 @@ public:
     QQuickItem *buddyFor() const;
     void setBuddyFor(QQuickItem *buddyfor);
 
+    int labelAlignment() const;
+    void setLabelAlignment(int alignment);
+
     //QML attached property
     static FormLayoutAttached *qmlAttachedProperties(QObject *object);
 
@@ -139,6 +146,7 @@ Q_SIGNALS:
     void checkedChanged();
     void enabledChanged();
     void buddyForChanged();
+    void labelAlignmentChanged();
 
 private:
     QString m_label;
@@ -149,6 +157,7 @@ private:
     bool m_checkable = false;
     bool m_checked = false;
     bool m_enabled = true;
+    int m_labelAlignment = 0;
 };
 
 QML_DECLARE_TYPEINFO(FormLayoutAttached, QML_HAS_ATTACHED_PROPERTIES)
