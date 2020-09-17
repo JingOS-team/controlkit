@@ -24,14 +24,12 @@ import "../../templates" as T
 T.AbstractApplicationHeader {
     id: root
 
+    // Always use header bg color for toolbar (if available), even if the page
+    // it's located on uses a different color set
     Theme.inherit: false
     Theme.colorSet: Theme.Header
 
     background: Rectangle {
-        // Always use window bg color for toolbar, even if the page
-        // it's located on uses a different color set
-        Theme.colorSet: Theme.Window
-        Theme.inherit: false
         color: Theme.backgroundColor
         Separator {
             visible: root.separatorVisible && (!root.page || !root.page.header || !root.page.header.visible || root.page.header.toString().indexOf("ToolBar") === -1)
