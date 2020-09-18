@@ -5,7 +5,7 @@
  */
 
 
-import QtQuick 2.11
+import QtQuick 2.12
 import QtQuick.Layouts 1.2
 import QtQuick.Window 2.2
 import org.kde.kirigami 2.14
@@ -216,12 +216,25 @@ QtObject {
         drag.filterChildren: true
         hoverEnabled: true
         clip: true
-
-        onClicked: {
+        
+        // differentiate between mouse and touch
+        HoverHandler {
+            id: mouseHover
+            acceptedDevices: PointerDevice.Mouse
+        }
+        
+        onPressed: {
             var pos = mapToItem(contentLayout, mouse.x, mouse.y);
             if (!contentLayout.contains(pos)) {
                 root.close();
+            } else if (mouseHover.hovered) { // only on mouse event, not touch
+                // disable dragging the sheet with a mouse
+                outerFlickable.interactive = false
             }
+        }
+        onReleased: {
+            // enable dragging of sheet once mouse is not clicked
+            outerFlickable.interactive = true
         }
 
         readonly property int contentItemPreferredWidth: root.contentItem.Layout.preferredWidth > 0 ? root.contentItem.Layout.preferredWidth : root.contentItem.implicitWidth
@@ -391,6 +404,18 @@ QtObject {
                 target: outerFlickable
                 scrollFlickableTarget: false
             }
+            
+            // disable dragging the sheet with a mouse on header bar
+            MouseArea {
+                anchors.fill: parent
+                onPressed: {
+                    if (mouseHover.hovered) { // only on mouse event, not touch
+                        outerFlickable.interactive = false
+                    }
+                }
+                onReleased: outerFlickable.interactive = true
+            }
+            
             onContentYChanged: {
                 if (scrollView.userInteracting) {
                     return;
