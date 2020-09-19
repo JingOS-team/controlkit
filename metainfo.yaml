@@ -9,7 +9,7 @@ platforms:
     - name: iOS
       note: maintainer needed
     - name: Windows
-    - name: MacOSX
+    - name: macOS
       note: maintainer needed
 public_lib: true
 deprecated: false
