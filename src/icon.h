@@ -59,16 +59,6 @@ class Icon : public QQuickItem
     Q_PROPERTY(QString fallback READ fallback WRITE setFallback NOTIFY fallbackChanged)
 
     /**
-     * The `implicitWidth` of this item, derived from the `source` image.
-     */
-    Q_PROPERTY(int implicitWidth READ implicitWidth CONSTANT)
-
-    /**
-     * The `implicitHeight` of this item, derived from the `source` image.
-     */
-    Q_PROPERTY(int implicitHeight READ implicitHeight CONSTANT)
-
-    /**
      * Whether this icon will use the QIcon::Active mode when drawing the icon,
      * resulting in a graphical effect being applied to the icon to indicate that
      * it is currently active.
@@ -141,9 +131,6 @@ public:
 
     void setSource(const QVariant &source);
     QVariant source() const;
-
-    int implicitWidth() const;
-    int implicitHeight() const;
 
     void setActive(bool active = true);
     bool active() const;

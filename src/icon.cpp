@@ -35,6 +35,8 @@ Icon::Icon(QQuickItem *parent)
       m_isMask(false)
 {
     setFlag(ItemHasContents, true);
+    // Using 32 because Icon used to redefine implicitWidth and implicitHeight and hardcode them to 32
+    setImplicitSize(32, 32);
     //FIXME: not necessary anymore
     connect(qApp, &QGuiApplication::paletteChanged, this, &QQuickItem::polish);
     connect(this, &QQuickItem::enabledChanged, this, &QQuickItem::polish);
@@ -158,17 +160,6 @@ void Icon::setColor(const QColor &color)
 QColor Icon::color() const
 {
     return m_color;
-}
-
-
-int Icon::implicitWidth() const
-{
-    return 32;
-}
-
-int Icon::implicitHeight() const
-{
-    return 32;
 }
 
 QSGNode* Icon::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* /*data*/)
