@@ -83,7 +83,7 @@ Kirigami.AbstractApplicationHeader {
         }
 
         QQC2.ToolSeparator {
-            visible: (menuButton.visible || buttonsLayout.visible) && breadcrumbVisible && pageRow.depth > 1
+            visible: (menuButton.visible || (buttonsLayout.visible && buttonsLayout.visibleChildren.length > 0)) && breadcrumbVisible && pageRow.depth > 1
         }
 
         Loader {
