@@ -250,16 +250,18 @@ QQC2.Page {
      * The delegate which will be used to draw the page title. It can be customized to put any kind of Item in there.
      * @since 2.7
      */
-    property Component titleDelegate: Kirigami.Heading {
-        id: title
-        level: 1
-        Layout.fillWidth: true
-        Layout.maximumWidth: implicitWidth + 1 // The +1 is to make sure we do not trigger eliding at max width
-        Layout.minimumWidth: 0
-        opacity: root.isCurrentPage ? 1 : 0.4
-        maximumLineCount: 1
-        elide: Text.ElideRight
-        text: root.title
+    property Component titleDelegate: Component {
+        id: defaultTitleDelegate
+        Kirigami.Heading {
+            level: 1
+            Layout.fillWidth: true
+            Layout.maximumWidth: implicitWidth + 1 // The +1 is to make sure we do not trigger eliding at max width
+            Layout.minimumWidth: 0
+            opacity: root.isCurrentPage ? 1 : 0.4
+            maximumLineCount: 1
+            elide: Text.ElideRight
+            text: root.title
+        }
     }
 
     /**
@@ -392,10 +394,14 @@ QQC2.Page {
             property T2.StackView stack
 
             visible: active
-            active: (row || stack) && (root.globalToolBarStyle === Kirigami.ApplicationHeaderStyle.ToolBar || root.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.Titles)
+            active: (row || stack) && (root.titleDelegate !== defaultTitleDelegate || root.globalToolBarStyle === Kirigami.ApplicationHeaderStyle.ToolBar || root.globalToolBarStyle === Kirigami.ApplicationHeaderStyle.Titles)
 
             function syncSource() {
-                if (row && active) {
+                if (root.globalToolBarStyle !== Kirigami.ApplicationHeaderStyle.ToolBar &&
+                    root.globalToolBarStyle !== Kirigami.ApplicationHeaderStyle.Titles &&
+                    root.titleDelegate !== defaultTitleDelegate) {
+                    sourceComponent = root.titleDelegate;
+                } else if (row && active) {
                     setSource(Qt.resolvedUrl(root.globalToolBarStyle === Kirigami.ApplicationHeaderStyle.ToolBar ? "private/globaltoolbar/ToolBarPageHeader.qml" : "private/globaltoolbar/TitlesPageHeader.qml"),
                     //TODO: find container reliably, remove assumption
                     {"pageRow": Qt.binding(function() {return row}),
