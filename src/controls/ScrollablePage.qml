@@ -24,6 +24,8 @@ import "private"
  *     }
  * }
  * @endcode
+ * 
+ * @warning Do not put a ScrollView inside of a ScrollablePage; children of a ScrollablePage are already inside a ScrollView.
  *
  * Another behavior added by this class is a "scroll down to refresh" behavior
  * It also can give the contents of the flickable to have more top margins in order
