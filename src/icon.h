@@ -119,7 +119,23 @@ class Icon : public QQuickItem
      */
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
+    /**
+     * Whether the icon is correctly loaded, is asyncronously loading or there was an error.
+     * Note that an icon will be properly loaded just on show, so if the icon is not visible,
+     * it can only have Null or Loading states.
+     * @since 5.15
+     */
+    Q_PROPERTY(Icon::Status status READ status NOTIFY statusChanged)
+
 public:
+    enum Status {
+        Null = 0, /// No icon has been set
+        Ready, /// The icon loaded correctly
+        Loading, // The icon is being loaded, but not ready yet
+        Error /// There was an error while loading the icon, for instance a non existent themed name, or an invalid url
+    };
+    Q_ENUM(Status)
+
     Icon(QQuickItem *parent = nullptr);
     ~Icon();
 
@@ -146,6 +162,8 @@ public:
     QString fallback() const;
     void setFallback(const QString &fallback);
 
+    Status status() const;
+
     QSGNode* updatePaintNode(QSGNode* node, UpdatePaintNodeData* data) override;
 
 Q_SIGNALS:
@@ -156,6 +174,7 @@ Q_SIGNALS:
     void isMaskChanged();
     void colorChanged();
     void fallbackChanged(const QString &fallback);
+    void statusChanged();
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
@@ -171,6 +190,7 @@ private:
     QPointer<QNetworkReply> m_networkReply;
     QHash<int, bool> m_monochromeHeuristics;
     QVariant m_source;
+    Status m_status = Null;
     bool m_changed;
     bool m_active;
     bool m_selected;

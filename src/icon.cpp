@@ -74,8 +74,10 @@ void Icon::setSource(const QVariant &icon)
         m_networkReply->close();
     }
     m_loadedImage = QImage();
+    m_status = Loading;
 
     polish();
+    emit statusChanged();
     emit sourceChanged();
     emit validChanged();
 }
@@ -102,6 +104,7 @@ bool Icon::active() const
 
 bool Icon::valid() const
 {
+    // TODO: should this be returbn m_status == Ready?
     // Consider an empty URL invalid, even though isNull() will say false
     if (m_source.canConvert<QUrl>() && m_source.toUrl().isEmpty()) {
         return false;
@@ -348,6 +351,8 @@ QImage Icon::findIcon(const QSize &size)
         case QQmlImageProviderBase::ImageResponse:
         {
             if (!m_loadedImage.isNull()) {
+                m_status = Ready;
+                emit statusChanged();
                 return m_loadedImage.scaled(size, Qt::KeepAspectRatio, smooth() ? Qt::SmoothTransformation : Qt::FastTransformation );
             }
             QQuickAsyncImageProvider *provider = dynamic_cast<QQuickAsyncImageProvider*>(imageProvider);
@@ -359,6 +364,11 @@ QImage Icon::findIcon(const QSize &size)
                     if (m_loadedImage.isNull()) {
                         // broken image from data, inform the user of this with some useful broken-image thing...
                         m_loadedImage = QIcon::fromTheme(m_fallback).pixmap(window(), QSize(width(), height()), iconMode(), QIcon::On).toImage();
+                        m_status = Error;
+                        emit statusChanged();
+                    } else {
+                        m_status = Ready;
+                        emit statusChanged();
                     }
                     polish();
                 }
@@ -376,15 +386,24 @@ QImage Icon::findIcon(const QSize &size)
             if (img.isNull()) {
                 // broken image from data, or the texture factory wasn't healthy, inform the user of this with some useful broken-image thing...
                 img = QIcon::fromTheme(m_fallback).pixmap(window(), QSize(width(), height()), iconMode(), QIcon::On).toImage();
+                m_status = Error;
+                emit statusChanged();
+            } else {
+                m_status = Ready;
+                emit statusChanged();
             }
             break;
         }
         case QQmlImageProviderBase::Invalid:
             //will have to investigate this more
+            m_status = Error;
+            emit statusChanged();
             break;
         }
     } else if(iconSource.startsWith(QLatin1String("http://")) || iconSource.startsWith(QLatin1String("https://"))) {
         if(!m_loadedImage.isNull()) {
+            m_status = Ready;
+            emit statusChanged();
             return m_loadedImage.scaled(size, Qt::KeepAspectRatio, smooth() ? Qt::SmoothTransformation : Qt::FastTransformation );
         }
         const auto url = m_source.toUrl();
@@ -417,6 +436,8 @@ QImage Icon::findIcon(const QSize &size)
         if (!icon.isNull()) {
             img = icon.pixmap(window(), size, iconMode(), QIcon::On).toImage();
 
+            m_status = Ready;
+            emit statusChanged();
             /*const QColor tintColor = !m_color.isValid() || m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
 
             if (m_isMask || icon.isMask() || iconSource.endsWith(QLatin1String("-symbolic")) || iconSource.endsWith(QLatin1String("-symbolic-rtl")) || iconSource.endsWith(QLatin1String("-symbolic-ltr")) || guessMonochrome(img)) {
@@ -429,6 +450,8 @@ QImage Icon::findIcon(const QSize &size)
     }
 
     if (!iconSource.isEmpty() && img.isNull()) {
+        m_status = Error;
+        emit statusChanged();
         img = QIcon::fromTheme(m_fallback).pixmap(window(), size, iconMode(), QIcon::On).toImage();
     }
     return img;
@@ -518,3 +541,10 @@ void Icon::setFallback(const QString& fallback)
         Q_EMIT fallbackChanged(fallback);
     }
 }
+
+Icon::Status Icon::status() const
+{
+    return m_status;
+}
+
+#include "moc_icon.cpp"
