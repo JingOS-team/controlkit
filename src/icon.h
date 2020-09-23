@@ -121,7 +121,7 @@ class Icon : public QQuickItem
 
     /**
      * Whether the icon is correctly loaded, is asyncronously loading or there was an error.
-     * Note that an icon will be properly loaded just on show, so if the icon is not visible,
+     * Note that image loading will not be initiated until the item is shown, so if the Icon is not visible,
      * it can only have Null or Loading states.
      * @since 5.15
      */
