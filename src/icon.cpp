@@ -358,7 +358,9 @@ QImage Icon::findIcon(const QSize &size)
             connect(response, &QQuickImageResponse::finished, this, [iconId, response, this](){
                 if (response->errorString().isEmpty()) {
                     QQuickTextureFactory *textureFactory = response->textureFactory();
-                    m_loadedImage = textureFactory->image();
+                    if (textureFactory) {
+                        m_loadedImage = textureFactory->image();
+                    }
                     if (m_loadedImage.isNull()) {
                         // broken image from data, inform the user of this with some useful broken-image thing...
                         m_loadedImage = QIcon::fromTheme(m_fallback).pixmap(window(), QSize(width(), height()), iconMode(), QIcon::On).toImage();
