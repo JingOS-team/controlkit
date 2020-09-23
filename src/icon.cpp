@@ -363,7 +363,7 @@ QImage Icon::findIcon(const QSize &size)
                 }
             });
             // Temporary icon while we wait for the real image to load...
-            img = QIcon::fromTheme(QStringLiteral("image-x-icon")).pixmap(window(), size, iconMode(), QIcon::On).toImage();
+            img = QIcon::fromTheme(m_placeholder).pixmap(window(), size, iconMode(), QIcon::On).toImage();
             break;
         }
         case QQmlImageProviderBase::Texture:
@@ -401,7 +401,7 @@ QImage Icon::findIcon(const QSize &size)
             connect(m_networkReply.data(), &QNetworkReply::finished, this, [this](){ handleFinished(m_networkReply); });
         }
         // Temporary icon while we wait for the real image to load...
-        img = QIcon::fromTheme(QStringLiteral("image-x-icon")).pixmap(window(), size, iconMode(), QIcon::On).toImage();
+        img = QIcon::fromTheme(m_placeholder).pixmap(window(), size, iconMode(), QIcon::On).toImage();
     } else {
         if (iconSource.startsWith(QLatin1String("qrc:/"))) {
             iconSource = iconSource.mid(3);
@@ -522,6 +522,19 @@ void Icon::setFallback(const QString& fallback)
     if (m_fallback != fallback) {
         m_fallback = fallback;
         Q_EMIT fallbackChanged(fallback);
+    }
+}
+
+QString Icon::placeholder() const
+{
+    return m_placeholder;
+}
+
+void Icon::setPlaceholder(const QString& placeholder)
+{
+    if (m_placeholder != placeholder) {
+        m_placeholder = placeholder;
+        Q_EMIT placeholderChanged(placeholder);
     }
 }
 

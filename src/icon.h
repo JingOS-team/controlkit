@@ -59,6 +59,19 @@ class Icon : public QQuickItem
     Q_PROPERTY(QString fallback READ fallback WRITE setFallback NOTIFY fallbackChanged)
 
     /**
+     * The name of an icon from the icon theme to show while the icon set in `source` is
+     * being loaded. This is primarily relevant for remote sources, or those using slow-
+     * loading image providers. The default temporary icon is `"image-x-icon"`
+     *
+     * @note This will only be loaded if the source is a type which can be so long-loading
+     * that a temporary image makes sense (e.g. a remote image, or from an ImageProvider
+     * of the type QQmlImageProviderBase::ImageResponse)
+     *
+     * @since 5.15
+     */
+    Q_PROPERTY(QString placeholder READ placeholder WRITE setPlaceholder NOTIFY placeholderChanged)
+
+    /**
      * Whether this icon will use the QIcon::Active mode when drawing the icon,
      * resulting in a graphical effect being applied to the icon to indicate that
      * it is currently active.
@@ -149,6 +162,9 @@ public:
     QString fallback() const;
     void setFallback(const QString &fallback);
 
+    QString placeholder() const;
+    void setPlaceholder(const QString &placeholder);
+
     Status status() const;
 
     QSGNode* updatePaintNode(QSGNode* node, UpdatePaintNodeData* data) override;
@@ -161,6 +177,7 @@ Q_SIGNALS:
     void isMaskChanged();
     void colorChanged();
     void fallbackChanged(const QString &fallback);
+    void placeholderChanged(const QString &placeholder);
     void statusChanged();
 
 protected:
@@ -187,6 +204,7 @@ private:
     QImage m_loadedImage;
     QColor m_color = Qt::transparent;
     QString m_fallback = QStringLiteral("unknown");
+    QString m_placeholder = QStringLiteral("image-x-icon");
 
     QImage m_icon;
 };
