@@ -104,7 +104,7 @@ bool Icon::active() const
 
 bool Icon::valid() const
 {
-    // TODO: should this be returbn m_status == Ready?
+    // TODO: should this be return m_status == Ready?
     // Consider an empty URL invalid, even though isNull() will say false
     if (m_source.canConvert<QUrl>() && m_source.toUrl().isEmpty()) {
         return false;
