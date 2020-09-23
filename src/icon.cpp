@@ -345,9 +345,41 @@ QImage Icon::findIcon(const QSize &size)
         case QQmlImageProviderBase::Pixmap:
             img = imageProvider->requestPixmap(iconId, &actualSize, size * multiplier).toImage();
             break;
-        case QQmlImageProviderBase::Texture:
-        case QQmlImageProviderBase::Invalid:
         case QQmlImageProviderBase::ImageResponse:
+        {
+            if (!m_loadedImage.isNull()) {
+                return m_loadedImage.scaled(size, Qt::KeepAspectRatio, smooth() ? Qt::SmoothTransformation : Qt::FastTransformation );
+            }
+            QQuickAsyncImageProvider *provider = dynamic_cast<QQuickAsyncImageProvider*>(imageProvider);
+            auto response = provider->requestImageResponse(iconId, size * multiplier);
+            connect(response, &QQuickImageResponse::finished, this, [iconId, response, this](){
+                if (response->errorString().isEmpty()) {
+                    QQuickTextureFactory *textureFactory = response->textureFactory();
+                    m_loadedImage = textureFactory->image();
+                    if (m_loadedImage.isNull()) {
+                        // broken image from data, inform the user of this with some useful broken-image thing...
+                        m_loadedImage = QIcon::fromTheme(m_fallback).pixmap(window(), QSize(width(), height()), iconMode(), QIcon::On).toImage();
+                    }
+                    polish();
+                }
+            });
+            // Temporary icon while we wait for the real image to load...
+            img = QIcon::fromTheme(QStringLiteral("image-x-icon")).pixmap(window(), size, iconMode(), QIcon::On).toImage();
+            break;
+        }
+        case QQmlImageProviderBase::Texture:
+        {
+            QQuickTextureFactory *textureFactory = imageProvider->requestTexture(iconId, &actualSize, size * multiplier);
+            if (textureFactory) {
+                img = textureFactory->image();
+            }
+            if (img.isNull()) {
+                // broken image from data, or the texture factory wasn't healthy, inform the user of this with some useful broken-image thing...
+                img = QIcon::fromTheme(m_fallback).pixmap(window(), QSize(width(), height()), iconMode(), QIcon::On).toImage();
+            }
+            break;
+        }
+        case QQmlImageProviderBase::Invalid:
             //will have to investigate this more
             break;
         }
