@@ -183,6 +183,7 @@ protected:
     void handleRedirect(QNetworkReply* reply);
     QIcon::Mode iconMode() const;
     bool guessMonochrome(const QImage &img);
+    void setStatus(Status status);
     void updatePolish() override;
 
 private:

@@ -74,10 +74,9 @@ void Icon::setSource(const QVariant &icon)
         m_networkReply->close();
     }
     m_loadedImage = QImage();
-    m_status = Loading;
+    setStatus(Loading);
 
     polish();
-    emit statusChanged();
     emit sourceChanged();
     emit validChanged();
 }
@@ -351,8 +350,7 @@ QImage Icon::findIcon(const QSize &size)
         case QQmlImageProviderBase::ImageResponse:
         {
             if (!m_loadedImage.isNull()) {
-                m_status = Ready;
-                emit statusChanged();
+                setStatus(Ready);
                 return m_loadedImage.scaled(size, Qt::KeepAspectRatio, smooth() ? Qt::SmoothTransformation : Qt::FastTransformation );
             }
             QQuickAsyncImageProvider *provider = dynamic_cast<QQuickAsyncImageProvider*>(imageProvider);
@@ -364,11 +362,9 @@ QImage Icon::findIcon(const QSize &size)
                     if (m_loadedImage.isNull()) {
                         // broken image from data, inform the user of this with some useful broken-image thing...
                         m_loadedImage = QIcon::fromTheme(m_fallback).pixmap(window(), QSize(width(), height()), iconMode(), QIcon::On).toImage();
-                        m_status = Error;
-                        emit statusChanged();
+                        setStatus(Error);
                     } else {
-                        m_status = Ready;
-                        emit statusChanged();
+                        setStatus(Ready);
                     }
                     polish();
                 }
@@ -386,24 +382,20 @@ QImage Icon::findIcon(const QSize &size)
             if (img.isNull()) {
                 // broken image from data, or the texture factory wasn't healthy, inform the user of this with some useful broken-image thing...
                 img = QIcon::fromTheme(m_fallback).pixmap(window(), QSize(width(), height()), iconMode(), QIcon::On).toImage();
-                m_status = Error;
-                emit statusChanged();
+                setStatus(Error);
             } else {
-                m_status = Ready;
-                emit statusChanged();
+                setStatus(Ready);
             }
             break;
         }
         case QQmlImageProviderBase::Invalid:
             //will have to investigate this more
-            m_status = Error;
-            emit statusChanged();
+            setStatus(Error);
             break;
         }
     } else if(iconSource.startsWith(QLatin1String("http://")) || iconSource.startsWith(QLatin1String("https://"))) {
         if(!m_loadedImage.isNull()) {
-            m_status = Ready;
-            emit statusChanged();
+            setStatus(Ready);
             return m_loadedImage.scaled(size, Qt::KeepAspectRatio, smooth() ? Qt::SmoothTransformation : Qt::FastTransformation );
         }
         const auto url = m_source.toUrl();
@@ -436,8 +428,7 @@ QImage Icon::findIcon(const QSize &size)
         if (!icon.isNull()) {
             img = icon.pixmap(window(), size, iconMode(), QIcon::On).toImage();
 
-            m_status = Ready;
-            emit statusChanged();
+            setStatus(Ready);
             /*const QColor tintColor = !m_color.isValid() || m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
 
             if (m_isMask || icon.isMask() || iconSource.endsWith(QLatin1String("-symbolic")) || iconSource.endsWith(QLatin1String("-symbolic-rtl")) || iconSource.endsWith(QLatin1String("-symbolic-ltr")) || guessMonochrome(img)) {
@@ -450,8 +441,7 @@ QImage Icon::findIcon(const QSize &size)
     }
 
     if (!iconSource.isEmpty() && img.isNull()) {
-        m_status = Error;
-        emit statusChanged();
+        setStatus(Error);
         img = QIcon::fromTheme(m_fallback).pixmap(window(), size, iconMode(), QIcon::On).toImage();
     }
     return img;
@@ -540,6 +530,16 @@ void Icon::setFallback(const QString& fallback)
         m_fallback = fallback;
         Q_EMIT fallbackChanged(fallback);
     }
+}
+
+void Icon::setStatus(Status status)
+{
+    if (status == m_status) {
+        return;
+    }
+
+    m_status = status;
+    emit statusChanged();
 }
 
 Icon::Status Icon::status() const
