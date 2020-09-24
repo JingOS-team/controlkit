@@ -133,12 +133,16 @@ class Icon : public QQuickItem
     /**
      * The width of the painted area measured in pixels. This will be smaller than or
      * equal to the width of the area taken up by the Item itself. This can be 0.
+     *
+     * @since 5.15
      */
     Q_PROPERTY(qreal paintedWidth READ paintedWidth NOTIFY paintedAreaChanged)
 
     /**
      * The height of the painted area measured in pixels. This will be smaller than or
      * equal to the height of the area taken up by the Item itself. This can be 0.
+     *
+     * @since 5.15
      */
     Q_PROPERTY(qreal paintedHeight READ paintedHeight NOTIFY paintedAreaChanged)
 public:
