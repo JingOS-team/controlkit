@@ -256,6 +256,7 @@ void Icon::updatePolish()
     QQuickItem::updatePolish();
 
     if (m_source.isNull()) {
+        updatePaintedGeometry();
         return;
     }
 
@@ -307,6 +308,7 @@ void Icon::updatePolish()
         }
     }
     m_changed = true;
+    updatePaintedGeometry();
     update();
 }
 
@@ -551,6 +553,42 @@ void Icon::setStatus(Status status)
 Icon::Status Icon::status() const
 {
     return m_status;
+}
+
+qreal Icon::paintedWidth() const
+{
+    return m_paintedWidth;
+}
+
+qreal Icon::paintedHeight() const
+{
+    return m_paintedHeight;
+}
+
+void Icon::updatePaintedGeometry()
+{
+    qreal newWidth = 0.0;
+    qreal newHeight = 0.0;
+    if (!m_icon.width() || !m_icon.height()) {
+        newWidth = newHeight = 0.0;
+    } else {
+        const qreal w = widthValid() ? width() : m_icon.width();
+        const qreal widthScale = w / m_icon.width();
+        const qreal h = heightValid() ? height() : m_icon.height();
+        const qreal heightScale = h / m_icon.height();
+        if (widthScale <= heightScale) {
+            newWidth = w;
+            newHeight = widthScale * m_icon.height();
+        } else if (heightScale < widthScale) {
+            newWidth = heightScale * m_icon.width();
+            newHeight = h;
+        }
+    }
+    if (newWidth != m_paintedWidth || newHeight != m_paintedHeight) {
+        m_paintedWidth = newWidth;
+        m_paintedHeight = newHeight;
+        Q_EMIT paintedAreaChanged();
+    }
 }
 
 #include "moc_icon.cpp"

@@ -130,6 +130,17 @@ class Icon : public QQuickItem
      */
     Q_PROPERTY(Icon::Status status READ status NOTIFY statusChanged)
 
+    /**
+     * The width of the painted area measured in pixels. This will be smaller than or
+     * equal to the width of the area taken up by the Item itself. This can be 0.
+     */
+    Q_PROPERTY(qreal paintedWidth READ paintedWidth NOTIFY paintedAreaChanged)
+
+    /**
+     * The height of the painted area measured in pixels. This will be smaller than or
+     * equal to the height of the area taken up by the Item itself. This can be 0.
+     */
+    Q_PROPERTY(qreal paintedHeight READ paintedHeight NOTIFY paintedAreaChanged)
 public:
     enum Status {
         Null = 0, /// No icon has been set
@@ -167,6 +178,9 @@ public:
 
     Status status() const;
 
+    qreal paintedWidth() const;
+    qreal paintedHeight() const;
+
     QSGNode* updatePaintNode(QSGNode* node, UpdatePaintNodeData* data) override;
 
 Q_SIGNALS:
@@ -179,6 +193,7 @@ Q_SIGNALS:
     void fallbackChanged(const QString &fallback);
     void placeholderChanged(const QString &placeholder);
     void statusChanged();
+    void paintedAreaChanged();
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
@@ -189,6 +204,7 @@ protected:
     bool guessMonochrome(const QImage &img);
     void setStatus(Status status);
     void updatePolish() override;
+    void updatePaintedGeometry();
 
 private:
     Kirigami::PlatformTheme *m_theme = nullptr;
@@ -205,6 +221,8 @@ private:
     QColor m_color = Qt::transparent;
     QString m_fallback = QStringLiteral("unknown");
     QString m_placeholder = QStringLiteral("image-x-icon");
+    qreal m_paintedWidth = 0.0;
+    qreal m_paintedHeight = 0.0;
 
     QImage m_icon;
 };
