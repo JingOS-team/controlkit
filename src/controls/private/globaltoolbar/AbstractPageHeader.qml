@@ -7,14 +7,10 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0 as Controls
 import QtQuick.Layouts 1.2
-import org.kde.kirigami 2.14
+import org.kde.kirigami 2.5
 
 AbstractApplicationHeader {
     id: root
-
-    Theme.inherit: pageRow.globalToolBar.Theme.inherit
-    Theme.colorSet: pageRow.globalToolBar.theme.colorSet
-
    // anchors.fill: parent
     property Item container
     property bool current
