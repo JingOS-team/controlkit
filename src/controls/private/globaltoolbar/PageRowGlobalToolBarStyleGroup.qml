@@ -4,11 +4,15 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-import QtQuick 2.1
-import org.kde.kirigami 2.4 as Kirigami
+import QtQuick 2.12
+import org.kde.kirigami 2.14 as Kirigami
 
 QtObject {
     id: globalToolBar
+
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Header
+
     property int style: Kirigami.ApplicationHeaderStyle.None
     readonly property int actualStyle: {
         if (style == Kirigami.ApplicationHeaderStyle.Auto) {
