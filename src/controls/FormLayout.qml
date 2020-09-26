@@ -279,7 +279,6 @@ Item {
             Layout.maximumWidth: item.Layout.maximumWidth
             Layout.maximumHeight: item.Layout.maximumHeight
 
-            Layout.leftMargin: root.wideMode ? 0 : Kirigami.Units.largeSpacing
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
             Layout.fillWidth: item.Layout.fillWidth || item.Kirigami.FormData.isSection
             Layout.columnSpan: item.Kirigami.FormData.isSection ? lay.columns : 1
