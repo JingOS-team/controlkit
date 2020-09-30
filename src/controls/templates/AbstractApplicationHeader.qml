@@ -93,10 +93,7 @@ Item {
         id: headerItem
         property real computedRootHeight: root.preferredHeight
         anchors {
-            left: parent.left
-            right: parent.right
-            bottom: root.position === Controls.ToolBar.Header ? parent.bottom : undefined
-            top: root.position === Controls.ToolBar.Footer ? parent.top : undefined
+            fill: parent
         }
 
         height: __appWindow && __appWindow.reachableMode && __appWindow.reachableModeEnabled ? root.maximumHeight : (root.minimumHeight > 0 ? Math.max(root.height, root.minimumHeight) : root.preferredHeight)
