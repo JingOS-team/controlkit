@@ -208,7 +208,14 @@ void DelegateRecycler::setSourceComponent(QQmlComponent *component)
             connect(engine, &QObject::destroyed, engine, [engine] { propertiesTrackerComponent.remove(engine); });
             it = propertiesTrackerComponent.insert(engine, new QQmlComponent(engine, engine));
 
-            (*it)->setData(QByteArrayLiteral("import QtQuick 2.3\nQtObject{property int trackedIndex: index; property var trackedModel: typeof model != 'undefined' ? model : null; property var trackedModelData: typeof modelData != 'undefined' ? modelData : null}"), QUrl(QStringLiteral("delegaterecycler.cpp")));
+            (*it)->setData(QByteArrayLiteral(R"(
+import QtQuick 2.3
+QtObject {
+    property int trackedIndex: index
+    property var trackedModel: typeof model != 'undefined' ? model : null
+    property var trackedModelData: typeof modelData != 'undefined' ? modelData : null
+}
+)"), QUrl(QStringLiteral("delegaterecycler.cpp")));
         }
         m_propertiesTracker = (*it)->create(QQmlEngine::contextForObject(this));
 

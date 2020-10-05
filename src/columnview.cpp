@@ -57,24 +57,31 @@ QmlComponentsPool::QmlComponentsPool(QQmlEngine *engine)
 {
     QQmlComponent *component = new QQmlComponent(engine, this);
 
-    component->setData(QByteArrayLiteral("import QtQuick 2.7\n"
-        "import org.kde.kirigami 2.7 as Kirigami\n"
-        "QtObject {\n"
-            "id: root\n"
-            "readonly property Kirigami.Units units: Kirigami.Units\n"
-            "readonly property Component separator: Kirigami.Separator {"
-                "property Item column\n"
-                "visible: column.Kirigami.ColumnView.view && column.Kirigami.ColumnView.view.contentX < column.x;"
-                "anchors.top: column.top;"
-                "anchors.bottom: column.bottom;"
-            "}\n"
-            "readonly property Component rightSeparator: Kirigami.Separator {"
-                "property Item column\n"
-                "anchors.top: column.top;"
-                "anchors.right: column.right;"
-                "anchors.bottom: column.bottom;"
-            "}"
-        "}"), QUrl(QStringLiteral("columnview.cpp")));
+    component->setData(QByteArrayLiteral(R"(
+import QtQuick 2.7
+import org.kde.kirigami 2.7 as Kirigami
+
+QtObject {
+    id: root
+    readonly property Kirigami.Units units: Kirigami.Units
+
+    readonly property Component separator: Kirigami.Separator {
+        property Item column
+
+        visible: column.Kirigami.ColumnView.view && column.Kirigami.ColumnView.view.contentX < column.x
+        anchors.top: column.top
+        anchors.bottom: column.bottom
+    }
+
+    readonly property Component rightSeparator: Kirigami.Separator {
+        property Item column
+
+        anchors.top: column.top
+        anchors.right: column.right
+        anchors.bottom: column.bottom
+    }
+}
+)"), QUrl(QStringLiteral("columnview.cpp")));
 
     m_instance = component->create();
     //qWarning()<<component->errors();

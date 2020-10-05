@@ -52,11 +52,14 @@ QObject *BasicThemeDeclarative::instance(const BasicTheme *theme)
 
     QQmlComponent c(engine);
     //NOTE: for now is important this import stays at 2.0
-    c.setData("import QtQuick 2.6\n\
-            import org.kde.kirigami 2.0 as Kirigami\n\
-            QtObject {\n\
-                property QtObject theme: Kirigami.Theme\n\
-            }", QUrl(QStringLiteral("basictheme.cpp")));
+    c.setData(R"(
+import QtQuick 2.6
+import org.kde.kirigami 2.0 as Kirigami
+
+QtObject {
+    property QtObject theme: Kirigami.Theme
+}
+)", QUrl(QStringLiteral("basictheme.cpp")));
 
     QObject *obj = c.create();
     m_declarativeBasicTheme = obj->property("theme").value<QObject *>();
