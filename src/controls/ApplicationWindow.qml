@@ -97,7 +97,7 @@ AbstractApplicationWindow {
     property alias pageStack: __pageStack
 
     //redefines here as here we can know a pointer to PageRow
-    wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth * 1.5
+    wideScreen: width >= (applicationWindow().pageStack.defaultColumnWidth * 1.5) + (contextDrawer ? contextDrawer.width : 0) + (globalDrawer ? globalDrawer.width : 0)
 
     Component.onCompleted: {
         if (pageStack.currentItem) {
