@@ -227,7 +227,10 @@ void Icon::handleRedirect(QNetworkReply* reply)
         QNetworkRequest request(possibleRedirectUrl);
         request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
         m_networkReply = qnam->get(request);
-        connect(m_networkReply.data(), &QNetworkReply::finished, this, [this](){handleFinished(m_networkReply); });
+        connect(m_networkReply.data(), &QNetworkReply::finished, this, [this](){
+            if (m_networkReply)
+                handleFinished(m_networkReply);
+        });
     }
 }
 
@@ -402,7 +405,10 @@ QImage Icon::findIcon(const QSize &size)
             QNetworkRequest request(url);
             request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
             m_networkReply = qnam->get(request);
-            connect(m_networkReply.data(), &QNetworkReply::finished, this, [this](){ handleFinished(m_networkReply); });
+            connect(m_networkReply.data(), &QNetworkReply::finished, this, [this](){
+                if (m_networkReply)
+                    handleFinished(m_networkReply);
+            });
         }
         // Temporary icon while we wait for the real image to load...
         img = QIcon::fromTheme(m_placeholder).pixmap(window(), size, iconMode(), QIcon::On).toImage();
