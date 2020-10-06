@@ -72,12 +72,29 @@ Item {
 
     Layout.fillWidth: true
 
+    onTwinFormLayoutsChanged: {
+        for (let i in twinFormLayouts) {
+            if (!(root in twinFormLayouts[i].children[0].reverseTwins)) {
+                twinFormLayouts[i].children[0].reverseTwins.push(root)
+                Qt.callLater(() => twinFormLayouts[i].children[0].reverseTwinsChanged());
+            }
+        }
+    }
+
+    Component.onDestruction: {
+        for (let i in twinFormLayouts) {
+            twinFormLayouts[i].children[0].reverseTwins = twinFormLayouts[i].children[0].reverseTwins.filter(function(value, index, arr){ return value != root;})
+            Qt.callLater(() => twinFormLayouts[i].children[0].reverseTwinsChanged());
+        }
+    }
     GridLayout {
         id: lay
         property int wideImplicitWidth
         columns: root.wideMode ? 2 : 1
         rowSpacing: Kirigami.Units.smallSpacing
         columnSpacing: Kirigami.Units.smallSpacing
+
+        property var reverseTwins: []
         property var knownItems: []
         property var buddies: []
         property int knownItemsImplicitWidth: {
@@ -90,12 +107,30 @@ Item {
         property int buddiesImplicitWidth: {
             var hint = 0;
             for (var i in buddies) {
-                if (buddies[i].visible) {
+                if (buddies[i].visible && !buddies[i].item.Kirigami.FormData.isSection) {
                     hint = Math.max(hint, buddies[i].implicitWidth);
                 }
             }
             return hint;
         }
+        readonly property var actualTwinFormLayouts: {
+            let list = lay.reverseTwins;
+            for (let i in twinFormLayouts) {
+                let parentLay = twinFormLayouts[i];
+                if (!parentLay || !parentLay.hasOwnProperty("children")) {
+                    continue;
+                }
+                list.push(parentLay);
+                for (let j in parentLay.children[0].reverseTwins) {
+                    let childLay = parentLay.children[0].reverseTwins[j];
+                    if (childLay && !(childLay in list)) {
+                        list.push(childLay);
+                    }
+                }
+            }
+            return list;
+        }
+
         states: [
             State {
                 when: root.wideMode
@@ -146,21 +181,27 @@ Item {
 
         Item {
             Layout.preferredWidth: {
-                var hint = 1;
-                for (var i in root.twinFormLayouts) {
-                    hint = Math.max(hint, root.twinFormLayouts[i].children[0].buddiesImplicitWidth);
+                var hint = lay.buddiesImplicitWidth;
+                for (var i in lay.actualTwinFormLayouts) {
+                    if (lay.actualTwinFormLayouts[i] && lay.actualTwinFormLayouts[i].hasOwnProperty("children")) {
+                        hint = Math.max(hint, lay.actualTwinFormLayouts[i].children[0].buddiesImplicitWidth);
+                    }
                 }
                 return hint;
             }
+            Layout.preferredHeight:2
         }
         Item {
             Layout.preferredWidth: {
-                var hint = 1;
-                for (var i in root.twinFormLayouts) {
-                    hint = Math.max(hint, root.twinFormLayouts[i].children[0].knownItemsImplicitWidth);
+                var hint = lay.knownItemsImplicitWidth;
+                for (var i in lay.actualTwinFormLayouts) {
+                    if (lay.actualTwinFormLayouts[i] && lay.actualTwinFormLayouts[i].hasOwnProperty("children")) {
+                        hint = Math.max(hint, lay.actualTwinFormLayouts[i].children[0].knownItemsImplicitWidth);
+                    }
                 }
                 return hint;
             }
+            Layout.preferredHeight:2
         }
     }
 
