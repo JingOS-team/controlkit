@@ -17,7 +17,14 @@ Controls.ToolButton {
 
     enabled: applicationWindow().pageStack.layers.depth > 1 || (applicationWindow().pageStack.depth > 1 && (applicationWindow().pageStack.currentIndex > 0 || applicationWindow().pageStack.contentItem.contentX > 0))
 
-    visible: applicationWindow().pageStack.layers.depth > 1 || (applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width && (globalToolBar.showNavigationButtons === true || (globalToolBar.showNavigationButtons & ApplicationHeaderStyle.ShowBackButton)))
+    property var showNavButtons: {
+        try {
+            return globalToolBar.showNavigationButtons
+        } catch (_) {
+            return false
+        }
+    }
+    visible: applicationWindow().pageStack.layers.depth > 1 || (applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width && showNavButtons === true || showNavButtons & ApplicationHeaderStyle.ShowBackButton)
     width: height
     height: parent.height
 
