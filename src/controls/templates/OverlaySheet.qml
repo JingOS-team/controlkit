@@ -510,6 +510,13 @@ QtObject {
                 width: mainItem.contentItemPreferredWidth <= 0 ? mainItem.width : Math.max(mainItem.width/2, Math.min(mainItem.contentItemMaximumWidth, mainItem.contentItemPreferredWidth)) - root.leftInset - root.rightInset
                 height: Math.min(implicitHeight, parent.height) - root.topInset - root.bottomInset
 
+                Behavior on height {
+                    NumberAnimation {
+                        duration: Units.smallDuration
+                        easing.type: Easing.InOutCubic
+                    }
+                }
+
                 // Even though we're not actually using any shadows here,
                 // we're using a ShadowedRectangle instead of a regular
                 // rectangle because it allows fine-grained control over which
@@ -517,6 +524,7 @@ QtObject {
                 ShadowedRectangle {
                     id: headerItem
                     Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignTop
                     //Layout.margins: 1
                     visible: root.header || root.showCloseButton
                     implicitHeight: Math.max(headerParent.implicitHeight, closeIcon.height) + Units.smallSpacing * 2
@@ -576,7 +584,11 @@ QtObject {
 
                     implicitHeight: flickableItem.contentHeight
                     Layout.maximumHeight: flickableItem.contentHeight
+
+                    Layout.alignment: Qt.AlignTop
                 }
+
+                Item { Layout.fillHeight: true }
 
                 Connections {
                     target: scrollView.flickableItem
