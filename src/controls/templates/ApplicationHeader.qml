@@ -105,7 +105,6 @@ AbstractApplicationHeader {
 
     Rectangle {
         anchors {
-            right: titleList.left
             verticalCenter: parent.verticalCenter
         }
         visible: titleList.x > 0 && !titleList.atXBeginning
@@ -252,7 +251,7 @@ AbstractApplicationHeader {
             listScrollAnim.running = false
             var pos = titleList.contentX;
             var destPos;
-            titleList.contentX = Math.max((contentItem.children[idx].x + contentItem.children[idx].width) - titleList.width, Math.min(titleList.contentX, contentItem.children[idx].x));
+            titleList.contentX = Math.max(((contentItem.children[idx] || {x: 0}).x + (contentItem.children[idx] || {width: 0}).width) - titleList.width, Math.min(titleList.contentX, (contentItem.children[idx] || {x: 0}).x));
             destPos = titleList.contentX;
             listScrollAnim.from = pos;
             listScrollAnim.to = destPos;
