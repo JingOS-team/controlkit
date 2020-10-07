@@ -76,7 +76,7 @@ OverlayDrawer {
         if (applicationWindow().pageStack.layers && applicationWindow().pageStack.layers.depth > 1 && applicationWindow().pageStack.layers.currentItem.hasOwnProperty("contextualActions")) {
             return applicationWindow().pageStack.layers.currentItem;
         }
-        else if (applicationWindow().pageStack.currentItem.hasOwnProperty("contextualActions")) {
+        else if ((applicationWindow().pageStack.currentItem || {}).hasOwnProperty("contextualActions")) {
             return applicationWindow().pageStack.currentItem;
         }
         else {
