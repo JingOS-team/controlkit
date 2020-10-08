@@ -256,7 +256,9 @@ void Icon::updatePolish()
     QQuickItem::updatePolish();
 
     if (m_source.isNull()) {
+        setStatus(Ready);
         updatePaintedGeometry();
+        update();
         return;
     }
 
