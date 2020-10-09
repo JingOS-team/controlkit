@@ -24,7 +24,7 @@ Controls.ToolButton {
             return false
         }
     }
-    visible: applicationWindow().pageStack.layers.depth > 1 || (applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width && showNavButtons === true || showNavButtons & ApplicationHeaderStyle.ShowBackButton)
+    visible: applicationWindow().pageStack.layers.depth > 1 || (applicationWindow().pageStack.contentItem.contentWidth > applicationWindow().pageStack.width && (showNavButtons === true || (showNavButtons & ApplicationHeaderStyle.ShowBackButton)))
 
     onClicked: {
         if (applicationWindow().pageStack.layers && applicationWindow().pageStack.layers.depth > 1) {
