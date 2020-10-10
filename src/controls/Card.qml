@@ -59,7 +59,7 @@ Kirigami.AbstractCard {
      *                      it can be either a freedesktop-compatible icon name (recommended)
      *                      or any url supported by Image
      * * titleLevel: The Kirigami Heading level for the title, it controls the font size, default 1
-     * * wrapMode: if the header should be able to do wrapping
+     * * titleWrapMode: if the header should be able to do wrapping
      *
      * It also has the full set of properties a QML Image has, such as sourceSize and fillMode
      */
