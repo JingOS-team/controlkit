@@ -12,7 +12,7 @@ import org.kde.kirigami 2.11 as Kirigami
 import "../private"
 
 /**
- * An item delegate Intended to support extra actions obtainable
+ * An item delegate intended to support extra actions obtainable
  * by uncovering them by dragging away the item with the handle
  * This acts as a container for normal list items.
  * Any subclass of AbstractListItem can be assigned as the contentItem property.
