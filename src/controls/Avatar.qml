@@ -86,8 +86,10 @@ QQC2.Control {
 
     background: Rectangle {
         radius: parent.width / 2
-
-        color: __private.color
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: __private.color }
+            GradientStop { position: 1.0; color: Kirigami.ColorUtils.scaleColor(__private.color, {lightness: -35.0}) }
+        }
     }
 
     QtObject {
