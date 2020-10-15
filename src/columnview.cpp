@@ -1017,6 +1017,32 @@ void ColumnView::setInteractive(bool interactive)
     emit interactiveChanged();
 }
 
+bool ColumnView::acceptsMouse() const
+{
+    return m_acceptsMouse;
+}
+
+void ColumnView::setAcceptsMouse(bool accepts)
+{
+    if (m_acceptsMouse == accepts) {
+        return;
+    }
+
+    m_acceptsMouse = accepts;
+
+    if (!m_acceptsMouse) {
+        if (m_dragging) {
+            m_dragging = false;
+            emit draggingChanged();
+        }
+
+        m_contentItem->snapToItem();
+        setKeepMouseGrab(false);
+    }
+
+    emit acceptsMouseChanged();
+}
+
 void ColumnView::addItem(QQuickItem *item)
 {
     insertItem(m_contentItem->m_items.length(), item);
@@ -1187,6 +1213,10 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
     case QEvent::MouseButtonPress: {
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
+        if (!m_acceptsMouse &&  me->source() == Qt::MouseEventNotSynthesized) {
+            return false;
+        }
+
         if (me->button() != Qt::LeftButton) {
             return false;
         }
@@ -1214,6 +1244,10 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
     }
     case QEvent::MouseMove: {
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
+        if (!m_acceptsMouse &&  me->source() == Qt::MouseEventNotSynthesized) {
+            return false;
+        }
 
         if (!(me->buttons() & Qt::LeftButton)) {
             return false;
@@ -1262,6 +1296,10 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
     case QEvent::MouseButtonRelease: {
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
+        if (!m_acceptsMouse &&  me->source() == Qt::MouseEventNotSynthesized) {
+            return false;
+        }
+
         if (me->button() == Qt::BackButton && m_currentIndex > 0) {
             setCurrentIndex(m_currentIndex - 1);
             me->accept();
@@ -1308,6 +1346,10 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
 
 void ColumnView::mousePressEvent(QMouseEvent *event)
 {
+    if (!m_acceptsMouse &&  event->source() == Qt::MouseEventNotSynthesized) {
+        return;
+    }
+
     if (event->button() == Qt::BackButton || event->button() == Qt::ForwardButton) {
         event->accept();
         return;

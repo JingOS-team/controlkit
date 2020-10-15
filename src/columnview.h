@@ -214,6 +214,11 @@ class ColumnView : public QQuickItem
      */
     Q_PROPERTY(bool interactive READ interactive WRITE setInteractive NOTIFY interactiveChanged)
 
+    /**
+     * True if the contents can be dragged also with mouse besides touch
+     */
+    Q_PROPERTY(bool acceptsMouse READ acceptsMouse WRITE setAcceptsMouse NOTIFY acceptsMouseChanged)
+
     // Default properties
     /**
      * Every column item the view contains
@@ -282,6 +287,9 @@ public:
 
     bool interactive() const;
     void setInteractive(bool interactive);
+
+    bool acceptsMouse() const;
+    void setAcceptsMouse(bool accepts);
 
     // Api not intended for QML use
     //can't do overloads in QML
@@ -391,6 +399,7 @@ Q_SIGNALS:
     void contentXChanged();
     void contentWidthChanged();
     void interactiveChanged();
+    void acceptsMouseChanged();
     void scrollDurationChanged();
     void separatorVisibleChanged();
     void firstVisibleItemChanged();
@@ -428,6 +437,7 @@ private:
     bool m_moving = false;
     bool m_separatorVisible = true;
     bool m_complete = false;
+    bool m_acceptsMouse = false;
 };
 
 QML_DECLARE_TYPEINFO(ColumnView, QML_HAS_ATTACHED_PROPERTIES)
