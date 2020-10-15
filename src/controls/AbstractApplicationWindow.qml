@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-import QtQuick 2.5
+import QtQuick 2.12
 import QtQuick.Controls 2.0 as QQC2
 import "templates/private"
 import org.kde.kirigami 2.4
