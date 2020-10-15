@@ -116,8 +116,6 @@ public:
     void setLabel(const QString &text);
     QString label() const;
 
-    QString decoratedLabel() const;
-
     void setIsSection(bool section);
     bool isSection() const;
 
