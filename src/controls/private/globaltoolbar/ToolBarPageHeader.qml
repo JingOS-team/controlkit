@@ -24,6 +24,9 @@ AbstractPageHeader {
         onPressed: {
             if (Window.window && (typeof Window.window.startSystemMove === "function") && mouse.source === Qt.MouseEventNotSynthesized) {
                 Window.window.startSystemMove();
+                // NOTE: only way to ensure ungrabMouse() is called from QML
+                visible=false;
+                visible=true;
             }
         }
     }
