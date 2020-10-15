@@ -117,6 +117,8 @@ T.OverlayDrawer {
 
 
         Separator {
+            LayoutMirroring.enabled: false
+           // LayoutMirroring.childrenInherit: true
             anchors {
                 right: root.edge == Qt.RightEdge ? parent.left : (root.edge == Qt.LeftEdge ? undefined : parent.right)
                 left: root.edge == Qt.LeftEdge ? parent.right : (root.edge == Qt.RightEdge ? undefined : parent.left)
