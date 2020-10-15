@@ -22,7 +22,7 @@ AbstractPageHeader {
         anchors.fill: parent
         onClicked: page.forceActiveFocus()
         onPressed: {
-            if (mouse.source === Qt.MouseEventNotSynthesized) {
+            if (Window.window && (typeof Window.window.startSystemMove === "function") && mouse.source === Qt.MouseEventNotSynthesized) {
                 Window.window.startSystemMove();
             }
         }
