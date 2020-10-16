@@ -407,7 +407,15 @@ void ContentItem::layoutItems()
     int i = 0;
     m_leftPinnedSpace = 0;
     m_rightPinnedSpace = 0;
-    for (QQuickItem *child : qAsConst(m_items)) {
+
+    bool reverse = qApp->layoutDirection() == Qt::RightToLeft;
+    auto it = !reverse ? m_items.begin() : m_items.end();
+    int increment = reverse ? -1 : +1;
+    auto lastPos = reverse ? m_items.begin() : m_items.end();
+
+    for (; it != lastPos; it = it + increment) {
+    //for (QQuickItem *child : qAsConst(m_items)) {
+        QQuickItem *child = reverse ? *(it - 1) : *it;
         ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
 
         if (child->isVisible()) {
@@ -447,7 +455,11 @@ void ContentItem::layoutItems()
             }
         }
 
-        attached->setIndex(i++);
+        if (reverse) {
+            attached->setIndex(m_items.count() - (++i));
+        } else {
+            attached->setIndex(i++);
+        }
 
         implicitWidth += child->implicitWidth();
 
