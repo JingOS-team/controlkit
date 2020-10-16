@@ -413,7 +413,7 @@ void ContentItem::layoutItems()
     int increment = reverse ? -1 : +1;
     auto lastPos = reverse ? m_items.begin() : m_items.end();
 
-    for (; it != lastPos; it = it + increment) {
+    for (; it != lastPos; it += increment) {
     //for (QQuickItem *child : qAsConst(m_items)) {
         QQuickItem *child = reverse ? *(it - 1) : *it;
         ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(child, true));
