@@ -295,7 +295,6 @@ OverlayDrawer {
                 spacing: 0
                 y: bannerImage.visible ? Math.max(headerContainer.height, -mainFlickable.contentY) - height : 0
 
-                height: bannerImage.implicitHeight + headerContainer.implicitHeight
                 Layout.fillWidth: true
                 //visible: !bannerImage.empty || root.collapsible
 
