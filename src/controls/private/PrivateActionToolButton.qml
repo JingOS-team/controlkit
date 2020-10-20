@@ -70,9 +70,14 @@ Controls.ToolButton {
         }
     }
 
-
-    checkable: (action && action.checkable) || (menuActions && menuActions.length > 0)
     visible: (action && action.hasOwnProperty("visible")) ? action.visible : true
+
+    // Workaround for QTBUG-85941
+    Binding {
+        target: control
+        property: "checkable"
+        value: (control.action && control.action.checkable) || (control.menuActions && control.menuActions.length > 0)
+    }
 
     onToggled: {
         if (menuActions.length > 0 && menu) {
