@@ -7,7 +7,6 @@
 #include "wheelhandler.h"
 #include "settings.h"
 #include <QWheelEvent>
-#include <QQuickItem>
 #include <QDebug>
 
 class GlobalWheelFilterSingleton

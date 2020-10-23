@@ -5,7 +5,6 @@
  */
 
 #include "shadowedrectanglenode.h"
-#include "shadowedrectanglematerial.h"
 #include "shadowedborderrectanglematerial.h"
 
 QColor premultiply(const QColor &color)

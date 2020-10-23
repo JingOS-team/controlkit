@@ -6,8 +6,6 @@
 
 #include "shadowedtexturenode.h"
 
-#include <QSGTextureProvider>
-#include "shadowedtexturematerial.h"
 #include "shadowedbordertexturematerial.h"
 
 template <typename T>

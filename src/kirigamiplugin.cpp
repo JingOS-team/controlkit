@@ -26,7 +26,6 @@
 #include "toolbarlayout.h"
 #include "sizegroup.h"
 
-#include <QQmlEngine>
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQuickStyle>

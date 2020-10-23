@@ -19,7 +19,6 @@
 #include <QtQml>
 #include <QQuickImageProvider>
 #include <QGuiApplication>
-#include <QPointer>
 #include <QPainter>
 #include <QScreen>
 

@@ -19,7 +19,6 @@
 #include "imagecolors.h"
 #include "platformtheme.h"
 
-#include <QColor>
 #include <QDebug>
 #include <QTimer>
 #include <QtConcurrent>

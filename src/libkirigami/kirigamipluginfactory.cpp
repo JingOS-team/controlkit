@@ -5,7 +5,6 @@
  */
 
 #include "kirigamipluginfactory.h"
-#include "platformtheme.h"
 
 #include <QDebug>
 

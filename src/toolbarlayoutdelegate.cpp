@@ -6,7 +6,6 @@
 
 #include "toolbarlayoutdelegate.h"
 
-#include <QQmlIncubator>
 
 #include "toolbarlayout.h"
 

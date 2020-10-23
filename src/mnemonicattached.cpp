@@ -6,7 +6,6 @@
 
 #include "mnemonicattached.h"
 #include <QQuickItem>
-#include <QQuickWindow>
 #include <QQuickRenderControl>
 #include <QDebug>
 
