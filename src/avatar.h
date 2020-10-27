@@ -13,5 +13,5 @@ class AvatarPrivate : public QObject {
 public:
     Q_INVOKABLE QString initialsFromString(const QString& name);
     Q_INVOKABLE QColor colorsFromString(const QString& name);
-    Q_INVOKABLE bool stringHasNonLatinCharacters(const QString& name);
+    Q_INVOKABLE bool stringUnsuitableForInitials(const QString& name);
 };

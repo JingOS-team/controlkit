@@ -104,7 +104,7 @@ QQC2.Control {
         Kirigami.Heading {
             visible: avatarRoot.initialsMode == Kirigami.Avatar.InitialsMode.UseInitials &&
                     !__private.showImage &&
-                    !AvatarPrivate.stringHasNonLatinCharacters(avatarRoot.name)
+                    !AvatarPrivate.stringUnsuitableForInitials(avatarRoot.name)
 
             text: AvatarPrivate.initialsFromString(name)
             color: Kirigami.ColorUtils.brightnessForColor(__private.color) == Kirigami.ColorUtils.Light
@@ -115,7 +115,7 @@ QQC2.Control {
         }
         Kirigami.Icon {
             visible: (avatarRoot.initialsMode == Kirigami.Avatar.InitialsMode.UseIcon && !__private.showImage) ||
-                    (AvatarPrivate.stringHasNonLatinCharacters(avatarRoot.name) && !__private.showImage)
+                    (AvatarPrivate.stringUnsuitableForInitials(avatarRoot.name) && !__private.showImage)
 
             source: "user"
 

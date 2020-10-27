@@ -7,6 +7,17 @@
 #include <QMap>
 #include <QVector>
 #include <QStringRef>
+#include <QTextBoundaryFinder>
+#include <QDebug>
+
+bool contains(const QString& str, QChar::Script s) {
+    for (auto rune : str) {
+        if (rune.script() == s) {
+            return true;
+        }
+    }
+    return false;
+}
 
 QString AvatarPrivate::initialsFromString(const QString& string)
 {
@@ -14,6 +25,13 @@ QString AvatarPrivate::initialsFromString(const QString& string)
     if (string.isEmpty()) return {};
 
     auto normalized = string.normalized(QString::NormalizationForm_D);
+
+    // Names written with Han and Hangul characters generally can be initialised by taking the
+    // first character
+    if (contains(normalized, QChar::Script_Han) || contains(normalized, QChar::Script_Hangul)) {
+        return QString(normalized[0]);
+    }
+
     // "FirstName Name Name LastName"
     if (normalized.contains(QLatin1Char(' '))) {
         // "FirstName Name Name LastName" -> "FirstName" "Name" "Name" "LastName"
@@ -100,12 +118,16 @@ auto AvatarPrivate::colorsFromString(const QString& string) -> QColor
     return grabColors()[index];
 }
 
-auto AvatarPrivate::stringHasNonLatinCharacters(const QString& string) -> bool
+auto AvatarPrivate::stringUnsuitableForInitials(const QString& string) -> bool
 {
+    if (string.isEmpty()) {
+        return true;
+    }
+
+    const auto scripts = QList<QChar::Script> { QChar::Script_Common, QChar::Script_Inherited, QChar::Script_Latin, QChar::Script_Han, QChar::Script_Hangul };
+
     for (auto character : string) {
-        if (character.script() != QChar::Script_Common &&
-            character.script() != QChar::Script_Inherited &&
-            character.script() != QChar::Script_Latin) {
+        if (!scripts.contains(character.script())) {
             return true;
         }
     }
