@@ -193,7 +193,7 @@ Item {
         }
         Item {
             Layout.preferredWidth: {
-                var hint = lay.knownItemsImplicitWidth;
+                var hint = Math.min(root.width, lay.knownItemsImplicitWidth);
                 for (var i in lay.actualTwinFormLayouts) {
                     if (lay.actualTwinFormLayouts[i] && lay.actualTwinFormLayouts[i].hasOwnProperty("children")) {
                         hint = Math.max(hint, lay.actualTwinFormLayouts[i].children[0].knownItemsImplicitWidth);
