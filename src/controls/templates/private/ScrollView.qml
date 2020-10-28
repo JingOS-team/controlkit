@@ -21,8 +21,6 @@ MouseArea {
     property int rightPadding: !Kirigami.Settings.hasTransientTouchInput && flickableItem.ScrollBar.vertical && flickableItem.ScrollBar.vertical.visible ? flickableItem.ScrollBar.vertical.width : 0
     property int bottomPadding: 0
 
-    readonly property Item verticalScrollBar: flickableItem.ScrollBar.vertical ? flickableItem.ScrollBar.vertical : null
-
     Accessible.onScrollDownAction: flickableItem.Accessible.onScrollDownAction
     Accessible.onScrollUpAction: flickableItem.Accessible.onScrollUpAction
 
