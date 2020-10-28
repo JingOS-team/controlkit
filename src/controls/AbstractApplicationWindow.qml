@@ -69,10 +69,11 @@ QQC2.ApplicationWindow {
 
     /**
      * pageStack: StackView
-     * Readonly.
+     * 
      * The stack used to allocate the pages and to manage the transitions
      * between them.
-     * Put a container here, such as QQuickControls PageStack
+     * 
+     * Put a container here, such as QQuickControls StackView
      */
     property Item pageStack
     LayoutMirroring.enabled: Qt.application.layoutDirection == Qt.RightToLeft
