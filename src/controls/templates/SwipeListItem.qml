@@ -177,14 +177,6 @@ T2.SwipeDelegate {
 
         property bool indicateActiveFocus: listItem.pressed || Kirigami.Settings.tabletMode || listItem.activeFocus || (view ? view.activeFocus : false)
 
-        // Search for scrollbar of the view or of the ScrollView
-        property T2.ScrollBar verticalScrollBar: {
-            if (!view) {
-                return null;
-            }
-            return view.T2.ScrollBar.vertical || view.parent.T2.ScrollBar.vertical;
-        }
-
         //install the SwipeItemEventFilter
         onViewChanged: {
             if (listItem.alwaysVisibleActions || !Kirigami.Settings.tabletMode) {
