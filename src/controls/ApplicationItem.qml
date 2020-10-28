@@ -7,7 +7,6 @@
 import QtQuick 2.5
 import "templates/private"
 import org.kde.kirigami 2.4 as Kirigami
-import QtGraphicalEffects 1.0
 
 /**
  * An item that provides the features of ApplicationWindow without the window itself.
@@ -151,11 +150,10 @@ AbstractApplicationItem {
             onActivated: __pageStack.goBack();
         }
 
-        Rectangle {
-            z: -1
-            anchors.fill: parent
-            color: Kirigami.Theme.backgroundColor
+        background: Rectangle {
+            color: root.color
         }
+
         focus: true
     }
 }
