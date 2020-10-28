@@ -30,6 +30,7 @@ kirigami_add_tests(
     tst_actiontoolbar.qml
     tst_pagerouter.qml
     tst_routerwindow.qml
+    tst_avatar.qml
     pagepool/tst_pagepool.qml
     pagepool/tst_layers.qml
 )
