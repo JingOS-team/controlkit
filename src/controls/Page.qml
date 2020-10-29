@@ -24,28 +24,18 @@ QQC2.Page {
     id: root
 
     /**
-     * leftPadding: int
-     * default contents padding at left
+     * padding: real
+     * 
+     * The default content padding is 1 gridUnit.
      */
-    leftPadding: Kirigami.Units.gridUnit
+    padding: Kirigami.Units.gridUnit
 
     /**
-     * topPadding: int
-     * default contents padding at top
+     * bottomPadding: real
+     * 
+     * The bottom content padding. Bound to verticalPadding or the height of floating action buttons (when present) by default.
      */
-    topPadding: Kirigami.Units.gridUnit
-
-    /**
-     * rightPadding: int
-     * default contents padding at right
-     */
-    rightPadding: Kirigami.Units.gridUnit
-
-    /**
-     * bottomPadding: int
-     * default contents padding at bottom
-     */
-    bottomPadding: actionButtons.item ? actionButtons.height : Kirigami.Units.gridUnit
+    bottomPadding: actionButtons.item ? actionButtons.height : verticalPadding
 
     /**
      * flickable: Flickable
