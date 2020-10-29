@@ -376,6 +376,14 @@ QtObject {
             }
         }
 
+        Keys.onEscapePressed: {
+            if (root.sheetOpen) {
+                root.close()
+            } else {
+                event.accepted = false
+            }
+        }
+
         Connections {
             target: scrollView.flickableItem
             onContentHeightChanged: {
