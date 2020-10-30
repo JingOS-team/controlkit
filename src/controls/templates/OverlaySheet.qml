@@ -137,6 +137,7 @@ QtObject {
 
 
     function open() {
+        contentItemParent.forceActiveFocus();
         openAnimation.running = true;
         root.sheetOpen = true;
         mainItem.visible = true;
@@ -175,6 +176,7 @@ QtObject {
         } else {
             closeAnimation.running = true;
             Qt.inputMethod.hide();
+            root.parent.forceActiveFocus();
         }
     }
     onHeaderChanged: {
