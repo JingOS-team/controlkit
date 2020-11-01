@@ -580,7 +580,6 @@ void ContentItem::forgetItem(QQuickItem *item)
     updateVisibleItems();
     m_shouldAnimate = true;
     m_view->polish();
-    item->setVisible(false);
 
     if (index <= m_view->currentIndex()) {
         m_view->setCurrentIndex(qBound(0, index - 1, m_items.count() - 1));
@@ -1142,6 +1141,7 @@ QQuickItem *ColumnView::removeItem(QQuickItem *item)
     }
 
     m_contentItem->forgetItem(item);
+    item->setVisible(false);
 
     ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(item, false));
 
