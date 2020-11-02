@@ -59,6 +59,7 @@ Controls.ToolButton {
                             // Important: We handle the press on parent in the parent, so ignore it here.
                             menu.closePolicy = Controls.Popup.CloseOnEscape | Controls.Popup.CloseOnPressOutsideParent
                             menu.closed.connect(() => control.checked = false)
+                            menu.actions = control.menuActions
                         }
                     }
                 } else {
