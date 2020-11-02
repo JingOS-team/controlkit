@@ -114,7 +114,8 @@ Item {
             return hint;
         }
         readonly property var actualTwinFormLayouts: {
-            let list = lay.reverseTwins;
+            // We need to copy that array by value
+            let list = lay.reverseTwins.slice();
             for (let i in twinFormLayouts) {
                 let parentLay = twinFormLayouts[i];
                 if (!parentLay || !parentLay.hasOwnProperty("children")) {
