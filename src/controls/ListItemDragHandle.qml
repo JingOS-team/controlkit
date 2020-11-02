@@ -112,6 +112,8 @@ Item {
             minimumY: 0
             maximumY: listView.height - listItem.height
         }
+        cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+
         Kirigami.Icon {
             id: internal
             source: "handle-sort"
