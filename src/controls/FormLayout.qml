@@ -287,7 +287,7 @@ Item {
                 if (item.Kirigami.FormData.checkable) {
                     buddy = checkableBuddyComponent.createObject(lay, {"item": item})
                 } else {
-                    buddy = buddyComponent.createObject(lay, {"item": item})
+                    buddy = buddyComponent.createObject(lay, {"item": item, "index": i - 2})
                 }
 
                 itemContainer.parent = lay;
@@ -322,7 +322,7 @@ Item {
             Layout.maximumHeight: item.Layout.maximumHeight
 
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-            Layout.fillWidth: item.Layout.fillWidth || item.Kirigami.FormData.isSection
+            Layout.fillWidth: item instanceof TextInput || item.Layout.fillWidth || item.Kirigami.FormData.isSection
             Layout.columnSpan: item.Kirigami.FormData.isSection ? lay.columns : 1
             onItemChanged: {
                 if (!item) {
@@ -362,6 +362,7 @@ Item {
             id: labelItem
 
             property var item
+            property int index
             enabled: item.enabled && item.Kirigami.FormData.enabled
             visible: item.visible
             Kirigami.MnemonicData.enabled: item.Kirigami.FormData.buddyFor && item.Kirigami.FormData.buddyFor.activeFocusOnTab
@@ -387,7 +388,7 @@ Item {
             Layout.alignment: temp.effectiveLayout(item)
             verticalAlignment: temp.effectiveTextLayout(item)
 
-            Layout.topMargin: root.wideMode && item.Kirigami.FormData.buddyFor.parent != root ? item.Kirigami.FormData.buddyFor.y : 0
+            Layout.topMargin: root.wideMode && item.Kirigami.FormData.buddyFor.parent != root ? item.Kirigami.FormData.buddyFor.y : (index === 0 ? 0 : Kirigami.Units.smallSpacing)
             onItemChanged: {
                 if (!item) {
                     labelItem.destroy();
