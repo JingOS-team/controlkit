@@ -220,6 +220,20 @@ QQC2.ApplicationWindow {
      */
     property bool reachableModeEnabled: true
 
+    /**
+     * A standard action that will quit the application when triggered. Its properties have the
+     * following values:
+     * @code
+     * Action {
+     *     text: "Quit"
+     *     icon.name: "application-exit-symbolic";
+     *     shortcut: StandardKey.Quit
+     *     [...]
+     * @endcode
+     * @since 5.76
+     */
+    readonly property Action quitAction: _quitAction
+
     color: Theme.backgroundColor
 
     MouseArea {
@@ -307,8 +321,11 @@ QQC2.ApplicationWindow {
         property QtObject __passiveNotification
     }
 
-    Shortcut {
-        sequence: StandardKey.Quit
-        onActivated: root.close()
+    Action {
+        id: _quitAction
+        text: qsTr("Quit")
+        icon.name: "application-exit-symbolic";
+        shortcut: StandardKey.Quit
+        onTriggered: root.close()
     }
 }
