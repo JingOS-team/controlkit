@@ -55,6 +55,12 @@ QQC2.Control {
     */
     property int imageMode: Kirigami.Avatar.ImageMode.AdaptiveImageOrInitals
 
+     /**
+     * Whether or not the image loaded from the provided source should be cached.
+     *
+     */
+     property alias cache: avatarImage.cache
+
     /**
      * color: color
      *
