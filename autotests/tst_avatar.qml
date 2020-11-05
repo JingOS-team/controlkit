@@ -34,5 +34,8 @@ Kirigami.PageRow {
             compare(AvatarPrivate.stringUnsuitableForInitials("蔣經國"), false)
             compare(AvatarPrivate.initialsFromString("蔣經國"), "蔣")
         }
+        function test_bad_names() {
+            compare(AvatarPrivate.stringUnsuitableForInitials("151231023"), true)
+        }
     }
 }

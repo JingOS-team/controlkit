@@ -124,6 +124,12 @@ auto AvatarPrivate::stringUnsuitableForInitials(const QString& string) -> bool
         return true;
     }
 
+    bool isNumber;
+    string.toFloat(&isNumber);
+    if (isNumber) {
+        return true;
+    }
+
     const auto scripts = QList<QChar::Script> { QChar::Script_Common, QChar::Script_Inherited, QChar::Script_Latin, QChar::Script_Han, QChar::Script_Hangul };
 
     for (auto character : string) {
