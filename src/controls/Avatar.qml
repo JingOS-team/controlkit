@@ -76,16 +76,19 @@ QQC2.Control {
     }
 
     padding: 0
-    topPadding: 0
-    leftPadding: 0
-    rightPadding: 0
-    bottomPadding: 0
+    horizontalPadding: padding
+    verticalPadding: padding
+    leftPadding: horizontalPadding
+    rightPadding: horizontalPadding
+    topPadding: verticalPadding
+    bottomPadding: verticalPadding
 
     implicitWidth: Kirigami.Units.iconSizes.large
     implicitHeight: Kirigami.Units.iconSizes.large
 
     background: Rectangle {
         radius: parent.width / 2
+
         gradient: Gradient {
             GradientStop { position: 0.0; color: __private.color }
             GradientStop { position: 1.0; color: Kirigami.ColorUtils.scaleColor(__private.color, {lightness: -35.0}) }
@@ -152,7 +155,6 @@ QQC2.Control {
 
             source: avatarImage
         }
-
         Rectangle {
             color: "transparent"
 
