@@ -92,11 +92,11 @@ QQC2.Control {
         gradient: Gradient {
             GradientStop {
                 position: 0.0
-                color: Qt.lighter(__private.color, 1.1)
+                color: Qt.lighter(__private.backgroundColor, 1.1)
             }
             GradientStop {
                 position: 1.0
-                color: Qt.darker(__private.color, 1.1)
+                color: Qt.darker(__private.backgroundColor, 1.1)
             }
         }
     }
@@ -105,12 +105,15 @@ QQC2.Control {
         id: __private
         // This property allows us to fall back to colour generation if
         // the root colour property is undefined.
-        property color color: {
+        property color backgroundColor: {
             if (!!avatarRoot.color) {
                 return avatarRoot.color
             }
             return AvatarPrivate.colorsFromString(name)
         }
+        property color textColor: Kirigami.ColorUtils.brightnessForColor(__private.backgroundColor) == Kirigami.ColorUtils.Light
+                                ? "black"
+                                : "white"
         property bool showImage: {
             return (avatarRoot.imageMode == Kirigami.Avatar.ImageMode.AlwaysShowImage) ||
                    (avatarImage.status == Image.Ready && avatarRoot.imageMode == Kirigami.Avatar.ImageMode.AdaptiveImageOrInitals)
@@ -124,9 +127,7 @@ QQC2.Control {
                     !AvatarPrivate.stringUnsuitableForInitials(avatarRoot.name)
 
             text: AvatarPrivate.initialsFromString(name)
-            color: Kirigami.ColorUtils.brightnessForColor(__private.color) == Kirigami.ColorUtils.Light
-                ? "black"
-                : "white"
+            color: __private.textColor
 
             anchors.centerIn: parent
         }
@@ -139,9 +140,7 @@ QQC2.Control {
             anchors.fill: parent
             anchors.margins: Kirigami.Units.smallSpacing
 
-            Kirigami.Theme.textColor: Kirigami.ColorUtils.brightnessForColor(__private.color) == Kirigami.ColorUtils.Light
-                                    ? "black"
-                                    : "white"
+            color: __private.textColor
         }
         Image {
             id: avatarImage
