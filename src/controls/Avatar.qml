@@ -62,6 +62,16 @@ QQC2.Control {
      property alias cache: avatarImage.cache
 
     /**
+    * The source size of the user's profile picture.
+    */
+    property alias sourceSize: avatarImage.sourceSize
+
+    /**
+    * Whether or not the image loaded from the provided source should be smoothed.
+    */
+    property alias smooth: avatarImage.smooth
+
+    /**
      * color: color
      *
      * The color to use for this avatar.
