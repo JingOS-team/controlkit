@@ -151,13 +151,15 @@ QQC2.Control {
             renderType: Text.NativeRendering
         }
         Kirigami.Icon {
+            id: avatarIcon
             visible: (avatarRoot.initialsMode == Kirigami.Avatar.InitialsMode.UseIcon && !__private.showImage) ||
                     (AvatarPrivate.stringUnsuitableForInitials(avatarRoot.name) && !__private.showImage)
 
             source: "user"
 
-            anchors.fill: parent
-            anchors.margins: Kirigami.Units.smallSpacing
+            anchors.centerIn: parent
+            height: Kirigami.Units.fontMetrics.roundedIconSize(avatarRoot.height - avatarText.topPadding - avatarText.bottomPadding)
+            width: height
 
             color: __private.textColor
         }
