@@ -23,29 +23,28 @@ Rectangle {
         opacity: (listItem.hovered || listItem.highlighted || listItem.activeFocus) && !listItem.pressed ? 0.5 : 0
         Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
     }
-
+                                               // Don't show separator when...
     readonly property bool __separatorVisible: listItem.separatorVisible
-
+                                               // There's a colored rectangle
+                                               && !listItem.hovered
+                                               && !listItem.highlighted
+                                               && !listItem.pressed
+                                               && !listItem.checked
+                                               // It would touch the section header
+                                               && !listItem.sectionDelegate
+                                               && (!!listItem.ListView.view ? listItem.ListView.nextSection == listItem.ListView.section : true)
+                                               // This is the last item in the list
+                                               // TODO: implement this
     Separator {
-        id: topSeparator
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: parent.top
-        }
-        visible: background.__separatorVisible
-        weight: Separator.Weight.Light
-    }
-
-    Separator {
-        id: bottomSeparator
         anchors {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
+            leftMargin: Units.largeSpacing
+            rightMargin: Units.largeSpacing
         }
         visible: background.__separatorVisible
-        weight: topSeparator.weight
+        weight: Separator.Weight.Light
     }
 }
 

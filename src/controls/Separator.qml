@@ -46,6 +46,6 @@ Rectangle {
      * mix weights lower than Normal with the background color
      * and mix weights higher than Normal with the text color.
      */
-    color: ColorUtils.linearInterpolation(Theme.backgroundColor, Theme.textColor, weight == Separator.Weight.Light ? 0.1 : 0.2);
+    color: ColorUtils.linearInterpolation(Theme.backgroundColor, Theme.textColor, weight == Separator.Weight.Light ? 0.07 : 0.15);
 }
 
