@@ -385,8 +385,11 @@ Item {
                 }
             }
 
-            Layout.alignment: temp.effectiveLayout(item)
+            horizontalAlignment: temp.effectiveLayout(item)
             verticalAlignment: temp.effectiveTextLayout(item)
+
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
 
             Layout.topMargin: root.wideMode && item.Kirigami.FormData.buddyFor.parent != root ? item.Kirigami.FormData.buddyFor.y : (index === 0 ? 0 : Kirigami.Units.smallSpacing)
             onItemChanged: {
