@@ -71,7 +71,7 @@ QQC2.Control {
     // as undefined, which will result in a generated colour being used.
 
     property P.BorderPropertiesGroup border: P.BorderPropertiesGroup {
-        width: 2
+        width: 1
         color: Qt.rgba(0,0,0,0.2)
     }
 
