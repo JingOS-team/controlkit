@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-import QtQuick 2.5
+import QtQuick 2.13
 import org.kde.kirigami 2.13 as Kirigami
 import QtQuick.Controls 2.13 as QQC2
 import org.kde.kirigami.private 2.13
@@ -131,7 +131,10 @@ QQC2.Control {
     }
 
     contentItem: Item {
-        Kirigami.Heading {
+        Text {
+            id: avatarText
+            font.pointSize: 999 // Maximum point size, not actual point size
+            fontSizeMode: Text.Fit
             visible: avatarRoot.initialsMode == Kirigami.Avatar.InitialsMode.UseInitials &&
                     !__private.showImage &&
                     !AvatarPrivate.stringUnsuitableForInitials(avatarRoot.name)
@@ -139,7 +142,13 @@ QQC2.Control {
             text: AvatarPrivate.initialsFromString(name)
             color: __private.textColor
 
-            anchors.centerIn: parent
+            anchors.fill: parent
+            padding: Math.round(avatarRoot.height/8) // leftPadding plus rightPadding is avatarRoot.height/4
+            verticalAlignment: Qt.AlignVCenter
+            horizontalAlignment: Qt.AlignHCenter
+            // Change this to Text.QtRendering if people start wanting to animate the size of avatars
+            // or expose renderType as an alias property of Avatar.
+            renderType: Text.NativeRendering
         }
         Kirigami.Icon {
             visible: (avatarRoot.initialsMode == Kirigami.Avatar.InitialsMode.UseIcon && !__private.showImage) ||
