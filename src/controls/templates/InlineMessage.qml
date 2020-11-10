@@ -40,14 +40,14 @@ import "private"
  *
  *     actions: [
  *         Kirigami.Action {
- *             iconName: "edit"
+ *             icon.name: "edit"
  *             text: "Action text"
  *             onTriggered: {
  *                 // do stuff
  *             }
  *         },
  *         Kirigami.Action {
- *             iconName: "edit"
+ *             icon.name: "edit"
  *             text: "Action text"
  *             onTriggered: {
  *                 // do stuff

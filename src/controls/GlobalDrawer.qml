@@ -29,7 +29,7 @@ import "templates/private"
  *         actions: [
  *            Kirigami.Action {
  *                text: "View"
- *                iconName: "view-list-icons"
+ *                icon.name: "view-list-icons"
  *                Kirigami.Action {
  *                        text: "action 1"
  *                }
@@ -42,7 +42,7 @@ import "templates/private"
  *            },
  *            Kirigami.Action {
  *                text: "Sync"
- *                iconName: "folder-sync"
+ *                icon.name: "folder-sync"
  *            }
  *         ]
  *     }
@@ -96,20 +96,20 @@ OverlayDrawer {
      *         actions: [
      *            Kirigami.Action {
      *                text: "View"
-     *                iconName: "view-list-icons"
+     *                icon.name: "view-list-icons"
      *                Kirigami.Action {
-     *                        text: "action 1"
+     *                    text: "action 1"
      *                }
      *                Kirigami.Action {
-     *                        text: "action 2"
+     *                    text: "action 2"
      *                }
      *                Kirigami.Action {
-     *                        text: "action 3"
+     *                    text: "action 3"
      *                }
      *            },
      *            Kirigami.Action {
      *                text: "Sync"
-     *                iconName: "folder-sync"
+     *                icon.name: "folder-sync"
      *            }
      *         ]
      *     }

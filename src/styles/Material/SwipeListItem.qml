@@ -25,11 +25,11 @@ import "../../templates" as T
  *         }
  *         actions: [
  *              Action {
- *                  iconName: "document-decrypt"
+ *                  icon.name: "document-decrypt"
  *                  onTriggered: print("Action 1 clicked")
  *              },
  *              Action {
- *                  iconName: model.action2Icon
+ *                  icon.name: model.action2Icon
  *                  onTriggered: //do something
  *              }
  *         ]

@@ -22,7 +22,7 @@ Kirigami.AbstractApplicationWindow {
         actions: [
             Kirigami.Action {
                 text: "View"
-                iconName: "view-list-icons"
+                icon.name: "view-list-icons"
                 Kirigami.Action {
                     text: "action 1"
                 }
@@ -35,7 +35,7 @@ Kirigami.AbstractApplicationWindow {
             },
             Kirigami.Action {
                 text: "Sync"
-                iconName: "folder-sync"
+                icon.name: "folder-sync"
                 Kirigami.Action {
                     text: "action 4"
                 }
@@ -45,7 +45,7 @@ Kirigami.AbstractApplicationWindow {
             },
             Kirigami.Action {
                 text: "Checkable"
-                iconName: "view-list-details"
+                icon.name: "view-list-details"
                 checkable: true
                 checked: false
                 onTriggered: {
@@ -54,7 +54,7 @@ Kirigami.AbstractApplicationWindow {
             },
             Kirigami.Action {
                 text: "Settings"
-                iconName: "configure"
+                icon.name: "configure"
                 checkable: true
                 //Need to do this, otherwise it breaks the bindings
                 property bool current: pageStack.currentItem ? pageStack.currentItem.objectName == "settingsPage" : false

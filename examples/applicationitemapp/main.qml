@@ -17,7 +17,7 @@ Kirigami.ApplicationItem {
         actions: [
             Kirigami.Action {
                 text: "View"
-                iconName: "view-list-icons"
+                icon.name: "view-list-icons"
                 Kirigami.Action {
                     text: "action 1"
                 }

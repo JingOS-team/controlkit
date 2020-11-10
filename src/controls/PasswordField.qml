@@ -33,7 +33,7 @@ Kirigami.ActionTextField
     inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
     rightActions: [
         Kirigami.Action {
-            iconName: root.showPassword ? "password-show-off" : "password-show-on"
+            icon.name: root.showPassword ? "password-show-off" : "password-show-on"
             onTriggered: root.showPassword = !root.showPassword
         }
     ]

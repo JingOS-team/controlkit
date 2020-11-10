@@ -24,7 +24,7 @@ import org.kde.kirigami 2.4 as Kirigami
  *         actions: [
  *            Kirigami.Action {
  *                text: "View"
- *                iconName: "view-list-icons"
+ *                icon.name: "view-list-icons"
  *                Kirigami.Action {
  *                        text: "action 1"
  *                }
@@ -37,7 +37,7 @@ import org.kde.kirigami 2.4 as Kirigami
  *            },
  *            Kirigami.Action {
  *                text: "Sync"
- *                iconName: "folder-sync"
+ *                icon.name: "folder-sync"
  *            }
  *         ]
  *     }
@@ -48,21 +48,21 @@ import org.kde.kirigami 2.4 as Kirigami
  *
  *     pageStack.initialPage: Kirigami.Page {
  *         mainAction: Kirigami.Action {
- *             iconName: "edit"
+ *             icon.name: "edit"
  *             onTriggered: {
  *                 // do stuff
  *             }
  *         }
  *         contextualActions: [
  *             Kirigami.Action {
- *                 iconName: "edit"
+ *                 icon.name: "edit"
  *                 text: "Action text"
  *                 onTriggered: {
  *                     // do stuff
  *                 }
  *             },
  *             Kirigami.Action {
- *                 iconName: "edit"
+ *                 icon.name: "edit"
  *                 text: "Action text"
  *                 onTriggered: {
  *                     // do stuff

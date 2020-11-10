@@ -13,7 +13,7 @@ Kirigami.ApplicationWindow {
         actions: [
             Kirigami.Action {
                 text: i18n("View")
-                iconName: "view-list-icons"
+                icon.name: "view-list-icons"
                 Kirigami.Action {
                     text: i18n("View Action 1")
                     onTriggered: showPassiveNotification(i18n("View Action 1 clicked"))
@@ -48,26 +48,26 @@ Kirigami.ApplicationWindow {
 
             actions {
                 main: Kirigami.Action {
-                    iconName: "go-home"
+                    icon.name: "go-home"
                     onTriggered: showPassiveNotification(i18n("Main action triggered"))
                 }
                 left: Kirigami.Action {
-                    iconName: "go-previous"
+                    icon.name: "go-previous"
                     onTriggered: showPassiveNotification(i18n("Left action triggered"))
                 }
                 right: Kirigami.Action {
-                    iconName: "go-next"
+                    icon.name: "go-next"
                     onTriggered: showPassiveNotification(i18n("Right action triggered"))
                 }
                 contextualActions: [
                     Kirigami.Action {
                         text: i18n("Contextual Action 1")
-                        iconName: "bookmarks"
+                        icon.name: "bookmarks"
                         onTriggered: showPassiveNotification(i18n("Contextual action 1 clicked"))
                     },
                     Kirigami.Action {
                         text: i18n("Contextual Action 2")
-                        iconName: "folder"
+                        icon.name: "folder"
                         enabled: false
                     }
                 ]

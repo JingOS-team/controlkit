@@ -29,15 +29,15 @@ Kirigami.ApplicationWindow {
         actions: [
             Kirigami.Action {
                 text: "Rooms"
-                iconName: "view-list-icons"
+                icon.name: "view-list-icons"
             },
             Kirigami.Action {
                 text: "Contacts"
-                iconName: "tag-people"
+                icon.name: "tag-people"
             },
             Kirigami.Action {
                 text: "Search"
-                iconName: "search"
+                icon.name: "search"
             }
         ]
     }
@@ -210,7 +210,7 @@ Kirigami.ApplicationWindow {
             actions.contextualActions: [
                 Kirigami.Action {
                     text: "Room Settings"
-                    iconName: "configure"
+                    icon.name: "configure"
                     Kirigami.Action {
                         text: "Setting 1"
                     }
@@ -220,7 +220,7 @@ Kirigami.ApplicationWindow {
                 },
                 Kirigami.Action {
                     text: "Shared Media"
-                    iconName: "document-share"
+                    icon.name: "document-share"
                     Kirigami.Action {
                         text: "Media 1"
                     }

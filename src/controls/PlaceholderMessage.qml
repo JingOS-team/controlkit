@@ -59,7 +59,7 @@ import "private"
  *         text: "Add an item to proceed"
  *
  *         helpfulAction: Kirigami.Action {
- *             iconName: "list-add"
+ *             icon.name: "list-add"
  *             text: "Add item..."
  *             onTriggered: {
  *                 [...]
@@ -129,7 +129,7 @@ import "private"
  *         visible: root.loading
  *
  *         helpfulAction: Kirigami.Action {
- *             iconName: "list-add"
+ *             icon.name: "list-add"
  *             text: "Add item..."
  *             onTriggered: {
  *                 [...]

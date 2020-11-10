@@ -33,7 +33,7 @@ import QtGraphicalEffects 1.0
  *         actions: [
  *            Kirigami.Action {
  *                text: "View"
- *                iconName: "view-list-icons"
+ *                icon.name: "view-list-icons"
  *                Kirigami.Action {
  *                        text: "action 1"
  *                }
@@ -46,7 +46,7 @@ import QtGraphicalEffects 1.0
  *            },
  *            Kirigami.Action {
  *                text: "Sync"
- *                iconName: "folder-sync"
+ *                icon.name: "folder-sync"
  *            }
  *         ]
  *     }
@@ -183,14 +183,14 @@ QQC2.ApplicationWindow {
      *   [...]
      *     contextualActions: [
      *         Kirigami.Action {
-     *             iconName: "edit"
+     *             icon.name: "edit"
      *             text: "Action text"
      *             onTriggered: {
      *                 // do stuff
      *             }
      *         },
      *         Kirigami.Action {
-     *             iconName: "edit"
+     *             icon.name: "edit"
      *             text: "Action text"
      *             onTriggered: {
      *                 // do stuff

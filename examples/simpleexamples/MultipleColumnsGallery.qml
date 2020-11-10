@@ -20,12 +20,12 @@ ScrollablePage {
         contextualActions: [
             Action {
                 text:"Action for buttons"
-                iconName: "bookmarks"
+                icon.name: "bookmarks"
                 onTriggered: print("Action 1 clicked")
             },
             Action {
                 text:"Action 2"
-                iconName: "folder"
+                icon.name: "folder"
                 enabled: false
             }
         ]

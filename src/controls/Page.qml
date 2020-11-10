@@ -73,14 +73,14 @@ QQC2.Page {
      *   [...]
      *     actions.contextualActions: [
      *         Kirigami.Action {
-     *             iconName: "edit"
+     *             icon.name: "edit"
      *             text: "Action text"
      *             onTriggered: {
      *                 // do stuff
      *             }
      *         },
      *         Kirigami.Action {
-     *             iconName: "edit"
+     *             icon.name: "edit"
      *             text: "Action text"
      *             onTriggered: {
      *                 // do stuff
@@ -105,7 +105,7 @@ QQC2.Page {
      * import org.kde.kirigami 2.4 as Kirigami
      * Kirigami.Page {
      *     actions.main: Kirigami.Action {
-     *         iconName: "edit"
+     *         icon.name: "edit"
      *         onTriggered: {
      *             // do stuff
      *         }
@@ -127,7 +127,7 @@ QQC2.Page {
      * import org.kde.kirigami 2.4 as Kirigami
      * Kirigami.Page {
      *     actions.left: Kirigami.Action {
-     *         iconName: "edit"
+     *         icon.name: "edit"
      *         onTriggered: {
      *             // do stuff
      *         }
@@ -149,7 +149,7 @@ QQC2.Page {
      * import org.kde.kirigami 2.4 as Kirigami
      * Kirigami.Page {
      *     actions.right: Kirigami.Action {
-     *         iconName: "edit"
+     *         icon.name: "edit"
      *         onTriggered: {
      *             // do stuff
      *         }

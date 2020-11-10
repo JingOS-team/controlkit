@@ -23,7 +23,7 @@ Kirigami.ApplicationWindow {
             contextualActions: [
                 Kirigami.Action {
                     id: sortAction
-                    iconName: "view-sort-ascending-symbolic"
+                    icon.name: "view-sort-ascending-symbolic"
                     tooltip: "Sort Ascending"
                 }
             ]
@@ -79,7 +79,7 @@ Kirigami.ApplicationWindow {
             actions {
                 main: Kirigami.Action {
                         id: shareAction
-                        iconName: "document-share"
+                        icon.name: "document-share"
                         text: "Share..."
                         tooltip: "Share this document with your device"
                         checkable: true
@@ -87,15 +87,15 @@ Kirigami.ApplicationWindow {
                     }
                 contextualActions: [
                     Kirigami.Action {
-                        iconName: "format-text-bold-symbolic"
+                        icon.name: "format-text-bold-symbolic"
                         tooltip: "Bold"
                     },
                     Kirigami.Action {
-                        iconName: "format-text-underline-symbolic"
+                        icon.name: "format-text-underline-symbolic"
                         tooltip: "Underline"
                     },
                     Kirigami.Action {
-                        iconName: "format-text-italic-symbolic"
+                        icon.name: "format-text-italic-symbolic"
                         tooltip: "Italic"
                     }
                 ]

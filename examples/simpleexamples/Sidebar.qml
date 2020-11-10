@@ -113,7 +113,7 @@ Kirigami.ApplicationWindow {
                 focusSequence: "Ctrl+F"
                 leftActions: [
                     Kirigami.Action {
-                        iconName: "edit-clear"
+                        icon.name: "edit-clear"
                         visible: searchField.text != ""
                         onTriggered: {
                             searchField.text = ""
@@ -121,7 +121,7 @@ Kirigami.ApplicationWindow {
                         }
                     },
                     Kirigami.Action {
-                        iconName: "edit-clear"
+                        icon.name: "edit-clear"
                         visible: searchField.text != ""
                         onTriggered: {
                             searchField.text = ""
@@ -131,7 +131,7 @@ Kirigami.ApplicationWindow {
                 ]
                 rightActions: [
                     Kirigami.Action {
-                        iconName: "edit-clear"
+                        icon.name: "edit-clear"
                         visible: searchField.text != ""
                         onTriggered: {
                             searchField.text = ""
@@ -139,7 +139,7 @@ Kirigami.ApplicationWindow {
                         }
                     },
                     Kirigami.Action {
-                        iconName: "anchor"
+                        icon.name: "anchor"
                         visible: searchField.text != ""
                         onTriggered: {
                             searchField.text = ""
