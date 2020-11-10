@@ -32,8 +32,8 @@ void main()
     // Calculate the main rectangle distance field.
     lowp float rect = sdf_rounded_rectangle(uv, aspect, radius);
 
-    // Render it, cancelling out any alpha component.
-    col = sdf_render(rect, col, vec4(color.rgb, 1.0));
+    // Render it.
+    col = sdf_render(rect, col, color);
 
     out_color = col * opacity;
 }
