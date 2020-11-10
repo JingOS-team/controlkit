@@ -44,6 +44,10 @@ void main()
     // Inner rectangle distance field equals outer reduced by twice the border width
     lowp float inner_rect = outer_rect + borderWidth * 2.0;
 
+    // Render it so we have a background for the image.
+    col = sdf_render(inner_rect, col, color);
+
+    // Sample the texture, then render it, blending with the background color.
     lowp vec2 texture_uv = ((uv / aspect) + 1.0) / 2.0;
     lowp vec4 texture_color = texture(textureSource, texture_uv);
     col = sdf_render(inner_rect, col, texture_color, texture_color.a, sdf_default_smoothing);

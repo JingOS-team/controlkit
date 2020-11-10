@@ -34,6 +34,10 @@ void main()
     // Calculate the main rectangle distance field.
     lowp float rect = sdf_rounded_rectangle(uv, aspect, radius);
 
+    // Render it, so we have a background for the image.
+    col = sdf_render(rect, col, color);
+
+    // Sample the texture, then render it, blending it with the background.
     lowp vec2 texture_uv = ((uv / aspect) + 1.0) / 2.0;
     lowp vec4 texture_color = texture(textureSource, texture_uv);
     col = sdf_render(rect, col, texture_color, texture_color.a, sdf_default_smoothing);
