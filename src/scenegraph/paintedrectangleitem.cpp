@@ -6,6 +6,7 @@
 
 #include "paintedrectangleitem.h"
 
+#include <cmath>
 #include <QPainter>
 
 PaintedRectangleItem::PaintedRectangleItem(QQuickItem* parent)
@@ -40,11 +41,16 @@ void PaintedRectangleItem::setBorderWidth(qreal width)
 void PaintedRectangleItem::paint(QPainter* painter)
 {
     painter->setRenderHint(QPainter::Antialiasing, true);
-    painter->setBrush(m_color);
-    if (m_borderWidth > 0.0) {
-        painter->setPen(QPen(m_borderColor, m_borderWidth));
-    } else {
-        painter->setPen(Qt::transparent);
+    painter->setPen(Qt::transparent);
+
+    auto radius = std::min(m_radius, std::min(width(), height()) / 2);
+    auto borderWidth = std::floor(m_borderWidth);
+
+    if (borderWidth > 0.0) {
+        painter->setBrush(m_borderColor);
+        painter->drawRoundedRect(0, 0, width(), height(), radius, radius);
     }
-    painter->drawRoundedRect(m_borderWidth / 2, m_borderWidth / 2, width() - m_borderWidth, height() - m_borderWidth, m_radius, m_radius);
+
+    painter->setBrush(m_color);
+    painter->drawRoundedRect(borderWidth, borderWidth, width() - borderWidth * 2, height() - borderWidth * 2, radius, radius);
 }
