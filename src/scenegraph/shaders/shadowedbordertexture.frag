@@ -69,7 +69,7 @@ void main()
     // Sample the texture, then blend it on top of the background color.
     lowp vec2 texture_uv = ((uv / aspect) + (1.0 * inverse_scale)) / (2.0 * inverse_scale);
     lowp vec4 texture_color = texture(textureSource, texture_uv);
-    col = sdf_render(inner_rect, col, texture_color, texture_color.a, sdf_default_smoothing / 2.0);
+    col = sdf_render(inner_rect, col, texture_color, texture_color.a, sdf_default_smoothing);
 
     out_color = col * opacity;
 }
