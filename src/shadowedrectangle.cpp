@@ -323,9 +323,7 @@ void ShadowedRectangle::checkSoftwareItem()
 
         auto updateItem = [this]() {
             auto borderWidth = m_border->width();
-            auto rect = boundingRect().adjusted(-borderWidth / 2, -borderWidth / 2, borderWidth / 2, borderWidth / 2);
-            m_softwareItem->setX(-borderWidth / 2);
-            m_softwareItem->setY(-borderWidth / 2);
+            auto rect = boundingRect();
             m_softwareItem->setSize(rect.size());
             m_softwareItem->setColor(m_color);
             m_softwareItem->setRadius(m_radius);
