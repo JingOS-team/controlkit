@@ -38,16 +38,15 @@ void main()
     // Calculate the outer rectangle distance field.
     lowp float outer_rect = sdf_rounded_rectangle(uv, aspect, radius);
 
-    // Render it, cancelling out any alpha components.
-    col = sdf_render(outer_rect, col, vec4(borderColor.rgb, 1.0));
+    // Render it
+    col = sdf_render(outer_rect, col, borderColor);
 
     // Inner rectangle distance field equals outer reduced by twice the border width
     lowp float inner_rect = outer_rect + borderWidth * 2.0;
 
-    // Sample the texture, then render it on top of the background color.
     lowp vec2 texture_uv = ((uv / aspect) + 1.0) / 2.0;
-    lowp vec4 texture_color = vec4(texture(textureSource, texture_uv).rgb, 1.0);
-    col = sdf_render(inner_rect, col, texture_color, texture_color.a, sdf_default_smoothing / 2.0);
+    lowp vec4 texture_color = texture(textureSource, texture_uv);
+    col = sdf_render(inner_rect, col, texture_color, texture_color.a, sdf_default_smoothing);
 
     out_color = col * opacity;
 }
