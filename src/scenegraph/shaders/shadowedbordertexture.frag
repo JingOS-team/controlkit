@@ -52,23 +52,15 @@ void main()
     // Scale corrected corner radius
     lowp vec4 corner_radius = radius * inverse_scale;
 
-    // Calculate the outer rectangle distance field.
+    // Calculate the outer rectangle distance field and render it.
     lowp float outer_rect = sdf_rounded_rectangle(uv, aspect * inverse_scale, corner_radius);
 
-    // First, remove anything that was rendered by the shadow if it is inside the rectangle.
-    // This allows us to use colors with alpha without rendering artifacts.
-    col = sdf_render(outer_rect, col, vec4(0.0));
-
-    // Then, render it again but this time with the proper color and properly alpha blended.
     col = sdf_render(outer_rect, col, borderColor);
 
     // The inner rectangle distance field is the outer reduced by twice the border width.
     lowp float inner_rect = outer_rect + (borderWidth * inverse_scale) * 2.0;
 
-    // Like above, but this time cut out the inner rectangle.
-    col = sdf_render(inner_rect, col, vec4(0.0));
-
-    // Finally, render the inner rectangle.
+    // Render the inner rectangle.
     col = sdf_render(inner_rect, col, color);
 
     // Slightly increase the size of the inner rectangle, to avoid issues with anti-aliasing.

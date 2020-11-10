@@ -47,14 +47,9 @@ void main()
     // Render it, interpolating the color over the distance.
     col = mix(col, shadowColor * sign(size), 1.0 - smoothstep(-size * 0.5, size * 0.5, shadow));
 
-    // Calculate the main rectangle distance field.
+    // Calculate the main rectangle distance field and render it.
     lowp float rect = sdf_rounded_rectangle(uv, aspect * inverse_scale, radius * inverse_scale);
 
-    // First, remove anything that was rendered by the shadow if it is inside the rectangle.
-    // This allows us to use colors with alpha without rendering artifacts.
-    col = sdf_render(rect, col, vec4(0.0));
-
-    // Then, render it again but this time with the proper color.
     col = sdf_render(rect, col, color);
 
     // Sample the texture, then blend it on top of the background color.
