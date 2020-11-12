@@ -38,7 +38,7 @@ Kirigami.AbstractApplicationHeader {
         Item {
             id: leftHandleAnchor
             visible: (typeof applicationWindow() !== "undefined" && applicationWindow().globalDrawer && applicationWindow().globalDrawer.enabled && applicationWindow().globalDrawer.handleVisible &&
-            (applicationWindow().globalDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? leftHandleAnchor : rightHandleAnchor))) &&
+            applicationWindow().globalDrawer.handle.handleAnchor == leftHandleAnchor) &&
             breadcrumbLoader.pageRow.firstVisibleItem &&
             breadcrumbLoader.pageRow.firstVisibleItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar
 
@@ -118,7 +118,7 @@ Kirigami.AbstractApplicationHeader {
                     applicationWindow().contextDrawer &&
                     applicationWindow().contextDrawer.enabled &&
                     applicationWindow().contextDrawer.handleVisible &&
-                    applicationWindow().contextDrawer.handle.handleAnchor == (Qt.application.layoutDirection == Qt.LeftToRight ? rightHandleAnchor : leftHandleAnchor) &&
+                    applicationWindow().contextDrawer.handle.handleAnchor == rightHandleAnchor &&
                     breadcrumbLoader.pageRow && breadcrumbLoader.pageRow.lastVisibleItem.globalToolBarStyle == Kirigami.ApplicationHeaderStyle.ToolBar)
             Layout.fillHeight: true
             Layout.preferredWidth: height

@@ -18,6 +18,9 @@ Item {
     opacity: 0.8
     layer.enabled: true
 
+    LayoutMirroring.enabled: false
+    LayoutMirroring.childrenInherit: true
+
     Item {
         id: iconRoot
         anchors {

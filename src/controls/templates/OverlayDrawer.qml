@@ -127,7 +127,8 @@ T2.Drawer {
         parent: applicationWindow().overlay.parent
 
         property Item handleAnchor: (applicationWindow().pageStack && applicationWindow().pageStack.globalToolBar)
-                ? (root.edge === Qt.LeftEdge
+                ? ((root.edge === Qt.LeftEdge && Qt.application.layoutDirection == Qt.LeftToRight)
+                   || (root.edge === Qt.RightEdge && Qt.application.layoutDirection == Qt.RightToLeft)
                    ? applicationWindow().pageStack.globalToolBar.leftHandleAnchor
                    : applicationWindow().pageStack.globalToolBar.rightHandleAnchor)
                 : (applicationWindow().header && applicationWindow().header.toString().indexOf("ToolBarApplicationHeader") !== -1 ? applicationWindow().header : null)
