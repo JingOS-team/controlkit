@@ -1225,11 +1225,21 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
     case QEvent::MouseButtonPress: {
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
-        if (!m_acceptsMouse &&  me->source() == Qt::MouseEventNotSynthesized) {
+        if (me->button() != Qt::LeftButton) {
             return false;
         }
 
-        if (me->button() != Qt::LeftButton) {
+        // On press, we set the current index of the view to the root item
+        QQuickItem *candidateItem = item;
+        while (candidateItem->parentItem() && candidateItem->parentItem() != m_contentItem) {
+            candidateItem = candidateItem->parentItem();
+        }
+        if (candidateItem->parentItem() == m_contentItem) {
+            setCurrentIndex(m_contentItem->m_items.indexOf(candidateItem));
+        }
+
+        // if !m_acceptsMouse we don't dra gwith mouse
+        if (!m_acceptsMouse &&  me->source() == Qt::MouseEventNotSynthesized) {
             return false;
         }
 
@@ -1244,14 +1254,6 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
         me->setAccepted(false);
         setKeepMouseGrab(false);
 
-        // On press, we set the current index of the view to the root item
-        QQuickItem *candidateItem = item;
-        while (candidateItem->parentItem() && candidateItem->parentItem() != m_contentItem) {
-            candidateItem = candidateItem->parentItem();
-        }
-        if (candidateItem->parentItem() == m_contentItem) {
-            setCurrentIndex(m_contentItem->m_items.indexOf(candidateItem));
-        }
         break;
     }
     case QEvent::MouseMove: {
