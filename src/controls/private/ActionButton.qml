@@ -65,12 +65,20 @@ Item {
                 if (root.hasGlobalDrawer && globalDrawer.enabled && globalDrawer.modal) {
                     globalDrawer.peeking = true;
                     globalDrawer.visible = true;
-                    globalDrawer.position = Math.min(1, Math.max(0, (x - root.width/2 + button.width/2)/globalDrawer.contentItem.width + mouseArea.drawerShowAdjust));
+                    if (Qt.application.layoutDirection === Qt.LeftToRight) {
+                        globalDrawer.position = Math.min(1, Math.max(0, (x - root.width/2 + button.width/2)/globalDrawer.contentItem.width + mouseArea.drawerShowAdjust));
+                    } else {
+                        globalDrawer.position = Math.min(1, Math.max(0, (root.width/2 - button.width/2 - x)/globalDrawer.contentItem.width + mouseArea.drawerShowAdjust));
+                    }
                 }
                 if (root.hasContextDrawer && contextDrawer.enabled && contextDrawer.modal) {
                     contextDrawer.peeking = true;
                     contextDrawer.visible = true;
-                    contextDrawer.position = Math.min(1, Math.max(0, (root.width/2 - button.width/2 - x)/contextDrawer.contentItem.width + mouseArea.drawerShowAdjust));
+                    if (Qt.application.layoutDirection === Qt.LeftToRight) {
+                        contextDrawer.position = Math.min(1, Math.max(0, (root.width/2 - button.width/2 - x)/contextDrawer.contentItem.width + mouseArea.drawerShowAdjust));
+                    } else {
+                        contextDrawer.position = Math.min(1, Math.max(0, (x - root.width/2 + button.width/2)/contextDrawer.contentItem.width + mouseArea.drawerShowAdjust));
+                    }
                 }
             }
         }
@@ -202,7 +210,11 @@ Item {
                 target: root.hasGlobalDrawer ? globalDrawer : null
                 onPositionChanged: {
                     if ( globalDrawer && globalDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
-                        button.x = globalDrawer.contentItem.width * globalDrawer.position + root.width/2 - button.width/2;
+                        if (Qt.application.layoutDirection === Qt.LeftToRight) {
+                            button.x = globalDrawer.contentItem.width * globalDrawer.position + root.width/2 - button.width/2;
+                        } else {
+                            button.x = -globalDrawer.contentItem.width * globalDrawer.position + root.width/2 - button.width/2
+                        }
                     }
                 }
             }
@@ -210,7 +222,11 @@ Item {
                 target: root.hasContextDrawer ? contextDrawer : null
                 onPositionChanged: {
                     if (contextDrawer && contextDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
-                        button.x = root.width/2 - button.width/2 - contextDrawer.contentItem.width * contextDrawer.position;
+                        if (Qt.application.layoutDirection === Qt.LeftToRight) {
+                            button.x = root.width/2 - button.width/2 - contextDrawer.contentItem.width * contextDrawer.position;
+                        } else {
+                            button.x = root.width/2 - button.width/2 + contextDrawer.contentItem.width * contextDrawer.position;
+                        }
                     }
                 }
             }
