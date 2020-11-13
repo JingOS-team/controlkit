@@ -495,6 +495,12 @@ QtObject {
                 }
             }
 
+            onContentHeightChanged: {
+                if (scrollView.flickableItem.contentHeight < height) {
+                    contentYChanged();
+                }
+            }
+
             ColumnLayout {
                 id: contentLayout
                 spacing: 0
