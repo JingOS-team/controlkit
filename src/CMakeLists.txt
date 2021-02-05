@@ -41,6 +41,11 @@ set(kirigami_SRCS
     scenegraph/shadowedtexturenode.cpp
     scenegraph/shadowedtexturematerial.cpp
     scenegraph/shadowedbordertexturematerial.cpp
+	ImagePreview/jexiv2extractor.cpp
+	ImagePreview/jimagedocument.cpp
+	ImagePreview/jresizehandle.cpp
+	ImagePreview/jresizerectangle.cpp
+	ImagePreview/jwallpapersettings.cpp
     ${kirigami_QM_LOADER}
     ${KIRIGAMI_STATIC_FILES}
     )
@@ -92,11 +97,13 @@ else()
 endif()
 
 
+
+####### add LibExiv2::LibExiv2 for picture plugin   ##########
 target_link_libraries(kirigamiplugin
         PUBLIC
             Qt5::Core
         PRIVATE
-            ${Kirigami_EXTRA_LIBS} Qt5::Qml Qt5::Quick Qt5::QuickControls2 Qt5::Concurrent
+            ${Kirigami_EXTRA_LIBS} Qt5::Qml Qt5::Quick Qt5::QuickControls2 Qt5::Concurrent Qt5::DBus LibExiv2::LibExiv2
     )
 
 if (BUILD_SHARED_LIBS)
@@ -112,6 +119,12 @@ if (BUILD_SHARED_LIBS)
     )
 
     install(DIRECTORY controls/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2)
+
+
+    file(GLOB ICONS_SRCS "controls/image/*.png" "controls/image/*.svg")
+    include(ECMInstallIcons)
+    #install(FILES ${ICONS_SRCS} DESTINATION ${KDE_INSTALL_FULL_ICONDIR}/breeze/actions/12/)
+    ecm_install_icons( ICONS ${ICONS_SRCS} DESTINATION ${KDE_INSTALL_ICONDIR} )
 
     if (DESKTOP_ENABLED)
         install(DIRECTORY styles/org.kde.desktop DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles)

@@ -120,7 +120,7 @@ Item {
             property int startY
             property int mouseDownY
             property Item originalParent
-            property int autoScrollThreshold: listItem.height * 3
+            property int autoScrollThreshold: (listView.contentHeight > listView.height) ? listItem.height * 3 : 0
             opacity: mouseArea.pressed || (!Kirigami.Settings.tabletMode && listItem.hovered) ? 1 : 0.6
 
             function arrangeItem() {

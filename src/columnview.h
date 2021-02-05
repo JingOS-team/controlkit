@@ -13,6 +13,19 @@
 class ContentItem;
 class ColumnView;
 
+class ScrollIntentionEvent : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(QPointF delta MEMBER delta CONSTANT)
+    Q_PROPERTY(bool accepted MEMBER accepted)
+public:
+    ScrollIntentionEvent(){}
+    ~ScrollIntentionEvent(){}
+
+    QPointF delta;
+    bool accepted = false;
+};
+
+
 /**
  * This is an attached property to every item that is inserted in the ColumnView,
  * used to access the view and page information such as the position and informations for layouting, such as fillWidth
@@ -55,6 +68,12 @@ class ColumnViewAttached : public QObject
      */
     Q_PROPERTY(ColumnView *view READ view NOTIFY viewChanged)
 
+    /**
+     * True if this column is at least partly visible in the ColumnView's viewport.
+     * @since 5.77
+     */
+    Q_PROPERTY(bool inViewport READ inViewport NOTIFY inViewportChanged)
+
 public:
     ColumnViewAttached(QObject *parent = nullptr);
     ~ColumnViewAttached();
@@ -84,6 +103,9 @@ public:
     bool isPinned() const;
     void setPinned(bool pinned);
 
+    bool inViewport() const;
+    void setInViewport(bool inViewport);
+
 Q_SIGNALS:
     void indexChanged();
     void fillWidthChanged();
@@ -91,6 +113,8 @@ Q_SIGNALS:
     void viewChanged();
     void preventStealingChanged();
     void pinnedChanged();
+    void scrollIntention(ScrollIntentionEvent *event);
+    void inViewportChanged();
 
 private:
     int m_index = -1;
@@ -103,6 +127,7 @@ private:
     bool m_shouldDeleteOnRemove = true;
     bool m_preventStealing = false;
     bool m_pinned = false;
+    bool m_inViewport = false;
 };
 
 
@@ -427,6 +452,8 @@ private:
     static QHash<QObject *, ColumnViewAttached *> m_attachedObjects;
     qreal m_oldMouseX = -1.0;
     qreal m_startMouseX = -1.0;
+    qreal m_oldMouseY = -1.0;
+    qreal m_startMouseY = -1.0;
     int m_currentIndex = -1;
     qreal m_topPadding = 0;
     qreal m_bottomPadding = 0;

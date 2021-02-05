@@ -1,0 +1,138 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libkirigami2plugin_qt\n"
+"PO-Revision-Date: 2020-11-05 05:43+0000\n"
+"Last-Translator: transxx.py program <null@kde.org>\n"
+"Language-Team: KDE Test Language <kde-i18n-doc@kde.org>\n"
+"Language: x-test\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Qt-Contexts: true\n"
+
+#: controls/AboutPage.qml:66
+msgctxt "AboutPage|"
+msgid "About"
+msgstr "xxAboutxx"
+
+#: controls/AboutPage.qml:92
+#, qt-format
+msgctxt "AboutPage|"
+msgid "Send an email to %1"
+msgstr "xxSend an email to %1xx"
+
+#: controls/AboutPage.qml:141
+msgctxt "AboutPage|"
+msgid "Copyright"
+msgstr "xxCopyrightxx"
+
+#: controls/AboutPage.qml:179
+msgctxt "AboutPage|"
+msgid "License:"
+msgstr "xxLicense:xx"
+
+#: controls/AboutPage.qml:196
+#, qt-format
+msgctxt "AboutPage|"
+msgid "License: %1"
+msgstr "xxLicense: %1xx"
+
+#: controls/AboutPage.qml:207
+msgctxt "AboutPage|"
+msgid "Libraries in use"
+msgstr "xxLibraries in usexx"
+
+#: controls/AboutPage.qml:221
+msgctxt "AboutPage|"
+msgid "Authors"
+msgstr "xxAuthorsxx"
+
+#: controls/AboutPage.qml:231
+msgctxt "AboutPage|"
+msgid "Credits"
+msgstr "xxCreditsxx"
+
+#: controls/AboutPage.qml:242
+msgctxt "AboutPage|"
+msgid "Translators"
+msgstr "xxTranslatorsxx"
+
+#: controls/AbstractApplicationWindow.qml:328
+msgctxt "AbstractApplicationWindow|"
+msgid "Quit"
+msgstr "xxQuitxx"
+
+#: controls/ActionToolBar.qml:145
+msgctxt "ActionToolBar|"
+msgid "More Actions"
+msgstr "xxMore Actionsxx"
+
+#: controls/ContextDrawer.qml:66
+msgctxt "ContextDrawer|"
+msgid "Actions"
+msgstr "xxActionsxx"
+
+#: controls/GlobalDrawer.qml:471
+msgctxt "GlobalDrawer|"
+msgid "Back"
+msgstr "xxBackxx"
+
+#: controls/GlobalDrawer.qml:562
+msgctxt "GlobalDrawer|"
+msgid "Close Sidebar"
+msgstr "xxClose Sidebarxx"
+
+#: controls/PasswordField.qml:32
+msgctxt "PasswordField|"
+msgid "Password"
+msgstr "xxPasswordxx"
+
+#: controls/SearchField.qml:31
+msgctxt "SearchField|"
+msgid "Search..."
+msgstr "xxSearch...xx"
+
+#: controls/SearchField.qml:33
+msgctxt "SearchField|"
+msgid "Search"
+msgstr "xxSearchxx"
+
+#: controls/templates/private/BackButton.qml:39
+msgctxt "BackButton|"
+msgid "Navigate Back"
+msgstr "xxNavigate Backxx"
+
+#: controls/templates/private/ForwardButton.qml:35
+msgctxt "ForwardButton|"
+msgid "Navigate Forward"
+msgstr "xxNavigate Forwardxx"
+
+#: controls/ToolBarApplicationHeader.qml:113
+msgctxt "ToolBarApplicationHeader|"
+msgid "More Actions"
+msgstr "xxMore Actionsxx"
+
+#: controls/UrlButton.qml:45
+msgctxt "UrlButton|"
+msgid "Copy link address"
+msgstr "xxCopy link addressxx"
+
+#: settings.cpp:205
+#, qt-format
+msgctxt "Settings|"
+msgid "KDE Frameworks %1"
+msgstr "xxKDE Frameworks %1xx"
+
+#: settings.cpp:207
+#, qt-format
+msgctxt "Settings|"
+msgid "The %1 windowing system"
+msgstr "xxThe %1 windowing systemxx"
+
+#: settings.cpp:208
+#, qt-format
+msgctxt "Settings|"
+msgid "Qt %2 (built against %3)"
+msgstr "xxQt %2 (built against %3)xx"

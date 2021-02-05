@@ -1,0 +1,31 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="MainPage.qml">MainPage.qml</file>
+        <file alias="main.qml">main.qml</file>
+        <file alias="today_number.png">today_number.png</file>
+        <file alias="selected.png">selected.png</file>
+        <file alias="desktop.png">desktop.png</file>
+        <file alias="Interfac.svg">Interfac.svg</file>
+        <file alias="Music.svg">Music.svg</file>
+        <file alias="recoder.png">recoder.png</file>
+        <file alias="blackPlay.png">blackPlay.png</file>
+        <file alias="recoder-speaker.png">recoder-speaker.png</file>
+        <file alias="search.png">search.png</file>
+        <file alias="menu-delete.png">menu-delete.png</file>
+        <file alias="menu-folder.png">menu-folder.png</file>
+        <file alias="menu-new.png">menu-new.png</file>
+        <file alias="gallery/ButtonGallery.qml">gallery/ButtonGallery.qml</file>
+        <file alias="gallery/ImageGallery.qml">gallery/ImageGallery.qml</file>
+        <file alias="gallery/LabelGallery.qml">gallery/LabelGallery.qml</file>
+        <file alias="gallery/SearchGallery.qml">gallery/SearchGallery.qml</file>
+        <file alias="gallery/TestGallery.qml">gallery/TestGallery.qml</file>        
+        <file alias="gallery/TestPopupGallery.qml">gallery/TestPopupGallery.qml</file>
+        <file alias="gallery/MenuPopupGallery.qml">gallery/MenuPopupGallery.qml</file>
+        <file alias="gallery/DialogGallery.qml">gallery/DialogGallery.qml</file>
+        <file alias="gallery/GridHoverGallery.qml">gallery/GridHoverGallery.qml</file>
+        <file alias="gallery/ListViewHoverGallery.qml">gallery/ListViewHoverGallery.qml</file>
+        <file alias="gallery/PageGallery.qml">gallery/PageGallery.qml</file>
+        <file alias="gallery/Switch_Slider.qml">gallery/Switch_Slider.qml</file>
+    </qresource>
+</RCC>
+

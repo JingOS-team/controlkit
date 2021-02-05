@@ -10,6 +10,7 @@
 #include <QJSEngine>
 #include <QQmlProperty>
 #include <QQuickWindow>
+#include <qqmlpropertymap.h>
 #include "pagerouter.h"
 
 ParsedRoute* parseRoute(QJSValue value)
@@ -69,7 +70,7 @@ QList<ParsedRoute*> parseRoutes(QJSValue values)
     return ret;
 }
 
-PageRouter::PageRouter(QQuickItem *parent) : QObject(parent), m_cache(), m_preload()
+PageRouter::PageRouter(QQuickItem *parent) : QObject(parent), m_paramMap(new QQmlPropertyMap), m_cache(), m_preload()
 {
     connect(this, &PageRouter::pageStackChanged, [=]() {
         connect(m_pageStack, &ColumnView::currentIndexChanged, this, &PageRouter::currentIndexChanged);
@@ -155,6 +156,31 @@ int PageRouter::routesCostForKey(const QString &key) const
     return -1;
 }
 
+// It would be nice if this could surgically update the
+// param map instead of doing this brute force approach,
+// but this seems to work well enough, and prematurely
+// optimising stuff is pretty bad if it isn't found as
+// a performance bottleneck.
+void PageRouter::reevaluateParamMapProperties()
+{
+    QStringList currentKeys;
+
+    for (auto item : m_currentRoutes) {
+        for (auto key : item->properties.keys()) {
+            currentKeys << key;
+
+            auto& value = item->properties[key];
+            m_paramMap->insert(key, value);
+        }
+    }
+
+    for (auto key : m_paramMap->keys()) {
+        if (!currentKeys.contains(key)) {
+            m_paramMap->clear(key);
+        }
+    }
+}
+
 void PageRouter::push(ParsedRoute* route)
 {
     Q_ASSERT(route);
@@ -168,7 +194,9 @@ void PageRouter::push(ParsedRoute* route)
 
             for ( auto it = route->properties.begin(); it != route->properties.end(); it++ ) {
                 item->item->setProperty(qUtf8Printable(it.key()), it.value());
+                item->properties[it.key()] = it.value();
             }
+            reevaluateParamMapProperties();
 
             m_pageStack->addItem(item->item);
         };
@@ -201,6 +229,8 @@ void PageRouter::push(ParsedRoute* route)
         route->setItem(qqItem);
         route->cache = routesCacheForKey(route->name);
         m_currentRoutes << route;
+        reevaluateParamMapProperties();
+
         auto attached = qobject_cast<PageRouterAttached*>(qmlAttachedPropertiesObject<PageRouter>(item, true));
         attached->m_router = this;
         component->completeCreate();
@@ -256,6 +286,10 @@ void PageRouter::navigateToRoute(QJSValue route)
             if (current->name != incoming->name || current->data != incoming->data) {
                 resolvedRoutes.replace(i, incoming);
             }
+            resolvedRoutes[i]->properties.clear();
+            for (auto it = incoming->properties.constBegin(); it != incoming->properties.constEnd(); it++) {
+                resolvedRoutes[i]->properties.insert(it.key(), it.value());
+            }
         }
     }
 
@@ -270,6 +304,7 @@ void PageRouter::navigateToRoute(QJSValue route)
     for (auto toPush : qAsConst(resolvedRoutes)) {
         push(toPush);
     }
+    reevaluateParamMapProperties();
     Q_EMIT navigationChanged();
 }
 
@@ -322,6 +357,7 @@ void PageRouter::popRoute()
     m_pageStack->pop(m_currentRoutes.last()->item);
     placeInCache(m_currentRoutes.last());
     m_currentRoutes.removeLast();
+    reevaluateParamMapProperties();
     Q_EMIT navigationChanged();
 }
 
@@ -672,6 +708,7 @@ void PageRouter::pushFromObject(QObject *object, QJSValue inputRoute, bool repla
         for (auto route : qAsConst(m_currentRoutes)) {
             if (popping) {
                 m_currentRoutes.removeAll(route);
+                reevaluateParamMapProperties();
                 placeInCache(route);
                 continue;
             }
@@ -679,6 +716,7 @@ void PageRouter::pushFromObject(QObject *object, QJSValue inputRoute, bool repla
                 m_pageStack->pop(route->item);
                 if (replace) {
                     m_currentRoutes.removeAll(route);
+                    reevaluateParamMapProperties();
                     m_pageStack->removeItem(route->item);
                 }
                 popping = true;
@@ -705,6 +743,10 @@ QJSValue PageRouter::currentRoutes() const
         auto object = engine->newObject();
         object.setProperty(QStringLiteral("route"), m_currentRoutes[i]->name);
         object.setProperty(QStringLiteral("data"), engine->toScriptValue(m_currentRoutes[i]->data));
+        auto keys = m_currentRoutes[i]->properties.keys();
+        for (auto key : keys) {
+            object.setProperty(key, engine->toScriptValue(m_currentRoutes[i]->properties[key]));
+        }
         ret.setProperty(i, object);
     }
     return ret;

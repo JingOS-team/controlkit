@@ -19,12 +19,16 @@ bool contains(const QString& str, QChar::Script s) {
     return false;
 }
 
-QString AvatarPrivate::initialsFromString(const QString& string)
+QString NameUtils::initialsFromString(const QString& string)
 {
     // "" -> ""
     if (string.isEmpty()) return {};
 
     auto normalized = string.normalized(QString::NormalizationForm_D);
+
+    if (normalized.startsWith(QLatin1Char('#')) || normalized.startsWith(QLatin1Char('@'))) {
+        normalized = normalized.remove(0, 1);
+    }
 
     // Names written with Han and Hangul characters generally can be initialised by taking the
     // first character
@@ -49,7 +53,7 @@ QString AvatarPrivate::initialsFromString(const QString& string)
             return QString(first.front());
         }
         // "FirstName" "LastName" -> "FL"
-        return first.front() + last.front();
+        return QString(first.front()) + last.front();
     // "OneName"
     } else {
         // "OneName" -> "O"
@@ -106,7 +110,7 @@ QList<QColor> grabColors()
     return c_colors[QStringLiteral("default")];
 }
 
-auto AvatarPrivate::colorsFromString(const QString& string) -> QColor
+auto NameUtils::colorsFromString(const QString& string) -> QColor
 {
     // We use a hash to get a "random" number that's always the same for
     // a given string.
@@ -118,7 +122,7 @@ auto AvatarPrivate::colorsFromString(const QString& string) -> QColor
     return grabColors()[index];
 }
 
-auto AvatarPrivate::stringUnsuitableForInitials(const QString& string) -> bool
+auto NameUtils::isStringUnsuitableForInitials(const QString& string) -> bool
 {
     if (string.isEmpty()) {
         return true;

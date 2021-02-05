@@ -84,7 +84,6 @@ Item {
     Component.onDestruction: {
         for (let i in twinFormLayouts) {
             twinFormLayouts[i].children[0].reverseTwins = twinFormLayouts[i].children[0].reverseTwins.filter(function(value, index, arr){ return value != root;})
-            Qt.callLater(() => twinFormLayouts[i].children[0].reverseTwinsChanged());
         }
     }
     GridLayout {
@@ -336,7 +335,7 @@ Item {
             Component.onCompleted: item.x = x + lay.x;
             Connections {
                 target: lay
-                onXChanged: item.x = x + lay.x;
+                function onXChanged() { item.x = x + lay.x }
             }
         }
     }
@@ -385,13 +384,13 @@ Item {
                 }
             }
 
-            horizontalAlignment: temp.effectiveLayout(item)
+            Layout.alignment: temp.effectiveLayout(item)
             verticalAlignment: temp.effectiveTextLayout(item)
 
-            Layout.fillWidth: true
+            Layout.fillWidth: !root.wideMode
             wrapMode: Text.Wrap
 
-            Layout.topMargin: root.wideMode && item.Kirigami.FormData.buddyFor.parent != root ? item.Kirigami.FormData.buddyFor.y : (index === 0 ? 0 : Kirigami.Units.smallSpacing)
+            Layout.topMargin: root.wideMode && item.Kirigami.FormData.buddyFor.parent != root ? item.Kirigami.FormData.buddyFor.y : ((index === 0 || root.wideMode) ? 0 : Kirigami.Units.smallSpacing)
             onItemChanged: {
                 if (!item) {
                     labelItem.destroy();

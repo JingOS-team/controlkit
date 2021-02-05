@@ -1,0 +1,145 @@
+# Wantoyo <wantoyek@gmail.com>, 2018, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2020-02-25 07:54+0700\n"
+"Last-Translator: Wantoyo <wantoyek@gmail.com>\n"
+"Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 19.12.1\n"
+"X-Qt-Contexts: true\n"
+
+#: controls/AboutPage.qml:66
+msgctxt "AboutPage|"
+msgid "About"
+msgstr "Tentang"
+
+#: controls/AboutPage.qml:92
+#, qt-format
+msgctxt "AboutPage|"
+msgid "Send an email to %1"
+msgstr ""
+
+#: controls/AboutPage.qml:141
+msgctxt "AboutPage|"
+msgid "Copyright"
+msgstr "Hakcipta"
+
+#: controls/AboutPage.qml:179
+msgctxt "AboutPage|"
+msgid "License:"
+msgstr "Lisensi:"
+
+#: controls/AboutPage.qml:196
+#, qt-format
+msgctxt "AboutPage|"
+msgid "License: %1"
+msgstr "Lisensi: %1"
+
+#: controls/AboutPage.qml:207
+msgctxt "AboutPage|"
+msgid "Libraries in use"
+msgstr "Pustaka Lib yang digunakan"
+
+#: controls/AboutPage.qml:221
+msgctxt "AboutPage|"
+msgid "Authors"
+msgstr "Penulis"
+
+#: controls/AboutPage.qml:231
+msgctxt "AboutPage|"
+msgid "Credits"
+msgstr "Pujian"
+
+#: controls/AboutPage.qml:242
+msgctxt "AboutPage|"
+msgid "Translators"
+msgstr "Penerjemah"
+
+#: controls/AbstractApplicationWindow.qml:328
+msgctxt "AbstractApplicationWindow|"
+msgid "Quit"
+msgstr ""
+
+#: controls/ActionToolBar.qml:145
+#, fuzzy
+#| msgctxt "ToolBarApplicationHeader|"
+#| msgid "More Actions"
+msgctxt "ActionToolBar|"
+msgid "More Actions"
+msgstr "Aksi Selebihnya"
+
+#: controls/ContextDrawer.qml:66
+msgctxt "ContextDrawer|"
+msgid "Actions"
+msgstr "Aksi"
+
+#: controls/GlobalDrawer.qml:471
+msgctxt "GlobalDrawer|"
+msgid "Back"
+msgstr "Mundur"
+
+#: controls/GlobalDrawer.qml:562
+msgctxt "GlobalDrawer|"
+msgid "Close Sidebar"
+msgstr "Tutup BilahSisi"
+
+#: controls/PasswordField.qml:32
+msgctxt "PasswordField|"
+msgid "Password"
+msgstr "Password"
+
+#: controls/SearchField.qml:31
+msgctxt "SearchField|"
+msgid "Search..."
+msgstr "Cari..."
+
+#: controls/SearchField.qml:33
+#, fuzzy
+#| msgctxt "SearchField|"
+#| msgid "Search..."
+msgctxt "SearchField|"
+msgid "Search"
+msgstr "Cari..."
+
+#: controls/templates/private/BackButton.qml:39
+msgctxt "BackButton|"
+msgid "Navigate Back"
+msgstr "Navigasi Mundur"
+
+#: controls/templates/private/ForwardButton.qml:35
+msgctxt "ForwardButton|"
+msgid "Navigate Forward"
+msgstr "Navigasi Maju"
+
+#: controls/ToolBarApplicationHeader.qml:113
+msgctxt "ToolBarApplicationHeader|"
+msgid "More Actions"
+msgstr "Aksi Selebihnya"
+
+#: controls/UrlButton.qml:45
+msgctxt "UrlButton|"
+msgid "Copy link address"
+msgstr "Salin alamat tautan"
+
+#: settings.cpp:205
+#, qt-format
+msgctxt "Settings|"
+msgid "KDE Frameworks %1"
+msgstr "KDE Frameworks %1"
+
+#: settings.cpp:207
+#, qt-format
+msgctxt "Settings|"
+msgid "The %1 windowing system"
+msgstr "Sistem windowing %1"
+
+#: settings.cpp:208
+#, qt-format
+msgctxt "Settings|"
+msgid "Qt %2 (built against %3)"
+msgstr "Qt %2 (dibangun terhadap %3)"

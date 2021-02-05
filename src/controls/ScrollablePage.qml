@@ -44,10 +44,10 @@ import "private"
  *         }
  *     }
  *     ListView {
- *         //NOTE: MyModel doesn't come from the components,
- *         //it's purely an example on how it can be used together
- *         //some application logic that can update the list model
- *         //and signals when it's done.
+ *         // NOTE: MyModel doesn't come from the components,
+ *         // it's purely an example on how it can be used together
+ *         // some application logic that can update the list model
+ *         // and signals when it's done.
  *         model: MyModel {
  *             onRefreshDone: view.refreshing = false;
  *         }
@@ -64,7 +64,7 @@ Page {
     id: root
 
     /**
-     * refreshing: bool
+     * \property bool ScrollablePage::refreshing
      * If true the list is asking for refresh and will show a loading spinner.
      * it will automatically be set to true when the user pulls down enough the list.
      * This signals the application logic to start its refresh procedure.
@@ -73,27 +73,27 @@ Page {
     property alias refreshing: scrollView.refreshing
 
     /**
-     * supportsRefreshing: bool
+     * \property bool ScrollablePage::supportsRefreshing
      * If true the list supports the "pull down to refresh" behavior.
      * default is false.
      */
     property alias supportsRefreshing: scrollView.supportsRefreshing
 
     /**
-     * flickable: Flickable
-     * The main Flickable item of this page
+     * \property QtQuick.Flickable ScrollablePage::flickable
+     * The main Flickable item of this page.
      */
     property alias flickable: scrollView.flickableItem
 
     /**
-     * verticalScrollBarPolicy: Qt.ScrollBarPolicy
-     * The vertical scrollbar policy
+     * \property Qt.ScrollBarPolicy ScrollablePage::verticalScrollBarPolicy
+     * The vertical scrollbar policy.
      */
     property alias verticalScrollBarPolicy: scrollView.verticalScrollBarPolicy
 
     /**
-     * horizontalScrollBarPolicy: Qt.ScrollBarPolicy
-     * The horizontal scrollbar policy
+     * \property Qt.ScrollBarPolicy ScrollablePage::horizontalScrollBarPolicy
+     * The horizontal scrollbar policy.
      */
     property alias horizontalScrollBarPolicy: scrollView.horizontalScrollBarPolicy
 
@@ -101,7 +101,7 @@ Page {
      * The main content Item of this page.
      * In the case of a ListView or GridView, both contentItem and flickable
      * will be a pointer to the ListView (or GridView)
-     * NOTE: can't be contentItem as Page's contentItem is final
+     * @note This can't be contentItem as Page's contentItem is final.
      */
     default property QtObject mainItem
 

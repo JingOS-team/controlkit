@@ -18,7 +18,7 @@ import QtQuick.Controls 2.1 as QQC2
  * For content that should be scrollable, such as ListViews, use ScrollablePage instead.
  *
  * @see ScrollablePage
- * @inherit QtQuick.Templates.Page
+ * @inherit QtQuick.Controls.Page
  */
 QQC2.Page {
     id: root

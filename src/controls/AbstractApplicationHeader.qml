@@ -21,6 +21,7 @@ import "templates" as T
  * * maximumHeight: default is Units.gridUnit * 3
  *
  * To achieve a titlebar that stays completely fixed just set the 3 sizes as the same
+ * @inherit org::kde::kirigami::templates::AbstractApplicationHeader
  */
 T.AbstractApplicationHeader {
     id: root

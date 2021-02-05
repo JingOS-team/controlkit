@@ -61,20 +61,20 @@ OverlayDrawer {
     enabled: !isMenu || Settings.isMobile
 
     /**
-     * title: string
+     * @var string title
      * A title to be displayed on top of the drawer
      */
     property alias title: bannerImage.title
 
     /**
-     * icon: var
+     * @var var icon
      * An icon to be displayed alongside the title.
      * It can be a QIcon, a fdo-compatible icon name, or any url understood by Image
      */
     property alias titleIcon: bannerImage.titleIcon
 
     /**
-     * bannerImageSource: string
+     * @var string bannerImageSource
      * An image to be used as background for the title and icon for
      * a decorative purpose.
      * It accepts any url format supported by Image
@@ -82,7 +82,7 @@ OverlayDrawer {
     property alias bannerImageSource: bannerImage.source
 
     /**
-     * actions: list<Action>
+     * @var list<Action> actions
      * The list of actions can be nested having a tree structure.
      * A tree depth bigger than 2 is discouraged.
      *
@@ -120,7 +120,6 @@ OverlayDrawer {
     property list<QtObject> actions
 
     /**
-     * header: Item
      * an item that will stay on top of the drawer,
      * and if the drawer contents can be scrolled,
      * this item will stay still and won't scroll.
@@ -130,7 +129,6 @@ OverlayDrawer {
     property Item header
 
     /**
-     * bannerVisible: bool
      * if true the banner area, which can contain an image,
      * an icon and a title will be visible.
      * By default the banner will be visible only on mobile platforms
@@ -138,9 +136,11 @@ OverlayDrawer {
      */
     property bool bannerVisible: Settings.isMobile
     /**
-     * content: list<Item> default property
+     * @var list<Item> content
      * Any random Item can be instantiated inside the drawer and
      * will be displayed underneath the actions list.
+     *
+     * This is the default property.
      *
      * Example usage:
      * @code
@@ -162,7 +162,7 @@ OverlayDrawer {
     default property alias content: mainContent.data
 
     /**
-     * topContent: list<Item> default property
+     * @var list<Item> topContent
      * Items that will be instantiated inside the drawer and
      * will be displayed on top of the actions list.
      *
@@ -186,7 +186,6 @@ OverlayDrawer {
     property alias topContent: topContent.data
 
     /**
-     * showContentWhenCollapsed: bool
      * If true, when the drawer is collapsed as a sidebar, the content items
      * at the bottom will be hidden (default false).
      * If you want to keep some items visible and some invisible, set this to
@@ -197,7 +196,6 @@ OverlayDrawer {
     property bool showContentWhenCollapsed: false
 
     /**
-     * showTopContentWhenCollapsed: bool
      * If true, when the drawer is collapsed as a sidebar, the top content items
      * at the top will be hidden (default false).
      * If you want to keep some items visible and some invisible, set this to
@@ -211,22 +209,17 @@ OverlayDrawer {
     property bool showHeaderWhenCollapsed: false
 
     /**
-     * resetMenuOnTriggered: bool
-     *
      * On the actions menu, whenever a leaf action is triggered, the menu
      * will reset to its parent.
      */
     property bool resetMenuOnTriggered: true
 
     /**
-     * currentSubMenu: Action
-     *
      * Points to the action acting as a submenu
      */
     readonly property Action currentSubMenu: stackView.currentItem ? stackView.currentItem.current: null
 
     /**
-     * isMenu: bool
      * When true the global drawer becomes a menu on the desktop. Defauls to false.
      * @since 2.11
      */
@@ -262,6 +255,16 @@ OverlayDrawer {
         if (header) {
             header.parent = headerContainer
             header.Layout.fillWidth = true;
+            if (header.z === undefined) {
+                header.z = 1;
+            }
+            if (header instanceof T2.ToolBar) {
+                header.position = T2.ToolBar.Header
+            } else if (header instanceof T2.TabBar) {
+                header.position = T2.TabBar.Header
+            } else if (header instanceof T2.DialogButtonBox) {
+                header.position = T2.DialogButtonBox.Header
+            }
         }
     }
 
@@ -334,7 +337,8 @@ OverlayDrawer {
 
                     Layout.fillWidth: true
                     visible: contentItem && opacity > 0
-                    Layout.preferredHeight: implicitHeight * opacity
+                    // Workaround for https://bugreports.qt.io/browse/QTBUG-90034
+                    Layout.preferredHeight: implicitHeight <= 0 || opacity == 1 ? -1 : implicitHeight * opacity
                     opacity: !root.collapsed || showHeaderWhenCollapsed
                     Behavior on opacity {
                         //not an animator as is binded

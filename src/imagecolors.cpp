@@ -62,7 +62,7 @@ void ImageColors::setSource(const QVariant &source)
     }
 
     m_source = source;
-    emit sourceChanged();
+    Q_EMIT sourceChanged();
 }
 
 QVariant ImageColors::source() const
@@ -150,7 +150,7 @@ void ImageColors::update()
                     m_futureImageData->deleteLater();
                     m_futureImageData = nullptr;
 
-                    emit paletteChanged();
+                    Q_EMIT paletteChanged();
                 });
         m_futureImageData->setFuture(future);
     };

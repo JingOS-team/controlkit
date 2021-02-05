@@ -349,8 +349,8 @@ AbstractApplicationHeader {
                         width: parent.width - x
 
                         Connections {
-                            target: delegateLoader.page
-                            Component.onDestruction: delegateLoader.sourceComponent = null
+                            target: delegateLoader.page.Component
+                            function onDestruction() { delegateLoader.sourceComponent = null }
                         }
 
                         sourceComponent: header.pageDelegate
@@ -368,7 +368,7 @@ AbstractApplicationHeader {
         }
         Connections {
             target: titleList.scrollingLocked ? pageRow.contentItem : null
-            onContentXChanged: {
+            function onContentXChanged() {
                 if (!titleList.dragging && !titleList.movingHorizontally && !titleList.scrollMutex) {
                     titleList.contentX = pageRow.contentItem.contentX - pageRow.contentItem.originX + titleList.originX;
                 }

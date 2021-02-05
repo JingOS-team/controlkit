@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="118px" height="118px" viewBox="0 0 118 118" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 33</title>
+    <defs>
+        <filter x="-12.0%" y="-12.0%" width="124.0%" height="124.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="桌面" transform="translate(-1638.000000, -319.000000)">
+            <g id="编组-16" transform="translate(155.000000, 110.000000)">
+                <g id="编组-33" filter="url(#filter-1)" transform="translate(1492.000000, 218.000000)">
+                    <rect id="矩形备份-37" fill="#354146" x="0" y="0" width="100" height="100" rx="24"></rect>
+                    <rect id="矩形备份-38" fill="#FF00BF" x="55" y="70" width="25" height="10" rx="2"></rect>
+                    <path d="M21.1997927,20.6922222 L43.9994819,33.8465374 C44.618576,34.2037247 45,34.8641423 45,35.5788872 L45,42.4196259 C45,43.1343376 44.6186111,43.7947299 43.9995624,44.1519293 L21.199825,57.3076848 C20.8171351,57.5285021 20.3278959,57.3972783 20.1070786,57.0145884 C20.036929,56.8930147 20,56.7551243 20,56.6147635 L20,48.5249069 C20,47.8101491 20.3814377,47.1497215 21.0005495,46.792539 L33.7570807,39.4329471 C33.9962708,39.2949518 34.0783053,38.9891826 33.94031,38.7499925 C33.896401,38.673884 33.8332109,38.6106904 33.7571049,38.5667771 L21.0004527,31.2061647 C20.3813954,30.8489675 20,30.1885706 20,29.4738527 L20,21.3851622 C20,20.9433344 20.3581722,20.5851622 20.8,20.5851622 C20.9403482,20.5851622 21.0782267,20.6220845 21.1997927,20.6922222 Z" id="路径备份-2" fill="#00FFCA"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

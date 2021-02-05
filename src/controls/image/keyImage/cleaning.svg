@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Cleaning, Housekeeping/broom</title>
+    <g id="I-Password" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="i04-1设置-Password" transform="translate(-1855.000000, -1567.000000)">
+            <g id="编组-32" transform="translate(278.000000, 1139.000000)">
+                <g id="Cleaning,-Housekeeping/broom" transform="translate(1577.000000, 428.000000)">
+                    <g id="Group" transform="translate(11.000000, 16.000000)" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">
+                        <line x1="16.0631757" y1="9.73783784" x2="23.8502027" y2="17.5248649" id="Path"></line>
+                        <line x1="23.8502027" y1="9.73783784" x2="16.0631757" y2="17.5248649" id="Path"></line>
+                        <path d="M7.48187189,24.8913924 L1.60850676,17.9940332 C-0.533076627,15.4798068 -0.533076627,11.7828959 1.60850676,9.26866946 L7.48187189,2.37131027 C8.76010294,0.869099721 10.6332978,0.00367227559 12.6057357,0.00405381106 L28.3141159,0.00405381106 C32.0309582,0.00405381106 35.0440541,3.01714998 35.0440541,6.73399216 L35.0440541,20.5287105 C35.0440541,24.2455528 32.0309582,27.2586486 28.3141159,27.2586486 L12.6057357,27.2586486 C10.6332978,27.2590304 8.76010294,26.393603 7.48187189,24.8913924 Z" id="Path"></path>
+                    </g>
+                    <polygon id="Path" points="60 60 0 60 0 0 60 0"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

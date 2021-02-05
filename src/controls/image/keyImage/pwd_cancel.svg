@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="44px" viewBox="0 0 44 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Interface, Essential/Delete, Disabled 3</title>
+    <defs>
+        <filter id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.556863 0 0 0 0 0.556863 0 0 0 0 0.576471 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+        <filter id="filter-2">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.556863 0 0 0 0 0.556863 0 0 0 0 0.576471 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="选择网络-密码-输入" transform="translate(-1082.000000, -370.000000)">
+            <g id="Interface,-Essential/Delete,-Disabled-3" transform="translate(650.000000, 330.000000)" filter="url(#filter-1)">
+                <g transform="translate(432.000000, 40.000000)" filter="url(#filter-2)" id="Interface,-Essential/Delete,-Disabled-2">
+                    <g id="Path" transform="translate(-0.000000, -0.000000)">
+                        <polygon points="0 0 44.0000002 0 44.0000002 44.0000002 0 44.0000002"></polygon>
+                        <line x1="13.0000001" y1="13.0000001" x2="31.0000001" y2="31.0000001" stroke="#323232" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"></line>
+                        <line x1="31.0000001" y1="13.0000001" x2="13.0000001" y2="31.0000001" stroke="#323232" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

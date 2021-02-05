@@ -34,7 +34,7 @@ import "templates" as T
  *
  * }
  * @endcode
- *
+ * @inherit org::kde::kirigami::templates::SwipeListItem
  */
 T.SwipeListItem {
     id: listItem

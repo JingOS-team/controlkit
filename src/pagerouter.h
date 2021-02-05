@@ -9,6 +9,7 @@
 #include <QCache>
 #include <QQuickItem>
 #include <QRandomGenerator>
+#include <QQmlPropertyMap>
 #include "columnview.h"
 
 static std::map<quint32,QVariant> s_knownVariants;
@@ -348,7 +349,28 @@ class PageRouter : public QObject, public QQmlParserStatus
      */
     Q_PROPERTY(int preloadedPoolCapacity READ preloadedPoolCapacity WRITE setPreloadedPoolCapacity)
 
+    /**
+     * Exposes the data of all pages on the stack, preferring pages on the top (e.g. most recently pushed) to pages pushed on the bottom (least recently pushed).
+     */
+    Q_PROPERTY(QQmlPropertyMap* params READ params CONSTANT)
+
 private:
+    /**
+     * The map exposing to QML all the params of the stack. This is a
+     * QQmlPropertyMap to allow binding to param values. This *does* lack
+     * the ability to drop items, but the amount of all params in an app
+     * is overwhelmingly likely to be fixed, not dynamic.
+     */
+    QSharedPointer<QQmlPropertyMap> m_paramMap;
+
+    /**
+     * Reevaluate the properties of the param map by going through all of the
+     * routes on the stack to determine the topmost value for every parametre.
+     *
+     * Should be called for every time a route is pushed, popped, or modified.
+     */
+    void reevaluateParamMapProperties();
+
     /**
      * @brief The routes the PageRouter is aware of.
      * 
@@ -461,6 +483,8 @@ public:
     ~PageRouter();
 
     QQmlListProperty<PageRoute> routes();
+
+    QQmlPropertyMap* params() { return m_paramMap.data(); }
 
     QJSValue initialRoute() const;
     void setInitialRoute(QJSValue initialRoute);

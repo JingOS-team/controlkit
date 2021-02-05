@@ -1,0 +1,144 @@
+# Vincent Pinon <vpinon@kde.org>, 2016, 2017.
+# Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
+# Xavier Besnard <xavier.besnard@neuf.fr>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2020-11-06 10:59+0100\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
+"Language-Team: FR\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.08.2\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: qtrich\n"
+"X-Qt-Contexts: true\n"
+
+#: controls/AboutPage.qml:66
+msgctxt "AboutPage|"
+msgid "About"
+msgstr "À propos"
+
+#: controls/AboutPage.qml:92
+#, qt-format
+msgctxt "AboutPage|"
+msgid "Send an email to %1"
+msgstr "Envoyer un courriel à %1"
+
+#: controls/AboutPage.qml:141
+msgctxt "AboutPage|"
+msgid "Copyright"
+msgstr "Copyright"
+
+#: controls/AboutPage.qml:179
+msgctxt "AboutPage|"
+msgid "License:"
+msgstr "Licence :"
+
+#: controls/AboutPage.qml:196
+#, qt-format
+msgctxt "AboutPage|"
+msgid "License: %1"
+msgstr "Licence : %1"
+
+#: controls/AboutPage.qml:207
+msgctxt "AboutPage|"
+msgid "Libraries in use"
+msgstr "Bibliothèques utilisées"
+
+#: controls/AboutPage.qml:221
+msgctxt "AboutPage|"
+msgid "Authors"
+msgstr "Auteurs"
+
+#: controls/AboutPage.qml:231
+msgctxt "AboutPage|"
+msgid "Credits"
+msgstr "Crédits"
+
+#: controls/AboutPage.qml:242
+msgctxt "AboutPage|"
+msgid "Translators"
+msgstr "Traducteur"
+
+#: controls/AbstractApplicationWindow.qml:328
+msgctxt "AbstractApplicationWindow|"
+msgid "Quit"
+msgstr "Quitter"
+
+#: controls/ActionToolBar.qml:145
+msgctxt "ActionToolBar|"
+msgid "More Actions"
+msgstr "Plus d'actions"
+
+#: controls/ContextDrawer.qml:66
+msgctxt "ContextDrawer|"
+msgid "Actions"
+msgstr "Actions"
+
+#: controls/GlobalDrawer.qml:471
+msgctxt "GlobalDrawer|"
+msgid "Back"
+msgstr "Retour"
+
+#: controls/GlobalDrawer.qml:562
+msgctxt "GlobalDrawer|"
+msgid "Close Sidebar"
+msgstr "Fermer la barre latérale"
+
+#: controls/PasswordField.qml:32
+msgctxt "PasswordField|"
+msgid "Password"
+msgstr "Mot de passe"
+
+#: controls/SearchField.qml:31
+msgctxt "SearchField|"
+msgid "Search..."
+msgstr "Chercher…"
+
+#: controls/SearchField.qml:33
+msgctxt "SearchField|"
+msgid "Search"
+msgstr "Rechercher"
+
+#: controls/templates/private/BackButton.qml:39
+msgctxt "BackButton|"
+msgid "Navigate Back"
+msgstr "Navigation arrière"
+
+#: controls/templates/private/ForwardButton.qml:35
+msgctxt "ForwardButton|"
+msgid "Navigate Forward"
+msgstr "Navigation avant"
+
+#: controls/ToolBarApplicationHeader.qml:113
+msgctxt "ToolBarApplicationHeader|"
+msgid "More Actions"
+msgstr "Actions supplémentaires"
+
+#: controls/UrlButton.qml:45
+msgctxt "UrlButton|"
+msgid "Copy link address"
+msgstr "Copier l'adresse du lien"
+
+#: settings.cpp:205
+#, qt-format
+msgctxt "Settings|"
+msgid "KDE Frameworks %1"
+msgstr "KDE Frameworks %1"
+
+#: settings.cpp:207
+#, qt-format
+msgctxt "Settings|"
+msgid "The %1 windowing system"
+msgstr "Le système de fenêtres %1"
+
+#: settings.cpp:208
+#, qt-format
+msgctxt "Settings|"
+msgid "Qt %2 (built against %3)"
+msgstr "Qt %2 (compilé avec %3)"

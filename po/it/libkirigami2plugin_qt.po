@@ -1,0 +1,139 @@
+# Vincenzo Reale <smart2128@baslug.org>, 2017, 2018, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2020-11-06 14:06+0100\n"
+"Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.08.3\n"
+"X-Qt-Contexts: true\n"
+
+#: controls/AboutPage.qml:66
+msgctxt "AboutPage|"
+msgid "About"
+msgstr "Informazioni"
+
+#: controls/AboutPage.qml:92
+#, qt-format
+msgctxt "AboutPage|"
+msgid "Send an email to %1"
+msgstr "Invia un messaggio di posta elettronica a %1"
+
+#: controls/AboutPage.qml:141
+msgctxt "AboutPage|"
+msgid "Copyright"
+msgstr "Copyright"
+
+#: controls/AboutPage.qml:179
+msgctxt "AboutPage|"
+msgid "License:"
+msgstr "Licenza:"
+
+#: controls/AboutPage.qml:196
+#, qt-format
+msgctxt "AboutPage|"
+msgid "License: %1"
+msgstr "Licenza: %1"
+
+#: controls/AboutPage.qml:207
+msgctxt "AboutPage|"
+msgid "Libraries in use"
+msgstr "Librerie in uso"
+
+#: controls/AboutPage.qml:221
+msgctxt "AboutPage|"
+msgid "Authors"
+msgstr "Autori"
+
+#: controls/AboutPage.qml:231
+msgctxt "AboutPage|"
+msgid "Credits"
+msgstr "Ringraziamenti"
+
+#: controls/AboutPage.qml:242
+msgctxt "AboutPage|"
+msgid "Translators"
+msgstr "Traduttori"
+
+#: controls/AbstractApplicationWindow.qml:328
+msgctxt "AbstractApplicationWindow|"
+msgid "Quit"
+msgstr "Esci"
+
+#: controls/ActionToolBar.qml:145
+msgctxt "ActionToolBar|"
+msgid "More Actions"
+msgstr "Altre azioni"
+
+#: controls/ContextDrawer.qml:66
+msgctxt "ContextDrawer|"
+msgid "Actions"
+msgstr "Azioni"
+
+#: controls/GlobalDrawer.qml:471
+msgctxt "GlobalDrawer|"
+msgid "Back"
+msgstr "Indietro"
+
+#: controls/GlobalDrawer.qml:562
+msgctxt "GlobalDrawer|"
+msgid "Close Sidebar"
+msgstr "Chiudi la barra laterale"
+
+#: controls/PasswordField.qml:32
+msgctxt "PasswordField|"
+msgid "Password"
+msgstr "Password"
+
+#: controls/SearchField.qml:31
+msgctxt "SearchField|"
+msgid "Search..."
+msgstr "Cerca..."
+
+#: controls/SearchField.qml:33
+msgctxt "SearchField|"
+msgid "Search"
+msgstr "Cerca"
+
+#: controls/templates/private/BackButton.qml:39
+msgctxt "BackButton|"
+msgid "Navigate Back"
+msgstr "Naviga indietro"
+
+#: controls/templates/private/ForwardButton.qml:35
+msgctxt "ForwardButton|"
+msgid "Navigate Forward"
+msgstr "Naviga in avanti"
+
+#: controls/ToolBarApplicationHeader.qml:113
+msgctxt "ToolBarApplicationHeader|"
+msgid "More Actions"
+msgstr "Altre azioni"
+
+#: controls/UrlButton.qml:45
+msgctxt "UrlButton|"
+msgid "Copy link address"
+msgstr "Copia indirizzo del collegamento"
+
+#: settings.cpp:205
+#, qt-format
+msgctxt "Settings|"
+msgid "KDE Frameworks %1"
+msgstr "KDE Frameworks %1"
+
+#: settings.cpp:207
+#, qt-format
+msgctxt "Settings|"
+msgid "The %1 windowing system"
+msgstr "Il sistema di gestione delle finestre %1"
+
+#: settings.cpp:208
+#, qt-format
+msgctxt "Settings|"
+msgid "Qt %2 (built against %3)"
+msgstr "Qt %2 (compilato con %3)"

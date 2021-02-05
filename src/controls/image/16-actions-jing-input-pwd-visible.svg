@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>-mockplus-</title>
+    <defs>
+        <filter id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.556863 0 0 0 0 0.556863 0 0 0 0 0.576471 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-10" transform="translate(-1133.000000, -478.000000)" filter="url(#filter-1)">
+            <g transform="translate(1133.000000, 478.000000)">
+                <g id="Path" transform="translate(-0.000000, -0.000000)">
+                    <polygon points="0 0 32.0000001 0 32.0000001 32.0000001 0 32.0000001"></polygon>
+                    <path d="M4.15733335,16.6226667 C3.94800002,16.2346667 3.94800002,15.7640001 4.15733335,15.3760001 C6.68000003,10.7106667 11.34,6.66666669 16.0000001,6.66666669 C20.6600001,6.66666669 25.3200001,10.7106667 27.8426668,15.3773334 C28.0520001,15.7653334 28.0520001,16.2360001 27.8426668,16.6240001 C25.3200001,21.2893334 20.6600001,25.3333334 16.0000001,25.3333334 C11.34,25.3333334 6.68000003,21.2893334 4.15733335,16.6226667 Z" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M18.8284001,13.1715734 C20.3904934,14.7336667 20.3904934,17.2663334 18.8284001,18.8284267 C17.2663067,20.3905201 14.7336401,20.3905201 13.1715467,18.8284267 C11.6094534,17.2663334 11.6094534,14.7336667 13.1715467,13.1715734 C14.7336401,11.60948 17.2663067,11.60948 18.8284001,13.1715734" stroke="#323232" stroke-width="1.9048" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

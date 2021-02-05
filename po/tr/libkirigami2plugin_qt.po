@@ -1,0 +1,143 @@
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2017-10-23 09:50+0000\n"
+"Last-Translator: Kaan <kaanozdincer@gmail.com>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-Qt-Contexts: true\n"
+"X-POOTLE-MTIME: 1497529432.000000\n"
+
+#: controls/AboutPage.qml:66
+msgctxt "AboutPage|"
+msgid "About"
+msgstr ""
+
+#: controls/AboutPage.qml:92
+#, qt-format
+msgctxt "AboutPage|"
+msgid "Send an email to %1"
+msgstr ""
+
+#: controls/AboutPage.qml:141
+msgctxt "AboutPage|"
+msgid "Copyright"
+msgstr ""
+
+#: controls/AboutPage.qml:179
+msgctxt "AboutPage|"
+msgid "License:"
+msgstr ""
+
+#: controls/AboutPage.qml:196
+#, qt-format
+msgctxt "AboutPage|"
+msgid "License: %1"
+msgstr ""
+
+#: controls/AboutPage.qml:207
+msgctxt "AboutPage|"
+msgid "Libraries in use"
+msgstr ""
+
+#: controls/AboutPage.qml:221
+msgctxt "AboutPage|"
+msgid "Authors"
+msgstr ""
+
+#: controls/AboutPage.qml:231
+msgctxt "AboutPage|"
+msgid "Credits"
+msgstr ""
+
+#: controls/AboutPage.qml:242
+msgctxt "AboutPage|"
+msgid "Translators"
+msgstr ""
+
+#: controls/AbstractApplicationWindow.qml:328
+msgctxt "AbstractApplicationWindow|"
+msgid "Quit"
+msgstr ""
+
+#: controls/ActionToolBar.qml:145
+#, fuzzy
+#| msgctxt "ContextDrawer|"
+#| msgid "Actions"
+msgctxt "ActionToolBar|"
+msgid "More Actions"
+msgstr "Eylemler"
+
+#: controls/ContextDrawer.qml:66
+msgctxt "ContextDrawer|"
+msgid "Actions"
+msgstr "Eylemler"
+
+#: controls/GlobalDrawer.qml:471
+msgctxt "GlobalDrawer|"
+msgid "Back"
+msgstr "Geri"
+
+#: controls/GlobalDrawer.qml:562
+msgctxt "GlobalDrawer|"
+msgid "Close Sidebar"
+msgstr ""
+
+#: controls/PasswordField.qml:32
+msgctxt "PasswordField|"
+msgid "Password"
+msgstr ""
+
+#: controls/SearchField.qml:31
+msgctxt "SearchField|"
+msgid "Search..."
+msgstr ""
+
+#: controls/SearchField.qml:33
+msgctxt "SearchField|"
+msgid "Search"
+msgstr ""
+
+#: controls/templates/private/BackButton.qml:39
+msgctxt "BackButton|"
+msgid "Navigate Back"
+msgstr "Geriye Git"
+
+#: controls/templates/private/ForwardButton.qml:35
+msgctxt "ForwardButton|"
+msgid "Navigate Forward"
+msgstr "İleri Git"
+
+#: controls/ToolBarApplicationHeader.qml:113
+#, fuzzy
+#| msgctxt "ContextDrawer|"
+#| msgid "Actions"
+msgctxt "ToolBarApplicationHeader|"
+msgid "More Actions"
+msgstr "Eylemler"
+
+#: controls/UrlButton.qml:45
+msgctxt "UrlButton|"
+msgid "Copy link address"
+msgstr ""
+
+#: settings.cpp:205
+#, qt-format
+msgctxt "Settings|"
+msgid "KDE Frameworks %1"
+msgstr ""
+
+#: settings.cpp:207
+#, qt-format
+msgctxt "Settings|"
+msgid "The %1 windowing system"
+msgstr ""
+
+#: settings.cpp:208
+#, qt-format
+msgctxt "Settings|"
+msgid "Qt %2 (built against %3)"
+msgstr ""

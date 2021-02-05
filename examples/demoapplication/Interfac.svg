@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="44px" viewBox="0 0 44 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Interface, Essential/Heart, Favorite 2备份 2</title>
+    <defs>
+        <filter id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.556863 0 0 0 0 0.556863 0 0 0 0 0.576471 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Interface,-Essential/Heart,-Favorite-2备份-2" transform="translate(-2093.000000, -253.000000)" filter="url(#filter-1)">
+            <g transform="translate(2093.000000, 253.000000)">
+                <g id="Path" transform="translate(-0.000000, -0.000000)">
+                    <polygon points="0 0 44.0000002 0 44.0000002 44.0000002 0 44.0000002"></polygon>
+                    <path d="M28.7833335,7.33333336 C34.5950001,7.33333336 38.5,12.7966667 38.5,17.8933334 C38.5,28.2150001 22.2933334,36.6666668 22,36.6666668 C21.7066668,36.6666668 5.50000002,28.2150001 5.50000002,17.8933334 C5.50000002,12.7966667 9.40500004,7.33333336 15.2166667,7.33333336 C18.5533334,7.33333336 20.7350001,9.0016667 22,10.4683334 C23.2650001,9.0016667 25.4466668,7.33333336 28.7833335,7.33333336 Z" stroke="#323232" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

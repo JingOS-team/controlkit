@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Music, Audio/Play 2备份 4</title>
+    <defs>
+        <filter id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.556863 0 0 0 0 0.556863 0 0 0 0 0.576471 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+        <filter id="filter-2">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.556863 0 0 0 0 0.556863 0 0 0 0 0.576471 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Music,-Audio/Play-2备份-4" transform="translate(-2085.000000, -387.000000)" filter="url(#filter-1)">
+            <g transform="translate(2085.000000, 387.000000)">
+                <g id="Group" transform="translate(-0.000000, -0.000000)">
+                    <g filter="url(#filter-2)" id="Interface,-Essential/Plus,-Add-2">
+                        <g transform="translate(0.308635, 0.308635)">
+                            <g id="Group" transform="translate(-0.000000, -0.000000)">
+                                <polygon id="Path" points="0 0 58.1996328 0 58.1996328 58.1996328 0 58.1996328"></polygon>
+                                <rect id="Rectangle" stroke="#323232" stroke-width="3.24324324" stroke-linecap="round" stroke-linejoin="round" x="7.2658605" y="7.2658605" width="43.6679118" height="43.6679118" rx="13.451087"></rect>
+                                <polygon id="Path" points="0 0 58.2238824 0 58.2238824 58.2238824 0 58.2238824"></polygon>
+                            </g>
+                        </g>
+                    </g>
+                    <g id="Business,-Products/cv-resume-checkmark" transform="translate(0.000000, 0.000000)">
+                        <g id="Group" transform="translate(0.296509, 0.296509)"></g>
+                    </g>
+                    <path d="M26.3507496,22.5392141 L35.7645402,28.106979 C36.9552077,28.8102246 36.9552077,30.5343887 35.7645402,31.2376342 L26.3507496,36.8053991 C25.1382572,37.5231946 23.6056669,36.6477751 23.6056669,35.238859 L23.6056669,24.1057542 C23.6056669,22.6968381 25.1382572,21.8214186 26.3507496,22.5392141 L26.3507496,22.5392141 Z" id="Path" stroke="#323232" stroke-width="3.24324324" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

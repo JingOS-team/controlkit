@@ -208,7 +208,7 @@ Item {
             }
             Connections {
                 target: root.hasGlobalDrawer ? globalDrawer : null
-                onPositionChanged: {
+                function onPositionChanged() {
                     if ( globalDrawer && globalDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
                         if (Qt.application.layoutDirection === Qt.LeftToRight) {
                             button.x = globalDrawer.contentItem.width * globalDrawer.position + root.width/2 - button.width/2;
@@ -220,7 +220,7 @@ Item {
             }
             Connections {
                 target: root.hasContextDrawer ? contextDrawer : null
-                onPositionChanged: {
+                function onPositionChanged() {
                     if (contextDrawer && contextDrawer.modal && !mouseArea.pressed && !edgeMouseArea.pressed && !fakeContextMenuButton.pressed) {
                         if (Qt.application.layoutDirection === Qt.LeftToRight) {
                             button.x = root.width/2 - button.width/2 - contextDrawer.contentItem.width * contextDrawer.position;
@@ -265,7 +265,7 @@ Item {
                         height: width
                         source: root.action && root.action.icon.name ? root.action.icon.name : ""
                         selected: true
-                        color: root.action && root.action.color && root.action.color.a > 0 ? root.action.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
+                        color: root.action && root.action.icon && root.action.icon.color && root.action.icon.color.a > 0 ? root.action.icon.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
                     }
                     Behavior on color {
                         ColorAnimation {
@@ -318,7 +318,7 @@ Item {
                         width: Units.iconSizes.smallMedium
                         height: width
                         selected: leftButtonGraphics.pressed
-                        color: root.action && root.action.color && root.action.color.a > 0 ? root.action.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
+                        color: root.leftAction && root.leftAction.icon && root.leftAction.icon.color && root.leftAction.icon.color.a > 0 ? root.leftAction.icon.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
                         anchors {
                             left: parent.left
                             verticalCenter: parent.verticalCenter
@@ -364,7 +364,7 @@ Item {
                         width: Units.iconSizes.smallMedium
                         height: width
                         selected: rightButtonGraphics.pressed
-                        color: root.action && root.action.color && root.action.color.a > 0 ? root.action.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
+                        color: root.rightAction && root.rightAction.icon && root.rightAction.icon.color && root.rightAction.icon.color.a > 0 ? root.rightAction.icon.color : (selected ? Theme.highlightedTextColor : Theme.textColor)
                         anchors {
                             right: parent.right
                             verticalCenter: parent.verticalCenter

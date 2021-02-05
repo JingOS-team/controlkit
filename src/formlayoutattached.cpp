@@ -25,7 +25,7 @@ void FormLayoutAttached::setLabel(const QString &text)
     }
 
     m_label = text;
-    emit labelChanged();
+    Q_EMIT labelChanged();
 }
 
 QString FormLayoutAttached::label() const
@@ -40,7 +40,7 @@ void FormLayoutAttached::setLabelAlignment(int section)
 	}
 
 	m_labelAlignment = section;
-	emit labelAlignmentChanged();
+	Q_EMIT labelAlignmentChanged();
 }
 
 int FormLayoutAttached::labelAlignment() const
@@ -55,7 +55,7 @@ void FormLayoutAttached::setIsSection(bool section)
     }
 
     m_isSection = section;
-    emit isSectionChanged();
+    Q_EMIT isSectionChanged();
 }
 
 bool FormLayoutAttached::isSection() const
@@ -70,7 +70,7 @@ void FormLayoutAttached::setCheckable(bool checkable)
     }
 
     m_checkable = checkable;
-    emit checkableChanged();
+    Q_EMIT checkableChanged();
 }
 
 bool FormLayoutAttached::checkable() const
@@ -85,7 +85,7 @@ void FormLayoutAttached::setChecked(bool checked)
     }
 
     m_checked = checked;
-    emit checkedChanged();
+    Q_EMIT checkedChanged();
 }
 
 bool FormLayoutAttached::checked() const
@@ -100,7 +100,7 @@ void FormLayoutAttached::setEnabled(bool enabled)
     }
 
     m_enabled = enabled;
-    emit enabledChanged();
+    Q_EMIT enabledChanged();
 }
 
 bool FormLayoutAttached::enabled() const
@@ -120,7 +120,7 @@ void FormLayoutAttached::setBuddyFor(QQuickItem *buddyfor)
     }
 
     m_buddyFor = buddyfor;
-    emit buddyForChanged();
+    Q_EMIT buddyForChanged();
 }
 
 FormLayoutAttached *FormLayoutAttached::qmlAttachedProperties(QObject *object)

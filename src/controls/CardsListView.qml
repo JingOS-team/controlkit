@@ -21,7 +21,7 @@ import "private"
  * The choice between using this view with AbstractCard or a normal ListView
  * with AbstractListItem/BasicListItem is purely a choice based on aesthetics alone.
  * It is discouraged to tweak the properties of this ListView.
- * @inherits ListView
+ * @inherit QtQuick.ListView
  * @since 2.4
  */
 CardsListViewPrivate {

@@ -13,7 +13,7 @@ import "templates" as T
  *
  * It's intended to make all listviews look coherent.
  *
- * @inherit QtQuick.Item
+ * @inherit org::kde::kirigami::templates::AbstractListItem
  */
 T.AbstractListItem {
     id: listItem

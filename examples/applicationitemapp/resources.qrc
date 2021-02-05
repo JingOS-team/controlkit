@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file alias="main.qml">main.qml</file>
+        <file alias="today_number.png">today_number.png</file>
+        <file alias="selected.png">selected.png</file>
     </qresource>
 </RCC>

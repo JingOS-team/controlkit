@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 4</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="桌面" transform="translate(-176.000000, -110.000000)">
+            <g id="编组-16" transform="translate(155.000000, 110.000000)">
+                <g id="编组-32" transform="translate(21.000000, 0.000000)">
+                    <rect id="矩形备份-28" fill="#354146" x="0" y="0" width="100" height="100" rx="24"></rect>
+                    <g id="编组-2" transform="translate(15.000000, 24.000000)">
+                        <rect id="矩形" fill="#FFFFFF" x="0" y="19" width="5" height="13" rx="2.5"></rect>
+                        <rect id="矩形备份-30" fill="#FFFFFF" x="65" y="17" width="5" height="18" rx="2.5"></rect>
+                        <rect id="矩形备份" fill="#FFFFFF" x="13" y="10" width="5" height="31" rx="2.5"></rect>
+                        <rect id="矩形备份-32" fill="#FF3D49" x="26" y="0" width="5" height="52" rx="2.5"></rect>
+                        <rect id="矩形备份-22" fill="#FFFFFF" x="39" y="13" width="5" height="26" rx="2.5"></rect>
+                        <rect id="矩形备份-29" fill="#FFFFFF" x="52" y="6" width="5" height="39" rx="2.5"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

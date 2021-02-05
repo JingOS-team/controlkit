@@ -11,7 +11,7 @@ import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.12 as Kirigami
 
-/**
+/*
  * PassiveNotification is a type for small, passive and inline
 notifications in the app.
  * used to show messages of limited importance that make sense only when

@@ -20,11 +20,15 @@ Flickable {
     contentWidth: mainLayout.width
     clip: true
     boundsBehavior: Flickable.StopAtBounds
+    interactive: Kirigami.Settings.hasTransientTouchInput
 
     Connections {
         target: pageRow
-        onCurrentIndexChanged: {
+        function onCurrentIndexChanged() {
             var currentItem = mainLayout.children[pageRow.currentIndex];
+            if (!currentItem)
+                return;
+
             listScrollAnim.running = false
             listScrollAnim.from = root.contentX;
             listScrollAnim.to = Math.max( 0,
