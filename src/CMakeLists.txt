@@ -113,6 +113,11 @@ if (BUILD_SHARED_LIBS)
 
     install(DIRECTORY controls/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2)
 
+    file(GLOB ICONS_SRCS "controls/image/*.png")
+    include(ECMInstallIcons)
+    #install(FILES ${ICONS_SRCS} DESTINATION ${KDE_INSTALL_FULL_ICONDIR}/breeze/actions/12/)
+    ecm_install_icons( ICONS ${ICONS_SRCS} DESTINATION ${KDE_INSTALL_ICONDIR} )
+
     if (DESKTOP_ENABLED)
         install(DIRECTORY styles/org.kde.desktop DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles)
     endif()

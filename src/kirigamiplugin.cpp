@@ -2,6 +2,7 @@
  *  SPDX-FileCopyrightText: 2009 Alan Alpert <alan.alpert@nokia.com>
  *  SPDX-FileCopyrightText: 2010 Ménard Alexis <menard@kde.org>
  *  SPDX-FileCopyrightText: 2010 Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2021 Rui Wang <wangrui@jingos.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -31,6 +32,7 @@
 #include <QQuickStyle>
 #include <QGuiApplication>
 #include <QClipboard>
+#include <QKeyEvent>
 
 #include "libkirigami/platformtheme.h"
 
@@ -41,6 +43,44 @@ static QString s_selectedStyle;
 #include <qrc_kirigami.cpp>
 #endif
 
+
+class KeyEventHelperPrivate : public QObject
+{
+    Q_OBJECT
+    public:
+        KeyEventHelperPrivate(QObject *parent = nullptr)
+        :QObject(parent)
+        ,m_object(NULL)
+        {
+
+        }
+        Q_INVOKABLE void setKeyEventObject(QObject* object)
+        {
+            m_object = object;
+        }
+
+        Q_INVOKABLE  QObject* getKeyEventObject() const
+        {
+            return m_object;
+        }        
+
+        static KeyEventHelperPrivate* instance()
+        {
+            if(m_instance == NULL)
+            {
+                m_instance = new KeyEventHelperPrivate();
+            }
+            return m_instance;
+        }
+    Q_SIGNALS:
+        void backKeyEvent();
+    private:
+        static KeyEventHelperPrivate* m_instance;
+        QObject *m_object;
+};
+
+KeyEventHelperPrivate *KeyEventHelperPrivate::m_instance = nullptr;
+
 class CopyHelperPrivate : public QObject
 {
     Q_OBJECT
@@ -48,7 +88,7 @@ class CopyHelperPrivate : public QObject
         Q_INVOKABLE static void copyTextToClipboard(const QString& text)
         {
             qGuiApp->clipboard()->setText(text);
-        }
+        }     
 };
 
 // we can't do this in the plugin object directly, as that can live in a different thread
@@ -61,6 +101,12 @@ public:
     {
         if (event->type() == QEvent::LanguageChange && receiver == QCoreApplication::instance()) {
             emit languageChangeEvent();
+        } else if(event->type() == QEvent::KeyPress && receiver == KeyEventHelperPrivate::instance()->getKeyEventObject()) {
+           QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+           
+            if(keyEvent->nativeScanCode() == 269025070) {
+                emit KeyEventHelperPrivate::instance()->backKeyEvent();
+            }
         }
         return QObject::eventFilter(receiver, event);
     }
@@ -217,6 +263,7 @@ void KirigamiPlugin::registerTypes(const char *uri)
     //2.6
     qmlRegisterType(componentUrl(QStringLiteral("AboutPage.qml")), uri, 2, 6, "AboutPage");
     qmlRegisterType(componentUrl(QStringLiteral("LinkButton.qml")), uri, 2, 6, "LinkButton");
+
     qmlRegisterType(componentUrl(QStringLiteral("UrlButton.qml")), uri, 2, 6, "UrlButton");
     qmlRegisterSingletonType<CopyHelperPrivate>("org.kde.kirigami.private", 2, 6, "CopyHelperPrivate", [] (QQmlEngine*, QJSEngine*) -> QObject* { return new CopyHelperPrivate; });
 
@@ -271,6 +318,28 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterSingletonType<DisplayHint>(uri, 2, 14, "DisplayHint", [](QQmlEngine*, QJSEngine*) -> QObject* { return new DisplayHint; });
     qmlRegisterType<SizeGroup>(uri, 2, 14, "SizeGroup");
 
+    // 2.15
+    qmlRegisterType(componentUrl(QStringLiteral("JButton.qml")), uri, 2, 15, "JButton");
+    qmlRegisterType(componentUrl(QStringLiteral("JIconButton.qml")), uri, 2, 15, "JIconButton");
+    qmlRegisterType(componentUrl(QStringLiteral("JLabel.qml")), uri, 2, 15, "JLabel");
+    qmlRegisterType(componentUrl(QStringLiteral("JSolidButton.qml")), uri, 2, 15, "JSolidButton");
+    qmlRegisterType(componentUrl(QStringLiteral("JArrowPopup.qml")), uri, 2, 15, "JArrowPopup");
+    qmlRegisterType(componentUrl(QStringLiteral("JMouseSolid.qml")), uri, 2, 15, "JMouseSolid");
+    qmlRegisterType(componentUrl(QStringLiteral("JSearchField.qml")), uri, 2, 15, "JSearchField");
+    qmlRegisterType(componentUrl(QStringLiteral("JPopupMenu.qml")), uri, 2, 15, "JPopupMenu");
+    qmlRegisterType(componentUrl(QStringLiteral("JDialog.qml")), uri, 2, 15, "JDialog");
+    qmlRegisterType(componentUrl(QStringLiteral("JBlurBackground.qml")), uri, 2, 15, "JBlurBackground");
+    qmlRegisterType(componentUrl(QStringLiteral("JMouseHover.qml")), uri, 2, 15, "JMouseHover");
+    qmlRegisterType(componentUrl(QStringLiteral("JMenuSeparator.qml")), uri, 2, 15, "JMenuSeparator");
+    qmlRegisterType(componentUrl(QStringLiteral("JMouseHoverMask.qml")), uri, 2, 15, "JMouseHoverMask");
+
+
+    qmlRegisterSingletonType(componentUrl(QStringLiteral("private/ConstValue.qml")), uri, 2, 15, "ConstValue");
+
+    qmlRegisterSingletonType<KeyEventHelperPrivate>(uri, 2, 15, "KeyEventHelper", [](QQmlEngine *, QJSEngine *) -> QObject * {
+        return static_cast<QObject *>(KeyEventHelperPrivate::instance());
+    });
+
     qmlProtectModule(uri, 2);
 }
 
@@ -279,5 +348,6 @@ void KirigamiPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
     Q_UNUSED(uri);
     connect(this, &KirigamiPlugin::languageChangeEvent, engine, &QQmlEngine::retranslate);
 }
+
 
 #include "kirigamiplugin.moc"

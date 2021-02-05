@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2011 Marco Martin <mart@kde.org>
  *  SPDX-FileCopyrightText: 2014 Aleix Pol Gonzalez <aleixpol@blue-systems.com>
+ *  SPDX-FileCopyrightText: 2021 Rui Wang <wangrui@jingos.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -14,7 +15,6 @@
 #include <QIcon>
 #include <QBitmap>
 #include <QSGTexture>
-#include <QDebug>
 #include <QSharedPointer>
 #include <QtQml>
 #include <QQuickImageProvider>
@@ -301,15 +301,17 @@ void Icon::updatePolish()
             m_icon.fill(Qt::transparent);
         }
 
-        const QColor tintColor = !m_color.isValid() || m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
 
-        //TODO: initialize m_isMask with icon.isMask()
-        if (tintColor.alpha() > 0 && (isMask() || guessMonochrome(m_icon))) {
-            QPainter p(&m_icon);
-            p.setCompositionMode(QPainter::CompositionMode_SourceIn);
-            p.fillRect(m_icon.rect(), tintColor);
-            p.end();
-        }
+        // just remove to show right images by wangqiang
+        // const QColor tintColor = !m_color.isValid() || m_color == Qt::transparent ? (m_selected ? m_theme->highlightedTextColor() : m_theme->textColor()) : m_color;
+
+        // //TODO: initialize m_isMask with icon.isMask()
+        // if (tintColor.alpha() > 0 && (isMask() || guessMonochrome(m_icon))) {
+        //     QPainter p(&m_icon);
+        //     p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        //     p.fillRect(m_icon.rect(), tintColor);
+        //     p.end();
+        // }
     }
     m_changed = true;
     updatePaintedGeometry();

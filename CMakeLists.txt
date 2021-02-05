@@ -17,7 +17,7 @@ endif()
 
 option(BUILD_SHARED_LIBS "Build a shared module" ON)
 option(DESKTOP_ENABLED "Build and install The Desktop style" ON)
-option(BUILD_EXAMPLES "Build and install examples" OFF)
+option(BUILD_EXAMPLES "Build and install examples" ON)
 option(DISABLE_DBUS "Build without D-Bus support" OFF)
 if(DEFINED STATIC_LIBRARY)
     message(FATAL_ERROR "Use the BUILD_SHARED_LIBS=OFF option to build a static library, STATIC_LIBRARY is no longer a supported option")
@@ -83,6 +83,11 @@ install(FILES
     COMPONENT Devel
 )
 
+#file(GLOB ICONS_SRCS "src/controls/image/*.png")
+#include(ECMInstallIcons)
+#install(FILES ${ICONS_SRCS} DESTINATION ${KDE_INSTALL_FULL_ICONDIR}/breeze/actions/12/)
+#ecm_install_icons( ICONS ${ICONS_SRCS} DESTINATION ${KDE_INSTALL_ICONDIR} )
+
 install(EXPORT KF5Kirigami2Targets
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
     FILE KF5Kirigami2Targets.cmake
@@ -129,3 +134,4 @@ if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
 endif()
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+

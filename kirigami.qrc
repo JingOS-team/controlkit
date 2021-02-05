@@ -94,5 +94,20 @@
         <file alias="styles/org.kde.desktop/AbstractApplicationHeader.qml">src/styles/org.kde.desktop/AbstractApplicationHeader.qml</file>
         <file alias="PlaceholderMessage.qml">src/controls/PlaceholderMessage.qml</file>
         <file alias="ShadowedImage.qml">src/controls/ShadowedImage.qml</file>
+        <file alias="PrivateMouseHover.qml">src/controls/private/PrivateMouseHover.qml</file>
+        <file alias="PrivateMouseSolid.qml">src/controls/private/PrivateMouseSolid.qml</file>
+        <file alias="JButton.qml">src/controls/JButton.qml</file>
+        <file alias="JIconButton.qml">src/controls/JIconButton.qml</file>
+        <file alias="JLabel.qml">src/controls/JLabel.qml</file>
+        <file alias="JSolidButton.qml">src/controls/JSolidButton.qml</file>
+        <file alias="JMouseSolid.qml">src/controls/JMouseSolid.qml</file>
+        <file alias="JSearchField.qml">src/controls/JSearchField.qml</file>
+        <file alias="ConstValue.qml">src/controls/private/ConstValue.qml</file>
+        <file alias="JPopupMenu.qml">src/controls/JPopupMenu.qml</file>
+        <file alias="JDialog.qml">src/controls/JDialog.qml</file>
+        <file alias="JBlurBackground.qml">src/controls/JBlurBackground.qml</file>
+        <file alias="JMouseHover.qml">src/controls/JMouseHover.qml</file>
+        <file alias="JMenuSeparator.qml">src/controls/JMenuSeparator.qml</file>
+        <file alias="JMouseHoverMask.qml">src/controls/JMouseHoverMask.qml</file>
     </qresource>
 </RCC>
