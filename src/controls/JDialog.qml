@@ -38,7 +38,7 @@ ApplicationWindow
 
 Window
    |
-   |- QQuickContentItem
+   |- QQuickRootItem (contentItem)
          |
          |-(实际内容)
 */

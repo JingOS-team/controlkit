@@ -1,3 +1,23 @@
+/*
+ * Copyright 2021 Lele Huan <huanlele@jingos.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License or (at your option) version 3 or any later version
+ * accepted by the membership of KDE e.V. (or its successor approved
+ * by the membership of KDE e.V.), which shall act as a proxy
+ * defined in Section 14 of version 3 of the license.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import QtQuick 2.12
 import QtQml 2.12
 import org.kde.kirigami 2.5
@@ -162,13 +182,10 @@ PinchArea{
         }
     }
 
-    //Item {
-
-        Loader{
-            id: editImage
-            sourceComponent: pinchItem.isGif === true ? gifImageCom : staticImageCom
-        }
-   // }
+    Loader{
+        id: editImage
+        sourceComponent: pinchItem.isGif === true ? gifImageCom : staticImageCom
+    }
 
     Component{
         id:staticImageCom
@@ -397,7 +414,7 @@ PinchArea{
     }
 
     function initParam() {
-        console.log("initParam  source is " + pinchItem.source)
+        //console.log("initParam  source is " + pinchItem.source)
         var sWidth = editImage.item.sourceSize.width;
         var sHeight = editImage.item.sourceSize.height;
 
@@ -413,8 +430,7 @@ PinchArea{
         }
 
         console.log("invoke  init param   soursize is " + editImage.item.sourceSize
-                    + "  pinchitem width is " + pinchItem.width + "  height is " + pinchItem.height + "   source " + pinchItem.source
-                    + "  is gif " + pinchItem.isGif)
+                    + "  pinchitem width is " + pinchItem.width + "  height is " + pinchItem.height + "   source " + pinchItem.source)
 
         var rateX = sWidth * 1.0 / pinchItem.width
         var rateY = sHeight * 1.0 / pinchItem.height
