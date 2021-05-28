@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/com/jingos/controlkit.1.0">
+        <file alias="qmldir">controls1.0/qmldir</file>
+        <file alias="Button.qml">controls1.0/Button/Button.qml</file>
+        <file alias="Label.qml">controls1.0/Label/Label.qml</file>
+    </qresource>
+</RCC>

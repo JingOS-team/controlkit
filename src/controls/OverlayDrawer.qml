@@ -18,6 +18,7 @@ import "templates" as T
  * For example in Okular Mobile, an Overlay Drawer is used to display
  * thumbnails of all pages within a document along with a search field.
  * This is used for the distinct task of navigating to another page.
+ * @inherit org::kde::kirigami::templates::OverlayDrawer
  */
 T.OverlayDrawer {
     id: root

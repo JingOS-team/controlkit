@@ -65,6 +65,7 @@ Kirigami.AbstractApplicationHeader {
         RowLayout {
             id: buttonsLayout
             Layout.fillHeight: true
+            Layout.preferredHeight: Math.max(backButton.visible ? backButton.implicitHeight : 0, forwardButton.visible ? forwardButton.implicitHeight : 0)
 
             Layout.leftMargin: leftHandleAnchor.visible ? Kirigami.Units.smallSpacing : 0
 
@@ -75,12 +76,15 @@ Kirigami.AbstractApplicationHeader {
             TemplatesPrivate.BackButton {
                 id: backButton
                 Layout.leftMargin: leftHandleAnchor.visible ? 0 : Kirigami.Units.smallSpacing
-                Layout.preferredWidth: height
+                Layout.minimumWidth: implicitHeight
+                Layout.minimumHeight: implicitHeight
                 Layout.maximumHeight: buttonsLayout.height
             }
             TemplatesPrivate.ForwardButton {
+                id: forwardButton
+                Layout.minimumWidth: implicitHeight
+                Layout.minimumHeight: implicitHeight
                 Layout.maximumHeight: buttonsLayout.height
-                Layout.preferredWidth: height
             }
         }
 

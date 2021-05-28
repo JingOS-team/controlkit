@@ -58,7 +58,7 @@ public:
                 QObject::connect(m_interface, &OrgKdeKWinTabletModeManagerInterface::tabletModeAvailableChanged,
                         q, [this](bool avail) {
                     isTabletModeAvailable = avail;
-                    emit q->tabletModeAvailableChanged(avail);
+                    Q_EMIT q->tabletModeAvailableChanged(avail);
                 });
             } else {
                 isTabletModeAvailable = false;
@@ -89,7 +89,7 @@ void TabletModeWatcherPrivate::setIsTablet(bool tablet)
     }
 
     isTabletMode = tablet;
-    emit q->tabletModeChanged(tablet);
+    Q_EMIT q->tabletModeChanged(tablet);
 }
 
 

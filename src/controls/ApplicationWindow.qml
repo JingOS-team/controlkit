@@ -98,12 +98,8 @@ AbstractApplicationWindow {
      */
     property alias pageStack: __pageStack
 
-    //redefines here as here we can know a pointer to PageRow
-    wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth * 1.5
-
     // whether is darkMode default is false
     property bool darkMode : false
-
 
     // whether is show fastBlur, default is false 
     property bool fastBlurMode : false
@@ -117,18 +113,21 @@ AbstractApplicationWindow {
     // default value is "#F7F7F7"
     property color fastBlurColor: "#F7F7F7"
 
-    Component.onCompleted: {
+    //redefines here as here we can know a pointer to PageRow
+    wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth * 1.5
 
+    Component.onCompleted: {
         if (pageStack.currentItem) {
             pageStack.currentItem.forceActiveFocus()
         }
-
         Kirigami15.KeyEventHelper.setKeyEventObject(root);
     }
 
     background: Item {
         anchors.fill: parent
         visible: root.fastBlurMode
+
+		/*
         Image{
             id:bgImg
             anchors.fill: parent
@@ -136,6 +135,7 @@ AbstractApplicationWindow {
             visible: true
             smooth: true
         }
+        */
         Rectangle {
             anchors.fill: parent
             color: root.fastBlurColor
@@ -152,8 +152,7 @@ AbstractApplicationWindow {
 
     PageRow {
         id: __pageStack
-        globalToolBar.style: Kirigami.ApplicationHeaderStyle.Auto
-        width: parent.width
+        objectName: "rootPageRow"
         anchors {
             bottom: parent.bottom
             top: parent.top
@@ -164,6 +163,14 @@ AbstractApplicationWindow {
                     root.reachableMode = false;
                 }
             }
+        }
+
+        globalToolBar.style: Kirigami.ApplicationHeaderStyle.Auto
+        width: parent.width
+
+        focus: true
+        function applicationWindow(){
+            return root.applicationWindow();
         }
         //FIXME
         onCurrentIndexChanged: root.reachableMode = false;
@@ -179,8 +186,7 @@ AbstractApplicationWindow {
                     backEvent.accepted = true;
                 }
             } else {
-                if(root.pageStack.currentItem != null && root.pageStack.currentItem.backRequested != undefined)
-                {
+                if(root.pageStack.currentItem != null && root.pageStack.currentItem.backRequested != undefined) {
                     root.pageStack.currentItem.backRequested(backEvent);
                     if (root.pageStack.currentIndex >= 1) {
                         if (!backEvent.accepted) {
@@ -197,7 +203,6 @@ AbstractApplicationWindow {
                 else
                     root.showMinimized();
             }
-
         }
         function goForward() {
             root.pageStack.currentIndex = Math.min(root.pageStack.depth-1, root.pageStack.currentIndex + 1);
@@ -234,14 +239,15 @@ AbstractApplicationWindow {
             sequence: "Forward"
             onActivated: __pageStack.goForward();
         }
+
         Shortcut {
             sequence: StandardKey.Forward
             onActivated: __pageStack.goForward();
         }
+        
         Shortcut {
             sequence: StandardKey.Back
             onActivated: __pageStack.goBack();
         }
-        focus: true
     }
 }

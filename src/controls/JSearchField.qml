@@ -20,6 +20,7 @@
 
 
 import QtQuick 2.6
+import QtQml 2.12
 import QtQuick.Controls 2.1 as Controls
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.kirigami 2.15
@@ -29,8 +30,13 @@ Controls.TextField
     id: textField
 
     property string focusSequence
+    property bool alwaysShowSearchIcon: false
     property list<QtObject> leftActions
     property list<QtObject> rightActions
+    property color bgColor: "#0c000000"
+    property bool showPassword: false
+
+    echoMode: showPassword ? TextInput.Password : TextInput.Normal
 
     signal leftActionTrigger()
     signal rightActionTrigger()
@@ -38,7 +44,7 @@ Controls.TextField
     Accessible.name: qsTr("Search")
     Accessible.searchEdit: true
 
-    leftPadding: Kirigami.Units.gridUnit - 10
+    leftPadding: alwaysShowSearchIcon ? leftActionsRow.width : 10
     rightPadding: rightActionsRow.width
 
     placeholderText: ""
@@ -58,15 +64,14 @@ Controls.TextField
         width:parent.width
         height: parent.height
 
-        color:"#000000"
-        opacity: 0.05
+        color:textField.bgColor
         radius: parent.height*0.36
     }
 
     leftActions:[
         Kirigami.Action {
             icon.name: "jing-search-bar"
-            visible: (!textField.focus && (textField.text.length <= 0))
+            visible: textField.alwaysShowSearchIcon === true || (textField.activeFocus === false && (textField.text.length <= 0))
 
             onTriggered:{
                 textField.leftActionTrigger()
@@ -84,6 +89,17 @@ Controls.TextField
                 textField.accepted()
                 textField.focus = false
                 textField.rightActionTrigger()
+            }
+        },
+        Kirigami.Action {
+            icon.name:  textField.echoMode === TextInput.Normal ?  "jing-input-pwd-visible" : "jing-input-pwd-hidden"
+            visible: textField.showPassword
+            onTriggered: {
+                if(textField.echoMode === TextInput.Normal){
+                    textField.echoMode = TextInput.Password
+                } else {
+                    textField.echoMode = TextInput.Normal;
+                }
             }
         }
     ]
@@ -106,7 +122,15 @@ Controls.TextField
 
             interval: 700
             repeat: true
-            running: textField.focus
+
+            //running: textField.focus
+            running: textField.activeFocus
+
+            onRunningChanged: {
+                if(running === false){
+                    cursorBg.visible = false
+                }
+            }
 
             onTriggered: {
                 if(timer.running) {
@@ -117,10 +141,12 @@ Controls.TextField
             }
         }
 
-        Connections {
-            target: textField
-            onFocusChanged: cursorBg.visible = focus
-        }
+//        Connections {
+//            target: textField
+//            function onActiveFocusChanged(){
+//                cursorBg.visible = focus
+//            }
+//        }
     }
 
     Row {
@@ -159,7 +185,7 @@ Controls.TextField
         anchors.verticalCenter: parent.verticalCenter
         
         height: textField.implicitHeight - 2 * Kirigami.Units.smallSpacing
-        padding: Kirigami.Units.smallSpacing
+        //padding: Kirigami.Units.smallSpacing
         layoutDirection: Qt.RightToLeft
 
         Repeater {
@@ -167,9 +193,9 @@ Controls.TextField
 
             JIconButton{
                 anchors.verticalCenter: parent.verticalCenter
-
-                height: parent.height + Kirigami.Units.smallSpacing * 2
-                width: parent.height + Kirigami.Units.smallSpacing * 2
+                padding: 2
+                height: parent.height
+                width: parent.height
 
                 source: modelData.icon.name.length > 0 ? modelData.icon.name : modelData.icon.source
                 visible: modelData.visible

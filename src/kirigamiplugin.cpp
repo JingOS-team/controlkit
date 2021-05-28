@@ -27,6 +27,14 @@
 #include "toolbarlayout.h"
 #include "sizegroup.h"
 
+//设置壁纸
+#include "ImagePreview/jwallpapersettings.h"
+
+//图片预览
+#include "ImagePreview/jimagedocument.h"
+#include "ImagePreview/jresizehandle.h"
+#include "ImagePreview/jresizerectangle.h"
+
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQuickStyle>
@@ -88,7 +96,7 @@ class CopyHelperPrivate : public QObject
         Q_INVOKABLE static void copyTextToClipboard(const QString& text)
         {
             qGuiApp->clipboard()->setText(text);
-        }     
+        }
 };
 
 // we can't do this in the plugin object directly, as that can live in a different thread
@@ -100,12 +108,12 @@ public:
     bool eventFilter(QObject *receiver, QEvent *event) override
     {
         if (event->type() == QEvent::LanguageChange && receiver == QCoreApplication::instance()) {
-            emit languageChangeEvent();
+            Q_EMIT languageChangeEvent();
         } else if(event->type() == QEvent::KeyPress && receiver == KeyEventHelperPrivate::instance()->getKeyEventObject()) {
            QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
            
             if(keyEvent->nativeScanCode() == 269025070) {
-                emit KeyEventHelperPrivate::instance()->backKeyEvent();
+                Q_EMIT KeyEventHelperPrivate::instance()->backKeyEvent();
             }
         }
         return QObject::eventFilter(receiver, event);
@@ -122,6 +130,11 @@ KirigamiPlugin::KirigamiPlugin(QObject *parent)
     filter->moveToThread(QCoreApplication::instance()->thread());
     QCoreApplication::instance()->installEventFilter(filter);
     connect(filter, &LanguageChangeEventFilter::languageChangeEvent, this, &KirigamiPlugin::languageChangeEvent);
+}
+
+KirigamiPlugin::~KirigamiPlugin()
+{
+    qDebug() << Q_FUNC_INFO;
 }
 
 QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
@@ -146,7 +159,8 @@ QUrl KirigamiPlugin::componentUrl(const QString &fileName) const
 
 void KirigamiPlugin::registerTypes(const char *uri)
 {
-#if defined(Q_OS_ANDROID) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    qDebug() << Q_FUNC_INFO << uri;
+#if defined(Q_OS_ANDROID)
     QResource::registerResource(QStringLiteral("assets:/android_rcc_bundle.rcc"));
 #endif
 
@@ -263,7 +277,6 @@ void KirigamiPlugin::registerTypes(const char *uri)
     //2.6
     qmlRegisterType(componentUrl(QStringLiteral("AboutPage.qml")), uri, 2, 6, "AboutPage");
     qmlRegisterType(componentUrl(QStringLiteral("LinkButton.qml")), uri, 2, 6, "LinkButton");
-
     qmlRegisterType(componentUrl(QStringLiteral("UrlButton.qml")), uri, 2, 6, "UrlButton");
     qmlRegisterSingletonType<CopyHelperPrivate>("org.kde.kirigami.private", 2, 6, "CopyHelperPrivate", [] (QQmlEngine*, QJSEngine*) -> QObject* { return new CopyHelperPrivate; });
 
@@ -307,7 +320,6 @@ void KirigamiPlugin::registerTypes(const char *uri)
 
     // 2.13
     qmlRegisterType<ImageColors>(uri, 2, 13, "ImageColors");
-    qmlRegisterSingletonType<AvatarPrivate>("org.kde.kirigami.private", 2, 13, "AvatarPrivate", [] (QQmlEngine*, QJSEngine*) -> QObject* { return new AvatarPrivate; });
     qmlRegisterType(componentUrl(QStringLiteral("Avatar.qml")), uri, 2, 13, "Avatar");
     qmlRegisterType(componentUrl(QStringLiteral("swipenavigator/SwipeNavigator.qml")), uri, 2, 13, "SwipeNavigator");
 
@@ -317,6 +329,11 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType<ToolBarLayout>(uri, 2, 14, "ToolBarLayout");
     qmlRegisterSingletonType<DisplayHint>(uri, 2, 14, "DisplayHint", [](QQmlEngine*, QJSEngine*) -> QObject* { return new DisplayHint; });
     qmlRegisterType<SizeGroup>(uri, 2, 14, "SizeGroup");
+    qmlRegisterType<AvatarGroup>("org.kde.kirigami.private", 2, 14, "AvatarGroup");
+    qmlRegisterType(componentUrl(QStringLiteral("CheckableListItem.qml")), uri, 2, 14, "CheckableListItem");
+    qmlRegisterSingletonType<NameUtils>(uri, 2, 14, "NameUtils", [] (QQmlEngine*, QJSEngine*) -> QObject* { return new NameUtils; });
+
+    qmlRegisterType(componentUrl(QStringLiteral("Hero.qml")), uri, 2, 15, "Hero");
 
     // 2.15
     qmlRegisterType(componentUrl(QStringLiteral("JButton.qml")), uri, 2, 15, "JButton");
@@ -327,12 +344,29 @@ void KirigamiPlugin::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("JMouseSolid.qml")), uri, 2, 15, "JMouseSolid");
     qmlRegisterType(componentUrl(QStringLiteral("JSearchField.qml")), uri, 2, 15, "JSearchField");
     qmlRegisterType(componentUrl(QStringLiteral("JPopupMenu.qml")), uri, 2, 15, "JPopupMenu");
+    qmlRegisterType(componentUrl(QStringLiteral("JSwitch.qml")), uri, 2, 15, "JSwitch");
+    qmlRegisterType(componentUrl(QStringLiteral("JSlider.qml")), uri, 2, 15, "JSlider");
     qmlRegisterType(componentUrl(QStringLiteral("JDialog.qml")), uri, 2, 15, "JDialog");
+    qmlRegisterType(componentUrl(QStringLiteral("JInputDialog.qml")), uri, 2, 15, "JInputDialog");
     qmlRegisterType(componentUrl(QStringLiteral("JBlurBackground.qml")), uri, 2, 15, "JBlurBackground");
     qmlRegisterType(componentUrl(QStringLiteral("JMouseHover.qml")), uri, 2, 15, "JMouseHover");
     qmlRegisterType(componentUrl(QStringLiteral("JMenuSeparator.qml")), uri, 2, 15, "JMenuSeparator");
     qmlRegisterType(componentUrl(QStringLiteral("JMouseHoverMask.qml")), uri, 2, 15, "JMouseHoverMask");
+    qmlRegisterType(componentUrl(QStringLiteral("JOpenModeDialog.qml")), uri, 2, 15, "JOpenModeDialog");
+    qmlRegisterType(componentUrl(QStringLiteral("JRoundRectangle.qml")), uri, 2, 15, "JRoundRectangle");
 
+    qmlRegisterType(componentUrl(QStringLiteral("JPasswdKeyBd.qml")), uri, 2, 15, "JPasswdKeyBd");
+    qmlRegisterType(componentUrl(QStringLiteral("JKeyBdLineEdit.qml")), uri, 2, 15, "JKeyBdLineEdit");
+    qmlRegisterType(componentUrl(QStringLiteral("JImageViewer.qml")), uri, 2, 15, "JImageViewer");
+
+    //图片预览 和壁纸设置
+    qmlRegisterType<JResizeHandle>(uri, 2, 15, "JResizeHandle");
+    qmlRegisterType<JResizeRectangle>(uri, 2, 15, "JResizeRectangle");
+    qmlRegisterType<JImageDocument>(uri, 2, 15, "JImageDocument");
+    qmlRegisterType<JWallPaperSettings>(uri, 2, 15, "JWallPaperSettings");
+
+    qmlRegisterType(componentUrl(QStringLiteral("JImagePreviewItem.qml")), uri, 2, 15, "JImagePreviewItem");
+    qmlRegisterType(componentUrl(QStringLiteral("JWallPaperItem.qml")), uri, 2, 15, "JWallPaperItem");
 
     qmlRegisterSingletonType(componentUrl(QStringLiteral("private/ConstValue.qml")), uri, 2, 15, "ConstValue");
 
@@ -340,12 +374,15 @@ void KirigamiPlugin::registerTypes(const char *uri)
         return static_cast<QObject *>(KeyEventHelperPrivate::instance());
     });
 
+
     qmlProtectModule(uri, 2);
 }
 
 void KirigamiPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     Q_UNUSED(uri);
+    qDebug() << Q_FUNC_INFO << uri;
+    engine->addImageProvider(QLatin1String("cropImageProvider"), theCropImageInstance);
     connect(this, &KirigamiPlugin::languageChangeEvent, engine, &QQmlEngine::retranslate);
 }
 

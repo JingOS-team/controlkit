@@ -26,49 +26,40 @@ import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.15
 import "private"
 
+//ConstValue.jingUnit   18
 QQC2.Menu {
     id: menu
 
-    width: ConstValue.jingUnit * 22
-
+    width: 198
     background: JBlurBackground{
+        id:blurBk
         anchors.fill: parent
-
-        startX: menu.x
-        startY: menu.y
-
         sourceItem:menu.parent
-        blurRadius: 144
-        radius:ConstValue.jingUnit
-        backgroundColor:"#EDFFFFFF"
     }
 
-    delegate: QQC2.MenuItem {
+    delegate: QQC2.MenuItem{
         id: itemDelegate
 
         width: parent.width
-        height: ConstValue.jingUnit*5
-        leftPadding: ConstValue.jingUnit*2.2
-        rightPadding: ConstValue.jingUnit*2.2
+        height: 45
+        leftPadding: 20
+        rightPadding: 20
 
         state: "hidden"
 
         contentItem: Item{
             id: menuItemContentItem
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: parent.width
-            height: parent.height
-
             Text{
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 color:"#000000"
-                font.pointSize: 22
+                font.pointSize: 11
                 text: itemDelegate.text
             }
 
             Icon{
+                width: 16
+                height: 16
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 source: itemDelegate.icon.source
@@ -88,9 +79,9 @@ QQC2.Menu {
                 id: bgColor
 
                 width: parent.width
-                height: (menu.currentIndex == 0 || menu.currentIndex == menu.count -1) ? parent.height +  ConstValue.jingUnit : parent.height
+                height: (menu.currentIndex == 0 || menu.currentIndex == menu.count -1) ? parent.height +  9 : parent.height
 
-                radius: (menu.currentIndex == 0 || menu.currentIndex == menu.count -1) ? ConstValue.jingUnit : 0
+                radius: (menu.currentIndex == 0 || menu.currentIndex == menu.count -1) ? 9 : 0
 
                 Connections{
                     target: menu
@@ -113,33 +104,58 @@ QQC2.Menu {
             }
         }
 
-        MouseArea{
-            anchors.fill:parent
 
-            hoverEnabled: true
-            
-            onEntered: {
-                cursorShape = Qt.BlankCursor
-                itemDelegate.state = "hovered"
-            }
-
-            onExited: {
-                cursorShape = Qt.ArrowCursor
+        onHoveredChanged: {
+            if(hovered){
+                itemDelegate.state = "hovered";
+            } else {
                 itemDelegate.state = "hidden"
             }
-
-            onClicked:{
-                itemDelegate.triggered()
-            }
-            
-            onPressed: {
-                itemDelegate.state = "pressed"
-            }
-
-            onReleased: {
-                itemDelegate.state = "hovered"
-            }
         }
+
+        onPressed: {
+            itemDelegate.state = "pressed"
+        }
+
+        onReleased: {
+            itemDelegate.state = "hovered"
+        }
+
+//        MouseArea{
+//            anchors.fill:parent
+
+//            hoverEnabled: true
+            
+//            onEntered: {
+//                cursorShape = Qt.BlankCursor
+//                itemDelegate.state = "hovered"
+//            }
+
+//            onExited: {
+//                cursorShape = Qt.ArrowCursor
+//                itemDelegate.state = "hidden"
+//            }
+
+//            onClicked:{
+//                console.log("onClicked")
+////                if(menu.count > 0)
+////                    menu.actionAt(menu.currentIndex).onTriggered(mouse)
+//                // itemDelegate.triggered()
+//                //There is no hover event on the touch screen, but currentIndex changed by hover event
+//                if(itemDelegate.action){
+//                    itemDelegate.action.triggered(mouse);
+//                }
+//            }
+            
+
+//            onPressed: {
+//                itemDelegate.state = "pressed"
+//            }
+
+//            onReleased: {
+//                itemDelegate.state = "hovered"
+//            }
+//        }
 
         states: [
             State {

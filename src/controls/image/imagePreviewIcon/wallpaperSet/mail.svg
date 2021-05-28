@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 20</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="桌面" transform="translate(-1059.000000, -328.000000)">
+            <g id="编组-16" transform="translate(155.000000, 110.000000)">
+                <g id="编组-20" transform="translate(904.000000, 218.000000)">
+                    <rect id="矩形备份-31" fill="#3C4BE8" x="0" y="0" width="100" height="100" rx="24"></rect>
+                    <rect id="矩形备份-20" fill="#FFFFFF" x="10" y="10" width="80" height="80" rx="14"></rect>
+                    <g id="编组-10备份-3" transform="translate(0.000000, 38.000000)">
+                        <path d="M40.7594125,21.235148 C46.4245387,24.1865057 53.1501307,24.2506657 58.8613641,21.4276279 L59.2405875,21.235148 L100,0 L100,38 C100,51.254834 89.254834,62 76,62 L24,62 C10.745166,62 0,51.254834 0,38 L0,0.001 L40.7594125,21.235148 Z" id="路径" fill="#0CA8FF"></path>
+                        <g id="编组-14" transform="translate(0.000000, 8.000000)" fill="#00CFFF">
+                            <path d="M61.4407858,3.68748771 L100,30.9697402 C99.4909792,43.7749774 88.9459527,54 76.0120264,54 L23.9963968,54 C10.9809919,54 0.384679926,43.6457446 0,30.7274315 L38.2170704,3.68748771 C45.1660523,-1.22916257 54.4918039,-1.22916257 61.4407858,3.68748771 Z" id="路径"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

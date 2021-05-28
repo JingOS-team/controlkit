@@ -12,7 +12,8 @@ import org.kde.kirigami 2.12 as Kirigami
 /**
  * This Component is used as the header of GlobalDrawer and as the header
  * of Card, It can be accessed there as a grouped property but can never
- * be instantiated directly
+ * be instantiated directly.
+ * \private
  */
 Kirigami.ShadowedImage {
     id: root
@@ -125,6 +126,7 @@ Kirigami.ShadowedImage {
             id: heading
             Layout.fillWidth: true
             Layout.fillHeight: true
+            verticalAlignment: Text.AlignVCenter
             visible: text.length > 0
             level: 1
             color: source != "" ? "white" : Kirigami.Theme.textColor

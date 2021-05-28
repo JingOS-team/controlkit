@@ -20,15 +20,9 @@ AbstractPageHeader {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: page.forceActiveFocus()
-        // positionChanged() is only emitted when pressed as long as hoverEnabled is false
-        onPositionChanged: {
-            if (Window.window && (typeof Window.window.startSystemMove === "function") && mouse.source === Qt.MouseEventNotSynthesized) {
-                Window.window.startSystemMove();
-                // NOTE: only way to ensure ungrabMouse() is called from QML
-                visible=false;
-                visible=true;
-            }
+        onPressed: {
+            page.forceActiveFocus()
+            mouse.accepted = false
         }
     }
 

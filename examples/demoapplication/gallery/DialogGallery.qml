@@ -63,6 +63,24 @@ ScrollablePage {
         }
     }
 
+    Kirigami215.JInputDialog{
+        id:inputDialog
+
+        title: "Enter Password"
+        echoMode: TextInput.Password
+        visible:false
+
+        onCancelButtonClicked:{
+            console.log("###########onCancelButtonClicked")
+        }
+
+        onOkButtonClicked:{
+            console.log("###########onOkButtonClicked")
+            console.log("###########onOkButtonClicked----inputDialog.inputText:" + inputDialog.inputText)
+            inputDialog.close()
+        }
+    }
+
     Column {
         width: page.width
         spacing: Units.smallSpacing
@@ -130,6 +148,24 @@ ScrollablePage {
 
                     var jx = dailog2.mapToItem(page, mouseX, mouseY)
                     dialog.open()
+                }
+            }
+        }
+
+        Rectangle{
+            width:parent.width
+            height: 200
+            color:"transparent"
+
+            Text{
+                text: "Input Dialog"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: {
+                    inputDialog.open()
                 }
             }
         }

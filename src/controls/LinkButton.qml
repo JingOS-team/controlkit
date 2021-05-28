@@ -23,7 +23,16 @@ QQC2.Label {
     id: control
 
     property Action action: null
+    /**
+     * @var Qt::MouseButtons acceptedButtons
+     * This property holds the mouse buttons that the mouse area reacts to.
+     * See <a href="https://doc.qt.io/qt-5/qml-qtquick-mousearea.html#acceptedButtons-prop">Qt documentation</a>.
+     */
     property alias acceptedButtons: area.acceptedButtons
+    /**
+     * @var MouseArea ara
+     * Mouse area element covering the button.
+     */
     property alias mouseArea: area
     Accessible.role: Accessible.Button
     Accessible.name: text

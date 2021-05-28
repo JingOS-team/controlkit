@@ -137,7 +137,7 @@ P.ScrollView {
             Connections {
                 enabled: typeof applicationWindow !== "undefined"
                 target: typeof applicationWindow !== "undefined" ? applicationWindow() : null
-                onReachableModeChanged: {
+                function onReachableModeChanged() {
                     overshootResetTimer.running = applicationWindow().reachableMode;
                 }
             }
@@ -191,7 +191,7 @@ P.ScrollView {
             flickableItem.anchors.leftMargin = leftPadding;
             flickableItem.anchors.topMargin = topPadding;
             flickableItem.anchors.rightMargin = rightPadding;
-            flickableItem.anchors.bottomMargin = bottomPadding;
+            flickableItem.anchors.bottomMargin = 0;
         }
     }
 }

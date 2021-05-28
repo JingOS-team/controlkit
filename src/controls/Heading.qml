@@ -12,7 +12,7 @@ import org.kde.kirigami 2.4
  * A heading label used for subsections of texts.
  *
  * The characteristics of the text will be automatically set according to the
- * plasma Theme. Use this components for section titles or headings in your UI,
+ * Theme. Use this components for section titles or headings in your UI,
  * for example page or section titles.
  *
  * Example usage:
@@ -30,8 +30,9 @@ import org.kde.kirigami 2.4
  * @endcode
  *
  * The most important property is "text", which applies to the text property of
- * Label. See PlasmaComponents Label and primitive QML Text element API for
- * additional properties, methods and signals.
+ * Label. See the Label component from QtQuick.Controls 2 and primitive QML Text
+ * element API for additional properties, methods and signals.
+ *
  * @inherits QtQuick.Controls.Label
  */
 QQC2.Label {
@@ -47,7 +48,7 @@ QQC2.Label {
     /**
      * step: int
      * adjust the point size in between a level and another.
-     * DEPRECATED
+     * @deprecated
      */
     property int step: 0
 

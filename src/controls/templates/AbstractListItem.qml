@@ -16,29 +16,26 @@ import QtQuick.Templates 2.4 as QQC2
  *
  * It's intended to make all listviews look coherent.
  *
- * @inherit QtQuick.Templates.ItemDelegate
+ * @inherit QtQuick.Controls.ItemDelegate
  */
 T2.ItemDelegate {
     id: listItem
 
     /**
-     * supportsMouseEvents: bool
+     * @deprecated
      * Holds if the item emits signals related to mouse interaction.
-     *TODO: remove
      * The default value is false.
      */
-    property bool supportsMouseEvents: hoverEnabled
+    property bool supportsMouseEvents: hoverEnabled // TODO KF6 remove
 
     /**
-     * containsMouse: bool
+     * @var bool containsMouse
      * True when the user hovers the mouse over the list item
      * NOTE: on mobile touch devices this will be true only when pressed is also true
-     * TODO: remove?
      */
-    property alias containsMouse: listItem.hovered
+    property alias containsMouse: listItem.hovered // TODO KF6 remove.
 
     /**
-     * alternatingBackground: bool
      * If true the background of the list items will be alternating between two
      * colors, helping readability with multiple column views.
      * Use it only when implementing a view which shows data visually in multiple columns
@@ -47,21 +44,18 @@ T2.ItemDelegate {
     property bool alternatingBackground: false
 
     /**
-     * sectionDelegate: bool
      * If true the item will be a delegate for a section, so will look like a
      * "title" for the items under it.
      */
     property bool sectionDelegate: false
 
     /**
-     * separatorVisible: bool
      * True if the separator between items is visible
      * default: true
      */
     property bool separatorVisible: true
 
     /**
-     * textColor: color
      * Color for the text in the item
      * It is advised to leave the default value (Theme.textColor)
      *
@@ -71,14 +65,12 @@ T2.ItemDelegate {
     property color textColor: Theme.textColor
 
     /**
-     * backgroundColor: color
      * Color for the background of the item
      * It is advised to leave the default value (Theme.viewBackgroundColor)
      */
     property color backgroundColor: "transparent"
 
     /**
-     * alternateBackgroundColor: color
      * The background color to use if alternatingBackground is true.
      * It is advised to leave the default.
      * @since 2.7
@@ -86,7 +78,6 @@ T2.ItemDelegate {
     property color alternateBackgroundColor: Theme.alternateBackgroundColor
 
     /**
-     * activeTextColor: color
      * Color for the text in the item when pressed or selected
      * It is advised to leave the default value (Theme.highlightedTextColor)
      *
@@ -96,7 +87,6 @@ T2.ItemDelegate {
     property color activeTextColor: Theme.highlightedTextColor
 
     /**
-     * activeBackgroundColor: color
      * Color for the background of the item when pressed or selected
      * It is advised to leave the default value (Theme.highlightColor)
      */
@@ -105,6 +95,10 @@ T2.ItemDelegate {
     default property alias _default: listItem.contentItem
 
     // Overrides action property of newer import versions which we can't use
+    /**
+     * This property holds the item action.
+     * \property QtQuick.Controls.Action AbstractListItem::action
+     */
     property QQC2.Action action
 
     activeFocusOnTab: ListView.view ? false : true

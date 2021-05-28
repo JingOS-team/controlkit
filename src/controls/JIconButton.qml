@@ -28,37 +28,36 @@ Item  {
     id: control
 
     property string source: ""
+    property var color: ""
+
     //define the image disable status url load path
     property string disableSource: ""
 
     property bool darkMode: applicationWindow().darkMode
     property bool hoverEnabled: true
+    property int  padding: 4
+    property int  iconRadius: Math.min(width, height)  / 2
+    property var  backgroundColor: ""
 
     signal pressed(QtObject mouse)
     signal clicked(QtObject mouse)
     signal released(QtObject mouse)
 
-    height:  Math.max(icon.height, icon.implicitHeight) + 10
-    width: Math.max(icon.width, icon.implicitWidth) + 10
+    height: Math.max(icon.height, icon.implicitHeight) + control.padding
+    width:  Math.max(icon.width, icon.implicitWidth) + control.padding
 
     PrivateMouseHover{
         visible: control.hoverEnabled ? true : false
         darkMode: control.darkMode
+        radius: iconRadius
+        color: backgroundColor ? backgroundColor : "transparent"
     }
 
     Kirigami.Icon{
-        id: icon
-        anchors.centerIn: parent
+        id:icon
+        anchors.fill: parent
+        anchors.margins: control.padding
+        color: control.color
         source: control.enabled ? control.source : (control.disableSource.length > 0 ? control.disableSource: control.source)
-    }
-
-     Component.onCompleted:{
-        if (control.width == 0 || control.height == 0) {
-            control.width = Qt.binding(function() {return Math.max(icon.width, icon.implicitWidth) + 10});
-            control.height = Qt.binding(function() {return Math.max(icon.height, icon.implicitHeight)+ 10});
-        } else {
-            icon.width = Qt.binding(function() {return control.width - 10});
-            icon.height = Qt.binding(function() {return control.height - 10});
-        }
     }
 }

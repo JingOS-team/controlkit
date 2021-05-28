@@ -1,13 +1,19 @@
 cmake_minimum_required(VERSION 3.5)
 
-set(KF5_VERSION "5.76.0") # handled by release scripts
-set(KF5_DEP_VERSION "5.76.0") # handled by release scripts
+set(KF_VERSION "5.79.0") # handled by release scripts
+set(KF5_DEP_VERSION "5.79.0") # handled by release scripts
 
-project(kirigami2 VERSION ${KF5_VERSION})
+remove_definitions(-DQT_NO_CAST_FROM_ASCII)
+project(kirigami2 VERSION ${KF_VERSION})
 
-set(REQUIRED_QT_VERSION 5.12.0)
+set(REQUIRED_QT_VERSION 5.14.0)
 
 SET(CMAKE_CXX_STANDARD 11)
+
+###### add picture plugin ,use exiv2 #########
+find_package(ECM 5.53.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${ECM_MODULE_PATH})
+find_package(LibExiv2 0.21 REQUIRED)
 
 ################# Disallow in-source build #################
 
@@ -17,7 +23,7 @@ endif()
 
 option(BUILD_SHARED_LIBS "Build a shared module" ON)
 option(DESKTOP_ENABLED "Build and install The Desktop style" ON)
-option(BUILD_EXAMPLES "Build and install examples" ON)
+option(BUILD_EXAMPLES "Build and install examples" OFF)
 option(DISABLE_DBUS "Build without D-Bus support" OFF)
 if(DEFINED STATIC_LIBRARY)
     message(FATAL_ERROR "Use the BUILD_SHARED_LIBS=OFF option to build a static library, STATIC_LIBRARY is no longer a supported option")
@@ -42,9 +48,10 @@ if(NOT BUILD_SHARED_LIBS)
     add_definitions(-DQT_STATICPLUGIN=1)
 endif()
 
+
 ################# set KDE specific information #################
 
-find_package(ECM 5.76.0 NO_MODULE)
+find_package(ECM 5.79.0 NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://commits.kde.org/extra-cmake-modules")
 
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
@@ -63,6 +70,8 @@ include(ECMAddQch)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(KDEPackageAppTemplates)
 
+kde_enable_exceptions()
+
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5Kirigami2")
 
 option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)" OFF)
@@ -72,7 +81,7 @@ configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KF5Kirigami2Config.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/KF5Kirigami2Config.cmake"
     INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
-    PATH_VARS  KF5_INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
+    PATH_VARS  CMAKE_INSTALL_PREFIX
 )
 
 install(FILES
@@ -95,7 +104,7 @@ install(EXPORT KF5Kirigami2Targets
 )
 
 
-ecm_setup_version(${KF5_VERSION}
+ecm_setup_version(${KF_VERSION}
     VARIABLE_PREFIX KIRIGAMI2
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kirigami_version.h"
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5Kirigami2ConfigVersion.cmake"
@@ -115,7 +124,7 @@ endif()
 
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
 
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050d00)
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
 add_subdirectory(src)
 if (NOT ANDROID)
     add_subdirectory(templates)
@@ -129,9 +138,11 @@ if (BUILD_TESTING AND BUILD_SHARED_LIBS)
     add_subdirectory(autotests)
 endif()
 
-if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
-    ecm_install_po_files_as_qm(po)
-endif()
+#if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+#    ecm_install_po_files_as_qm(po)
+#endif()
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
+find_package(KF5I18n CONFIG REQUIRED)
+ki18n_install(po)

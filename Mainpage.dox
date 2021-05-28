@@ -9,12 +9,12 @@
 /** \mainpage kirigami
 
 
-\section overview Introduction
+\subsection overview Introduction
 Kirigami is a set of QtQuick components for building adaptable UIs based on Qt Quick Controls 2. Its goal is to enable creation of applications that look and feel great on mobile as well as desktop devices and follow the <a href="https://hig.kde.org">KDE Human Interface Guidelines</a>.
 The target of those components is anybody that wants to do an application using QtQuick as its main UI, especially if targeting a mobile platform, without adding many dependencies. They work on a variety of platforms, such as Plasma Mobile, Desktop Linux, Android, iOS and Windows.
 It is a Tier-1 KDE Framework starting with KDE Frameworks 5.37.
 
-\section components Main Components
+\subsection components Main Components
 - \link org::kde::kirigami::ApplicationWindow  ApplicationWindow \endlink
 - \link org::kde::kirigami::Action Action  \endlink
 - \link org::kde::kirigami::GlobalDrawer GlobalDrawer  \endlink
@@ -40,7 +40,7 @@ It is a Tier-1 KDE Framework starting with KDE Frameworks 5.37.
 - \link org::kde::kirigami::PlaceholderMessage PlaceholderMessage  \endlink
 
 
-\section example Minimal Example
+\subsection example Minimal Example
 
 @code
 import QtQuick 2.1
@@ -136,7 +136,7 @@ Kirigami.ApplicationWindow {
 }
 @endcode
 
-\section deployment Deployment
+\subsection deployment Deployment
 CMake is recomended for both building Kirigami and the project using it, qmake is supported as well, so we can have several configurations, depending what is the host build system and how the deployment needs to be done.
 Kirigami can be built in two ways: both as a module or statically linked in the application, leading to four combinations:
 

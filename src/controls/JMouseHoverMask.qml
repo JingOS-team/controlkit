@@ -111,6 +111,10 @@ Rectangle{
             mouseHoverMask.state = "hidden"
         }
 
+        onCanceled: {//add by hjy 触摸屏操作时 需要调用这个 才能够把hover取消
+            mouseHoverMask.state = "hidden"
+        }
+
         onClicked: mouseHoverMask.clicked(mouse)
 
         onPressed: {

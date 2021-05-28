@@ -12,10 +12,10 @@ import "private"
 /**
  * Overlay Drawers are used to expose additional UI elements needed for
  * small secondary tasks for which the main UI elements are not needed.
- * For example in Okular Active, an Overlay Drawer is used to display
+ * For example in Okular Mobile, an Overlay Drawer is used to display
  * thumbnails of all pages within a document along with a search field.
  * This is used for the distinct task of navigating to another page.
- * @inherits: QtQuick.Templates.Drawer
+ * @inherits: QtQuick.Controls.Drawer
  */
 T2.Drawer {
     id: root
@@ -24,19 +24,16 @@ T2.Drawer {
 
 //BEGIN Properties
     /**
-     * drawerOpen: bool
      * true when the drawer is open and visible
      */
     property bool drawerOpen: false
 
     /**
-     * enabled: bool
      * This property holds whether the item receives mouse and keyboard events. By default this is true.
      */
     property bool enabled: true
 
     /**
-     * peeking: true
      * When true the drawer is in a state between open and closed. the drawer is visible but not completely open.
      * This is usually the case when the user is dragging the drawer from a screen
      * edge, so the user is "peeking" what's in the drawer
@@ -44,13 +41,11 @@ T2.Drawer {
     property bool peeking: false
 
     /**
-     * animating: Bool
      * True during an animation of a drawer either opening or closing
      */
     readonly property bool animating : enterAnimation.animating || exitAnimation.animating || positionResetAnim.running
 
     /**
-     * collapsible: Bool
      * When true, the drawer can be collapsed to a very thin, usually icon only sidebar.
      * Only modal drawers are collapsible.
      * Collapsible is not supported in Mobile mode
@@ -59,7 +54,6 @@ T2.Drawer {
     property bool collapsible: false
 
     /**
-     * collapsed: bool
      * When true, the drawer will be collapsed to a very thin sidebar,
      * usually icon only.
      * Only collapsible drawers can be collapsed
@@ -67,7 +61,6 @@ T2.Drawer {
     property bool collapsed: false
 
     /**
-     * collapsedSize: int
      * When collapsed, the drawer will be resized to this size
      * (which may be width for vertical drawers or height for
      * horizontal drawers).
@@ -108,16 +101,15 @@ T2.Drawer {
     }
 
     /**
-     * handleVisible: bool
      * If true, a little handle will be visible to make opening the drawer easier
      * Currently supported only on left and right drawers
      */
     property bool handleVisible: typeof(applicationWindow)===typeof(Function) && applicationWindow() ? applicationWindow().controlsVisible : true
 
     /**
-     * handle: Item
      * Readonly property that points to the item that will act as a physical
      * handle for the Drawer
+     * @var MouseArea handle
      **/
     readonly property Item handle: MouseArea {
         id: drawerHandle
@@ -194,7 +186,7 @@ T2.Drawer {
                     margin = applicationWindow().footer.height + Units.smallSpacing;
                 }
 
-                if(root.height < root.parent.height) {
+                if(root.parent && root.height < root.parent.height) {
                     margin = root.parent.height - root.height - root.y + Units.smallSpacing;
                 }
 
@@ -271,7 +263,7 @@ T2.Drawer {
 
     y: modal ? 0 : ((T2.ApplicationWindow.menuBar ? T2.ApplicationWindow.menuBar.height : 0) + (T2.ApplicationWindow.header ? T2.ApplicationWindow.header.height : 0))
 
-    height: root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge ? (modal ? parent.height : (parent.height - y - (T2.ApplicationWindow.footer ? T2.ApplicationWindow.footer.height : 0))) : implicitHeight
+    height: parent && (root.edge == Qt.LeftEdge || root.edge == Qt.RightEdge) ? (modal ? parent.height : (parent.height - y - (T2.ApplicationWindow.footer ? T2.ApplicationWindow.footer.height : 0))) : implicitHeight
 
     parent: modal || edge === Qt.LeftEdge || edge === Qt.RightEdge ? T2.ApplicationWindow.overlay : T2.ApplicationWindow.contentItem
 
@@ -291,12 +283,12 @@ T2.Drawer {
     //NOTE: this is NOT a binding, otherwise it causes a binding loop in implicitHeight
     Connections {
         target: parent
-        onWidthChanged: {
+        function onWidthChanged() {
             if (edge === Qt.TopEdge || edge === Qt.BottomEdge) {
                 width = parent.width;
             }
         }
-        onHeightChanged: {
+        function onHeightChanged() {
             if (edge === Qt.LeftEdge || edge === Qt.RightEdge) {
                 height = parent.height;
             }

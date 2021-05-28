@@ -147,9 +147,9 @@ bool MnemonicAttached::eventFilter(QObject *watched, QEvent *e)
         QKeyEvent *ke = static_cast<QKeyEvent *>(e);
         if (ke->key() == Qt::Key_Alt) {
             m_actualRichTextLabel = m_richTextLabel;
-            emit richTextLabelChanged();
+            Q_EMIT richTextLabelChanged();
             m_active = true;
-            emit activeChanged();
+            Q_EMIT activeChanged();
         }
 
     } else if (e->type() == QEvent::KeyRelease) {
@@ -157,9 +157,9 @@ bool MnemonicAttached::eventFilter(QObject *watched, QEvent *e)
         if (ke->key() == Qt::Key_Alt) {
             m_actualRichTextLabel = m_label;
             m_actualRichTextLabel = removeAcceleratorMarker(m_actualRichTextLabel);
-            emit richTextLabelChanged();
+            Q_EMIT richTextLabelChanged();
             m_active = false;
-            emit activeChanged();
+            Q_EMIT activeChanged();
         }
     }
     return false;
@@ -253,8 +253,8 @@ void MnemonicAttached::updateSequence()
         //was the label already completely plain text? try to limit signal emission
         if (m_mnemonicLabel != m_actualRichTextLabel) {
             m_mnemonicLabel = m_actualRichTextLabel;
-            emit mnemonicLabelChanged();
-            emit richTextLabelChanged();
+            Q_EMIT mnemonicLabelChanged();
+            Q_EMIT richTextLabelChanged();
         }
         return;
     }
@@ -303,7 +303,7 @@ void MnemonicAttached::updateSequence()
     }
 
     if (!m_sequence.isEmpty()) {
-        emit sequenceChanged();
+        Q_EMIT sequenceChanged();
     } else {
         m_actualRichTextLabel = text;
         m_actualRichTextLabel = removeAcceleratorMarker(m_actualRichTextLabel);
@@ -311,8 +311,8 @@ void MnemonicAttached::updateSequence()
         
     }
 
-    emit richTextLabelChanged();
-    emit mnemonicLabelChanged();
+    Q_EMIT richTextLabelChanged();
+    Q_EMIT mnemonicLabelChanged();
 }
 
 void MnemonicAttached::setLabel(const QString &text)
@@ -323,7 +323,7 @@ void MnemonicAttached::setLabel(const QString &text)
 
     m_label = text;
     updateSequence();
-    emit labelChanged();
+    Q_EMIT labelChanged();
 }
 
 QString MnemonicAttached::richTextLabel() const
@@ -349,7 +349,7 @@ void MnemonicAttached::setEnabled(bool enabled)
 
     m_enabled = enabled;
     updateSequence();
-    emit enabledChanged();
+    Q_EMIT enabledChanged();
 }
 
 bool MnemonicAttached::enabled() const
@@ -388,7 +388,7 @@ void MnemonicAttached::setControlType(MnemonicAttached::ControlType controlType)
     } else {
         m_weight = m_baseWeight + (m_weights.constEnd() - 1).key();
     }
-    emit controlTypeChanged();
+    Q_EMIT controlTypeChanged();
 }
 
 MnemonicAttached::ControlType MnemonicAttached::controlType() const

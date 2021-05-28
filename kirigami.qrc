@@ -104,10 +104,24 @@
         <file alias="JSearchField.qml">src/controls/JSearchField.qml</file>
         <file alias="ConstValue.qml">src/controls/private/ConstValue.qml</file>
         <file alias="JPopupMenu.qml">src/controls/JPopupMenu.qml</file>
+        <file alias="JSwitch.qml">src/controls/JSwitch.qml</file>
+        <file alias="JSlider.qml">src/controls/JSlider.qml</file>
         <file alias="JDialog.qml">src/controls/JDialog.qml</file>
+        <file alias="JInputDialog.qml">src/controls/JInputDialog.qml</file>
         <file alias="JBlurBackground.qml">src/controls/JBlurBackground.qml</file>
         <file alias="JMouseHover.qml">src/controls/JMouseHover.qml</file>
         <file alias="JMenuSeparator.qml">src/controls/JMenuSeparator.qml</file>
         <file alias="JMouseHoverMask.qml">src/controls/JMouseHoverMask.qml</file>
+        <file alias="JOpenModeDialog.qml">src/controls/JOpenModeDialog.qml</file>
+        <file alias="JImagePreviewItem.qml">src/controls/JImagePreviewItem.qml</file>
+        <file alias="JBasicResizeHandle.qml">src/controls/ImagePreview/JBasicResizeHandle.qml</file>
+        <file alias="JCropView.qml">src/controls/ImagePreview/JCropView.qml</file>
+        <file alias="JImageViewer.qml">src/controls/ImagePreview/JImageViewer.qml</file>
+        <file alias="JWallPaperItem.qml">src/controls/JWallPaperItem.qml</file>
+        <file alias="JNormalKey.qml">src/controls/JNormalKey.qml</file>
+        <file alias="JOptionKey.qml">src/controls/JOptionKey.qml</file>
+        <file alias="JPasswdKeyBd.qml">src/controls/JPasswdKeyBd.qml</file>
+        <file alias="JKeyBdLineEdit.qml">src/controls/JKeyBdLineEdit.qml</file>
+        <file alias="JRoundRectangle.qml">src/controls/JRoundRectangle.qml</file>
     </qresource>
 </RCC>

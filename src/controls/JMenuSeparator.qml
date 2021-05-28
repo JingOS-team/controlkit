@@ -29,11 +29,11 @@ QQC2.MenuSeparator {
 
     anchors.horizontalCenter: parent.horizontalCenter
 
-    topPadding: 1
-    bottomPadding: 1
+    topPadding: 0
+    bottomPadding: 0
     
     implicitHeight: topPadding + bottomPadding + separator.implicitHeight
-    width: parent.width - ConstValue.jingUnit*4.5
+    width: parent.width - 36
 
     contentItem: Rectangle{
         id: separator
@@ -41,9 +41,9 @@ QQC2.MenuSeparator {
         anchors.centerIn: controlRoot
         width: controlRoot.width
         implicitHeight: Units.devicePixelRatio
-        
-        color: "#FF000000"
-        opacity: 0.2
+        color:"#2E3C3C43"
+//        color: "#FF000000"
+//        opacity: 0.2
     }
 }
 

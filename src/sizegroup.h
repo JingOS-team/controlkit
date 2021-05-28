@@ -35,7 +35,7 @@ public:
 
 private:
 
-    Mode m_mode;
+    Mode m_mode = None;
     QList<QPointer<QQuickItem>> m_items;
     QMap<QQuickItem*,QPair<QMetaObject::Connection,QMetaObject::Connection>> m_connections;
 

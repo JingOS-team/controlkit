@@ -1,5 +1,10 @@
-QT          += core qml quick gui svg network quickcontrols2 concurrent
+QT          += core qml quick gui svg network quickcontrols2 concurrent dbus
 HEADERS     += $$PWD/src/kirigamiplugin.h \
+               $$PWD/src/ImagePreview/jexiv2extractor.h \
+               $$PWD/src/ImagePreview/jimagedocument.h \
+               $$PWD/src/ImagePreview/jresizehandle.h \
+               $$PWD/src/ImagePreview/jresizerectangle.h \
+               $$PWD/src/ImagePreview/jwallpapersettings.h \
                $$PWD/src/enums.h \
                $$PWD/src/settings.h \
                $$PWD/src/colorutils.h \
@@ -26,12 +31,18 @@ HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/wheelhandler.h \
                $$PWD/src/shadowedrectangle.h \
                $$PWD/src/shadowedtexture.h \
+               $$PWD/src/sizegroup.h \
                $$PWD/src/pagerouter.h \
                $$PWD/src/pagepool.h \
                $$PWD/src/avatar.h \
                $$PWD/src/toolbarlayout.h \
                $$PWD/src/toolbarlayoutdelegate.h
 SOURCES     += $$PWD/src/kirigamiplugin.cpp \
+               $$PWD/src/ImagePreview/jexiv2extractor.cpp \
+               $$PWD/src/ImagePreview/jimagedocument.cpp \
+               $$PWD/src/ImagePreview/jresizehandle.cpp \
+               $$PWD/src/ImagePreview/jresizerectangle.cpp \
+               $$PWD/src/ImagePreview/jwallpapersettings.cpp \
                $$PWD/src/enums.cpp \
                $$PWD/src/settings.cpp \
                $$PWD/src/colorutils.cpp \
@@ -57,6 +68,7 @@ SOURCES     += $$PWD/src/kirigamiplugin.cpp \
                $$PWD/src/wheelhandler.cpp \
                $$PWD/src/shadowedrectangle.cpp \
                $$PWD/src/shadowedtexture.cpp \
+               $$PWD/src/sizegroup.cpp \
                $$PWD/src/pagerouter.cpp \
                $$PWD/src/pagepool.cpp \
                $$PWD/src/avatar.cpp \

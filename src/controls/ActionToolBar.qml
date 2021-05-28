@@ -113,13 +113,13 @@ Controls.Control {
         layoutDirection: root.LayoutMirroring.enabled ? Qt.RightToLeft : Qt.LeftToRight
 
         fullDelegate: PrivateActionToolButton {
-            flat: root.flat && !action.icon.color.a
+            flat: root.flat
             display: root.display
             action: Kirigami.ToolBarLayout.action
         }
 
         iconDelegate: PrivateActionToolButton {
-            flat: root.flat && !action.icon.color.a
+            flat: root.flat
             display: Controls.Button.IconOnly
             action: Kirigami.ToolBarLayout.action
 

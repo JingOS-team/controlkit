@@ -19,7 +19,7 @@ import "private"
  * for every item.
  * If possible use cards only when you don't need to instantiate a lot
  * and use CardsLayout intead.
- * @inherits GridView
+ * @inherit QtQuick.GridView
  * @see CardsLayout
  * @since 2.4
  */
@@ -27,8 +27,7 @@ CardsGridViewPrivate {
     id: root
 
     /**
-     * columns: int
-     * how many columns the gridview has
+     * How many columns the gridview has.
      * @since 2.5
      */
     readonly property int columns: Math.max(1,
@@ -38,14 +37,12 @@ CardsGridViewPrivate {
                        );
 
     /**
-     * maximumColumns: int
-     * Maximum value for columns if the user wants to limit it
+     * Maximum value for columns if the user wants to limit it.
      * @since 2.5
      */
     property int maximumColumns: Infinity
 
     /**
-     * maximumColumnWidth: int
      * The maximum width the columns may have. the cards will never
      * get wider than this size, when the GridView is wider than
      * maximumColumnWidth, it will switch from one to two columns.
@@ -56,7 +53,6 @@ CardsGridViewPrivate {
     property int maximumColumnWidth: Kirigami.Units.gridUnit * 20
 
     /**
-     * minimumColumnWidth: int
      * The minimum width the columns may have. the cards will never
      * get smaller than this size.
      * If the default needs to be overridden for some reason,

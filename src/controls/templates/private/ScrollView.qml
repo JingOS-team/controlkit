@@ -36,6 +36,7 @@ MouseArea {
 
     focus: true
 
+    onPressed: mouse.accepted = mouse.source !== Qt.MouseEventNotSynthesized
     onVerticalScrollBarPolicyChanged: {
         if (flickableItem.ScrollBar.vertical) {
             flickableItem.ScrollBar.vertical.visible = verticalScrollBarPolicy != Qt.ScrollBarAlwaysOff;
@@ -69,6 +70,11 @@ MouseArea {
         scrollBarCreationTimer.restart();
     }
 
+    Binding {
+        target: root.flickableItem
+        property: "interactive"
+        value: Kirigami.Settings.hasTransientTouchInput
+    }
     Timer {
         id: scrollBarCreationTimer
         interval: 0

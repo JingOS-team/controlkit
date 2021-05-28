@@ -66,10 +66,10 @@ Rectangle{
                     visible:true
                 }
 
-                PropertyChanges {
-                    target: background.parent
-                    scale: 1.1
-                }
+//                PropertyChanges {
+//                    target: background.parent
+//                    //scale: 1.1
+//                }
             },
             State {
                 name: "hiden"
@@ -83,14 +83,14 @@ Rectangle{
                     height: 0
 
                     visible:false
-                    scale: 1
+                    //scale: 1
                     
                 }
-                PropertyChanges {
-                    target: background.parent
+//                PropertyChanges {
+//                    target: background.parent
 
-                    scale: 1
-                }
+//                    //scale: 1
+//                }
             }
         ]
 
@@ -103,7 +103,7 @@ Rectangle{
                     PropertyAnimation { target: back_item; properties: "x,y,width,height"; duration: 400; easing.type: Easing.OutQuart }
                 }
 
-                PropertyAnimation { target: background.parent; properties: "scale"; duration: 400; easing.type: Easing.OutQuart }
+                //PropertyAnimation { target: background.parent; properties: "scale"; duration: 400; easing.type: Easing.OutQuart }
             },
             Transition {
                 from:"shown"; to:"hiden"
@@ -113,7 +113,7 @@ Rectangle{
                     PropertyAnimation { target: back_item; properties: "visible"; duration: 0; easing.type: Easing.OutQuart }
                 }
 
-                PropertyAnimation { target: background.parent; properties: "scale"; duration: 200; easing.type: Easing.OutQuart }
+                //PropertyAnimation { target: background.parent; properties: "scale"; duration: 200; easing.type: Easing.OutQuart }
             }
         ]
     }

@@ -80,7 +80,7 @@ bool GlobalWheelFilter::eventFilter(QObject *watched, QEvent *event)
             if (handler->m_scrollFlickableTarget) {
                 shouldScrollFlickable = true;
             }
-            emit handler->wheel(&m_wheelEvent);
+            Q_EMIT handler->wheel(&m_wheelEvent);
         }
 
         if (shouldScrollFlickable && !m_wheelEvent.isAccepted()) {
@@ -283,7 +283,7 @@ void WheelHandler::setTarget(QQuickItem *target)
 
     GlobalWheelFilter::self()->setItemHandlerAssociation(target, this);
 
-    emit targetChanged();
+    Q_EMIT targetChanged();
 }
 
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 35</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="桌面" transform="translate(-1058.000000, -110.000000)">
+            <g id="编组-16" transform="translate(155.000000, 110.000000)">
+                <g id="编组-41" transform="translate(903.000000, 0.000000)">
+                    <rect id="矩形" fill="#FF9F29" x="0" y="0" width="100" height="100" rx="24"></rect>
+                    <rect id="矩形" fill="#FFFFFF" x="10" y="10" width="80" height="54" rx="14"></rect>
+                    <path d="M0,29 L14.1741801,29 C20.4614469,29 26.2316076,32.4819794 29.1622146,38.0444668 C32.0928215,43.6069542 37.8629822,47.0889336 44.150249,47.0889336 L100,47.0889336 L100,47.0889336 L100,76 C100,89.254834 89.254834,100 76,100 L24,100 C10.745166,100 1.623249e-15,89.254834 0,76 L0,29 L0,29 Z" id="矩形" fill="#FFD12A"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

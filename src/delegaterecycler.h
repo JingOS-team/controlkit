@@ -39,9 +39,8 @@ Q_SIGNALS:
  * and deleting old ones. It ensures scrolling of lists with heavy delegates is
  * smoother and helps with memory fragmentations as well.
  *
- * NOTE: CardListView and CardGridView are already using this recycler, so do NOT use it
- * as a delegate for those 2 views.
- * Also, do NOT use this with a Repeater.
+ * @note CardListView and CardGridView are already using this recycler, so do NOT use it
+ * as a delegate for those 2 views. Also, do NOT use this with a Repeater.
  * @since 2.4
  */
 class DelegateRecycler : public QQuickItem
@@ -50,8 +49,10 @@ class DelegateRecycler : public QQuickItem
 
     /**
      * The Component the actual delegates will be built from.
-     * Note: the component may not be a child of this object, therefore it can't be
+     *
+     * @note the component may not be a child of this object, therefore it can't be
      * declared inside the DelegateRecycler declaration.
+     *
      * The DelegateRecycler will not take ownership of the delegate Component, so it's up
      * to the caller to delete it (usually with the normal child/parent relationship)
      */

@@ -94,7 +94,7 @@ void DelegateCache::insert(QQmlComponent *component, QQuickItem *item)
 
     DelegateRecyclerAttached *attached = qobject_cast<DelegateRecyclerAttached *>(qmlAttachedPropertiesObject<DelegateRecycler>(item, false));
     if (attached) {
-        emit attached->pooled();
+        Q_EMIT attached->pooled();
     }
 
     item->setParentItem(nullptr);
@@ -316,7 +316,7 @@ QtObject {
 
         DelegateRecyclerAttached *attached = qobject_cast<DelegateRecyclerAttached *>(qmlAttachedPropertiesObject<DelegateRecycler>(m_item, false));
         if (attached) {
-            emit attached->reused();
+            Q_EMIT attached->reused();
         }
     }
 
@@ -328,7 +328,7 @@ QtObject {
         updateSize(true);
     }
 
-    emit sourceComponentChanged();
+    Q_EMIT sourceComponentChanged();
 }
 
 void DelegateRecycler::resetSourceComponent()

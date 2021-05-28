@@ -42,7 +42,7 @@ void PagePool::setCachePages(bool cache)
     }
 
     m_cachePages = cache;
-    emit cachePagesChanged();
+    Q_EMIT cachePagesChanged();
 }
 
 bool PagePool::cachePages() const
@@ -72,14 +72,14 @@ QQuickItem *PagePool::loadPageWithProperties(
         if (callback.isCallable()) {
             QJSValueList args = {qmlEngine(this)->newQObject(found.value())};
             callback.call(args);
-            emit lastLoadedUrlChanged();
-            emit lastLoadedItemChanged();
+            Q_EMIT lastLoadedUrlChanged();
+            Q_EMIT lastLoadedItemChanged();
             // We could return the item, but for api coherence return null
             return nullptr;
 
         } else {
-            emit lastLoadedUrlChanged();
-            emit lastLoadedItemChanged();
+            Q_EMIT lastLoadedUrlChanged();
+            Q_EMIT lastLoadedItemChanged();
             return found.value();
         }
     }
@@ -136,12 +136,12 @@ QQuickItem *PagePool::loadPageWithProperties(
         QJSValueList args = {qmlEngine(this)->newQObject(item)};
         callback.call(args);
         m_lastLoadedUrl = actualUrl;
-        emit lastLoadedUrlChanged();
+        Q_EMIT lastLoadedUrlChanged();
         // We could return the item, but for api coherence return null
         return nullptr;
     } else {
         m_lastLoadedUrl = actualUrl;
-        emit lastLoadedUrlChanged();
+        Q_EMIT lastLoadedUrlChanged();
         return item;
     }
 }
@@ -190,7 +190,7 @@ QQuickItem *PagePool::createFromComponent(QQmlComponent *component, const QVaria
         QQmlEngine::setObjectOwnership(item, QQmlEngine::JavaScriptOwnership);
     }
 
-    emit lastLoadedItemChanged();
+    Q_EMIT lastLoadedItemChanged();
 
     return item;
 }
@@ -291,8 +291,8 @@ void PagePool::clear()
     m_lastLoadedUrl = QUrl();
     m_lastLoadedItem = nullptr;
     
-    emit lastLoadedUrlChanged();
-    emit lastLoadedItemChanged();
+    Q_EMIT lastLoadedUrlChanged();
+    Q_EMIT lastLoadedItemChanged();
 }
 
 #include "moc_pagepool.cpp"

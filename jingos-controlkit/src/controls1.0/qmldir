@@ -1,0 +1,12 @@
+module com.jingos.controlkit
+
+plugin JingOSControlKitPlugin
+classname JingOSControlKitPlugin
+depends QtQuick.Controls 2.0
+depends QtGraphicalEffects 1.0
+designersupported
+
+typeinfo plugins.qmltypes
+
+Button 1.0 Button.qml
+Label  1.0 Label.qml

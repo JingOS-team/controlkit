@@ -89,6 +89,10 @@ Kirigami.ScrollablePage {
             targetPage: "gallery/PageGallery.qml"
         }
         ListElement{
+            title: "Switch_Slider"
+            targetPage: "gallery/Switch_Slider.qml"
+        }
+        ListElement{
             title: "Test"
             targetPage: "gallery/TestGallery.qml"
         }

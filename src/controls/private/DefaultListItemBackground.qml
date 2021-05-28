@@ -21,20 +21,23 @@ Rectangle {
         visible: !Settings.tabletMode && listItem.supportsMouseEvents
         color: listItem.activeBackgroundColor
         opacity: (listItem.hovered || listItem.highlighted || listItem.activeFocus) && !listItem.pressed ? 0.5 : 0
-        Behavior on opacity { NumberAnimation { duration: Units.longDuration } }
     }
                                                // Don't show separator when...
     readonly property bool __separatorVisible: listItem.separatorVisible
                                                // There's a colored rectangle
-                                               && !listItem.hovered
                                                && !listItem.highlighted
                                                && !listItem.pressed
                                                && !listItem.checked
+                                               // ...Unless the colored rectangle is transparent
+                                               && (!listItem.hovered || listItem.activeBackgroundColor.a == 0)
                                                // It would touch the section header
                                                && !listItem.sectionDelegate
                                                && (!!listItem.ListView.view ? listItem.ListView.nextSection == listItem.ListView.section : true)
                                                // This is the last item in the list
                                                // TODO: implement this
+
+    property var leadingWidth
+
     Separator {
         anchors {
             left: parent.left

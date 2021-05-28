@@ -13,6 +13,8 @@ import org.kde.kirigami 2.11 as Kirigami
  * An action used to load Pages coming from a common PagePool
  * in a PageRow or QtQuickControls2 StackView
  *
+ * @see PagePool
+ *
  * @inherit Action
  */
 Kirigami.Action {
@@ -35,7 +37,7 @@ Kirigami.Action {
     property Kirigami.PagePool pagePool
 
     /**
-     * pageStack: Kirigami.PageRow or QtQuickControls2 StackView
+     * The pageStack property accepts either a Kirigami.PageRow or a QtQuickControls2 StackView.
      * The component that will instantiate the pages, which has to work with a stack logic.
      * Kirigami.PageRow is recommended, but will work with QtQuicControls2 StackView as well.
      * By default this property is binded to ApplicationWindow's global
@@ -57,7 +59,7 @@ Kirigami.Action {
       */
     property var initialProperties
 
-    /** useLayers: bool
+    /** 
       * @since 5.70
       * @since org.kde.kirigami 2.12
       * When true the PagePoolAction will use the layers property of the pageStack.
@@ -67,14 +69,14 @@ Kirigami.Action {
     property bool useLayers: false
 
     /**
-      * Retrieve the page item held in the PagePool or null if it has not been loaded yet.
+      * @returns the page item held in the PagePool or null if it has not been loaded yet.
       */
     function pageItem() {
         return pagePool.pageForUrl(page)
     }
 
     /**
-      * Return true if the page has been loaded and placed on pageStack.layers
+      * @returns true if the page has been loaded and placed on pageStack.layers
       * and useLayers is true, otherwise returns null.
       */
     function layerContainsPage() {
@@ -87,7 +89,7 @@ Kirigami.Action {
     }
 
     /**
-      * Return true if the page has been loaded and placed on the pageStack,
+      * @returns true if the page has been loaded and placed on the pageStack,
       * otherwise returns null.
       */
     function stackContainsPage() {
@@ -174,7 +176,7 @@ Kirigami.Action {
             Connections {
                 target: pageStack
 
-                onCurrentItemChanged: {
+                function onCurrentItemChanged() {
                     if (root.useLayers) {
                         if (root.layerContainsPage()) {
                             _private.clearLayers()
@@ -192,7 +194,7 @@ Kirigami.Action {
                 enabled: pageStack.hasOwnProperty("layers")
                 target: pageStack.layers
 
-                onCurrentItemChanged: {
+                function onCurrentItemChanged() {
                     if (root.useLayers && root.checkable) {
                         _private.setChecked(root.layerContainsPage());
 

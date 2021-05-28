@@ -90,13 +90,14 @@ Controls.TextField
         id: leftActionsRow
         padding: Kirigami.Units.smallSpacing
         anchors.left: parent.left
+        anchors.leftMargin: Kirigami.Units.smallSpacing
         anchors.verticalCenter: parent.verticalCenter
         height: root.implicitHeight - 2 * Kirigami.Units.smallSpacing
         Repeater {
             model: root.leftActions
             Kirigami.Icon {
-                height: parent.height
-                width: parent.height
+                implicitWidth: Kirigami.Units.iconSizes.smallMedium
+                implicitHeight: Kirigami.Units.iconSizes.smallMedium
 
                 anchors.verticalCenter: parent.verticalCenter
 
@@ -116,13 +117,14 @@ Controls.TextField
         padding: Kirigami.Units.smallSpacing
         layoutDirection: Qt.RightToLeft
         anchors.right: parent.right
+        anchors.rightMargin: Kirigami.Units.smallSpacing
         anchors.verticalCenter: parent.verticalCenter
         height: root.implicitHeight - 2 * Kirigami.Units.smallSpacing
         Repeater {
             model: root.rightActions
             Kirigami.Icon  {
-                height: parent.height
-                width: parent.height
+                implicitWidth: Kirigami.Units.iconSizes.smallMedium
+                implicitHeight: Kirigami.Units.iconSizes.smallMedium
 
                 anchors.verticalCenter: parent.verticalCenter
 

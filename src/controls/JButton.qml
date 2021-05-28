@@ -42,6 +42,7 @@ QQC2.Button  {
         horizontalAlignment: Text.AlignHCenter 
         verticalAlignment: Text.AlignVCenter 
         elide: Text.ElideRight 
+        opacity: control.enabled ? 1.0 : 0.5
         color: control.fontColor 
         text: control.text 
         font: control.font 
@@ -49,5 +50,6 @@ QQC2.Button  {
 
     background: PrivateMouseHover{
         id: background
+        radius:control.radius
     }
 }

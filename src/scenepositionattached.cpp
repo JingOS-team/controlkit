@@ -65,8 +65,8 @@ void ScenePositionAttached::connectAncestors(QQuickItem *item)
                 } while (!m_ancestors.isEmpty() && m_ancestors.last() != ancestor);
 
                 connectAncestors(ancestor);
-                emit xChanged();
-                emit yChanged();
+                Q_EMIT xChanged();
+                Q_EMIT yChanged();
             }
         );
 

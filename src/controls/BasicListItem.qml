@@ -38,6 +38,70 @@ AbstractListItem {
     property alias subtitle: subtitleItem.text
 
     /**
+     * leading: Item
+     *
+     * An item that will be displayed before the title and subtitle. Note that the
+     * leading item is allowed to expand infinitely horizontally, and should be bounded by the user.
+     *
+     * @since org.kde.kirigami 2.15
+     */
+    property Item leading
+    onLeadingChanged: {
+        if (!!listItem.leading) {
+            listItem.leading.parent = contItem
+            listItem.leading.anchors.left = listItem.leading.parent.left
+            listItem.leading.anchors.top = listItem.leading.parent.top
+            listItem.leading.anchors.bottom = listItem.leading.parent.bottom
+            layout.anchors.left = listItem.leading.right
+            layout.anchors.leftMargin = Qt.binding(function() { return listItem.leadingPadding })
+        } else {
+            layout.anchors.left = contentItem.left
+            layout.anchors.leftMargin = 0
+        }
+    }
+
+    /**
+     * leadingPadding: real
+     *
+     * Padding after the leading item.
+     *
+     * @since org.kde.kirigami 2.15
+     */
+    property real leadingPadding: Units.largeSpacing
+
+    /**
+     * trailing: Item
+     *
+     * An item that will be displayed after the title and subtitle. Note that the
+     * trailing item is allowed to expand infinitely horizontally, and should be bounded by the user.
+     *
+     * @since org.kde.kirigami 2.15
+     */
+    property Item trailing
+    onTrailingChanged: {
+        if (!!listItem.trailing) {
+            listItem.trailing.parent = contItem
+            listItem.trailing.anchors.right = listItem.trailing.parent.right
+            listItem.trailing.anchors.top = listItem.trailing.parent.top
+            listItem.trailing.anchors.bottom = listItem.trailing.parent.bottom
+            layout.anchors.right = listItem.trailing.left
+            layout.anchors.rightMargin = Qt.binding(function() { return listItem.trailingPadding })
+        } else {
+            layout.anchors.right = contentItem.right
+            layout.anchors.rightMargin = 0
+        }
+    }
+
+    /**
+     * trailingPadding: real
+     *
+     * Padding before the trailing item.
+     *
+     * @since org.kde.kirigami 2.15
+     */
+    property real trailingPadding: Units.largeSpacing
+
+    /**
      * bold: bool
      *
      * Whether the list item's text (both label and subtitle, if provided) should
@@ -127,55 +191,79 @@ AbstractListItem {
      */
     property alias reserveSpaceForLabel: labelItem.visible
 
+    /**
+     * reserveSpaceForSubtitle: bool
+     *
+     * Whether or not the list item's height should account for
+     * the presence of a subtitle, even if one is not present.
+     * @since 5.77
+     * @since org.kde.kirigami 2.15
+     */
+    property bool reserveSpaceForSubtitle: false
+
     default property alias _basicDefault: layout.data
 
     icon: action ? action.icon.name || action.icon.source : undefined
-    contentItem: RowLayout {
-        id: layout
-        spacing: LayoutMirroring.enabled ? listItem.rightPadding : listItem.leftPadding
-        Icon {
-            id: iconItem
-            source: {
-                if (!listItem.icon) {
-                    return undefined
+
+    contentItem: Item {
+        id: contItem
+        implicitWidth: (listItem.leading || {implicitWidth: 0}).implicitWidth + layout.implicitWidth + (listItem.trailing || {implicitWidth: 0}).implicitWidth
+        implicitHeight: layout.implicitHeight + (subtitleItem.text === "" && listItem.reserveSpaceForSubtitle ? subtitleItem.implicitHeight : 0)
+
+        RowLayout {
+            id: layout
+            spacing: LayoutMirroring.enabled ? listItem.rightPadding : listItem.leftPadding
+            anchors.left: contItem.left
+            anchors.leftMargin: listItem.leadingPadding
+            anchors.right: contItem.right
+            anchors.rightMargin: listItem.trailingPadding
+            anchors.verticalCenter: parent.verticalCenter
+
+            Icon {
+                id: iconItem
+                source: {
+                    if (!listItem.icon) {
+                        return undefined
+                    }
+                    if (listItem.icon.hasOwnProperty) {
+                        if (listItem.icon.hasOwnProperty("name") && listItem.icon.name !== "")
+                            return listItem.icon.name;
+                        if (listItem.icon.hasOwnProperty("source"))
+                            return listItem.icon.source;
+                    }
+                    return listItem.icon;
                 }
-                if (listItem.icon.hasOwnProperty) {
-                    if (listItem.icon.hasOwnProperty("name") && listItem.icon.name !== "")
-                        return listItem.icon.name;
-                    if (listItem.icon.hasOwnProperty("source"))
-                        return listItem.icon.source;
-                }
-                return listItem.icon;
-            }
-            property int size: Units.iconSizes.smallMedium
-            Layout.minimumHeight: size
-            Layout.maximumHeight: size
-            Layout.minimumWidth: size
-            selected: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents))
-            opacity: 1
-            visible: source != undefined
-        }
-        ColumnLayout {
-            spacing: 0
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignVCenter
-            QQC2.Label {
-                id: labelItem
-                text: listItem.text
-                Layout.fillWidth: true
-                color: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents)) ? listItem.activeTextColor : listItem.textColor
-                elide: Text.ElideRight
-                font.weight: listItem.bold ? Font.Bold : Font.Normal
+                property int size: Units.iconSizes.smallMedium
+                Layout.minimumHeight: size
+                Layout.maximumHeight: size
+                Layout.minimumWidth: size
+                Layout.maximumWidth: size
+                selected: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents))
                 opacity: 1
+                visible: source != undefined
             }
-            QQC2.Label {
-                id: subtitleItem
+            ColumnLayout {
+                spacing: 0
                 Layout.fillWidth: true
-                color: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents)) ? listItem.activeTextColor : listItem.textColor
-                elide: Text.ElideRight
-                font: Theme.smallFont
-                opacity: listItem.bold ? 0.9 : 0.7
-                visible: text.length > 0
+                Layout.alignment: Qt.AlignVCenter
+                QQC2.Label {
+                    id: labelItem
+                    text: listItem.text
+                    Layout.fillWidth: true
+                    color: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents)) ? listItem.activeTextColor : listItem.textColor
+                    elide: Text.ElideRight
+                    font.weight: listItem.bold ? Font.Bold : Font.Normal
+                    opacity: 1
+                }
+                QQC2.Label {
+                    id: subtitleItem
+                    Layout.fillWidth: true
+                    color: (listItem.highlighted || listItem.checked || (listItem.pressed && listItem.supportsMouseEvents)) ? listItem.activeTextColor : listItem.textColor
+                    elide: Text.ElideRight
+                    font: Theme.smallFont
+                    opacity: listItem.bold ? 0.9 : 0.7
+                    visible: text.length > 0
+                }
             }
         }
     }

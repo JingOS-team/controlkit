@@ -19,7 +19,7 @@ import "private"
  * for cards, use the Card component.
  *
  * @see Card
- * @inherits T.AbstractCard
+ * @inherit org::kde::kirigami::templates::AbstractCard
  * @since 2.4
  */
 T.AbstractCard {

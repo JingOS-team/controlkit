@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 21备份</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="100" height="100" rx="24"></rect>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="桌面" transform="translate(-770.000000, -1056.000000)">
+            <g id="编组-16" transform="translate(155.000000, 110.000000)">
+                <g id="编组-40" transform="translate(615.000000, 946.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="矩形" fill="#354146" xlink:href="#path-1"></use>
+                    <text id="09" fill-rule="nonzero" mask="url(#mask-2)" font-family="Gilroy-Light, Gilroy" font-size="42" font-weight="300" fill="#00DB63">
+                        <tspan x="10" y="48">09</tspan>
+                    </text>
+                    <text id="37" fill-rule="nonzero" mask="url(#mask-2)" font-family="Gilroy-Light, Gilroy" font-size="42" font-weight="300" fill="#FFFFFF">
+                        <tspan x="10" y="88">37</tspan>
+                    </text>
+                    <circle id="椭圆形备份-6" fill="#00DB63" mask="url(#mask-2)" cx="69" cy="19" r="3"></circle>
+                    <circle id="椭圆形备份-7" fill="#00DB63" mask="url(#mask-2)" cx="69" cy="35" r="3"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

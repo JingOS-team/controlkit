@@ -279,7 +279,7 @@ void BasicTheme::syncColors()
         }
     }
 
-    emit colorsChanged();
+    Q_EMIT colorsChanged();
 }
 
 

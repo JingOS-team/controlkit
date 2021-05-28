@@ -107,7 +107,6 @@ ScrollablePage
 
     FormLayout {
         id: form
-
         GridLayout {
             columns: 2
             Layout.fillWidth: true

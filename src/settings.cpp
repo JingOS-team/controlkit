@@ -13,6 +13,7 @@
 #include <QGuiApplication>
 #include <QIcon>
 #include <QTouchDevice>
+#include <QMouseEvent>
 #include <QWindow>
 
 #include "libkirigami/tabletmodewatcher.h"
@@ -104,7 +105,13 @@ bool Settings::eventFilter(QObject *watched, QEvent *event)
         setTransientTouchInput(true);
         break;
     case QEvent::MouseButtonPress:
-    case QEvent::MouseMove:
+    case QEvent::MouseMove: {
+        QMouseEvent *me = static_cast<QMouseEvent *>(event);
+        if (me->source() == Qt::MouseEventNotSynthesized) {
+            setTransientTouchInput(false);
+        }
+        break;
+    }
     case QEvent::Wheel:
         setTransientTouchInput(false);
     default:
@@ -121,7 +128,7 @@ void Settings::setTabletModeAvailable(bool mobileAvailable)
     }
 
     m_tabletModeAvailable = mobileAvailable;
-    emit tabletModeAvailableChanged();
+    Q_EMIT tabletModeAvailableChanged();
 }
 
 bool Settings::isTabletModeAvailable() const
@@ -136,7 +143,7 @@ void Settings::setIsMobile(bool mobile)
     }
 
     m_mobile = mobile;
-    emit isMobileChanged();
+    Q_EMIT isMobileChanged();
 }
 
 bool Settings::isMobile() const
@@ -151,7 +158,7 @@ void Settings::setTabletMode(bool tablet)
     }
 
     m_tabletMode = tablet;
-    emit tabletModeChanged();
+    Q_EMIT tabletModeChanged();
 }
 
 bool Settings::tabletMode() const
@@ -167,7 +174,7 @@ void Settings::setTransientTouchInput(bool touch)
 
     m_hasTransientTouchInput = touch;
     if (!m_tabletMode) {
-        emit hasTransientTouchInputChanged();
+        Q_EMIT hasTransientTouchInputChanged();
     }
 }
 

@@ -25,6 +25,7 @@
         <file alias="gallery/GridHoverGallery.qml">gallery/GridHoverGallery.qml</file>
         <file alias="gallery/ListViewHoverGallery.qml">gallery/ListViewHoverGallery.qml</file>
         <file alias="gallery/PageGallery.qml">gallery/PageGallery.qml</file>
+        <file alias="gallery/Switch_Slider.qml">gallery/Switch_Slider.qml</file>
     </qresource>
 </RCC>
 

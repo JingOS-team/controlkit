@@ -119,7 +119,7 @@ void ColumnViewAttached::setIndex(int index)
         const bool oldFillWidth = m_fillWidth;
         m_fillWidth = index == m_view->count() - 1;
         if (oldFillWidth != m_fillWidth) {
-            emit fillWidthChanged();
+            Q_EMIT fillWidthChanged();
         }
     }
 
@@ -128,7 +128,7 @@ void ColumnViewAttached::setIndex(int index)
     }
 
     m_index = index;
-    emit indexChanged();
+    Q_EMIT indexChanged();
 }
 
 int ColumnViewAttached::index() const
@@ -148,7 +148,7 @@ void ColumnViewAttached::setFillWidth(bool fill)
     }
 
     m_fillWidth = fill;
-    emit fillWidthChanged();
+    Q_EMIT fillWidthChanged();
 
     if (m_view) {
         m_view->polish();
@@ -177,7 +177,7 @@ void ColumnViewAttached::setReservedSpace(qreal space)
     }
 
     m_reservedSpace = space;
-    emit reservedSpaceChanged();
+    Q_EMIT reservedSpaceChanged();
 
     if (m_view) {
         m_view->polish();
@@ -204,18 +204,18 @@ void ColumnViewAttached::setView(ColumnView *view)
         m_fillWidth = m_index == m_view->count() - 1;
         connect(m_view.data(), &ColumnView::countChanged, this, [this]() {
             m_fillWidth = m_index == m_view->count() - 1;
-            emit fillWidthChanged();
+            Q_EMIT fillWidthChanged();
         });
     }
     if (!m_customReservedSpace && m_view) {
         m_reservedSpace = m_view->columnWidth();
         connect(m_view.data(), &ColumnView::columnWidthChanged, this, [this]() {
             m_reservedSpace = m_view->columnWidth();
-            emit reservedSpaceChanged();
+            Q_EMIT reservedSpaceChanged();
         });
     }
 
-    emit viewChanged();
+    Q_EMIT viewChanged();
 }
 
 QQuickItem *ColumnViewAttached::originalParent() const
@@ -250,7 +250,7 @@ void ColumnViewAttached::setPreventStealing(bool prevent)
     }
 
     m_preventStealing = prevent;
-    emit preventStealingChanged();
+    Q_EMIT preventStealingChanged();
 }
 
 bool ColumnViewAttached::isPinned() const
@@ -266,11 +266,27 @@ void ColumnViewAttached::setPinned(bool pinned)
 
     m_pinned = pinned;
 
-    emit pinnedChanged();
+    Q_EMIT pinnedChanged();
 
     if (m_view) {
         m_view->polish();
     }
+}
+
+bool ColumnViewAttached::inViewport() const
+{
+    return m_inViewport;
+}
+
+void ColumnViewAttached::setInViewport(bool inViewport)
+{
+    if (m_inViewport == inViewport) {
+        return;
+    }
+
+    m_inViewport = inViewport;
+
+    Q_EMIT inViewportChanged();
 }
 
 
@@ -525,11 +541,16 @@ void ContentItem::updateVisibleItems()
     QList <QObject *> newItems;
 
     for (auto *item : qAsConst(m_items)) {
-        if (item->isVisible() && item->x() + x() < width() && item->x() + item->width() + x() > 0) {
+        ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(item, true));
+
+        if (item->isVisible() && item->x() + x() < m_view->width() && item->x() + item->width() + x() > 0) {
             newItems << item;
             connect(item, &QObject::destroyed, this, [this, item] {
                 m_visibleItems.removeAll(item);
             });
+            attached->setInViewport(true);
+        } else {
+            attached->setInViewport(false);
         }
     }
 
@@ -541,12 +562,12 @@ void ContentItem::updateVisibleItems()
 
     if (newItems != m_visibleItems) {
         m_visibleItems = newItems;
-        emit m_view->visibleItemsChanged();
+        Q_EMIT m_view->visibleItemsChanged();
         if (!newItems.isEmpty() && m_visibleItems.first() != oldFirstVisibleItem) {
-            emit m_view->firstVisibleItemChanged();
+            Q_EMIT m_view->firstVisibleItemChanged();
         }
         if (!newItems.isEmpty() && m_visibleItems.last() != oldLastVisibleItem) {
-            emit m_view->lastVisibleItemChanged();
+            Q_EMIT m_view->lastVisibleItemChanged();
         }
     }
 }
@@ -584,7 +605,7 @@ void ContentItem::forgetItem(QQuickItem *item)
     if (index <= m_view->currentIndex()) {
         m_view->setCurrentIndex(qBound(0, index - 1, m_items.count() - 1));
     }
-    emit m_view->countChanged();
+    Q_EMIT m_view->countChanged();
 }
 
 QQuickItem *ContentItem::ensureSeparator(QQuickItem *item)
@@ -653,7 +674,7 @@ void ContentItem::itemChange(QQuickItem::ItemChange change, const QQuickItem::It
 
         m_shouldAnimate = true;
         m_view->polish();
-        emit m_view->countChanged();
+        Q_EMIT m_view->countChanged();
         break;
     }
     case QQuickItem::ItemChildRemovedChange: {
@@ -731,11 +752,12 @@ ColumnView::ColumnView(QQuickItem *parent)
     //NOTE: this is to *not* trigger itemChange
     m_contentItem = new ContentItem(this);
     setAcceptedMouseButtons(Qt::LeftButton | Qt::BackButton | Qt::ForwardButton);
+    setAcceptTouchEvents(false); // Relies on synthetized mouse events
     setFiltersChildMouseEvents(true);
 
     connect(m_contentItem->m_slideAnim, &QPropertyAnimation::finished, this, [this] () {
         m_moving = false;
-        emit movingChanged();
+        Q_EMIT movingChanged();
     });
     connect(m_contentItem, &ContentItem::widthChanged, this, &ColumnView::contentWidthChanged);
     connect(m_contentItem, &ContentItem::xChanged, this, &ColumnView::contentXChanged);
@@ -772,7 +794,7 @@ void ColumnView::setColumnResizeMode(ColumnResizeMode mode)
     }
     m_contentItem->m_shouldAnimate = false;
     polish();
-    emit columnResizeModeChanged();
+    Q_EMIT columnResizeModeChanged();
 }
 
 qreal ColumnView::columnWidth() const
@@ -792,7 +814,7 @@ void ColumnView::setColumnWidth(qreal width)
     m_contentItem->m_columnWidth = width;
     m_contentItem->m_shouldAnimate = false;
     polish();
-    emit columnWidthChanged();
+    Q_EMIT columnWidthChanged();
 }
 
 int ColumnView::currentIndex() const
@@ -844,8 +866,8 @@ void ColumnView::setCurrentIndex(int index)
         }
     }
 
-    emit currentIndexChanged();
-    emit currentItemChanged();
+    Q_EMIT currentIndexChanged();
+    Q_EMIT currentItemChanged();
 }
 
 QQuickItem *ColumnView::currentItem()
@@ -894,7 +916,7 @@ void ColumnView::setTopPadding(qreal padding)
 
     m_topPadding = padding;
     polish();
-    emit topPaddingChanged();
+    Q_EMIT topPaddingChanged();
 }
 
 qreal ColumnView::bottomPadding() const
@@ -910,7 +932,7 @@ void ColumnView::setBottomPadding(qreal padding)
 
     m_bottomPadding = padding;
     polish();
-    emit bottomPaddingChanged();
+    Q_EMIT bottomPaddingChanged();
 }
 
 
@@ -933,7 +955,7 @@ void ColumnView::setScrollDuration(int duration)
     }
 
     m_contentItem->m_slideAnim->setDuration(duration);
-    emit scrollDurationChanged();
+    Q_EMIT scrollDurationChanged();
 }
 
 bool ColumnView::separatorVisible() const
@@ -974,7 +996,7 @@ void ColumnView::setSeparatorVisible(bool visible)
         }
     }
 
-    emit separatorVisibleChanged();
+    Q_EMIT separatorVisibleChanged();
 }
 
 bool ColumnView::dragging() const
@@ -1018,14 +1040,14 @@ void ColumnView::setInteractive(bool interactive)
     if (!m_interactive) {
         if (m_dragging) {
             m_dragging = false;
-            emit draggingChanged();
+            Q_EMIT draggingChanged();
         }
 
         m_contentItem->snapToItem();
         setKeepMouseGrab(false);
     }
 
-    emit interactiveChanged();
+    Q_EMIT interactiveChanged();
 }
 
 bool ColumnView::acceptsMouse() const
@@ -1044,14 +1066,14 @@ void ColumnView::setAcceptsMouse(bool accepts)
     if (!m_acceptsMouse) {
         if (m_dragging) {
             m_dragging = false;
-            emit draggingChanged();
+            Q_EMIT draggingChanged();
         }
 
         m_contentItem->snapToItem();
         setKeepMouseGrab(false);
     }
 
-    emit acceptsMouseChanged();
+    Q_EMIT acceptsMouseChanged();
 }
 
 void ColumnView::addItem(QQuickItem *item)
@@ -1079,16 +1101,16 @@ void ColumnView::insertItem(int pos, QQuickItem *item)
     // We layout immediately to be sure all geometries are final after the return of this call
     m_contentItem->m_shouldAnimate = false;
     m_contentItem->layoutItems();
-    emit contentChildrenChanged();
+    Q_EMIT contentChildrenChanged();
 
     // In order to keep the same current item we need to increase the current index if displaced
     // NOTE: just updating m_currentIndex does *not* update currentItem (which is what we need atm) while setCurrentIndex will update also currentItem
     if (m_currentIndex >= pos) {
         ++m_currentIndex;
-        emit currentIndexChanged();
+        Q_EMIT currentIndexChanged();
     }
 
-    emit itemInserted(pos, item);
+    Q_EMIT itemInserted(pos, item);
 }
 
 void ColumnView::moveItem(int from, int to)
@@ -1104,13 +1126,13 @@ void ColumnView::moveItem(int from, int to)
 
     if (from == m_currentIndex) {
         m_currentIndex = to;
-        emit currentIndexChanged();
+        Q_EMIT currentIndexChanged();
     } else if (from < m_currentIndex && to > m_currentIndex) {
         --m_currentIndex;
-        emit currentIndexChanged();
+        Q_EMIT currentIndexChanged();
     } else if (from > m_currentIndex && to <= m_currentIndex) {
         ++m_currentIndex;
-        emit currentIndexChanged();
+        Q_EMIT currentIndexChanged();
     }
 
     polish();
@@ -1151,7 +1173,7 @@ QQuickItem *ColumnView::removeItem(QQuickItem *item)
         item->setParentItem(attached ? attached->originalParent() : nullptr);
     }
 
-    emit itemRemoved(item);
+    Q_EMIT itemRemoved(item);
 
     return item;
 }
@@ -1186,7 +1208,7 @@ void ColumnView::clear()
         removeItem(item);
     }
     m_contentItem->m_items.clear();
-    emit contentChildrenChanged();
+    Q_EMIT contentChildrenChanged();
 }
 
 bool ColumnView::containsItem(QQuickItem *item)
@@ -1240,6 +1262,7 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
 
         // if !m_acceptsMouse we don't dra gwith mouse
         if (!m_acceptsMouse &&  me->source() == Qt::MouseEventNotSynthesized) {
+            event->setAccepted(false);
             return false;
         }
 
@@ -1249,6 +1272,7 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
             return false;
         }
         m_oldMouseX = m_startMouseX = mapFromItem(item, me->localPos()).x();
+        m_oldMouseY = m_startMouseY = mapFromItem(item, me->localPos()).y();
 
         m_mouseDown = true;
         me->setAccepted(false);
@@ -1267,10 +1291,9 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
             return false;
         }
 
-        if ((!keepMouseGrab() && item->keepMouseGrab()) || item->property("preventStealing").toBool()) {
-            m_contentItem->snapToItem();
-            return false;
-        }
+        const QPointF pos = mapFromItem(item, me->localPos());
+
+        bool verticalScrollIntercepted = false;
 
         QQuickItem *candidateItem = item;
         while (candidateItem->parentItem() && candidateItem->parentItem() != m_contentItem) {
@@ -1283,7 +1306,26 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
             }
         }
 
-        const QPointF pos = mapFromItem(item, me->localPos());
+        {
+            ColumnViewAttached *attached = qobject_cast<ColumnViewAttached *>(qmlAttachedPropertiesObject<ColumnView>(candidateItem, true));
+
+            ScrollIntentionEvent scrollIntentionEvent;
+            scrollIntentionEvent.delta = QPointF(pos.x() - m_oldMouseX, pos.y() - m_oldMouseY);
+
+            Q_EMIT attached->scrollIntention(&scrollIntentionEvent);
+
+            if (scrollIntentionEvent.accepted) {
+                verticalScrollIntercepted = true;
+                event->setAccepted(true);
+            }
+        }
+
+        if ((!keepMouseGrab() && item->keepMouseGrab()) || item->property("preventStealing").toBool()) {
+            m_contentItem->snapToItem();
+            m_oldMouseX = pos.x();
+            m_oldMouseY = pos.y();
+            return false;
+        }
 
         const bool wasDragging = m_dragging;
         // If a drag happened, start to steal all events, use startDragDistance * 2 to give time to widgets to take the mouse grab by themselves
@@ -1291,8 +1333,8 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
 
         if (m_dragging != wasDragging) {
             m_moving = true;
-            emit movingChanged();
-            emit draggingChanged();
+            Q_EMIT movingChanged();
+            Q_EMIT draggingChanged();
         }
 
         if (m_dragging) {
@@ -1301,10 +1343,12 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
 
         m_contentItem->m_lastDragDelta = pos.x() - m_oldMouseX;
         m_oldMouseX = pos.x();
+        m_oldMouseY = pos.y();
 
         setKeepMouseGrab(m_dragging);
         me->setAccepted(m_dragging);
-        return m_dragging;
+
+        return m_dragging && !verticalScrollIntercepted;
         break;
     }
     case QEvent::MouseButtonRelease: {
@@ -1334,7 +1378,7 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
         m_contentItem->m_lastDragDelta = 0;
         if (m_dragging) {
             m_dragging = false;
-            emit draggingChanged();
+            Q_EMIT draggingChanged();
         }
 
         if (item->property("preventStealing").toBool()) {
@@ -1361,6 +1405,7 @@ bool ColumnView::childMouseEventFilter(QQuickItem *item, QEvent *event)
 void ColumnView::mousePressEvent(QMouseEvent *event)
 {
     if (!m_acceptsMouse &&  event->source() == Qt::MouseEventNotSynthesized) {
+        event->setAccepted(false);
         return;
     }
 
@@ -1397,8 +1442,8 @@ void ColumnView::mouseMoveEvent(QMouseEvent *event)
     m_dragging = keepMouseGrab() || qAbs(event->localPos().x() - m_startMouseX) > qApp->styleHints()->startDragDistance() * 2;
     if (m_dragging != wasDragging) {
         m_moving = true;
-        emit movingChanged();
-        emit draggingChanged();
+        Q_EMIT movingChanged();
+        Q_EMIT draggingChanged();
     }
 
     setKeepMouseGrab(m_dragging);
@@ -1435,7 +1480,7 @@ void ColumnView::mouseReleaseEvent(QMouseEvent *event)
 
     if (m_dragging) {
         m_dragging = false;
-        emit draggingChanged();
+        Q_EMIT draggingChanged();
     }
 
     setKeepMouseGrab(false);
@@ -1453,7 +1498,7 @@ void ColumnView::mouseUngrabEvent()
 
     if (m_dragging) {
         m_dragging = false;
-        emit draggingChanged();
+        Q_EMIT draggingChanged();
     }
 
     setKeepMouseGrab(false);
@@ -1463,7 +1508,7 @@ void ColumnView::classBegin()
 {
     auto syncColumnWidth = [this]() {
         m_contentItem->m_columnWidth = privateQmlComponentsPoolSelf->instance(qmlEngine(this))->m_units->property("gridUnit").toInt() * 20;
-        emit columnWidthChanged();
+        Q_EMIT columnWidthChanged();
     };
 
     connect(QmlComponentsPoolSingleton::instance(qmlEngine(this)), &QmlComponentsPool::gridUnitChanged, this, syncColumnWidth);
@@ -1471,7 +1516,7 @@ void ColumnView::classBegin()
 
     auto syncDuration = [this]() {
         m_contentItem->m_slideAnim->setDuration(QmlComponentsPoolSingleton::instance(qmlEngine(this))->m_units->property("longDuration").toInt());
-        emit scrollDurationChanged();
+        Q_EMIT scrollDurationChanged();
     };
 
     connect(QmlComponentsPoolSingleton::instance(qmlEngine(this)), &QmlComponentsPool::longDurationChanged, this, syncDuration);

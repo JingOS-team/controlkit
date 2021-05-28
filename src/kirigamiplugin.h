@@ -25,6 +25,7 @@ class KirigamiPlugin : public QQmlExtensionPlugin
 
 public:
     KirigamiPlugin(QObject *parent = nullptr);
+    virtual ~KirigamiPlugin();
     void registerTypes(const char *uri) override;
     void initializeEngine(QQmlEngine *engine, const char *uri) override;
 
@@ -53,7 +54,7 @@ private:
     QUrl componentUrl(const QString &fileName) const;
     QString resolveFilePath(const QString &path) const
     {
-#if defined(Q_OS_ANDROID) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+#if defined(Q_OS_ANDROID)
         return QStringLiteral(":/android_rcc_bundle/qml/org/kde/kirigami.2/") + path;
 #elif defined(KIRIGAMI_BUILD_TYPE_STATIC)
         return QStringLiteral(":/org/kde/kirigami.2/") + path;
@@ -63,7 +64,7 @@ private:
     }
     QString resolveFileUrl(const QString &filePath) const
     {
-#if defined(Q_OS_ANDROID) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+#if defined(Q_OS_ANDROID)
         return QStringLiteral("qrc:/android_rcc_bundle/qml/org/kde/kirigami.2/") + filePath;
 #elif defined(KIRIGAMI_BUILD_TYPE_STATIC)
         return filePath;

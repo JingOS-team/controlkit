@@ -110,5 +110,4 @@ ScrollablePage {
             }
         }
     }
-
 }

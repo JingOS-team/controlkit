@@ -7,7 +7,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.2
 import "private"
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.14
 import QtQuick.Controls 2.4 as Controls
 
 /**
@@ -30,7 +30,7 @@ Item {
     property int maximumHeight: Units.gridUnit * 3
 
     property int position: Controls.ToolBar.Header
-    
+
     property PageRow pageRow: __appWindow ? __appWindow.pageStack: null
     property Page page: pageRow ? pageRow.currentItem : null
 
@@ -73,6 +73,22 @@ Item {
 
     opacity: height > 0 ? 1 : 0
 
+    onPageChanged: {
+        // NOTE: The Connections object doesn't work with attached properties signals, so we have to do this by hand
+        if (headerItem.oldPage) {
+            headerItem.oldPage.ColumnView.scrollIntention.disconnect(headerItem.scrollIntentHandler);
+        }
+        if (root.page) {
+            root.page.ColumnView.scrollIntention.connect(headerItem.scrollIntentHandler);
+        }
+        headerItem.oldPage = root.page;
+    }
+    Component.onDestruction: {
+        if (root.page) {
+            root.page.ColumnView.scrollIntention.disconnect(headerItem.scrollIntentHandler);
+        }
+    }
+
     NumberAnimation {
         id: heightAnim
         target: root
@@ -82,7 +98,7 @@ Item {
     }
     Connections {
         target: __appWindow
-        onControlsVisibleChanged: {
+        function onControlsVisibleChanged() {
             heightAnim.from = root.implicitHeight
             heightAnim.to = __appWindow.controlsVisible ? root.preferredHeight : 0;
             heightAnim.restart();
@@ -91,53 +107,45 @@ Item {
 
     Item {
         id: headerItem
-        property real computedRootHeight: root.preferredHeight
         anchors {
-            fill: parent
+            left: parent.left
+            right: parent.right
+            bottom: !Settings.isMobile || root.position === Controls.ToolBar.Header ? parent.bottom : undefined
+            top: !Settings.isMobile || root.position === Controls.ToolBar.Footer ? parent.top : undefined
         }
 
         height: __appWindow && __appWindow.reachableMode && __appWindow.reachableModeEnabled ? root.maximumHeight : (root.minimumHeight > 0 ? Math.max(root.height, root.minimumHeight) : root.preferredHeight)
 
-        //FIXME: see FIXME below
-        Connections {
-            target: root.page ? root.page.globalToolBarItem : null
-            enabled: headerSlideConnection.passive && target
-            onImplicitHeightChanged: root.implicitHeight = root.page.globalToolBarItem.implicitHeight
-        }
-
-        Connections {
-            id: headerSlideConnection
-            target: root.page ? root.page.flickable : null
-            enabled: !passive
-            property real oldContentY
-            property bool updatingContentY: false
-
-            //FIXME HACK: if we are in global mode, meaning if we are the toolbar showing the global breadcrumb (but the pages are showing their own toolbar), not to try to mess with page contentY.
-            //A better solution is needed
-            readonly property bool passive: root.pageRow && parent.parent == root.pageRow && root.pageRow.globalToolBar.actualStyle !== ApplicationHeaderStyle.TabBar && root.pageRow.globalToolBar.actualStyle != ApplicationHeaderStyle.Breadcrumb
-
-            onContentYChanged: {
-                if(root.page && root.page.flickable && root.page.flickable.contentHeight < root.page.height) {
-                    return
-                }                
-
-                if ((root.pageRow ? root.pageRow.wideMode : (__appWindow && __appWindow.wideScreen)) || !Settings.isMobile || root.page.flickable.atYBeginning) {
-                    root.implicitHeight = root.preferredHeight;
-                } else {
-                    var oldHeight = root.implicitHeight;
-
-                    root.implicitHeight = Math.max(root.minimumHeight,
-                                            Math.min(root.preferredHeight,
-                                                 root.implicitHeight + oldContentY - root.page.flickable.contentY));
-
-                    //if the implicitHeight is changed, use that to simulate scroll
-                    if (oldHeight === implicitHeight) {
-                        oldContentY = root.page.flickable.contentY;
-                    }
-                }
+        function scrollIntentHandler(event) {
+            if (root.pageRow
+                && root.pageRow.globalToolBar.actualStyle !== ApplicationHeaderStyle.TabBar
+                && root.pageRow.globalToolBar.actualStyle !== ApplicationHeaderStyle.Breadcrumb) {
+                return;
+            }
+            if (!root.page.flickable || (root.page.flickable.atYBeginning && root.page.flickable.atYEnd)) {
+                return;
             }
 
-            onMovementEnded: {
+            root.implicitHeight = Math.max(0, Math.min(root.preferredHeight, root.implicitHeight + event.delta.y))
+            event.accepted = root.implicitHeight > 0 && root.implicitHeight < root.preferredHeight;
+            slideResetTimer.restart();
+            if ((root.page.flickable instanceof ListView) && root.page.flickable.verticalLayoutDirection === ListView.BottomToTop) {
+                root.page.flickable.contentY -= event.delta.y;
+            }
+        }
+
+        property Page oldPage
+
+        Connections {
+            target: root.page ? root.page.globalToolBarItem : null
+            enabled: target
+            function onImplicitHeightChanged() { root.implicitHeight = root.page.globalToolBarItem.implicitHeight }
+        }
+
+        Timer {
+           id: slideResetTimer
+           interval: 500
+           onTriggered: {
                 if ((root.pageRow ? root.pageRow.wideMode : (__appWindow && __appWindow.wideScreen)) || !Settings.isMobile) {
                     return;
                 }
@@ -150,25 +158,25 @@ Item {
                 heightAnim.restart();
             }
         }
+
         Connections {
             target: pageRow
-            onCurrentItemChanged: {
+            function onCurrentItemChanged() {
                 if (!root.page) {
                     return;
                 }
-                if (root.page.flickable) {
-                    headerSlideConnection.oldContentY = root.page.flickable.contentY;
-                } else {
-                    headerSlideConnection.oldContentY = 0;
-                }
 
-                root.implicitHeight = root.preferredHeight;
+                heightAnim.from = root.implicitHeight;
+                heightAnim.to = root.preferredHeight;
+
+                heightAnim.restart();
             }
         }
 
         Item {
             id: mainItem
             clip: childrenRect.width > width
+            onChildrenChanged: Array.from(children).forEach(item => item.anchors.verticalCenter = this.verticalCenter)
             anchors {
                 fill: parent
                 leftMargin: root.leftPadding

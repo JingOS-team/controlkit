@@ -135,7 +135,7 @@ void PlatformThemePrivate::syncCustomPalette()
         setPaletteColor(customPalette, state, QPalette::LinkVisited, q->visitedLinkColor(), &changed);
     }
     if (changed) {
-        emit q->paletteChanged(customPalette);
+        Q_EMIT q->paletteChanged(customPalette);
     }
 }
 
@@ -199,7 +199,7 @@ void PlatformThemePrivate::emitCompressedColorChanged()
     m_pendingColorChange = true;
     QMetaObject::invokeMethod(q, [this]() {
         syncCustomPalette();
-        emit q->colorsChanged();
+        Q_EMIT q->colorsChanged();
         m_pendingColorChange = false;
     }, Qt::QueuedConnection);
 }
@@ -247,7 +247,7 @@ void PlatformTheme::setColorSet(PlatformTheme::ColorSet colorSet)
     }
 
     if (!d->m_init) {
-        emit colorSetChanged(colorSet);
+        Q_EMIT colorSetChanged(colorSet);
         d->emitCompressedColorChanged();
     }
 }
@@ -272,7 +272,7 @@ void PlatformTheme::setColorGroup(PlatformTheme::ColorGroup colorGroup)
     }
 
     if (!d->m_init) {
-        emit colorGroupChanged(colorGroup);
+        Q_EMIT colorGroupChanged(colorGroup);
         d->emitCompressedColorChanged();
     }
 }
@@ -297,7 +297,7 @@ void PlatformTheme::setInherit(bool inherit)
     if (inherit && d->m_parentTheme) {
         setColorSet(d->m_parentTheme->colorSet());
     }
-    emit inheritChanged(inherit);
+    Q_EMIT inheritChanged(inherit);
 }
 
 QColor PlatformTheme::textColor() const
@@ -613,7 +613,7 @@ void PlatformTheme::setDefaultFont(const QFont &font)
     }
 
     d->font = font;
-    emit defaultFontChanged(font);
+    Q_EMIT defaultFontChanged(font);
 }
 
 QFont PlatformTheme::smallFont() const
@@ -625,7 +625,7 @@ void PlatformTheme::setSmallFont(const QFont &font)
 {
     if (d->smallFont != font) {
         d->smallFont = font;
-        emit smallFontChanged(font);
+        Q_EMIT smallFontChanged(font);
     }
 }
 
@@ -873,7 +873,7 @@ void PlatformTheme::setPalette(const QPalette &palette)
 
     d->palette = palette;
     PROPAGATECUSTOMCOLOR(Palette, palette)
-    emit paletteChanged(palette);
+    Q_EMIT paletteChanged(palette);
 }
 
 QIcon PlatformTheme::iconFromTheme(const QString &name, const QColor &customColor)

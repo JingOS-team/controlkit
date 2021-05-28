@@ -5,14 +5,16 @@
  */
 
 import QtQuick 2.13
-import org.kde.kirigami 2.13 as Kirigami
+import org.kde.kirigami 2.14 as Kirigami
 import QtQuick.Controls 2.13 as QQC2
-import org.kde.kirigami.private 2.13
+import QtGraphicalEffects 1.0
+import org.kde.kirigami.private 2.14
 
 import "templates/private" as P
 
 /**
  * An element that represents a user, either with initials, an icon, or a profile image.
+ * @inherit QtQuick.Controls.Control
  */
 QQC2.Control {
     id: avatarRoot
@@ -30,7 +32,8 @@ QQC2.Control {
     /**
     * The given name of a user.
     *
-    * The user's name will be used for generating initials.
+    * The user's name will be used for generating initials and to provide the
+    * accessible name for assistive technology.
     */
     property string name
 
@@ -72,16 +75,31 @@ QQC2.Control {
     property alias smooth: avatarImage.smooth
 
     /**
+     *
+     */
+
+    /**
      * color: color
      *
-     * The color to use for this avatar.
+     * The color to use for this avatar. If not explicitly set, this defaults to generating a colour from the name.
      */
-    property var color: undefined
+    property var color: Kirigami.NameUtils.colorsFromString(name)
     // We use a var instead of a color here to allow setting the colour
     // as undefined, which will result in a generated colour being used.
 
+    /**
+     * actions.main: Kirigami.Action
+     * actions.secondary: Kirigami.Action
+     *
+     * Actions associated with this avatar.
+     *
+     * Note that the secondary action should only be used for shortcuts of actions
+     * elsewhere in your application's UI, and cannot be accessed on mobile platforms.
+     */
+    property AvatarGroup actions: AvatarGroup {}
+
     property P.BorderPropertiesGroup border: P.BorderPropertiesGroup {
-        width: 1
+        width: 0
         color: Qt.rgba(0,0,0,0.2)
     }
 
@@ -96,32 +114,68 @@ QQC2.Control {
     implicitWidth: Kirigami.Units.iconSizes.large
     implicitHeight: Kirigami.Units.iconSizes.large
 
+    Accessible.role: !!actions.main ? Accessible.Button : Accessible.Graphic
+    Accessible.name: !!actions.main ? i18n("%1 — %2").arg(name).arg(actions.main.text) : name
+    Accessible.focusable: !!actions.main
+    Accessible.onPressAction: {
+        avatarRoot.actions.main.trigger()
+    }
+
     background: Rectangle {
         radius: parent.width / 2
 
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: Qt.lighter(__private.backgroundColor, 1.1)
+        readonly property Gradient colouredGradient: Gradient {
+            GradientStop { position: 0.0; color: Qt.lighter(avatarRoot.color, 1.2) }
+            GradientStop { position: 1.0; color: Qt.darker(avatarRoot.color, 1.3) }
+        }
+
+        color: __private.showImage ? Kirigami.Theme.backgroundColor : "white"
+        gradient: __private.showImage ? undefined : colouredGradient
+
+        MouseArea {
+            id: primaryMouse
+
+            anchors.fill: parent
+            hoverEnabled: true
+            property bool mouseInCircle: {
+                let x = avatarRoot.width / 2, y = avatarRoot.height / 2
+                let xPrime = mouseX, yPrime = mouseY
+
+                let distance = (x - xPrime) ** 2 + (y - yPrime) ** 2
+                let radiusSquared = (Math.min(avatarRoot.width, avatarRoot.height) / 2) ** 2
+
+                return distance < radiusSquared
             }
-            GradientStop {
-                position: 1.0
-                color: Qt.darker(__private.backgroundColor, 1.1)
+
+            onClicked: {
+                if (mouseY > avatarRoot.height - secondaryRect.height && !!avatarRoot.actions.secondary) {
+                    avatarRoot.actions.secondary.trigger()
+                    return
+                }
+                if (!!avatarRoot.actions.main) {
+                    avatarRoot.actions.main.trigger()
+                }
             }
+
+            enabled: !!avatarRoot.actions.main || !!avatarRoot.actions.secondary
+            cursorShape: containsMouse && mouseInCircle && enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+
+            states: [
+                State {
+                    name: "secondaryRevealed"
+                    when: (!Kirigami.Settings.isMobile) && (!!avatarRoot.actions.secondary) && (primaryMouse.containsMouse && primaryMouse.mouseInCircle)
+                    PropertyChanges {
+                        target: secondaryRect
+                        visible: true
+                    }
+                }
+            ]
         }
     }
 
     QtObject {
         id: __private
-        // This property allows us to fall back to colour generation if
-        // the root colour property is undefined.
-        property color backgroundColor: {
-            if (!!avatarRoot.color) {
-                return avatarRoot.color
-            }
-            return AvatarPrivate.colorsFromString(name)
-        }
-        property color textColor: Kirigami.ColorUtils.brightnessForColor(__private.backgroundColor) == Kirigami.ColorUtils.Light
+        property color textColor: Kirigami.ColorUtils.brightnessForColor(avatarRoot.color) == Kirigami.ColorUtils.Light
                                 ? "black"
                                 : "white"
         property bool showImage: {
@@ -137,54 +191,48 @@ QQC2.Control {
             fontSizeMode: Text.Fit
             visible: avatarRoot.initialsMode == Kirigami.Avatar.InitialsMode.UseInitials &&
                     !__private.showImage &&
-                    !AvatarPrivate.stringUnsuitableForInitials(avatarRoot.name)
+                    !Kirigami.NameUtils.isStringUnsuitableForInitials(avatarRoot.name) &&
+                    avatarRoot.width > Kirigami.Units.gridUnit
 
-            text: AvatarPrivate.initialsFromString(name)
+            text: Kirigami.NameUtils.initialsFromString(name)
             color: __private.textColor
 
             anchors.fill: parent
-            padding: Math.round(avatarRoot.height/8) // leftPadding plus rightPadding is avatarRoot.height/4
-            verticalAlignment: Qt.AlignVCenter
-            horizontalAlignment: Qt.AlignHCenter
-            // Change this to Text.QtRendering if people start wanting to animate the size of avatars
-            // or expose renderType as an alias property of Avatar.
-            renderType: Text.NativeRendering
+            font {
+                // this ensures we don't get a both point and pixel size are set warning
+                pointSize: -1
+                pixelSize: (avatarRoot.height - Kirigami.Units.largeSpacing) / 2
+            }
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
         }
         Kirigami.Icon {
             id: avatarIcon
             visible: (avatarRoot.initialsMode == Kirigami.Avatar.InitialsMode.UseIcon && !__private.showImage) ||
-                    (AvatarPrivate.stringUnsuitableForInitials(avatarRoot.name) && !__private.showImage)
+                    (Kirigami.NameUtils.isStringUnsuitableForInitials(avatarRoot.name) && !__private.showImage)
 
             source: "user"
 
-            anchors.centerIn: parent
-            height: Kirigami.Units.fontMetrics.roundedIconSize(avatarRoot.height - avatarText.topPadding - avatarText.bottomPadding)
-            width: height
+            anchors.fill: parent
+            anchors.margins: Kirigami.Units.largeSpacing
 
             color: __private.textColor
         }
         Image {
             id: avatarImage
-            visible: false
+            visible: __private.showImage
 
             mipmap: true
             smooth: true
             sourceSize {
-                width: avatarImage.width
-                height: avatarImage.height
+                width: avatarRoot.width
+                height: avatarRoot.height
             }
 
-            fillMode: Image.PreserveAspectFit
+            fillMode: Image.PreserveAspectCrop
             anchors.fill: parent
         }
-        Kirigami.ShadowedTexture {
-            visible: __private.showImage
 
-            radius: width / 2
-            anchors.fill: parent
-
-            source: avatarImage
-        }
         Rectangle {
             color: "transparent"
 
@@ -194,6 +242,43 @@ QQC2.Control {
             border {
                 width: avatarRoot.border.width
                 color: avatarRoot.border.color
+            }
+        }
+
+        Rectangle {
+            id: secondaryRect
+            visible: false
+
+            anchors {
+                bottom: parent.bottom
+                left: parent.left
+                right: parent.right
+            }
+
+            height: Kirigami.Units.iconSizes.small + Kirigami.Units.smallSpacing*2
+
+            color: Qt.rgba(0, 0, 0, 0.6)
+
+            Kirigami.Icon {
+                Kirigami.Theme.textColor: "white"
+                source: (avatarRoot.actions.secondary || {iconName: ""}).iconName
+
+                width: Kirigami.Units.iconSizes.small
+                height: Kirigami.Units.iconSizes.small
+
+                x: Math.round((parent.width/2)-(this.width/2))
+                y: Math.round((parent.height/2)-(this.height/2))
+            }
+        }
+
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                height: avatarRoot.height
+                width: avatarRoot.width
+                radius: height / 2
+                color: "black"
+                visible: false
             }
         }
     }
