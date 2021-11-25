@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2018 by Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2021 by Lele Huan <huanlele@jingos.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -83,6 +84,8 @@ Item {
      */
     property ListView listView
 
+    property string source: ""
+    property var color: ""
     /**
      * Emitted when the drag handle wants to move the item in the model
      * The following example does the move in the case a ListModel is used
@@ -102,7 +105,6 @@ Item {
 
     implicitWidth: Kirigami.Units.iconSizes.smallMedium
     implicitHeight: implicitWidth
-
     MouseArea {
         id: mouseArea
         anchors.fill: parent
@@ -116,7 +118,8 @@ Item {
 
         Kirigami.Icon {
             id: internal
-            source: "handle-sort"
+            source: root.source  || "handle-sort"
+            color: root.color
             property int startY
             property int mouseDownY
             property Item originalParent

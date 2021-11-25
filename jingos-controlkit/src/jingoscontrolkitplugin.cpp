@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2021 Beijing Jingling Information System Technology Co., Ltd. All rights reserved.
+ *
+ * Authors:
+ * Lele Huan <huanlele@jingos.com>
+ *
+ */
+
 #include "jingoscontrolkitplugin.h"
 
 #include <QQmlContext>

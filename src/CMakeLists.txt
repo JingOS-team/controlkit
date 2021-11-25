@@ -41,11 +41,17 @@ set(kirigami_SRCS
     scenegraph/shadowedtexturenode.cpp
     scenegraph/shadowedtexturematerial.cpp
     scenegraph/shadowedbordertexturematerial.cpp
-	ImagePreview/jexiv2extractor.cpp
-	ImagePreview/jimagedocument.cpp
-	ImagePreview/jresizehandle.cpp
-	ImagePreview/jresizerectangle.cpp
-	ImagePreview/jwallpapersettings.cpp
+    jplatformtheme.cpp
+    jthememanager.cpp
+    ThemePrivate/jbasictheme.cpp
+    ThemePrivate/jplatformtheme_p.cpp
+    ThemePrivate/jthememanager_p.cpp
+    ImagePreview/jexiv2extractor.cpp
+    ImagePreview/jimagedocument.cpp
+    ImagePreview/jresizehandle.cpp
+    ImagePreview/jresizerectangle.cpp
+    ImagePreview/jwallpapersettings.cpp
+    jmediasettool.cpp
     ${kirigami_QM_LOADER}
     ${KIRIGAMI_STATIC_FILES}
     )
@@ -98,14 +104,19 @@ endif()
 
 
 
-####### add LibExiv2::LibExiv2 for picture plugin   ##########
+####### add LibExiv2::LibExiv2 for picture plugin   MauiKit tag##########
 target_link_libraries(kirigamiplugin
         PUBLIC
-            Qt5::Core
+            Qt5::Core 
         PRIVATE
-            ${Kirigami_EXTRA_LIBS} Qt5::Qml Qt5::Quick Qt5::QuickControls2 Qt5::Concurrent Qt5::DBus LibExiv2::LibExiv2
+            ${Kirigami_EXTRA_LIBS} Qt5::Qml Qt5::Quick Qt5::QuickControls2 Qt5::Concurrent Qt5::Widgets 
+			Qt5::DBus
+			LibExiv2::LibExiv2
+			KF5::Package
+		    KF5::ConfigCore
+    		KF5::ConfigGui
+			KF5::I18n 
     )
-
 if (BUILD_SHARED_LIBS)
     add_custom_target(copy_to_bin ALL
         COMMAND ${CMAKE_COMMAND} -E

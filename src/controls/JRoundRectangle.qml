@@ -1,25 +1,14 @@
 /*
- * Copyright 2021 Lele Huan <huanlele@jingos.com>
+ * Copyright (C) 2021 Beijing Jingling Information System Technology Co., Ltd. All rights reserved.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
- * accepted by the membership of KDE e.V. (or its successor approved
- * by the membership of KDE e.V.), which shall act as a proxy
- * defined in Section 14 of version 3 of the license.
+ * Authors:
+ * Lele Huan <huanlele@jingos.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 import QtQuick 2.12
 import QtQml 2.12
+import jingos.display 1.0
 Item {
     id:root
     property color color: "#ffffff"
@@ -31,8 +20,8 @@ Item {
     property int arrowX: 0
     property int arrowY: 0
 
-    property int arrowWidth : 12
-    property int arrowHeight: 8
+    property int arrowWidth :JDisplay.dp(16)
+    property int arrowHeight: JDisplay.dp(8)
 
 
     property int radiusPos:JRoundRectangle.UNKOWN
@@ -53,12 +42,22 @@ Item {
         ARROW_LEFT = 0x08
     }
 
+    onArrowPosChanged: {
+        mycanvas.requestPaint();
+    }
+
     onColorChanged: {
         mycanvas.requestPaint();
     }
 
     onRadiusChanged: {
         mycanvas.requestPaint();
+    }
+
+    onVisibleChanged: {
+        if(visible){
+            mycanvas.requestPaint();
+        }
     }
 
     onBorderColorChanged: {
@@ -69,99 +68,150 @@ Item {
         mycanvas.requestPaint();
     }
 
+    onWidthChanged: {
+        mycanvas.requestPaint()
+    }
+
+    onHeightChanged: {
+        mycanvas.requestPaint()
+    }
+
     Canvas {
         id: mycanvas
         anchors.fill: parent
+        renderTarget:Canvas.FramebufferObject
+        renderStrategy:Canvas.Cooperative
         onPaint: {
+
             var ctx = getContext("2d");
+            ctx.clearRect(0,0,width,height);
             if(root.borderWidth >= 1){
                 ctx.strokeStyle = root.borderColor
                 ctx.lineWidth = root.borderWidth;
             }
 
             ctx.fillStyle = root.color
-            var w = width;
-            var h = height;
-            if((root.arrowPos & JRoundRectangle.ARROW_TOP) || (root.arrowPos & JRoundRectangle.ARROW_BOTTOM)){
-                h = h - root.arrowHeight;
-            } else if((root.arrowPos & JRoundRectangle.ARROW_RIGHT) || (root.arrowPos & JRoundRectangle.ARROW_LEFT)){
-                w = w - root.arrowWidth;
-            }
 
-            drawRoundRectPath(ctx, w, h, root.radius, root.radiusPos, root.arrowPos, root.arrowX, root.arrowY, root.arrowWidth, root.arrowHeight);
+            drawRoundRectPath(ctx, width, height, root.radius, root.radiusPos, root.arrowPos, root.arrowX, root.arrowY, root.arrowWidth, root.arrowHeight);
             ctx.fill();
             if(root.borderWidth >= 1){
                 ctx.stroke();
             }
         }
 
+        /*
+          cxt : Canvas handle
+          width: rect width
+          height: rect height
+          radius: Fillet radius
+          rPos:  Fillet position ， lefttop，righttop， rightbottom，leftbottom
+          aPos:   Arrow position， left right top bottom
+          ax:     The coordinates of the arrow  x
+          ay:     The coordinates of the arrow  y
+          aw:     Arrow width
+          ah:     Arrow height
+
+          --->
+        |--------|
+        |        |
+        |--------|  //start pos
+           <---
+        */
         function drawRoundRectPath(cxt, width, height, radius, rPos, aPos, ax, ay, aw, ah) {
             cxt.beginPath();
+
+            var apstart = ax + aw / 2;
+            var apend = ax - aw / 2;
+
             if(rPos & JRoundRectangle.BOTTOMRIGHT){
-                //从右下角顺时针绘制，弧度从0到1/2PI
-                cxt.arc(width - radius, height - radius, radius, 0, Math.PI / 2);
+                if(aPos & JRoundRectangle.ARROW_BOTTOM){
+                    cxt.arc(width - radius, height - ah - radius, radius, 0, Math.PI / 2);
+                } else {
+                    cxt.arc(width - radius, height - radius, radius, 0, Math.PI / 2);
+                }
             } else {
-
+                if(aPos & JRoundRectangle.ARROW_BOTTOM){
+                    cxt.moveTo(width, height - ah);
+                } else {
                     cxt.moveTo(width, height);
-
+                }
             }
 
             if(rPos & JRoundRectangle.BOTTOMLEFT){
-                //画底线
                 if(aPos & JRoundRectangle.ARROW_BOTTOM){
-                    var apstart = ax + aw / 2;
-                    var apend = ax - aw / 2;
-                    console.log("line to " + apstart + "  " + height)
-                    cxt.lineTo(apstart, height);
-                    console.log("line to " + ax + "  " + height + ah)
-                    cxt.lineTo(ax, height + ah);
-                    console.log("line to " + apend + "  " + height)
-                    cxt.lineTo(apend, height);
+                    cxt.lineTo(apstart, height - ah);
+                    cxt.lineTo(ax, height);
+                    cxt.lineTo(apend, height - ah);
+                    cxt.arc(radius, height - ah - radius, radius, Math.PI / 2, Math.PI);
                 } else {
                     cxt.lineTo(radius, height);
+                    cxt.arc(radius, height - radius, radius, Math.PI / 2, Math.PI);
                 }
-
-                //左下角圆弧，弧度从1/2PI到PI
-                cxt.arc(radius, height - radius, radius, Math.PI / 2, Math.PI);
             } else {
                 if(aPos & JRoundRectangle.ARROW_BOTTOM){
-                    var apstart = ax + aw / 2;
-                    var apend = ax - aw / 2;
-                    console.log("line to " + apstart + "  " + height)
-                    cxt.lineTo(apstart, height);
-                    console.log("line to " + ax + "  " + height + ah)
-                    cxt.lineTo(ax, height + ah);
-                    console.log("line to " + apend + "  " + height)
-                    cxt.lineTo(apend, height);
-                    cxt.lineTo(0, height);
+
+                    cxt.lineTo(apstart, height - ah);
+                    cxt.lineTo(ax, height);
+                    cxt.lineTo(apend, height - ah);
+                    cxt.lineTo(0, height - ah);
                 } else {
                     cxt.lineTo(0, height);
                 }
             }
 
             if(rPos & JRoundRectangle.TOPLEFT){
-                //画左线
-                cxt.lineTo(0, radius);
-                //左上角圆弧，弧度从PI到3/2PI
-                cxt.arc(radius, radius, radius, Math.PI, Math.PI * 3 / 2);
+                if(aPos & JRoundRectangle.ARROW_TOP){
+                    cxt.lineTo(0, radius + ah);
+                    cxt.arc(radius, radius + ah, radius, Math.PI, Math.PI * 3 / 2);
+                } else {
+                    cxt.lineTo(0, radius);
+                    cxt.arc(radius, radius, radius, Math.PI, Math.PI * 3 / 2);
+                }
+
             } else {
-                cxt.lineTo(0, 0);
+                if(aPos & JRoundRectangle.ARROW_TOP){
+                    cxt.lineTo(0, ah);
+                } else {
+                    cxt.lineTo(0, 0);
+                }
             }
 
             if(rPos & JRoundRectangle.TOPRIGHT){
-                //画上线
-                cxt.lineTo(width - radius, 0);
-                //右上角圆弧
-                cxt.arc(width - radius, radius, radius, Math.PI * 3 / 2, Math.PI * 2);
+                if(aPos & JRoundRectangle.ARROW_TOP){
+                    cxt.lineTo(apend, ah);
+                    cxt.lineTo(ax, 0);
+                    cxt.lineTo(apstart, ah);
+                    cxt.lineTo(width - radius, ah);
+                    cxt.arc(width - radius, radius + ah, radius, Math.PI * 3 / 2, Math.PI * 2);
+                } else {
+                    cxt.lineTo(width - radius, 0);
+                    cxt.arc(width - radius, radius, radius, Math.PI * 3 / 2, Math.PI * 2);
+                }
+
             } else {
-                cxt.lineTo(width, 0);
+                if(aPos & JRoundRectangle.ARROW_TOP){
+                    cxt.lineTo(apend, ah);
+                    cxt.lineTo(ax, 0);
+                    cxt.lineTo(apstart, ah);
+
+                } else {
+                    cxt.lineTo(width, 0);
+                }
             }
 
+
             if(rPos & JRoundRectangle.BOTTOMRIGHT){
-                //画右线
-                cxt.lineTo(width, height - radius);
+                if(aPos & JRoundRectangle.ARROW_BOTTOM){
+                    cxt.lineTo(width, height - ah - radius);
+                } else {
+                    cxt.lineTo(width, height - radius);
+                }
             } else {
-                cxt.lineTo(width, height);
+                if(aPos & JRoundRectangle.ARROW_BOTTOM){
+                    cxt.lineTo(width, height - ah);
+                } else {
+                    cxt.lineTo(width, height);
+                }
             }
             cxt.closePath();
         }

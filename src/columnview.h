@@ -130,7 +130,6 @@ private:
     bool m_inViewport = false;
 };
 
-
 /**
  * ColumnView is a container that lays out items horizontally in a row,
  * when not all items fit in the ColumnView, it will behave like a Flickable and will be a scrollable view which shows only a determined number of columns.

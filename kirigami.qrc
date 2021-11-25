@@ -90,13 +90,13 @@
         <file alias="styles/org.kde.desktop/Theme.qml">src/styles/org.kde.desktop/Theme.qml</file>
         <file alias="styles/org.kde.desktop/Units.qml">src/styles/org.kde.desktop/Units.qml</file>
         <file alias="styles/org.kde.desktop/SwipeListItem.qml">src/styles/org.kde.desktop/SwipeListItem.qml</file>
-        <file alias="styles/org.kde.desktop/ApplicationWindow.qml">src/styles/org.kde.desktop/ApplicationWindow.qml</file>
         <file alias="styles/org.kde.desktop/AbstractApplicationHeader.qml">src/styles/org.kde.desktop/AbstractApplicationHeader.qml</file>
         <file alias="PlaceholderMessage.qml">src/controls/PlaceholderMessage.qml</file>
         <file alias="ShadowedImage.qml">src/controls/ShadowedImage.qml</file>
         <file alias="PrivateMouseHover.qml">src/controls/private/PrivateMouseHover.qml</file>
         <file alias="PrivateMouseSolid.qml">src/controls/private/PrivateMouseSolid.qml</file>
         <file alias="JButton.qml">src/controls/JButton.qml</file>
+        <file alias="JSwitchButton.qml">src/controls/JSwitchButton.qml</file>
         <file alias="JIconButton.qml">src/controls/JIconButton.qml</file>
         <file alias="JLabel.qml">src/controls/JLabel.qml</file>
         <file alias="JSolidButton.qml">src/controls/JSolidButton.qml</file>
@@ -123,5 +123,18 @@
         <file alias="JPasswdKeyBd.qml">src/controls/JPasswdKeyBd.qml</file>
         <file alias="JKeyBdLineEdit.qml">src/controls/JKeyBdLineEdit.qml</file>
         <file alias="JRoundRectangle.qml">src/controls/JRoundRectangle.qml</file>
+        <file alias="Osd.qml">src/controls/videoPlayer/Osd.qml</file>
+        <file alias="VideoFooter.qml">src/controls/videoPlayer/VideoFooter.qml</file>
+        <file alias="JVideoView.qml">src/controls/JVideoView.qml</file>
+        <file alias="JMusicView.qml">src/controls/JMusicView.qml</file>
+        <file alias="JTheme.qml">src/controls/JTheme.qml</file>
+        <file alias="JArrowPopup.qml">src/controls/JArrowPopup.qml</file>
+        <file alias="JToolTip.qml">src/controls/JToolTip.qml</file>
+        <file alias="JVerticalScrollBar.qml">src/controls/JVerticalScrollBar.qml</file>
+        <file alias="TextFieldPrivate/TextFieldToolBar.qml">src/controls/TextFieldPrivate/TextFieldToolBar.qml</file>
+        <file alias="TextFieldPrivate/TextFieldCursor.qml">src/controls/TextFieldPrivate/TextFieldCursor.qml</file>
+        <file alias="TextFieldPrivate/qmldir">src/controls/TextFieldPrivate/qmldir</file>
+        <file alias="JTextField.qml">src/controls/JTextField.qml</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

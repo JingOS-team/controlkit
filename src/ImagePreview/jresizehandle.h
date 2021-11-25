@@ -1,6 +1,6 @@
 /*
  *   Copyright 2019 by Marco Martin <mart@kde.org>
- *             2021 Wang Rui <wangrui@jingos.com>
+ *   Copyright 2021 by Rui Wang <wangrui@jingos.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as

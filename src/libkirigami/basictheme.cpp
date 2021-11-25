@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2017 by Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2021 by Lele Huan <huanlele@jingos.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -71,6 +72,7 @@ QtObject {
 BasicTheme::BasicTheme(QObject *parent)
     : PlatformTheme(parent)
 {
+
     //TODO: correct?
     connect(qApp, &QGuiApplication::fontDatabaseChanged, this, [this] () {
         setDefaultFont(qApp->font());
@@ -147,6 +149,7 @@ BasicTheme::BasicTheme(QObject *parent)
     connect(this, &PlatformTheme::colorsChanged,
             this, &BasicTheme::syncCustomColorsToQML);
     syncColors();
+
 }
 
 BasicTheme::~BasicTheme()
@@ -295,50 +298,42 @@ void BasicTheme::syncCustomColorsToQML()
 
 QColor BasicTheme::buttonTextColor() const
 {
-    qWarning()<<"WARNING: buttonTextColor is deprecated, use textColor with colorSet: Theme.Button instead";
     return m_buttonTextColor;
 }
 
 QColor BasicTheme::buttonBackgroundColor() const
 {
-    qWarning()<<"WARNING: buttonBackgroundColor is deprecated, use backgroundColor with colorSet: Theme.Button instead";
     return m_buttonBackgroundColor;
 }
 
 QColor BasicTheme::buttonHoverColor() const
 {
-    qWarning()<<"WARNING: buttonHoverColor is deprecated, use backgroundColor with colorSet: Theme.Button instead";
     return m_buttonHoverColor;
 }
 
 QColor BasicTheme::buttonFocusColor() const
 {
-    qWarning()<<"WARNING: buttonFocusColor is deprecated, use backgroundColor with colorSet: Theme.Button instead";
     return m_buttonFocusColor;
 }
 
 
 QColor BasicTheme::viewTextColor() const
 {
-    qWarning()<<"WARNING: viewTextColor is deprecated, use backgroundColor with colorSet: Theme.View instead";
     return m_viewTextColor;
 }
 
 QColor BasicTheme::viewBackgroundColor() const
 {
-    qWarning()<<"WARNING: viewBackgroundColor is deprecated, use backgroundColor with colorSet: Theme.View instead";
     return m_viewBackgroundColor;
 }
 
 QColor BasicTheme::viewHoverColor() const
 {
-    qWarning()<<"WARNING: viewHoverColor is deprecated, use backgroundColor with colorSet: Theme.View instead";
     return m_viewHoverColor;
 }
 
 QColor BasicTheme::viewFocusColor() const
 {
-    qWarning()<<"WARNING: viewFocusColor is deprecated, use backgroundColor with colorSet: Theme.View instead";
     return m_viewFocusColor;
 }
 

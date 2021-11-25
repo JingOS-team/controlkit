@@ -1,0 +1,4 @@
+Tests: testsuite
+Depends: @, @builddeps@, xvfb, xauth, qtdeclarative5-dev-tools,
+         qml-module-qttest, qml-module-qtquick-layouts, openbox
+Restrictions: build-needed, allow-stderr

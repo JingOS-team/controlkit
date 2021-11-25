@@ -1,0 +1,3 @@
+module jingos.display
+plugin jingosDisplay
+classname JingosDisplayPlugin

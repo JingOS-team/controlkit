@@ -19,19 +19,6 @@ DelegateRecyclerAttached::DelegateRecyclerAttached(QObject *parent)
 
 DelegateRecyclerAttached::~DelegateRecyclerAttached()
 {}
-/*
-void setRecycler(DelegateRecycler *recycler)
-{
-    m_recycler = recycler;
-}
-
-DelegateRecycler *recycler() const
-{
-    return m_recycler;
-}
-*/
-
-
 
 class DelegateCache
 {

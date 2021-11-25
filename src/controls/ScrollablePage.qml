@@ -57,8 +57,6 @@ import "private"
  * [...]
  * @endcode
  *
- * @inherit Page
- *
  */
 Page {
     id: root
@@ -106,7 +104,6 @@ Page {
     default property QtObject mainItem
 
     /**
-     * keyboardNavigationEnabled: bool
      * If true, and if flickable is an item view, like a ListView or
      * a GridView, it will be possible to navigate the list current item
      * to next and previous items with keyboard up/down arrow buttons.

@@ -11,9 +11,11 @@ set(REQUIRED_QT_VERSION 5.14.0)
 SET(CMAKE_CXX_STANDARD 11)
 
 ###### add picture plugin ,use exiv2 #########
-find_package(ECM 5.53.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${ECM_MODULE_PATH})
-find_package(LibExiv2 0.21 REQUIRED)
+find_package(ECM 5.79.0 NO_MODULE)
+#set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://commits.kde.org/extra-cmake-modules")
+
+# where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
 ################# Disallow in-source build #################
 
@@ -33,7 +35,13 @@ endif()
 include(CPack)
 include(FeatureSummary)
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Quick Gui Svg QuickControls2 Concurrent)
+find_package(LibExiv2 0.21 REQUIRED)
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Widgets Quick Gui Svg QuickControls2 Concurrent DBus)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
+	Package
+	Config
+	I18n
+)
 if (BUILD_TESTING)
     find_package(Qt5QuickTest ${REQUIRED_QT_VERSION} CONFIG QUIET)
 endif()
@@ -50,13 +58,6 @@ endif()
 
 
 ################# set KDE specific information #################
-
-find_package(ECM 5.79.0 NO_MODULE)
-set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://commits.kde.org/extra-cmake-modules")
-
-# where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
-
 include(GenerateExportHeader)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
@@ -125,6 +126,7 @@ endif()
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
 
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
+remove_definitions(-DQT_NO_CAST_FROM_ASCII)
 add_subdirectory(src)
 if (NOT ANDROID)
     add_subdirectory(templates)
@@ -138,6 +140,9 @@ if (BUILD_TESTING AND BUILD_SHARED_LIBS)
     add_subdirectory(autotests)
 endif()
 
+add_subdirectory(jingosTheme)
+add_subdirectory(jingosDisplay)
+add_subdirectory(jingosMultimedia)
 #if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
 #    ecm_install_po_files_as_qm(po)
 #endif()

@@ -23,10 +23,15 @@ Kirigami.PageRow {
         // these are just randomly sampled names from internet pages in the
         // source languages of the name
         function test_jp_name() {
-  
+            compare(Kirigami.NameUtils.isStringUnsuitableForInitials("北里 柴三郎"), false)
+            compare(Kirigami.NameUtils.initialsFromString("北里 柴三郎"), "北")
+
+            compare(Kirigami.NameUtils.isStringUnsuitableForInitials("小野田 寛郎"), false)
+            compare(Kirigami.NameUtils.initialsFromString("小野田 寛郎"), "小")
         }
         function test_cn_name() {
-
+            compare(Kirigami.NameUtils.isStringUnsuitableForInitials("蔣經國"), false)
+            compare(Kirigami.NameUtils.initialsFromString("蔣經國"), "蔣")
         }
         function test_bad_names() {
             compare(Kirigami.NameUtils.isStringUnsuitableForInitials("151231023"), true)

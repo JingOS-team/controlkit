@@ -1,0 +1,6 @@
+module jingos.multimedia 
+plugin jingosMultimediaModule 
+classname JMultimediaModulePlugin
+depends QtQuick.Controls 2.0
+depends QtGraphicalEffects 1.0
+designersupported

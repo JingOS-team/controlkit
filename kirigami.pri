@@ -1,11 +1,28 @@
-QT          += core qml quick gui svg network quickcontrols2 concurrent dbus
+QT          += core qml quick gui svg network quickcontrols2 concurrent dbus multimedia
 HEADERS     += $$PWD/src/kirigamiplugin.h \
+               $$PWD/jingosDisplay/jdisplaymetrics.h \
+               $$PWD/jingosDisplay/jingosDisplayPlugin.h \
+               $$PWD/jingosMultimedia/jbasevideosurface.h \
+               $$PWD/jingosMultimedia/jmultimediaModuleplugin.h \
+               $$PWD/jingosMultimedia/mpvobject.h \
+               $$PWD/jingosMultimedia/mpvrenderitem.h \
+               $$PWD/jingosMultimedia/player.h \
+               $$PWD/jingosMultimedia/qthelper.h \
                $$PWD/src/ImagePreview/jexiv2extractor.h \
                $$PWD/src/ImagePreview/jimagedocument.h \
                $$PWD/src/ImagePreview/jresizehandle.h \
                $$PWD/src/ImagePreview/jresizerectangle.h \
                $$PWD/src/ImagePreview/jwallpapersettings.h \
+               $$PWD/src/ThemePrivate/jbasictheme.h \
+               $$PWD/src/ThemePrivate/jbasictheme_p.h \
+               $$PWD/src/ThemePrivate/jplatformtheme_p.h \
+               $$PWD/src/ThemePrivate/jthememanager_p.h \
                $$PWD/src/enums.h \
+               $$PWD/src/jdisplaymetrics.h \
+               $$PWD/src/jfont.h \
+               $$PWD/src/jplatformtheme.h \
+               $$PWD/src/jthememanager.h \
+               $$PWD/src/player.h \
                $$PWD/src/settings.h \
                $$PWD/src/colorutils.h \
                $$PWD/src/columnview_p.h \
@@ -38,12 +55,27 @@ HEADERS     += $$PWD/src/kirigamiplugin.h \
                $$PWD/src/toolbarlayout.h \
                $$PWD/src/toolbarlayoutdelegate.h
 SOURCES     += $$PWD/src/kirigamiplugin.cpp \
+               $$PWD/jingosDisplay/jdisplaymetrics.cpp \
+               $$PWD/jingosDisplay/jingosDisplayPlugin.cpp \
+               $$PWD/jingosMultimedia/jbasevideosurface.cpp \
+               $$PWD/jingosMultimedia/jmultimediaModuleplugin.cpp \
+               $$PWD/jingosMultimedia/mpvobject.cpp \
+               $$PWD/jingosMultimedia/mpvrenderitem.cpp \
+               $$PWD/jingosMultimedia/player.cpp \
                $$PWD/src/ImagePreview/jexiv2extractor.cpp \
                $$PWD/src/ImagePreview/jimagedocument.cpp \
                $$PWD/src/ImagePreview/jresizehandle.cpp \
                $$PWD/src/ImagePreview/jresizerectangle.cpp \
                $$PWD/src/ImagePreview/jwallpapersettings.cpp \
+               $$PWD/src/ThemePrivate/jbasictheme.cpp \
+               $$PWD/src/ThemePrivate/jplatformtheme_p.cpp \
+               $$PWD/src/ThemePrivate/jthememanager_p.cpp \
                $$PWD/src/enums.cpp \
+               $$PWD/src/jdisplaymetrics.cpp \
+               $$PWD/src/jfont.cpp \
+               $$PWD/src/jplatformtheme.cpp \
+               $$PWD/src/jthememanager.cpp \
+               $$PWD/src/player.cpp \
                $$PWD/src/settings.cpp \
                $$PWD/src/colorutils.cpp \
                $$PWD/src/columnview.cpp \
@@ -89,3 +121,14 @@ exists($$_PRO_FILE_PWD_/kirigami-icons.qrc) {
     message("Using icons QRCfile shipped in kirigami")
     RESOURCES += $$PWD/kirigami-icons.qrc
 }
+
+SUBDIRS += \
+    $$PWD/jingosDisplay/jingosDisplay.pro \
+    $$PWD/jingosMultimedia/jingosMultimedia.pro
+
+DISTFILES += \
+    $$PWD/jingosDisplay/CMakeLists.txt \
+    $$PWD/jingosDisplay/JDisplay.qml \
+    $$PWD/jingosDisplay/qmldir \
+    $$PWD/jingosMultimedia/CMakeLists.txt \
+    $$PWD/jingosMultimedia/qmldir

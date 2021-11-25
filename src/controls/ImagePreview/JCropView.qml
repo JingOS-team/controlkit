@@ -1,27 +1,17 @@
 /*
- * Copyright 2021 Lele Huan <huanlele@jingos.com>
+ * Copyright (C) 2021 Beijing Jingling Information System Technology Co., Ltd. All rights reserved.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
- * accepted by the membership of KDE e.V. (or its successor approved
- * by the membership of KDE e.V.), which shall act as a proxy
- * defined in Section 14 of version 3 of the license.
+ * Authors:
+ * Lele Huan <huanlele@jingos.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.15
 import QtQuick.Controls 2.10 as QQC2
 
 import org.kde.kirigami 2.15 as Kirigami
-
+import jingos.display 1.0
+import "./"
 Kirigami.Page {
     id: cropView
     leftPadding: 0
@@ -30,15 +20,12 @@ Kirigami.Page {
     bottomPadding: 0
     globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
 
-    //要裁剪的图片的实际宽高
     property int cropImageWidth:    cropView.width * 4 / 5
     property int cropImageHeight:    cropView.height * 4 / 5
-    //要裁剪的图片路径
     property string imageUrl: ""
-    //旋转次数
     property int rotateCount: 0
-    width: parent.width
-    height: parent.height
+
+    property bool saveError: false
 
     signal cropImageFinished(string path)
     signal closePage();
@@ -54,23 +41,19 @@ Kirigami.Page {
         providerImage:true
         path: cropView.imageUrl
         onVisualImageChanged: {
-            //裁剪完成后,会触发该信号,但是不需要刷新界面,不显示裁剪后的图片
             if(isCropping === true){
-                console.log("jimage document visual image changed  iscropping .so return");
                 return;
             }
-            console.log("jimage document visual image changed ")
+
+            imgViewer.source = "";
 
             imgViewer.width = cropImageWidth;
             imgViewer.height = cropImageHeight;
 
-            imgViewer.source = "";
             imgViewer.source = "image://cropImageProvider/cropImage";
         }
 
         onCropImageFinished:{
-            //图片裁剪完成
-            console.log("jimage document crop image finished " + path)
             isCropping = false;
             cropView.cropImageFinished(path);
         }
@@ -84,15 +67,11 @@ Kirigami.Page {
         fullScreen: true
         //source: "image://cropImageProvider/cropImage"
         onInitFinished: {
-            //初始化裁剪框位置
             resizeRectangle.width = imgViewer.editImg.width
             resizeRectangle.height = imgViewer.editImg.height
             resizeRectangle.x = (cropView.width - imgViewer.editImg.width) / 2;
             resizeRectangle.y = (cropView.height - imgViewer.editImg.height) / 2
             resizeRectangle.moveAreaRect = Qt.rect( resizeRectangle.x, resizeRectangle.y, resizeRectangle.width, resizeRectangle.height);
-
-            console.log("resize rectnagle x is " + resizeRectangle.x + "  y is " + resizeRectangle.y
-                        + " width is " + resizeRectangle.width + "  height is " + resizeRectangle.height)
 
             vabView.width = resizeRectangle.width
             vabView.height = resizeRectangle.height
@@ -107,7 +86,6 @@ Kirigami.Page {
         showBgCover:false
         sourceItem: imgViewer
         backgroundColor:"#EDFFFFFF"
-        blurRadius: 130
         radius: 0
     }
 
@@ -219,11 +197,11 @@ Kirigami.Page {
 
         Row {
             anchors.fill: parent
-            spacing: width / 3 - 1
+            spacing: width / 3 - JDisplay.dp(1)
             Repeater {
                 model: 4
                 delegate: Rectangle {
-                    width: 1
+                    width: JDisplay.dp(1)
                     height: parent.height
                 }
             }
@@ -231,12 +209,12 @@ Kirigami.Page {
 
         Column {
             anchors.fill: parent
-            spacing: height / 3 - 1
+            spacing: height / 3 - JDisplay.dp(1)
             Repeater {
                 model: 4
                 delegate: Rectangle {
                     width: parent.width
-                    height: 1
+                    height: JDisplay.dp(1)
                 }
             }
         }
@@ -246,7 +224,6 @@ Kirigami.Page {
     Rectangle {
         id: rightToolView
 
-        //图片是否被修改,包括旋转,裁剪
         property bool isModified: doneImage.opacity === 1.0
 
         width: parent.width / 10
@@ -265,7 +242,7 @@ Kirigami.Page {
             color: rightToolView.isModified ? "#FFFFFF" : "#4DFFFFFF"
             text: i18nd("kirigami-controlkit", "Reduction")
             anchors.horizontalCenter: parent.horizontalCenter
-            font.pointSize: 10
+            font.pointSize: JDisplay.sp(10)
 
             MouseArea {
                 anchors.fill: reduction
@@ -277,17 +254,18 @@ Kirigami.Page {
             }
         }
 
-        Image {
+        Kirigami.Icon {
             id: rotateImage
 
+            width: JDisplay.dp(22)
+            height: width
             anchors {
                 bottom: cancelImage.top
-                bottomMargin: 22
+                bottomMargin: JDisplay.dp(22)
                 horizontalCenter: parent.horizontalCenter
             }
-            source: "../image/imagePreviewIcon/crop_rotate.png"
-            width: 22
-            height: width
+            color:"#ffffff"
+            source: Qt.resolvedUrl("../image/imagePreviewIcon/crop_rotate.svg")
 
             MouseArea {
                 anchors.fill: parent
@@ -298,17 +276,18 @@ Kirigami.Page {
             }
         }
 
-        Image {
+        Kirigami.Icon {
             id: cancelImage
 
-            source: "../image/imagePreviewIcon/crop_delete.png"
-            width: 22
+            width: JDisplay.dp(22)
             height: width
             anchors {
                 bottom: doneImage.top
-                bottomMargin: 22
+                bottomMargin: JDisplay.dp(22)
                 horizontalCenter: parent.horizontalCenter
             }
+            color:"#ffffff"
+            source: Qt.resolvedUrl("../image/imagePreviewIcon/crop_delete.svg")
 
             MouseArea {
                 anchors.fill: parent
@@ -318,19 +297,21 @@ Kirigami.Page {
             }
         }
 
-        Image {
+        Kirigami.Icon {
             id: doneImage
 
-            source: "../image/imagePreviewIcon/done.png"
-            width: 22
+            width: JDisplay.dp(22)
             height: width
-            opacity: (resizeRectangle.isRectChanged === true || (cropView.rotateCount % 4 !== 0)) ? 1.0 : 0.5
+
             anchors {
                 bottom: parent.bottom
-                bottomMargin: 22
+                bottomMargin: JDisplay.dp(22)
                 horizontalCenter: parent.horizontalCenter
             }
 
+            color:"#ffffff"
+            source: Qt.resolvedUrl("../image/imagePreviewIcon/done.svg")
+            opacity: (resizeRectangle.isRectChanged === true || (cropView.rotateCount % 4 !== 0)) ? 1.0 : 0.5
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
@@ -344,10 +325,11 @@ Kirigami.Page {
 
     Kirigami.JDialog{
         id:abandionDialog
-        title: i18nd("kirigami-controlkit", "Abandoning modification")
-        text: i18nd("kirigami-controlkit", "Are you sure to discard the current modification")
-        rightButtonText: i18nd("kirigami-controlkit", "Action")
-        leftButtonText: i18nd("kirigami-controlkit", "Cancel")
+        title: cropView.saveError ? i18nd("kirigami-controlkit", "Save failed") : i18nd("kirigami-controlkit", "Abandoning modification")
+        text: cropView.saveError ?  i18nd("kirigami-controlkit", "The file has an error and cannot be saved") : i18nd("kirigami-controlkit", "Are you sure to discard the current modification?")
+        rightButtonText: cropView.saveError ? "" : i18nd("kirigami-controlkit", "Action")
+        leftButtonText: cropView.saveError ? "" : i18nd("kirigami-controlkit", "Cancel")
+        centerButtonText : cropView.saveError ? i18nd("kirigami-controlkit", "OK") : ""
         visible:false
 
         onLeftButtonClicked:{
@@ -359,31 +341,31 @@ Kirigami.Page {
             cropView.rotateCount = 0;
             imageDoc.clearUndoImage()
         }
+
+        onCenterButtonClicked:{
+            abandionDialog.close()
+        }
+
+        onVisibleChanged:{
+            if(abandionDialog.visible === false){
+                cropView.saveError = false;
+            }
+        }
     }
 
     function crop() {
 
         const ratioX = imgViewer.editImg.width * 1.0 / imgViewer.editImg.item.sourceSize.width
         const ratioY = imgViewer.editImg.height * 1.0 / imgViewer.editImg.item.sourceSize.height;
-        //裁剪图片的x,y坐标映射到cropview上的位置,
-//        var cRect = cropEditImage.mapToItem(cropView, imgViewer.editImg.x, imgViewer.editImg.y)
-//        imageDoc.crop((resizeRectangle.x - cRect.x),
-//                      (resizeRectangle.y - cRect.y),
-//                      resizeRectangle.width,
-//                      resizeRectangle.height);
-
-
-        console.log("crop image width is " + imgViewer.editImg.width + "  height is " + imgViewer.editImg.height
-                    + " source size is " + imgViewer.editImg.item.sourceSize
-                    + "  resize rect x is " + resizeRectangle.x + " y is " + resizeRectangle.y
-                    + " width is " + resizeRectangle.width + "  height " + resizeRectangle.height)
 
         var cRect = resizeRectangle.mapToItem(imgViewer.editImg, 0, 0, resizeRectangle.width, resizeRectangle.height);
-        console.log("after map ratiox is " + ratioX + "  ratioy " + ratioY + " crect x is " + cRect.x + "  y is " + cRect.y
-                    + " crect  width " + cRect.width + "  height " + cRect.height)
 
         imageDoc.isCropping = true;
         imageDoc.crop(cRect.x / ratioX, cRect.y / ratioY, cRect.width / ratioX, cRect.height / ratioY);
-        imageDoc.saveAs()
+        var rv = imageDoc.saveAs();
+        if(rv === false){
+            cropView.saveError = true;
+            abandionDialog.open();
+        }
     }
 }

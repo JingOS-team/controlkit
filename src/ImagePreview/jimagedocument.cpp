@@ -1,21 +1,21 @@
 /*
- * Copyright 2021 Lele Huan <huanlele@jingos.com>
+ *   Copyright 2017 by Atul Sharma <atulsharma406@gmail.com>
+ *   Copyright 2021 Rui Wang <wangrui@jingos.com>
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
- * accepted by the membership of KDE e.V. (or its successor approved
- * by the membership of KDE e.V.), which shall act as a proxy
- * defined in Section 14 of version 3 of the license.
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Library General Public License for more details
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 #include "jimagedocument.h"
@@ -54,7 +54,6 @@ JCropImageProvider::JCropImageProvider():QQuickImageProvider(QQmlImageProviderBa
 JCropImageProvider::~JCropImageProvider()
 {
     g_pSingleton = nullptr;
-    qDebug() << Q_FUNC_INFO;
 }
 
 JCropImageProvider *JCropImageProvider::instance()
@@ -75,7 +74,6 @@ QImage JCropImageProvider::requestImage(const QString &id, QSize *size, const QS
     if(m_pCropImgDoc)
         return m_pCropImgDoc->visualImage();
     else {
-        qDebug() << "jCropiamgeproivder crop image document is null, return empty image";
         return QImage();
     }
 }
@@ -95,9 +93,7 @@ JImageDocument::JImageDocument()
         QImageReader imageRead(location);
         imageRead.setAutoTransform(true);
         m_undoImages.append(imageRead.read());
-        m_edited = false;
-        Q_EMIT editedChanged();
-        qDebug() << Q_FUNC_INFO << "visual image changed";
+        setEdited(false);
         Q_EMIT visualImageChanged();
     });
 }
@@ -114,7 +110,6 @@ QString JImageDocument::path() const
 
 void JImageDocument::setPath(const QString& url)
 {
-    //qDebug() << Q_FUNC_INFO << url;
     m_path = url;
     Q_EMIT pathChanged(url);
 }
@@ -125,7 +120,6 @@ QImage JImageDocument::visualImage() const
         return {};
     }
     QImage img = m_undoImages.last();
-    qDebug() << Q_FUNC_INFO << img;
     return img;
 }
 
@@ -137,7 +131,6 @@ bool JImageDocument::clearUndoImage()
     while (m_undoImages.count() > 1) {
         m_undoImages.pop_back();
     }
-    qDebug() << Q_FUNC_INFO << "visual image changed";
     Q_EMIT visualImageChanged();
     return true;
 }
@@ -149,8 +142,10 @@ bool JImageDocument::edited() const
 
 void JImageDocument::setEdited(bool value)
 {
-    m_edited = value;
-    Q_EMIT editedChanged();
+    if(m_edited != value){
+        m_edited = value;
+        Q_EMIT editedChanged();
+    }
 }
 
 bool JImageDocument::providerImage() const
@@ -160,7 +155,6 @@ bool JImageDocument::providerImage() const
 
 void JImageDocument::setProviderImage(bool v)
 {
-    //qDebug() << Q_FUNC_INFO << v;
     if(m_nProviderImage != v){
         m_nProviderImage = v;
         if(m_nProviderImage == true){
@@ -176,7 +170,6 @@ void JImageDocument::rotate(int angle)
     tranform.rotate(angle);
     setEdited(true);
     m_undoImages.append(m_undoImages.last().transformed(tranform,  Qt::FastTransformation));
-    qDebug() << Q_FUNC_INFO << "visual image changed";
     Q_EMIT visualImageChanged();
 }
 
@@ -184,7 +177,6 @@ void JImageDocument::mirror(bool horizontal, bool vertical)
 {
     setEdited(true);
     m_undoImages.append(m_undoImages.last().mirrored(horizontal, vertical));
-    qDebug() << Q_FUNC_INFO << "visual image changed";
     Q_EMIT visualImageChanged();
 }
 
@@ -209,7 +201,6 @@ void JImageDocument::crop(int x, int y, int width, int height)
     setEdited(true);
     QImage cropImage = m_undoImages.last().copy(rect);
     m_undoImages.append(cropImage);
-    qDebug() << Q_FUNC_INFO << "visual image changed";
     Q_EMIT visualImageChanged();
 }
 
@@ -237,13 +228,13 @@ void JImageDocument::slotFinished()
     Q_EMIT resetHandle();
     Q_EMIT updateThumbnail();
     setEdited(false);
-    qDebug() << Q_FUNC_INFO << "visual image changed";
     Q_EMIT visualImageChanged();
 }
 
 bool JImageDocument::saveAs(const QString& imagePath)
 {
     QString updatedPath = imagePath;
+    bool isSaveSuc = true;
     if(updatedPath.isEmpty()){
         QString location = QUrl(m_path).path();
 
@@ -266,24 +257,21 @@ bool JImageDocument::saveAs(const QString& imagePath)
             cur++;
         }
         QImage lastImage =  m_undoImages.last();
-        bool isSaveSuc = lastImage.save(updatedPath);
-        qDebug() << Q_FUNC_INFO << updatedPath << "  " << isSaveSuc;
+        isSaveSuc = lastImage.save(updatedPath, nullptr, 100);
 
         JExiv2Extractor extractor;
         extractor.setFileDateTime(location,updatedPath);
     } else {
         QImage lastImage =  m_undoImages.last();
-        bool isSaveSuc = lastImage.save(updatedPath);
-        qDebug() << Q_FUNC_INFO << updatedPath << "  " << isSaveSuc;
+        isSaveSuc = lastImage.save(updatedPath, nullptr, 100);
     }
 
-    Q_EMIT resetHandle();
-    setEdited(false);
-    setPath(updatedPath);
-    qDebug() << Q_FUNC_INFO << "visual image changed";
-    Q_EMIT visualImageChanged();
-    Q_EMIT cropImageFinished(updatedPath);
-    return true;
+    if(isSaveSuc){
+        setPath(updatedPath);
+        Q_EMIT cropImageFinished(updatedPath);
+    }
+
+    return isSaveSuc;
 }
 
 void JImageDocument::undo()
@@ -294,7 +282,6 @@ void JImageDocument::undo()
     if (m_undoImages.count() == 1) {
         setEdited(false);
     }
-    qDebug() << Q_FUNC_INFO << "visual image changed";
     Q_EMIT visualImageChanged();
 }
 

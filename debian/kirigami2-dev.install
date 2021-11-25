@@ -1,0 +1,6 @@
+usr/include/KF5/Kirigami2/
+usr/lib/*/cmake/KF5Kirigami2
+usr/lib/*/libKF5Kirigami2.so
+usr/lib/*/qt5/mkspecs
+usr/share/kdevappwizard/templates/kirigami.tar.bz2
+usr/share/qt5/doc/KF5Kirigami2.tags

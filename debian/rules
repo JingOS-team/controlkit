@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+
+export DEB_LDFLAGS_MAINT_APPEND := -Wl,--as-needed
+
+%:
+	dh $@ --with kf5,pkgkde_symbolshelper --buildsystem kf5 --without build_stamp
+
+override_dh_auto_configure:
+	dh_auto_configure -- -DBUILD_EXAMPLES=ON -DBUILD_QCH=ON -DBREEZEICONS_DIR=/usr/share/icons/breeze
+
+override_dh_auto_test:
+	# Disable unittest at build time, they require the runtime
+	# dependencies and the modules installed. Move the tests to
+	# autopkgtest.
+	:

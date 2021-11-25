@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="45px" height="44px" viewBox="0 0 45 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Interface, Essential/Rotate, Item 2</title>
+    <defs>
+        <filter id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Interface,-Essential/Rotate,-Item-2" transform="translate(-1836.000000, -850.000000)" filter="url(#filter-1)">
+            <g transform="translate(1836.000000, 850.000000)">
+                <g id="Group" transform="translate(-0.000000, -0.000000)">
+                    <g stroke-linecap="round" stroke-linejoin="round" transform="translate(5.500000, 5.500000)" id="Path" stroke="#323232" stroke-width="2.75">
+                        <path d="M16.5,33.0000001 L3.66666668,33.0000001 C1.64083334,33.0000001 0,31.3591668 0,29.3333334 L0,16.5000001 C0,14.4741667 1.64083334,12.8333334 3.66666668,12.8333334 L16.5,12.8333334 C18.5258334,12.8333334 20.1666668,14.4741667 20.1666668,16.5000001 L20.1666668,29.3333334 C20.1666668,31.3591668 18.5258334,33.0000001 16.5,33.0000001 Z"></path>
+                        <polyline points="36.6666668 12.8333334 31.1666668 18.3333334 25.6666668 12.8333334"></polyline>
+                        <path d="M31.1666668,18.3333334 L31.1666668,7.33333336 C31.1666668,3.28350001 27.8831668,0 23.8333334,0 L16.5000001,0"></path>
+                    </g>
+                    <rect id="Rectangle" x="0" y="0" width="44.0000002" height="44.0000002"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

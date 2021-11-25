@@ -1,3 +1,12 @@
+/*
+ * Copyright (C) 2021 Beijing Jingling Information System Technology Co., Ltd. All rights reserved.
+ *
+ * Authors:
+ * Rui Wang <wangrui@jingos.com>
+ * Lele Huan <huanlele@jingos.com>
+ *
+ */
+
 import QtQuick 2.0
 import QtQuick.Controls 2.2 as Controls
 import QtQuick.Layouts 1.2

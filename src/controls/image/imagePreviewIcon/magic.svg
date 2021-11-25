@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="46px" height="46px" viewBox="0 0 46 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Design, Tools/magic-wand 2</title>
+    <defs>
+        <filter id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.000000 0 0 0 0 0.000000 0 0 0 0 0.000000 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Design,-Tools/magic-wand-2" transform="translate(-1721.000000, -51.000000)" filter="url(#filter-1)">
+            <g transform="translate(1722.000000, 52.000000)">
+                <g id="Design,-Tools/magic-wand" transform="translate(-1.000000, -1.000000)">
+                    <g id="Group" transform="translate(0.990833, 0.990833)">
+                        <rect id="Rectangle" stroke="#323232" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" x="5.50229167" y="5.50229167" width="33.01375" height="33.01375" rx="7.33333333"></rect>
+                        <line x1="17.4239236" y1="26.5792784" x2="12.8386806" y2="31.1796528" id="Path" stroke="#323232" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"></line>
+                        <path d="M22.2494334,26.8839953 L21.0364899,22.9819168 L17.134338,21.7688999 C16.8101351,21.6681187 16.5712601,21.3920217 16.5181492,21.0566956 C16.4650382,20.7213696 16.6069022,20.384969 16.8840938,20.1889352 L20.2203166,17.8295526 L20.1680815,13.7436241 C20.1637167,13.4041304 20.3524747,13.0916002 20.654985,12.9374489 C20.9574951,12.7832976 21.3212889,12.8142619 21.5933952,13.0173216 L24.8683225,15.4614396 L28.7381209,14.149143 C29.0596473,14.0401214 29.4151861,14.1230852 29.6552539,14.3631529 C29.8953214,14.6032206 29.9782852,14.9587594 29.8692637,15.2802858 L28.5568938,19.1500108 L31.0007916,22.4248831 C31.2038513,22.6969894 31.2348156,23.0607832 31.0806643,23.3632933 C30.9265131,23.6658036 30.6139829,23.8545616 30.2744891,23.8501968 L26.1887074,23.7979617 L23.8293247,27.1341845 C23.6332891,27.4113342 23.2969219,27.5531743 22.9616269,27.5000776 C22.6263321,27.4469808 22.3502469,27.2081537 22.2494334,26.8839953 L22.2494334,26.8839953 Z" id="Path" stroke="#323232" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <polygon id="Path" points="0 0 44.0183333 0 44.0183333 44.0183333 0 44.0183333"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

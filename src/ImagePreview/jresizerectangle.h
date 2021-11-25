@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2020 Carl Schwan <carl@carlschwan.eu>
- * SPDX-FileCopyrightText: (C) 2021 Wang Rui <wangrui@jingos.com>
+ * SPDX-FileCopyrightText: (C) 2021 Rui Wang <wangrui@jingos.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */

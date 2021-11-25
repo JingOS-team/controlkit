@@ -1,22 +1,11 @@
 /*
- * Copyright 2021 Lele Huan <huanlele@jingos.com>
+ * Copyright (C) 2021 Beijing Jingling Information System Technology Co., Ltd. All rights reserved.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
- * accepted by the membership of KDE e.V. (or its successor approved
- * by the membership of KDE e.V.), which shall act as a proxy
- * defined in Section 14 of version 3 of the license.
+ * Authors:
+ * Lele Huan <huanlele@jingos.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 
 import QtQuick 2.5
 import QtQuick.Window 2.5
@@ -26,7 +15,7 @@ import QtQml 2.12
 
 import org.kde.kirigami 2.5
 import org.kde.kirigami 2.15 as Kirigami
-
+import jingos.display 1.0
 import "./ImagePreview"
 
 Kirigami.Page {
@@ -59,7 +48,7 @@ Kirigami.Page {
     }
 
     function getRootWindow(){
-        if(typeof applicationWindow === "function"){
+        if(!cropView.rootWindow && typeof applicationWindow === "function"){
             cropView.rootWindow =  applicationWindow();
             cropView.oldVisibility = root.rootWindow.visibility;
             cropView.rootWindow.visibility = Window.FullScreen;
@@ -109,15 +98,15 @@ Kirigami.Page {
                 id:timeCol
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 100
-                anchors.rightMargin: 50
+                anchors.bottomMargin: JDisplay.dp(100)
+                anchors.rightMargin: JDisplay.dp(50)
                 width: Math.max(timeText.width, dateText.width)
                 Text {
                     id:timeText
 
                     anchors.right: parent.right
                     color: "#FFFFFF"
-                    font.pointSize: 71
+                    font.pointSize: JDisplay.sp(71)
                     text: dateTimeTimer.timeString
                 }
                 Text {
@@ -125,7 +114,7 @@ Kirigami.Page {
 
                     anchors.right: parent.right
                     color: "#FFFFFF"
-                    font.pointSize: 13
+                    font.pointSize: JDisplay.sp(13)
                     text: dateTimeTimer.dateString
                 }
             }
@@ -134,10 +123,6 @@ Kirigami.Page {
                 id:dateTimeTimer
                 property string dateString : ""
                 property string timeString : ""
-                //这里使用默认的locale获取的语言好像不对，这里从c++获取语言后传过来
-                //property var locale : Qt.locale(wPaperSettings.localeName)
-                //Qt.locale返回默认的本地locale，但是现在jingos上time一直使用英文，所以
-                //需要使用本地localce的name重新促使化locae，这样time也就使用新的格式
                 property var locale : Qt.locale(Qt.locale().name)
                 //property string datePrefix: wPaperSettings.localeName === "zh_CN" ? i18nd("kirigami-controlkit", "day") : ""
                 property string datePrefix: dateTimeTimer.locale.name === "zh_CN" ? i18nd("kirigami-controlkit", "day") : ""
@@ -230,11 +215,11 @@ Kirigami.Page {
                 anchors{
                     horizontalCenter: parent.horizontalCenter
                     top: parent.top
-                    topMargin: 55
+                    topMargin: JDisplay.dp(55)
                 }
                 interactive: false
-                width: parent.width - (55 * 2 )
-                height: parent.height - 50
+                width: parent.width - (JDisplay.dp(55 * 2))
+                height: parent.height - JDisplay.dp(50)
                 model: gridModel
                 cellWidth : appIconView.width / 6
                 cellHeight : appIconView.height / 4
@@ -242,7 +227,7 @@ Kirigami.Page {
                 delegate:Column {
                     width: appIconView.cellWidth
                     height: appIconView.cellHeight
-                    spacing: 5
+                    spacing: JDisplay.dp(5)
 
                     Image {
                         id: icon
@@ -262,7 +247,7 @@ Kirigami.Page {
                         maximumLineCount: 2
                         elide: Text.ElideRight
 
-                        font.pointSize: 8
+                        font.pointSize: JDisplay.sp(8)
                         color: "white"
                         text:  model.name
                     }
@@ -275,17 +260,18 @@ Kirigami.Page {
                 anchors{
                     bottom: parent.bottom
                     horizontalCenter: parent.horizontalCenter
-                    bottomMargin: 20
+                    bottomMargin: JDisplay.dp(20)
                 }
-                spacing: 12
+                spacing: JDisplay.dp(12)
 
                 Repeater {
                     id: dockRepeater
                     model:dockModel
                     delegate: Image {
                         id: dockBarImage
-                        width: 50
+                        width: JDisplay.dp(50)
                         height: width
+                        opacity: 0.5
                         source: model.imagePath
                     }
                 }
@@ -300,20 +286,19 @@ Kirigami.Page {
         anchors.fill: parent
 
         Row{
-            height: 22
+            height: JDisplay.dp(22)
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: actionRow.top
-            anchors.bottomMargin: 25
-            spacing: 5
+            anchors.bottomMargin: JDisplay.dp(25)
+            spacing: JDisplay.dp(5)
 
             Item {
-                width: 22
-                height: 22
+                width: JDisplay.dp(22)
+                height: width
 
                 Image {
                     id: moveScaleImg
-                    width: 22
-                    height: 22
+                    anchors.fill: parent
                     source: "./image/imagePreviewIcon/wallpaperSet/move_scale.svg"
                     smooth: true
                     visible: false
@@ -331,7 +316,7 @@ Kirigami.Page {
                 anchors.verticalCenter: parent.verticalCenter
                 color: "#EBEBF5"
                 opacity: 0.6
-                font.pointSize: 10
+                font.pointSize: JDisplay.dp(10)
                 text: i18nd("kirigami-controlkit", "Move & Scale")
             }
         }
@@ -339,18 +324,15 @@ Kirigami.Page {
         Row{
             id:actionRow
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 95
+            anchors.bottomMargin: JDisplay.dp(95)
             anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 50
+            spacing: JDisplay.dp(50)
             Kirigami.JButton {
                 id:cancelBtn
-                width: 90
-                height: 28
-
-                backgroundColor: "#99FFFFFF"
-                font.pointSize: 11
+                width: JDisplay.dp(90)
+                height: JDisplay.dp(28)
+                font.pointSize: JDisplay.sp(11)
                 text: i18nd("kirigami-controlkit", "Cancel")
-
                 onClicked: {
                     cropView.cancel();
                 }
@@ -358,11 +340,9 @@ Kirigami.Page {
 
             Kirigami.JButton {
                 id:setBtn
-                width: 90
-                height: 28
-
-                backgroundColor: "#99FFFFFF"
-                font.pointSize: 11
+                width: JDisplay.dp(90)
+                height: JDisplay.dp(28)
+                font.pointSize: JDisplay.sp(11)
                 text: i18nd("kirigami-controlkit", "Set")
                 onClicked: {
                     pop.open();
@@ -372,14 +352,14 @@ Kirigami.Page {
 
         Popup{
             id:pop
-            x:actionItem.width / 2  + (setBtn.width - pop.width) / 2 + 25
-            y:actionRow.y - pop.height - 10
-            width: 260
-            height: 145
+            x:actionItem.width / 2  + (setBtn.width - pop.width) / 2 + JDisplay.dp(25)
+            y:actionRow.y - pop.height - JDisplay.dp(10)
+            width: JDisplay.dp(260)
+            height: JDisplay.dp(145)
             leftPadding:0
             topPadding:0
             rightPadding:0
-            bottomPadding:6
+            bottomPadding:JDisplay.dp(6)
             modal:true
             dim:false
             //closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
@@ -388,16 +368,16 @@ Kirigami.Page {
 
                 Kirigami.JRoundRectangle{
                     id:lockScreeBtn
-                    radius: 12
+                    radius: JDisplay.dp(12)
                     width: parent.width
-                    height: 45
+                    height: JDisplay.dp(45)
                     radiusPos: Kirigami.JRoundRectangle.TOPLEFT | Kirigami.JRoundRectangle.TOPRIGHT
-                    color: lockScrennMouse.containsMouse ? "#cdcdcd" : "white"
-                    opacity: lockScrennMouse.containsMouse ? (lockScrennMouse.pressed ? 0.6 : 0.8) : 1.0
+                    color: lockScrennMouse.containsMouse ? (lockScrennMouse.pressed ? Kirigami.JTheme.pressBackground: Kirigami.JTheme.hoverBackground) : "transparent"
+
                     Text {
                         anchors.centerIn: parent
-                        color: "#FF3C4BE8"
-                        font.pointSize: 10
+                        color: Kirigami.JTheme.highlightColor
+                        font.pointSize: JDisplay.sp(10)
                         text: i18nd("kirigami-controlkit", "Set Lock Screen")
                     }
                     MouseArea{
@@ -405,24 +385,24 @@ Kirigami.Page {
                         anchors.fill: parent
                         hoverEnabled: true
                         onClicked: {
-                            doingRect.visible = true;
                             cropView.cropWallPaper(Kirigami.JWallPaperSettings.LockScreen)
                             pop.close();
+                        }
+                        onContainsMouseChanged: {
+
                         }
                     }
                 }
                 Rectangle{
                     id:homeScreenBtn
                     width: parent.width
-                    //height: 45
                     anchors.top: lockScreeBtn.bottom
                     anchors.bottom: bothBtn.top
-                    color: homeScreenMouse.containsMouse ? "#cdcdcd" : "white"
-                    opacity: homeScreenMouse.containsMouse ? (homeScreenMouse.pressed ? 0.6 : 0.8) : 1.0
+                    color: homeScreenMouse.containsMouse ? (homeScreenMouse.pressed ? Kirigami.JTheme.pressBackground: Kirigami.JTheme.hoverBackground) : "transparent"
                     Text {
                         anchors.centerIn: parent
-                        color: "#FF3C4BE8"
-                        font.pointSize: 10
+                        color: Kirigami.JTheme.highlightColor
+                        font.pointSize: JDisplay.sp(10)
                         text: i18nd("kirigami-controlkit", "Set Home Screen")
 
                     }
@@ -431,39 +411,37 @@ Kirigami.Page {
                         anchors.fill: parent
                         hoverEnabled: true
                         onClicked: {
-                            doingRect.visible = true;
+                            //doingRect.visible = true;
                             cropView.cropWallPaper(Kirigami.JWallPaperSettings.HomeScreen)
                             pop.close();
                         }
                     }
                     Rectangle{
                         width: parent.width
-                        height: 1
+                        height: JDisplay.dp(1)
                         anchors.top : parent.top
-                        color: "#3C3C43"
-                        opacity: 0.18
+                        color: Kirigami.JTheme.dividerForeground
                     }
 
                     Rectangle{
                         width: parent.width
-                        height: 1
+                        height: JDisplay.dp(1)
                         anchors.bottom: parent.bottom
-                        color: "#2E3C3C43"
+                        color: Kirigami.JTheme.dividerForeground
                     }
                 }
                 Kirigami.JRoundRectangle{
                     id:bothBtn
                     width: parent.width
-                    height: 45
-                    radius: 12
+                    height: JDisplay.dp(45)
+                    radius: JDisplay.dp(12)
                     anchors.bottom: parent.bottom
                     radiusPos: Kirigami.JRoundRectangle.BOTTOMLEFT | Kirigami.JRoundRectangle.BOTTOMRIGHT
-                    color: bothMouse.containsMouse ? "#cdcdcd" : "white"
-                    opacity: bothMouse.containsMouse ? (bothMouse.pressed ? 0.6 : 0.8) : 1.0
+                    color: bothMouse.containsMouse ? (bothMouse.pressed ? Kirigami.JTheme.pressBackground: Kirigami.JTheme.hoverBackground) : "transparent"
                     Text {
                         anchors.centerIn: parent
-                        color: "#FF3C4BE8"
-                        font.pointSize: 10
+                        color:Kirigami.JTheme.highlightColor
+                        font.pointSize: JDisplay.sp(10)
                         text: i18nd("kirigami-controlkit", "Set Both")
                     }
 
@@ -472,61 +450,32 @@ Kirigami.Page {
                         anchors.fill: parent
                         hoverEnabled: true
                         onClicked: {
-                            doingRect.visible = true;
+                            //doingRect.visible = true;
                             cropView.cropWallPaper(Kirigami.JWallPaperSettings.Both)
                             pop.close();
                         }
                     }
                 }
             }
-
-            background: Item {
-                id: background
-                Rectangle{
-                    anchors.fill: parent
-                    anchors.bottomMargin: 6
-                    radius: 12
-                    layer.enabled: true
-                    layer.effect: DropShadow {
-                        radius: 40
-                        samples: 25
-                        color: "#1A000000"
-                        verticalOffset: 0
-                        horizontalOffset: 0
-                        spread: 0
-                    }
-                }
-
-                Rectangle {
-                    id: upBar
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 2
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    width: 12
-                    height: 12
-
-                    rotation: 45
-                    layer.enabled: true
-
-                    layer.effect: DropShadow {
-                        radius: 40
-                        samples: 25
-                        color: "#1A000000"
-                        verticalOffset: 0
-                        horizontalOffset: 0
-                        spread: 0
-                    }
-                }
+            background: Kirigami.JBlurBackground{
+                id:background
+                anchors.fill: parent
+                sourceItem:cropView
+                radius: JDisplay.dp(12)
+                //radiusPos: Kirigami.JRoundRectangle.BOTTOMLEFT | Kirigami.JRoundRectangle.BOTTOMRIGHT | Kirigami.JRoundRectangle.TOPLEFT | Kirigami.JRoundRectangle.TOPRIGHT
+                arrowPos:Kirigami.JRoundRectangle.ARROW_BOTTOM
+                arrowX:background.width / 2
+                arrowWidth : JDisplay.dp(12)
+                arrowHeight: JDisplay.dp(6)
+                arrowY:6
             }
-
         }
 
         Rectangle{
             id:doingRect
-            width: 215
-            height: 60
-            radius: 12
+            width: JDisplay.dp(215)
+            height:JDisplay.dp( 60)
+            radius: JDisplay.dp(12)
             visible: false
             color: "white"
             anchors.centerIn: parent
@@ -534,11 +483,11 @@ Kirigami.Page {
             Row{
                 height: parent.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 5
+                spacing: JDisplay.dp(5)
                 Image{
                     id:loadingImg
-                    width: 22
-                    height: 22
+                    width: JDisplay.dp(22)
+                    height: width
                     anchors.verticalCenter: parent.verticalCenter
                     source: "./image/imagePreviewIcon/wallpaperSet/loading.png"
                     NumberAnimation {
@@ -554,7 +503,7 @@ Kirigami.Page {
 
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: 10
+                    font.pointSize: JDisplay.sp(10)
                     text: i18nd("kirigami-controlkit", "Settings Wallpaper...")
                 }
             }
@@ -563,8 +512,6 @@ Kirigami.Page {
         Kirigami.JWallPaperSettings{
             id:wPaperSettings
             onSigSetWallPaperFinished: {
-                console.log("jwall paper settings set wall paper finished " + success)
-                doingRect.visible = false;
                 cropView.setWallPaperFinished(success);
             }
         }

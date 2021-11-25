@@ -1,21 +1,9 @@
 /*
- * Copyright 2021 Rui Wang <wangrui@jingos.com>
+ * Copyright (C) 2021 Beijing Jingling Information System Technology Co., Ltd. All rights reserved.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
- * accepted by the membership of KDE e.V. (or its successor approved
- * by the membership of KDE e.V.), which shall act as a proxy
- * defined in Section 14 of version 3 of the license.
+ * Authors:
+ * Lele Huan <huanlele@jingos.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 import QtQuick 2.2
@@ -25,6 +13,7 @@ import QtQuick.Controls 2.14 as QQC2
 
 import org.kde.kirigami 2.5
 import org.kde.kirigami 2.15
+import jingos.display 1.0
 /*
 ApplicationWindow
    |
@@ -32,15 +21,15 @@ ApplicationWindow
    |      |
    |      |- QQuickContentItem (objectName is  ApplicationWindow)
    |               |
-   |               |-(实际内容)
+   |               |-(content)
    |
    |- QQuickOverlay
 
 Window
    |
-   |- QQuickRootItem (contentItem)
+   |- QQuickContentItem
          |
-         |-(实际内容)
+         |-(content)
 */
 
 /*
@@ -71,10 +60,10 @@ QQC2.Popup  {
     property string msgText
     property string inputText
 
-    property color titleColor: "#000000"
-    property color textColor: "#000000"
-    property color msgTextColor: "#000000"
-    property color inputTextColor: "#000000"
+    property color titleColor: JTheme.majorForeground  //"#000000"
+    property color textColor: JTheme.majorForeground  //"#000000"
+    property color msgTextColor: JTheme.majorForeground  //"#000000"
+    property color inputTextColor: JTheme.majorForeground  //"#000000"
 
     property string rightButtonText
     property string leftButtonText
@@ -84,43 +73,41 @@ QQC2.Popup  {
     property bool leftButtonEnable: true
     property bool centerButtonEnable: true
 
-    property color rightButtonTextColor : "#3C4BE8"
-    property color leftButtonTextColor : "#000000"
-    property color centerButtonTextColor : "#3C4BE8"
+    property color rightButtonTextColor : JTheme.buttonWeakForeground //"#3C4BE8"
+    property color leftButtonTextColor : JTheme.buttonForeground  //"#000000"
+    property color centerButtonTextColor : JTheme.buttonWeakForeground  //"#3C4BE8"
 
     //show textEdit, default false
     property bool inputEnable: false
-    //输入框是否使用密码方式显示
     property bool showPassword: true
+    //property RegExpValidator valid : RegExpValidator { regExp: /[0-9A-F]+/ }
+    property RegExpValidator validator :RegExpValidator { }
+    property alias blurBackground: bkground
 
     signal rightButtonClicked()
     signal leftButtonClicked()
     signal centerButtonClicked()
 
-    //用来作背景图的item
     property Item sourceItem: null
-    //window窗口句柄
     //property var rootWindow : null
-    //applicationwidnow的 cotentitem
+    //applicationwidnow  cotentitem
     property Item windowContentItem: null
 
     //default anchor center in screen
     property bool defaultAnchors: true
     //anchors.centerIn: parent
-    anchors.centerIn:{
-        console.log(" jdialog  center in Overlay.overlay " + ApplicationWindow.overlay)
-        ApplicationWindow.overlay
-    }
+    anchors.centerIn: ApplicationWindow.overlay
 
     modal: true
+    dim:false
     closePolicy: QQC2.Popup.NoAutoClose
 
-    topPadding: 16
-    leftPadding: 16
-    rightPadding: 16
-    bottomPadding: 19
+    topPadding: JDisplay.dp(16)
+    leftPadding: JDisplay.dp(16)
+    rightPadding: JDisplay.dp(16)
+    bottomPadding: JDisplay.dp(19)
 
-    width: 231
+    width: JDisplay.dp(231)
     height: clayout.height + dialog.topPadding + dialog.bottomPadding
 
 
@@ -130,43 +117,34 @@ QQC2.Popup  {
     property Component inputItem: null
     property Component buttonItem: null
 
-    function getRootWindow(){
-        if(dialog.windowContentItem){
-            //already get, not need redo
-            return ;
-        }
-
-        if(typeof applicationWindow === "function"){
-            var rootwin = applicationWindow();
-            dialog.windowContentItem = rootwin.contentItem;
-            console.log("JDialog applicationWindow is defined get  windowContentItem is " + dialog.windowContentItem);
-            return;
-        }
-
-        var p = dialog
-
-        while(p){
-            console.log("p  is " + p + " width is " + p.width + " height is " + p.height + " object name " + p.objectName);
-            if(p.objectName && p.objectName === "rootPageRow"){
-                var rootwin = p.applicationWindow();
-                dialog.windowContentItem = rootwin.contentItem;
-                if(dialog.windowContentItem){
-                    console.log("find rootwindow get windowContentItem " + dialog.windowContentItem)
-                    break;
-                }
-            }
-
-            if(p.objectName === "ApplicationWindow"){
-                dialog.windowContentItem = p;
-                console.log("find ApplictionWindow's contentItem set sourceItem " + dialog.windowContentItem)
-                break;
-            }
-            p = p.parent;
+    onWindowChanged: {
+        if(window){
+            dialog.windowContentItem = window.contentItem;
+        } else {
+            dialog.windowContentItem = null;
         }
     }
 
     contentItem: FocusScope {
+        id: focusScope
         focus: true
+
+        Keys.onPressed: {
+            if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return){
+                if(dialog.centerButtonText != "") {
+                    dialog.centerButtonClicked()
+                } else if(dialog.leftButtonText != "" && dialog.rightButtonText != "") {
+                    dialog.rightButtonClicked()
+                }
+            }
+        }
+
+        onVisibleChanged: {
+            if(visible && !inputEnable) {
+                focusScope.forceActiveFocus()
+            }
+        }
+
         Column{
             id:clayout
             width: parent.width
@@ -174,6 +152,7 @@ QQC2.Popup  {
             Loader{
                 id:titleLoader
                 width: parent.width
+                height: item ? item.height : 0
                 active: dialog.title != ""
                 sourceComponent: dialog.titleItem ? dialog.titleItem : defaultTitleCom
             }
@@ -181,6 +160,7 @@ QQC2.Popup  {
             Loader{
                 id:textLoader
                 width: parent.width
+                height: item ? item.height : 0
                 active: dialog.text != ""
                 sourceComponent: dialog.textItem ? dialog.textItem : defaultTextItem
             }
@@ -188,6 +168,7 @@ QQC2.Popup  {
             Loader{
                 id:msgtextLoader
                 width: parent.width
+                height: item ? item.height : 0
                 active: dialog.msgText != "" && dialog.inputEnable === false
                 sourceComponent: dialog.msgTextItem ? dialog.msgTextItem : defaultMsgTextItem
             }
@@ -195,6 +176,7 @@ QQC2.Popup  {
             Loader{
                 id:inputLoader
                 width: parent.width
+                height: item ? item.height : 0
                 focus: active
                 active: dialog.inputEnable
                 sourceComponent: dialog.inputItem ? dialog.inputItem : defaultInputItem
@@ -203,6 +185,7 @@ QQC2.Popup  {
             Loader{
                 id:twoButtonLoader
                 width: parent.width
+                height: item ? item.height : 0
                 active: (dialog.leftButtonText != "" && dialog.rightButtonText != "") && centerButtonText == ""
                 sourceComponent: dialog.buttonItem ? dialog.buttonItem : defaultTwoButtonItem
             }
@@ -210,6 +193,7 @@ QQC2.Popup  {
             Loader{
                 id:oneButtonLoader
                 width: parent.width
+                height: item ? item.height : 0
                 active: centerButtonText != ""
                 sourceComponent: dialog.buttonItem ? dialog.buttonItem : defaultOneButtonItem
             }
@@ -220,14 +204,16 @@ QQC2.Popup  {
     Component{
         id:defaultTitleCom
         Item {
-            height: titleText.height + 6
+            height: titleText.height + JDisplay.dp(10)
             Text {
                 id: titleText
                 width: parent.width
 
                 horizontalAlignment: Text.AlignHCenter
+                color: dialog.titleColor
                 wrapMode: Text.WordWrap
-                font.pointSize: 10.5
+                font.pixelSize: JDisplay.sp(16)
+                font.weight: Font.Medium
                 text: dialog.title
             }
         }
@@ -236,14 +222,15 @@ QQC2.Popup  {
     Component{
         id:defaultTextItem
         Item {
-            height: textText.height + (dialog.msgText != "" ? 8 : 19)
+            height: textText.height + (dialog.msgText != "" ? JDisplay.dp(12) : JDisplay.dp(20))
             Text {
                 id: textText
                 width: parent.width
 
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WordWrap
-                font.pointSize: 8
+                color: dialog.textColor
+                font.pixelSize: JDisplay.sp(12)
                 text: dialog.text
             }
         }
@@ -252,14 +239,15 @@ QQC2.Popup  {
     Component{
         id:defaultMsgTextItem
         Item {
-            height: msgTextText.height + 19
+            height: msgTextText.height + JDisplay.dp(24)
             Text {
                 id: msgTextText
                 width: parent.width
 
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WordWrap
-                font.pointSize: 15
+                color: dialog.msgTextColor
+                font.pixelSize: JDisplay.sp(22)
                 text: dialog.msgText
             }
         }
@@ -268,49 +256,55 @@ QQC2.Popup  {
     Component{
         id:defaultInputItem
         FocusScope {
-            height: Math.max(inputContainRect.implicitHeight, inputContainRect.height) + 16
+            height: Math.max(inputContainRect.implicitHeight, inputContainRect.height) + JDisplay.dp(18)
             focus: true
             JSearchField{
                 id: inputContainRect
+		property string rootInputText: dialog.inputText
                 width: parent.width
-                height: 30
+                bgColor: JTheme.buttonPopupBackground
+                bgRadius: JDisplay.dp(5)
+                borderWidth: 0
                 focus: true
+                validator: dialog.validator
                 leftActions:[]
-                font.pointSize: 10
+                font.pointSize: JDisplay.sp(10)
                 placeholderText: ""
-                showPassword:dialog.showPassword
-                text:dialog.inputText
+                revealPasswordButtonShown:dialog.showPassword
+
+		onRootInputTextChanged:{
+			inputContainRect.text = rootInputText
+		}
                 onTextChanged:{
                     dialog.inputText = inputContainRect.text
                 }
+//                onRightActionTrigger:{
+//                    //clear text button click
+//                    dialog.inputText = "";
+//                }
+
                 onVisibleChanged: {
                     if(visible === false){
-                        if(showPassword === true){
+                        if(revealPasswordButtonShown === true){
                             inputContainRect.echoMode = TextInput.Password
                         }
                     }
                 }
 
-                background:Rectangle{
-                    border.color: "#26000000"
-                    border.width: 1
-                    radius: 5
-                }
                 Keys.onPressed: {
                     if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return){
                         if(dialog.centerButtonText != ""){
-                            console.log("emit centerButtonClicked")
                             dialog.centerButtonClicked();
                         } else if(dialog.leftButtonText != "" && dialog.rightButtonText != ""){
                             dialog.rightButtonClicked();
                         }
+                        event.accepted = true;
                     }
                 }
 
                 onFocusChanged: {
                     if(focus === false && inputContainRect.visible === true){
-                        console.log("set focus to true")
-                        inputContainRect.focus = true;
+//                        inputContainRect.focus = true;
                     }
                 }
             }
@@ -327,14 +321,14 @@ QQC2.Popup  {
                 id: leftButton
                 anchors.left : parent.left
 
-                width: ConstValue.jingUnit * 5
-                height: ConstValue.jingUnit * 2
-
+                width: JDisplay.dp(90)
+                height: JDisplay.dp(36)
+                radius: JDisplay.dp(7)
+                backgroundColor: JTheme.buttonPopupBackground
                 enabled: dialog.leftButtonEnable
-                backgroundColor: "#22767680"
 
                 fontColor: dialog.leftButtonTextColor
-                font.pointSize: 11
+                font.pointSize: JDisplay.sp(11)
                 text: dialog.leftButtonText
 
                 onClicked: dialog.leftButtonClicked()
@@ -343,15 +337,14 @@ QQC2.Popup  {
             JButton {
                 id: rightButton
                 anchors.right: parent.right
-
-                width: ConstValue.jingUnit * 5
-                height: ConstValue.jingUnit * 2
-
+                width: JDisplay.dp(90)
+                height: JDisplay.dp(36)
+                radius: JDisplay.dp(7)
+                backgroundColor: JTheme.buttonPopupBackground
                 enabled: dialog.rightButtonEnable
-                backgroundColor: "#22767680"
 
                 fontColor: dialog.rightButtonTextColor
-                font.pointSize: 11
+                font.pointSize: JDisplay.sp(11)
                 text: dialog.rightButtonText
 
                 onClicked: dialog.rightButtonClicked()
@@ -369,13 +362,13 @@ QQC2.Popup  {
                 anchors.left : parent.left
 
                 width:parent.width
-                height: ConstValue.jingUnit * 2
-
+                height: JDisplay.dp(36)
+                radius: JDisplay.dp(7)
+                backgroundColor: JTheme.buttonPopupBackground
                 enabled: dialog.centerButtonEnable
-                backgroundColor: "#22767680"
 
                 fontColor: dialog.rightButtonTextColor
-                font.pointSize: 11
+                font.pointSize: JDisplay.sp(11)
                 text: dialog.centerButtonText
 
                 onClicked: {
@@ -385,31 +378,27 @@ QQC2.Popup  {
         }
     }
 
+
+    enter: Transition {
+            ParallelAnimation{
+                NumberAnimation { property: "scale"; from: 0.0; to: 1.0; duration: 75 }
+                NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 75 }
+            }
+    }
+
+    onVisibleChanged: {
+        if(visible){
+             bkground.resetBg();
+        }
+    }
+
     background: JBlurBackground{
         id: bkground
+        radius: JDisplay.dp(8)
+        resetByManual: true
         sourceItem: dialog.sourceItem ? dialog.sourceItem : dialog.windowContentItem
-        backgroundColor:"#EDFFFFFF"
-        blurRadius: 130
-        radius: ConstValue.jingUnit
     }
     onAboutToShow:{
-        if(dialog.defaultAnchors === true){
-            dialog.getRootWindow();
-//            console.log("dialog  visible is true   getrootwindow return  " + dialog.rootWindow)
-//            if(dialog.rootWindow){
-//                console.log("set dialog parent to dialog.rootWindow.overlay " + dialog.rootWindow.overlay
-//                            + " width " + dialog.rootWindow.overlay.width
-//                            + " height " + dialog.rootWindow.overlay.height)
-//                //dialog.parent = dialog.rootWindow.overlay
-//            } else {
-//                console.log("dialog.rootWindow is null set dialog parent to QQC2.Overlay.overlay  " + QQC2.Overlay.overlay
-//                            + " width " + QQC2.Overlay.overlay.width
-//                            + " height " + QQC2.Overlay.overlay.height)
-//                //dialog.parent = QQC2.Overlay.overlay;
-//            }
-            console.log("set bkground source item to dialog.windowContentItem " + dialog.windowContentItem + " width is  " + dialog.windowContentItem.width +
-                        " height is " + dialog.windowContentItem.height)
-        }
 
         if(inputLoader.active && inputLoader.item){
             dialog.focus = true;

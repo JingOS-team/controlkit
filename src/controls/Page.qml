@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2021 Lele Huan <huanlele@jingos.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -7,6 +8,7 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.10 as Kirigami
+import org.kde.kirigami 2.15
 import "private"
 import QtQuick.Templates 2.1 as T2
 import QtQuick.Controls 2.1 as QQC2
@@ -316,7 +318,8 @@ QQC2.Page {
     }
 
     background: Rectangle {
-        color: Kirigami.Theme.backgroundColor
+        //color: Kirigami.Theme.backgroundColor
+        color: JTheme.background
     }
 
     implicitHeight: (header ? header.implicitHeight : 0) + (footer ? footer.implicitHeight : 0) + contentItem.implicitHeight + topPadding + bottomPadding

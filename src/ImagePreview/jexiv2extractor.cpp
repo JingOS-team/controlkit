@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2012-2015 Vishesh Handa <vhanda@kde.org>
- * SPDX-FileCopyrightText: (C) 2021 Wang Rui <wangrui@jingos.com>
+ * SPDX-FileCopyrightText: (C) 2021 Rui Wang <wangrui@jingos.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -94,7 +94,6 @@ static QDateTime dateTimeFromString(const QString &dateString)
         dateTime.setTimeSpec(Qt::UTC);
     }
     if (!dateTime.isValid()) {
-        qWarning() << "Could not determine correct datetime format from:" << dateString;
         return QDateTime();
     }
 

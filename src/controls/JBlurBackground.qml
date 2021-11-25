@@ -1,48 +1,45 @@
-
 /*
- * Copyright 2021 Rui Wang <wangrui@jingos.com>
+ * Copyright (C) 2021 Beijing Jingling Information System Technology Co., Ltd. All rights reserved.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
- * accepted by the membership of KDE e.V. (or its successor approved
- * by the membership of KDE e.V.), which shall act as a proxy
- * defined in Section 14 of version 3 of the license.
+ * Authors:
+ * Lele Huan <huanlele@jingos.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 import QtQuick 2.2
+import QtQml 2.12
 import org.kde.kirigami 2.15
 import QtGraphicalEffects 1.0
-
+import jingos.display 1.0
 Item{
     id: blurBackground
 
     property var sourceItem: null
+    property var radius: JDisplay.dp(10)
+    property real blurRadius: 128
+    property real backgroundOpacity: 0.6
 
-
-    property real blurRadius: 144  //default blur radius
-    property real radius: ConstValue.jingUnit
-    property color backgroundColor : "#EDFFFFFF"  //default bg color
+    property color backgroundColor : JTheme.floatBackground
 
     property bool showBgCover: true
     property bool showBgBoder: true
+    property bool useBlur: true
 
+    property int arrowX: 0
+    property int arrowY: 0
+    property int arrowWidth: 0
+    property int arrowHeight: 0
+    property int arrowPos: JRoundRectangle.ARROW_UNKOWN
+
+    property rect sourceRect: Qt.rect(0, 0, -1, -1)
+    property bool resetByManual: false
     onWidthChanged: {
-        console.log("onWidthChanged blurback ground w is " + blurBackground.width + "  h is " + blurBackground.height)
-        delayTimer.start();
+        if(resetByManual === false && useBlur === true)
+            delayTimer.start();
     }
     onHeightChanged: {
-        console.log("onHeightChanged blurback ground w is " + blurBackground.width + "  h is " + blurBackground.height)
-        delayTimer.start();
+        if(resetByManual === false && useBlur === true)
+            delayTimer.start();
     }
 
     Timer{
@@ -58,30 +55,21 @@ Item{
         if(visible === false){
             blurLoader.active =false;
         } else {
-            console.log("blur back ground  visibile is true")
-            delayTimer.start()
+            if(resetByManual === false && useBlur === true)
+                delayTimer.start();
         }
     }
 
     function resetBg(){
-        if(blurBackground.visible === true && blurBackground.sourceItem && blurBackground.width > 0 && blurBackground.height > 0){
-            console.log("show blur item effectsource")
-            blurLoader.active = true;
+        if((resetByManual === true || blurBackground.visible === true) && blurBackground.sourceItem && blurBackground.width > 0 && blurBackground.height > 0 && useBlur === true){
+            var jx = blurBackground.mapToItem(blurBackground.sourceItem, 0, 0);
+            blurBackground.sourceRect = Qt.rect(jx.x, jx.y, blurBackground.width, blurBackground.height);
+            if(blurLoader.active === false){
+                blurLoader.active = true;
+            }
         } else {
-            console.log("blubackground visible is " + blurBackground.visible + " sourceItem is " + blurBackground.sourceItem
-                        +"  w is " + blurBackground.width + "  h is " + blurBackground.height + " not show effectsource")
             blurLoader.active = false;
         }
-
-        //            var jx = eff.mapToItem(blurBackground.sourceItem, 0, 0);
-        //            //console.log("reset bg " + jx.x + "  " + jx.y + " w is " + blurBackground.width + "  h is " + blurBackground.height)
-        //            eff.sourceRect = Qt.rect(jx.x, jx.y, blurBackground.width, blurBackground.height)
-        //            eff.live = true;
-        //        } else {
-        //            console.log("blubackground visible is " + blurBackground.visible + " sourceItem is " + blurBackground.sourceItem
-        //                        +"  w is " + blurBackground.width + "  h is " + blurBackground.height + " not show effectsource")
-        //            eff.live = false;
-        //        }
     }
 
     Loader{
@@ -98,11 +86,9 @@ Item{
                 id:eff
                 anchors.fill: parent
                 sourceItem: blurBackground.sourceItem
-                sourceRect: {
-                    var jx = eff.mapToItem(blurBackground.sourceItem, 0, 0);
-                    Qt.rect(jx.x, jx.y, blurBackground.width, blurBackground.height)
-                }
+                sourceRect: blurBackground.sourceRect
                 visible: false
+
             }
 
             FastBlur{
@@ -114,12 +100,17 @@ Item{
                 visible:false
             }
 
-            Rectangle{
-                id: maskRect
+            JRoundRectangle{
+                id:maskRect
                 anchors.fill: parent
-                color: blurBackground.backgroundColor
-                radius: blurBackground.radius
                 visible: false
+                radius: blurBackground.radius
+                radiusPos: JRoundRectangle.BOTTOMLEFT | JRoundRectangle.BOTTOMRIGHT | JRoundRectangle.TOPLEFT | JRoundRectangle.TOPRIGHT
+                arrowPos:blurBackground.arrowPos
+                arrowX:blurBackground.arrowX
+                arrowY:blurBackground.arrowY
+                arrowWidth: blurBackground.arrowWidth
+                arrowHeight: blurBackground.arrowHeight
             }
 
             OpacityMask{
@@ -132,24 +123,40 @@ Item{
             DropShadow {
                 anchors.fill: mask
                 horizontalOffset: 0
-                verticalOffset: 4
+                verticalOffset: JDisplay.dp(4)
                 radius: 12.0
                 samples: 24
                 cached: true
                 color: Qt.rgba(0, 0, 0, 0.1)
                 source: mask
-                visible: true
             }
         }
     }
 
-
-    Rectangle{
+    JRoundRectangle{
         anchors.fill: parent
-        visible: blurBackground.showBgCover
-        color: blurBackground.sourceItem ? Qt.rgba(1, 1, 1, 0.6) : Qt.rgba(1, 1, 1, 1)
         radius: blurBackground.radius
-        border.color: Qt.rgba(0, 0, 0, 0.1)
-        border.width : blurBackground.showBgBoder ? 1 : 0
+        radiusPos: JRoundRectangle.BOTTOMLEFT | JRoundRectangle.BOTTOMRIGHT | JRoundRectangle.TOPLEFT | JRoundRectangle.TOPRIGHT
+        arrowPos:blurBackground.arrowPos
+        arrowX:blurBackground.arrowX
+        arrowY:blurBackground.arrowY
+        arrowWidth: blurBackground.arrowWidth
+        arrowHeight: blurBackground.arrowHeight
+
+        visible: blurBackground.showBgCover
+        color: Qt.rgba(blurBackground.backgroundColor.r, blurBackground.backgroundColor.g, blurBackground.backgroundColor.b)
+        opacity: blurBackground.sourceItem ? blurBackground.backgroundOpacity : 1.0
+        borderColor: Qt.rgba(0, 0, 0, 0.1)
+        borderWidth : blurBackground.showBgBoder ? 1 : 0
     }
+
+//    Rectangle{
+//        anchors.fill: parent
+//        radius: blurBackground.radius
+//        visible: blurBackground.showBgCover
+//        color: Qt.rgba(blurBackground.backgroundColor.r, blurBackground.backgroundColor.g, blurBackground.backgroundColor.b)
+//        opacity: blurBackground.sourceItem ? 0.6 : 1.0
+//        border.color:  Qt.rgba(0, 0, 0, 0.1)
+//        border.width:  blurBackground.showBgBoder ? 1 : 0
+//    }
 }

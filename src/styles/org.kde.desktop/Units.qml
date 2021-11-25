@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2021 Lele Huan <huanlele@jingos.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -22,7 +23,6 @@ QtObject {
      * the capital letter M
      */
     property int gridUnit: fontMetrics.height
-
 
     /**
      * units.iconSizes provides access to platform-dependent icon sizing

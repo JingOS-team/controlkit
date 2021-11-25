@@ -1,21 +1,9 @@
 /*
- * Copyright 2021 Rui Wang <wangrui@jingos.com>
+ * Copyright (C) 2021 Beijing Jingling Information System Technology Co., Ltd. All rights reserved.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
- * accepted by the membership of KDE e.V. (or its successor approved
- * by the membership of KDE e.V.), which shall act as a proxy
- * defined in Section 14 of version 3 of the license.
+ * Authors:
+ * Lele Huan <huanlele@jingos.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 import QtQuick 2.2
@@ -27,30 +15,19 @@ Rectangle{
     property real moveX: 0
     property real moveY: 0
     property bool darkMode: false
-
+    property bool containsMouse: area.containsMouse
+    property color hoverColor: JTheme.hoverBackground
+    property color pressColor: JTheme.pressBackground
     anchors.fill: parent
 
     radius: ConstValue.radius
     color: "transparent"
 
     Rectangle {
-        id: press_item
-
-        anchors.fill: parent
-        
-        color:darkMode ?  ConstValue.darkPressColor : ConstValue.pressColor
-        visible: false
-        radius: parent.radius
-        opacity: background.darkMode ? 0.3 : 0.16
-    }
-
-    Rectangle {
         id: back_item
-
-        color: darkMode ? ConstValue.darkHoverColor : ConstValue.hoverColor
+        color:  area.pressed? background.pressColor : background.hoverColor
         radius: parent.radius
-        opacity: darkMode ? 0.18 : 0.12
-        
+
         state: "hiden"
         states: [
             State {
@@ -62,14 +39,9 @@ Rectangle{
                     y: 0
                     width: background.width
                     height: background.height
-                    
+
                     visible:true
                 }
-
-//                PropertyChanges {
-//                    target: background.parent
-//                    //scale: 1.1
-//                }
             },
             State {
                 name: "hiden"
@@ -83,14 +55,8 @@ Rectangle{
                     height: 0
 
                     visible:false
-                    //scale: 1
-                    
                 }
-//                PropertyChanges {
-//                    target: background.parent
 
-//                    //scale: 1
-//                }
             }
         ]
 
@@ -124,20 +90,21 @@ Rectangle{
         anchors.fill:parent
         hoverEnabled: true
 
-        onEntered: {
-            cursorShape = Qt.BlankCursor
+        onContainsMouseChanged: {
+            if (containsMouse) {
+                cursorShape = Qt.BlankCursor
 
-            back_item.x = mouseX
-            back_item.y = mouseY
-            back_item.state = "shown"
-        }
+                back_item.x = area.mouseX
+                back_item.y = area.mouseY
+                back_item.state = "shown"
+            } else {
+                cursorShape = Qt.ArrowCursor
 
-        onExited: {
-            cursorShape = Qt.ArrowCursor
+                background.moveX = area.mouseX
+                background.moveY = area.mouseY
 
-            background.moveX = mouseX
-            background.moveY = mouseY
-            back_item.state = "hiden"
+                back_item.state = "hiden"
+            }
         }
 
         onClicked: {
@@ -145,16 +112,16 @@ Rectangle{
         }
 
         onPressed: {
-            press_item.visible = true
-            back_item.visible = false
+            //press_item.visible = true
+            //back_item.visible = false
 
             background.parent.pressed(mouse)
         }
 
         onReleased: {
-            press_item.visible = false
-            back_item.visible = true
-            
+            //press_item.visible = false
+            //back_item.visible = true
+
             background.parent.released(mouse)
         }
     }

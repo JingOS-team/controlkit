@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2020 Carl Schwan <carl@carlschwan.eu>
- *                             2021 Wang Rui <wangrui@jingos.com>
+ * SPDX-FileCopyrightText: (C) 2021 Rui Wang <wangrui@jingos.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -60,7 +60,7 @@ void JResizeRectangle::mouseMoveEvent(QMouseEvent *event)
         if(leftTop){
             setX(x);
             setY(y);
-            setIsMoving(true);
+            //setIsMoving(true);
         } else {
             if(m_currentArea.x() < m_moveArea.x()){
                 setX(m_moveArea.x());
@@ -78,6 +78,7 @@ void JResizeRectangle::mouseMoveEvent(QMouseEvent *event)
                 setY(y);
             }
         }
+        setIsMoving(true);
         event->accept();
     } else {
       event->ignore();

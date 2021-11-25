@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2016 Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2021 Lele Huan <huanlele@jingos.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -119,7 +120,6 @@ T.Control {
     property alias interactive: columnView.interactive
 
     /**
-     * wideMode: bool
      * If true, the PageRow is wide enough that willshow more than one column at once
      * @since 5.37
      */

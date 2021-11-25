@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Marco Martin <mart@kde.org>
- *  SPDX-FileCopyrightText: 2020 Rui Wang <wangrui@jingos.com>
+ *  SPDX-FileCopyrightText: 2021 Lele Huan <huanlele@jingos.com>
+ *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -11,91 +12,8 @@ import QtGraphicalEffects 1.0
 import QtQuick 2.14
 import org.kde.kirigami 2.15 as Kirigami15
 
-/**
- * A window that provides some basic features needed for all apps
- *
- * It's usually used as a root QML component for the application.
- * It's based around the PageRow component, the application will be
- * about pages adding and removal.
- * For most of the usages, this class should be used instead
- * of AbstractApplicationWidnow
- * @see AbstractApplicationWidnow
- *
- * Example usage:
- * @code
- * import org.kde.kirigami 2.4 as Kirigami
- *
- * Kirigami.ApplicationWindow {
- *  [...]
- *     globalDrawer: Kirigami.GlobalDrawer {
- *         actions: [
- *            Kirigami.Action {
- *                text: "View"
- *                iconName: "view-list-icons"
- *                Kirigami.Action {
- *                        text: "action 1"
- *                }
- *                Kirigami.Action {
- *                        text: "action 2"
- *                }
- *                Kirigami.Action {
- *                        text: "action 3"
- *                }
- *            },
- *            Kirigami.Action {
- *                text: "Sync"
- *                iconName: "folder-sync"
- *            }
- *         ]
- *     }
- *
- *     contextDrawer: Kirigami.ContextDrawer {
- *         id: contextDrawer
- *     }
- *
- *     pageStack.initialPage: Kirigami.Page {
- *         mainAction: Kirigami.Action {
- *             iconName: "edit"
- *             onTriggered: {
- *                 // do stuff
- *             }
- *         }
- *         contextualActions: [
- *             Kirigami.Action {
- *                 iconName: "edit"
- *                 text: "Action text"
- *                 onTriggered: {
- *                     // do stuff
- *                 }
- *             },
- *             Kirigami.Action {
- *                 iconName: "edit"
- *                 text: "Action text"
- *                 onTriggered: {
- *                     // do stuff
- *                 }
- *             }
- *         ]
- *       [...]
- *     }
- *  [...]
- * }
- * @endcode
- *
-*/
 AbstractApplicationWindow {
     id: root
-
-    /**
-     * pageStack: StackView
-     * Readonly.
-     * The stack used to allocate the pages and to manage the transitions
-     * between them.
-     * It's using a PageRow, while having the same API as PageStack,
-     * it positions the pages as adjacent columns, with as many columns
-     * as can fit in the screen. An handheld device would usually have a single
-     * fullscreen column, a tablet device would have many tiled columns.
-     */
     property alias pageStack: __pageStack
 
     // whether is darkMode default is false
@@ -114,7 +32,9 @@ AbstractApplicationWindow {
     property color fastBlurColor: "#F7F7F7"
 
     //redefines here as here we can know a pointer to PageRow
-    wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth * 1.5
+
+    // we negate the canBeEnabled check because we don't want to factor in the automatic drawer provided by Kirigami for page actions for our calculations
+    wideScreen: width >= (root.pageStack.defaultColumnWidth) + ((contextDrawer && !(contextDrawer instanceof Kirigami.ContextDrawer)) ? contextDrawer.width : 0) + (globalDrawer ? globalDrawer.width : 0)
 
     Component.onCompleted: {
         if (pageStack.currentItem) {
@@ -127,7 +47,7 @@ AbstractApplicationWindow {
         anchors.fill: parent
         visible: root.fastBlurMode
 
-		/*
+        /*
         Image{
             id:bgImg
             anchors.fill: parent
@@ -143,6 +63,11 @@ AbstractApplicationWindow {
         }
     }
 
+    Rectangle{
+        anchors.fill: parent
+        color: JTheme.background
+    }
+
     Connections{
         target:Kirigami15.KeyEventHelper
         onBackKeyEvent:{
@@ -152,10 +77,9 @@ AbstractApplicationWindow {
 
     PageRow {
         id: __pageStack
-        objectName: "rootPageRow"
+        globalToolBar.style: Kirigami.ApplicationHeaderStyle.Auto
         anchors {
-            bottom: parent.bottom
-            top: parent.top
+            fill: parent
             //HACK: workaround a bug in android iOS keyboard management
             bottomMargin: ((Qt.platform.os == "android" || Qt.platform.os == "ios") || !Qt.inputMethod.visible) ? 0 : Qt.inputMethod.keyboardRectangle.height
             onBottomMarginChanged: {
@@ -164,21 +88,12 @@ AbstractApplicationWindow {
                 }
             }
         }
-
-        globalToolBar.style: Kirigami.ApplicationHeaderStyle.Auto
-        width: parent.width
-
-        focus: true
-        function applicationWindow(){
-            return root.applicationWindow();
-        }
         //FIXME
         onCurrentIndexChanged: root.reachableMode = false;
 
         function goBack(exit = true) {
             //NOTE: drawers are handling the back button by themselves
             var backEvent = {accepted: false}
-
             if (root.pageStack.layers.depth > 1) {
                 root.pageStack.layers.currentItem.backRequested(backEvent);
                 if (!backEvent.accepted) {
@@ -208,46 +123,47 @@ AbstractApplicationWindow {
             root.pageStack.currentIndex = Math.min(root.pageStack.depth-1, root.pageStack.currentIndex + 1);
         }
 
-        WheelHandler {
-            id: wheelHandler
-            property int distant : 0
+//        WheelHandler {
+//            id: wheelHandler
+//            property int distant : 0
 
-            orientation:Qt.Horizontal 
-            acceptedDevices:PointerDevice.AllPointerTypes
-            
-            onWheel:{
-                wheelHandler.distant = wheelHandler.distant + event.angleDelta.x 
-            }
+//            //orientation:Qt.Horizontal
+//            acceptedDevices:PointerDevice.AllPointerTypes
+//            onWheel:{
+//                wheelHandler.distant = wheelHandler.distant + event.angleDelta.x
+//            }
 
-            onActiveChanged:{
-                if(active == false)
-                {
-                    if (wheelHandler.distant > 0)
-                    {
-                        __pageStack.goBack(false)
-                    }
-                    wheelHandler.distant = 0
-                }
-            }
-        }
+//            onActiveChanged:{
+//                console.log("222222222222222222   active is " + active + "  distant is " + wheelHandler.distant)
+//                if(active == false)
+//                {
+
+//                    if (wheelHandler.distant > 0)
+//                    {
+//                        __pageStack.goBack(false)
+//                    }
+//                    wheelHandler.distant = 0
+//                }
+//            }
+//        }
+
         Keys.onBackPressed: {
             goBack();
             event.accepted = true
         }
-
         Shortcut {
             sequence: "Forward"
             onActivated: __pageStack.goForward();
         }
-
         Shortcut {
             sequence: StandardKey.Forward
             onActivated: __pageStack.goForward();
         }
-        
         Shortcut {
             sequence: StandardKey.Back
             onActivated: __pageStack.goBack();
         }
+
+        focus: true
     }
 }

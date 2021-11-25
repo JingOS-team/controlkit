@@ -1,0 +1,117 @@
+kirigami2 (5.78.0) focal; urgency=medium
+
+  * Format version
+
+ -- JingOS CI <jingos@jingos.com>  Wed, 24 Nov 2021 20:08:05 +0800
+
+kirigami2 (5.50.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Thu, 06 Sep 2018 22:26:35 +0000
+
+kirigami2 (5.49.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Sat, 11 Aug 2018 18:58:58 +0000
+
+kirigami2 (5.48.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 16 Jul 2018 15:07:59 +0000
+
+kirigami2 (5.47.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 13 Jun 2018 04:07:12 +0000
+
+kirigami2 (5.46.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 14 Mar 2018 12:19:06 +0000
+
+kirigami2 (5.43.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Fri, 09 Feb 2018 14:23:28 +0000
+
+kirigami2 (5.42.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Sun, 14 Jan 2018 15:50:43 +0000
+
+kirigami2 (5.41.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Fri, 08 Dec 2017 14:45:56 +0000
+
+kirigami2 (5.40.0-0neon) xenial; urgency=medium
+
+  [ Jonathan Riddell ]
+  * Now in frameworks
+
+  [ Neon CI ]
+  * New release
+
+ -- Neon CI <neon@kde.org>  Fri, 10 Nov 2017 12:58:07 +0000
+
+kirigami2 (2.2.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 21 Jun 2017 13:45:07 +0000
+
+kirigami2 (2.1.1-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Tue, 02 May 2017 09:49:24 +0000
+
+kirigami2 (2.0.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Thu, 12 Jan 2017 12:36:09 +0000
+
+kirigami2 (1.80.0-0neon) UNRELEASED; urgency=medium
+
+  * Kirigami 2 package
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Mon, 19 Dec 2016 14:31:26 +0000
+
+kirigami (1.1.0-1) unstable; urgency=medium
+
+  * Initial Debian release.
+
+ -- Maximiliano Curia <maxy@debian.org>  Mon, 03 Oct 2016 18:48:42 +0200
+
+kirigami (1.1.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 26 Sep 2016 11:53:18 +0000
+
+kirigami (1.0.2-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Tue, 20 Sep 2016 13:39:43 +0000
+
+kirigami (1.0.1-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Wed, 10 Aug 2016 15:20:12 +0000
+
+kirigami (1.0.0-0) xenial; urgency=medium
+
+  * Initial release.
+
+ -- Bhushan Shah <bshah@kde.org>  Mon, 14 Mar 2016 11:39:57 +0530

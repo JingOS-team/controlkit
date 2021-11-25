@@ -41,11 +41,5 @@ T.AbstractCard {
             }
             return Theme.backgroundColor
         }
-        Behavior on color {
-            ColorAnimation {
-                duration: Units.longDuration
-                easing.type: Easing.InOutQuad
-            }
-        }
     }
 }

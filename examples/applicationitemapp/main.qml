@@ -13,10 +13,6 @@ import QtQuick.Controls 2.14
 Kirigami.ApplicationItem {
     id: root
 
-    // Rectangle {
-    //     color: "red"
-    //     anchors.fill: parent
-    // }
     globalDrawer: Kirigami.GlobalDrawer {
         title: "Hello App"
         titleIcon: "applications-graphics"
@@ -64,22 +60,7 @@ Kirigami.ApplicationItem {
                     }
                 ]
             }
-        //    Rectangle {
-        //        color: "blue"
-        //        anchors.fill: parent
-        //    }
 
-            // Kirigami26.LinkButton{
-            //     id:linkButton
-            //     anchors.centerIn: parent
-            //     text: "Hello world"
-            //     font.pixelSize: 22
-            //     font.italic: true
-            //     color: "red"
-            //     onClicked: {
-            //         showPassiveNotification("Action 2 clicked")
-            //     }
-            // }
             Kirigami215.JButton{
                 id: jbutton
                 anchors.top : linkButton.bottom
@@ -119,13 +100,7 @@ Kirigami.ApplicationItem {
                     var pan = new Panel("org.kde.phone.panel")
                     console.log("Kirigami.Icon Component.onCompleted pan.height:" + pan.height)
 
-                }
-                // Text {
-                //     text: "Icon"
-                //     anchors.centerIn: parent
-                //     font.bold: true
-                //     color: "#8e8e8e"
-                // }   
+                } 
             }
 
             Kirigami28.SearchField{
@@ -148,33 +123,12 @@ Kirigami.ApplicationItem {
             }
 
 
-            // Kirigami20.Icon{
-            //     width: 100
-            //     height: 100
-            //     anchors.top: searchField.bottom
-            //     // source: "applications-games"
-            //     source: "akregator"
-
-            // }
+  
 
 
 
 
 
-            // Action {
-            //     id: copyAction
-            //     text: qsTr("&Copy")
-            //     icon.name: "edit-copy"
-            //     shortcut: StandardKey.Copy
-            //     onTriggered: window.activeFocusItem.copy()
-            // }
-
-            // ToolButton {
-            //     id: toolButton
-            //     anchors.top: searchField.bottom
-            //     anchors.topMargin: 300
-            //     action: copyAction
-            // }
         }
     }
 }

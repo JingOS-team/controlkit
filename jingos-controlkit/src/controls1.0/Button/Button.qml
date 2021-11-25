@@ -1,6 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2011 by Marco Martin <mart@kde.org>
- *
+ *	
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 

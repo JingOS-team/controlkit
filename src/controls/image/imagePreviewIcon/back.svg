@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="45px" viewBox="0 0 44 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>-mockplus-</title>
+    <defs>
+        <filter id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.000000 0 0 0 0 0.000000 0 0 0 0 0.000000 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="相册-视频-功能栏" transform="translate(-20.000000, -51.000000)">
+            <g id="-mockplus-" transform="translate(0.000000, -7.000000)">
+                <g id="-mockplus-" transform="translate(20.000000, 56.333333)">
+                    <g id="Arrows,-Diagrams/Arrow-2" transform="translate(0.000000, 1.000000)" filter="url(#filter-1)">
+                        <g transform="translate(0.000000, 0.833333)">
+                            <g id="Interface,-Essential/Arrow,-Down" transform="translate(22.000000, 22.000000) rotate(90.000000) translate(-22.000000, -22.000000) ">
+                                <g id="Path" transform="translate(-0.000000, -0.000000)">
+                                    <polygon points="0 0 44.0000002 0 44.0000002 44.0000002 0 44.0000002"></polygon>
+                                    <polyline stroke="#323232" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" points="38.5000002 13.7500001 22.0000001 30.2500001 5.50000002 13.7500001"></polyline>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

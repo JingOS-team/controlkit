@@ -15,9 +15,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
-    
-    const QString style = QQuickStyle::name();
-    qDebug()<<"file:"<<__FILE__<<" line:"<<__LINE__<<"function:"<<__FUNCTION__<<"style:"<<style;
 
     QQuickView view;
     view.setResizeMode(QQuickView::SizeRootObjectToView);

@@ -21,13 +21,11 @@ Kirigami.Action {
     id: root
 
     /**
-     * page: string
      * Url or filename of the page this action will load
      */
     property string page
 
     /**
-     * pagePool: Kirigami.PagePool
      * The PagePool used by this PagePoolAction.
      * PagePool will make sure only one instance of the page identified by the page url will be created and reused.
      * PagePool's lastLoaderUrl property will be used to control the mutual
@@ -46,7 +44,6 @@ Kirigami.Action {
     property Item pageStack: typeof applicationWindow != undefined ? applicationWindow().pageStack : null
 
     /**
-     * basePage: Kirigami.Page
      * The page of pageStack new pages will be pushed after.
      * All pages present after the given basePage will be removed from the pageStack
      */
@@ -120,7 +117,6 @@ Kirigami.Action {
         let pageStack_ = useLayers ? pageStack.layers : pageStack
 
         if (initialProperties && typeof(initialProperties) !== "object") {
-            console.warn("initialProperties must be of type object");
             return;
         }
 

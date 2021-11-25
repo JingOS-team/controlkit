@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="46px" height="51px" viewBox="0 0 46 51" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Interface, Essential/trash-delete-bin 2</title>
+    <defs>
+        <filter id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.000000 0 0 0 0 0.000000 0 0 0 0 0.000000 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="相册-视频-功能栏" transform="translate(-1845.000000, -48.000000)">
+            <g id="Interface,-Essential/trash-delete-bin-2" transform="translate(0.000000, -7.000000)" filter="url(#filter-1)">
+                <g transform="translate(1846.000000, 56.333333)">
+                    <g id="Interface,-Essential/trash-delete-bin" transform="translate(-1.000000, -1.000000)">
+                        <g id="Group" transform="translate(0.990833, 0.990069)">
+                            <path d="M11.0045833,17.8824479 L11.0045833,37.7518345 C11.0045833,39.9465463 12.6468899,41.7257118 14.6727778,41.7257118 L29.3455556,41.7257118 C31.3714434,41.7257118 33.01375,39.9465463 33.01375,37.7518345 L33.01375,17.8824479 M25.6773611,19.8693866 L25.6773611,33.7779572 M18.3409722,19.8693866 L18.3409722,33.7779572 M8.2534375,11.9216319 L35.7648958,11.9216319 M14.6727778,11.9216289 L15.6705267,8.67894806 C16.169665,7.05544927 17.5720915,5.96040392 19.1516432,5.96080982 L24.8666901,5.96080982 C26.4475917,5.95869134 27.8519108,7.05406016 28.3514749,8.67894806 L29.3455556,11.9216289" id="Shape" stroke="#323232" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <rect id="Rectangle" x="0" y="0" width="44.0183333" height="47.6865278"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

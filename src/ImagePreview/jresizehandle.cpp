@@ -1,7 +1,7 @@
 /*
  *   Copyright 2019 by Marco Martin <mart@kde.org>
  *   Copyright 2020 by Carl Schwan <carl@carlschwan.eu>
- *   Copyright 2021 Wang Rui <wangrui@jingos.com>
+ *   Copyright 2021 Rui Wang <wangrui@jingos.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -24,6 +24,7 @@
 
 #include <QCursor>
 #include <cmath>
+#include <QDebug>
 
 JResizeHandle::JResizeHandle(QQuickItem *parent)
     : QQuickItem(parent)
@@ -134,12 +135,14 @@ void JResizeHandle::mousePressEvent(QMouseEvent *event)
     setResizeBlocked(false, false);
     event->accept();
     setIsPressed(true);
-
 }
 
 void JResizeHandle::mouseMoveEvent(QMouseEvent *event)
 {
 
+    if(m_nIsPressed == false){
+        return;
+    }
     const QPointF difference = m_mouseDownPosition - event->windowPos();
 
     const QSizeF minimumSize = QSize(20, 20);
@@ -153,13 +156,20 @@ void JResizeHandle::mouseMoveEvent(QMouseEvent *event)
             m_rectangle->setX(x);
             m_rectangle->setWidth(width);
             setResizeBlocked(m_mouseDownGeometry.width() + difference.x() < minimumSize.width(), m_resizeHeightBlocked);
+        } else if( x < m_moveArea.x()){
+            m_rectangle->setX(m_moveArea.x());
+            qreal w = width - static_cast<qreal>(m_moveArea.x() - x);
+            m_rectangle->setWidth(w);
         }
     } else if (resizeRight()) {
         const qreal width = qMax(minimumSize.width(), m_mouseDownGeometry.width() - difference.x());
 
-        if((m_moveArea.x() + m_moveArea.width()) > (m_rectangle->x() +width) && width > 150){
+        if((m_moveArea.x() + m_moveArea.width()) >= (m_rectangle->x() +width) && width > 150){
             m_rectangle->setWidth(width);
             setResizeBlocked(m_mouseDownGeometry.width() - difference.x() < minimumSize.width(), m_resizeHeightBlocked);
+        } else if((m_moveArea.x() + m_moveArea.width()) < (m_rectangle->x() +width)){
+            qreal w = m_rectangle->x() + width - (m_moveArea.x() + m_moveArea.width());
+            m_rectangle->setWidth(width - w);
         }
     }
 
@@ -172,14 +182,20 @@ void JResizeHandle::mouseMoveEvent(QMouseEvent *event)
             m_rectangle->setHeight(height);
             setResizeBlocked(m_resizeWidthBlocked,
                              m_mouseDownGeometry.height() + difference.y() < minimumSize.height());
+        } else if( y < m_moveArea.y()){
+            m_rectangle->setY(m_moveArea.y());
+            qreal h = height - static_cast<qreal>(m_moveArea.y() - y);
+            m_rectangle->setHeight(h);
         }
     } else if (resizeBottom()) {
         const qreal height = qMax(minimumSize.height(), m_mouseDownGeometry.height() - difference.y());
-        if((m_moveArea.y() + m_moveArea.height()) > (m_rectangle->y() +height)  && height > 150){
+        if((m_moveArea.y() + m_moveArea.height()) >= (m_rectangle->y() +height)  && height > 150){
             m_rectangle->setHeight(qMax(height, minimumSize.height()));
             setResizeBlocked(m_resizeWidthBlocked, m_mouseDownGeometry.height() - difference.y() < minimumSize.height());
+        } else if((m_moveArea.y() + m_moveArea.height()) < (m_rectangle->y() +height)){
+            qreal h = (m_rectangle->y() +height) - (m_moveArea.y() + m_moveArea.height());
+            m_rectangle->setHeight(height - h);
         }
-
     }
 
     event->accept();

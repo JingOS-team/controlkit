@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2019 Marco Martin <mart@kde.org>
+ *  SPDX-FileCopyrightText: 2021 Lele Huan <huanlele@jingos.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -57,6 +58,7 @@ QmlComponentsPool::QmlComponentsPool(QQmlEngine *engine)
 {
     QQmlComponent *component = new QQmlComponent(engine, this);
 
+
     component->setData(QByteArrayLiteral(R"(
 import QtQuick 2.7
 import org.kde.kirigami 2.7 as Kirigami
@@ -84,7 +86,7 @@ QtObject {
 )"), QUrl(QStringLiteral("columnview.cpp")));
 
     m_instance = component->create();
-    //qWarning()<<component->errors();
+    qWarning()<<component->errors();
     Q_ASSERT(m_instance);
 
     m_separatorComponent = m_instance->property("separator").value<QQmlComponent *>();
@@ -1507,7 +1509,7 @@ void ColumnView::mouseUngrabEvent()
 void ColumnView::classBegin()
 {
     auto syncColumnWidth = [this]() {
-        m_contentItem->m_columnWidth = privateQmlComponentsPoolSelf->instance(qmlEngine(this))->m_units->property("gridUnit").toInt() * 20;
+        m_contentItem->m_columnWidth = 38 * 20;//privateQmlComponentsPoolSelf->instance(qmlEngine(this))->m_units->property("gridUnit").toInt() * 20;
         Q_EMIT columnWidthChanged();
     };
 
@@ -1515,7 +1517,7 @@ void ColumnView::classBegin()
     syncColumnWidth();
 
     auto syncDuration = [this]() {
-        m_contentItem->m_slideAnim->setDuration(QmlComponentsPoolSingleton::instance(qmlEngine(this))->m_units->property("longDuration").toInt());
+        m_contentItem->m_slideAnim->setDuration(250);// (QmlComponentsPoolSingleton::instance(qmlEngine(this))->m_units->property("longDuration").toInt());
         Q_EMIT scrollDurationChanged();
     };
 

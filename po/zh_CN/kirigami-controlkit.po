@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-25 14:33+0800\n"
+"POT-Creation-Date: 2021-08-16 15:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,84 +44,101 @@ msgstr ""
 msgid "%1 — %2"
 msgstr ""
 
-#: src/controls/ImagePreview/JCropView.qml:253
+#: src/controls/ImagePreview/JCropView.qml:258
 #, kde-format
 msgid "Reduction"
 msgstr "还原"
 
-#: src/controls/ImagePreview/JCropView.qml:334
+#: src/controls/ImagePreview/JCropView.qml:343
+#, kde-format
+msgid "Save failed"
+msgstr "保存失败"
+
+#: src/controls/ImagePreview/JCropView.qml:343
 #, kde-format
 msgid "Abandoning modification"
 msgstr "放弃修改"
 
-#: src/controls/ImagePreview/JCropView.qml:335
+#: src/controls/ImagePreview/JCropView.qml:344
 #, kde-format
-msgid "Are you sure to discard the current modification"
-msgstr "您确定放弃当前修改吗"
+msgid "The file has an error and cannot be saved"
+msgstr "文件保存发生错误"
 
-#: src/controls/ImagePreview/JCropView.qml:336
+#: src/controls/ImagePreview/JCropView.qml:344
+#, kde-format
+msgid "Are you sure to discard the current modification?"
+msgstr "您确定放弃当前修改吗?"
+
+#: src/controls/ImagePreview/JCropView.qml:345
 #, kde-format
 msgid "Action"
 msgstr "确定"
 
-#: src/controls/ImagePreview/JCropView.qml:337
-#: src/controls/JImagePreviewItem.qml:428 src/controls/JWallPaperItem.qml:337
+#: src/controls/ImagePreview/JCropView.qml:346
+#: src/controls/JImagePreviewItem.qml:553 src/controls/JWallPaperItem.qml:337
+#: src/JImagePreviewItem.qml:502 src/JWallPaperItem.qml:338
 #, kde-format
 msgid "Cancel"
 msgstr "取消"
 
-#: src/controls/JImagePreviewItem.qml:424
-#: src/controls/JImagePreviewItem.qml:427
+#: src/controls/ImagePreview/JCropView.qml:347
+#, kde-format
+msgid "OK"
+msgstr "确定"
+
+#: src/controls/JImagePreviewItem.qml:549
+#: src/controls/JImagePreviewItem.qml:552 src/JImagePreviewItem.qml:498
+#: src/JImagePreviewItem.qml:501
 #, kde-format
 msgid "Delete"
 msgstr "删除"
 
-#: src/controls/JImagePreviewItem.qml:425
+#: src/controls/JImagePreviewItem.qml:550 src/JImagePreviewItem.qml:499
 #, kde-format
 msgid "Are you sure you want to delete this video?"
 msgstr "您确定删除这个视频吗?"
 
-#: src/controls/JImagePreviewItem.qml:426
+#: src/controls/JImagePreviewItem.qml:551 src/JImagePreviewItem.qml:500
 #, kde-format
 msgid "Are you sure you want to delete this photo?"
 msgstr "您确定删除这个照片吗?"
 
-#: src/controls/JOpenModeDialog.qml:28
+#: src/controls/JOpenModeDialog.qml:29
 #, kde-format
 msgid "Open mode"
 msgstr "打开方式"
 
-#: src/controls/JWallPaperItem.qml:128
+#: src/controls/JWallPaperItem.qml:130 src/JWallPaperItem.qml:129
 #, kde-format
 msgid "day"
 msgstr "日"
 
-#: src/controls/JWallPaperItem.qml:320
+#: src/controls/JWallPaperItem.qml:322 src/JWallPaperItem.qml:321
 #, kde-format
 msgid "Move & Scale"
 msgstr "移动 & 缩放"
 
-#: src/controls/JWallPaperItem.qml:351
+#: src/controls/JWallPaperItem.qml:348 src/JWallPaperItem.qml:352
 #, kde-format
 msgid "Set"
 msgstr "设置"
 
-#: src/controls/JWallPaperItem.qml:386
+#: src/controls/JWallPaperItem.qml:383 src/JWallPaperItem.qml:387
 #, kde-format
 msgid "Set Lock Screen"
 msgstr "设置锁屏壁纸"
 
-#: src/controls/JWallPaperItem.qml:411
+#: src/controls/JWallPaperItem.qml:409 src/JWallPaperItem.qml:412
 #, kde-format
 msgid "Set Home Screen"
 msgstr "设置桌面壁纸"
 
-#: src/controls/JWallPaperItem.qml:452
+#: src/controls/JWallPaperItem.qml:448 src/JWallPaperItem.qml:453
 #, kde-format
 msgid "Set Both"
 msgstr "设置锁屏和桌面"
 
-#: src/controls/JWallPaperItem.qml:543
+#: src/controls/JWallPaperItem.qml:510 src/JWallPaperItem.qml:544
 #, kde-format
 msgid "Settings Wallpaper..."
 msgstr "壁纸设置中..."
@@ -163,6 +180,31 @@ msgctxt ""
 "Keep the text as concise as possible."
 msgid "Navigate to %1."
 msgstr ""
+
+#: src/controls/TextFieldPrivate/TextFieldToolBar.qml:102
+#, kde-format
+msgid "select"
+msgstr "选择"
+
+#: src/controls/TextFieldPrivate/TextFieldToolBar.qml:117
+#, kde-format
+msgid "select all"
+msgstr "选择全部"
+
+#: src/controls/TextFieldPrivate/TextFieldToolBar.qml:132
+#, kde-format
+msgid "cut"
+msgstr "剪切"
+
+#: src/controls/TextFieldPrivate/TextFieldToolBar.qml:148
+#, kde-format
+msgid "copy"
+msgstr "拷贝"
+
+#: src/controls/TextFieldPrivate/TextFieldToolBar.qml:161
+#, kde-format
+msgid "paste"
+msgstr "粘贴"
 
 #: templates/kirigami/src/contents/ui/main.qml:8
 #: templates/kirigami/src/contents/ui/main.qml:11

@@ -1,6 +1,7 @@
 /*
  *  Copyright 2019 Marco Martin <mart@kde.org>
- *            2021 Wang Rui <wangrui@jingos.com>
+ *  Copyright 2021 Rui Wang <wangrui@jingos.com>
+ *  Copyright 2021 Lele Huan <huanlele@jingos.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -19,40 +20,39 @@
  */
 
 import QtQuick 2.12
-import org.kde.kirigami 2.12 as Kirigami
 import org.kde.kirigami 2.15
+import jingos.display 1.0
 JResizeHandle {
-    width: 30
+    width: JDisplay.dp(30)
     height: width
 
     property int rhHeight:width/10
 
     anchors.top: resizeCorner === JResizeHandle.TopLeft || resizeCorner === JResizeHandle.TopRight ? parent.top : undefined
-    anchors.topMargin: -rhHeight
+    //anchors.topMargin: -rhHeight
 
     anchors.left: resizeCorner === JResizeHandle.TopLeft || resizeCorner === JResizeHandle.BottomLeft ? parent.left : undefined
-    anchors.leftMargin: -rhHeight
+    //anchors.leftMargin: -rhHeight
 
     anchors.bottom: resizeCorner === JResizeHandle.BottomLeft || resizeCorner === JResizeHandle.BottomRight ? parent.bottom : undefined
-    anchors.bottomMargin: -rhHeight
+    //anchors.bottomMargin: -rhHeight
 
     anchors.right: resizeCorner === JResizeHandle.TopRight || resizeCorner === JResizeHandle.BottomRight ? parent.right : undefined
-    anchors.rightMargin: -rhHeight
-
+    //anchors.rightMargin: -rhHeight
 
     Rectangle{
         id:topOrBottomRect
-        anchors.top: resizeCorner === JResizeHandle.TopLeft || resizeCorner === JResizeHandle.TopRight ? parent.top : undefined
-        anchors.bottom: resizeCorner === JResizeHandle.BottomLeft || resizeCorner === JResizeHandle.BottomRight ? parent.bottom : undefined
-        width:parent.width
+        x: resizeCorner === JResizeHandle.TopLeft ||  resizeCorner === JResizeHandle.BottomLeft ? -rhHeight : 0
+        y: resizeCorner === JResizeHandle.TopLeft ||  resizeCorner === JResizeHandle.TopRight ? -rhHeight : parent.height
+        width:parent.width + rhHeight
         height:rhHeight
     }
 
     Rectangle {
         id:leftOrRightRect
-        anchors.left: resizeCorner === JResizeHandle.TopLeft || resizeCorner === JResizeHandle.BottomLeft ? parent.left : undefined
-        anchors.right: resizeCorner === JResizeHandle.TopRight || resizeCorner === JResizeHandle.BottomRight ? parent.right : undefined
+        x: resizeCorner === JResizeHandle.TopLeft ||  resizeCorner === JResizeHandle.BottomLeft ? -rhHeight : parent.width
+        y: resizeCorner === JResizeHandle.TopLeft ||  resizeCorner === JResizeHandle.TopRight ? -rhHeight : 0
         width:rhHeight
-        height:parent.width
+        height:parent.width + rhHeight
     }
 }

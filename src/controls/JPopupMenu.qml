@@ -1,49 +1,55 @@
 /*
- * Copyright 2021 Rui Wang <wangrui@jingos.com>
+ * Copyright (C) 2021 Beijing Jingling Information System Technology Co., Ltd. All rights reserved.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
- * accepted by the membership of KDE e.V. (or its successor approved
- * by the membership of KDE e.V.), which shall act as a proxy
- * defined in Section 14 of version 3 of the license.
+ * Authors:
+ * Lele Huan <huanlele@jingos.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 import QtQuick 2.2
-import org.kde.kirigami 2.0
 import QtQuick.Controls 2.14 as QQC2
-import org.kde.kirigami 2.0 as Kirigami
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.15
+import jingos.display 1.0
 import "private"
 
 //ConstValue.jingUnit   18
 QQC2.Menu {
     id: menu
 
-    width: 198
-    background: JBlurBackground{
-        id:blurBk
-        anchors.fill: parent
-        sourceItem:menu.parent
+    implicitWidth :JDisplay.dp(198)
+    property alias blurBackground: blurBk
+
+    property color backgroundColor: JTheme.floatBackground
+    property color textColor: JTheme.majorForeground
+    property color iconColor: JTheme.majorForeground
+    property color hoverColor: JTheme.hoverBackground
+    property color pressColor: JTheme.pressBackground
+
+    property real textPointSize: JDisplay.sp(13)
+    property real iconWidth: JDisplay.dp(16)
+    property real iconHeight: JDisplay.dp(16)
+
+    property Item windowContentItem: null
+
+    topPadding: blurBackground.arrowPos === JRoundRectangle.ARROW_TOP ? blurBackground.arrowHeight : 0
+    bottomPadding: blurBackground.arrowPos === JRoundRectangle.ARROW_BOTTOM ? blurBackground.arrowHeight : 0
+
+    onWindowChanged: {
+        if(window){
+            menu.windowContentItem = window.contentItem;
+        } else {
+            menu.windowContentItem = null;
+        }
     }
 
     delegate: QQC2.MenuItem{
         id: itemDelegate
 
         width: parent.width
-        height: 45
-        leftPadding: 20
-        rightPadding: 20
+        height: JDisplay.dp(40)
+        leftPadding: JDisplay.dp(20)
+        rightPadding: JDisplay.dp(20)
 
         state: "hidden"
 
@@ -52,16 +58,18 @@ QQC2.Menu {
             Text{
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                color:"#000000"
-                font.pointSize: 11
+                color: itemDelegate.enabled ? menu.textColor : JTheme.disableForeground
+                font.pixelSize: menu.textPointSize
                 text: itemDelegate.text
             }
 
             Icon{
-                width: 16
-                height: 16
+                width: menu.iconWidth
+                height: menu.iconHeight
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
+                color: itemDelegate.enabled ? menu.iconColor : JTheme.iconDisableForeground
+                visible: source !== ""
                 source: itemDelegate.icon.source
             }
         }
@@ -75,32 +83,23 @@ QQC2.Menu {
             visible: false
             clip: true
 
-            Rectangle{
+            JRoundRectangle{
                 id: bgColor
 
-                width: parent.width
-                height: (menu.currentIndex == 0 || menu.currentIndex == menu.count -1) ? parent.height +  9 : parent.height
+                anchors.fill: parent
 
-                radius: (menu.currentIndex == 0 || menu.currentIndex == menu.count -1) ? 9 : 0
-
-                Connections{
-                    target: menu
-                    onCurrentIndexChanged:{
-                        if (menu.currentIndex == 0) {
-                            bgColor.anchors.top = menuItemBackground.top
-                            bgColor.anchors.bottom = undefined
-                            bgColor.anchors.fill = undefined
-                        } else if (menu.currentIndex == menu.count -1 ) {
-                            bgColor.anchors.top = undefined
-                            bgColor.anchors.fill = undefined
-                            bgColor.anchors.bottom = menuItemBackground.bottom
-                        } else {
-                            bgColor.anchors.top = undefined
-                            bgColor.anchors.bottom = undefined
-                            bgColor.anchors.fill= menuItemBackground
-                        }
+                radiusPos: {
+                    if(menu.count === 1) {
+                        return JRoundRectangle.TOPLEFT | JRoundRectangle.TOPRIGHT | JRoundRectangle.BOTTOMRIGHT | JRoundRectangle.BOTTOMLEFT
+                    } else if(menu.currentIndex === 0){
+                        return JRoundRectangle.TOPLEFT | JRoundRectangle.TOPRIGHT
+                    } else if(menu.currentIndex === menu.count -1){
+                        return JRoundRectangle.BOTTOMRIGHT | JRoundRectangle.BOTTOMLEFT
+                    } else {
+                        return JRoundRectangle.UNKOWN
                     }
                 }
+                radius: JDisplay.dp(10)
             }
         }
 
@@ -121,49 +120,13 @@ QQC2.Menu {
             itemDelegate.state = "hovered"
         }
 
-//        MouseArea{
-//            anchors.fill:parent
-
-//            hoverEnabled: true
-            
-//            onEntered: {
-//                cursorShape = Qt.BlankCursor
-//                itemDelegate.state = "hovered"
-//            }
-
-//            onExited: {
-//                cursorShape = Qt.ArrowCursor
-//                itemDelegate.state = "hidden"
-//            }
-
-//            onClicked:{
-//                console.log("onClicked")
-////                if(menu.count > 0)
-////                    menu.actionAt(menu.currentIndex).onTriggered(mouse)
-//                // itemDelegate.triggered()
-//                //There is no hover event on the touch screen, but currentIndex changed by hover event
-//                if(itemDelegate.action){
-//                    itemDelegate.action.triggered(mouse);
-//                }
-//            }
-            
-
-//            onPressed: {
-//                itemDelegate.state = "pressed"
-//            }
-
-//            onReleased: {
-//                itemDelegate.state = "hovered"
-//            }
-//        }
-
         states: [
             State {
                 name: "hovered"
                 PropertyChanges {
                     target: menuItemBackground
                     visible: true
-                    color: "#1F767680"
+                    color: menu.hoverColor
                     
                 }
             },
@@ -180,7 +143,7 @@ QQC2.Menu {
                 PropertyChanges {
                     target: menuItemBackground
                     visible: true
-                    color: "#29787880"
+                    color: menu.pressColor
                 }
             }
         ]
@@ -218,6 +181,12 @@ QQC2.Menu {
                 }
             }
         ]
+    }
+
+    background: JBlurBackground{
+        id:blurBk
+        backgroundColor: menu.backgroundColor
+        sourceItem:windowContentItem
     }
 }
 

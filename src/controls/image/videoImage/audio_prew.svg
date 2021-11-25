@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="44px" viewBox="0 0 44 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Music, Audio/Play, Next 2</title>
+    <defs>
+        <filter id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+        <filter id="filter-2">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.556863 0 0 0 0 0.556863 0 0 0 0 0.576471 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="视频插件" transform="translate(-207.000000, -1160.000000)">
+            <g id="编组-9" transform="translate(77.000000, 1152.000000)" filter="url(#filter-1)">
+                <g filter="url(#filter-2)" id="Music,-Audio/Play,-Next-2">
+                    <g transform="translate(152.000000, 30.000000) rotate(-180.000000) translate(-152.000000, -30.000000) translate(130.000000, 8.000000)">
+                        <g id="Path" transform="translate(-0.000000, -0.000000)">
+                            <polygon points="0 0 44.0000002 0 44.0000002 44.0000002 0 44.0000002"></polygon>
+                            <line x1="33.0000001" y1="12.3750001" x2="33.0000001" y2="31.6250001" stroke="#323232" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"></line>
+                            <path d="M23.6958334,20.3885001 L12.0743334,13.1248334 C10.8093334,12.3346667 9.1666667,13.2440001 9.1666667,14.7363334 L9.1666667,29.2618335 C9.1666667,30.7541668 10.8093334,31.6653335 12.0743334,30.8733335 L23.6940001,23.6096668 C24.8875001,22.8671668 24.8875001,21.1328334 23.6958334,20.3885001 L23.6958334,20.3885001 Z" stroke="#323232" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

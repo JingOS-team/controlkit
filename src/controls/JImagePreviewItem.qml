@@ -1,37 +1,28 @@
 /*
- * Copyright 2021 Lele Huan <huanlele@jingos.com>
+ * Copyright (C) 2021 Beijing Jingling Information System Technology Co., Ltd. All rights reserved.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
- * accepted by the membership of KDE e.V. (or its successor approved
- * by the membership of KDE e.V.), which shall act as a proxy
- * defined in Section 14 of version 3 of the license.
+ * Authors:
+ * Lele Huan <huanlele@jingos.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.12
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.15 as Kirigami
+import jingos.display 1.0
 
+import "./videoPlayer"
 import "./ImagePreview"
-//图片预览插件,用户需要传入一个model,
+//user need set a model,
 /*
-model 需要的数据有
-mimeType : 图片类型  image/gif
-mediaType: 0 图片 1 视频
-previewurl: 文件路径
-imageTime: 文件的时间
-mediaUrl: 视频文件路径 (和 mediaType 一样)
+model view data
+mimeType : image type  image/gif
+mediaType: 0 image 1 video
+previewurl: path
+imageTime: file create time
+mediaurl: video file path
 */
 Kirigami.Page {
     id: root
@@ -40,36 +31,31 @@ Kirigami.Page {
     topPadding: 0
     bottomPadding: 0
     globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
+    clip:true
 
-    //使用页面管理栈加载改页面调用的其他页面
     property bool usePageStack : true
-    //预览图片列表中开始预览的图片索引
     property var startIndex
-    //图片列表的 model
     property var imagesModel
-    //是否是第一次加载,如果是,显示缩略图,暂时先不用
     property bool isFirstOpenPage: true
-    //所预览图片列表标题
     property string imageDetailTitle
-    //用来设置壁纸的图片路径
     property string wallpaperUrl
-    //用来进行裁剪的图片路径
     property string croppaperUrl
-    //用俩进行裁剪的图片 mimetype
     property string cropMimeType: ""
-    //ApplicationWindow 句柄,
     property var rootWindow: null
     property var oldVisibility
-    //页面关闭信号
+    property bool imageIncreaseByCrop: false
+    property alias listCurrIndex: listView.currentIndex
+
     signal close();
-    //请求全屏显示
     signal requestFullScreen();
-    //图片裁剪或者旋转 完成 path为新图片路径
     signal cropImageFinished(string path, string mimeType)
-    //删除 指定图片, index为model中索引,path为图片路径
     signal deleteCurrentPicture(int index, string path);
 
     signal playVideo(string mediaUrl);
+    signal spaceKeyPressed()
+
+    //true use mpv， false use mediaplayer
+    property bool useMpv: true
 
     background: Rectangle {
         color: "black"
@@ -88,6 +74,72 @@ Kirigami.Page {
             root.oldVisibility = root.rootWindow.visibility;
         }
     }
+
+    function openCropPictureView(imageUrl, mimeType) {
+        root.croppaperUrl = imageUrl;
+        root.cropMimeType = mimeType;
+        if(typeof applicationWindow === "function" && root.usePageStack === true){
+            applicationWindow().pageStack.layers.push(cropPicCom)
+        } else {
+            cropImageLoader.active = true;
+        }
+    }
+
+    function closeCropPictureView() {
+
+        if(typeof applicationWindow === "function" && root.usePageStack === true){
+            applicationWindow().pageStack.layers.pop()
+        } else {
+            cropImageLoader.active = false;
+        }
+    }
+
+    function openWallpaperView(imageUrl){
+        root.wallpaperUrl = imageUrl
+        if(typeof applicationWindow === "function" && root.usePageStack === true){
+            applicationWindow().pageStack.layers.push(wallpaperComponent)
+        } else {
+            wallpaperLoader.active = true;
+        }
+    }
+
+    function popWallpaperView(){
+        if(typeof applicationWindow === "function" && root.usePageStack === true){
+            applicationWindow().pageStack.layers.pop()
+        } else {
+            wallpaperLoader.active = false;
+        }
+    }
+
+    function setInteractive(active){
+            if(typeof applicationWindow === "function"){
+                var win = applicationWindow();
+                if(win.pageStack){
+                    win.pageStack.interactive = active;
+                }
+            }
+        }
+
+    function actionClicked(flag){    
+        switch (flag) {
+        case 1:
+            root.openCropPictureView(listView.currentItem.previewUrl, listView.currentItem.mimeType)
+            break
+        case 2:
+            //saveToFileClicked()
+            break
+        case 3:
+            root.openWallpaperView(listView.currentItem.previewUrl)
+            break
+        case 4:
+            deleteDialog.open()
+            break
+        case 5:
+            listView.rorateView()
+            break;
+        }
+    }
+
     Component.onCompleted: {
         getRootWindow();
         delayForcusTimer.start();
@@ -96,7 +148,6 @@ Kirigami.Page {
     Component.onDestruction: {
 
         if(root.rootWindow){
-            console.log("jimage preview item destruction set visibility to " + root.oldVisibility)
             root.rootWindow.visibility =  root.oldVisibility;
         }
     }
@@ -118,8 +169,31 @@ Kirigami.Page {
                 }
             }
             break
+        case Qt.Key_Space:
+            spaceKeyPressed()
+            break
         default:
             break
+        }
+    }
+
+    Keys.onSpacePressed: {
+        if(listView.mpvObj && listView.currentItem && listView.currentItem.isVideo){
+            if(root.useMpv){
+                listView.mpvObj.pause = !listView.mpvObj.pause
+            } else {
+                /*
+                StoppedState,  0
+                PlayingState,   1
+                PausedState    2
+                 */
+                if(listView.mpvObj.playbackState !== 1){
+                    listView.mpvObj.play()
+                } else {
+                    listView.mpvObj.pause();
+                }
+            }
+
         }
     }
 
@@ -127,9 +201,8 @@ Kirigami.Page {
         id:delayForcusTimer
         running: false
         repeat: false
-        interval: 10
+        interval: 200
         onTriggered: {
-            console.log(" force ative focus")
             listView.forceActiveFocus();
         }
     }
@@ -146,11 +219,12 @@ Kirigami.Page {
         highlightMoveDuration: 0
         highlightRangeMode: ListView.StrictlyEnforceRange
         interactive: true
+        keyNavigationEnabled:false
 
         model: imagesModel
         property bool completedOk : false
+        property var mpvObj: null
         Component.onCompleted: {
-            console.log("listview completed   count is  " + listView.count)
             listView.currentIndex = startIndex
 
             if (!setCacheTimer.running & listView.cacheBuffer != listView.width * 5) {
@@ -159,65 +233,181 @@ Kirigami.Page {
             listView.completedOk = true;
         }
 
-        onCountChanged: {
-            console.log("11111count changed count is " + count + "  currnent index is " + listView.currentIndex + "  completedok is " + listView.completedOk)
-            if((count === 0 || listView.currentIndex >= count) && listView.completedOk === true){
-                root.close();
+        Keys.onReleased : {
+            if(event.isAutoRepeat === false){
+                if(event.key === Qt.Key_Right){
+                    if(listView.currentIndex < listView.count - 1){
+                        listView.currentIndex += 1
+                    }
+                } else if(event.key === Qt.Key_Left){
+                    if(listView.currentIndex >= 1){
+                        listView.currentIndex -= 1;
+                    }
+                }
             }
         }
 
-        delegate:JImageViewer{
+        onCountChanged: {
+            if((count === 0 || listView.currentIndex >= count) && listView.completedOk === true){
+                root.close();
+            }
+            if(root.imageIncreaseByCrop === true){
+                if(listView.currentIndex + 1 < count){
+                    listView.currentIndex++;
+                }
+                root.imageIncreaseByCrop = false;
+            }
+        }
+
+        delegate:Item{
             id:deleViewer
             width: root.width
             height: root.height
-            isGif: model.mimeType === "image/gif"
             property bool isVideo: model.mediaType === 1
+            property bool  isGif: deleViewer.mimeType === "image/gif"
             property string imageTime: model.imageTime
             property string mediaUrl: model.mediaurl
             property string mimeType: model.mimeType
-            source: model.previewurl
-            onClicked: {
-                titleItem.visible = !titleItem.visible
+            property string previewUrl: model.previewurl
+            property alias deleItem: deleLoader.item
+            Loader{
+                id:deleLoader
+                anchors.fill: parent
+                sourceComponent: deleViewer.isVideo ? videoCom : imageCom
+                onLoaded: {
+                    if(item){
+                        if(deleViewer.isVideo){
+                            if(!listView.mpvObj) {
+                                delayCreateMediaObjTimer.restart();
+                            }
+                            item.playVideoPath = deleViewer.mediaUrl;
+                            if(listView.currentIndex === model.index) {
+                                item.isShow = true;
+
+                                footer.setSliderValue(0)
+                                footer.visible = true
+
+                                deleViewer.imageTime = item.videoDisplayName
+                                titleItem.visible = true
+                            }
+                        } else {
+                            item.isGif =  deleViewer.isGif
+                            item.source = deleViewer.previewUrl;
+                        }
+                    }
+                }
             }
 
             Connections{
                 target: listView
                 function onCurrentIndexChanged() {
-                    if(listView.currentIndex !== model.index){
-                        deleViewer.resetParam();
+                    if(listView.moving === false)
+                        indexOrCountChange()
+                }
+
+                function onCountChanged() {
+                    if((listView.count === 0 || listView.currentIndex >= listView.count) && listView.completedOk === true) {
+                        root.close()
+                    }
+                    indexOrCountChange()
+                }
+
+                function onMovementEnded(){
+                    indexOrCountChange();
+                }
+
+                function indexOrCountChange() {
+                    if(listView.currentIndex !== model.index) {
+                        if(deleViewer.isVideo){
+                            if(deleLoader.item.isShow === true){
+                                deleLoader.item.isShow = false;
+                                if(listView.mpvObj){
+                                    if(root.useMpv){
+                                        listView.mpvObj.pause = true;
+                                    } else {
+                                        listView.mpvObj.stop();
+                                    }
+                                }
+                            }
+                        } else {
+                            deleLoader.item.resetParam()
+                        }
+                    } else {
+                        if(deleViewer.isVideo && deleLoader.item) {
+                            deleLoader.item.isShow = true;
+                            titleItem.visible = true;
+                            footer.visible = true;
+                        } else {
+                            footer.visible = false
+                        }
                     }
                 }
             }
 
-            Loader {
-                id: videoPicLoader
+            MouseArea {
                 anchors.fill: parent
-                sourceComponent: videoPicComponent
-                active: deleViewer.isVideo
-                asynchronous: true
-            }
-
-            Component {
-                id: videoPicComponent
-                Item {
-                    Kirigami.JIconButton {
-                        id: videoPic
-
-                        anchors.centerIn: parent
-                        width: 60
-                        height: width
-                        source: Qt.resolvedUrl("./image/imagePreviewIcon/edit_audio.png")
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                root.playVideo(deleViewer.mediaUrl)
+                enabled: {
+                    if(deleLoader.status === Loader.Null || deleLoader.status === Loader.Error)  {
+                        return true
+                    } else {
+                        if(deleViewer.isVideo) {
+                            return  false
+                        } else {
+                            if(deleViewer.deleItem.mouseEbable) {
+                                return false
+                            } else {
+                                return  true
                             }
+                        }
+                    }
+                }
+                onClicked: {
+                     titleItem.visible = !titleItem.visible
+                }
+            }
+        }
+
+        Component{
+            id:imageCom
+            JImageViewer {
+                id: imgViewer
+                onClicked: {
+                    titleItem.visible = !titleItem.visible
+                }
+            }
+        }
+
+        Component {
+            id: videoCom
+            JVideoView {
+                id: video
+                strVideoTitle: imageDetailTitle
+                mpvVideo: listView.mpvObj
+                useMpv: root.useMpv
+                onFootAndHeadVisibleChanged: {
+                    if(listView.currentItem && listView.currentItem.isVideo && video.isShow) {
+                        titleItem.visible = video.footAndHeadVisible
+                        footer.visible = video.footAndHeadVisible
+                    }
+                }
+
+                onSetOsdBritness: {
+                    osdItem.dealBrightness(brirnessData)
+                }
+
+                onSetOsdVolume: {
+                    osdItem.dealVolume(volumeData)
+                    if(mpvVideo) {
+                        if(root.useMpv) {
+                            mpvVideo.volume = osdItem.volume
+                        } else {
+                            mpvVideo.volume = osdItem.volume/100
                         }
                     }
                 }
             }
         }
+
 
         Timer {
             id: setCacheTimer
@@ -228,15 +418,70 @@ Kirigami.Page {
                 }
             }
         }
+
+        function rorateView() {
+            if(listView.mpvObj) {
+                if(root.useMpv){
+                    listView.mpvObj.videoRotate = listView.mpvObj.videoRotate + 90
+                    if(listView.mpvObj.pause === true) {
+                        listView.mpvObj.seekPosition(listView.mpvObj.position)
+                    }
+                } else {
+                    if(listView.currentItem.isVideo){
+                        if(listView.currentItem.deleItem.orientation === 0){
+                            listView.currentItem.deleItem.orientation = 270;
+                        } else {
+                            listView.currentItem.deleItem.orientation = listView.currentItem.deleItem.orientation - 90;
+                        }
+                    }
+                }
+                listView.currentItem.deleItem.restartHideHeadFooterTimer()
+            }
+        }
+
+        Timer {
+            id:delayCreateMediaObjTimer
+            interval: 300
+            onTriggered: {
+                listView.createMpvObject();
+            }
+        }
+
+        function createMpvObject() {
+            if(root.useMpv){
+                listView.mpvObj = Qt.createQmlObject('import jingos.multimedia 1.0; MpvObject {}', root);
+            } else {
+                listView.mpvObj = Qt.createQmlObject('import QtMultimedia 5.15
+                                                        import jingos.multimedia 1.0
+                                                        MediaPlayer{
+                                                            id:qmp
+                                                            notifyInterval:200
+                                                            videoOutput: JBaseVideoSurface{id:jbv}
+                                                            function addRenderItem(item){jbv.addRenderItem(item)}
+                                                            function clearRenderItem(item){jbv.clearRenderItem(item)}
+                                                        }', root);
+            }
+
+            if(listView.mpvObj == null) {
+                console.log("Error creating object");
+            } else {
+                if(root.useMpv) {
+                    listView.mpvObj.volume = osdItem.volume
+                } else {
+                    listView.mpvObj.volume = osdItem.volume/100
+                }
+
+            }
+        }
     }
 
-    //左侧导航按钮
+    //left Navigation buttons
     Item {
         id: leftItem
 
         anchors .left: parent.left
-        height: titleItem.visible ? parent.height - titleItem.height : parent.height
-        width: leftArrow.width + 10 * titleItem.rate
+        height:  parent.height - titleItem.height
+        width: leftArrow.width +  JDisplay.dp(10)
         anchors.bottom: parent.bottom
         visible: listView.currentIndex !== 0
 
@@ -254,7 +499,7 @@ Kirigami.Page {
                 verticalCenter: parent.verticalCenter
             }
             source: "./image/imagePreviewIcon/leftarrow.png"
-            sourceSize: Qt.size(30, 30)
+            sourceSize: Qt.size(JDisplay.dp(30), JDisplay.dp(30))
             opacity:leftIconMouse.containsMouse ? 1.0 : 0.0
 
             MouseArea {
@@ -266,13 +511,14 @@ Kirigami.Page {
         }
     }
 
-    //右侧导航按钮
+    //right Navigation buttons
     Item {
         id: rightItem
 
         anchors.right: parent.right
-        height: titleItem.visible ? parent.height - titleItem.height : parent.height
-        width: rightArrow.width
+        //height:titleItem.visible ? parent.height - titleItem.height : parent.height
+        height: parent.height - titleItem.height
+        width: rightArrow.width +  JDisplay.dp(10)
         anchors.bottom: parent.bottom
         visible: listView.currentIndex !== (listView.count - 1)
 
@@ -291,7 +537,7 @@ Kirigami.Page {
                 verticalCenter: parent.verticalCenter
             }
             source: "./image/imagePreviewIcon/rightarrow.png"
-            sourceSize: Qt.size(30, 30)
+            sourceSize: Qt.size(JDisplay.dp(30), JDisplay.dp(30))
             opacity: rightIconMouse.containsMouse ? 1.0 : 0.0
 
             MouseArea {
@@ -303,59 +549,42 @@ Kirigami.Page {
         }
     }
 
-    //标题栏点击按钮触发的动作, 裁剪, 设置壁纸, 删除
-    function actionClicked(flag){
-        switch (flag) {
-        case 1:
-            root.openCropPictureView(listView.currentItem.source, listView.currentItem.mimeType)
-            break
-        case 2:
-            //saveToFileClicked()
-            break
-        case 3:
-            root.openWallpaperView(listView.currentItem.source)
-            break
-        case 4:
-            deleteDialog.open()
-            break
-        }
-    }
 
-    //标题栏
+    //title
     Item {
         id:titleItem
-        property bool isVideoScreen
-        property bool isGifImage: false
-        property real rate: 1
         width: parent.width
-        height: 60 * titleItem.rate
+        height: JDisplay.dp(60)
         visible: false
-        Kirigami.JBlurBackground{
-            anchors.fill:parent
-            sourceItem: listView
-            showBgBoder:false
-            backgroundColor:"#EDFFFFFF"
-            blurRadius: 130
-            radius: 0
+//        Kirigami.JBlurBackground{
+//            anchors.fill:parent
+//            sourceItem: listView
+//            showBgBoder:false
+//            blurRadius: 130
+//            radius: 0
+//        }
+
+        Rectangle {
+            anchors.fill: parent
+            color:Kirigami.JTheme.background
         }
 
         Item {
             id: titleBarLeftTitle
             anchors.left: parent.left
             anchors.bottom: parent.bottom
-            height: parent.height - 18 * titleItem.rate
+            height: parent.height - JDisplay.dp(18)
             width: parent.width
 
             Kirigami.JIconButton {
                 id: back
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
-                anchors.leftMargin: 10 * titleItem.rate
-                width: parent.height / 2 + 10
+                anchors.leftMargin: JDisplay.dp(9)
+                width: JDisplay.dp(22 + 10)
                 height: width
-                source: Qt.resolvedUrl("./image/imagePreviewIcon/back.png")
+                source: Qt.resolvedUrl("./image/imagePreviewIcon/back.svg")
                 onClicked:{
-                    console.log("click and send close signal")
                     root.close();
                 }
             }
@@ -363,34 +592,40 @@ Kirigami.Page {
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: back.right
-                anchors.leftMargin: 8 * titleItem.rate
-                font.pointSize: 15 * titleItem.rate
+                anchors.leftMargin: JDisplay.dp(8)
+                font.pointSize: JDisplay.sp(12)
                 width: titleBarLeftTitle.width / 2
+                color: Kirigami.JTheme.majorForeground
                 elide: Text.ElideRight
-                text: root.imageDetailTitle
-            }
-
-            Text {
-                anchors.centerIn: parent
-                font.pointSize: 8 * titleItem.rate
-                color: "#99000000"
-                text: listView.currentItem.imageTime
+                text: (listView.currentItem && listView.currentItem.isVideo) ? listView.currentItem.deleItem.videoDisplayName: listView.currentItem.imageTime
             }
 
             Row {
                 id: imageTitleRight
-                height: 22 * titleItem.rate + 10
+                height: JDisplay.dp(32)
                 anchors.right: parent.right
-                anchors.rightMargin: 14 * titleItem.rate
+                anchors.rightMargin: JDisplay.dp(14)
                 anchors.verticalCenter: parent.verticalCenter
 
-                spacing: 36 * titleItem.rate
+                spacing: JDisplay.dp(36)
 
                 Repeater {
                     id: btnRepeater
+                    model: {
+                        if(listView.currentItem){
+                            if(listView.currentItem.isVideo){
+                                return videoTitleModel
+                            } else if(listView.currentItem.isGif){
+                                return gifTitleModel
+                            } else {
+                                return imageTitleModel
+                            }
+                        } else {
+                            return null;
+                        }
+                    }
 
-                    model: listView.currentItem && (listView.currentItem.isVideo || listView.currentItem.isGif) ? imageVideoModel : imageTitleModel
-                    delegate: Kirigami.JIconButton{
+                    delegate: Kirigami.JIconButton {
                         width: imageTitleRight.height
                         height:width
                         source: name
@@ -405,9 +640,9 @@ Kirigami.Page {
 
         ListModel {
             id: imageTitleModel
-            property string cropname : Qt.resolvedUrl("./image/imagePreviewIcon/crop.png")
-            property string magicname : Qt.resolvedUrl("./image/imagePreviewIcon/magic.png")
-            property string deletename : Qt.resolvedUrl("./image/imagePreviewIcon/delete.png")
+            property string cropname : Qt.resolvedUrl("./image/imagePreviewIcon/crop.svg")
+            property string magicname : Qt.resolvedUrl("./image/imagePreviewIcon/magic.svg")
+            property string deletename : Qt.resolvedUrl("./image/imagePreviewIcon/delete.svg")
 
             Component.onCompleted: {
                 imageTitleModel.append({"name": imageTitleModel.cropname, "flag" : 1})
@@ -417,22 +652,118 @@ Kirigami.Page {
         }
 
         ListModel {
-            id: imageVideoModel
-            property string deletename : Qt.resolvedUrl("./image/imagePreviewIcon/delete.png")
-//            ListElement {
-//                name: imageVideoModel.deletename
-//                flag: 4
-//            }
+            id: gifTitleModel
+            property string deletename : Qt.resolvedUrl("./image/imagePreviewIcon/delete.svg")
             Component.onCompleted: {
-                imageVideoModel.append({"name": imageVideoModel.deletename, "flag" : 4})
+                gifTitleModel.append({"name": gifTitleModel.deletename, "flag" : 4})
+            }
+        }
+
+        ListModel {
+            id: videoTitleModel
+            property string rotatename : Qt.resolvedUrl("./image/imagePreviewIcon/rotate.svg")
+            Component.onCompleted: {
+                videoTitleModel.append({"name": videoTitleModel.rotatename, "flag" : 5})
             }
         }
     } // end title
 
+    VideoFooter {
+        id: footer
+        z:1
+        width: parent.width
+        visible: false
+        Connections{
+            target: listView.mpvObj
+            function onDurationChanged(){
+                if(root.useMpv){
+                    footer.duration = listView.mpvObj.duration
+                } else {
+                    footer.duration = listView.mpvObj.duration / 1000
+                }
+            }
+            function onPositionChanged(){
+                if(root.useMpv){
+                    footer.setSliderValue(listView.mpvObj.position);
+                } else {
+                    footer.setSliderValue(listView.mpvObj.position / 1000);
+                }
+            }
+        }
+        Component.onDestruction: {
+            if(!playStatus) {
+                Kirigami.JMediaSetTool.setInhibit(false)
+            }
+        }
+        playStatus:{
+            if(listView.mpvObj){
+                if(useMpv){
+                    return listView.mpvObj.pause;
+                } else {
+                    return listView.mpvObj.playbackState !== 1
+                }
+            }
+            return true
+        }
+        onPlayStatusChanged: {
+            Kirigami.JMediaSetTool.setInhibit(!playStatus)
+        }
+
+        onPlayBtnClicked: {
+            if(listView.mpvObj) {
+                if(root.useMpv){
+                    listView.mpvObj.pause = !listView.mpvObj.pause
+                } else {
+                    if(listView.mpvObj.playbackState !== 1){
+                        listView.mpvObj.play()
+                    } else {
+                        listView.mpvObj.pause();
+                    }
+                }
+                listView.currentItem.deleItem.restartHideHeadFooterTimer()
+            }
+        }
+        onSeekValue: {
+            if(listView.mpvObj){
+                if(root.useMpv){
+                    listView.mpvObj.seekPosition(value)
+                } else {
+                    listView.mpvObj.seek(parseInt(value * 1000));
+                }
+            }
+        }
+
+        onSliderPress: {
+            listView.currentItem.deleItem.restartHideHeadFooterTimer()
+        }
+
+        onZoomBtnClicked: {
+
+        }
+    }
+
+    Osd {
+        id: osdItem
+        visible: false
+        z:1
+
+        onInitMediaSetVolume: {
+            if(listView.currentItem && listView.currentItem.isVideo) {
+                if(listView.mpvObj)
+                     if(root.useMpv){
+                        listView.mpvObj.volume = osdItem.volume
+                     } else {
+                        listView.mpvObj.volume = osdItem.volume/100
+                     }
+            }
+        }
+    }
+
+
     Kirigami.JDialog{
         id:deleteDialog
         title: i18nd("kirigami-controlkit", "Delete")
-        text: listView.currentItem.isVideo ? i18nd("kirigami-controlkit", "Are you sure you want to delete this video?")
+        text: (listView.currentItem && listView.currentItem.isVideo) ? i18nd("kirigami-controlkit", "Are you sure you want to delete this video?")
                                            : i18nd("kirigami-controlkit", "Are you sure you want to delete this photo?")
         rightButtonText:i18nd("kirigami-controlkit", "Delete")
         leftButtonText: i18nd("kirigami-controlkit", "Cancel")
@@ -444,56 +775,7 @@ Kirigami.Page {
 
         onRightButtonClicked:{
             deleteDialog.close()
-            //console.log("delete button   count is " + listView.count + "   current index is " + listView.currentIndex)
-            root.deleteCurrentPicture(listView.currentIndex, listView.currentItem.source);
-        }
-    }
-
-    //加载裁剪图片控件
-    function openCropPictureView(imageUrl, mimeType) {
-        console.log("crop picture " + imageUrl)
-        root.croppaperUrl = imageUrl;
-        root.cropMimeType = mimeType;
-        if(typeof applicationWindow === "function" && root.usePageStack === true){
-            console.log("push crop item")
-            applicationWindow().pageStack.layers.push(cropPicCom)
-        } else {
-            console.log("use loader to load crop item")
-            cropImageLoader.active = true;
-        }
-    }
-
-    //关闭裁剪图片控件
-    function closeCropPictureView() {
-
-        if(typeof applicationWindow === "function" && root.usePageStack === true){
-            console.log("closeCropPictureView use page stack layer pop")
-            applicationWindow().pageStack.layers.pop()
-        } else {
-            console.log("closeCropPictureView use loader set false")
-            cropImageLoader.active = false;
-        }
-    }
-
-    //打开设置壁纸页面
-    function openWallpaperView(imageUrl){
-        console.log("open wall paper  picture " + imageUrl)
-        root.wallpaperUrl = imageUrl
-        if(typeof applicationWindow === "function" && root.usePageStack === true){
-            console.log("use page push " + imageUrl)
-            applicationWindow().pageStack.layers.push(wallpaperComponent)
-        } else {
-            console.log("use wall paper loader ")
-            wallpaperLoader.active = true;
-        }
-    }
-
-    //关闭设置壁纸页面
-    function popWallpaperView(){
-        if(typeof applicationWindow === "function" && root.usePageStack === true){
-            applicationWindow().pageStack.layers.pop()
-        } else {
-            wallpaperLoader.active = false;
+            root.deleteCurrentPicture(listView.currentIndex, listView.currentItem.previewUrl);
         }
     }
 
@@ -509,7 +791,7 @@ Kirigami.Page {
         }
     }
 
-    //设置壁纸控件
+    //wallpapersettings
     Component{
         id:wallpaperComponent
         JWallPaperItem{
@@ -517,7 +799,6 @@ Kirigami.Page {
 
             source: root.wallpaperUrl
             onSetWallPaperFinished:{
-                console.log(" setwallpaper finnish:" + success)
                 popWallpaperView()
             }
             onCancel:{
@@ -533,26 +814,25 @@ Kirigami.Page {
         active: false
         onStatusChanged:{
             if (cropImageLoader.status === Loader.Ready){
-                console.log("cropImageLoader.status === Loader.Ready ")
                 cropImageLoader.item.parent = Overlay.overlay
             }
         }
     }
 
-    //裁剪图片控件
+    //crop image
     Component {
         id: cropPicCom
         JCropView {
             id: cropView
             imageUrl: root.croppaperUrl
             onCropImageFinished:{
-                root.closeCropPictureView();
+                root.imageIncreaseByCrop = true;
                 root.cropImageFinished(path, root.cropMimeType);
+                root.closeCropPictureView();
             }
             onClosePage:{
                 root.closeCropPictureView();
             }
         }
     }
-
 }
